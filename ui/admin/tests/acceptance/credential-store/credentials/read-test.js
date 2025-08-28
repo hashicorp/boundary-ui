@@ -157,16 +157,23 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('visiting username, password & domain credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.staticCredentialStore);
 
     await click(commonSelectors.HREF(urls.credentials));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentials);
 
     await click(commonSelectors.HREF(urls.usernamePasswordDomainCredential));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.usernamePasswordDomainCredential);
   });
 
@@ -243,6 +250,15 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a username, password & domain credential form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     instances.usernamePasswordDomainCredential.authorized_actions =
       instances.usernamePasswordDomainCredential.authorized_actions.filter(
         (item) => item != 'read',

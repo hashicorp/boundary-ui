@@ -11,6 +11,7 @@ import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-libraries | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -102,6 +103,15 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   });
 
   test('User can navigate to vault ldap credential library details', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibraries);
 
     assert

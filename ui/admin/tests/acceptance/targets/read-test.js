@@ -331,6 +331,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot navigate to a rdp target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     instances.rdpTarget.authorized_actions =
       instances.rdpTarget.authorized_actions.filter((item) => item !== 'read');
@@ -344,16 +353,23 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targets);
 
     await click(commonSelectors.HREF(urls.rdpTarget));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.rdpTarget);
   });

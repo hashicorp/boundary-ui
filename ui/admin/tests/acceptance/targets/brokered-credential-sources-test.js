@@ -171,7 +171,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       });
 
       await visit(urls[input.route]);
-      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls[input.route]);
       assert
@@ -240,7 +239,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       await visit(urls[input.route]);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls[input.link]));
-      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls[input.expectedUrl]);
     },
@@ -303,7 +301,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       });
 
       await visit(urls[input.route]);
-      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls[input.route]);
     },

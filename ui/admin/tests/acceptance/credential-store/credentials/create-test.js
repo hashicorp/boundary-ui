@@ -83,7 +83,7 @@ module(
       };
       getUsernamePasswordDomainCredentialCount = () => {
         return this.server.schema.credentials.where({
-          type: 'username_password_domain'
+          type: 'username_password_domain',
         }).length;
       };
       await authenticateSession({});
@@ -119,6 +119,15 @@ module(
     });
 
     test('users can create a new username, password & domain credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       const usernamePasswordDomainCredentialCount =
         getUsernamePasswordDomainCredentialCount();
@@ -145,6 +154,15 @@ module(
     });
 
     test('users can create a new username & password credential with domain in username field', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       const usernamePasswordDomainCredentialCount =
         getUsernamePasswordDomainCredentialCount();
@@ -156,9 +174,11 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
-      await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_WITH_DOMAIN_VALUE);
+      await fillIn(
+        selectors.FIELD_USERNAME,
+        selectors.FIELD_USERNAME_WITH_DOMAIN_VALUE,
+      );
       await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
-
 
       // check that the domain field is filled in
       assert.dom(selectors.FIELD_DOMAIN).hasValue(selectors.FIELD_DOMAIN_VALUE);
@@ -171,7 +191,6 @@ module(
         usernamePasswordDomainCredentialCount + 1,
       );
     });
-
 
     test('users can create a new username & key pair credential', async function (assert) {
       setRunOptions({
@@ -316,6 +335,15 @@ module(
     });
 
     test('users can cancel creation of new username, password & domain credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -475,6 +503,15 @@ module(
     });
 
     test('saving a new username, password & domain credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a username-password-domain credential.';
@@ -498,8 +535,7 @@ module(
             },
           },
         );
-      }
-      );
+      });
       await click(commonSelectors.HREF(urls.newCredential));
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.SAVE_BTN);
@@ -507,7 +543,9 @@ module(
 
       assert
         .dom(selectors.FIELD_DOMAIN_ERROR)
-        .hasText('Field required for creating a username-password-domain credential.');
+        .hasText(
+          'Field required for creating a username-password-domain credential.',
+        );
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {

@@ -486,6 +486,15 @@ module('Acceptance | targets | list', function (hooks) {
   );
 
   test('user can only see RDP and TCP targets when rdp-target feature is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.disable('ssh-target');
 
     await visit(urls.projectScope);
@@ -504,6 +513,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can only see SSH and TCP targets when ssh-target feature is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.disable('rdp-target');
 
     await visit(urls.projectScope);

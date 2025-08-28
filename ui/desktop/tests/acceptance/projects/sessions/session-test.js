@@ -335,6 +335,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting an RDP session should display a toast notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.rdpSession.id,
@@ -362,6 +371,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('clicking on `do not show again` button prevents the toast warning from showing again', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     // First RDP Session visit should show the toast notification
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({

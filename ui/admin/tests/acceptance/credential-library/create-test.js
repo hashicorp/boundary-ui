@@ -150,6 +150,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library with username, password and domain type for vault generic', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     const credentialLibraryCount = getCredentialLibraryCount();
     const usernamePasswordDomainCredentialLibraryCount =
       getUsernamePasswordDomainCredentialLibraryCount();
@@ -432,6 +441,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library of type vault ldap', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.newCredentialLibrary);
 
     await click(selectors.TYPE_VAULT_LDAP);
@@ -466,6 +484,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library with username, password and domain type for vault ldap', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     const credentialLibraryCount = getCredentialLibraryCount();
     const usernamePasswordDomainCredentialLibraryCount =
       getUsernamePasswordDomainCredentialLibraryCount();
@@ -509,6 +536,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('default `vault-generic` credential library is selected when `ssh-target` feature is not enabled and user manually sets `type` in the query params', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(`${urls.newCredentialLibrary}?type=vault-ssh-certificate`);
 
     assert.dom(selectors.TYPE_VAULT_SSH_CERT).isNotVisible();

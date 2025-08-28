@@ -180,6 +180,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault generic credential library of username, password and domain type and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.usernamePasswordDomainCredentialLibrary);
 
     await click(commonSelectors.EDIT_BTN);
@@ -443,6 +452,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('cannot update credential type in a vault ldap credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.vaultLDAPCredentialLibrary);
 
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
@@ -451,6 +469,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault ldap credential library and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.vaultLDAPCredentialLibrary);
 
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');

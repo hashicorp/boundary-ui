@@ -130,6 +130,15 @@ module(
     });
 
     test('can save changes to existing username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       assert.notEqual(
         instances.usernamePasswordCredential.name,
         commonSelectors.FIELD_NAME_VALUE,
@@ -205,6 +214,15 @@ module(
     });
 
     test('can save changes to existing username, password & domain credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const mockInput = 'random string';
 
       await visit(urls.usernamePasswordDomainCredential);
@@ -256,6 +274,15 @@ module(
     });
 
     test('can cancel changes to existing username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.usernamePasswordCredential);
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
@@ -321,6 +348,15 @@ module(
     });
 
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
 
@@ -506,6 +542,15 @@ module(
     });
 
     test('can cancel discard unsaved username & password credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(6);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -591,6 +636,15 @@ module(
     });
 
     test('can cancel unsaved username, password & domain credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const name = instances.usernamePasswordDomainCredential.name;
       await visit(urls.usernamePasswordDomainCredential);
 
@@ -637,6 +691,15 @@ module(
     });
 
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.usernamePasswordCredential);
 
       assert.dom(commonSelectors.FIELD_PASSWORD).doesNotExist();

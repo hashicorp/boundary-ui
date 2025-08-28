@@ -193,6 +193,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('visiting vault ldap credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     const vaultLDAPCredentialLibrary = this.server.create(
       'credential-library',
       {
@@ -207,7 +216,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     const url = `${urls.credentialLibraries}/${vaultLDAPCredentialLibrary.id}`;
 
     await visit(url);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), url);
   });

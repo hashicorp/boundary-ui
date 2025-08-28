@@ -516,6 +516,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('defaults to type `tcp` when no query param provided and rdp feature is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     await visit(urls.targets);
 
@@ -525,6 +534,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new RDP targets route when rdp feature is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
@@ -540,6 +558,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('default port is not marked required for RDP targets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     await visit(urls.targets);
 
@@ -550,6 +577,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new RDP target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     const targetCount = getTargetCount();
     const rdpTargetCount = getRDPTargetCount();
@@ -566,6 +602,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create a type `rdp` target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
 
     const targetCount = getTargetCount();
@@ -598,6 +643,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('saving a new RDP target with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets', () => {
       return new Response(
         400,

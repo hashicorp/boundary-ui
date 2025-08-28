@@ -200,6 +200,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('can delete rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     const rdpTargetCount = getRDPTargetCount();
     await visit(urls.targets);

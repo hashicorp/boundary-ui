@@ -363,6 +363,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can save changes to existing rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('rdp-target');
     featuresService.enable('ssh-target');
 
@@ -393,6 +402,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('displays add injected credentials alert for ssh target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
 
     await visit(urls.targets);

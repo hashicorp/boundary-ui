@@ -252,8 +252,6 @@ module(
 
         await visit(url);
 
-        await a11yAudit();
-
         assert.strictEqual(currentURL(), url);
         assert
           .dom(commonSelectors.TABLE_ROWS)

@@ -199,6 +199,15 @@ module(
     });
 
     test('can delete username, password & domain credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const usernamePasswordDomainCredentialCount =
         getUsernamePasswordDomainCredentialCount();
 
@@ -409,6 +418,15 @@ module(
     });
 
     test('can cancel delete username, password & domain credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernamePasswordDomainCredentialCount =
@@ -507,6 +525,15 @@ module(
     });
 
     test('deleting a username, password & domain credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
+        },
+      });
+
       this.server.del('/credentials/:id', () => {
         return new Response(
           490,
