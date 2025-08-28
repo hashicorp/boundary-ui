@@ -7,6 +7,13 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
+import chunk from 'lodash/chunk';
+
+// Maximum expression tree depth is 1000 so
+// we limit the number of expressions in a query.
+// See "Maximum Depth Of An Expression Tree" in
+// https://www.sqlite.org/limits.html
+const MAX_EXPR_NUM = 999;
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -114,10 +121,11 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       const totalItems = sessions.meta?.totalItems;
 
       const allSessions = await this.getAllSessions(scope_id);
-      const [associatedUsers, associatedTargets] = await Promise.all([
-        this.getAssociatedUsers(scope, allSessions),
-        this.getAssociatedTargets(scope, allSessions),
-      ]);
+      const associatedUsers = await this.getAssociatedUsers(scope, allSessions);
+      const associatedTargets = await this.getAssociatedTargets(
+        scope,
+        allSessions,
+      );
 
       return {
         sessions,
@@ -159,24 +167,27 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       this.can.can('list model', globalScope, { collection: 'users' }) &&
       this.can.can('list model', orgScope, { collection: 'users' })
     ) {
-      const uniqueSessionUserIds = new Set(
-        allSessions
-          .filter((session) => session.user_id)
-          .map((session) => session.user_id),
+      const uniqueSessionUserIds = [
+        ...new Set(
+          allSessions
+            .filter((session) => session.user_id)
+            .map((session) => session.user_id),
+        ),
+      ];
+      const chunkedUserIds = chunk(uniqueSessionUserIds, MAX_EXPR_NUM);
+      const associatedUsersPromises = chunkedUserIds.map((userIds) =>
+        this.store.query('user', {
+          scope_id: 'global',
+          recursive: true,
+          query: {
+            filters: {
+              id: { values: userIds.map((userId) => ({ equals: userId })) },
+            },
+          },
+        }),
       );
-      const filters = {
-        id: { values: [] },
-      };
-      uniqueSessionUserIds.forEach((userId) => {
-        filters.id.values.push({ equals: userId });
-      });
-      const associatedUsersQuery = {
-        scope_id: 'global',
-        recursive: true,
-        query: { filters },
-      };
-
-      return this.store.query('user', associatedUsersQuery);
+      const usersArray = await Promise.all(associatedUsersPromises);
+      return usersArray.flat();
     }
 
     return [];
@@ -189,21 +200,29 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAssociatedTargets(scope, allSessions) {
     if (this.can.can('list model', scope, { collection: 'targets' })) {
-      const uniqueSessionTargetIds = new Set(
-        allSessions
-          .filter((session) => session.target_id)
-          .map((session) => session.target_id),
-      );
-      const filters = { id: { values: [] } };
-      uniqueSessionTargetIds.forEach((targetId) => {
-        filters.id.values.push({ equals: targetId });
-      });
-      const associatedTargetsQuery = {
-        scope_id: scope.id,
-        query: { filters },
-      };
+      const uniqueSessionTargetIds = [
+        ...new Set(
+          allSessions
+            .filter((session) => session.target_id)
+            .map((session) => session.target_id),
+        ),
+      ];
 
-      return this.store.query('target', associatedTargetsQuery);
+      const chunkedTargetIds = chunk(uniqueSessionTargetIds, MAX_EXPR_NUM);
+      const associatedTargetsPromises = chunkedTargetIds.map((targetIds) =>
+        this.store.query('target', {
+          scope_id: scope.id,
+          query: {
+            filters: {
+              id: {
+                values: targetIds.map((targetId) => ({ equals: targetId })),
+              },
+            },
+          },
+        }),
+      );
+      const targetsArray = await Promise.all(associatedTargetsPromises);
+      return targetsArray.flat();
     }
 
     return [];
