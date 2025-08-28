@@ -6,7 +6,7 @@
 // This is a codemod that takes a ember a11y report and ignores the failing a11y rules in the tests
 // they were reported from. It can be ran the command line from the root of this monorepo like this:
 //
-// EMBER_A11Y_REPORT_FILE=~/Downloads/ember-a11y-reports-latest/desktop.json pnpm dlx jscodeshift -t ./support/ember-a11y-ignore.mjs ui/desktop/tests
+// EMBER_A11Y_REPORT_FILE=~/Downloads/ember-a11y-reports/desktop.json pnpm dlx jscodeshift -t ./support/ember-a11y-ignore.mjs ui/desktop/tests
 //
 // This file passes exports a transform function which is used by the jscodeshift package to execute
 // the codemode. Since codeshift doesn't provide a way of specifying arguments, the report file is
