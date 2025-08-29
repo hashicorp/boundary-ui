@@ -352,6 +352,7 @@ CREATE TABLE IF NOT EXISTS session_recording (
     target_name TEXT,
     target_scope_id TEXT,
     target_scope_name TEXT,
+    target_scope_parent_scope_id TEXT,
     created_time TEXT NOT NULL,
     data TEXT NOT NULL
 );
@@ -371,21 +372,22 @@ CREATE VIRTUAL TABLE IF NOT EXISTS session_recording_fts USING fts5(
     target_name,
     target_scope_id,
     target_scope_name,
+    target_scope_parent_scope_id,
     created_time,
     content='',
 );
 
 CREATE TRIGGER IF NOT EXISTS session_recording_ai AFTER INSERT ON session_recording BEGIN
     INSERT INTO session_recording_fts(
-        rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time
+        rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, target_scope_parent_scope_id, created_time
     ) VALUES (
-        new.rowid, new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.created_time
+        new.rowid, new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.target_scope_parent_scope_id, new.created_time
     );
 END;
 
 CREATE TRIGGER IF NOT EXISTS session_recording_ad AFTER DELETE ON session_recording BEGIN
-    INSERT INTO session_recording_fts(session_recording_fts, rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time)
-    VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.created_time);
+    INSERT INTO session_recording_fts(session_recording_fts, rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, target_scope_parent_scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.target_scope_parent_scope_id, old.created_time);
 END;`;
 
 const createSessionTables = `

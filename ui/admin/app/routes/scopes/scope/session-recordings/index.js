@@ -59,8 +59,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     },
   };
 
-  allSessionRecordings;
-
   /**
    * Load all session recordings.
    * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], doSessionRecordingsExist: boolean, doStorageBucketsExist: boolean }>}
@@ -144,10 +142,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
           queryOptions,
         );
         totalItems = sessionRecordings.meta?.totalItems;
-        // Query all session recordings for filtering values if entering route for the first time
-        if (!this.allSessionRecordings) {
-          await this.getAllSessionRecordings(scope_id);
-        }
         doSessionRecordingsExist = await this.getDoSessionRecordingsExist(
           scope_id,
           totalItems,
@@ -157,29 +151,12 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         return {
           sessionRecordings,
           doSessionRecordingsExist: doSessionRecordingsExist,
-          allSessionRecordings: this.allSessionRecordings,
           totalItems,
           doStorageBucketsExist: doStorageBucketsExist,
         };
       }
     },
   );
-
-  /**
-   * Sets allSessionRecordings to all session recordings for filters
-   * @param {string} scope_id
-   */
-  async getAllSessionRecordings(scope_id) {
-    const options = { pushToStore: false, peekDb: true };
-    this.allSessionRecordings = await this.store.query(
-      'session-recording',
-      {
-        scope_id,
-        recursive: true,
-      },
-      options,
-    );
-  }
 
   /**
    * Sets doSessionRecordingsExist to true if there are any session recordings.
@@ -237,5 +214,14 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     await this.getAllSessionRecordings(scope.id);
 
     return super.refresh(...arguments);
+  }
+
+  /**
+   * Loads initial filter options in controller so it happens outside of model hook
+   * @param controller
+   */
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.loadItems();
   }
 }

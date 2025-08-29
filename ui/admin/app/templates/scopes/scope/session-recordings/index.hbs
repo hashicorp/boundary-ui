@@ -49,10 +49,13 @@
             <Dropdown
               name='user'
               @toggleText={{t 'resources.user.title'}}
-              @itemOptions={{this.filterOptions 'user'}}
+              @itemOptions={{this.userFilters.options}}
               @checkedItems={{this.users}}
               @applyFilter={{fn this.applyFilter 'users'}}
               @isSearchable={{true}}
+              @searchTerm={{this.userFilters.search}}
+              @updateSearchTerm={{fn this.onFilterSearch.perform 'userFilters'}}
+              @isLoading={{this.onFilterSearch.isRunning}}
               as |FD selectItem itemOptions|
             >
               {{#each itemOptions as |itemOption|}}
@@ -70,10 +73,16 @@
             <Dropdown
               name='scope'
               @toggleText={{t 'resources.scope.title'}}
-              @itemOptions={{this.projectScopes}}
+              @itemOptions={{this.scopeFilters.options}}
               @checkedItems={{this.scopes}}
               @applyFilter={{fn this.applyFilter 'scopes'}}
               @isSearchable={{true}}
+              @searchTerm={{this.scopeFilters.search}}
+              @updateSearchTerm={{fn
+                this.onFilterSearch.perform
+                'scopeFilters'
+              }}
+              @isLoading={{this.onFilterSearch.isRunning}}
               as |FD selectItem itemOptions|
             >
               {{#each-in
@@ -100,10 +109,16 @@
             <Dropdown
               name='target'
               @toggleText={{t 'resources.target.title'}}
-              @itemOptions={{this.filterOptions 'target'}}
+              @itemOptions={{this.targetFilters.options}}
               @checkedItems={{this.targets}}
               @applyFilter={{fn this.applyFilter 'targets'}}
               @isSearchable={{true}}
+              @searchTerm={{this.targetFilters.search}}
+              @updateSearchTerm={{fn
+                this.onFilterSearch.perform
+                'targetFilters'
+              }}
+              @isLoading={{this.onFilterSearch.isRunning}}
               as |FD selectItem itemOptions|
             >
               {{#each itemOptions as |itemOption|}}
