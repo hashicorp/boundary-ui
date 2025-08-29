@@ -20,21 +20,6 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     delete String.prototype.removeExtraWhiteSpace;
   });
 
-  // TODO: Add a normal LIKE search when we add a resource that uses it
-  test('it generates search correctly with FTS5', function (assert) {
-    const query = { search: 'favorite' };
-
-    const { sql, parameters } = generateSQLExpressions('target', query);
-    assert.strictEqual(
-      sql,
-      `
-        SELECT * FROM "target"
-        WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
-    );
-    assert.deepEqual(parameters, ['"favorite"*']);
-  });
-
   test('it grabs resources not in the model mapping', function (assert) {
     const query = {
       filters: { id: [{ equals: 'tokenKey' }] },
@@ -52,7 +37,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
 
   test('it executes count queries correctly', function (assert) {
     const select = {
-      select: ['count(*) as total'],
+      select: [{ field: '*', isCount: true, alias: 'total' }],
     };
 
     const { sql, parameters } = generateSQLExpressions('target', {}, select);
@@ -64,6 +49,38 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     );
     assert.deepEqual(parameters, []);
   });
+
+  test.each(
+    'it generates DISTINCT queries correctly',
+    [
+      {
+        select: [{ field: 'type', isDistinct: true }],
+        expectedSelect: 'type',
+      },
+      {
+        select: [
+          { field: 'type', isDistinct: true },
+          { field: 'status', isDistinct: true },
+        ],
+        expectedSelect: 'type, status',
+      },
+    ],
+    function (assert, { select, expectedSelect }) {
+      const { sql, parameters } = generateSQLExpressions(
+        'target',
+        {},
+        { select },
+      );
+
+      assert.strictEqual(
+        sql,
+        `
+        SELECT DISTINCT ${expectedSelect} FROM "target"
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, []);
+    },
+  );
 
   test.each(
     'it generates filters correctly',
@@ -300,7 +317,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', query, {
       page: 2,
       pageSize: 15,
-      select: ['data'],
+      select: [{ field: 'data' }],
     });
 
     assert.strictEqual(
