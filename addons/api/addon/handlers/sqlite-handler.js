@@ -182,8 +182,8 @@ export default class SqliteHandler {
     // If we get an invalid list token, we'll delete the token and
     // clear the DB and try again without a token.
     if (
-      err?.errors[0].status === 400 &&
-      err?.errors[0].code === 'invalid list token'
+      err?.errors?.[0].status === 400 &&
+      err?.errors?.[0].code === 'invalid list token'
     ) {
       await this.sqlite.deleteResource(type);
       // Delete all tokens of the same resource type so we don't keep clearing the DB.
