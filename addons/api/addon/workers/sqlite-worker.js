@@ -27,6 +27,10 @@ const MAX_HOST_PARAMETERS = 32766;
 const SCHEMA_VERSION = 1;
 const isSecure = self.isSecureContext;
 
+// Error code for sqlite corruption errors.
+// See https://sqlite.org/rescode.html#corrupt
+const SQLITE_CORRUPT = 11;
+
 const methods = {
   initializeSQLite: async () => {
     sqlite3 = await sqlite3InitModule({
@@ -65,7 +69,7 @@ const methods = {
 
         setupDb();
         done = true;
-      } catch (err) {
+      } catch (/** @type {import('@sqlite.org/sqlite-wasm').SQLite3Error} */ err) {
         // If we get a SQLite3Error and the pool is at capacity, we'll assume the error is
         // because we hit the cap so we add more capacity and see if that solves it.
         if (
@@ -81,7 +85,13 @@ const methods = {
           }
         } else {
           console.error('SQLite initialization error:', err);
-          throw err;
+
+          // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry
+          if (err?.resultCode === SQLITE_CORRUPT) {
+            poolUtil.unlink(`/${dbName}`);
+          } else {
+            throw err;
+          }
         }
       }
     }
