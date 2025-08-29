@@ -167,6 +167,21 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       this.can.can('list model', globalScope, { collection: 'users' }) &&
       this.can.can('list model', orgScope, { collection: 'users' })
     ) {
+      const users = await this.store.query(
+        'user',
+        {
+          scope_id: 'global',
+          recursive: true,
+          page: 1,
+          pageSize: 1,
+        },
+        { pushToStore: false },
+      );
+
+      if (!users.length) {
+        return [];
+      }
+
       const uniqueSessionUserIds = [
         ...new Set(
           allSessions
@@ -176,15 +191,18 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       ];
       const chunkedUserIds = chunk(uniqueSessionUserIds, MAX_EXPR_NUM);
       const associatedUsersPromises = chunkedUserIds.map((userIds) =>
-        this.store.query('user', {
-          scope_id: 'global',
-          recursive: true,
-          query: {
-            filters: {
-              id: { values: userIds.map((userId) => ({ equals: userId })) },
+        this.store.query(
+          'user',
+          {
+            scope_id: 'global',
+            query: {
+              filters: {
+                id: { values: userIds.map((userId) => ({ equals: userId })) },
+              },
             },
           },
-        }),
+          { peekDb: true },
+        ),
       );
       const usersArray = await Promise.all(associatedUsersPromises);
       return usersArray.flat();
@@ -200,6 +218,25 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAssociatedTargets(scope, allSessions) {
     if (this.can.can('list model', scope, { collection: 'targets' })) {
+      const targets = await this.store.query(
+        'target',
+        {
+          scope_id: scope.id,
+          query: {
+            filters: {
+              scope_id: [{ equals: scope.id }],
+            },
+          },
+          page: 1,
+          pageSize: 1,
+        },
+        { pushToStore: false },
+      );
+
+      if (!targets.length) {
+        return [];
+      }
+
       const uniqueSessionTargetIds = [
         ...new Set(
           allSessions
@@ -210,16 +247,20 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
 
       const chunkedTargetIds = chunk(uniqueSessionTargetIds, MAX_EXPR_NUM);
       const associatedTargetsPromises = chunkedTargetIds.map((targetIds) =>
-        this.store.query('target', {
-          scope_id: scope.id,
-          query: {
-            filters: {
-              id: {
-                values: targetIds.map((targetId) => ({ equals: targetId })),
+        this.store.query(
+          'target',
+          {
+            scope_id: scope.id,
+            query: {
+              filters: {
+                id: {
+                  values: targetIds.map((targetId) => ({ equals: targetId })),
+                },
               },
             },
           },
-        }),
+          { peekDb: true },
+        ),
       );
       const targetsArray = await Promise.all(associatedTargetsPromises);
       return targetsArray.flat();
