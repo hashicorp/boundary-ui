@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
@@ -20,7 +19,6 @@ module(
     setupApplicationTest(hooks);
     setupMirage(hooks);
     setupSqlite(hooks);
-    setupIndexedDb(hooks);
 
     let getCredentialsCount;
     let getUsernamePasswordCredentialCount;
