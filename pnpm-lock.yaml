@@ -63,9 +63,6 @@ importers:
       broccoli-source:
         specifier: ^3.0.1
         version: 3.0.1
-      dexie:
-        specifier: ^3.2.4
-        version: 3.2.7
       ember-auto-import:
         specifier: ^2.10.0
         version: 2.10.0(@glint/template@1.5.2)(webpack@5.99.8(esbuild@0.25.9))
@@ -4487,10 +4484,6 @@ packages:
 
   detect-node@2.1.0:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
-
-  dexie@3.2.7:
-    resolution: {integrity: sha512-2a+BXvVhY5op+smDRLxeBAivE7YcYaneXJ1la3HOkUfX9zKkE/AJ8CNgjiXbtXepFyFmJNGSbmjOwqbT749r/w==}
-    engines: {node: '>=6.0'}
 
   dezalgo@1.0.3:
     resolution: {integrity: sha512-K7i4zNfT2kgQz3GylDw40ot9GAE47sFZ9EXHFSPP6zONLgH6kWXE0KWJchkbQJLBkRazq4APwZ4OwiFFlT95OQ==}
@@ -13369,8 +13362,6 @@ snapshots:
 
   detect-node@2.1.0:
     optional: true
-
-  dexie@3.2.7: {}
 
   dezalgo@1.0.3:
     dependencies:
