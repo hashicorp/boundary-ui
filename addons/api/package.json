@@ -32,7 +32,6 @@
     "broccoli-merge-trees": "^4.2.0",
     "broccoli-plugin": "^4.0.7",
     "broccoli-source": "^3.0.1",
-    "dexie": "^3.2.4",
     "ember-auto-import": "^2.10.0",
     "ember-can": "^4.2.0",
     "ember-cli-babel": "^8.2.0",

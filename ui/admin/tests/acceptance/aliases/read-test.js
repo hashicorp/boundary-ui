@@ -9,7 +9,6 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -17,7 +16,6 @@ module('Acceptance | aliases | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupSqlite(hooks);
-  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {

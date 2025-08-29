@@ -6,6 +6,9 @@
 import Service from '@ember/service';
 import { PWBHost } from 'promise-worker-bi';
 
+export const formatDbName = (userId, clusterUrl) =>
+  `boundary-${userId}-${clusterUrl}`;
+
 // A mapping of columns to their expected model attributes for supported models
 // The JSON data column is not included here but is assumed to always be last.
 export const modelMapping = {

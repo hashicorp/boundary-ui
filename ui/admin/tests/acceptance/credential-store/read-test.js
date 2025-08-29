@@ -8,7 +8,6 @@ import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -17,7 +16,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupSqlite(hooks);
-  setupIndexedDb(hooks);
 
   let featuresService;
 

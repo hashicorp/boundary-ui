@@ -10,7 +10,6 @@ import Store from 'ember-data/store';
 import { CacheHandler } from '@ember-data/store';
 import RequestManager from '@ember-data/request';
 import { LegacyNetworkHandler } from '@ember-data/legacy-compat';
-import IndexedDbHandler from 'api/handlers/indexed-db-handler';
 import SqliteHandler from 'api/handlers/sqlite-handler';
 
 export default class extends Store {
@@ -19,14 +18,9 @@ export default class extends Store {
   constructor(args) {
     super(args);
 
-    const indexedDbHandler = new IndexedDbHandler(this);
     const sqliteHandler = new SqliteHandler(this);
 
-    this.requestManager.use([
-      sqliteHandler,
-      indexedDbHandler,
-      LegacyNetworkHandler,
-    ]);
+    this.requestManager.use([sqliteHandler, LegacyNetworkHandler]);
     this.requestManager.useCache(CacheHandler);
   }
 }
