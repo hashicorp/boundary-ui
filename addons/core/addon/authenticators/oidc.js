@@ -57,6 +57,17 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
   }
 
   /**
+   * Generates an account URL used to retrieve authenticated account.
+   * @override
+   * @param {string} accountID
+   * @return {string}
+   */
+  buildAccountEndpointURL(accountID) {
+    const adapter = this.store.adapterFor('application');
+    return adapter.buildURL('account', accountID, {}, 'findRecord');
+  }
+
+  /**
    * Intercepts the authenticate response, if any, and assigns the returned
    * token to all future requests via `addTokenToAuthorization`.
    * Returns the response data as normal.
