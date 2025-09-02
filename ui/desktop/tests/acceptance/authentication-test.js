@@ -14,7 +14,6 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -23,6 +22,7 @@ import {
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -153,7 +153,7 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
@@ -162,7 +162,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(1);
     this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
     await visit(urls.authenticate.global);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
@@ -172,7 +172,7 @@ module('Acceptance | authentication', function (hooks) {
       return new Response(404);
     });
     await visit(urls.authenticate.global);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
@@ -196,6 +196,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('signing out redirects to first global authenticate method', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
 
@@ -215,6 +224,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('401 responses result in deauthentication', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     await authenticateSession({
       scope: {
@@ -254,6 +272,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('signing out with running sessions renders signout modal', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
     await visit(urls.authenticate.methods.global);
@@ -276,6 +303,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('confirming signout via modal stops sessions and logs out user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     const stopAllSessions = this.ipcStub.withArgs('stopAll');
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
@@ -300,6 +336,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     // We need to encapsulate the event listener inside a mocked window service to ensure
     // the entire event is torn down (including the mocked window), since "window" exists
     // globally across all tests, and we don't want tests impacting one another

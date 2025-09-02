@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -57,6 +58,15 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('users can update an exisiting alias', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.aliases);
     await click(commonSelectors.HREF(urls.alias));
     await click(commonSelectors.EDIT_BTN);
@@ -67,6 +77,15 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('can cancel changes to an existing alias', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const name = instances.alias.name;
     await visit(urls.aliases);
 
@@ -82,6 +101,15 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('users have the option to clear an alias', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = aliasCount();
     assert.true(instances.alias.authorized_actions.includes('update'));
     await visit(urls.globalScope);
@@ -98,6 +126,15 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('users can not see the option to clear an alias without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.globalScope);

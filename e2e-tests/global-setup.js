@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { chromium, test as baseTest } from '@playwright/test';
+import { chromium, test as baseTest, mergeTests } from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
+import { boundaryApiClientTest } from './helpers/boundary-api-client.js';
 import { LoginPage } from './admin/pages/login.js';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -60,7 +61,7 @@ export const authenticatedState = path.resolve(
 );
 
 // Centralized location for environment variables used in tests
-export const test = baseTest.extend({
+export const base = baseTest.extend({
   adminAuthMethodId: process.env.E2E_PASSWORD_AUTH_METHOD_ID,
   adminLoginName: process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
   adminPassword: process.env.E2E_PASSWORD_ADMIN_PASSWORD,
@@ -99,3 +100,5 @@ export const test = baseTest.extend({
     await use(request);
   },
 });
+
+export const test = mergeTests(base, boundaryApiClientTest);

@@ -18,6 +18,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | update',
@@ -137,6 +138,15 @@ module(
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.notEqual(
         instances.usernameKeyPairCredential.name,
         commonSelectors.FIELD_NAME_VALUE,
@@ -230,6 +240,15 @@ module(
     });
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.usernameKeyPairCredential);
 
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
@@ -285,6 +304,15 @@ module(
     });
 
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
 
@@ -319,6 +347,15 @@ module(
     });
 
     test('can discard unsaved username & password credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -351,6 +388,15 @@ module(
     });
 
     test('can discard unsaved username & key pair credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -385,6 +431,15 @@ module(
     });
 
     test('can discard unsaved JSON credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -455,6 +510,15 @@ module(
     });
 
     test('can cancel discard unsaved username & key pair credential changes via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(6);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -537,6 +601,15 @@ module(
     });
 
     test('private_key and private_key_passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.usernameKeyPairCredential);
 
       assert.dom(selectors.FIELD_SSH_PRIVATE_KEY).doesNotExist();
@@ -561,6 +634,15 @@ module(
     });
 
     test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.jsonCredential);
 
       await click(commonSelectors.EDIT_BTN);

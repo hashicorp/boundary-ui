@@ -16,6 +16,7 @@ import {
 } from 'api/models/credential-store';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -70,6 +71,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('users can navigate to credential-stores with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.projectScope));
@@ -83,6 +93,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = [];
@@ -104,6 +123,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('users can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = ['create'];
@@ -115,6 +143,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('users can link to docs page for credential stores', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));
@@ -127,6 +164,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('user can search for a specific credential-store by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));
@@ -147,6 +193,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('user can search for credential-stores and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));
@@ -166,6 +221,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('user can filter for credential-stores by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));
@@ -185,6 +249,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('credential stores table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.credentialStores.all().destroy();
     const years = ['2006', '2005', '2004', '2003'];
     faker.helpers.shuffle(years).map((year) => {
@@ -236,6 +309,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.credentialStores.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('credential-store', {

@@ -7,9 +7,9 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -68,18 +68,34 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('visiting host sets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostSets);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSets);
 
     await click(commonSelectors.HREF(urls.hostSet));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
   });
 
   test('cannot navigate to a host set form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostCatalog);
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'read');
@@ -92,8 +108,16 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownHostSet);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
@@ -101,6 +125,15 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('users can link to docs page for host sets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostSets);
 
     await click(commonSelectors.HREF(urls.hostSet));

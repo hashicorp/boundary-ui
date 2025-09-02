@@ -14,6 +14,8 @@ const {
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
+const ENABLE_A11Y_AUDIT = process.env.ENABLE_A11Y_AUDIT || false;
+const COLOR_THEME = process.env.COLOR_THEME ?? 'light';
 
 const clone = (obj) => v8.deserialize(v8.serialize(obj));
 
@@ -157,16 +159,6 @@ module.exports = function (environment) {
       ? JSON.parse(process.env.ENABLE_MIRAGE)
       : true;
 
-    ENV['ember-a11y-testing'] = {
-      componentOptions: {
-        axeOptions: {
-          checks: {
-            'color-contrast': { options: { noScroll: true } },
-          },
-        },
-      },
-    };
-
     // Default edition in development
     ENV.features.defaultEdition = 'enterprise';
     // Enable development-only features
@@ -178,6 +170,9 @@ module.exports = function (environment) {
       ENV.features.featureEditions.enterprise[feature] = true;
       ENV.features.featureEditions.hcp[feature] = true;
     });
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'test') {
@@ -197,6 +192,9 @@ module.exports = function (environment) {
     ENV.oidcPollingTimeoutSeconds = 0;
 
     ENV.enableConfirmService = false;
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'production') {

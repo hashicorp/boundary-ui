@@ -16,6 +16,8 @@ The desktop client UI for Boundary.
     - [Building for Production](#building-for-production)
       - [Environment Variables (PROD)](#environment-variables-prod)
     - [Running Tests](#running-tests)
+      - [Light vs Dark Mode A11y Tests](#light-vs-dark-mode-a11y-tests)
+      - [Explicit a11yAudit usage](#explicit-a11yaudit-usage)
     - [Running end to end Tests](#running-end-to-end-tests)
     - [Troubleshooting](#troubleshooting)
       - [Blank screen and/or hang browser tab when running as web app](#blank-screen-andor-hang-browser-tab-when-running-as-web-app)
@@ -96,18 +98,16 @@ These environment variables may be used to customized the build.
 | Variable | Description |
 | -------- | ----------- |
 | `DEBUG_APP_UPDATER` | Enable to debug app updater feature. Must be enabled for all `APP_UPDATER_*` variables to be used. |
-| `APP_UPDATER_CURRENT_VERSION` | Version of client. |
-| `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
-| `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
 | `SETUP_CLI` | Enable download and extraction of CLI. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 | `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
+| `COLOR_THEME` | Define (`dark`) to set the test browser appearance to dark for running tests in dark mode. |
 
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in. 
+for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in.
 To build this UI for production, run the following commands from this folder:
 
 ```bash
@@ -140,6 +140,7 @@ These environment variables may be used to customized the build.
 ### Running Tests
 
 - `pnpm test` runs full tests in random order with coverage
+- `COLOR_THEME=dark ember test --server` runs tests in dark mode
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
@@ -149,8 +150,44 @@ of testing".  Use test coverage as a guide to help you identify untested
 high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
-If you write acceptance tests, please ensure at least one validation per
-route using `await a11yAudit();`.
+Write acceptance tests like normal. Our a11y testing strategy will automatically
+run `a11yAudit()` after [specific helper actions](tests/test-helper.js#L26), like visit, click, and fillIn.
+Our a11y tests have their own pnpm commands:
+
+* `pnpm test-a11y` runs a11y tests for light and dark mode
+* `pnpm test-a11y:light` runs a11y tests just for light mode
+* `pnpm test-a11y:dark` runs a11y tests just for dark mode
+
+#### Light vs Dark Mode A11y Tests
+
+When running a11y tests in light mode, we audit against multiple WCAG standards.
+However, dark mode will only tests against the `color-contrast` rule. Unless fixing
+a specific test, please use `pnpm test-a11y` for full a11y testing coverage.
+
+#### Explicit a11yAudit usage
+
+We no longer need to call `a11yAudit()` directly but there any be times we need to.
+An example would be when an action is taken in our tests that alters the UI but
+does not trigger an audit via our default helpers. In the below example, we use
+a dispatch to insert text into a code editor. This will not trigger an audit and
+inserting an `a11yAudit()` right after would be acceptable. Wrap the audit with
+`shouldForceAudit` so the audit is only run when testing a11y.
+
+```javascript
+import { shouldForceAudit } from 'ember-a11y-testing/test-support';
+
+const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+const editorView = editorElement.editor;
+editorView.dispatch({
+  changes: {
+    from: editorView.state.selection.main.from,
+    insert: '{"test": "value"}',
+  },
+});
+if (shouldForceAudit()) {
+  await a11yAudit();
+}
+```
 
 ### Running end to end Tests
 

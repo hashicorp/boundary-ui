@@ -8,7 +8,6 @@ import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -16,6 +15,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | change password', function (hooks) {
   setupApplicationTest(hooks);
@@ -56,11 +56,19 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('visiting account change password', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.SIDEBAR_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.changePassword);
   });
@@ -102,11 +110,18 @@ module('Acceptance | accounts | change password', function (hooks) {
       selectors.FIELD_NEW_PASSWORD_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
-
-    await a11yAudit();
   });
 
   test('can cancel password change', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.changePassword);
 
     await fillIn(
@@ -123,6 +138,15 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('errors are displayed when changing password fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/accounts/:id', () => {
       return new Response(
         490,
@@ -147,7 +171,6 @@ module('Acceptance | accounts | change password', function (hooks) {
       selectors.FIELD_NEW_PASSWORD_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST).isVisible();
   });

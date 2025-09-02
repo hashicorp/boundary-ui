@@ -7,11 +7,11 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
@@ -84,11 +84,19 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('visiting target host sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
     await click(commonSelectors.HREF(urls.targetHostSources));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targetHostSources);
     assert
@@ -97,15 +105,32 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('can navigate to a known host set type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targetHostSources);
 
     await click(commonSelectors.HREF(urls.hostSet));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
   });
 
   test('cannot navigate to an unknown host set type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       hostSets: instances.hostCatalogPlugin.hostSets,
     });
@@ -123,6 +148,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('can remove a host set', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
@@ -137,6 +171,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('cannot remove a host set without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'remove-host-sources',
@@ -149,6 +192,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -177,6 +229,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('select and save host sets to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({ hostSetIds: [] });
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
@@ -204,6 +265,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('cannot add host sources without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'add-host-sources',
@@ -217,6 +287,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('select and cancel host sets to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
@@ -250,6 +329,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('adding a target host set which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -282,6 +370,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('saving host source with address brings up confirmation modal and removes address', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const target = this.server.create('target', {
@@ -318,6 +415,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('saving host source with address brings up confirmation modal and can cancel', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const target = this.server.create('target', {

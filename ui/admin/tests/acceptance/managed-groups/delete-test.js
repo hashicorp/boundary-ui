@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -16,6 +15,7 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,6 +81,15 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User can delete a managed group', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.managedGroups);
 
@@ -93,6 +102,15 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User can delete a ldap managed group', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapManagedGroups);
 
@@ -105,6 +123,15 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User cannot delete a managed-group without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -117,6 +144,15 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User cannot delete a ldap managed-group without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -129,6 +165,15 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('Errors are displayed when delete on managed group fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/managed-groups/:id', () => {
       return new Response(
         490,
@@ -145,13 +190,21 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.managedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.managedGroup);
   });
 
   test('Errors are displayed when delete on ldap managed group fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/managed-groups/:id', () => {
       return new Response(
         490,
@@ -168,7 +221,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);

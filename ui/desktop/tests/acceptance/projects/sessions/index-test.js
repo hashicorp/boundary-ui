@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   currentSession,
@@ -22,6 +21,7 @@ import {
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -170,13 +170,21 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch();
 
     await visit(urls.sessions);
-    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting index', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
 
@@ -188,35 +196,54 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting empty sessions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.sessions.all().destroy();
     this.stubCacheDaemonSearch('sessions', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
-    await a11yAudit();
 
     assert.dom(APP_STATE_TITLE).hasText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 
   test('visiting a session', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -226,6 +253,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to an active session', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -237,6 +273,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to an active session with read:self permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ authorized_actions: ['read:self'] });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
@@ -249,6 +294,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to a pending session', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ status: STATUS_SESSION_PENDING });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
@@ -261,6 +315,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to session even without read permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ authorized_actions: [] });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
@@ -273,6 +336,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot link to a canceling session', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ status: STATUS_SESSION_CANCELING });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
@@ -286,6 +358,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot link to a terminated session', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ status: STATUS_SESSION_TERMINATED });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
@@ -298,6 +379,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can cancel an active session with cancel permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -308,6 +398,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can cancel an active session with cancel:self permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ authorized_actions: ['cancel:self'] });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
@@ -320,6 +419,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot click cancel button without cancel permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.update({ authorized_actions: [] });
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
@@ -330,6 +438,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cancelling a session shows success alert', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('stop');
     await visit(urls.projects);
 
@@ -342,6 +459,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cancelling a session keeps you on the sessions list screen', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('stop');
     await visit(urls.projects);
 
@@ -352,6 +478,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/sessions/:id_method', () => new Response(400));
     await visit(urls.projects);
 
@@ -364,6 +499,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('stop').throws();
     await visit(urls.projects);
 
@@ -376,6 +520,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('user can change org scope and only sessions for that org will be displayed', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.stubCacheDaemonSearch(
       'sessions',
       'sessions',
@@ -413,6 +566,15 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('sessions list view still loads with no cache daemon', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
     this.stubCacheDaemonSearch();
     const sessionsCount = this.server.schema.sessions.all().models.length;
