@@ -7,7 +7,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import { formatDbName } from 'api/services/indexed-db';
+import { formatDbName } from 'api/services/sqlite';
 
 /**
  * Entry route for the application.
@@ -21,7 +21,6 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service features;
   @service featureEdition;
-  @service indexedDb;
   @service sqlite;
   @service('browser/window') window;
 
@@ -75,7 +74,6 @@ export default class ApplicationRoute extends Route {
       const hostUrl = this.window.location.host;
       if (userId && hostUrl) {
         await this.sqlite.setup(formatDbName(userId, hostUrl));
-        await this.indexedDb.setup(formatDbName(userId, hostUrl));
       }
     }
   }

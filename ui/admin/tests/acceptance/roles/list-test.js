@@ -15,7 +15,6 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
@@ -28,7 +27,6 @@ module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupSqlite(hooks);
-  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
