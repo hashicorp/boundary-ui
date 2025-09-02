@@ -9,7 +9,6 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -21,7 +20,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupSqlite(hooks);
-  setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
   let getAliasCount;
