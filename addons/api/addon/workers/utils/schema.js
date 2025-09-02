@@ -388,6 +388,45 @@ CREATE TRIGGER IF NOT EXISTS session_recording_ad AFTER DELETE ON session_record
     VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.created_time);
 END;`;
 
+const createSessionTables = `
+CREATE TABLE IF NOT EXISTS session (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT,
+    status TEXT,
+    endpoint TEXT,
+    target_id TEXT,
+    user_id TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_session_scope_id_created_time ON session(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS session_fts USING fts5(
+    id,
+    type,
+    status,
+    endpoint,
+    target_id,
+    user_id,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS session_ai AFTER INSERT ON session BEGIN
+    INSERT INTO session_fts(
+        id, type, status, endpoint, target_id, user_id, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.status, new.endpoint, new.target_id, new.user_id, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_ad AFTER DELETE ON session BEGIN
+    INSERT INTO session_fts(session_fts, rowid, id, type, status, endpoint, target_id, user_id, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.status, old.endpoint, old.target_id, old.user_id, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -408,16 +447,7 @@ ${createScopeTables}
 ${createAuthMethodTables}
 ${createHostCatalogTables}
 ${createSessionRecordingTables}
-
-CREATE TABLE IF NOT EXISTS "group" (
-    id TEXT NOT NULL PRIMARY KEY,
-    name TEXT,
-    description TEXT,
-    scope_id TEXT NOT NULL,
-    created_time TEXT NOT NULL,
-    data TEXT NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_group_scope_id_created_time ON "group"(scope_id, created_time DESC);
+${createSessionTables}
 
 COMMIT;`;
 
