@@ -111,13 +111,9 @@ export default class SqliteHandler {
           await writeToDbPromise;
         }
 
-        // TODO: Remove all timers once we're ready to merge back to main
-        console.time(`SQLite fetch ${type}`);
-
         if (totalInsert > 0) {
           // If there were any inserts, let sqlite handle running analyze on the DB
           await this.sqlite.analyzeDatabase();
-          console.timeLog(`SQLite fetch ${type}`, 'analyze');
         }
 
         const { sql, parameters } = generateSQLExpressions(type, queryObj, {
@@ -130,7 +126,6 @@ export default class SqliteHandler {
           sql,
           parameters,
         });
-        console.timeLog(`SQLite fetch ${type}`, 'rows');
 
         const { sql: countSql, parameters: countParams } =
           generateSQLExpressions(type, queryObj, {
@@ -140,7 +135,6 @@ export default class SqliteHandler {
           sql: countSql,
           parameters: countParams,
         });
-        console.timeLog(`SQLite fetch ${type}`, 'count');
 
         const results = rows.map((item) =>
           JSON.parse(item.data, (key, value) =>
@@ -162,7 +156,6 @@ export default class SqliteHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        console.timeEnd(`SQLite fetch ${type}`);
         records.meta = { totalItems: count[0].total };
         return records;
       }
@@ -260,8 +253,6 @@ export default class SqliteHandler {
       return [...params, JSON.stringify(datum)];
     });
 
-    if (items.length > 0) console.time(`SQLite insert`);
     await this.sqlite.insertResource(type, items);
-    if (items.length > 0) console.timeEnd(`SQLite insert`);
   }
 }

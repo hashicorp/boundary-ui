@@ -37,7 +37,6 @@ const methods = {
       print: console.log,
       printErr: console.error,
     });
-    console.log(`SQLite Version: ${sqlite3?.version.libVersion}`);
     const dbName = await promiseWorker.postMessage({
       method: 'getDatabaseName',
     });
