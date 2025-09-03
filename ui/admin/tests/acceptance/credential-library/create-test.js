@@ -450,6 +450,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       },
     });
 
+    featuresService.enable('vault-ldap-credential');
+
     await visit(urls.newCredentialLibrary);
 
     await click(selectors.TYPE_VAULT_LDAP);
@@ -483,6 +485,13 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     );
   });
 
+  test('cannot select vault ldap when feature is disabled', async function (assert) {
+    await visit(urls.newCredentialLibrary);
+
+    assert.false(featuresService.isEnabled('vault-ldap-credential'));
+    assert.dom(selectors.TYPE_VAULT_LDAP).doesNotExist();
+  });
+
   test('can create a new credential library with username, password and domain type for vault ldap', async function (assert) {
     setRunOptions({
       rules: {
@@ -492,6 +501,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
         },
       },
     });
+
+    featuresService.enable('vault-ldap-credential');
 
     const credentialLibraryCount = getCredentialLibraryCount();
     const usernamePasswordDomainCredentialLibraryCount =
@@ -544,6 +555,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
         },
       },
     });
+
+    featuresService.enable('vault-ldap-credential');
 
     await visit(`${urls.newCredentialLibrary}?type=vault-ssh-certificate`);
 
