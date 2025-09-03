@@ -40,7 +40,9 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
     // We let the server handle the validation in that case
     // and only update the model if we have exactly one username and one domain after splitting
     if (arr.length === 2) {
-      const [username, domain] = arr;
+      const isDomainFirst = value.includes('\\');
+      const username = isDomainFirst ? arr[1] : arr[0];
+      const domain = isDomainFirst ? arr[0] : arr[1];
 
       // Update the model with the values only if both username and domain are present
       if (username && domain) {

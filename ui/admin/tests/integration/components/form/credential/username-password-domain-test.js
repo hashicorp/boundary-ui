@@ -18,8 +18,8 @@ module(
 
     test('it renders', async function (assert) {
       this.model = {};
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(
         hbs`<Form::Credential::UsernamePasswordDomain @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}  />`,
       );
@@ -35,8 +35,8 @@ module(
 
     test('it splits the username and domain when the value contains delimiters such as `@` or `\\` on `onBlur`', async function (assert) {
       this.model = { username: '', domain: '', authorized_actions: ['update'] };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
         <Form::Credential::UsernamePasswordDomain
           @model={{this.model}}
@@ -52,7 +52,7 @@ module(
       assert.strictEqual(this.model.domain, 'domain.com');
 
       // Test with a different delimiter `\`
-      await fillIn('[name=username]', `username\\domain.com`);
+      await fillIn('[name=username]', `domain.com\\username`);
       await blur('[name=username]');
 
       assert.strictEqual(this.model.username, 'username');
@@ -61,8 +61,8 @@ module(
 
     test('it splits the username and domain when the value contains delimiters such as `@` or `\\` when submit is clicked', async function (assert) {
       this.model = { username: '', domain: '', authorized_actions: ['update'] };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
         <Form::Credential::UsernamePasswordDomain
         @model={{this.model}}
@@ -80,8 +80,8 @@ module(
 
     test('it does not split the username and domain when the value does not contain a delimiter', async function (assert) {
       this.model = { username: '', domain: '', authorized_actions: ['update'] };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
         <Form::Credential::UsernamePasswordDomain
           @model={{this.model}}
@@ -100,8 +100,8 @@ module(
 
     test('it does not split if the username or domain is empty', async function (assert) {
       this.model = { username: '', domain: '', authorized_actions: ['update'] };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
       <Form::Credential::UsernamePasswordDomain
         @model={{this.model}}
@@ -126,8 +126,8 @@ module(
 
     test('it does not split when the username is empty or contains multiple delimiters', async function (assert) {
       this.model = { username: '', domain: '', authorized_actions: ['update'] };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
       <Form::Credential::UsernamePasswordDomain
         @model={{this.model}}
@@ -158,8 +158,8 @@ module(
         domain: 'domain.com',
         authorized_actions: ['update'],
       };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
       <Form::Credential::UsernamePasswordDomain
         @model={{this.model}}
@@ -182,8 +182,8 @@ module(
         domain: 'domain.com',
         authorized_actions: ['update'],
       };
-      this.submit = () => { };
-      this.cancel = () => { };
+      this.submit = () => {};
+      this.cancel = () => {};
       await render(hbs`
         <Form::Credential::UsernamePasswordDomain
           @model={{this.model}}
@@ -209,7 +209,7 @@ module(
       };
       const submitSpy = sinon.spy();
       this.submit = submitSpy;
-      this.cancel = () => { };
+      this.cancel = () => {};
 
       await render(hbs`
       <Form::Credential::UsernamePasswordDomain
