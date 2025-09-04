@@ -571,6 +571,7 @@ user:
   actions:
     add-accounts: Add Accounts
     delete: Delete User
+    edit-details: 'Edit User details'
 role:
   title: Role
   title_plural: Roles
