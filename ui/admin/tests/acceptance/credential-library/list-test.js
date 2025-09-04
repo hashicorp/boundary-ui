@@ -123,6 +123,15 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   });
 
   test('User cannot navigate to vault ldap credential library details when feature is not enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-09-04
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibraries);
 
     assert
