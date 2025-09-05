@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.4.0 [CLI 0.20.0] (2025.09.25)
+
+### New & Improved
+
+- Upgrade CLI to v0.20.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2992))
+
+### Bug Fixes
+
+- Fix bug that prevented setting cluster URL when error occurred while disconnecting ([PR](https://github.com/hashicorp/boundary-ui/pull/2975))
+- Gracefully handle session cleanup when logging out or quitting ([PR](https://github.com/hashicorp/boundary-ui/pull/2891))
+
 ## V2.3.3 [CLI 0.19.3] (2025.07.09)
 
 ### New & Improved
