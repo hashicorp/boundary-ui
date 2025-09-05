@@ -20,6 +20,8 @@ let poolUtil;
 /** @type {import('@sqlite.org/sqlite-wasm').Sqlite3Static} */
 let sqlite3;
 
+const { promise: ready, resolve: readyResolve } = Promise.withResolvers();
+
 // Maximum number of host parameters for SQLite prepared statements.
 // See "Maximum Number Of Host Parameters In A Single SQL Statement" in
 // https://www.sqlite.org/limits.html
@@ -194,6 +196,7 @@ const methods = {
 const promiseWorker = new PWBWorker();
 promiseWorker.register(async ({ method, payload }) => {
   if (!sharedService) {
+    await ready;
     return methods[method](payload);
   }
 
@@ -221,5 +224,6 @@ if (isSecure) {
   // Production builds error out when using top level awaits so we'll just use an async IIFE
   (async () => {
     await methods.initializeSQLite();
+    readyResolve();
   })();
 }
