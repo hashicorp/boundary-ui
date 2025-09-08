@@ -244,11 +244,13 @@ class BoundaryApi {
 export const boundaryApiClientTest = base.extend<{
   apiClient: BoundaryApi;
   controllerAddr?: string;
-  apiClientTestAfter?: () => {};
+  apiClientTestAfter?: () => void;
 }>({
-  // this is a noop so that the `apiClient` fixture doesn't fail for other tests,
-  // the `apiClientTestAfter` fixture is used in api-client tests to provide a hook for assertions
-  apiClientTestAfter: () => {},
+  apiClientTestAfter: async ({}, use) => {
+    // this is a noop so that the `apiClient` fixture doesn't fail for other tests,
+    // the `apiClientTestAfter` fixture is used in api-client tests to provide a hook for assertions
+    await use(() => {});
+  },
   apiClient: async ({ controllerAddr, apiClientTestAfter }, use) => {
     // by destructuring the `apiClientTestAfter` fixture it creates a dependency on that fixture which
     // controls the setup/teardown order and allows `api-client.spec.js` to test the teardown cleanup
