@@ -369,6 +369,7 @@ session:
   proxy-url:
     address-port: Address & port
     ssh: SSH
+    rdp: RDP
   shell: Shell
 global:
   title: Global
@@ -728,9 +729,11 @@ target:
   types:
     tcp: Generic TCP
     ssh: SSH
+    rdp: RDP
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+    rdp: Remote Desktop Protocol for Windows servers.
   filter:
     active-sessions:
       yes: Has active sessions
@@ -748,6 +751,7 @@ target:
     default_client_port:
       label: Default Client Port
       help: The local proxy port on which to listen by default when a session is started on a client.
+      rdp-windows-error: 'Note: Windows OS prevents port 3389 from being used.'
     sidebar:
       label: Session Recording
       help: Record SSH sessions on this target and save them to a storage bucket.
@@ -810,6 +814,10 @@ target:
       add:
         title: Add Injected Application Credential Sources
         description: Select injected Application credential sources to assign to this target.
+      alert:
+        title: Cannot connect to this target without injected application credentials
+        description: Injected application credentials are used by Boundary to sign in to remote resources without showing them to the end-user.
+        action: Add injected application credentials
   workers:
     description: You can customize how your workers route traffic to this target by setting up a filter that matches specific worker tags. If your target is in a private network, we recommend setting up an egress filter to specify a worker inside the network so that Boundary can access the host. Ingress and egress filters are allowed to select the same worker.
     messages:
@@ -904,10 +912,12 @@ credential-library:
     new: New Credential Library
     ssh_private_key: SSH Private Key
     username_password: Username & Password
+    username_password_domain: Username, Password & Domain
     username_attribute: Username
     password_attribute: Password
     private_key_passphrase_attribute: Private Key Passphrase
     private_key_attribute: Private Key
+    domain_attribute: Domain
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -922,6 +932,7 @@ credential-library:
     credential_type:
       label: Credential Type
       help: Specify the type of credential this library will issue. This must be set to use credential injection. After this data is saved, it cannot be changed later.
+      description: The type of credential the library uses for credential injection.
     credential_mapping_overrides:
       label: Credential mapping overrides
       help: Specify the credential fields to use instead of the defaults
@@ -955,9 +966,11 @@ credential-library:
   types:
     vault-generic: Generic Secrets
     vault-ssh-certificate: SSH Certificates
+    vault-ldap: LDAP
   help:
     vault-generic: Authorize sessions using credentials brokered by Vault
     vault-ssh-certificate: Authorize sessions using the SSH Secrets Engine in Vault
+    vault-ldap: Authorize sessions using the LDAP Secrets Engine in Vault
 credential:
   title: Credential
   title_plural: Credentials
@@ -974,12 +987,14 @@ credential:
   types:
     username_password: Username & Password
     ssh_private_key: Username & Key Pair
+    username_password_domain: Username, Password & Domain
     json: JSON
     unknown: Unknown
   help:
     username_password: Connect using the provided username and password.
     ssh_private_key: Connect using a username, public key, and private key.
     json: Connect using a JSON blob containing the credentials.
+    username_password_domain: Includes a domain field for Active Directory
   form:
     username:
       label: Username
@@ -987,6 +1002,9 @@ credential:
     password:
       label: Password
       help: The password to use when signing in with this credential store.
+    domain:
+      label: Domain
+      help: The Active Directory domain or FQDN (e.g., contoso.local)
     private_key:
       label: SSH Private Key
       help: The private key to use when connecting with this credential store.

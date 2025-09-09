@@ -4,21 +4,22 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { click, currentURL, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_TARGET_RDP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let featuresService;
@@ -30,11 +31,15 @@ module('Acceptance | targets | update', function (hooks) {
       project: null,
     },
     target: null,
+    rdpTarget: null,
+    sshTarget: null,
   };
   const urls = {
     projectScope: null,
     targets: null,
     target: null,
+    rdpTarget: null,
+    sshTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -52,10 +57,22 @@ module('Acceptance | targets | update', function (hooks) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
     });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
+      scope: instances.scopes.project,
+      injected_application_credential_source_ids: [],
+    });
+    instances.sshTarget = this.server.create('target', {
+      type: TYPE_TARGET_SSH,
+      scope: instances.scopes.project,
+      injected_application_credential_source_ids: [],
+    });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
+    urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
 
     await authenticateSession({});
   });
@@ -343,5 +360,72 @@ module('Acceptance | targets | update', function (hooks) {
       undefined,
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
+  });
+
+  test('can save changes to existing rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    featuresService.enable('ssh-target');
+
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.rdpTarget));
+
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL)
+      .exists('Injected application credential alert is displayed');
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL_ADD_BTN)
+      .hasAttribute(
+        'href',
+        `${urls.rdpTarget}/add-injected-application-credential-sources`,
+      );
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(currentURL(), urls.rdpTarget);
+    assert.strictEqual(
+      this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models[0]
+        .name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+  });
+
+  test('displays add injected credentials alert for ssh target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('ssh-target');
+
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.sshTarget));
+
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL)
+      .exists('Injected application credential alert is displayed');
+
+    await click(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL_ADD_BTN);
+
+    assert.strictEqual(
+      currentURL(),
+      `${urls.sshTarget}/add-injected-application-credential-sources`,
+    );
   });
 });

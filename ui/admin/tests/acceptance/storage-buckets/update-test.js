@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -15,6 +16,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | storage-buckets | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   let features;
 

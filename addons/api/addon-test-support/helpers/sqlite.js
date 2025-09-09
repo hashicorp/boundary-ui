@@ -3,15 +3,17 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * This test helper can help set up and cleanup the database in your tests.
  *
  * ```js
- * import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+ * import { setupSqlite } from 'api/test-support/helpers/sqlite';
  *
  * module('Acceptance | my test', function(hooks) {
  *  setupApplicationTest(hooks);
- *  setupIndexedDb(hooks);
+ *  setupSqlite(hooks);
  *
  *   // add your actual tests here
  * });
@@ -19,17 +21,17 @@
  *
  * @param hooks
  */
-export function setupIndexedDb(hooks) {
+export function setupSqlite(hooks) {
   hooks.beforeEach(async function () {
-    const indexedDb = this.owner.lookup('service:indexed-db');
-    await indexedDb.setup(`test-indexed-db-${Date.now()}`);
+    const sqliteDb = this.owner.lookup('service:sqlite');
+    await sqliteDb.setup(`test-sqlite-${uuidv4()}`);
   });
 
   hooks.afterEach(async function () {
-    const indexedDb = this.owner.lookup('service:indexed-db');
+    const sqliteDb = this.owner.lookup('service:sqlite');
 
-    await indexedDb.db.delete();
+    await sqliteDb.deleteDatabase();
   });
 }
 
-export default setupIndexedDb;
+export default setupSqlite;

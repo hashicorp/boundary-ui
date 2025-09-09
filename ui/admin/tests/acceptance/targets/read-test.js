@@ -4,13 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -18,7 +22,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let featuresService;
@@ -33,6 +37,7 @@ module('Acceptance | targets | read', function (hooks) {
     sshTarget: null,
     tcpTarget: null,
     alias: null,
+    rdpTarget: null,
   };
   const urls = {
     globalScope: null,
@@ -43,6 +48,7 @@ module('Acceptance | targets | read', function (hooks) {
     tcpTarget: null,
     alias: null,
     aliases: null,
+    rdpTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -65,6 +71,10 @@ module('Acceptance | targets | read', function (hooks) {
       type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
+      scope: instances.scopes.project,
+    });
 
     instances.alias = this.server.createList('alias', 1, {
       scope: instances.scopes.global,
@@ -83,6 +93,7 @@ module('Acceptance | targets | read', function (hooks) {
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
 
     await authenticateSession({ username: 'admin' });
   });
@@ -317,5 +328,49 @@ module('Acceptance | targets | read', function (hooks) {
     await click(selectors.ALIASES_VIEW_MORE_BTN);
 
     assert.dom(selectors.ALIASES_FLYOUT).isVisible();
+  });
+
+  test('cannot navigate to a rdp target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    instances.rdpTarget.authorized_actions =
+      instances.rdpTarget.authorized_actions.filter((item) => item !== 'read');
+
+    await visit(urls.projectScope);
+
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.rdpTarget))
+      .doesNotExist();
+  });
+
+  test('visiting rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.targets));
+
+    assert.strictEqual(currentURL(), urls.targets);
+
+    await click(commonSelectors.HREF(urls.rdpTarget));
+
+    assert.strictEqual(currentURL(), urls.rdpTarget);
   });
 });

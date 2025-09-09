@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -14,6 +15,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   let featuresService;
 
@@ -26,6 +28,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     usernamePasswordCredential: null,
     usernameKeyPairCredential: null,
     jsonCredential: null,
+    usernamePasswordDomainCredential: null,
   };
 
   const urls = {
@@ -37,6 +40,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     usernameKeyPairCredential: null,
     jsonCredential: null,
     unknownCredential: null,
+    usernamePasswordDomainCredential: null,
   };
 
   hooks.beforeEach(async function () {
@@ -68,6 +72,15 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       credentialStore: instances.staticCredentialStore,
       type: 'json',
     });
+    instances.usernamePasswordDomainCredential = this.server.create(
+      'credential',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.staticCredentialStore,
+        type: 'username_password_domain',
+      },
+    );
+
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -76,6 +89,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
+    urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
     await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
@@ -140,6 +154,27 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     await click(commonSelectors.HREF(urls.jsonCredential));
 
     assert.strictEqual(currentURL(), urls.jsonCredential);
+  });
+
+  test('visiting username, password & domain credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.staticCredentialStore);
+
+    await click(commonSelectors.HREF(urls.credentials));
+
+    assert.strictEqual(currentURL(), urls.credentials);
+
+    await click(commonSelectors.HREF(urls.usernamePasswordDomainCredential));
+
+    assert.strictEqual(currentURL(), urls.usernamePasswordDomainCredential);
   });
 
   test('cannot navigate to a username & password credential form without proper authorization', async function (assert) {
@@ -211,6 +246,31 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       .isVisible();
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.jsonCredential))
+      .doesNotExist();
+  });
+
+  test('cannot navigate to a username, password & domain credential form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    instances.usernamePasswordDomainCredential.authorized_actions =
+      instances.usernamePasswordDomainCredential.authorized_actions.filter(
+        (item) => item != 'read',
+      );
+    await visit(urls.credentials);
+
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          urls.usernamePasswordDomainCredential,
+        ),
+      )
       .doesNotExist();
   });
 

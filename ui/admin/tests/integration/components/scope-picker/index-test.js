@@ -10,11 +10,13 @@ import { hbs } from 'ember-cli-htmlbars';
 import { click } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 
 module('Integration | Component | scope-picker/index', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks, 'en-us');
+  setupSqlite(hooks);
 
   const SCOPE_PICKER_DROPDOWN = '.scope-picker button';
   const SCOPE_PICKER_DROPDOWN_ICON = '.hds-dropdown-toggle-button__icon svg';
@@ -30,6 +32,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
   let global;
   let scopeService;
   let store;
+  let query;
 
   hooks.beforeEach(async function () {
     store = this.owner.lookup('service:store');
@@ -37,6 +40,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
 
     this.server.create('scope', { id: 'global' });
     global = await store.findRecord('scope', 'global');
+    query = { filters: { scope_id: [{ equals: 'global' }] } };
   });
 
   test('it renders correct content when there are more than five orgs', async function (assert) {
@@ -49,9 +53,15 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       scope: { id: orgs[0].id, type: 'org' },
     });
     scopeService.org = global;
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
+    query.filters.scope_id = [{ equals: orgs[0].id }];
     scopeService.projectsList = await store.query('scope', {
       scope_id: orgs[0].id,
+      query,
     });
 
     await render(hbs`<ScopePicker />`);
@@ -75,9 +85,15 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       scope: { id: orgs[0].id, type: 'org' },
     });
     scopeService.org = global;
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global', query }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
+    query.filters.scope_id = [{ equals: orgs[0].id }];
     scopeService.projectsList = await store.query('scope', {
       scope_id: orgs[0].id,
+      query,
     });
 
     await render(hbs`<ScopePicker />`);
@@ -100,10 +116,18 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       type: 'project',
       scope: { id: orgs[0].id, type: 'org' },
     });
-    const projects = await store.query('scope', { scope_id: orgs[0].id });
+    query.filters.scope_id = [{ equals: orgs[0].id }];
+    const projects = await store.query('scope', {
+      scope_id: orgs[0].id,
+      query,
+    });
     scopeService.org = global;
     scopeService.project = projects[0];
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
     scopeService.projectsList = projects;
 
     await render(hbs`<ScopePicker />`);
@@ -128,10 +152,18 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       type: 'project',
       scope: { id: orgs[0].id, type: 'org' },
     });
-    const projects = await store.query('scope', { scope_id: orgs[0].id });
+    query.filters.scope_id = [{ equals: orgs[0].id }];
+    const projects = await store.query('scope', {
+      scope_id: orgs[0].id,
+      query,
+    });
     scopeService.org = global;
     scopeService.project = projects[0];
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
     scopeService.projectsList = projects;
 
     await render(hbs`<ScopePicker />`);
@@ -152,7 +184,11 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       scope: { id: 'global', type: 'global' },
     });
     scopeService.org = global;
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
 
     await render(hbs`<ScopePicker />`);
     await click(SCOPE_PICKER_DROPDOWN);
@@ -167,8 +203,11 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
     scopeService.org = scopeService.orgsList[0];
 
     await render(hbs`<ScopePicker />`);
@@ -188,10 +227,15 @@ module('Integration | Component | scope-picker/index', function (hooks) {
       type: 'project',
       scope: { id: org.id, type: 'org' },
     });
-    const projects = await store.query('scope', { scope_id: org.id });
+    query.filters.scope_id = [{ equals: org.id }];
+    const projects = await store.query('scope', { scope_id: org.id, query });
     scopeService.org = global;
     scopeService.project = projects[0];
-    scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
+    query.filters.scope_id = [{ equals: 'global' }];
+    scopeService.orgsList = await store.query('scope', {
+      scope_id: 'global',
+      query,
+    });
     scopeService.projectsList = projects;
 
     await render(hbs`<ScopePicker />`);

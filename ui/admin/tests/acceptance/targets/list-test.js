@@ -14,10 +14,13 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -27,9 +30,9 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
-  setupIntl(hooks, 'en-us');
+  setupSqlite(hooks);
 
+  let featuresService;
   const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
   const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
   const CREATED_TIME_VALUES_ARRAY = [
@@ -49,6 +52,7 @@ module('Acceptance | targets | list', function (hooks) {
     tcpTarget: null,
     sshTarget: null,
     session: null,
+    rdpTarget: null,
   };
 
   const urls = {
@@ -57,6 +61,7 @@ module('Acceptance | targets | list', function (hooks) {
     targets: null,
     tcpTarget: null,
     sshTarget: null,
+    rdpTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -83,14 +88,20 @@ module('Acceptance | targets | list', function (hooks) {
       scope: instances.scopes.project,
       status: STATUS_SESSION_ACTIVE,
     });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
+      scope: instances.scopes.project,
+    });
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
 
-    const featuresService = this.owner.lookup('service:features');
+    featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
+    featuresService.enable('rdp-target');
 
     await authenticateSession({});
   });
@@ -221,12 +232,15 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
     assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).isVisible();
 
     await fillIn(commonSelectors.SEARCH_INPUT, instances.sshTarget.id);
     await waitFor(commonSelectors.HREF(urls.tcpTarget), { count: 0 });
+    await waitFor(commonSelectors.HREF(urls.rdpTarget), { count: 0 });
 
     assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).doesNotExist();
   });
 
   test('user can search for targets and get no results', async function (assert) {
@@ -245,6 +259,7 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
     assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).isVisible();
 
     await fillIn(
       commonSelectors.SEARCH_INPUT,
@@ -254,6 +269,7 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.sshTarget)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).doesNotExist();
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
@@ -273,12 +289,14 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
     assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).isVisible();
 
     await click(commonSelectors.FILTER_DROPDOWN('type'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM('tcp'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('type'));
 
     assert.dom(commonSelectors.HREF(urls.sshTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
   });
 
@@ -466,4 +484,58 @@ module('Acceptance | targets | list', function (hooks) {
       });
     },
   );
+
+  test('user can only see RDP and TCP targets when rdp-target feature is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.disable('ssh-target');
+
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.targets));
+
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).doesNotExist();
+
+    await click(commonSelectors.FILTER_DROPDOWN('type'));
+
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('tcp')).isVisible();
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('rdp')).isVisible();
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('ssh')).doesNotExist();
+  });
+
+  test('user can only see SSH and TCP targets when ssh-target feature is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.disable('rdp-target');
+
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.targets));
+
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.rdpTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+
+    await click(commonSelectors.FILTER_DROPDOWN('type'));
+
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('tcp')).isVisible();
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('rdp')).doesNotExist();
+    assert.dom(commonSelectors.FILTER_DROPDOWN_ITEM('ssh')).isVisible();
+  });
 });

@@ -78,6 +78,15 @@ export default factory.extend({
     return name;
   },
 
+  scope() {
+    if (this.type === 'global') {
+      return {
+        id: 'global',
+        type: 'global',
+      };
+    }
+  },
+
   withChildren: trait({
     afterCreate(record, server) {
       if (record.type === 'global') {

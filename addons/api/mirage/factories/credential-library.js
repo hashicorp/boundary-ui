@@ -10,6 +10,7 @@ import generateId from '../helpers/id';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
   TYPES_CREDENTIAL_LIBRARY,
   options,
 } from 'api/models/credential-library';
@@ -21,6 +22,9 @@ export default factory.extend({
   credential_type(i) {
     if (this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC) {
       return options.credential_types[i % options.credential_types.length];
+    }
+    if (this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP) {
+      return options.credential_types[2]; // Only supports username, password & domain credential type
     }
   },
   authorized_actions: () =>
@@ -43,6 +47,10 @@ export default factory.extend({
         return {
           username: faker.internet.userName(),
           key_bits: faker.number.int(999),
+          path: faker.system.directoryPath(),
+        };
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP:
+        return {
           path: faker.system.directoryPath(),
         };
     }

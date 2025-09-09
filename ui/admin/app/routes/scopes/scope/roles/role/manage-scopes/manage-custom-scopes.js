@@ -108,7 +108,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
    * @returns {Promise<[ScopeModel]>}
    */
   async getAllProjects() {
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     return this.store.query(
       'scope',
       {
@@ -156,7 +156,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
     if (!search) {
       return totalItems;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const filters = canSelectOrgs
       ? { scope_id: [{ equals: 'global' }] }
       : { type: [{ equals: TYPE_SCOPE_PROJECT }] };

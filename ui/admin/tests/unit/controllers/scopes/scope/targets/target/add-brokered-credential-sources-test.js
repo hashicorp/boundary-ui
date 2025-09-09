@@ -7,13 +7,24 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { currentURL, visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import {
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+} from 'api/models/credential';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
+import { TYPE_TARGET_RDP } from 'api/models/target';
 
 module(
   'Unit | Controller | scopes/scope/targets/target/add-brokered-credential-sources',
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
+    setupSqlite(hooks);
 
     let store;
     let controller;
@@ -111,6 +122,90 @@ module(
       await controller.cancel();
 
       assert.strictEqual(currentURL(), urls.credentialSources);
+    });
+
+    test('hasAvailableBrokeredCredentialSources returns true if target has available credentials for RDP target', function (assert) {
+      const target = store.createRecord('target', {
+        brokered_credential_source_ids: [{ value: 'cred_123' }],
+        type: TYPE_TARGET_RDP,
+      });
+      const credentialLibraries = [
+        store.createRecord('credential-library', {
+          credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+        }),
+      ];
+      const credentials = [
+        store.createRecord('credential', {
+          type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+        }),
+      ];
+      controller.set('model', { target, credentialLibraries, credentials });
+
+      assert.true(controller.hasAvailableBrokeredCredentialSources);
+    });
+
+    test('hasAvailableBrokeredCredentialSources returns false if target has no available credentials for RDP target', function (assert) {
+      const target = store.createRecord('target', {
+        brokered_credential_source_ids: [{ value: 'cred_123' }],
+        type: TYPE_TARGET_RDP,
+      });
+      controller.set('model', {
+        target,
+        credentialLibraries: [],
+        credentials: [],
+      });
+
+      assert.false(controller.hasAvailableBrokeredCredentialSources);
+    });
+
+    test('filteredCredentialSources returns credential libraries and credentials not already added to RDP target', function (assert) {
+      const credential1 = store.createRecord('credential', {
+        id: 'cred_1',
+        type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
+      });
+      const credential2 = store.createRecord('credential', {
+        id: 'cred_2',
+        type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      });
+
+      const credentialLibrary1 = store.createRecord('credential-library', {
+        id: 'lib_1',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      });
+      const credentialLibrary2 = store.createRecord('credential-library', {
+        id: 'lib_2',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
+      });
+      const credentialLibrary3 = store.createRecord('credential-library', {
+        id: 'lib_3',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      });
+
+      const target = store.createRecord('target', {
+        brokered_credential_source_ids: [{ value: 'cred_2' }],
+        type: TYPE_TARGET_RDP,
+      });
+
+      controller.set('model', {
+        target,
+        credentialLibraries: [
+          credentialLibrary1,
+          credentialLibrary2,
+          credentialLibrary3,
+        ],
+        credentials: [credential1],
+      });
+
+      const filteredCredentialSources = controller.filteredCredentialSources;
+      assert.strictEqual(filteredCredentialSources.length, 4);
+      assert.true(filteredCredentialSources.includes(credentialLibrary1));
+      assert.true(filteredCredentialSources.includes(credentialLibrary2));
+      assert.true(filteredCredentialSources.includes(credentialLibrary3));
+      assert.true(filteredCredentialSources.includes(credential1));
+      assert.false(filteredCredentialSources.includes(credential2));
     });
   },
 );

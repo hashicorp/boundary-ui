@@ -1,0 +1,51 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Form::Field::ListWrapper
+  @layout='horizontal'
+  @isOptional={{true}}
+  @disabled={{@disabled}}
+>
+  <:fieldset as |F|>
+    <F.Legend>
+      {{t
+        'resources.credential-library.form.credential_mapping_overrides.label'
+      }}
+    </F.Legend>
+    <F.HelperText>
+      {{t
+        'resources.credential-library.form.credential_mapping_overrides.help'
+      }}
+    </F.HelperText>
+
+    {{#if @model.errors.credential_mapping_overrides}}
+      <F.Error as |E|>
+        {{#each @model.errors.credential_mapping_overrides as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </:fieldset>
+
+  <:field as |F|>
+    <F.KeyValue
+      @name='credential_mapping_overrides'
+      @model={{@model}}
+      @disabled={{@disabled}}
+      @width='100%'
+      @showNewRow={{this.showNewRow}}
+    >
+      <:newKey as |N|>
+        <N.select @selectOptions={{this.selectOptions}} />
+      </:newKey>
+      <:key as |K|>
+        <K.select @selectOptions={{this.mappingOverrides}} />
+      </:key>
+      <:value as |V|>
+        <V.text />
+      </:value>
+    </F.KeyValue>
+  </:field>
+</Form::Field::ListWrapper>

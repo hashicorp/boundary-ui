@@ -16,7 +16,7 @@
   <nav.link @route='scopes.scope.targets.target.brokered-credential-sources'>
     {{t 'resources.target.brokered-credential-source.title_plural'}}
   </nav.link>
-  {{#if @model.isSSH}}
+  {{#if (or @model.isSSH @model.isRDP)}}
     <nav.link
       @route='scopes.scope.targets.target.injected-application-credential-sources'
     >

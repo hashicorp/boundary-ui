@@ -75,7 +75,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
         })
       ) {
         const sort = {
-          attribute: sortAttribute,
+          attributes: [sortAttribute],
           direction: sortDirection,
         };
 
@@ -118,12 +118,11 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const aliases = await this.store.query(
       'alias',
       {
         scope_id,
-        query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
       },

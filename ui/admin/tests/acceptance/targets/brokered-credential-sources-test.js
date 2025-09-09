@@ -7,17 +7,28 @@ import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { TYPE_CREDENTIAL_USERNAME_PASSWORD } from 'api/models/credential';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_JSON,
+} from 'api/models/credential';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+} from 'api/models/credential-library';
+import { TYPE_TARGET_RDP, TYPE_TARGET_TCP } from 'api/models/target';
 
 module('Acceptance | targets | brokered credential sources', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   let getCredentialLibraryCount;
   let getCredentialCount;
@@ -44,13 +55,16 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     orgScope: null,
     projectScope: null,
     targets: null,
-    target: null,
+    tcpTarget: null,
+    rdpTarget: null,
     credentialLibraries: null,
     credentialLibrary: null,
     credential: null,
     jsonCredential: null,
-    addBrokeredCredentialSources: null,
-    brokeredCredentialSources: null,
+    addBrokeredCredentialSourcesForTCPTarget: null,
+    brokeredCredentialSourcesForTCPTarget: null,
+    addBrokeredCredentialSourcesForRDPTarget: null,
+    brokeredCredentialSourcesForRDPTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -73,7 +87,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       type: 'static',
       scope: instances.scopes.project,
     });
-    instances.credentials = this.server.createList('credential', 3, {
+    instances.credentials = this.server.createList('credential', 4, {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
     });
@@ -87,9 +101,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     );
     instances.credentialLibrary = instances.credentialLibraries[0];
     instances.credential = instances.credentials[0];
-    instances.target = this.server.create('target', {
-      scope: instances.scopes.project,
-    });
 
     randomlySelectedCredentials = this.server.schema.credentials
       .all()
@@ -97,7 +108,19 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     randomlySelectedCredentialLibraries = this.server.schema.credentialLibraries
       .all()
       .models.map((cred) => cred.id);
-    instances.target.update({
+
+    instances.tcpTarget = this.server.create('target', {
+      scope: instances.scopes.project,
+      type: TYPE_TARGET_TCP,
+      brokeredCredentialSourceIds: [
+        ...randomlySelectedCredentialLibraries,
+        ...randomlySelectedCredentials,
+      ],
+    });
+
+    instances.rdpTarget = this.server.create('target', {
+      scope: instances.scopes.project,
+      type: TYPE_TARGET_RDP,
       brokeredCredentialSourceIds: [
         ...randomlySelectedCredentialLibraries,
         ...randomlySelectedCredentials,
@@ -109,12 +132,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
-    urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.brokeredCredentialSources = `${urls.target}/brokered-credential-sources`;
+    urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
+    urls.brokeredCredentialSourcesForTCPTarget = `${urls.tcpTarget}/brokered-credential-sources`;
+    urls.brokeredCredentialSourcesForRDPTarget = `${urls.rdpTarget}/brokered-credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
-    urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[2].credentialStoreId}/credentials/${instances.credentials[2].id}`;
-    urls.addBrokeredCredentialSources = `${urls.target}/add-brokered-credential-sources`;
+    urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[3].credentialStoreId}/credentials/${instances.credentials[3].id}`;
+    urls.addBrokeredCredentialSourcesForTCPTarget = `${urls.tcpTarget}/add-brokered-credential-sources`;
+    urls.addBrokeredCredentialSourcesForRDPTarget = `${urls.rdpTarget}/add-brokered-credential-sources`;
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     getCredentialCount = () =>
@@ -124,179 +150,323 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await authenticateSession({ username: 'admin' });
   });
 
-  test('visiting target brokered credential sources', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+  test.each(
+    'visiting brokered credential sources',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
       },
-    });
-
-    await visit(urls.brokeredCredentialSources);
-
-    assert.strictEqual(currentURL(), urls.brokeredCredentialSources);
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialSourceCount });
-  });
-
-  test('can navigate to a vault type credential library', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
       },
-    });
-
-    await visit(urls.brokeredCredentialSources);
-
-    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
-
-    assert.strictEqual(currentURL(), urls.credentialLibrary);
-  });
-
-  test('can navigate to a username & password type credential', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
         },
-      },
-    });
+      });
 
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-    });
-    await visit(urls.brokeredCredentialSources);
+      await visit(urls[input.route]);
 
-    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credential));
-
-    assert.strictEqual(currentURL(), urls.credential);
-  });
-
-  test('cannot navigate to a json type credential when feature is disabled', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    const jsonCredential = instances.credentials[2];
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-    });
-    await visit(urls.brokeredCredentialSources);
-
-    assert.false(featuresService.isEnabled('json-credentials'));
-    assert.dom(commonSelectors.TABLE_ROW(3)).includesText(jsonCredential.name);
-    assert.dom(commonSelectors.HREF(urls.jsonCredential)).doesNotExist();
-  });
-
-  test('visiting add brokered credential sources', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.addBrokeredCredentialSources);
-
-    assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
-  });
-
-  test('displays list of all brokered credential source types available', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [],
-    });
-    await visit(urls.addBrokeredCredentialSources);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialSourceCount });
-    assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
-  });
-
-  test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-    });
-    await visit(urls.addBrokeredCredentialSources);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: getCredentialLibraryCount() });
-    assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
-  });
-
-  test('displays no brokered credential sources message when none available', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.addBrokeredCredentialSources);
-
-    assert
-      .dom(commonSelectors.PAGE_MESSAGE_HEADER)
-      .hasText('No Brokered Credential Sources Available');
-  });
-
-  test('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [],
-    });
-    await visit(urls.brokeredCredentialSources);
-
-    // Click on the rose message link
-    await click(commonSelectors.PAGE_MESSAGE_LINK);
-
-    assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
-  });
+      assert.strictEqual(currentURL(), urls[input.route]);
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialSourceCount });
+    },
+  );
 
   test.each(
-    'can select credential sources',
+    'can navigate to a credential library and credential',
+    {
+      'username & password credential type for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+        link: 'credential',
+        expectedUrl: 'credential',
+      },
+
+      'username & password credential type for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+        link: 'credential',
+        expectedUrl: 'credential',
+      },
+      'vault generic credential library type for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+        link: 'credentialLibrary',
+        expectedUrl: 'credentialLibrary',
+      },
+      'vault generic credential library type for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+        link: 'credentialLibrary',
+        expectedUrl: 'credentialLibrary',
+      },
+      'json credential type for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+        link: 'jsonCredential',
+        expectedUrl: 'jsonCredential',
+        enableJsonFeature: true,
+      },
+      'json credential type for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+        link: 'jsonCredential',
+        expectedUrl: 'jsonCredential',
+        enableJsonFeature: true,
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      // needed only if the test is for json credential
+      if (input.enableJsonFeature) {
+        featuresService.enable('json-credentials');
+      }
+      await visit(urls[input.route]);
+
+      await click(commonSelectors.TABLE_RESOURCE_LINK(urls[input.link]));
+
+      assert.strictEqual(currentURL(), urls[input.expectedUrl]);
+    },
+  );
+
+  test.each(
+    'cannot navigate to a json type credential when feature is disabled',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      const jsonCredential = instances.credentials[3];
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [...randomlySelectedCredentials],
+      });
+      await visit(urls[input.route]);
+
+      assert.false(featuresService.isEnabled('json-credentials'));
+      assert
+        .dom(commonSelectors.TABLE_ROW(4))
+        .includesText(jsonCredential.name);
+      assert.dom(commonSelectors.HREF(urls.jsonCredential)).doesNotExist();
+    },
+  );
+
+  test.each(
+    'visiting add brokered credential sources',
+    {
+      'for TCP target': {
+        route: 'addBrokeredCredentialSourcesForTCPTarget',
+      },
+      'for RDP target': {
+        route: 'addBrokeredCredentialSourcesForRDPTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      await visit(urls[input.route]);
+
+      assert.strictEqual(currentURL(), urls[input.route]);
+    },
+  );
+
+  test.each(
+    'displays correct list of brokered credential sources for TCP target to add',
+    {
+      'all credential source types are available': {
+        getBrokeredCredentialSourceIds: () => [],
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: credentialSourceCount });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'only credential libraries are available': {
+        getBrokeredCredentialSourceIds: () => randomlySelectedCredentials,
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: getCredentialLibraryCount() });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'only credentials are available': {
+        getBrokeredCredentialSourceIds: () =>
+          randomlySelectedCredentialLibraries,
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: getCredentialCount() });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'no brokered credential sources are available': {
+        getBrokeredCredentialSourceIds: () => [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.PAGE_MESSAGE_HEADER)
+            .hasText('No Brokered Credential Sources Available');
+        },
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances.tcpTarget.update({
+        brokeredCredentialSourceIds: input.getBrokeredCredentialSourceIds(),
+      });
+      await visit(urls.addBrokeredCredentialSourcesForTCPTarget);
+
+      input.assertVisible(assert);
+    },
+  );
+
+  test.each(
+    'displays correct list of brokered credential sources for RDP target to add',
+    {
+      'all credential source types are available': {
+        getBrokeredCredentialSourceIds: () => [],
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: credentialSourceCount });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'only credential libraries are available': {
+        getBrokeredCredentialSourceIds: () => randomlySelectedCredentials,
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: getCredentialLibraryCount() });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'only credentials are available': {
+        getBrokeredCredentialSourceIds: () =>
+          randomlySelectedCredentialLibraries,
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.TABLE_ROWS)
+            .isVisible({ count: getCredentialCount() });
+          assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
+        },
+      },
+      'no brokered credential sources are available': {
+        getBrokeredCredentialSourceIds: () => [
+          ...randomlySelectedCredentialLibraries,
+          ...randomlySelectedCredentials,
+        ],
+        assertVisible: (assert) => {
+          assert
+            .dom(commonSelectors.PAGE_MESSAGE_HEADER)
+            .hasText('No Brokered Credential Sources Available');
+        },
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances.rdpTarget.update({
+        brokeredCredentialSourceIds: input.getBrokeredCredentialSourceIds(),
+      });
+      await visit(urls.addBrokeredCredentialSourcesForRDPTarget);
+
+      input.assertVisible(assert);
+    },
+  );
+
+  test.each(
+    'when no brokered credential sources available, button routes to add brokered credential sources',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        addRoute: 'addBrokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        addRoute: 'addBrokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [],
+      });
+      await visit(urls[input.route]);
+
+      // Click on the rose message link
+      await click(commonSelectors.PAGE_MESSAGE_LINK);
+
+      assert.strictEqual(currentURL(), urls[input.addRoute]);
+    },
+  );
+
+  test.each(
+    'can select credential sources for TCP target',
     {
       'save vault generic credential-library': {
         credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC],
@@ -339,23 +509,26 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       setRunOptions({
         rules: {
           'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
             enabled: false,
           },
         },
       });
 
-      instances.target.update({
+      instances.tcpTarget.update({
         brokeredCredentialSourceIds: [],
       });
-      await visit(urls.brokeredCredentialSources);
+      await visit(urls.brokeredCredentialSourcesForTCPTarget);
 
       assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
 
       await click(selectors.MANAGE_DROPDOWN);
       await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
 
-      assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
+      assert.strictEqual(
+        currentURL(),
+        urls.addBrokeredCredentialSourcesForTCPTarget,
+      );
       assert
         .dom(commonSelectors.TABLE_ROWS)
         .isVisible({ count: credentialSourceCount });
@@ -365,238 +538,465 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       }
       await click(input.action);
 
-      assert.strictEqual(currentURL(), urls.brokeredCredentialSources);
+      assert.strictEqual(
+        currentURL(),
+        urls.brokeredCredentialSourcesForTCPTarget,
+      );
       assert
         .dom(commonSelectors.TABLE_ROWS)
         .isVisible({ count: input.expectedCount });
     },
   );
 
-  test('cannot add credential sources without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+  test.each(
+    'can select credential sources for RDP target',
+    {
+      'save vault generic credential-library': {
+        credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
       },
-    });
+      'save vault ssh certificate credential-library': {
+        credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
+      'save username and password credential': {
+        credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
+      'save ssh private key credential': {
+        credentialSources: [TYPE_CREDENTIAL_SSH_PRIVATE_KEY],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
+      'save username, password and domain credential': {
+        credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
+      'save json credential': {
+        credentialSources: [TYPE_CREDENTIAL_JSON],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
+      'save credentials and credential-libraries': {
+        credentialSources: [
+          TYPE_CREDENTIAL_USERNAME_PASSWORD,
+          TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+          TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+          TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+          TYPE_CREDENTIAL_JSON,
+          TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+        ],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 6,
+      },
+      'cancel vault generic credential-library': {
+        credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+      'cancel vault ssh certificate credential-library': {
+        credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+      'cancel username and password credential': {
+        credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+      'cancel ssh private key credential': {
+        credentialSources: [TYPE_CREDENTIAL_SSH_PRIVATE_KEY],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+      'cancel username, password and domain credential': {
+        credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+      'cancel json credential': {
+        credentialSources: [TYPE_CREDENTIAL_JSON],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
 
-    instances.target.authorized_actions =
-      instances.target.authorized_actions.filter(
-        (item) => item !== 'add-credential-sources',
+      'cancel credentials and credential-libraries': {
+        credentialSources: [
+          TYPE_CREDENTIAL_USERNAME_PASSWORD,
+          TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+          TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+          TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+          TYPE_CREDENTIAL_JSON,
+          TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+        ],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances.rdpTarget.update({
+        brokeredCredentialSourceIds: [],
+      });
+      await visit(urls.brokeredCredentialSourcesForRDPTarget);
+
+      assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+
+      assert.strictEqual(
+        currentURL(),
+        urls.addBrokeredCredentialSourcesForRDPTarget,
       );
-    await visit(urls.brokeredCredentialSources);
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialSourceCount });
 
-    await click(selectors.MANAGE_DROPDOWN);
+      for (const type of input.credentialSources) {
+        await click(selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(type));
+      }
+      await click(input.action);
 
-    assert
-      .dom(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS)
-      .doesNotExist();
-  });
-
-  test('adding credential sources which errors displays error message', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    this.server.post('/targets/:idMethod', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {},
-        },
+      assert.strictEqual(
+        currentURL(),
+        urls.brokeredCredentialSourcesForRDPTarget,
       );
-    });
-    instances.target.update({
-      brokeredCredentialSourceIds: [],
-    });
-    await visit(urls.addBrokeredCredentialSources);
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.expectedCount });
+    },
+  );
 
-    await click(
-      selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
-        TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-      ),
-    );
-    await click(
-      selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
-        TYPE_CREDENTIAL_USERNAME_PASSWORD,
-      ),
-    );
-    await click(commonSelectors.SAVE_BTN);
-
-    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
-  });
-
-  test('can remove a vault type credential library', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+  test.each(
+    'cannot add credential sources without proper authorization',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
       },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
-    });
-    const credentialLibraryCount = getCredentialLibraryCount();
-    const availableCredentialsCount = getCredentialCount();
-    await visit(urls.brokeredCredentialSources);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialLibraryCount });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialLibraryCount - 1 });
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: availableCredentialsCount + 1 });
-  });
-
-  test('can remove a username & password type credential', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
       },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-    });
-    const credentialCount = getCredentialCount();
-    const availableCredentialsCount = getCredentialLibraryCount();
-    await visit(urls.brokeredCredentialSources);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialCount });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialCount - 1 });
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: availableCredentialsCount + 1 });
-  });
-
-  test('cannot remove credential libraries without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
         },
-      },
-    });
+      });
 
-    instances.target.authorized_actions =
-      instances.target.authorized_actions.filter(
+      instances[input.targetName].authorized_actions = instances[
+        input.targetName
+      ].authorized_actions.filter((item) => item !== 'add-credential-sources');
+      await visit(urls[input.route]);
+
+      await click(selectors.MANAGE_DROPDOWN);
+
+      assert
+        .dom(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS)
+        .doesNotExist();
+    },
+  );
+
+  test.each(
+    'adding credential sources which errors displays error message',
+    {
+      'for TCP target': {
+        route: 'addBrokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'addBrokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      this.server.post('/targets/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          },
+        );
+      });
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [],
+      });
+      await visit(urls[input.route]);
+
+      await click(
+        selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
+          TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        ),
+      );
+      await click(
+        selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
+          TYPE_CREDENTIAL_USERNAME_PASSWORD,
+        ),
+      );
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
+    },
+  );
+
+  test.each(
+    'can remove a vault type credential library',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
+      });
+      const credentialLibraryCount = getCredentialLibraryCount();
+      const availableCredentialsCount = getCredentialCount();
+      await visit(urls[input.route]);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialLibraryCount });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialLibraryCount - 1 });
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: availableCredentialsCount + 1 });
+    },
+  );
+
+  test.each(
+    'can remove a username & password type credential',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [...randomlySelectedCredentials],
+      });
+      const credentialCount = getCredentialCount();
+      const availableCredentialsCount = getCredentialLibraryCount();
+      await visit(urls[input.route]);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialCount });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialCount - 1 });
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: availableCredentialsCount + 1 });
+    },
+  );
+
+  test.each(
+    'cannot remove credential sources without proper authorization',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances[input.targetName].authorized_actions = instances[
+        input.targetName
+      ].authorized_actions.filter(
         (item) => item !== 'remove-credential-sources',
       );
-    await visit(urls.brokeredCredentialSources);
+      await visit(urls[input.route]);
+      assert
+        .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN)
+        .doesNotExist();
+    },
+  );
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
-  });
-
-  test('removing a target credential library which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+  test.each(
+    'removing a credential source which errors displays error messages',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
       },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
-    });
-    this.server.post('/targets/:idMethod', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {},
-        },
-      );
-    });
-    const count = getCredentialLibraryCount();
-    await visit(urls.brokeredCredentialSources);
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
-    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
-  });
-
-  test('removing a target credential which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
       },
-    });
-
-    instances.target.update({
-      brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-    });
-    this.server.post('/targets/:idMethod', () => {
-      return new Response(
-        400,
-        {},
-        {
-          status: 400,
-          code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {},
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
         },
-      );
-    });
-    const count = getCredentialCount();
-    await visit(urls.brokeredCredentialSources);
+      });
 
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
+      });
+      this.server.post('/targets/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          },
+        );
+      });
+      const count = getCredentialLibraryCount();
+      await visit(urls[input.route]);
 
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+      assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
 
-    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
-  });
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
+    },
+  );
+
+  test.each(
+    'removing a credential which errors displays error messages',
+    {
+      'for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+      },
+      'for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+      },
+    },
+    async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
+      instances[input.targetName].update({
+        brokeredCredentialSourceIds: [...randomlySelectedCredentials],
+      });
+      this.server.post('/targets/:idMethod', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {},
+          },
+        );
+      });
+      const count = getCredentialCount();
+      await visit(urls[input.route]);
+
+      assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
+    },
+  );
 });

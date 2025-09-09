@@ -4,24 +4,27 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_TARGET_RDP } from 'api/models/target';
 
 module('Acceptance | targets | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let getTargetCount;
+  let getRDPTargetCount;
+  let featuresService;
 
   const instances = {
     scopes: {
@@ -30,6 +33,7 @@ module('Acceptance | targets | delete', function (hooks) {
       project: null,
     },
     target: null,
+    rdpTarget: null,
   };
   const urls = {
     orgScope: null,
@@ -37,6 +41,7 @@ module('Acceptance | targets | delete', function (hooks) {
     targets: null,
     target: null,
     newTarget: null,
+    rdpTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -53,14 +58,24 @@ module('Acceptance | targets | delete', function (hooks) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
     });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
+      scope: instances.scopes.project,
+    });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.newTarget = `${urls.targets}/new`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
+    getRDPTargetCount = () =>
+      this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models.length;
+
+    featuresService = this.owner.lookup('service:features');
+
     await authenticateSession({});
   });
 
@@ -182,5 +197,26 @@ module('Acceptance | targets | delete', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_DELETE);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+  });
+
+  test('can delete rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    const rdpTargetCount = getRDPTargetCount();
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.rdpTarget));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+    assert.strictEqual(getRDPTargetCount(), rdpTargetCount - 1);
   });
 });

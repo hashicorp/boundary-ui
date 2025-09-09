@@ -5,7 +5,7 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
@@ -255,6 +255,53 @@ test(
       // End `boundary connect` process
       if (connect) {
         connect.kill('SIGTERM');
+      }
+    }
+  },
+);
+
+test(
+  'Verify RDP target creation',
+  { tag: ['@ent', '@aws', '@docker'] },
+  async ({ request, page, sshUser, targetAddress, targetPort }) => {
+    await page.goto('/');
+    let org;
+    try {
+      org = await boundaryHttp.createOrg(request);
+      const project = await boundaryHttp.createProject(request, org.id);
+
+      // go to the credential store page
+
+      await page.goto(`/scopes/${project.id}/credential-stores`);
+
+      // Create UPD credential
+      const credentialStore = new CredentialStoresPage(page);
+      await credentialStore.createStaticCredentialStore();
+      const credentialName =
+        await credentialStore.createStaticCredentialUsernamePasswordDomain(
+          sshUser,
+          'testPassword',
+          'testDomain',
+        );
+
+      const targetsPage = new TargetsPage(page);
+      const rdpTarget = await targetsPage.createRDPTargetWithAddressEnt(
+        targetAddress,
+        targetPort,
+      );
+      await targetsPage.addBrokeredCredentialsToTarget(
+        rdpTarget,
+        credentialName,
+      );
+      await targetsPage.addInjectedCredentialsToTarget(
+        rdpTarget,
+        credentialName,
+      );
+
+      // TODO: Connection will be tested later when we have the Proxy in place.
+    } finally {
+      if (org) {
+        await boundaryHttp.deleteOrg(request, org.id);
       }
     }
   },

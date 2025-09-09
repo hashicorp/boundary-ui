@@ -5,10 +5,7 @@
 
 import Component from '@glimmer/component';
 
-import {
-  options,
-  TYPES_CREDENTIAL_LIBRARY,
-} from 'api/models/credential-library';
+import { options } from 'api/models/credential-library';
 
 export default class FormCredentialLibraryVaultSshCertComponent extends Component {
   // =properties
@@ -17,11 +14,6 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
    * @type {object}
    */
   keyTypes = options.key_type;
-
-  /**
-   * @type {Array.<string>}
-   */
-  types = TYPES_CREDENTIAL_LIBRARY;
 
   /**
    * Boolean to determine if the key bits field should be displayed on the form

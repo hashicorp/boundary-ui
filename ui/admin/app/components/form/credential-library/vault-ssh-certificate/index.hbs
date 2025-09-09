@@ -54,29 +54,10 @@
   </Hds::Form::Textarea::Field>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group
-      @name={{t 'form.type.label'}}
-      @alignment='center'
-      as |G|
-    >
-      <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each this.types as |type|}}
-        <G.RadioCard
-          @value={{type}}
-          @maxWidth='20rem'
-          @checked={{eq type @model.type}}
-          {{on 'input' (fn @changeType type)}}
-          as |R|
-        >
-          <R.Label>{{t
-              (concat 'resources.credential-library.types.' type)
-            }}</R.Label>
-          <R.Description>{{t
-              (concat 'resources.credential-library.help.' type)
-            }}</R.Description>
-        </G.RadioCard>
-      {{/each}}
-    </Hds::Form::RadioCard::Group>
+    <Form::CredentialLibrary::Radio
+      @model={{@model}}
+      @changeType={{@changeType}}
+    />
   {{else}}
     <InfoField
       @value={{t (concat 'resources.credential-library.types.' @model.type)}}

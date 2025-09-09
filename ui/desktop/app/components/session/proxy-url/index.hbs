@@ -3,40 +3,36 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<div class='proxy-url-container'>
-  <Hds::Dropdown @listPosition='bottom-left' as |dd|>
-    <dd.ToggleButton @color='secondary' @text={{this.selectedValue}} />
-    <dd.Interactive
-      {{on
-        'click'
-        (fn
-          this.updateContent
-          (t 'resources.session.proxy-url.address-port')
-          dd.close
-        )
-      }}
-    >{{t 'resources.session.proxy-url.address-port'}}</dd.Interactive>
-    <dd.Interactive
-      data-test-ssh-option
-      {{on
-        'click'
-        (fn this.updateContent (t 'resources.session.proxy-url.ssh') dd.close)
-      }}
-    >{{t 'resources.session.proxy-url.ssh'}}</dd.Interactive>
-  </Hds::Dropdown>
-  {{#if this.isAddressAndPort}}
-    <Hds::Copy::Snippet
-      class='copy-address'
-      @textToCopy={{@proxyAddress}}
-      @isTruncated={{true}}
-    />
-    <Hds::Copy::Snippet class='copy-port' @textToCopy={{@proxyPort}} />
-  {{/if}}
-  {{#unless this.isAddressAndPort}}
-    <Hds::Copy::Snippet
-      class='copy-ssh-command'
-      @textToCopy={{this.sshCommand}}
-      @isTruncated={{true}}
-    />
+<div
+  class='proxy-url-container{{if this.isRDPTarget " rdp-target"}}'
+  data-test-proxy-url
+>
+  {{#unless this.isRDPTarget}}
+    <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+      <dd.ToggleButton
+        @color='secondary'
+        @text={{t (concat 'resources.session.proxy-url.' this.currentValue)}}
+      />
+      {{#each this.dropdownOptions as |optionId|}}
+        <dd.Interactive
+          data-test={{concat optionId '-option'}}
+          {{on 'click' (fn this.handleSelect optionId dd.close)}}
+        >
+          {{t (concat 'resources.session.proxy-url.' optionId)}}
+        </dd.Interactive>
+      {{/each}}
+    </Hds::Dropdown>
   {{/unless}}
+
+  {{#let this.copySnippetData as |snippet|}}
+    {{#if snippet}}
+      <Hds::Copy::Snippet
+        @textToCopy={{snippet.address}}
+        @isTruncated={{true}}
+      />
+      {{#if snippet.port}}
+        <Hds::Copy::Snippet @textToCopy={{snippet.port}} />
+      {{/if}}
+    {{/if}}
+  {{/let}}
 </div>

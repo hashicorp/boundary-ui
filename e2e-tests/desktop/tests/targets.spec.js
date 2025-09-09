@@ -13,6 +13,8 @@ let targetWithHost;
 let targetWithTwoHosts;
 let sshTarget;
 let credential;
+let updCredential;
+let rdpTarget;
 
 test.beforeEach(
   async ({ request, targetAddress, targetPort, sshUser, sshKeyPath }) => {
@@ -64,6 +66,13 @@ test.beforeEach(
       username: sshUser,
       sshKeyPath,
     });
+    updCredential =
+      await boundaryHttp.createStaticCredentialUsernamePasswordDomain(request, {
+        credentialStoreId: credentialStore.id,
+        username: sshUser,
+        password: 'password',
+        domain: 'domain',
+      });
 
     // Create tcp target with host set and 1 host
     targetWithHost = await boundaryHttp.createTarget(request, {
@@ -105,6 +114,26 @@ test.beforeEach(
     sshTarget = await boundaryHttp.addInjectedCredentials(request, {
       target: sshTarget,
       credentialIds: [credential.id],
+    });
+
+    // Create an RDP target and add host source and credential sources
+    // TODO: A test for RDP target connection will be added later when the Proxy is in place.
+    rdpTarget = await boundaryHttp.createTarget(request, {
+      scopeId: project.id,
+      type: 'rdp',
+      port: 3389,
+    });
+    rdpTarget = await boundaryHttp.addHostSource(request, {
+      target: rdpTarget,
+      hostSourceIds: [hostSet.id],
+    });
+    rdpTarget = await boundaryHttp.addBrokeredCredentials(request, {
+      target: rdpTarget,
+      credentialIds: [updCredential.id],
+    });
+    rdpTarget = await boundaryHttp.addInjectedCredentials(request, {
+      target: rdpTarget,
+      credentialIds: [updCredential.id],
     });
   },
 );

@@ -14,6 +14,7 @@ const licensedFeatures = {
   'multi-hop-sessions': false,
   'ssh-target': false,
   'ssh-session-recording': false,
+  'rdp-target': false,
 };
 // Base edition declares available features, disabled by default.
 const baseEdition = {
@@ -27,6 +28,8 @@ const baseEdition = {
   'ldap-auth-methods': false,
   'worker-filter': false,
   'worker-filter-hcp': false,
+  // TODO: Remove this flag when Vault-ldap credential library is supported
+  'vault-ldap-credential': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};

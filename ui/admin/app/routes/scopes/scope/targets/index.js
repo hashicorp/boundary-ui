@@ -64,16 +64,6 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortType = (recordA, recordB) => {
-    const typeMap = {
-      [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
-      [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
-    };
-    return String(typeMap[recordA.attributes.type]).localeCompare(
-      String(typeMap[recordB.attributes.type]),
-    );
-  };
-
   retrieveData = restartableTask(
     async ({
       search,
@@ -117,10 +107,19 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         this.addActiveSessionFilters(filters, availableSessions, sessions);
       }
 
+      const typeMap = {
+        [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
+        [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
+      };
+
       const sort =
         sortAttribute === 'type'
-          ? { sortFunction: this.sortType, direction: sortDirection }
-          : { attribute: sortAttribute, direction: sortDirection };
+          ? {
+              attributes: [sortAttribute],
+              customSort: { attributeMap: typeMap },
+              direction: sortDirection,
+            }
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       let targets;
       let totalItems = 0;
@@ -149,7 +148,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const targets = await this.store.query(
       'target',
       {

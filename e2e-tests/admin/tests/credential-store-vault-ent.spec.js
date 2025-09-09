@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+import { expect } from '@playwright/test';
 import { test } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
@@ -53,31 +54,14 @@ test(
     let orgId;
     let connect;
     try {
-      execSync(
-        `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
+      const clientToken = await vaultCli.setupVaultCredentialStore(
+        boundaryPolicyName,
+        secretPolicyName,
+        secretsPath,
+        secretName,
+        sshUser,
+        sshKeyPath,
       );
-      execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
-      execSync(
-        `vault kv put -mount ${secretsPath} ${secretName} ` +
-          ` username=${sshUser}` +
-          ` private_key=@${sshKeyPath}`,
-      );
-      execSync(
-        `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
-      );
-      const vaultToken = JSON.parse(
-        execSync(
-          `vault token create` +
-            ` -no-default-policy=true` +
-            ` -policy=${boundaryPolicyName}` +
-            ` -policy=${secretPolicyName}` +
-            ` -orphan=true` +
-            ` -period=20m` +
-            ` -renewable=true` +
-            ` -format=json`,
-        ),
-      );
-      const clientToken = vaultToken.auth.client_token;
 
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
@@ -128,6 +112,52 @@ test(
         connect.kill('SIGTERM');
       }
 
+      if (orgId) {
+        await boundaryCli.deleteScope(orgId);
+      }
+    }
+  },
+);
+
+test(
+  'Vault Credential Store - Username, Password & Domain credential type',
+  { tag: ['@ent', '@aws', '@docker'] },
+  async ({ page, sshUser, sshKeyPath, vaultAddrPrivate, workerTagEgress }) => {
+    let orgId;
+    try {
+      // Set up Vault credential store
+      const clientToken = await vaultCli.setupVaultCredentialStore(
+        boundaryPolicyName,
+        secretPolicyName,
+        secretsPath,
+        secretName,
+        sshUser,
+        sshKeyPath,
+      );
+      const orgsPage = new OrgsPage(page);
+      await orgsPage.createOrg();
+      const projectsPage = new ProjectsPage(page);
+      await projectsPage.createProject();
+
+      const credentialStoresPage = new CredentialStoresPage(page);
+      await credentialStoresPage.createVaultCredentialStoreWithWorkerFilter(
+        vaultAddrPrivate,
+        clientToken,
+        `"${workerTagEgress}" in "/tags/type"`,
+      );
+
+      const credentialLibraryName =
+        await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
+          `${secretsPath}/data/${secretName}`,
+          'Username, Password & Domain',
+        );
+
+      await expect(
+        page
+          .getByRole('navigation', { name: 'breadcrumbs' })
+          .getByText(credentialLibraryName),
+      ).toBeVisible();
+    } finally {
       if (orgId) {
         await boundaryCli.deleteScope(orgId);
       }

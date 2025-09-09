@@ -27,3 +27,7 @@ onboarding-failed:
 required-field: This is a required field.
 client-agent-failed:
   sessions: Unable to retrieve sessions from the client agent.
+rdp-warning:
+  title: Continue in your RDP client
+  description: Your RDP client may show a pop-up to accept a certificate to connect. This is normal for RDP clients.
+  do-not-show-again: Do not show again

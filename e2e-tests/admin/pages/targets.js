@@ -237,6 +237,112 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
+   * Creates a new RDP target.
+   * Assumes you have selected the desired project.
+   * @param {string} port Port of the target
+   * @returns Name of the target
+   */
+  async createRdpTargetEnt(port) {
+    const targetName = 'Target ' + nanoid();
+    await this.page
+      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('link', { name: 'Targets' })
+      .click();
+    await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    await this.page.getByLabel('Name').fill(targetName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page
+      .getByRole('group', { name: 'Type' })
+      .getByLabel('RDP')
+      .click();
+    await this.page.getByLabel('Default Port').fill(port);
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(targetName),
+    ).toBeVisible();
+
+    return targetName;
+  }
+
+  /**
+   * Creates a new RDP target with address in boundary-enterprise
+   * Assumes you have selected the desired project.
+   * @param {string} address Address of the target
+   * @param {string} port Port of the target
+   * @returns Name of the target
+   */
+  async createRDPTargetWithAddressEnt(address, port) {
+    const targetName = 'Target ' + nanoid();
+    await this.page
+      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('link', { name: 'Targets' })
+      .click();
+    await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    await this.page.getByLabel('Name').fill(targetName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page
+      .getByRole('group', { name: 'Type' })
+      .getByLabel('RDP')
+      .click();
+    await this.page.getByLabel('Target Address').fill(address);
+    await this.page.getByLabel('Default Port').fill(port);
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(targetName),
+    ).toBeVisible();
+
+    return targetName;
+  }
+
+  /**
+   * Creates a new RDP target with address and alias.
+   * Assumes you have selected the desired project.
+   * @param {string} address Address of the target
+   * @param {string} port Port of the target
+   * @param {string} alias alias used for the target
+   * @returns Name of the target
+   */
+
+  async createRdpTargetWithAddressAndAlias(address, port, alias) {
+    const targetName = 'Target ' + nanoid();
+    await this.page
+      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('link', { name: 'Targets' })
+      .click();
+    await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    await this.page.getByLabel('Name').fill(targetName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page
+      .getByRole('group', { name: 'Type' })
+      .getByLabel('RDP')
+      .click();
+    await this.page.getByLabel('Target Address').fill(address);
+    await this.page.getByLabel('Default Port').fill(port);
+    await this.page
+      .getByRole('group', { name: 'Aliases' })
+      .getByLabel('value')
+      .last()
+      .fill(alias);
+    await this.page.getByRole('button', { name: 'Add' }).click();
+
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(targetName),
+    ).toBeVisible();
+
+    return targetName;
+  }
+
+  /**
    * Adds a host source to a target. Assume you have selected the desired target.
    * @param {string} hostSourceName Name of host source that will be attached to the target
    */

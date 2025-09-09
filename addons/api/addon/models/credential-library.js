@@ -4,14 +4,22 @@
  */
 
 import GeneratedCredentialLibraryModel from '../generated/models/credential-library';
-
+import {
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+} from 'api/models/credential';
 /**
  * Enum options for credential library.
  */
 export const options = {
   http_method: ['GET', 'POST'],
   key_type: ['ed25519', 'ecdsa', 'rsa'],
-  credential_types: ['ssh_private_key', 'username_password'],
+  credential_types: [
+    TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+    TYPE_CREDENTIAL_USERNAME_PASSWORD,
+    TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  ],
   mapping_overrides: {
     username_password: ['username_attribute', 'password_attribute'],
     ssh_private_key: [
@@ -19,12 +27,18 @@ export const options = {
       'private_key_passphrase_attribute',
       'username_attribute',
     ],
+    username_password_domain: [
+      'username_attribute',
+      'password_attribute',
+      'domain_attribute',
+    ],
   },
 };
 
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE =
   'vault-ssh-certificate';
+export const TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP = 'vault-ldap';
 
 /**
  * Supported Credential Library types.
@@ -32,6 +46,7 @@ export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE =
 export const TYPES_CREDENTIAL_LIBRARY = Object.freeze([
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 ]);
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
@@ -52,7 +67,8 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
   get isVault() {
     return (
       this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC ||
-      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE ||
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
     );
   }
 
@@ -70,5 +86,13 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    */
   get isVaultSSHCertificate() {
     return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE;
+  }
+
+  /**
+   * True if credential is a vault ldap type.
+   * @type {boolean}
+   */
+  get isVaultLDAP() {
+    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP;
   }
 }
