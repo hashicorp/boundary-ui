@@ -1224,7 +1224,7 @@ alias:
       help: Specify any target across your deployment to associate this alias with
     value:
       label: Alias Value
-      help: The alias you would like to use for this resource
+      help: The alias you would like to use for this resource. If using Windows, using a "." in the hostname is recommended.
     authorize_session_arguments:
       label: Host ID
       help: Always use this host when connecting using this alias
