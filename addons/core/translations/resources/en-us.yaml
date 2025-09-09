@@ -571,7 +571,9 @@ user:
   actions:
     add-accounts: Add Accounts
     delete: Delete User
-    edit-details: 'Edit User details'
+    edit-details:
+      button-text: 'Edit User details'
+      aria-describedby: 'user-details'
 role:
   title: Role
   title_plural: Roles
