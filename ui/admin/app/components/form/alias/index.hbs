@@ -81,7 +81,12 @@
     as |F|
   >
     <F.Label>{{t 'resources.alias.form.value.label'}}</F.Label>
-    <F.HelperText>{{t 'resources.alias.form.value.help'}}</F.HelperText>
+    <F.HelperText>
+      {{t 'resources.alias.form.value.help'}}
+      <Hds::Link::Inline @href={{doc-url 'alias.single-word-aliases'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.value}}
       <F.Error as |E|>
         {{#each @model.errors.value as |error|}}
