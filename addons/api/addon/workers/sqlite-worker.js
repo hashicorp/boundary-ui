@@ -27,7 +27,18 @@ const { promise: ready, resolve: readyResolve } = Promise.withResolvers();
 // https://www.sqlite.org/limits.html
 const MAX_HOST_PARAMETERS = 32766;
 const SCHEMA_VERSION = 1;
-const isSecure = self.isSecureContext;
+
+// Some browsers do not allow calling getDirectory in private browsing modes even
+// if we're in a secure context. This will cause the SQLite setup to fail so we should
+// check ahead of time to see if we're able to call the API.
+let canCallGetDirectory;
+try {
+  canCallGetDirectory = Boolean(await navigator.storage.getDirectory());
+} catch {
+  canCallGetDirectory = false;
+}
+
+const isSecure = self.isSecureContext && canCallGetDirectory;
 
 // Error code for sqlite corruption errors.
 // See https://sqlite.org/rescode.html#corrupt
