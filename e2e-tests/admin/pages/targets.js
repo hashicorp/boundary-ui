@@ -70,8 +70,33 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} alias alias used for the target
    * @returns Name of the target
    */
-  async createTargetWithAddressAndAlias(address, port, alias) {
+  async createTargetWithAddressAndAlias(
+    address,
+    port,
+    alias,
+    targetType = 'tcp',
+  ) {
     const targetName = 'Target ' + nanoid();
+    let targetTypeLabel;
+
+    switch (targetType) {
+      case 'ssh': {
+        targetTypeLabel = 'SSH';
+        break;
+      }
+      case 'rdp': {
+        targetTypeLabel = 'RDP';
+        break;
+      }
+      case 'tcp': {
+        targetTypeLabel = 'Generic TCP';
+        break;
+      }
+      default: {
+        throw new Error(`Unexpected target type passed ${targetType}`);
+      }
+    }
+
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
@@ -79,6 +104,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(targetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByLabel(targetTypeLabel).click();
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);
     await this.page

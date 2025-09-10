@@ -169,6 +169,7 @@ test.describe('Aliases (Enterprise)', () => {
           targetAddress,
           targetPort,
           alias,
+          'ssh',
         );
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();

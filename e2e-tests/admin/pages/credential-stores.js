@@ -153,7 +153,9 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('group', { name: 'Type' })
       .getByLabel('Username & Key Pair')
       .click();
-    await this.page.getByLabel('Username', { exact: true }).fill(username);
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
     const keyData = await readFile(keyPath, {
       encoding: 'utf-8',
     });
@@ -211,8 +213,12 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('group', { name: 'Type' })
       .getByLabel('Username & Password')
       .click();
-    await this.page.getByLabel('Username', { exact: true }).fill(username);
-    await this.page.getByLabel('Password', { exact: true }).fill(password);
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
+    await this.page
+      .getByLabel('Password Required', { exact: true })
+      .fill(password);
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();
     await expect(
