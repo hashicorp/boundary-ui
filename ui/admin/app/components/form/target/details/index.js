@@ -10,27 +10,14 @@ import {
   TYPE_TARGET_SSH,
 } from 'api/models/target';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
   rdp: 'monitor',
 };
-const RDP_WINDOWS_INVALID_DEFAULT_CLIENT_PORT = '3389';
 
 export default class FormTargetComponent extends Component {
-  // attributes
-
-  /**
-   * Flag to show the RDP Windows default client port error.
-   * This is set to true when the default client port is '3389' for RDP targets.
-   * It is used to indicate that the default client port is not recommended for Windows RDP targets.
-   * @type {boolean}
-   */
-  @tracked showRDPWindowsDefaultClientPortError = false;
-
   // =services
 
   @service features;
@@ -68,18 +55,6 @@ export default class FormTargetComponent extends Component {
   }
 
   /**
-   * Checks if the default client port error should be shown.
-   * This is true if either the default client port `3389` error is shown or there is an error on the default client port field.
-   * @type {boolean}
-   */
-  get showDefaultClientPortError() {
-    return (
-      this.showRDPWindowsDefaultClientPortError ||
-      this.args.model.get('errors.default_client_port')
-    );
-  }
-
-  /**
    * Checks if the injected application credential alert should be shown for SSH and RDP targets.
    * @type {boolean}
    */
@@ -99,20 +74,5 @@ export default class FormTargetComponent extends Component {
    */
   get showTargetTypeRadioGroup() {
     return (this.isRDPEnabled || this.isSSHEnabled) && this.args.model.isNew;
-  }
-
-  // =actions
-
-  /**
-   * Validates the default client port for the target.
-   * If the target type is RDP and the default client port is set to '3389', it sets the error flag.
-   * @param {Event} event
-   */
-  @action
-  handleDefaultClientPortBlur(event) {
-    const defaultClientPort = event.target.value;
-    this.showRDPWindowsDefaultClientPortError =
-      defaultClientPort === RDP_WINDOWS_INVALID_DEFAULT_CLIENT_PORT &&
-      this.args.model.type === TYPE_TARGET_RDP;
   }
 }
