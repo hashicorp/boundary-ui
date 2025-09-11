@@ -165,11 +165,10 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAlias(
+        const targetName = await targetsPage.createSshTargetWithAddressAndAlias(
           targetAddress,
           targetPort,
           alias,
-          'ssh',
         );
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
