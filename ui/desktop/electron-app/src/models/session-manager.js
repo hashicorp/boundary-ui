@@ -44,8 +44,19 @@ class SessionManager {
    * Returning Promise.all() ensures all sessions in the list have been
    * stopped before calling the next fn
    */
-  stopAll() {
-    return Promise.all(this.#sessions.map((session) => session.stop()));
+  async stopAll() {
+    try {
+      const stopPromises = this.#sessions.map((session) => session.stop());
+      console.log(
+        'stopAll - stopping all sessions:',
+        this.#sessions,
+        stopPromises,
+      );
+      const results = await Promise.all(stopPromises);
+      return results;
+    } catch (error) {
+      console.error('stopAll error:', error);
+    }
   }
 }
 
