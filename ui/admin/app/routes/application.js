@@ -23,6 +23,7 @@ export default class ApplicationRoute extends Route {
   @service featureEdition;
   @service sqlite;
   @service('browser/window') window;
+  @service store;
 
   // =attributes
 
@@ -74,6 +75,19 @@ export default class ApplicationRoute extends Route {
       const hostUrl = this.window.location.host;
       if (userId && hostUrl) {
         await this.sqlite.setup(formatDbName(userId, hostUrl));
+      }
+
+      if (this.session.data?.authenticated?.account_id) {
+        const account = await this.store.findRecord(
+          'account',
+          this.session.data.authenticated.account_id,
+        );
+        const username =
+          account.login_name ||
+          account.subject ||
+          account.email ||
+          account.full_name;
+        this.session.set('data.authenticated.username', username);
       }
     }
   }

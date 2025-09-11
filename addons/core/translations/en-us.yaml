@@ -49,6 +49,7 @@ titles:
   project-actions: Project Actions
   user-menu: User Menu
   back-link: 'Back to {scope}'
+  authenticated: Signed In
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   cluster-url-initialization: To get started, please enter your cluster URL
