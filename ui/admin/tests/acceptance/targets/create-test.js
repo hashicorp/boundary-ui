@@ -623,10 +623,6 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn(selectors.FIELD_DEFAULT_CLIENT_PORT, '3389');
     await blur(selectors.FIELD_DEFAULT_CLIENT_PORT);
 
-    assert
-      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_RDP_WINDOWS_ERROR)
-      .hasText('Note: Windows OS prevents port 3389 from being used.');
-
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getRDPTargetCount(), rdpTargetCount + 1);

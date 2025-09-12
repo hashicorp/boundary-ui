@@ -24,8 +24,6 @@ export const FIELD_ENABLE_RECORDING_TOGGLE =
   '[name=target-enable-session-recording]';
 export const FIELD_ADD_NEW_STORAGE_BUCKET_LINK =
   '.enable-session-recording-toggle .hds-link-standalone';
-export const FIELD_DEFAULT_CLIENT_PORT_RDP_WINDOWS_ERROR =
-  '[data-test-error-message-default-client-port-rdp-windows';
 export const FIELD_DEFAULT_CLIENT_PORT = '[name="default_client_port"]';
 
 export const NEW_TARGET_BTN = '[data-test-new-target-button]';
