@@ -133,6 +133,22 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         });
         totalItems = targets.meta?.totalItems;
         doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
+
+        // To correctly show targets with active sessions, the associated
+        // sessions need to be queried to sync all the session models in
+        //  ember data and retrieve their updated `status` properties
+        await this.store.query(
+          'session',
+          {
+            query: {
+              filters: {
+                scope_id: [{ equals: scope_id }],
+                target_id: targets.map((target) => ({ equals: target.id })),
+              },
+            },
+          },
+          { pushToStore: true, peekDb: true },
+        );
       }
       return { targets, doTargetsExist, totalItems };
     },
