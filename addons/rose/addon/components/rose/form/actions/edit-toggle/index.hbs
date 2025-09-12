@@ -8,6 +8,7 @@
     {{yield to='edit'}}
   {{else}}
     <Hds::Button
+      aria-describedby={{@ariaDescribedBy}}
       @text={{@enableEditText}}
       @color='secondary'
       {{on 'click' @enableEdit}}
