@@ -177,7 +177,7 @@
     as |F|
   >
     <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
-    <F.HelperText>
+    <F.HelperText data-test-default-client-port-helper-text>
       {{t 'resources.target.form.default_client_port.help'}}
       {{#if (eq @model.type 'rdp')}}
         <br />
@@ -225,7 +225,7 @@
     as |F|
   >
     <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
-    <F.HelperText>
+    <F.HelperText data-test-max-connections-helper-text>
       {{t 'form.session_connection_limit.help'}}
       {{#if (eq @model.type 'rdp')}}
         <br />

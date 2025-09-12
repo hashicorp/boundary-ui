@@ -676,4 +676,42 @@ module('Acceptance | targets | create', function (hooks) {
       .hasText('The request was invalid.');
     assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
+
+  test('it shows additional helper text in field labels for rdp targets', async function (assert) {
+    featuresService.enable('rdp-target');
+
+    const staticDefaultClientPortHelperText =
+      'The local proxy port on which to listen by default when a session is started on a client.';
+    const staticMaxConnectionsHelperText =
+      'The maximum number of connections allowed per session. For unlimited, specify "-1".';
+
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.newTarget);
+    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_TCP);
+    assert
+      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_HELPER_TEXT)
+      .hasText(staticDefaultClientPortHelperText);
+    assert
+      .dom(selectors.FIELD_MAX_CONNECTIONS_HELPER_TEXT)
+      .hasText(staticMaxConnectionsHelperText);
+
+    await click(selectors.FIELD_TYPE_VALUE('rdp'));
+    assert
+      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_HELPER_TEXT)
+      .hasText(
+        `${staticDefaultClientPortHelperText} Note: Windows OS prevents port 3389 from being used.`,
+      );
+    assert
+      .dom(selectors.FIELD_MAX_CONNECTIONS_HELPER_TEXT)
+      .hasText(
+        `${staticMaxConnectionsHelperText} Note: The Windows Remote Desktop Connection client requires a connection limit of 2 or higher`,
+      );
+  });
 });
