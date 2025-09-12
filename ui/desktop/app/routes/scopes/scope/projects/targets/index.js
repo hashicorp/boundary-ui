@@ -156,12 +156,28 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         },
       });
 
-      // Load the aliases for the targets on the current page
+      // To correctly show targets with active sessions, the associated
+      // sessions need to be queried to sync all the session models in
+      //  ember data and retrieve their updated `status` properties
+      const sessionsPromise = this.store.query(
+        'session',
+        {
+          force_refresh: true,
+          query: {
+            filters: {
+              target_id: targets.map((target) => ({ equals: target.id })),
+            },
+          },
+        },
+        { pushToStore: true },
+      );
+
+      // Load the sessions and aliases for the targets on the current page
       try {
-        await aliasPromise;
+        await Promise.all([aliasPromise, sessionsPromise]);
       } catch (e) {
         __electronLog?.warn(
-          'Could not retrieve aliases for targets',
+          'Could not retrieve aliases and/or sessions for targets',
           e.message,
         );
         // Separately await and catch the error here so we can continue loading
@@ -180,8 +196,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   );
 
   async getSessions(orgScope, scopes, orgFilter) {
-    // Retrieve all sessions so that the session and activeSessions getters
-    // in the target model always retrieve the most up-to-date sessions.
     const sessionQuery = {
       recursive: true,
       scope_id: orgScope.id,
