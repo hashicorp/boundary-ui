@@ -20,6 +20,10 @@ import {
 } from 'ember-simple-auth/test-support';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +78,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     targets: null,
     target: null,
     session: null,
+    sessions: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -150,6 +155,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.sessions = `${urls.projects}/sessions`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
@@ -637,5 +643,63 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert
       .dom(`[data-test-target-aliases="${instances.target2.id}"]`)
       .hasNoText();
+  });
+
+  test('active sessions are refreshed when visiting the targets list page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+
+      'sessions',
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+    );
+
+    const activeSessionFlyoutButtonSelector = (id) =>
+      `[data-test-targets-sessions-flyout-button="${id}"]`;
+
+    assert.strictEqual(instances.session.status, STATUS_SESSION_ACTIVE);
+    await visit(urls.targets);
+    const emberDataSessionModel = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+
+    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_ACTIVE);
+
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .exists();
+
+    await click(`[href="${urls.sessions}"]`);
+
+    assert
+      .dom('.hds-table tbody tr:first-child')
+      .includesText(instances.session.id);
+    assert.dom('.hds-table tbody tr:first-child').includesText('Active');
+
+    // simulate the session has been cancelled externally
+    instances.session.status = STATUS_SESSION_TERMINATED;
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_TERMINATED);
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .doesNotExist();
   });
 });
