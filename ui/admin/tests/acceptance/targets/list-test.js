@@ -21,7 +21,10 @@ import {
   TYPE_TARGET_SSH,
   TYPE_TARGET_RDP,
 } from 'api/models/target';
-import { STATUS_SESSION_ACTIVE } from 'api/models/session';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
@@ -59,6 +62,7 @@ module('Acceptance | targets | list', function (hooks) {
     orgScope: null,
     projectScope: null,
     targets: null,
+    sessions: null,
     tcpTarget: null,
     sshTarget: null,
     rdpTarget: null,
@@ -95,6 +99,7 @@ module('Acceptance | targets | list', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
+    urls.sessions = `${urls.projectScope}/sessions`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
     urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
@@ -348,6 +353,60 @@ module('Acceptance | targets | list', function (hooks) {
     assert
       .dom(commonSelectors.FILTER_DROPDOWN('active-sessions'))
       .doesNotExist();
+  });
+
+  test('active sessions are refreshed when visiting the targets list page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.targets);
+
+    assert.strictEqual(
+      instances.session.targetId,
+      instances.sshTarget.id,
+      'session is associated with correct target',
+    );
+    const emberDataSessionModel = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+    assert.strictEqual(
+      emberDataSessionModel.status,
+      STATUS_SESSION_ACTIVE,
+      'ember data session model is active',
+    );
+
+    assert
+      .dom(selectors.TABLE_TARGETS_ROW(instances.sshTarget.id))
+      .exists('the target is listed in the table');
+    assert
+      .dom(selectors.TABLE_ACTIVE_SESSIONS(instances.sshTarget.id))
+      .includesText('Yes', 'target shows the active session in the table');
+
+    await click(commonSelectors.HREF(urls.sessions));
+    assert
+      .dom(selectors.TABLE_SESSIONS_STATUS(instances.session.id))
+      .includesText('Active');
+
+    // simulate that the session was cancelled and reached a terminated status externally
+    instances.session.status = STATUS_SESSION_TERMINATED;
+
+    await click(commonSelectors.HREF(urls.targets));
+    assert
+      .dom(selectors.TABLE_TARGETS_ROW(instances.sshTarget.id))
+      .exists('the target is still listed in the table');
+    assert
+      .dom(selectors.TABLE_ACTIVE_SESSIONS(instances.sshTarget.id))
+      .doesNotExist('the target does not have an active session');
+    assert.strictEqual(
+      emberDataSessionModel.status,
+      STATUS_SESSION_TERMINATED,
+      'the session ember data model status is updated',
+    );
   });
 
   test('user can navigate to active sessions from targets table', async function (assert) {
