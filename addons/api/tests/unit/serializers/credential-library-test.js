@@ -291,11 +291,6 @@ module('Unit | Serializer | credential library', function (hooks) {
       description: 'Description',
       path: '/vault/path',
       version: 1,
-      credential_type: 'username_password_domain',
-      credential_mapping_overrides: [
-        { key: 'username_attribute', value: 'user' },
-        { key: 'domain_attribute', value: 'domain' },
-      ],
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -306,11 +301,6 @@ module('Unit | Serializer | credential library', function (hooks) {
       name: 'Name',
       description: 'Description',
       version: 1,
-      credential_type: 'username_password_domain',
-      credential_mapping_overrides: {
-        username_attribute: 'user',
-        domain_attribute: 'domain',
-      },
       attributes: {
         path: '/vault/path',
       },
@@ -326,15 +316,10 @@ module('Unit | Serializer | credential library', function (hooks) {
         type: 'credential-library',
         attributes: {
           type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
-          name: 'Name',
+          name: 'Test',
           description: 'Description',
           path: '/vault/path',
           version: 1,
-          credential_type: 'username_password_domain',
-          credential_mapping_overrides: [
-            { key: 'username_attribute', value: 'user' },
-            { key: 'domain_attribute', value: 'domain' },
-          ],
         },
       },
     });
@@ -345,15 +330,9 @@ module('Unit | Serializer | credential library', function (hooks) {
     assert.deepEqual(serializedRecord, {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       credential_store_id: null,
-      name: 'Name',
+      name: 'Test',
       description: 'Description',
       version: 1,
-      credential_type: 'username_password_domain',
-      credential_mapping_overrides: {
-        username_attribute: 'user',
-        domain_attribute: 'domain',
-        password_attribute: null,
-      },
       attributes: {
         path: '/vault/path',
       },

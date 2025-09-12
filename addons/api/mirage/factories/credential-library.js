@@ -23,9 +23,6 @@ export default factory.extend({
     if (this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC) {
       return options.credential_types[i % options.credential_types.length];
     }
-    if (this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP) {
-      return options.credential_types[2]; // Only supports username, password & domain credential type
-    }
   },
   authorized_actions: () =>
     permissions.authorizedActionsFor('credential-library') || [

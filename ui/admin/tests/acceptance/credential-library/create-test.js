@@ -479,10 +479,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       credentialLibrary.attributes.path,
       selectors.FIELD_VAULT_PATH_VALUE,
     );
-    assert.strictEqual(
-      credentialLibrary.credentialType,
-      selectors.FIELD_CRED_TYPE_UPD_VALUE,
-    );
   });
 
   test('cannot select vault ldap when feature is disabled', async function (assert) {
@@ -499,60 +495,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
     assert.false(featuresService.isEnabled('vault-ldap-credential'));
     assert.dom(selectors.TYPE_VAULT_LDAP).doesNotExist();
-  });
-
-  test('can create a new credential library with username, password and domain type for vault ldap', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-          enabled: false,
-        },
-      },
-    });
-
-    featuresService.enable('vault-ldap-credential');
-
-    const credentialLibraryCount = getCredentialLibraryCount();
-    const usernamePasswordDomainCredentialLibraryCount =
-      getUsernamePasswordDomainCredentialLibraryCount();
-    await visit(urls.newCredentialLibrary);
-
-    await click(selectors.TYPE_VAULT_LDAP);
-
-    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-    await click(commonSelectors.SAVE_BTN);
-
-    assert.strictEqual(getCredentialLibraryCount(), credentialLibraryCount + 1);
-    assert.strictEqual(
-      getUsernamePasswordDomainCredentialLibraryCount(),
-      usernamePasswordDomainCredentialLibraryCount + 1,
-    );
-
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
-    });
-
-    assert.strictEqual(
-      credentialLibrary.name,
-      commonSelectors.FIELD_NAME_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.credentialType,
-      selectors.FIELD_CRED_TYPE_UPD_VALUE,
-    );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      domain_attribute: 'domain',
-    });
   });
 
   test('default `vault-generic` credential library is selected when `ssh-target` feature is not enabled and user manually sets `type` in the query params', async function (assert) {
