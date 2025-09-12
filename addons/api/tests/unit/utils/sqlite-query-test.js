@@ -52,7 +52,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
 
   test('it executes count queries correctly', function (assert) {
     const select = {
-      select: ['count(*) as total'],
+      select: [{ field: '*', isCount: true, alias: 'total' }],
     };
 
     const { sql, parameters } = generateSQLExpressions('target', {}, select);
@@ -300,7 +300,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', query, {
       page: 2,
       pageSize: 15,
-      select: ['data'],
+      select: [{ field: 'data' }],
     });
 
     assert.strictEqual(
