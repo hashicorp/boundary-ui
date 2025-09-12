@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service store;
 
   // =attributes
 
@@ -49,6 +50,19 @@ export default class ApplicationRoute extends Route {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
+
+      if (sessionData?.account_id) {
+        const account = await this.store.findRecord(
+          'account',
+          sessionData.account_id,
+        );
+        const username =
+          account.login_name ||
+          account.subject ||
+          account.email ||
+          account.full_name;
+        this.session.set('data.authenticated.username', username);
+      }
     }
   }
 

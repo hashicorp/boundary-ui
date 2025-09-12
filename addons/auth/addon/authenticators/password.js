@@ -72,8 +72,6 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
       fetch(authEndpointURL, { method: 'post', body }),
     );
     const json = await response.json();
-    return response.status < 400
-      ? resolve(this.normalizeData(json, login_name))
-      : reject();
+    return response.status < 400 ? resolve(this.normalizeData(json)) : reject();
   }
 }
