@@ -156,7 +156,7 @@ test.describe('AWS', () => {
 
         // Create a target and add DHC host set as a host source
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTarget(targetPort);
+        const targetName = await targetsPage.createTargetCe(targetPort);
         await targetsPage.addHostSourceToTarget(hostSetName);
 
         // Add another host source

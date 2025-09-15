@@ -14,7 +14,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} port Port of the target
    * @returns Name of the target
    */
-  async createTarget(port) {
+  async createTargetCe(port) {
     const targetName = 'Target ' + nanoid();
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
@@ -41,7 +41,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} port Port of the target
    * @returns Name of the target
    */
-  async createTargetWithAddress(address, port) {
+  async createTargetWithAddressCe(address, port) {
     const targetName = 'Target ' + nanoid();
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
@@ -70,7 +70,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} alias alias used for the target
    * @returns Name of the target
    */
-  async createTargetWithAddressAndAlias(address, port, alias) {
+  async createTargetWithAddressAndAliasCe(address, port, alias) {
     const targetName = 'Target ' + nanoid();
 
     await this.page
@@ -106,7 +106,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createTargetEnt(port, targetType) {
+  async createTargetEnt(targetType, port) {
     const targetName = 'Target ' + nanoid();
     let targetTypeLabel;
 
@@ -159,7 +159,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createTargetWithAddressEnt(address, port, targetType) {
+  async createTargetWithAddressEnt(targetType, address, port) {
     const targetName = 'Target ' + nanoid();
     let targetTypeLabel;
 
@@ -214,7 +214,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createTargetWithAddressAndAliasEnt(address, port, alias, targetType) {
+  async createTargetWithAddressAndAliasEnt(targetType, address, port, alias) {
     const targetName = 'Target ' + nanoid();
     let targetTypeLabel;
 

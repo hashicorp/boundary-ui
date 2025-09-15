@@ -44,7 +44,7 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddress(
+        const targetName = await targetsPage.createTargetWithAddressCe(
           targetAddress,
           targetPort,
         );
@@ -148,7 +148,7 @@ test.describe('Aliases', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAlias(
+        const targetName = await targetsPage.createTargetWithAddressAndAliasCe(
           targetAddress,
           targetPort,
           alias,
@@ -206,7 +206,7 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddress(
+        const targetName = await targetsPage.createTargetWithAddressCe(
           targetAddress,
           targetPort,
         );

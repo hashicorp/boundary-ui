@@ -31,7 +31,7 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   const projectsPage = new ProjectsPage(page);
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
-  targetName = await targetsPage.createTargetWithAddress(
+  targetName = await targetsPage.createTargetWithAddressCe(
     targetAddress,
     targetPort,
   );

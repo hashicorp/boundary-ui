@@ -85,7 +85,7 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddress(
+      const targetName = await targetsPage.createTargetWithAddressCe(
         targetAddress,
         targetPort,
       );

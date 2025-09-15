@@ -42,9 +42,9 @@ test(
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
       const targetName = await targetsPage.createTargetWithAddressEnt(
+        'tcp',
         targetAddress,
         targetPort,
-        'tcp',
       );
 
       await boundaryCli.authenticateBoundary(
@@ -110,9 +110,9 @@ test(
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
       const targetName = await targetsPage.createTargetWithAddressEnt(
+        'ssh',
         targetAddress,
         targetPort,
-        'ssh',
       );
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
@@ -196,7 +196,7 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetEnt(targetPort, 'ssh');
+      const targetName = await targetsPage.createTargetEnt('ssh', targetPort);
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
@@ -288,9 +288,9 @@ test(
 
       const targetsPage = new TargetsPage(page);
       const rdpTarget = await targetsPage.createTargetWithAddressEnt(
+        'rdp',
         targetAddress,
         targetPort,
-        'rdp',
       );
       await targetsPage.addBrokeredCredentialsToTarget(
         rdpTarget,
