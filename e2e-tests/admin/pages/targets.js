@@ -101,39 +101,6 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
-   * Creates a new TCP target with address in boundary-enterprise
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createTcpTargetWithAddressEnt(address, port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('TCP')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
    * Creates a new target. Assumes you have selected the desired project.
    * @param {string} port Port of the target
    * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
