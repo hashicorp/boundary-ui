@@ -162,7 +162,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       const sessionsPromise = this.store.query(
         'session',
         {
-          force_refresh: true,
           query: {
             filters: {
               target_id: targets.map((target) => ({ equals: target.id })),
