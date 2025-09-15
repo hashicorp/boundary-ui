@@ -6,6 +6,10 @@
 export const FIELD_TYPE_CHECKED = '[name="Type"]:checked';
 export const FIELD_TYPE_VALUE = (type) => `[value=${type}]`;
 export const FIELD_DEFAULT_PORT_LABEL = '[data-test-default-port-label]';
+export const FIELD_DEFAULT_CLIENT_PORT_HELPER_TEXT =
+  '[data-test-default-client-port-helper-text]';
+export const FIELD_MAX_CONNECTIONS_HELPER_TEXT =
+  '[data-test-max-connections-helper-text]';
 export const FIELD_INFO = '.info-field';
 export const FIELD_INFO_LABEL = '.info-field .hds-form-helper-text';
 export const FIELD_ALIAS = '[name="value"]';
@@ -24,8 +28,6 @@ export const FIELD_ENABLE_RECORDING_TOGGLE =
   '[name=target-enable-session-recording]';
 export const FIELD_ADD_NEW_STORAGE_BUCKET_LINK =
   '.enable-session-recording-toggle .hds-link-standalone';
-export const FIELD_DEFAULT_CLIENT_PORT_RDP_WINDOWS_ERROR =
-  '[data-test-error-message-default-client-port-rdp-windows';
 export const FIELD_DEFAULT_CLIENT_PORT = '[name="default_client_port"]';
 
 export const NEW_TARGET_BTN = '[data-test-new-target-button]';
