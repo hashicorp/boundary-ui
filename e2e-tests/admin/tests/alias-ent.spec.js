@@ -46,9 +46,10 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
 
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
+        const targetName = await targetsPage.createTargetWithAddressEnt(
           targetAddress,
           targetPort,
+          'ssh',
         );
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
@@ -165,10 +166,11 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressAndAlias(
+        const targetName = await targetsPage.createTargetWithAddressAndAliasEnt(
           targetAddress,
           targetPort,
           alias,
+          'ssh',
         );
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
@@ -235,9 +237,10 @@ test.describe('Aliases (Enterprise)', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
+        const targetName = await targetsPage.createTargetWithAddressEnt(
           targetAddress,
           targetPort,
+          'ssh',
         );
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();

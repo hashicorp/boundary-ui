@@ -134,12 +134,33 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
-   * Creates a new SSH target. Assumes you have selected the desired project.
+   * Creates a new target. Assumes you have selected the desired project.
    * @param {string} port Port of the target
+   * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createSshTargetEnt(port) {
+  async createTargetEnt(port, targetType) {
     const targetName = 'Target ' + nanoid();
+    let targetTypeLabel;
+
+    switch (targetType) {
+      case 'ssh': {
+        targetTypeLabel = 'SSH';
+        break;
+      }
+      case 'rdp': {
+        targetTypeLabel = 'RDP';
+        break;
+      }
+      case 'tcp': {
+        targetTypeLabel = 'Generic TCP';
+        break;
+      }
+      default: {
+        throw new Error(`Unexpected target type passed ${targetType}`);
+      }
+    }
+
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
@@ -149,7 +170,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
+      .getByLabel(targetTypeLabel)
       .click();
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
@@ -164,14 +185,35 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
-   * Creates a new SSH target with address in boundary-enterprise
+   * Creates a new target with address.
    * Assumes you have selected the desired project.
    * @param {string} address Address of the target
    * @param {string} port Port of the target
+   * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createSshTargetWithAddressEnt(address, port) {
+  async createTargetWithAddressEnt(address, port, targetType) {
     const targetName = 'Target ' + nanoid();
+    let targetTypeLabel;
+
+    switch (targetType) {
+      case 'ssh': {
+        targetTypeLabel = 'SSH';
+        break;
+      }
+      case 'rdp': {
+        targetTypeLabel = 'RDP';
+        break;
+      }
+      case 'tcp': {
+        targetTypeLabel = 'Generic TCP';
+        break;
+      }
+      default: {
+        throw new Error(`Unexpected target type passed ${targetType}`);
+      }
+    }
+
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
@@ -181,7 +223,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
+      .getByLabel(targetTypeLabel)
       .click();
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);
@@ -197,15 +239,36 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
-   * Creates a new SSH target with address and alias.
+   * Creates a new target with address and alias.
    * Assumes you have selected the desired project.
    * @param {string} address Address of the target
    * @param {string} port Port of the target
    * @param {string} alias alias used for the target
+   * @param {string} targetType Type of the target ("ssh", "rdp", or "tcp")
    * @returns Name of the target
    */
-  async createSshTargetWithAddressAndAlias(address, port, alias) {
+  async createTargetWithAddressAndAliasEnt(address, port, alias, targetType) {
     const targetName = 'Target ' + nanoid();
+    let targetTypeLabel;
+
+    switch (targetType) {
+      case 'ssh': {
+        targetTypeLabel = 'SSH';
+        break;
+      }
+      case 'rdp': {
+        targetTypeLabel = 'RDP';
+        break;
+      }
+      case 'tcp': {
+        targetTypeLabel = 'Generic TCP';
+        break;
+      }
+      default: {
+        throw new Error(`Unexpected target type passed ${targetType}`);
+      }
+    }
+
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
@@ -215,113 +278,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page
-      .getByRole('group', { name: 'Aliases' })
-      .getByLabel('value')
-      .last()
-      .fill(alias);
-    await this.page.getByRole('button', { name: 'Add' }).click();
-
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new RDP target.
-   * Assumes you have selected the desired project.
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createRdpTargetEnt(port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('RDP')
-      .click();
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new RDP target with address in boundary-enterprise
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createRDPTargetWithAddressEnt(address, port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('RDP')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new RDP target with address and alias.
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @param {string} alias alias used for the target
-   * @returns Name of the target
-   */
-
-  async createRdpTargetWithAddressAndAlias(address, port, alias) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('RDP')
+      .getByLabel(targetTypeLabel)
       .click();
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);

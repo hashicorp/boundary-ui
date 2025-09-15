@@ -41,9 +41,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      const targetName = await targetsPage.createTargetWithAddressEnt(
         targetAddress,
         targetPort,
+        'ssh',
       );
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();

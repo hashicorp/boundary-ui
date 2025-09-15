@@ -97,9 +97,10 @@ test(
       await page.getByRole('link', { name: orgName }).click();
       await page.getByRole('link', { name: projectName }).click();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      const targetName = await targetsPage.createTargetWithAddressEnt(
         targetAddress,
         targetPort,
+        'ssh',
       );
       await targetsPage.addIngressWorkerFilterToTarget(
         `"${workerTagEgress}" in "/tags/type"`,
