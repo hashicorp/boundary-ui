@@ -196,7 +196,7 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetEnt(targetPort, 'SSH');
+      const targetName = await targetsPage.createTargetEnt(targetPort, 'ssh');
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
