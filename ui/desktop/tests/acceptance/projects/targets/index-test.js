@@ -20,6 +20,10 @@ import {
 } from 'ember-simple-auth/test-support';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +78,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     targets: null,
     target: null,
     session: null,
+    sessions: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -150,6 +155,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.sessions = `${urls.projects}/sessions`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
@@ -161,7 +167,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -217,7 +223,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('visiting targets list view with no targets', async function (assert) {
     this.server.schema.targets.all().destroy();
     this.server.schema.sessions.all().destroy();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -238,7 +244,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -285,7 +291,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -335,7 +341,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -370,7 +376,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -432,12 +438,17 @@ module('Acceptance | projects | targets | index', function (hooks) {
       'sessions',
       'targets',
       'aliases',
+      'sessions',
       {
         resource: 'sessions',
         func: () => [],
       },
       'targets',
       'aliases',
+      {
+        resource: 'sessions',
+        func: () => [],
+      },
     );
     await visit(urls.projects);
 
@@ -476,7 +487,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'cancel');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -532,7 +543,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -567,11 +578,13 @@ module('Acceptance | projects | targets | index', function (hooks) {
       'targets',
       'aliases',
       'sessions',
+      'sessions',
       {
         resource: 'targets',
         func: () => [instances.target],
       },
       'aliases',
+      'sessions',
     );
 
     await visit(urls.scopes.global);
@@ -637,5 +650,63 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert
       .dom(`[data-test-target-aliases="${instances.target2.id}"]`)
       .hasNoText();
+  });
+
+  test('active sessions are refreshed when visiting the targets list page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+
+      'sessions',
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+    );
+
+    const activeSessionFlyoutButtonSelector = (id) =>
+      `[data-test-targets-sessions-flyout-button="${id}"]`;
+
+    assert.strictEqual(instances.session.status, STATUS_SESSION_ACTIVE);
+    await visit(urls.targets);
+    const emberDataSessionModel = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+
+    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_ACTIVE);
+
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .exists();
+
+    await click(`[href="${urls.sessions}"]`);
+
+    assert
+      .dom('.hds-table tbody tr:first-child')
+      .includesText(instances.session.id);
+    assert.dom('.hds-table tbody tr:first-child').includesText('Active');
+
+    // simulate the session has been cancelled externally
+    instances.session.status = STATUS_SESSION_TERMINATED;
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_TERMINATED);
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .doesNotExist();
   });
 });
