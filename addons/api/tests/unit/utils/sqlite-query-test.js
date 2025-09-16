@@ -150,7 +150,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           },
         },
         expectedWhereClause:
-          'WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND (type = ?)',
+          'WHERE (id NOT IN (?, ?)) AND (status IN (?, ?)) AND (type = ?)',
         expectedParams: ['id1', 'id2', 'active', 'pending', 'ssh'],
       },
     },
@@ -271,7 +271,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
         SELECT * FROM "target"
-        WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+        WHERE (id NOT IN (?, ?)) AND (status IN (?, ?)) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, [
@@ -307,7 +307,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
       SELECT data FROM "target"
-      WHERE (type = ?) AND (status = ? OR status = ?) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+      WHERE (type = ?) AND (status IN (?, ?)) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
       ORDER BY name COLLATE NOCASE DESC, name DESC
       LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
     );
