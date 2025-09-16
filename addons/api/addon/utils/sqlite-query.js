@@ -8,6 +8,12 @@ import { searchTables } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
 import { underscore } from '@ember/string';
 
+// Maximum expression tree depth is 1000 so
+// we limit the number of expressions in a query.
+// See "Maximum Depth Of An Expression Tree" in
+// https://www.sqlite.org/limits.html
+const MAX_EXPR_NUM = 999;
+
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
  *
@@ -80,7 +86,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
       .flatMap((item) => Object.keys(item))
       .every((op) => op === firstOperator);
     if (
-      filterValueArray.length > 1 &&
+      filterValueArray.length > MAX_EXPR_NUM &&
       (firstOperator === 'equals' || firstOperator === 'notEquals') &&
       allOperatorsEqual
     ) {
