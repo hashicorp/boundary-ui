@@ -84,15 +84,25 @@ function addFilterConditions({ filters, parameters, conditions }) {
         if (typeOf(value) === 'date') {
           value = value.toISOString();
         }
-
+        let subquery;
         // Handle LIKE operator separately
         if (operation === 'contains') {
           parameters.push(`%${value}%`);
+          // Handle IN/NOT IN operator separately
+        } else if (operation === 'in' || operation === 'notIn') {
+          const values = value.map((item) => `'${item}'`);
+          subquery = values.join(', ');
         } else {
           parameters.push(value);
         }
+        let filterCondition;
+        if (operation === 'in' || operation === 'notIn') {
+          filterCondition = `${key}${OPERATORS[operation](subquery)}`;
+        } else {
+          filterCondition = `${key}${OPERATORS[operation]}`;
+        }
 
-        return `${key}${OPERATORS[operation]}`;
+        return filterCondition;
       });
 
     const { logicalOperator } = filterArrayOrObject;
@@ -195,6 +205,8 @@ const OPERATORS = {
   lt: ' < ?',
   lte: ' <= ?',
   contains: ' LIKE ?',
+  in: (values) => ` IN (${values})`,
+  notIn: (values) => ` NOT IN (${values})`,
 };
 
 // Logical Operators
