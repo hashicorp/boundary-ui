@@ -8,12 +8,6 @@ import { searchTables } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
 import { underscore } from '@ember/string';
 
-// Maximum expression tree depth is 1000 so
-// we limit the number of expressions in a query.
-// See "Maximum Depth Of An Expression Tree" in
-// https://www.sqlite.org/limits.html
-const MAX_EXPR_NUM = 999;
-
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
  *
@@ -86,7 +80,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
       .flatMap((item) => Object.keys(item))
       .every((op) => op === firstOperator);
     if (
-      filterValueArray.length > MAX_EXPR_NUM &&
+      filterValueArray.length > 1 &&
       (firstOperator === 'equals' || firstOperator === 'notEquals') &&
       allOperatorsEqual
     ) {
@@ -95,10 +89,13 @@ function addFilterConditions({ filters, parameters, conditions }) {
         .filter((f) => f)
         .map((filterObjValue) => {
           let value = Object.values(filterObjValue)[0];
-          return `'${value}'`;
+          if (typeOf(value) === 'date') {
+            value = value.toISOString();
+          }
+          parameters.push(value);
+          return value;
         });
-      const subquery = values.join(', ');
-      const filterCondition = `${key}${OPERATORS[operation](subquery)}`;
+      const filterCondition = `${key}${OPERATORS[operation](values)}`;
       conditions.push(parenthetical(filterCondition));
       continue;
     }
@@ -223,8 +220,8 @@ const OPERATORS = {
   lt: ' < ?',
   lte: ' <= ?',
   contains: ' LIKE ?',
-  in: (values) => ` IN (${values})`,
-  notIn: (values) => ` NOT IN (${values})`,
+  in: (values) => ` IN (${values.map(() => '?').join(', ')})`,
+  notIn: (values) => ` NOT IN (${values.map(() => '?').join(', ')})`,
 };
 
 // Logical Operators
