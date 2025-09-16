@@ -75,6 +75,28 @@ function addFilterConditions({ filters, parameters, conditions }) {
       continue;
     }
 
+    const firstOperator = Object.keys(filterValueArray[0])[0];
+    const allOperatorsEqual = filterValueArray
+      .flatMap((item) => Object.keys(item))
+      .every((op) => op === firstOperator);
+    if (
+      filterValueArray.length > 1 &&
+      (firstOperator === 'equals' || firstOperator === 'notEquals') &&
+      allOperatorsEqual
+    ) {
+      const operation = firstOperator === 'equals' ? 'in' : 'notIn';
+      const values = filterValueArray
+        .filter((f) => f)
+        .map((filterObjValue) => {
+          let value = Object.values(filterObjValue)[0];
+          return `'${value}'`;
+        });
+      const subquery = values.join(', ');
+      const filterCondition = `${key}${OPERATORS[operation](subquery)}`;
+      conditions.push(parenthetical(filterCondition));
+      continue;
+    }
+
     const filterConditions = filterValueArray
       .filter((f) => f)
       .map((filterObjValue) => {
@@ -84,25 +106,15 @@ function addFilterConditions({ filters, parameters, conditions }) {
         if (typeOf(value) === 'date') {
           value = value.toISOString();
         }
-        let subquery;
+
         // Handle LIKE operator separately
         if (operation === 'contains') {
           parameters.push(`%${value}%`);
-          // Handle IN/NOT IN operator separately
-        } else if (operation === 'in' || operation === 'notIn') {
-          const values = value.map((item) => `'${item}'`);
-          subquery = values.join(', ');
         } else {
           parameters.push(value);
         }
-        let filterCondition;
-        if (operation === 'in' || operation === 'notIn') {
-          filterCondition = `${key}${OPERATORS[operation](subquery)}`;
-        } else {
-          filterCondition = `${key}${OPERATORS[operation]}`;
-        }
 
-        return filterCondition;
+        return `${key}${OPERATORS[operation]}`;
       });
 
     const { logicalOperator } = filterArrayOrObject;

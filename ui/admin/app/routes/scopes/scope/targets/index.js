@@ -84,7 +84,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
       const filters = {
         scope_id: [{ equals: scope_id }],
-        id: [],
+        id: { values: [] },
         type: [],
       };
       types.forEach((type) => {
@@ -200,26 +200,24 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     availableSessions.forEach((availability) => {
       if (availability === 'yes') {
-        //filters.id.logicalOperator = 'or';
-        // uniqueTargetIdsWithSessions.forEach((targetId) => {
-        //   filters.id.values.push({ equals: targetId });
-        // });
-        filters.id.push({ in: [...uniqueTargetIdsWithSessions] });
+        filters.id.logicalOperator = 'or';
+        uniqueTargetIdsWithSessions.forEach((targetId) => {
+          filters.id.values.push({ equals: targetId });
+        });
 
         // If there's no sessions just set it to a dummy value
         // so the search returns no results
         if (uniqueTargetIdsWithSessions.size === 0) {
-          filters.id.push({ equals: 'none' });
+          filters.id.values.push({ equals: 'none' });
         }
       }
 
       if (availability === 'no') {
-        //filters.id.logicalOperator = 'and';
+        filters.id.logicalOperator = 'and';
 
-        // uniqueTargetIdsWithSessions.forEach((targetId) => {
-        //   filters.id.values.push({ notEquals: targetId });
-        // });
-        filters.id.push({ notIn: [...uniqueTargetIdsWithSessions] });
+        uniqueTargetIdsWithSessions.forEach((targetId) => {
+          filters.id.values.push({ notEquals: targetId });
+        });
       }
     });
   };
