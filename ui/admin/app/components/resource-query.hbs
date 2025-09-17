@@ -1,0 +1,14 @@
+<input {{on 'input' this.onInput}} />
+
+{{#if this.selectedResult}}
+  Selected Result
+{{else}}
+<ul>
+  {{#each this.results as |result|}}
+    <li>
+      {{result.model.id}}
+      <button {{on 'click' this.selectResult}}>go</button>
+    </li>
+  {{/each}}
+</ul>
+{{/if}}}
