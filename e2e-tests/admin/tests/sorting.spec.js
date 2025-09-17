@@ -41,16 +41,16 @@ test.beforeEach(async ({ apiClient }) => {
   });
 
   // create roles with specific names
-  const roles = await Promise.all(
-    roleNamesToCreate.map((roleName) => {
-      return apiClient.clients.Role.roleServiceCreateRole({
-        item: {
-          scopeId: org.id,
-          name: roleName,
-        },
-      });
-    }),
-  );
+  const roles = [];
+  for (const roleName of roleNamesToCreate) {
+    const role = await apiClient.clients.Role.roleServiceCreateRole({
+      item: {
+        scopeId: org.id,
+        name: roleName,
+      },
+    });
+    roles.push(role);
+  }
 
   // collect all roles and data so that sorting can be tested based on the underlying data
   rolesSortedByCreatedTime = roles.toSorted((a, b) => {
