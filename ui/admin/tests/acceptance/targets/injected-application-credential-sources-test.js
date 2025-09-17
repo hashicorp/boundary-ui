@@ -194,7 +194,6 @@ module(
       // SSH specific credential sources
       getCredentialLibraryCount = () =>
         this.server.schema.credentialLibraries.where((c) => {
-          console.log(c.credential_type, c.type);
           return (
             c.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
             c.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
