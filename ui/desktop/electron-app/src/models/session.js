@@ -75,12 +75,14 @@ class Session {
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
 
-        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
         // Cancel session before killing process
+        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+        const sanitizedAddr = sanitizer.urlValidate(this.#addr);
         const cancelSessionCommand = [
           'sessions',
           'cancel',
           `-id=${this.id}`,
+          `-addr=${sanitizedAddr}`,
           '-token=env://BOUNDARY_TOKEN',
         ];
         spawnSync(cancelSessionCommand, {
