@@ -41,11 +41,11 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(
-        'tcp',
-        targetPort,
-        targetAddress,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'tcp',
+        port: targetPort,
+        address: targetAddress,
+      });
 
       await boundaryCli.authenticateBoundary(
         controllerAddr,
@@ -109,11 +109,11 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(
-        'ssh',
-        targetPort,
-        targetAddress,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+        address: targetAddress,
+      });
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
       const credentialName =
@@ -196,7 +196,10 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget('ssh', targetPort);
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+      });
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
@@ -287,11 +290,11 @@ test(
         );
 
       const targetsPage = new TargetsPage(page);
-      const rdpTarget = await targetsPage.createTarget(
-        'rdp',
-        targetPort,
-        targetAddress,
-      );
+      const rdpTarget = await targetsPage.createTarget({
+        targetType: 'rdp',
+        port: targetPort,
+        address: targetAddress,
+      });
       await targetsPage.addBrokeredCredentialsToTarget(
         rdpTarget,
         credentialName,

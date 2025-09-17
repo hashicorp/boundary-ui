@@ -44,11 +44,12 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTarget(
-          'tcp',
+        const targetName = await targetsPage.createTarget({
+          targetType: 'tcp',
           targetPort,
           targetAddress,
-        );
+          alias: null,
+        });
 
         // Create alias for target
         const aliasName = 'Alias ' + nanoid();
@@ -149,12 +150,11 @@ test.describe('Aliases', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTarget(
-          'tcp',
-          targetPort,
-          targetAddress,
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+          address: targetAddress,
           alias,
-        );
+        });
 
         // Connect to target using alias
         connect = await boundaryCli.connectToAlias(alias, sshUser, sshKeyPath);
@@ -208,11 +208,10 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTarget(
-          'tcp',
-          targetPort,
-          targetAddress,
-        );
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+          address: targetAddress,
+        });
 
         // Create new alias from scope page
         await boundaryCli.authenticateBoundary(

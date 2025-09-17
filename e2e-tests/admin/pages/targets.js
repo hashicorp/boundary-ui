@@ -17,7 +17,8 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} alias alias used for the target
    * @returns Name of the target
    */
-  async createTarget(targetType, port, address, alias) {
+  async createTarget({ targetType = 'tcp', port, address, alias }) {
+    console.log(`${targetType}, ${port}, ${address}, ${alias}`);
     const targetName = 'Target ' + nanoid();
     let targetTypeLabel;
 
