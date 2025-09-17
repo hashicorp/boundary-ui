@@ -75,6 +75,9 @@ function addFilterConditions({ filters, parameters, conditions }) {
       continue;
     }
 
+    // When attribute conditions are a series of equals/notEquals
+    // replace with in/notIn to avoid hitting the sqlite maximum
+    // expression tree depth.
     const firstOperator = Object.keys(filterValueArray[0])[0];
     const allOperatorsEqual = filterValueArray
       .flatMap((item) => Object.keys(item))
