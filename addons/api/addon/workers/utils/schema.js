@@ -44,9 +44,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS target_fts USING fts5(
 -- which replaces the row and doesn't execute an UPDATE trigger.
 CREATE TRIGGER IF NOT EXISTS target_ai AFTER INSERT ON target BEGIN
     INSERT INTO target_fts(
-        id, type, name, description, address, scope_id, created_time
+        rowid, id, type, name, description, address, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.address, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.address, new.scope_id, new.created_time
     );
 END;
 
@@ -83,9 +83,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS alias_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS alias_ai AFTER INSERT ON alias BEGIN
     INSERT INTO alias_fts(
-        id, type, name, description, destination_id, value, scope_id, created_time
+        rowid, id, type, name, description, destination_id, value, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.destination_id, new.value, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.destination_id, new.value, new.scope_id, new.created_time
     );
 END;
 
@@ -116,9 +116,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS group_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS group_ai AFTER INSERT ON "group" BEGIN
     INSERT INTO group_fts(
-        id, name, description, scope_id, created_time
+        rowid, id, name, description, scope_id, created_time
     ) VALUES (
-        new.id, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.name, new.description, new.scope_id, new.created_time
     );
 END;
 
@@ -149,9 +149,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS role_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS role_ai AFTER INSERT ON role BEGIN
     INSERT INTO role_fts(
-        id, name, description, scope_id, created_time
+        rowid, id, name, description, scope_id, created_time
     ) VALUES (
-        new.id, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.name, new.description, new.scope_id, new.created_time
     );
 END;
 
@@ -182,9 +182,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS user_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS user_ai AFTER INSERT ON user BEGIN
     INSERT INTO user_fts(
-        id, name, description, scope_id, created_time
+        rowid, id, name, description, scope_id, created_time
     ) VALUES (
-        new.id, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.name, new.description, new.scope_id, new.created_time
     );
 END;
 
@@ -217,9 +217,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS credential_store_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS credential_store_ai AFTER INSERT ON credential_store BEGIN
     INSERT INTO credential_store_fts(
-        id, type, name, description, scope_id, created_time
+        rowid, id, type, name, description, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.scope_id, new.created_time
     );
 END;
 
@@ -252,9 +252,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS scope_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS scope_ai AFTER INSERT ON scope BEGIN
     INSERT INTO scope_fts(
-        id, type, name, description, scope_id, created_time
+        rowid, id, type, name, description, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.scope_id, new.created_time
     );
 END;
 
@@ -289,9 +289,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS auth_method_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS auth_method_ai AFTER INSERT ON auth_method BEGIN
     INSERT INTO auth_method_fts(
-        id, type, name, description, is_primary, scope_id, created_time
+        rowid, id, type, name, description, is_primary, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.is_primary, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.is_primary, new.scope_id, new.created_time
     );
 END;
 
@@ -326,9 +326,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS host_catalog_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS host_catalog_ai AFTER INSERT ON host_catalog BEGIN
     INSERT INTO host_catalog_fts(
-        id, type, name, description, plugin_name, scope_id, created_time
+        rowid, id, type, name, description, plugin_name, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.name, new.description, new.plugin_name, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.plugin_name, new.scope_id, new.created_time
     );
 END;
 
@@ -377,9 +377,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS session_recording_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS session_recording_ai AFTER INSERT ON session_recording BEGIN
     INSERT INTO session_recording_fts(
-        id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time
+        rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time
     ) VALUES (
-        new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.created_time
+        new.rowid, new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.created_time
     );
 END;
 
@@ -416,9 +416,9 @@ CREATE VIRTUAL TABLE IF NOT EXISTS session_fts USING fts5(
 
 CREATE TRIGGER IF NOT EXISTS session_ai AFTER INSERT ON session BEGIN
     INSERT INTO session_fts(
-        id, type, status, endpoint, target_id, user_id, scope_id, created_time
+        rowid, id, type, status, endpoint, target_id, user_id, scope_id, created_time
     ) VALUES (
-        new.id, new.type, new.status, new.endpoint, new.target_id, new.user_id, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.status, new.endpoint, new.target_id, new.user_id, new.scope_id, new.created_time
     );
 END;
 
