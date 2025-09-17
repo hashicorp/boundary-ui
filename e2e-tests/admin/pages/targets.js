@@ -46,10 +46,12 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(targetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel(targetTypeLabel)
-      .click();
+    if (targetTypeLabel != 'Generic TCP') {
+      await this.page
+        .getByRole('group', { name: 'Type' })
+        .getByLabel(targetTypeLabel)
+        .click();
+    }
     if (address) await this.page.getByLabel('Target Address').fill(address);
     if (port) await this.page.getByLabel('Default Port').fill(port);
     if (alias) {

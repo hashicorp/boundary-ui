@@ -44,9 +44,10 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressCe(
-          targetAddress,
+        const targetName = await targetsPage.createTarget(
+          'tcp',
           targetPort,
+          targetAddress,
         );
 
         // Create alias for target
@@ -148,9 +149,10 @@ test.describe('Aliases', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAliasCe(
-          targetAddress,
+        const targetName = await targetsPage.createTarget(
+          'tcp',
           targetPort,
+          targetAddress,
           alias,
         );
 
@@ -206,9 +208,10 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressCe(
-          targetAddress,
+        const targetName = await targetsPage.createTarget(
+          'tcp',
           targetPort,
+          targetAddress,
         );
 
         // Create new alias from scope page

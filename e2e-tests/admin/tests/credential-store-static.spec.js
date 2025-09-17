@@ -31,10 +31,7 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   const projectsPage = new ProjectsPage(page);
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
-  targetName = await targetsPage.createTargetWithAddressCe(
-    targetAddress,
-    targetPort,
-  );
+  targetName = await targetsPage.createTarget('tcp', targetPort, targetAddress);
   const credentialStoresPage = new CredentialStoresPage(page);
   await credentialStoresPage.createStaticCredentialStore();
 });

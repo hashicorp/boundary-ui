@@ -57,7 +57,7 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetCe(targetPort);
+      const targetName = await targetsPage.createTarget('tcp', targetPort);
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
@@ -127,9 +127,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddressCe(
-        targetAddress,
+      const targetName = await targetsPage.createTarget(
+        'tcp',
         targetPort,
+        targetAddress,
       );
 
       await boundaryCli.authenticateBoundary(
@@ -191,7 +192,7 @@ test(
       const projectsPage = new ProjectsPage(page);
       await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddressCe(targetAddress, targetPort);
+      await targetsPage.createTarget('tcp', targetPort, targetAddress);
 
       // Update target
       await page.getByRole('button', { name: 'Edit Form' }).click();
