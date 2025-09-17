@@ -430,6 +430,8 @@ END;`;
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
+-- This ensures multiple triggers can activate in the scenario of using REPLACE INTO
+PRAGMA recursive_triggers = true;
 PRAGMA user_version = ${version};
 
 CREATE TABLE IF NOT EXISTS token (
