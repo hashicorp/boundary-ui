@@ -4,7 +4,6 @@
  */
 
 import { modelMapping } from 'api/services/sqlite';
-import { searchTables } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
 import { underscore } from '@ember/string';
 
@@ -35,16 +34,14 @@ export function generateSQLExpressions(
   addFilterConditions({ filters, parameters, conditions });
   addSearchConditions({ search, resource, tableName, parameters, conditions });
 
+  const selectClause = constructSelectClause(select, tableName);
   const orderByClause = constructOrderByClause(resource, sort);
-
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';
 
   const paginationClause = page && pageSize ? `LIMIT ? OFFSET ?` : '';
   if (paginationClause) {
     parameters.push(pageSize, (page - 1) * pageSize);
   }
-
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${tableName}"`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
@@ -142,32 +139,57 @@ function addSearchConditions({
   parameters,
   conditions,
 }) {
-  if (!search) {
+  if (!search || !modelMapping[resource]) {
     return;
   }
 
-  if (searchTables.has(resource)) {
-    // Use the special prefix indicator "*" for full-text search
-    parameters.push(`"${search}"*`);
-    // Use a subquery to match against the FTS table with rowids as SQLite is
-    // much more efficient with FTS queries when using rowids or MATCH (or both).
-    // We could have also used a join here but a subquery is simpler.
-    conditions.push(
-      `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
+  // Use the special prefix indicator "*" for full-text search
+  if (typeOf(search) === 'object') {
+    if (!search?.value) {
+      return;
+    }
+
+    parameters.push(
+      or(search.fields.map((field) => `${field}:"${search.value}"*`)),
     );
-    return;
+  } else {
+    parameters.push(`"${search}"*`);
   }
 
-  const fields = Object.keys(modelMapping[resource]);
-  const searchConditions = parenthetical(
-    or(
-      fields.map((field) => {
-        parameters.push(`%${search}%`);
-        return `${field}${OPERATORS['contains']}`;
-      }),
-    ),
+  // Use a subquery to match against the FTS table with rowids as SQLite is
+  // much more efficient with FTS queries when using rowids or MATCH (or both).
+  // We could have also used a join here but a subquery is simpler.
+  conditions.push(
+    `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
   );
-  conditions.push(searchConditions);
+}
+function constructSelectClause(select = [{ field: '*' }], tableName) {
+  const distinctColumns = select.filter(({ isDistinct }) => isDistinct);
+  let selectColumns;
+
+  // Special case for distinct columns as they must be grouped together.
+  // We're only handling simple use cases as anything more complicated
+  // like windows/CTEs can be custom SQL.
+  if (distinctColumns.length > 0) {
+    selectColumns = `DISTINCT ${distinctColumns.map(({ field }) => field).join(', ')}`;
+  } else {
+    selectColumns = select
+      .map(({ field, isCount, alias }) => {
+        let column = field;
+
+        if (isCount) {
+          column = `count(${column})`;
+        }
+        if (alias) {
+          column = `${column} as ${alias}`;
+        }
+
+        return column;
+      })
+      .join(', ');
+  }
+
+  return `SELECT ${selectColumns} FROM "${tableName}"`;
 }
 
 function constructOrderByClause(resource, sort) {
