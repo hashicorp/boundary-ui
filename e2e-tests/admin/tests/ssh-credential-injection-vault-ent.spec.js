@@ -89,10 +89,10 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddressEnt(
+      const targetName = await targetsPage.createTarget(
         'ssh',
-        targetAddress,
         targetPort,
+        targetAddress,
       );
 
       // Create credentials
