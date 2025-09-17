@@ -62,8 +62,12 @@ export const STORAGE_BUCKET_DROPDOWN = '[name=storage_bucket_id]';
 export const NO_RESULTS_MSG = '[data-test-no-target-results]';
 export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
+export const TABLE_TARGETS_ROW = (id) =>
+  `tbody [data-test-targets-table-row="${id}"]`;
 export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
+export const TABLE_SESSIONS_STATUS = (id) =>
+  `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:nth-child(5)`;
 export const TABLE_CREDENTIAL_SOURCE_CHECKBOX = (type) =>
   `tbody [data-test-credential-source="${type}"] input[type="checkbox"]`;
 

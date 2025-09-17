@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const treeKill = require('tree-kill');
 const sanitizer = require('../utils/sanitizer.js');
-const { isWindows } = require('../helpers/platform.js');
-const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
+const {
+  spawnAsyncJSONPromise,
+  spawnSync,
+} = require('../helpers/spawn-promise.js');
 
 class Session {
   #id;
@@ -73,14 +74,20 @@ class Session {
       if (this.isRunning) {
         this.#process.on('close', () => resolve());
         this.#process.on('error', (e) => reject(e));
-        /**
-         * On Windows OS, a spawned process uses cmd.exe to initiate a session.
-         * Hence, captured process.pid corresponds to cmd.exe instead of session.
-         * To avoid orphaned session processes and due to lack of node support
-         * to handle killing processes cleanly in this scenario,
-         * kill entire dependent process tree on Windows.
-         */
-        isWindows() ? treeKill(this.#process.pid) : this.#process.kill();
+
+        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+        // Cancel session before killing process
+        const cancelSessionCommand = [
+          'sessions',
+          'cancel',
+          `-id=${this.id}`,
+          '-token=env://BOUNDARY_TOKEN',
+        ];
+        spawnSync(cancelSessionCommand, {
+          BOUNDARY_TOKEN: sanitizedToken,
+        });
+
+        this.#process.kill();
       } else {
         // Do nothing when process isn't running
         resolve();
