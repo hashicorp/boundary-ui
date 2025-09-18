@@ -38,6 +38,9 @@ export default class ScopesScopeWorkersNewRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    showBSide: {
+      replace: false,
+    },
   };
 
   // =methods
@@ -211,5 +214,11 @@ export default class ScopesScopeWorkersNewRoute extends Route {
       options,
     );
     return scopes.meta?.totalItems;
+  }
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.set('search', '');
+      controller.set('page', 1);
+    }
   }
 }

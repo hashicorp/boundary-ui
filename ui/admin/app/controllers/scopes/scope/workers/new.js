@@ -17,9 +17,10 @@ export default class ScopesScopeWorkersNewController extends Controller {
 
   // =attributes
   queryParams = [
-    'search',
+    { search: { scope: 'controller' } },
     { types: { type: 'array' } },
     { parent_scope: { type: 'array' } },
+    { show_b_side: { scope: 'controller '} },
   ]
   @tracked showBSide = false;
   @tracked search = '';

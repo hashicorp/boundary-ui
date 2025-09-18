@@ -269,25 +269,6 @@ unzip *.zip ;\\
 
   @action
   addTags() {
-    // const keywordValues = [
-    //   GRANT_SCOPE_THIS,
-    //   GRANT_SCOPE_CHILDREN,
-    //   GRANT_SCOPE_DESCENDANTS,
-    // ];
-
-    // const scopesArray = this.selectedScopes.map((value) => {
-    //   if (keywordValues.includes(value)) {
-    //     return { id: value, name: value };
-    //   }
-    //   const scopeModel = this.args.model.scopes.find(
-    //     (scope) => scope.id === value,
-    //   );
-    //   return scopeModel ? scopeModel : { id: value };
-    // });
-
-    // this.permissions = scopesArray; // Save to tracked property
-    // console.log(this.permissions);
-
     // Example label, you can set this dynamically as needed
     const label = 'sample label';
 
@@ -315,6 +296,9 @@ unzip *.zip ;\\
     this.permissions = [...this.permissions, result];
     console.log(this.permissions);
     this.args.toggleBSide();
+    this.args.handleSearchInput({ target: { value: '' } });
+    this.selectedScopes = new TrackedArray([]);
+    this.grantStrings = [];
   }
   @action
   addGrantString() {
