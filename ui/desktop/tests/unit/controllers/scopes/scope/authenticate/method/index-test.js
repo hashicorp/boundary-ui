@@ -6,8 +6,9 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
+import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';
 import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module(
@@ -24,12 +25,23 @@ module(
     const instances = {
       scopes: {
         global: null,
+        org: null,
       },
       authMethod: null,
+      account: null,
+    };
+
+    const urls = {
+      targets: null,
+    };
+
+    const setDefaultClusterUrl = (test) => {
+      const windowOrigin = window.location.origin;
+      const clusterUrl = test.owner.lookup('service:clusterUrl');
+      clusterUrl.rendererClusterUrl = windowOrigin;
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
       );
@@ -44,6 +56,15 @@ module(
         scope: instances.scopes.global,
         type: TYPE_AUTH_METHOD_PASSWORD,
       });
+      instances.account = this.server.create('account', {
+        scope: instances.scopes.global,
+        authMethod: instances.authMethod,
+      });
+
+      urls.targets = '/scopes/global/projects/targets';
+
+      this.owner.register('service:browser/window', WindowMockIPC);
+      setDefaultClusterUrl(this);
     });
 
     test('it exists', function (assert) {
@@ -51,7 +72,8 @@ module(
     });
 
     test('authenticate action saves login information', async function (assert) {
-      const identification = 'admin123';
+      await visit('/');
+      const identification = instances.account.attributes.login_name;
       const authMethod = await store.findRecord(
         'auth-method',
         instances.authMethod.id,
@@ -60,12 +82,15 @@ module(
         session.data.authenticated;
 
       assert.notOk(usernameBefore);
-      assert.strictEqual(authBefore, 'authenticator:test');
+      assert.notOk(authBefore);
+      assert.ok(identification);
 
       await controller.authenticate(authMethod, {
         identification,
         password: 'password',
       });
+      await settled();
+
       const { authenticator: authAfter, username: usernameAfter } =
         session.data.authenticated;
 
@@ -74,6 +99,7 @@ module(
         `authenticator:${instances.authMethod.type}`,
       );
       assert.strictEqual(usernameAfter, identification);
+      assert.strictEqual(currentURL(), urls.targets);
     });
   },
 );
