@@ -44,10 +44,12 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByLabel('Name').fill(targetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     if (targetType) {
-      await this.page
-        .getByRole('group', { name: 'Type' })
-        .getByLabel(targetTypeLabel)
-        .click();
+      if (targetTypeLabel)
+        await this.page
+          .getByRole('group', { name: 'Type' })
+          .getByLabel(targetTypeLabel)
+          .click();
+      else throw new Error(`Unsupported target type: ${targetType}`);
     }
     if (address) await this.page.getByLabel('Target Address').fill(address);
     if (port) await this.page.getByLabel('Default Port').fill(port);
