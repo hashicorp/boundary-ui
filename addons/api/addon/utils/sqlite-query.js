@@ -75,6 +75,34 @@ function addFilterConditions({ filters, parameters, conditions }) {
       continue;
     }
 
+    // When attribute conditions are a series of equals/notEquals
+    // replace with in/notIn to avoid hitting the sqlite maximum
+    // expression tree depth.
+    const firstOperator = Object.keys(filterValueArray[0])[0];
+    const allOperatorsEqual = filterValueArray
+      .flatMap((item) => Object.keys(item))
+      .every((op) => op === firstOperator);
+    if (
+      filterValueArray.length > 1 &&
+      (firstOperator === 'equals' || firstOperator === 'notEquals') &&
+      allOperatorsEqual
+    ) {
+      const operation = firstOperator === 'equals' ? 'in' : 'notIn';
+      const values = filterValueArray
+        .filter((f) => f)
+        .map((filterObjValue) => {
+          let value = Object.values(filterObjValue)[0];
+          if (typeOf(value) === 'date') {
+            value = value.toISOString();
+          }
+          parameters.push(value);
+          return value;
+        });
+      const filterCondition = `${key}${OPERATORS[operation](values)}`;
+      conditions.push(parenthetical(filterCondition));
+      continue;
+    }
+
     const filterConditions = filterValueArray
       .filter((f) => f)
       .map((filterObjValue) => {
@@ -195,6 +223,8 @@ const OPERATORS = {
   lt: ' < ?',
   lte: ' <= ?',
   contains: ' LIKE ?',
+  in: (values) => ` IN (${values.map(() => '?').join(', ')})`,
+  notIn: (values) => ` NOT IN (${values.map(() => '?').join(', ')})`,
 };
 
 // Logical Operators
