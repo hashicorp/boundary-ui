@@ -46,10 +46,11 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
 
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
@@ -165,12 +166,12 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAlias(
-          targetAddress,
-          targetPort,
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
           alias,
-          'ssh',
-        );
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
@@ -236,10 +237,11 @@ test.describe('Aliases (Enterprise)', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
