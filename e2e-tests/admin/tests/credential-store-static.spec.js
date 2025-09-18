@@ -32,7 +32,6 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
   targetName = await targetsPage.createTarget({
-    targetType: 'tcp',
     port: targetPort,
     address: targetAddress,
   });

@@ -45,10 +45,8 @@ test.describe('Aliases', () => {
         await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
         const targetName = await targetsPage.createTarget({
-          targetType: 'tcp',
-          targetPort,
-          targetAddress,
-          alias: null,
+          port: targetPort,
+          address: targetAddress,
         });
 
         // Create alias for target

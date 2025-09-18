@@ -17,8 +17,7 @@ export class TargetsPage extends BaseResourcePage {
    * @param {string} alias alias used for the target
    * @returns Name of the target
    */
-  async createTarget({ targetType = 'tcp', port, address, alias }) {
-    console.log(`${targetType}, ${port}, ${address}, ${alias}`);
+  async createTarget({ targetType, port, address, alias }) {
     const targetName = 'Target ' + nanoid();
     let targetTypeLabel;
 
@@ -35,9 +34,6 @@ export class TargetsPage extends BaseResourcePage {
         targetTypeLabel = 'Generic TCP';
         break;
       }
-      default: {
-        throw new Error(`Unexpected target type passed ${targetType}`);
-      }
     }
 
     await this.page
@@ -47,7 +43,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(targetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    if (targetTypeLabel != 'Generic TCP') {
+    if (targetType) {
       await this.page
         .getByRole('group', { name: 'Type' })
         .getByLabel(targetTypeLabel)
