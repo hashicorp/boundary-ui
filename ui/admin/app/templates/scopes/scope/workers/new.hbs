@@ -25,8 +25,15 @@
   <page.body>
     <Form::Worker::CreateWorkerLed
       @model={{@model}}
-      @cancel={{fn this.cancel @model}}
-      @submit={{fn this.createWorkerLed @model}}
+      @cancel={{fn this.cancel @model.worker}}
+      @submit={{fn this.createWorkerLed @model.worker}}
+      @showBSide={{this.showBSide}}
+      @toggleBSide={{this.toggleBSide}}
+      @search={{this.search}}
+      @types={{this.types}}
+      @parentScope={{this.parent_scope}}
+      @handleSearchInput={{this.handleSearchInput}}
+      @applyFilter={{this.applyFilter}}
     />
   </page.body>
 

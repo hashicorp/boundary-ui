@@ -9,6 +9,11 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { TrackedArray } from 'tracked-built-ins';
 import Tag from '../tag';
+import {
+  GRANT_SCOPE_THIS,
+  GRANT_SCOPE_CHILDREN,
+  GRANT_SCOPE_DESCENDANTS,
+} from 'api/models/role';
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
@@ -22,8 +27,51 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked configFilePath;
   @tracked initialUpstreams;
   @tracked workerTags = new TrackedArray([]);
+  @tracked selectedScopes = new TrackedArray([]);
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
+  keywords = {
+    keyThis: GRANT_SCOPE_THIS,
+    keyChildren: GRANT_SCOPE_CHILDREN,
+    keyDescendants: GRANT_SCOPE_DESCENDANTS,
+  };
+
+  @tracked grantScopeIds = [];
+  @tracked permissions = [];
+  @tracked newGrantString = '';
+  @tracked grantStrings = [];
+
+  get scopeTypeOptions() {
+    return [
+      { name: 'Global', id: 'global' },
+      { name: 'Organization', id: 'org' },
+      { name: 'Project', id: 'project' },
+    ];
+  }
+
+  get parentScopeOptions() {
+    const scopes = this.args.model.scopes || [];
+    const seen = new Set();
+    const options = [];
+
+    scopes.forEach((s) => {
+      const scopeObj = s.scope;
+      if (scopeObj && scopeObj.id && !seen.has(scopeObj.id)) {
+        options.push({ id: scopeObj.id, name: scopeObj.name });
+        seen.add(scopeObj.id);
+      }
+    });
+
+    return options;
+  }
+
+  get showAlert() {
+    return (
+      this.args.model.worker.isGlobal &&
+      (this.grantScopeIds.includes(GRANT_SCOPE_CHILDREN) ||
+        this.grantScopeIds.includes(GRANT_SCOPE_DESCENDANTS))
+    );
+  }
 
   get clusterIDFromURL() {
     const hostname = this.window?.location?.hostname;
@@ -190,5 +238,96 @@ unzip *.zip ;\\
   @action
   toggleEnableRecordingStoragePath() {
     this.enableRecordingStoragePath = !this.enableRecordingStoragePath;
+  }
+
+  @action
+  scopeSelectionChange({ selectableRowsStates }) {
+    selectableRowsStates.forEach(({ isSelected, selectionKey }) => {
+      if (isSelected && !this.selectedScopes.includes(selectionKey)) {
+        this.selectedScopes.push(selectionKey);
+      } else if (!isSelected && this.selectedScopes.includes(selectionKey)) {
+        const idx = this.selectedScopes.indexOf(selectionKey);
+        if (idx !== -1) this.selectedScopes.splice(idx, 1);
+      }
+    });
+    console.log(this.selectedScopes);
+  }
+
+  @action
+  toggleField(event) {
+    const { checked, value } = event.target;
+    if (checked) {
+      if (!this.selectedScopes.includes(value)) {
+        this.selectedScopes.push(value);
+      }
+    } else {
+      const idx = this.selectedScopes.indexOf(value);
+      if (idx !== -1) this.selectedScopes.splice(idx, 1);
+    }
+    console.log(this.selectedScopes);
+  }
+
+  @action
+  addTags() {
+    // const keywordValues = [
+    //   GRANT_SCOPE_THIS,
+    //   GRANT_SCOPE_CHILDREN,
+    //   GRANT_SCOPE_DESCENDANTS,
+    // ];
+
+    // const scopesArray = this.selectedScopes.map((value) => {
+    //   if (keywordValues.includes(value)) {
+    //     return { id: value, name: value };
+    //   }
+    //   const scopeModel = this.args.model.scopes.find(
+    //     (scope) => scope.id === value,
+    //   );
+    //   return scopeModel ? scopeModel : { id: value };
+    // });
+
+    // this.permissions = scopesArray; // Save to tracked property
+    // console.log(this.permissions);
+
+    // Example label, you can set this dynamically as needed
+    const label = 'sample label';
+
+    // Get scope names or ids from selectedScopes
+    const scopes = this.selectedScopes.map((value) => {
+      // If value is a scope model, use its name or id
+      if (typeof value === 'object' && value !== null) {
+        return value.name || value.id;
+      }
+      // If value is an id, try to find the scope model in model.scopes
+      const scopeModel = this.args.model.scopes?.find(
+        (scope) => scope.id === value,
+      );
+      return scopeModel ? scopeModel.name || scopeModel.id : value;
+    });
+
+    // Build the object
+    const result = {
+      label,
+      grants: this.grantStrings,
+      scopes,
+    };
+
+    // Save or use the result as needed
+    this.permissions = [...this.permissions, result];
+    console.log(this.permissions);
+    this.args.toggleBSide();
+  }
+  @action
+  addGrantString() {
+    if (this.newGrantString?.trim()) {
+      this.grantStrings = [...this.grantStrings, this.newGrantString.trim()];
+      this.newGrantString = '';
+    }
+    console.log(this.grantStrings);
+  }
+
+  @action
+  removeGrant(grantString) {
+    this.grantStrings = this.grantStrings.filter((g) => g !== grantString);
+    console.log(this.grantStrings);
   }
 }

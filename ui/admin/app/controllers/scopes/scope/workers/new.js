@@ -4,6 +4,7 @@
  */
 
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
@@ -13,6 +14,19 @@ export default class ScopesScopeWorkersNewController extends Controller {
   // =services
 
   @service router;
+
+  // =attributes
+  queryParams = [
+    'search',
+    { types: { type: 'array' } },
+    { parent_scope: { type: 'array' } },
+  ]
+  @tracked showBSide = false;
+  @tracked search = '';
+  @tracked types = [];
+  @tracked parent_scope = [];
+  @tracked page = 1;
+  @tracked pageSize = 10;
 
   // =actions
 
@@ -39,5 +53,23 @@ export default class ScopesScopeWorkersNewController extends Controller {
   @notifySuccess('notifications.add-success')
   async createWorkerLed(worker, workerGeneratedAuthToken) {
     await worker.createWorkerLed(workerGeneratedAuthToken);
+  }
+
+  @action
+  toggleBSide() {
+    this.showBSide = !this.showBSide;
+  }
+
+  @action
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
+  }
+
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = selectedItems;
+    this.page = 1;
   }
 }

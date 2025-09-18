@@ -26,6 +26,7 @@ export default class FormRoleManageScopesIndexComponent extends Component {
    * @type {boolean}
    */
   get showAlert() {
+    console.log('CALLED: ', this.args.model);
     return (
       this.args.model.scope.isGlobal &&
       (this.args.model.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN) ||
