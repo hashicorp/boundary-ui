@@ -70,42 +70,76 @@
                 </dd.Interactive>
               </Hds::Dropdown>
             {{/if}}
-
-            <Hds::Dropdown
-              @enableCollisionDetection={{true}}
-              data-test-side-nav-user-dropdown
-              as |dd|
-            >
-              {{#if this.session.data.authenticated.username}}
+            {{#if this.session.data.authenticated.username}}
+              <Hds::Dropdown
+                @enableCollisionDetection={{true}}
+                class='user-menu-dropdown'
+                data-test-side-nav-user-dropdown
+                as |dd|
+              >
                 <dd.ToggleButton
                   @icon='user'
                   @text={{this.session.data.authenticated.username}}
+                  {{hds-tooltip this.session.data.authenticated.username}}
+                  class='user-menu-dropdown__toggle-button'
                 />
-              {{else}}
+                <dd.Title @text={{t 'titles.authenticated'}} />
+                <dd.Description
+                  @text={{this.session.data.authenticated.username}}
+                />
+                <dd.Separator />
+
+                <dd.Interactive @route='account.change-password'>{{t
+                    'actions.change-password'
+                  }}</dd.Interactive>
+                <dd.Separator />
+
+                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                    'actions.deauthenticate'
+                  }}</dd.Interactive>
+                <dd.Separator />
+
+                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+                {{#each this.themes as |theme|}}
+                  <dd.Radio
+                    @value={{theme.value}}
+                    checked={{eq this.session.data.theme theme.value}}
+                    {{on 'change' (fn this.toggleTheme theme.value)}}
+                  >
+                    {{t (concat 'themes.' theme.label)}}
+                  </dd.Radio>
+                {{/each}}
+              </Hds::Dropdown>
+            {{else}}
+              <Hds::Dropdown
+                @enableCollisionDetection={{true}}
+                data-test-side-nav-user-dropdown
+                as |dd|
+              >
                 <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
-              {{/if}}
 
-              <dd.Interactive @route='account.change-password'>{{t
-                  'actions.change-password'
-                }}</dd.Interactive>
-              <dd.Separator />
+                <dd.Interactive @route='account.change-password'>{{t
+                    'actions.change-password'
+                  }}</dd.Interactive>
+                <dd.Separator />
 
-              <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
-                  'actions.deauthenticate'
-                }}</dd.Interactive>
-              <dd.Separator />
+                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                    'actions.deauthenticate'
+                  }}</dd.Interactive>
+                <dd.Separator />
 
-              <dd.Title @text={{t 'actions.toggle-color-theme'}} />
-              {{#each this.themes as |theme|}}
-                <dd.Radio
-                  @value={{theme.value}}
-                  checked={{eq this.session.data.theme theme.value}}
-                  {{on 'change' (fn this.toggleTheme theme.value)}}
-                >
-                  {{t (concat 'themes.' theme.label)}}
-                </dd.Radio>
-              {{/each}}
-            </Hds::Dropdown>
+                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+                {{#each this.themes as |theme|}}
+                  <dd.Radio
+                    @value={{theme.value}}
+                    checked={{eq this.session.data.theme theme.value}}
+                    {{on 'change' (fn this.toggleTheme theme.value)}}
+                  >
+                    {{t (concat 'themes.' theme.label)}}
+                  </dd.Radio>
+                {{/each}}
+              </Hds::Dropdown>
+            {{/if}}
           </:actions>
         </Hds::SideNav::Header>
       </:header>

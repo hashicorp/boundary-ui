@@ -101,7 +101,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @param {string} username
    * @return {object}
    */
-  normalizeData(data, username) {
+  normalizeData(data) {
     // Pull fields up from `data.attributes` for easier access in JavaScript.
     // The `attributes` field exists on the Go side for its convenience but is
     // unnecessary here.
@@ -109,7 +109,6 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     // Add booleans indicated the scope type
     data.isGlobal = data?.scope?.type === 'global';
     data.isOrg = data?.scope?.type === 'org';
-    if (username) data.username = username;
     return data;
   }
 
