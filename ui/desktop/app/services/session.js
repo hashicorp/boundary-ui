@@ -28,16 +28,20 @@ export default class SessionService extends BaseSessionService {
       });
 
       if (sessionData?.account_id) {
-        const account = await this.store.findRecord(
-          'account',
-          sessionData.account_id,
-        );
-        const username =
-          account.login_name ||
-          account.subject ||
-          account.email ||
-          account.full_name;
-        set(this, 'data.authenticated.username', username);
+        try {
+          const account = await this.store.findRecord(
+            'account',
+            sessionData.account_id,
+          );
+          const username =
+            account.login_name ||
+            account.subject ||
+            account.email ||
+            account.full_name;
+          set(this, 'data.authenticated.username', username);
+        } catch (e) {
+          // no op
+        }
       }
     }
   }

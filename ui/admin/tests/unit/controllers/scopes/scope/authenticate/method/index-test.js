@@ -5,10 +5,8 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { visit } from '@ember/test-helpers';
+import { visit, currentURL, settled } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module(
@@ -16,7 +14,6 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupSqlite(hooks);
 
     let controller;
     let store;
@@ -25,8 +22,10 @@ module(
     const instances = {
       scopes: {
         global: null,
+        org: null,
       },
       authMethod: null,
+      account: null,
     };
 
     const urls = {
@@ -35,7 +34,6 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
       );
@@ -46,9 +44,17 @@ module(
         id: 'global',
         type: 'global',
       });
+      instances.scopes.org = this.server.create('scope', {
+        type: 'org',
+        scope: { id: 'global', type: 'global' },
+      });
       instances.authMethod = this.server.create('auth-method', {
         scope: instances.scopes.global,
         type: TYPE_AUTH_METHOD_PASSWORD,
+      });
+      instances.account = this.server.create('account', {
+        scope: instances.scopes.global,
+        authMethod: instances.authMethod,
       });
 
       urls.globalScope = '/scopes/global/scopes';
@@ -57,7 +63,7 @@ module(
 
     test('authenticate action saves login information and redirects to correct page', async function (assert) {
       await visit(urls.authenticate);
-      const identification = 'admin123';
+      const identification = instances.account.attributes.login_name;
       const authMethod = await store.findRecord(
         'auth-method',
         instances.authMethod.id,
@@ -66,12 +72,15 @@ module(
         session.data.authenticated;
 
       assert.notOk(usernameBefore);
-      assert.strictEqual(authBefore, 'authenticator:test');
+      assert.notOk(authBefore);
+      assert.ok(identification);
 
       await controller.authenticate(authMethod, {
         identification,
         password: 'password',
       });
+      await settled();
+
       const { authenticator: authAfter, username: usernameAfter } =
         session.data.authenticated;
 
@@ -80,6 +89,7 @@ module(
         `authenticator:${instances.authMethod.type}`,
       );
       assert.strictEqual(usernameAfter, identification);
+      assert.strictEqual(currentURL(), urls.globalScope);
     });
   },
 );
