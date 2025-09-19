@@ -41,6 +41,8 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked newGrantString = '';
   @tracked grantStrings = [];
 
+  // @tracked selectedTab = 0;
+
   get scopeTypeOptions() {
     return [
       { name: 'Global', id: 'global' },
@@ -269,52 +271,31 @@ unzip *.zip ;\\
 
   @action
   addTags() {
-    // const keywordValues = [
-    //   GRANT_SCOPE_THIS,
-    //   GRANT_SCOPE_CHILDREN,
-    //   GRANT_SCOPE_DESCENDANTS,
-    // ];
-
-    // const scopesArray = this.selectedScopes.map((value) => {
-    //   if (keywordValues.includes(value)) {
-    //     return { id: value, name: value };
-    //   }
-    //   const scopeModel = this.args.model.scopes.find(
-    //     (scope) => scope.id === value,
-    //   );
-    //   return scopeModel ? scopeModel : { id: value };
-    // });
-
-    // this.permissions = scopesArray; // Save to tracked property
-    // console.log(this.permissions);
-
-    // Example label, you can set this dynamically as needed
     const label = 'sample label';
 
-    // Get scope names or ids from selectedScopes
     const scopes = this.selectedScopes.map((value) => {
-      // If value is a scope model, use its name or id
       if (typeof value === 'object' && value !== null) {
         return value.name || value.id;
       }
-      // If value is an id, try to find the scope model in model.scopes
       const scopeModel = this.args.model.scopes?.find(
         (scope) => scope.id === value,
       );
       return scopeModel ? scopeModel.name || scopeModel.id : value;
     });
 
-    // Build the object
     const result = {
       label,
       grants: this.grantStrings,
       scopes,
     };
 
-    // Save or use the result as needed
     this.permissions = [...this.permissions, result];
     console.log(this.permissions);
-    this.args.toggleBSide();
+    // this.args.toggleBSide();
+    this.selectedScopes = new TrackedArray([]);
+    this.grantStrings = [];
+    this.args.handleSearchInput({ target: { value: '' } });
+    this.args.tabSelectChange(0);
   }
   @action
   addGrantString() {
@@ -330,4 +311,9 @@ unzip *.zip ;\\
     this.grantStrings = this.grantStrings.filter((g) => g !== grantString);
     console.log(this.grantStrings);
   }
+
+  // @action
+  // tabSelectChange(index) {
+  //   this.selectedTab = index;
+  // }
 }

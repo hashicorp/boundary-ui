@@ -38,6 +38,10 @@ export default class ScopesScopeWorkersNewRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    selectedTab: {
+      refreshModel: false,
+      replace: false,
+    },
   };
 
   // =methods

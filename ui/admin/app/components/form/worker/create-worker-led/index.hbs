@@ -3,526 +3,516 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{#if @showBSide}}
-  {{! Keyword Section }}
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyThis}}
-    name={{this.keywords.keyThis}}
-    checked={{includes this.keywords.keyThis this.grantScopeIds}}
-    {{!-- disabled={{form.disabled}} --}}
-    {{on 'change' this.toggleField}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.role.scope.form.this.help'
-        scopeDisplayName=(if
-          @model.worker.name @model.worker.name @model.worker.id
-        )
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
+<Hds::Tabs
+  @selectedTabIndex={{@selectedTab}}
+  @onClickTab={{@tabSelectChange}}
+  as |T|
+>
+  <T.Tab>New Worker</T.Tab>
+  <T.Tab>Add permissions</T.Tab>
 
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyChildren}}
-    name={{this.keywords.keyChildren}}
-    checked={{includes this.keywords.keyChildren this.grantScopeIds}}
-    {{!-- disabled={{form.disabled}} --}}
-    {{on 'change' this.toggleField}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
-    <F.HelperText>{{if
-        true
-        (t 'resources.role.scope.form.children.help.0')
-        (t 'resources.role.scope.form.children.help.1')
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
-
-  {{#if true}}
-    <Hds::Form::Toggle::Field
-      @value={{this.keywords.keyDescendants}}
-      name={{this.keywords.keyDescendants}}
-      checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
-      {{!-- disabled={{form.disabled}} --}}
-      {{on 'change' this.toggleField}}
-      as |F|
+  <T.Panel>
+    <Rose::Form
+      @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
+      @disabled={{@model.worker.isSaving}}
+      @showEditToggle={{false}}
+      as |form|
     >
-      <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.role.scope.form.descendants.help'
-        }}</F.HelperText>
-    </Hds::Form::Toggle::Field>
-  {{/if}}
-
-  {{#if this.showAlert}}
-    <Hds::Alert @type='compact' as |A|>
-      <A.Description>
-        {{t
-          'resources.role.scope.messages.keywords-selected.description'
-          htmlSafe=true
-        }}
-        <Hds::Link::Inline
-          @color='secondary'
-          @href={{doc-url 'role.add-grant-scopes'}}
-        >
-          {{t 'resources.role.scope.messages.keywords-selected.link'}}
-        </Hds::Link::Inline>
-      </A.Description>
-    </Hds::Alert>
-  {{/if}}
-  {{#if @model.scopes}}
-    <Hds::Accordion @size='large' as |A|>
-      <A.Item
-        @containsInteractive={{true}}
-        @isOpen={{false}}
-        data-test-grant-scope-accordion-item
-      >
-        <:toggle>Custom Scopes</:toggle>
-        <:content>
-          <Hds::SegmentedGroup as |S|>
-            <S.TextInput
-              @value={{@search}}
-              @type='search'
-              placeholder={{t 'actions.search'}}
-              aria-label={{t 'actions.search'}}
-              {{on 'input' @handleSearchInput}}
-            />
-            <S.Generic>
-              <Dropdown
-                name='type'
-                @toggleText='Scope type'
-                @itemOptions={{this.scopeTypeOptions}}
-                @checkedItems={{@types}}
-                @applyFilter={{fn @applyFilter 'types'}}
-              />
-            </S.Generic>
-            <S.Generic>
-              <Dropdown
-                name='parent-scope'
-                @toggleText='Parent scope'
-                @itemOptions={{this.parentScopeOptions}}
-                @checkedItems={{@parentScope}}
-                @applyFilter={{fn @applyFilter 'parent_scope'}}
-              />
-            </S.Generic>
-          </Hds::SegmentedGroup>
-          <Hds::Table
-            @columns={{array
-              (hash label=(t 'resources.scope.title'))
-              (hash label=(t 'form.id.label'))
-              (hash label=(t 'form.type.label'))
-              (hash label=(t 'resources.role.scope.titles.parent_scope'))
-            }}
-            @model={{@model.scopes}}
-            @isSelectable={{true}}
-            @onSelectionChange={{this.scopeSelectionChange}}
-            @valign='middle'
-          >
-            <:body as |B|>
-              <B.Tr
-                @selectionKey={{B.data.id}}
-                @isSelected={{includes B.data.id this.selectedScopes}}
-                @selectionAriaLabelSuffix='row {{B.data.id}}'
-              >
-                <B.Td>{{B.data.displayName}}</B.Td>
-                <B.Td>{{B.data.id}}</B.Td>
-                <B.Td>{{B.data.type}}</B.Td>
-                <B.Td>{{B.data.scope.name}}</B.Td>
-              </B.Tr>
-            </:body>
-          </Hds::Table>
-        </:content>
-      </A.Item>
-    </Hds::Accordion>
-  {{/if}}
-
-  {{! GRANT STRING }}
-  <Rose::List::KeyValue as |list|>
-    <list.item as |item|>
-      <item.key>
-        <Hds::Form::Label @controlId='add-grant'>
-          {{t 'resources.role.grant.actions.create'}}
-        </Hds::Form::Label>
-      </item.key>
-      <item.cell>
-        <Hds::Form::TextInput::Field
-          {{on 'input' (set-from-event this 'newGrantString')}}
-          name='grant'
-          title={{t 'form.grant.help'}}
-          @id='add-grant'
-          @type='text'
-          @value={{this.newGrantString}}
-        />
-      </item.cell>
-      <item.cell>
-        <Hds::Button
-          disabled={{this.cannotSave}}
-          type='button'
-          @color='secondary'
-          @text={{t 'actions.add'}}
-          {{on 'click' this.addGrantString}}
-        />
-      </item.cell>
-    </list.item>
-  </Rose::List::KeyValue>
-  <Rose::List::KeyValue as |list|>
-    {{#each this.grantStrings as |grantString index|}}
-      <list.item as |item|>
-        <item.key>
-          <Hds::Form::Label @controlId='update-grant-{{index}}'>
-            {{t 'form.grant.label'}}
-          </Hds::Form::Label>
-        </item.key>
-        <item.cell>
+      <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+        {{t 'resources.worker.form.steps.1.title'}}
+      </Hds::Text::Display>
+      <div class='worker-create-section'>
+        {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
           <Hds::Form::TextInput::Field
-            {{on 'input' (set-from-event this.grantStrings index)}}
-            name='grant'
-            title={{t 'form.grant.help'}}
-            disabled={{if (can 'setGrants role' @model) false true}}
-            @id='update-grant-{{index}}'
-            @type='text'
-            @value={{grantString}}
-            @error={{@model.errors.grant_strings}}
-          />
-        </item.cell>
-        <item.cell>
-          <Hds::Button
-            {{on 'click' (fn this.removeGrant grantString)}}
-            type='button'
-            @color='secondary'
-            @icon='trash'
-            @isIconOnly={{true}}
-            @text={{t 'actions.remove'}}
-          />
-        </item.cell>
-      </list.item>
-    {{/each}}
-  </Rose::List::KeyValue>
-  {{! -- Worker Tags Section }}
-  {{!-- <Form::Field::ListWrapper @layout='horizontal' @isOptional={{true}}>
-    <:fieldset as |F|>
-      <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-      <F.HelperText>
-        {{t 'resources.worker.form.worker_tags.help'}}
-      </F.HelperText>
-    </:fieldset>
+            name='cluster_id'
+            @value={{this.clusterID}}
+            @isOptional={{true}}
+            placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
+            {{on 'input' (set-from-event this 'clusterID')}}
+            as |F|
+          >
+            <F.Label>{{t 'resources.worker.form.cluster_id.label'}}</F.Label>
+            <F.HelperText>
+              {{t 'resources.worker.form.cluster_id.help'}}
+              <Hds::Link::Inline @href={{doc-url 'worker.manage-workers'}}>
+                {{t 'actions.learn-more'}}
+              </Hds::Link::Inline>
+            </F.HelperText>
+          </Hds::Form::TextInput::Field>
+        {{/if}}
 
-    <:field as |F|>
-      <F.KeyValue
-        @name='worker_tags'
-        @options={{this.workerTags}}
-        @addOption={{this.addWorkerTag}}
-        @removeOptionByIndex={{this.removeWorkerTagByIndex}}
-      >
-        <:key as |K|>
-          <K.text />
-        </:key>
-        <:value as |V|>
-          <V.text />
-        </:value>
-      </F.KeyValue>
-    </:field>
-  </Form::Field::ListWrapper> --}}
-
-  {{! SAVE & CANCEL }}
-  <Hds::Button
-    @text={{if @model.worker.isNew (t 'actions.save') (t 'actions.done')}}
-    {{on 'click' this.addTags}}
-    {{!-- {{on 'click' @toggleBSide}} --}}
-  />
-  <Hds::Button
-    @color='secondary'
-    @text={{if @model.worker.isNew (t 'actions.cancel') (t 'actions.done')}}
-    {{on 'click' @toggleBSide}}
-  />
-{{else}}
-  <Rose::Form
-    @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
-    @disabled={{@model.worker.isSaving}}
-    @showEditToggle={{false}}
-    as |form|
-  >
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-      {{t 'resources.worker.form.steps.1.title'}}
-    </Hds::Text::Display>
-    <div class='worker-create-section'>
-      {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
         <Hds::Form::TextInput::Field
-          name='cluster_id'
-          @value={{this.clusterID}}
+          name='ip_address'
+          @value={{this.ipAddress}}
           @isOptional={{true}}
-          placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
-          {{on 'input' (set-from-event this 'clusterID')}}
+          placeholder='worker1.example.com'
+          {{on 'input' (set-from-event this 'ipAddress')}}
           as |F|
         >
-          <F.Label>{{t 'resources.worker.form.cluster_id.label'}}</F.Label>
+          <F.Label>{{t 'resources.worker.form.ip_address.label'}}</F.Label>
           <F.HelperText>
-            {{t 'resources.worker.form.cluster_id.help'}}
-            <Hds::Link::Inline @href={{doc-url 'worker.manage-workers'}}>
+            {{t 'resources.worker.form.ip_address.help'}}
+            <Hds::Link::Inline @href={{doc-url 'worker'}}>
               {{t 'actions.learn-more'}}
             </Hds::Link::Inline>
           </F.HelperText>
         </Hds::Form::TextInput::Field>
-      {{/if}}
 
-      <Hds::Form::TextInput::Field
-        name='ip_address'
-        @value={{this.ipAddress}}
-        @isOptional={{true}}
-        placeholder='worker1.example.com'
-        {{on 'input' (set-from-event this 'ipAddress')}}
-        as |F|
-      >
-        <F.Label>{{t 'resources.worker.form.ip_address.label'}}</F.Label>
-        <F.HelperText>
-          {{t 'resources.worker.form.ip_address.help'}}
-          <Hds::Link::Inline @href={{doc-url 'worker'}}>
-            {{t 'actions.learn-more'}}
-          </Hds::Link::Inline>
-        </F.HelperText>
-      </Hds::Form::TextInput::Field>
-
-      <Hds::Form::TextInput::Field
-        name='config_file_path'
-        @value={{this.configFilePath}}
-        @isOptional={{true}}
-        placeholder='/home/ubuntu/boundary'
-        {{on 'input' (set-from-event this 'configFilePath')}}
-        as |F|
-      >
-        <F.Label>{{t 'resources.worker.form.config_file_path.label'}}</F.Label>
-        <F.HelperText>
-          {{t 'resources.worker.form.config_file_path.help'}}
-        </F.HelperText>
-      </Hds::Form::TextInput::Field>
-
-      {{#if (not (feature-flag 'byow-pki-hcp-cluster-id'))}}
         <Hds::Form::TextInput::Field
-          name='initial_upstreams'
-          @value={{this.initialUpstreams}}
+          name='config_file_path'
+          @value={{this.configFilePath}}
           @isOptional={{true}}
-          placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
-          {{on 'input' (set-from-event this 'initialUpstreams')}}
+          placeholder='/home/ubuntu/boundary'
+          {{on 'input' (set-from-event this 'configFilePath')}}
           as |F|
         >
           <F.Label>{{t
-              'resources.worker.form.initial_upstreams.label'
+              'resources.worker.form.config_file_path.label'
             }}</F.Label>
           <F.HelperText>
-            {{t 'resources.worker.form.initial_upstreams.help'}}
+            {{t 'resources.worker.form.config_file_path.help'}}
           </F.HelperText>
         </Hds::Form::TextInput::Field>
-      {{/if}}
-      <Form::Field::ListWrapper
-        @layout='horizontal'
-        @disabled={{form.disabled}}
-        @isOptional={{true}}
-      >
-        <:fieldset as |F|>
-          <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-          <F.HelperText>
-            {{t 'resources.worker.form.worker_tags.help'}}
-          </F.HelperText>
-        </:fieldset>
 
-        <:field as |F|>
-          {{#unless form.disabled}}
-            <Hds::Button
-              @text='Add worker tags'
-              @icon='plus'
-              {{on 'click' @toggleBSide}}
-            />
-          {{/unless}}
-          {{#if this.permissions.length}}
-            <Hds::Table
-              @columns={{array
-                (hash label=(t 'titles.label'))
-                (hash label=(t 'resources.role.grant.title_plural'))
-                (hash label=(t 'resources.role.scope.title_plural'))
-                (hash label=(t 'titles.actions'))
-              }}
-              @model={{this.permissions}}
-              @valign='middle'
-            >
-              <:body as |B|>
-                <B.Tr>
-                  <B.Td>{{B.data.label}}</B.Td>
-                  <B.Td>{{B.data.grants}}</B.Td>
-                  <B.Td>{{B.data.scopes}}</B.Td>
-                  <B.Td>Fake Buttons</B.Td>
-                </B.Tr>
-              </:body>
-            </Hds::Table>
-          {{/if}}
-        </:field>
-      </Form::Field::ListWrapper>
+        {{#if (not (feature-flag 'byow-pki-hcp-cluster-id'))}}
+          <Hds::Form::TextInput::Field
+            name='initial_upstreams'
+            @value={{this.initialUpstreams}}
+            @isOptional={{true}}
+            placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
+            {{on 'input' (set-from-event this 'initialUpstreams')}}
+            as |F|
+          >
+            <F.Label>{{t
+                'resources.worker.form.initial_upstreams.label'
+              }}</F.Label>
+            <F.HelperText>
+              {{t 'resources.worker.form.initial_upstreams.help'}}
+            </F.HelperText>
+          </Hds::Form::TextInput::Field>
+        {{/if}}
+        <Form::Field::ListWrapper
+          @layout='horizontal'
+          @disabled={{form.disabled}}
+          @isOptional={{true}}
+        >
+          <:fieldset as |F|>
+            <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+            <F.HelperText>
+              {{t 'resources.worker.form.worker_tags.help'}}
+            </F.HelperText>
+          </:fieldset>
 
-      {{#if (feature-flag 'ssh-session-recording')}}
-        <Hds::Form::Fieldset @isOptional={{true}} as |F|>
-          <F.Legend>{{t
-              'resources.worker.form.local_session_recording_storage.label'
-            }}</F.Legend>
-          <F.HelperText>
-            {{t 'resources.worker.form.local_session_recording_storage.help'}}
-            <Hds::Link::Inline @href={{doc-url 'session-recording'}}>{{t
-                'actions.learn-more'
-              }}</Hds::Link::Inline>
-          </F.HelperText>
-          <F.Control>
-            <Hds::Form::Toggle::Field
-              name='enableRecordingStoragePath'
-              checked={{this.enableRecordingStoragePath}}
-              {{on 'change' this.toggleEnableRecordingStoragePath}}
-              as |F|
-            >
-              <F.Label>{{t
-                  'resources.worker.form.enable_recording_storage_path.label'
-                }}</F.Label>
-            </Hds::Form::Toggle::Field>
-          </F.Control>
-          {{#if this.enableRecordingStoragePath}}
+          <:field as |F|>
+            {{#unless form.disabled}}
+              {{! ADD PERMISSION BUTTON HERE }}
+              <Hds::Button
+                @text='Add worker tags'
+                @icon='plus'
+                {{on 'click' (fn @tabSelectChange 1)}}
+                {{!-- {{on 'click' @toggleBSide}} --}}
+              />
+            {{/unless}}
+            {{#if this.permissions.length}}
+              <Hds::Table
+                @columns={{array
+                  (hash label=(t 'titles.label'))
+                  (hash label=(t 'resources.role.grant.title_plural'))
+                  (hash label=(t 'resources.role.scope.title_plural'))
+                  (hash label=(t 'titles.actions'))
+                }}
+                @model={{this.permissions}}
+                @valign='middle'
+              >
+                <:body as |B|>
+                  <B.Tr>
+                    <B.Td>{{B.data.label}}</B.Td>
+                    <B.Td>{{B.data.grants}}</B.Td>
+                    <B.Td>{{B.data.scopes}}</B.Td>
+                    <B.Td>Fake Buttons</B.Td>
+                  </B.Tr>
+                </:body>
+              </Hds::Table>
+            {{/if}}
+          </:field>
+        </Form::Field::ListWrapper>
+
+        {{#if (feature-flag 'ssh-session-recording')}}
+          <Hds::Form::Fieldset @isOptional={{true}} as |F|>
+            <F.Legend>{{t
+                'resources.worker.form.local_session_recording_storage.label'
+              }}</F.Legend>
+            <F.HelperText>
+              {{t 'resources.worker.form.local_session_recording_storage.help'}}
+              <Hds::Link::Inline @href={{doc-url 'session-recording'}}>{{t
+                  'actions.learn-more'
+                }}</Hds::Link::Inline>
+            </F.HelperText>
             <F.Control>
-              <Hds::Form::TextInput::Field
-                name='recording_storage_path'
-                @value={{this.recording_storage_path}}
-                placeholder='/tmp/worker1'
-                {{on 'input' (set-from-event this 'recording_storage_path')}}
+              <Hds::Form::Toggle::Field
+                name='enableRecordingStoragePath'
+                checked={{this.enableRecordingStoragePath}}
+                {{on 'change' this.toggleEnableRecordingStoragePath}}
                 as |F|
               >
                 <F.Label>{{t
-                    'resources.worker.form.recording_storage_path.label'
+                    'resources.worker.form.enable_recording_storage_path.label'
                   }}</F.Label>
-                <F.HelperText>
-                  {{t 'resources.worker.form.recording_storage_path.help'}}
-                </F.HelperText>
-              </Hds::Form::TextInput::Field>
+              </Hds::Form::Toggle::Field>
             </F.Control>
-          {{/if}}
-        </Hds::Form::Fieldset>
-      {{/if}}
-
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.worker.form.steps.1.create_directory'}}
-      </Hds::Text::Body>
-
-      <Hds::CodeBlock
-        @language='bash'
-        @value={{this.createConfigText}}
-        @hasCopyButton={{true}}
-        @hasLineNumbers={{false}}
-        data-test-worker-directory
-      />
-
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.worker.form.steps.1.create_config'}}
-      </Hds::Text::Body>
-
-      <Hds::CodeBlock
-        @language='hcl'
-        @value={{this.workerConfigText}}
-        @hasCopyButton={{true}}
-        @hasLineNumbers={{false}}
-        data-test-worker-config
-      />
-
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
-      </Hds::Text::Body>
-    </div>
-
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-      {{t 'resources.worker.form.steps.2.title'}}
-    </Hds::Text::Display>
-    <div class='worker-create-section'>
-
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.worker.form.steps.2.run_command'}}
-      </Hds::Text::Body>
-
-      <Hds::CodeBlock
-        @language='bash'
-        @value={{this.installBoundaryText}}
-        @hasCopyButton={{true}}
-        @hasLineNumbers={{false}}
-      />
-
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.worker.form.steps.2.copy_registration_request'}}
-        <Hds::Text::Code @size='300' @color='primary'>
-          {{t
-            'resources.worker.form.steps.3.worker_auth_registration_request.label'
-          }}</Hds::Text::Code>.
-      </Hds::Text::Body>
-    </div>
-
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-      {{t 'resources.worker.form.steps.3.title'}}
-    </Hds::Text::Display>
-    <div class='worker-create-section'>
-      <div class='worker-auth-token'>
-        <Hds::Form::TextInput::Field
-          name='worker_auth_registration_request'
-          @value={{this.generatedWorkerAuthToken}}
-          @isRequired={{true}}
-          @isInvalid={{@model.worker.errors.worker_generated_auth_token}}
-          disabled={{form.disabled}}
-          {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
-          as |F|
-        >
-          <F.Label>{{t
-              'resources.worker.form.steps.3.worker_auth_registration_request.label'
-            }}</F.Label>
-          <F.HelperText>
-            {{t
-              'resources.worker.form.steps.3.worker_auth_registration_request.help'
-            }}
-          </F.HelperText>
-          {{#if @model.worker.errors.worker_generated_auth_token}}
-            <F.Error as |E|>
-              {{#each
-                @model.worker.errors.worker_generated_auth_token
-                as |error|
-              }}
-                <E.Message>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
-        </Hds::Form::TextInput::Field>
-        {{#if (can 'save worker' @model.worker)}}
-          <Hds::Button
-            @text={{t 'resources.worker.actions.register'}}
-            type='submit'
-            disabled={{@model.worker.cannotSave}}
-            class='nowrap'
-          />
+            {{#if this.enableRecordingStoragePath}}
+              <F.Control>
+                <Hds::Form::TextInput::Field
+                  name='recording_storage_path'
+                  @value={{this.recording_storage_path}}
+                  placeholder='/tmp/worker1'
+                  {{on 'input' (set-from-event this 'recording_storage_path')}}
+                  as |F|
+                >
+                  <F.Label>{{t
+                      'resources.worker.form.recording_storage_path.label'
+                    }}</F.Label>
+                  <F.HelperText>
+                    {{t 'resources.worker.form.recording_storage_path.help'}}
+                  </F.HelperText>
+                </Hds::Form::TextInput::Field>
+              </F.Control>
+            {{/if}}
+          </Hds::Form::Fieldset>
         {{/if}}
+
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.worker.form.steps.1.create_directory'}}
+        </Hds::Text::Body>
+
+        <Hds::CodeBlock
+          @language='bash'
+          @value={{this.createConfigText}}
+          @hasCopyButton={{true}}
+          @hasLineNumbers={{false}}
+          data-test-worker-directory
+        />
+
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.worker.form.steps.1.create_config'}}
+        </Hds::Text::Body>
+
+        <Hds::CodeBlock
+          @language='hcl'
+          @value={{this.workerConfigText}}
+          @hasCopyButton={{true}}
+          @hasLineNumbers={{false}}
+          data-test-worker-config
+        />
+
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
+        </Hds::Text::Body>
       </div>
 
-      {{#unless @model.worker.isNew}}
-        <div class='worker-success'>
-          <div>
-            <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
-            <Hds::Text::Body @tag='p' @size='300' class='p'>
-              {{this.generatedWorkerAuthToken}}
-            </Hds::Text::Body>
-          </div>
-          <div>
-            <Hds::Icon
-              @name='check-circle-fill'
-              @color='success'
-              @isInline={{true}}
+      <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+        {{t 'resources.worker.form.steps.2.title'}}
+      </Hds::Text::Display>
+      <div class='worker-create-section'>
+
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.worker.form.steps.2.run_command'}}
+        </Hds::Text::Body>
+
+        <Hds::CodeBlock
+          @language='bash'
+          @value={{this.installBoundaryText}}
+          @hasCopyButton={{true}}
+          @hasLineNumbers={{false}}
+        />
+
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.worker.form.steps.2.copy_registration_request'}}
+          <Hds::Text::Code @size='300' @color='primary'>
+            {{t
+              'resources.worker.form.steps.3.worker_auth_registration_request.label'
+            }}</Hds::Text::Code>.
+        </Hds::Text::Body>
+      </div>
+
+      <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+        {{t 'resources.worker.form.steps.3.title'}}
+      </Hds::Text::Display>
+      <div class='worker-create-section'>
+        <div class='worker-auth-token'>
+          <Hds::Form::TextInput::Field
+            name='worker_auth_registration_request'
+            @value={{this.generatedWorkerAuthToken}}
+            @isRequired={{true}}
+            @isInvalid={{@model.worker.errors.worker_generated_auth_token}}
+            disabled={{form.disabled}}
+            {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
+            as |F|
+          >
+            <F.Label>{{t
+                'resources.worker.form.steps.3.worker_auth_registration_request.label'
+              }}</F.Label>
+            <F.HelperText>
+              {{t
+                'resources.worker.form.steps.3.worker_auth_registration_request.help'
+              }}
+            </F.HelperText>
+            {{#if @model.worker.errors.worker_generated_auth_token}}
+              <F.Error as |E|>
+                {{#each
+                  @model.worker.errors.worker_generated_auth_token
+                  as |error|
+                }}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </Hds::Form::TextInput::Field>
+          {{#if (can 'save worker' @model.worker)}}
+            <Hds::Button
+              @text={{t 'resources.worker.actions.register'}}
+              type='submit'
+              disabled={{@model.worker.cannotSave}}
+              class='nowrap'
             />
-            <Hds::Text::Body @tag='p' @size='300' class='p' @color='success'>
-              {{t 'resources.worker.form.steps.3.registered'}}
-            </Hds::Text::Body>
-          </div>
+          {{/if}}
         </div>
-      {{/unless}}
-    </div>
+
+        {{#unless @model.worker.isNew}}
+          <div class='worker-success'>
+            <div>
+              <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
+              <Hds::Text::Body @tag='p' @size='300' class='p'>
+                {{this.generatedWorkerAuthToken}}
+              </Hds::Text::Body>
+            </div>
+            <div>
+              <Hds::Icon
+                @name='check-circle-fill'
+                @color='success'
+                @isInline={{true}}
+              />
+              <Hds::Text::Body @tag='p' @size='300' class='p' @color='success'>
+                {{t 'resources.worker.form.steps.3.registered'}}
+              </Hds::Text::Body>
+            </div>
+          </div>
+        {{/unless}}
+      </div>
+      <Hds::Button
+        @color='secondary'
+        @text={{if @model.worker.isNew (t 'actions.cancel') (t 'actions.done')}}
+        {{on 'click' @cancel}}
+      />
+    </Rose::Form>
+  </T.Panel>
+  <T.Panel>
+    {{! Keyword Section }}
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyThis}}
+      name={{this.keywords.keyThis}}
+      checked={{includes this.keywords.keyThis this.grantScopeIds}}
+      {{!-- disabled={{form.disabled}} --}}
+      {{on 'change' this.toggleField}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.role.scope.form.this.help'
+          scopeDisplayName=(if
+            @model.worker.name @model.worker.name @model.worker.id
+          )
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyChildren}}
+      name={{this.keywords.keyChildren}}
+      checked={{includes this.keywords.keyChildren this.grantScopeIds}}
+      {{!-- disabled={{form.disabled}} --}}
+      {{on 'change' this.toggleField}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
+      <F.HelperText>{{if
+          true
+          (t 'resources.role.scope.form.children.help.0')
+          (t 'resources.role.scope.form.children.help.1')
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+
+    {{#if true}}
+      <Hds::Form::Toggle::Field
+        @value={{this.keywords.keyDescendants}}
+        name={{this.keywords.keyDescendants}}
+        checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
+        {{!-- disabled={{form.disabled}} --}}
+        {{on 'change' this.toggleField}}
+        as |F|
+      >
+        <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
+        <F.HelperText>{{t
+            'resources.role.scope.form.descendants.help'
+          }}</F.HelperText>
+      </Hds::Form::Toggle::Field>
+    {{/if}}
+
+    {{#if this.showAlert}}
+      <Hds::Alert @type='compact' as |A|>
+        <A.Description>
+          {{t
+            'resources.role.scope.messages.keywords-selected.description'
+            htmlSafe=true
+          }}
+          <Hds::Link::Inline
+            @color='secondary'
+            @href={{doc-url 'role.add-grant-scopes'}}
+          >
+            {{t 'resources.role.scope.messages.keywords-selected.link'}}
+          </Hds::Link::Inline>
+        </A.Description>
+      </Hds::Alert>
+    {{/if}}
+    {{#if @model.scopes}}
+      <Hds::Accordion @size='large' as |A|>
+        <A.Item
+          @containsInteractive={{true}}
+          @isOpen={{false}}
+          data-test-grant-scope-accordion-item
+        >
+          <:toggle>Custom Scopes</:toggle>
+          <:content>
+            <Hds::SegmentedGroup as |S|>
+              <S.TextInput
+                @value={{@search}}
+                @type='search'
+                placeholder={{t 'actions.search'}}
+                aria-label={{t 'actions.search'}}
+                {{on 'input' @handleSearchInput}}
+              />
+              <S.Generic>
+                <Dropdown
+                  name='type'
+                  @toggleText='Scope type'
+                  @itemOptions={{this.scopeTypeOptions}}
+                  @checkedItems={{@types}}
+                  @applyFilter={{fn @applyFilter 'types'}}
+                />
+              </S.Generic>
+              <S.Generic>
+                <Dropdown
+                  name='parent-scope'
+                  @toggleText='Parent scope'
+                  @itemOptions={{this.parentScopeOptions}}
+                  @checkedItems={{@parentScope}}
+                  @applyFilter={{fn @applyFilter 'parent_scope'}}
+                />
+              </S.Generic>
+            </Hds::SegmentedGroup>
+            <Hds::Table
+              @columns={{array
+                (hash label=(t 'resources.scope.title'))
+                (hash label=(t 'form.id.label'))
+                (hash label=(t 'form.type.label'))
+                (hash label=(t 'resources.role.scope.titles.parent_scope'))
+              }}
+              @model={{@model.scopes}}
+              @isSelectable={{true}}
+              @onSelectionChange={{this.scopeSelectionChange}}
+              @valign='middle'
+            >
+              <:body as |B|>
+                <B.Tr
+                  @selectionKey={{B.data.id}}
+                  @isSelected={{includes B.data.id this.selectedScopes}}
+                  @selectionAriaLabelSuffix='row {{B.data.id}}'
+                >
+                  <B.Td>{{B.data.displayName}}</B.Td>
+                  <B.Td>{{B.data.id}}</B.Td>
+                  <B.Td>{{B.data.type}}</B.Td>
+                  <B.Td>{{B.data.scope.name}}</B.Td>
+                </B.Tr>
+              </:body>
+            </Hds::Table>
+          </:content>
+        </A.Item>
+      </Hds::Accordion>
+    {{/if}}
+
+    {{! GRANT STRING }}
+    <Rose::List::KeyValue as |list|>
+      <list.item as |item|>
+        <item.key>
+          <Hds::Form::Label @controlId='add-grant'>
+            {{t 'resources.role.grant.actions.create'}}
+          </Hds::Form::Label>
+        </item.key>
+        <item.cell>
+          <Hds::Form::TextInput::Field
+            {{on 'input' (set-from-event this 'newGrantString')}}
+            name='grant'
+            title={{t 'form.grant.help'}}
+            @id='add-grant'
+            @type='text'
+            @value={{this.newGrantString}}
+          />
+        </item.cell>
+        <item.cell>
+          <Hds::Button
+            disabled={{this.cannotSave}}
+            type='button'
+            @color='secondary'
+            @text={{t 'actions.add'}}
+            {{on 'click' this.addGrantString}}
+          />
+        </item.cell>
+      </list.item>
+    </Rose::List::KeyValue>
+    <Rose::List::KeyValue as |list|>
+      {{#each this.grantStrings as |grantString index|}}
+        <list.item as |item|>
+          <item.key>
+            <Hds::Form::Label @controlId='update-grant-{{index}}'>
+              {{t 'form.grant.label'}}
+            </Hds::Form::Label>
+          </item.key>
+          <item.cell>
+            <Hds::Form::TextInput::Field
+              {{on 'input' (set-from-event this.grantStrings index)}}
+              name='grant'
+              title={{t 'form.grant.help'}}
+              disabled={{if (can 'setGrants role' @model) false true}}
+              @id='update-grant-{{index}}'
+              @type='text'
+              @value={{grantString}}
+              @error={{@model.errors.grant_strings}}
+            />
+          </item.cell>
+          <item.cell>
+            <Hds::Button
+              {{on 'click' (fn this.removeGrant grantString)}}
+              type='button'
+              @color='secondary'
+              @icon='trash'
+              @isIconOnly={{true}}
+              @text={{t 'actions.remove'}}
+            />
+          </item.cell>
+        </list.item>
+      {{/each}}
+    </Rose::List::KeyValue>
+
+    {{! SAVE & CANCEL }}
+    <Hds::Button
+      @text={{if @model.worker.isNew (t 'actions.save') (t 'actions.done')}}
+      {{on 'click' this.addTags}}
+    />
     <Hds::Button
       @color='secondary'
       @text={{if @model.worker.isNew (t 'actions.cancel') (t 'actions.done')}}
-      {{on 'click' @cancel}}
+      {{on 'click' (fn @tabSelectChange 0)}}
+      {{!-- {{on 'click' @cancel}} --}}
     />
-  </Rose::Form>
-{{/if}}
+
+  </T.Panel>
+</Hds::Tabs>

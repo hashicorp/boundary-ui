@@ -20,6 +20,7 @@ export default class ScopesScopeWorkersNewController extends Controller {
     'search',
     { types: { type: 'array' } },
     { parent_scope: { type: 'array' } },
+    { selected_tab: { type: 'number', scope: 'controller' } },
   ]
   @tracked showBSide = false;
   @tracked search = '';
@@ -27,6 +28,7 @@ export default class ScopesScopeWorkersNewController extends Controller {
   @tracked parent_scope = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked selectedTab = 0;
 
   // =actions
 
@@ -58,6 +60,11 @@ export default class ScopesScopeWorkersNewController extends Controller {
   @action
   toggleBSide() {
     this.showBSide = !this.showBSide;
+  }
+
+  @action
+  tabSelectChange(tabIndex) {
+    this.selectedTab = tabIndex;
   }
 
   @action
