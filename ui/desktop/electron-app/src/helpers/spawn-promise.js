@@ -27,16 +27,19 @@ module.exports = {
    * data on either stdout or stderr.  The process is allowed to continue
    * running after the promise resolves.  This function is intended to launch
    * the local proxy.
-   * @param {string} command
+   * @param {string[]} command
+   * @param {string} token
+   * @param {number} timeout Duration in seconds
    * @return {Promise}
    */
-  spawnAsyncJSONPromise(command, token) {
+  spawnAsyncJSONPromise(command, token, timeout = 0) {
     return new Promise((resolve, reject) => {
       const childProcess = spawn(path, command, {
         env: {
           ...process.env,
           BOUNDARY_TOKEN: token,
         },
+        timeout: timeout * 1000,
       });
       let outputStream = '';
       let errorStream = '';

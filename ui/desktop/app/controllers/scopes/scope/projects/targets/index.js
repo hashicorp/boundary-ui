@@ -190,6 +190,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const options = {
       target_id: target.id,
       token: this.session.data.authenticated.token,
+      session_max_seconds: target.session_max_seconds,
     };
 
     if (host) options.host_id = host.id;
