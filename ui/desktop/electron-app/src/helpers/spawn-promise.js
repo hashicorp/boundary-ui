@@ -32,14 +32,14 @@ module.exports = {
    * @param {number} timeout Duration in seconds
    * @return {Promise}
    */
-  spawnAsyncJSONPromise(command, token, timeout = 0) {
+  spawnAsyncJSONPromise(command, token, timeout) {
     return new Promise((resolve, reject) => {
       const childProcess = spawn(path, command, {
         env: {
           ...process.env,
           BOUNDARY_TOKEN: token,
         },
-        timeout: timeout * 1000,
+        timeout: timeout ? timeout * 1000 : undefined,
       });
       let outputStream = '';
       let errorStream = '';
