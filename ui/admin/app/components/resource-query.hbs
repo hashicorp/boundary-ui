@@ -2,17 +2,40 @@
   <Hds::Modal as |M|>
     <M.Header>Super Query</M.Header>
     <M.Body>
-      <input {{on 'input' this.onInput}} value={{this.searchText}} />
+      <button type='button' {{on 'click' this.clearResult}}>clear</button>
+      <input {{on 'input' this.onInput}} value={{this.searchText}} autofocus />
       <br />
-      {{#if this.selectedResult}}
-        <button {{on 'click' this.clearResult}}>clear result</button>
+      {{#if (and this.selectedResult (eq this.action 'quick_look'))}}
         Selected Result
         {{this.selectedResult.id}}
-        {{log this.selectedResult}}
+        {{#let (this.attributes this.selectedResult) as |attributes|}}
+          <ul>
+            {{#each attributes as |attr|}}
+              <li>
+                <code>
+                  {{attr}}:
+                  {{get this.selectedResult attr}}
+                </code>
+              </li>
+            {{/each}}
+          </ul>
+        {{/let}}
+      {{else if this.selectedResult}}
+        <ul>
+          <li>
+            <button {{on 'click' (fn this.setAction 'quick_look')}}>Quick look</button>
+          </li>
+          <li>
+            <button {{on 'click' (fn this.setAction 'goto')}}>Go to</button>
+          </li>
+        </ul>
       {{else}}
         <ul>
-          {{#each this.results as |result|}}
-            <li>
+          {{this.highlightedIndex}}
+          {{#each this.results as |result i|}}
+            <li class='{{if (eq i this.highlightedIndex) "highlighted-index"}}'>
+              {{i}}
+              /
               {{result.model.id}}
               /
               {{result.model.name}}
@@ -27,5 +50,8 @@
         </ul>
       {{/if}}
     </M.Body>
+    <M.Footer>
+      Helpful things here...
+    </M.Footer>
   </Hds::Modal>
 {{/if}}

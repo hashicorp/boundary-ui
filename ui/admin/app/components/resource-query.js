@@ -8,6 +8,9 @@ export default class ResourceQueryComponent extends Component {
   @service
   store;
 
+  @service
+  router;
+
   @tracked
   searchText = 'resource:target';
 
@@ -23,19 +26,40 @@ export default class ResourceQueryComponent extends Component {
   @tracked
   show = false;
 
+  @tracked
+  highlightedIndex = 0;
+
+  @tracked
+  action = null;
+
   constructor() {
     super(...arguments);
 
-    document.body.addEventListener("keydown", (e) => {
+    document.body.addEventListener('keydown', (e) => {
+      console.log(e.code);
+
       if (e.metaKey) {
         this.meta = true;
         console.log('meta on');
       }
 
-      console.log(this.meta, e.code);
       if (this.meta && e.code === 'Slash') {
-        console.log('toggle!');
         this.show = !this.show;
+      }
+
+      if (e.code === 'ArrowUp') {
+        this.highlightedIndex--;
+      }
+
+      if (e.code === 'ArrowDown') {
+        this.highlightedIndex++;
+      }
+
+      if (e.code === 'Enter') {
+        const selected = this.results[this.highlightedIndex];
+        if (selected) {
+          this.selectResult(selected.model);
+        }
       }
     });
 
@@ -78,11 +102,11 @@ export default class ResourceQueryComponent extends Component {
         result.expression.value &&
         result.expression.type === 'LiteralExpression'
       ) {
-        filters[result.field.name] = [{ equals: result.expression.value }] ;
+        filters[result.field.name] = [{ equals: result.expression.value }];
       }
 
-      if (result.expression.type === "EmptyExpression") {
-        console.log("empty expression case here");
+      if (result.expression.type === 'EmptyExpression') {
+        console.log('empty expression case here');
       }
     }
 
@@ -97,6 +121,36 @@ export default class ResourceQueryComponent extends Component {
   @action
   clearResult() {
     this.selectedResult = null;
+    this.action = null;
+  }
+
+  @action
+  attributes(model) {
+    const attrs = [];
+    model.eachAttribute((attr) => {
+      attrs.push(attr);
+    });
+
+    return attrs;
+  }
+
+  @action
+  setAction(action) {
+    switch (action) {
+      case 'quick_look': {
+        this.action = 'quick_look';
+        break;
+      }
+
+      case 'goto': {
+        this.router.transitionTo(
+          'scopes.scope.targets.target',
+          this.selectedResult.scope.id,
+          this.selectedResult.id,
+        );
+        break;
+      }
+    }
   }
 }
 

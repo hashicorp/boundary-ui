@@ -11,6 +11,10 @@
 @use 'notify';
 @use '@hashicorp/ember-asciinema-player';
 
+.highlighted-index {
+  background-color: aquamarine;
+}
+
 .rose-layout-global {
   .rose-layout-global-body {
     justify-content: center;
