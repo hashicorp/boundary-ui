@@ -1,14 +1,31 @@
-<input {{on 'input' this.onInput}} />
-
-{{#if this.selectedResult}}
-  Selected Result
-{{else}}
-<ul>
-  {{#each this.results as |result|}}
-    <li>
-      {{result.model.id}}
-      <button {{on 'click' this.selectResult}}>go</button>
-    </li>
-  {{/each}}
-</ul>
-{{/if}}}
+{{#if this.show}}
+  <Hds::Modal as |M|>
+    <M.Header>Super Query</M.Header>
+    <M.Body>
+      <input {{on 'input' this.onInput}} value={{this.searchText}} />
+      <br />
+      {{#if this.selectedResult}}
+        <button {{on 'click' this.clearResult}}>clear result</button>
+        Selected Result
+        {{this.selectedResult.id}}
+        {{log this.selectedResult}}
+      {{else}}
+        <ul>
+          {{#each this.results as |result|}}
+            <li>
+              {{result.model.id}}
+              /
+              {{result.model.name}}
+              /
+              {{result.model.type}}
+              <button
+                {{on 'click' (fn this.selectResult result.model)}}
+                type='button'
+              >go</button>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </M.Body>
+  </Hds::Modal>
+{{/if}}

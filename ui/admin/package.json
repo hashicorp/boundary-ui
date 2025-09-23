@@ -40,6 +40,7 @@
   "dependencies": {
     "@babel/runtime": "7.27.6",
     "ember-named-blocks-polyfill": "^0.2.5",
+    "liqe": "^3.8.3",
     "lodash": "^4.17.21",
     "uuid": "^11.0.3"
   },
