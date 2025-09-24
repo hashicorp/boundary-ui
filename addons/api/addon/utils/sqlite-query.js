@@ -68,7 +68,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
       ? filterArrayOrObject
       : filterArrayOrObject.values;
 
-    if (!filterValueArray || !filterValueArray.length) {
+    if (!filterValueArray || !filterValueArray.length || key === 'subqueries') {
       continue;
     }
 
@@ -130,6 +130,22 @@ function addFilterConditions({ filters, parameters, conditions }) {
       ),
     );
   }
+
+  if (filters.subqueries?.length > 0) {
+    filters.subqueries.forEach((subquery) => {
+      const { resource, query, select } = subquery;
+      const { sql, parameters: subqueryParams } = generateSQLExpressions(
+        resource,
+        query,
+        {
+          select,
+        },
+      );
+
+      conditions.push(`id IN (${sql})`);
+      parameters.push(...subqueryParams);
+    });
+  }
 }
 
 function addSearchConditions({
@@ -163,6 +179,7 @@ function addSearchConditions({
     `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
   );
 }
+
 function constructSelectClause(select = [{ field: '*' }], tableName) {
   const distinctColumns = select.filter(({ isDistinct }) => isDistinct);
   let selectColumns;
