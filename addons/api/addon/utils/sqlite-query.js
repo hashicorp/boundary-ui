@@ -31,12 +31,14 @@ export function generateSQLExpressions(
   const conditions = [];
   const parameters = [];
   const tableName = underscore(resource);
+  const joins = [];
 
-  addFilterConditions({ filters, parameters, conditions });
+  addFilterConditions({ filters, parameters, conditions, joins, tableName });
   addSearchConditions({ search, resource, tableName, parameters, conditions });
 
   const selectClause = constructSelectClause(select, tableName);
-  const orderByClause = constructOrderByClause(resource, sort);
+  const joinClause = constructJoinClause(joins);
+  const orderByClause = constructOrderByClause(resource, tableName, sort);
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';
 
   const paginationClause = page && pageSize ? `LIMIT ? OFFSET ?` : '';
@@ -49,6 +51,7 @@ export function generateSQLExpressions(
     // This is mainly to help us read and test the generated SQL as it has no effect on the actual SQL execution.
     sql: `
       ${selectClause}
+      ${joinClause}
       ${whereClause}
       ${orderByClause}
       ${paginationClause}`
@@ -58,7 +61,13 @@ export function generateSQLExpressions(
   };
 }
 
-function addFilterConditions({ filters, parameters, conditions }) {
+function addFilterConditions({
+  filters,
+  parameters,
+  conditions,
+  joins,
+  tableName,
+}) {
   if (!filters) {
     return;
   }
@@ -69,7 +78,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
       ? filterArrayOrObject
       : filterArrayOrObject.values;
 
-    if (!filterValueArray || !filterValueArray.length || key === 'subqueries') {
+    if (!filterValueArray || !filterValueArray.length || key === 'joins') {
       continue;
     }
 
@@ -86,8 +95,13 @@ function addFilterConditions({ filters, parameters, conditions }) {
       allOperatorsEqual
     ) {
       const operation = firstOperator === 'equals' ? 'in' : 'notIn';
+      const nullOperator =
+        firstOperator === 'equals' ? 'IS NULL' : 'IS NOT NULL';
       const values = filterValueArray
-        .filter((f) => f)
+        .filter(
+          (filterObjValue) =>
+            filterObjValue && Object.values(filterObjValue)[0] !== null,
+        )
         .map((filterObjValue) => {
           let value = Object.values(filterObjValue)[0];
           if (typeOf(value) === 'date') {
@@ -96,7 +110,14 @@ function addFilterConditions({ filters, parameters, conditions }) {
           parameters.push(value);
           return value;
         });
-      const filterCondition = `${key}${OPERATORS[operation](values)}`;
+
+      // Add a check for null values as an IN clause will mistakenly use `=` for null values.
+      // We'll add an extra OR clause to handle nulls separately.
+      const isNullValue = filterValueArray.some(
+        (filterObjValue) => Object.values(filterObjValue)[0] === null,
+      );
+
+      const filterCondition = `"${tableName}".${key}${OPERATORS[operation](values)}${isNullValue ? ` OR "${tableName}".${key} ${nullOperator}` : ''}`;
       conditions.push(parenthetical(filterCondition));
       continue;
     }
@@ -105,6 +126,16 @@ function addFilterConditions({ filters, parameters, conditions }) {
       .filter((f) => f)
       .map((filterObjValue) => {
         let [operation, value] = Object.entries(filterObjValue)[0];
+
+        // Handle null values: convert equals/notEquals to IS NULL or IS NOT NULL
+        if (value === null) {
+          if (operation === 'equals') {
+            return `"${tableName}".${key} IS NULL`;
+          }
+          if (operation === 'notEquals') {
+            return `"${tableName}".${key} IS NOT NULL`;
+          }
+        }
 
         // SQLite needs to be working with ISO strings
         if (typeOf(value) === 'date') {
@@ -118,7 +149,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
           parameters.push(value);
         }
 
-        return `${key}${OPERATORS[operation]}`;
+        return `"${tableName}".${key}${OPERATORS[operation]}`;
       });
 
     const { logicalOperator } = filterArrayOrObject;
@@ -132,19 +163,40 @@ function addFilterConditions({ filters, parameters, conditions }) {
     );
   }
 
-  if (filters.subqueries?.length > 0) {
-    filters.subqueries.forEach((subquery) => {
-      const { resource, query, select } = subquery;
-      const { sql, parameters: subqueryParams } = generateSQLExpressions(
+  if (filters.joins?.length > 0) {
+    const tableNameIndex = {};
+
+    filters.joins.forEach((join) => {
+      const {
         resource,
         query,
-        {
-          select,
-        },
-      );
+        joinFrom = 'id',
+        joinOn,
+        joinType = 'INNER',
+      } = join;
+      const joinTableName = underscore(resource);
+      tableNameIndex[resource] ??= 1;
+      // Alias in the possible scenario we join the same table more than once
+      const alias = `${joinTableName}${tableNameIndex[resource]}`;
 
-      conditions.push(`id IN (${sql})`);
-      parameters.push(...subqueryParams);
+      joins.push({
+        type: joinType,
+        table: joinTableName,
+        alias,
+        condition: `"${tableName}".${joinFrom} = ${alias}.${joinOn}`,
+      });
+
+      // Add the conditions from the join query
+      if (query?.filters) {
+        addFilterConditions({
+          filters: query.filters,
+          parameters,
+          conditions,
+          tableName: alias,
+        });
+      }
+
+      tableNameIndex[resource]++;
     });
   }
 }
@@ -177,7 +229,7 @@ function addSearchConditions({
   // much more efficient with FTS queries when using rowids or MATCH (or both).
   // We could have also used a join here but a subquery is simpler.
   conditions.push(
-    `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
+    `"${tableName}".rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
   );
 }
 
@@ -186,7 +238,7 @@ function constructSelectClause(select = [{ field: '*' }], tableName) {
   const nonDistinctColumns = select.filter(({ isDistinct }) => !isDistinct);
 
   const buildColumnExpression = ({ field, isCount, alias, isDistinct }) => {
-    let column = field;
+    let column = field === '*' ? field : `"${tableName}".${field}`;
 
     // If there's just distinct with nothing else, this will be handled separately
     // and we will just return the column back as is
@@ -235,11 +287,27 @@ function constructSelectClause(select = [{ field: '*' }], tableName) {
   return `SELECT ${selectColumns} FROM "${tableName}"`;
 }
 
-function constructOrderByClause(resource, sort) {
-  const defaultOrderByClause = 'ORDER BY created_time DESC';
+function constructJoinClause(joins) {
+  if (!joins || joins.length === 0) {
+    return '';
+  }
+
+  return joins
+    .map(
+      ({ type, table, alias, condition }) =>
+        `${type} JOIN "${table}" ${alias} ON ${condition}`,
+    )
+    .join(' ');
+}
+
+function constructOrderByClause(resource, tableName, sort) {
+  const defaultOrderByClause = `ORDER BY "${tableName}".created_time DESC`;
 
   const { attributes, customSort, direction, isCoalesced } = sort;
   const sortDirection = direction === 'desc' ? 'DESC' : 'ASC';
+  const attributesWithTableName = attributes?.map(
+    (attribute) => `"${tableName}".${attribute}`,
+  );
 
   // We have to check if the attributes are valid for the resource
   // as we can't use parameterized queries for ORDER BY
@@ -255,21 +323,21 @@ function constructOrderByClause(resource, sort) {
       },
       '',
     );
-    return `ORDER BY CASE ${attributes.join(', ')} ${whenClauses}END ${sortDirection}`;
+    return `ORDER BY CASE ${attributesWithTableName.join(', ')} ${whenClauses}END ${sortDirection}`;
   } else if (attributes?.length > 0) {
-    const commaSeparatedVals = attributes.join(', ');
+    const commaSeparatedVals = attributesWithTableName.join(', ');
 
     // In places where `collate nocase` is used, it is to ensure case is ignored on the initial sort.
     // Then, a sort on the same condition is performed to ensure upper-case strings are given preference in a tie.
     if (isCoalesced) {
-      return `ORDER BY COALESCE(${attributes.join(', ')}) COLLATE NOCASE ${sortDirection}, COALESCE(${commaSeparatedVals}) ${sortDirection}`;
+      return `ORDER BY COALESCE(${commaSeparatedVals}) COLLATE NOCASE ${sortDirection}, COALESCE(${commaSeparatedVals}) ${sortDirection}`;
     }
 
     const attributesWithNoCollate = attributes
-      .map((attr) => `${attr} COLLATE NOCASE ${sortDirection}`)
+      .map((attr) => `"${tableName}".${attr} COLLATE NOCASE ${sortDirection}`)
       .join(', ');
     const attributesWithDirection = attributes
-      .map((attr) => `${attr} ${sortDirection}`)
+      .map((attr) => `"${tableName}".${attr} ${sortDirection}`)
       .join(', ');
     return `ORDER BY ${attributesWithNoCollate}, ${attributesWithDirection}`;
   } else if (modelMapping[resource]?.created_time) {
