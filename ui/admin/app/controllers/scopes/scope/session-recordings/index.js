@@ -195,14 +195,6 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
       await this.retrieveFilterOptions('targetFilters');
   });
 
-  // async loadItems() {
-  //   this.userFilters.options = await this.retrieveFilterOptions('userFilters');
-  //   this.scopeFilters.options =
-  //     await this.retrieveFilterOptions('scopeFilters');
-  //   this.targetFilters.options =
-  //     await this.retrieveFilterOptions('targetFilters');
-  // }
-
   // =actions
 
   /**
