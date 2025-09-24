@@ -9,6 +9,8 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
 import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 
@@ -201,7 +203,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     availableSessions.forEach((availability) => {
       if (availability === 'yes') {
-        filters.subqueries = [
+        filters.joins = [
           {
             resource: 'session',
             query: {
@@ -215,27 +217,35 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
                 },
               },
             },
-            select: [{ field: 'target_id' }],
+            joinOn: 'target_id',
+            joinType: 'INNER',
           },
         ];
       }
 
       if (availability === 'no') {
-        filters.subqueries = [
+        filters.joins = [
           {
             resource: 'session',
             query: {
               filters: {
                 status: {
-                  logicalOperator: 'and',
+                  logicalOperator: 'or',
                   values: [
-                    { notEquals: STATUS_SESSION_ACTIVE },
-                    { notEquals: STATUS_SESSION_PENDING },
+                    { equals: STATUS_SESSION_CANCELING },
+                    { equals: STATUS_SESSION_TERMINATED },
+                    // We include null here because traditionally with a LEFT JOIN we'd want to do a check on
+                    // `OR target_id IS NOT NULL` but this is tough to get right due to the presence of other
+                    // possible filters and operator precedence with the OR. We can check for a null status instead
+                    // which functionally is the same since status is normally a required field and that means
+                    // a session does not exist for a particular target.
+                    { equals: null },
                   ],
                 },
               },
             },
-            select: [{ field: 'target_id' }],
+            joinOn: 'target_id',
+            joinType: 'LEFT',
           },
         ];
       }
