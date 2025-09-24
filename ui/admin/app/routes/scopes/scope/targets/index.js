@@ -92,19 +92,25 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       });
 
       if (this.can.can('list model', scope, { collection: 'sessions' })) {
-        const sessions = await this.store.query('session', {
-          scope_id,
-          query: {
-            filters: {
-              scope_id: [{ equals: scope_id }],
-              status: [
-                { equals: STATUS_SESSION_ACTIVE },
-                { equals: STATUS_SESSION_PENDING },
-              ],
+        await this.store.query(
+          'session',
+          {
+            scope_id,
+            query: {
+              filters: {
+                scope_id: [{ equals: scope_id }],
+                status: [
+                  { equals: STATUS_SESSION_ACTIVE },
+                  { equals: STATUS_SESSION_PENDING },
+                ],
+              },
             },
+            page: 1,
+            pageSize: 1,
           },
-        });
-        this.addActiveSessionFilters(filters, availableSessions, sessions);
+          { pushToStore: false },
+        );
+        this.addActiveSessionFilters(filters, availableSessions);
       }
 
       const typeMap = {
@@ -186,13 +192,8 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
    * Add the filters for active sessions to the filter object.
    * @param filters
    * @param availableSessions
-   * @param sessions
    */
-  addActiveSessionFilters = (filters, availableSessions, sessions) => {
-    const uniqueTargetIdsWithSessions = new Set(
-      sessions.map((session) => session.target_id),
-    );
-
+  addActiveSessionFilters = (filters, availableSessions) => {
     // Don't add any filtering if the user selects both which is equivalent to no filters
     if (availableSessions.length === 2) {
       return;
@@ -200,24 +201,43 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     availableSessions.forEach((availability) => {
       if (availability === 'yes') {
-        filters.id.logicalOperator = 'or';
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
-          filters.id.values.push({ equals: targetId });
-        });
-
-        // If there's no sessions just set it to a dummy value
-        // so the search returns no results
-        if (uniqueTargetIdsWithSessions.size === 0) {
-          filters.id.values.push({ equals: 'none' });
-        }
+        filters.subqueries = [
+          {
+            resource: 'session',
+            query: {
+              filters: {
+                status: {
+                  logicalOperator: 'or',
+                  values: [
+                    { equals: STATUS_SESSION_ACTIVE },
+                    { equals: STATUS_SESSION_PENDING },
+                  ],
+                },
+              },
+            },
+            select: [{ field: 'target_id' }],
+          },
+        ];
       }
 
       if (availability === 'no') {
-        filters.id.logicalOperator = 'and';
-
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
-          filters.id.values.push({ notEquals: targetId });
-        });
+        filters.subqueries = [
+          {
+            resource: 'session',
+            query: {
+              filters: {
+                status: {
+                  logicalOperator: 'and',
+                  values: [
+                    { notEquals: STATUS_SESSION_ACTIVE },
+                    { notEquals: STATUS_SESSION_PENDING },
+                  ],
+                },
+              },
+            },
+            select: [{ field: 'target_id' }],
+          },
+        ];
       }
     });
   };
