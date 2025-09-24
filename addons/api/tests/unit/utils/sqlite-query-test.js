@@ -410,6 +410,48 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     ]);
   });
 
+  test('it generates subqueries with filters', function (assert) {
+    const query = {
+      filters: {
+        type: [{ equals: 'ssh' }],
+        subqueries: [
+          {
+            resource: 'session',
+            query: {
+              filters: {
+                status: [{ equals: 'active' }],
+              },
+            },
+            select: [{ field: 'target_id' }],
+          },
+          {
+            resource: 'session-recording',
+            query: {
+              filters: {
+                state: [{ equals: 'available' }],
+              },
+            },
+            select: [{ field: 'target_id' }],
+          },
+        ],
+      },
+    };
+
+    const { sql, parameters } = generateSQLExpressions('target', query);
+    assert.strictEqual(
+      sql,
+      `
+        SELECT * FROM "target"
+        WHERE (type = ?) AND id IN (SELECT target_id FROM "session"
+                                    WHERE (status = ?)
+                                    ORDER BY created_time DESC) AND id IN (SELECT target_id FROM "session_recording"
+                                                                            WHERE (state = ?)
+                                                                            ORDER BY created_time DESC)
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, ['ssh', 'active', 'available']);
+  });
+
   test('it generates SQL with all clauses combined', function (assert) {
     const query = {
       search: 'favorite',

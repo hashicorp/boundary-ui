@@ -69,7 +69,7 @@ function addFilterConditions({ filters, parameters, conditions }) {
       ? filterArrayOrObject
       : filterArrayOrObject.values;
 
-    if (!filterValueArray || !filterValueArray.length) {
+    if (!filterValueArray || !filterValueArray.length || key === 'subqueries') {
       continue;
     }
 
@@ -130,6 +130,22 @@ function addFilterConditions({ filters, parameters, conditions }) {
           : or(filterConditions),
       ),
     );
+  }
+
+  if (filters.subqueries?.length > 0) {
+    filters.subqueries.forEach((subquery) => {
+      const { resource, query, select } = subquery;
+      const { sql, parameters: subqueryParams } = generateSQLExpressions(
+        resource,
+        query,
+        {
+          select,
+        },
+      );
+
+      conditions.push(`id IN (${sql})`);
+      parameters.push(...subqueryParams);
+    });
   }
 }
 
