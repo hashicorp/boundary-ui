@@ -231,7 +231,7 @@
     grid-template-areas: 'label' 'text-input' 'helper-text';
 
     .hds-form-label {
-      font-size: sizing.rems(m);
+      font-size: var(--token-typography-body-300-font-size);
       grid-area: label;
       line-height: sizing.rems(m) + sizing.rems(xxs);
     }
@@ -241,7 +241,7 @@
       border: 0;
       color: var(--token-form-label-color);
       grid-area: text-input;
-      font-size: sizing.rems(m);
+      font-size: var(--token-typography-body-300-font-size);
       padding: 0;
     }
 
@@ -343,7 +343,7 @@
   }
 
   .secret-editor-skeleton-message {
-    font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
+    font-size: var(--token-typography-body-200-font-size);
     left: 50%;
     position: absolute;
     top: 50%;
