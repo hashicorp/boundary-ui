@@ -15,7 +15,7 @@
   max-width: 100%;
   display: flex;
   flex: 1;
-  font-family: ui-monospace, Menlo, monospace;
+  font-family: var(--token-typography-font-stack-code);
 }
 
 .rose-autosize {
