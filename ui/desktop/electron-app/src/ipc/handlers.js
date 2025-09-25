@@ -71,8 +71,14 @@ handle('cliExists', () => boundaryCli.exists());
 /**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', ({ target_id, token, host_id }) =>
-  sessionManager.start(runtimeSettings.clusterUrl, target_id, token, host_id),
+handle('connect', ({ target_id, token, host_id, session_max_seconds }) =>
+  sessionManager.start(
+    runtimeSettings.clusterUrl,
+    target_id,
+    token,
+    host_id,
+    session_max_seconds,
+  ),
 );
 
 /**

@@ -169,28 +169,26 @@
   <Hds::Form::TextInput::Field
     @isOptional={{true}}
     @value={{@model.default_client_port}}
-    @isInvalid={{this.showDefaultClientPortError}}
+    @isInvalid={{@model.errors.default_client_port}}
     @type='text'
     name='default_client_port'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'default_client_port')}}
-    {{on 'blur' this.handleDefaultClientPortBlur}}
     as |F|
   >
     <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.target.form.default_client_port.help'
-      }}</F.HelperText>
-    {{#if this.showDefaultClientPortError}}
+    <F.HelperText data-test-default-client-port-helper-text>
+      {{t 'resources.target.form.default_client_port.help'}}
+      {{#if (eq @model.type 'rdp')}}
+        <br />
+        {{t 'resources.target.form.default_client_port.rdp-windows-notice'}}
+      {{/if}}
+    </F.HelperText>
+    {{#if @model.errors.default_client_port}}
       <F.Error as |E|>
         {{#each @model.errors.default_client_port as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
-        {{#if this.showRDPWindowsDefaultClientPortError}}
-          <E.Message data-test-error-message-default-client-port-rdp-windows>
-            {{t 'resources.target.form.default_client_port.rdp-windows-error'}}
-          </E.Message>
-        {{/if}}
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>
@@ -227,7 +225,13 @@
     as |F|
   >
     <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
-    <F.HelperText>{{t 'form.session_connection_limit.help'}}</F.HelperText>
+    <F.HelperText data-test-max-connections-helper-text>
+      {{t 'form.session_connection_limit.help'}}
+      {{#if (eq @model.type 'rdp')}}
+        <br />
+        {{t 'form.session_connection_limit.rdp-windows-notice'}}
+      {{/if}}
+    </F.HelperText>
     {{#if @model.errors.session_connection_limit}}
       <F.Error as |E|>
         {{#each @model.errors.session_connection_limit as |error|}}
