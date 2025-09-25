@@ -13,7 +13,7 @@ const oidcRequiredAttempts = 3;
 
 const commandHandlers = {
   password: {
-    login: (payload, scopeAttrs) => {
+    login: (payload, auth_method_id, account_id, scopeAttrs) => {
       if (payload.attributes.login_name === 'error') {
         return new Response(400);
       } else {
@@ -25,9 +25,9 @@ const commandHandlers = {
               scope: scopeAttrs,
               id: 'token123',
               token: 'thetokenstring',
-              account_id: 'authenticatedaccount',
+              account_id: account_id || 'authenticatedaccount',
               user_id: 'authenticateduser',
-              auth_method_id: 'authmethod123',
+              auth_method_id: auth_method_id || 'authmethod123',
               created_time: '',
               updated_time: '',
               last_used_time: '',
@@ -90,7 +90,7 @@ const commandHandlers = {
 };
 
 // Handles all custom methods on /auth-methods/:id route
-export function authHandler({ scopes, authMethods }, request) {
+export function authHandler({ scopes, authMethods, accounts }, request) {
   const [, id, method] = request.params.id_method.match(
     /(?<id>.[^:]*):(?<method>(.*))/,
   );
@@ -100,8 +100,14 @@ export function authHandler({ scopes, authMethods }, request) {
     const payload = JSON.parse(request.requestBody);
     const { command } = payload;
     const scope = scopes.find(authMethod.scopeId);
+    const account = accounts.where({ authMethodId: authMethod.id })?.models[0];
     const scopeAttrs = this.serialize(scopes.find(scope.id));
-    return commandHandlers[authMethod.type][command](payload, scopeAttrs);
+    return commandHandlers[authMethod.type][command](
+      payload,
+      authMethod.id,
+      account?.id,
+      scopeAttrs,
+    );
   }
 
   // TODO:  this handler doesn't really belong here, but we already route
