@@ -28,9 +28,10 @@
 
   .rose-form-checkbox-label {
     // label styles
-    @include type.type(s, semibold);
+    @include type.type(s);
 
     color: currentcolor;
+    font-weight: var(--token-typography-font-weight-semibold);
 
     &,
     .rose-form-checkbox-label-description {
