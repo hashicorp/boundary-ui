@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
 import { defer } from 'rsvp';
-import { taskFor } from 'ember-concurrency-ts';
 
 /**
  * @param  {...any} args
@@ -60,13 +59,13 @@ export default class LoadingService extends Service {
   watchTransitions = true;
 
   get isLoading() {
-    return taskFor(this._runJob).isRunning;
+    return this._runJob.isRunning;
   }
 
   get showLoading() {
     return (
-      !taskFor(this.preDelayTask).isRunning &&
-      (this.isLoading || taskFor(this.postDelayTask).isRunning)
+      !this.preDelayTask.isRunning &&
+      (this.isLoading || this.postDelayTask.isRunning)
     );
   }
 
@@ -119,13 +118,13 @@ export default class LoadingService extends Service {
 
   async run(...args) {
     if (this.preDelay > 0) {
-      taskFor(this.preDelayTask).perform(this.preDelay);
+      this.preDelayTask.perform(this.preDelay);
     }
 
-    let result = await taskFor(this._runJob).perform(...args);
+    let result = await this._runJob.perform(...args);
 
     if (this.postDelay > 0) {
-      taskFor(this.postDelayTask).perform(this.postDelay);
+      this.postDelayTask.perform(this.postDelay);
     }
 
     return result;
