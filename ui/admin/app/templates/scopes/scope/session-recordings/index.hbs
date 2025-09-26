@@ -55,7 +55,10 @@
               @isSearchable={{true}}
               @searchTerm={{this.userFilters.search}}
               @updateSearchTerm={{fn this.onFilterSearch.perform 'userFilters'}}
-              @isLoading={{this.onFilterSearch.isRunning}}
+              @isLoading={{or
+                this.onFilterSearch.isRunning
+                this.loadItems.isRunning
+              }}
               as |FD selectItem itemOptions|
             >
               {{#each itemOptions as |itemOption|}}
@@ -82,7 +85,10 @@
                 this.onFilterSearch.perform
                 'scopeFilters'
               }}
-              @isLoading={{this.onFilterSearch.isRunning}}
+              @isLoading={{or
+                this.onFilterSearch.isRunning
+                this.loadItems.isRunning
+              }}
               as |FD selectItem itemOptions|
             >
               {{#each-in
@@ -118,7 +124,10 @@
                 this.onFilterSearch.perform
                 'targetFilters'
               }}
-              @isLoading={{this.onFilterSearch.isRunning}}
+              @isLoading={{or
+                this.onFilterSearch.isRunning
+                this.loadItems.isRunning
+              }}
               as |FD selectItem itemOptions|
             >
               {{#each itemOptions as |itemOption|}}

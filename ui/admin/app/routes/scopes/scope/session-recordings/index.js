@@ -222,6 +222,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    controller.loadItems();
+    controller.loadItems.perform();
   }
 }

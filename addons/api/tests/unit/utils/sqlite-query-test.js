@@ -300,6 +300,31 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     ]);
   });
 
+  test('it generates FTS5 search with object parameter', function (assert) {
+    const query = {
+      search: {
+        text: 'favorite',
+        fields: ['name', 'description'],
+      },
+      filters: {
+        type: [{ equals: 'ssh' }],
+      },
+    };
+
+    const { sql, parameters } = generateSQLExpressions('target', query);
+    assert.strictEqual(
+      sql,
+      `
+        SELECT * FROM "target"
+        WHERE (type = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, [
+      'ssh',
+      'name:"favorite"* OR description:"favorite"*',
+    ]);
+  });
+
   test('it generates SQL with all clauses combined', function (assert) {
     const query = {
       search: 'favorite',
