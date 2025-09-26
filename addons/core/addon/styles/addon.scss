@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+@use 'rose/app/styles/rose/variables/sizing' as sizing;
+@use 'sass:meta';
+
 .filters-applied {
   display: flex;
   flex-wrap: wrap;
@@ -70,5 +73,36 @@
 .container-inputs__margin-bottom {
   input:not(:last-child) {
     margin-bottom: 0.5rem;
+  }
+}
+
+$margin-directions: (
+  '': 'margin',
+  '-top': 'margin-top',
+  '-right': 'margin-right',
+  '-bottom': 'margin-bottom',
+  '-left': 'margin-left',
+  '-x': (
+    'margin-left',
+    'margin-right',
+  ),
+  '-y': (
+    'margin-top',
+    'margin-bottom',
+  ),
+);
+
+// Generate margin utility classes with sizes and directions
+@each $size-name, $size-coefficient in sizing.$size-coefficients {
+  @each $direction-suffix, $properties in $margin-directions {
+    .margin#{$direction-suffix}-#{$size-name} {
+      @if meta.type-of($properties) == 'list' {
+        @each $property in $properties {
+          #{$property}: #{sizing.rems($size-name)};
+        }
+      } @else {
+        #{$properties}: #{sizing.rems($size-name)};
+      }
+    }
   }
 }
