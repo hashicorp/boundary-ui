@@ -4,6 +4,70 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { parse } from 'liqe';
 
+class Frame {
+  @tracked
+  name = '';
+
+  @tracked
+  searchText = '';
+
+  @tracked
+  options = [];
+
+  @tracked
+  selectedOptionIndex = null;
+
+  // TODO: enum: loading, etc...
+  @tracked
+  state = '';
+
+  #load;
+  context;
+
+  #select;
+
+  constructor(name, { options, load, select, context }) {
+    this.name = name;
+    this.options = options;
+    this.#load = load;
+    this.#select = select;
+    this.context = context ?? {};
+  }
+
+  select() {
+    this.#select(this.options[this.selectedOptionIndex], this.context);
+  }
+
+  async load() {
+    this.isLoading = true;
+    const options = await this.#load(this.context);
+    if (!Array.isArray(options)) {
+      throw new Error(`load must return an array`);
+    }
+    this.selectedOptionIndex = 0;
+    this.options = options;
+    this.isLoading = false;
+  }
+}
+
+class Option {
+  @tracked
+  name;
+
+  @tracked
+  category;
+
+  @tracked
+  context = {};
+
+  constructor(name, { category, context }) {
+    this.name = name;
+    this.action = action;
+    this.category = category;
+    this.context = context ?? {};
+  }
+}
+
 export default class ResourceQueryComponent extends Component {
   @service
   store;
@@ -11,8 +75,8 @@ export default class ResourceQueryComponent extends Component {
   @service
   router;
 
-  @tracked
-  searchText = 'resource:target';
+  @service
+  flashMessages;
 
   @tracked
   results = [];
@@ -24,7 +88,7 @@ export default class ResourceQueryComponent extends Component {
   meta = false;
 
   @tracked
-  show = false;
+  show = true;
 
   @tracked
   highlightedIndex = 0;
@@ -32,9 +96,137 @@ export default class ResourceQueryComponent extends Component {
   @tracked
   action = null;
 
+  @tracked
+  frames = [];
+
   constructor() {
     super(...arguments);
+    this.setupKeyboardHandlers();
 
+    const self = this;
+
+    const resourceAttributeFrame = new Frame('Resource Attribute', {
+      async select() {},
+      async load(context) {
+        const { attr, model } = context;
+        return [new Option('Copy Value', {})];
+      },
+    });
+
+    const resourceAttributesFrame = new Frame('Resource Attributes', {
+      async select(option, context) {
+        resourceAttributeFrame.context = {
+          model: context.model,
+          attr: option.context.attr,
+        };
+
+        self.frames.push(resourceAttributeFrame);
+        self.frames = self.frames;
+      },
+
+      async load(context) {
+        const { model } = context;
+        await model.reload();
+
+        const attrs = [];
+        model.eachAttribute((attr) => {
+          attrs.push(attr);
+        });
+
+        return attrs.map((attr) => {
+          const attrValue = model[attr];
+          console.log({ attrValue });
+          const attrValueString = Array.isArray(attrValue)
+            ? attrValue
+                .map((item) =>
+                  typeof item === 'object'
+                    ? 'id' in item
+                      ? item.id
+                      : JSON.stringify(item)
+                    : item,
+                )
+                .join(', ')
+            : `${attrValue}`;
+          return new Option(`${attr}: ${attrValueString}`, {
+            category: 'result',
+            context: { attr },
+          });
+        });
+      },
+    });
+
+    const resourceOptionsFrame = new Frame('Resource Options', {
+      async select(option, context) {
+        const { model } = context;
+        if (option.name === 'Resource Attributes') {
+          console.log('Resource Attributes!');
+          console.log('context???', model);
+          resourceAttributesFrame.context.model = model;
+          resourceAttributesFrame.load();
+          self.frames.push(resourceAttributesFrame);
+          self.frames = self.frames;
+        }
+
+        if (option.name === 'Copy ID') {
+          navigator.clipboard.writeText(model.id);
+          self.flashMessages.success('Copied ID to clipboard');
+        }
+
+        if (option.name === 'Goto') {
+          self.router.transitionTo(`/scopes/${model.scope.id}/targets/${model.id}`);
+        }
+      },
+
+      async load() {
+        return [
+          new Option('Copy ID', { category: 'result' }),
+          new Option('Resource Attributes', {
+            category: 'result',
+          }),
+          new Option('Goto', {
+            category: 'result',
+          }),
+        ];
+      },
+    });
+
+    const initialFrame = new Frame('Super Query', {
+      async select(option) {
+        console.log('option selected!', option);
+        resourceOptionsFrame.context.model = option.context.model;
+        await resourceOptionsFrame.load();
+        self.frames.push(resourceOptionsFrame);
+        console.log('frames after push', self.frames);
+        self.frames = self.frames;
+      },
+
+      async load({ store, resource, query }) {
+        if (!store) throw new Error(`Set context.store`);
+        if (!resource || !query) return;
+
+        const q = {
+          scope_id: 'global',
+          recursive: true,
+          query,
+        };
+        const queryResults = await store.query(resource, q, {
+          peekDb: true,
+        });
+
+        const results = queryResults.map((r) => ({ model: r }));
+        console.log('store results', { results });
+
+        return results.map(
+          ({ model }) =>
+            new Option(model.id, { category: 'result', context: { model } }),
+        );
+      },
+    });
+
+    this.frames = [initialFrame];
+  }
+
+  setupKeyboardHandlers() {
     document.body.addEventListener('keydown', (e) => {
       console.log(e.code);
 
@@ -49,16 +241,23 @@ export default class ResourceQueryComponent extends Component {
 
       if (e.code === 'ArrowUp') {
         this.highlightedIndex--;
+        this.currentFrame.selectedOptionIndex = Math.max(0, this.currentFrame.selectedOptionIndex - 1);
       }
 
       if (e.code === 'ArrowDown') {
         this.highlightedIndex++;
+        this.currentFrame.selectedOptionIndex = Math.min(this.currentFrame.options.length - 1, this.currentFrame.selectedOptionIndex + 1);
       }
 
       if (e.code === 'Enter') {
-        const selected = this.results[this.highlightedIndex];
-        if (selected) {
-          this.selectResult(selected.model);
+        this.currentFrame.select();
+      }
+
+      if (e.code === 'Escape') {
+        if (this.frames.length === 1) {
+          this.show = false;
+        } else {
+          this.popFrame();
         }
       }
     });
@@ -69,24 +268,19 @@ export default class ResourceQueryComponent extends Component {
     });
   }
 
-  async loadResults(resource, filters) {
-    console.log({ resource });
-    const q = {
-      scope_id: 'global',
-      recursive: true,
-      query: { filters },
-    };
-    console.log({ q });
-    const queryResults = await this.store.query(resource, q, { peekDb: true });
+  get currentFrame() {
+    return this.frames.at(-1);
+  }
 
-    const results = queryResults.map((r) => ({ model: r }));
-    console.log('store results', { results });
-    this.results = results;
+  get previousFrame() {
+    return this.frames.at(-2);
   }
 
   @action
-  onInput(e) {
+  async onInput(e) {
     const input = e.target.value;
+    this.currentFrame.searchText = input;
+
     const result = parse(input);
     console.log('parse results', { result });
     const results = gatherInputs(result);
@@ -96,8 +290,15 @@ export default class ResourceQueryComponent extends Component {
     const resourceValue = resource.expression.value;
 
     const remaining = results.filter((r) => r !== resource);
+    let search;
     const filters = {};
+
     for (const result of remaining) {
+      if (result.field.type === 'ImplicitField') {
+        search = !search ? result.expression.value : search;
+        continue;
+      }
+
       if (
         result.expression.value &&
         result.expression.type === 'LiteralExpression'
@@ -110,47 +311,19 @@ export default class ResourceQueryComponent extends Component {
       }
     }
 
-    this.loadResults(resourceValue, filters);
+    this.currentFrame.context = {
+      store: this.store,
+      resource: resourceValue,
+      query: { filters, search },
+    };
+
+    this.currentFrame.load();
   }
 
   @action
-  selectResult(result) {
-    this.selectedResult = result;
-  }
-
-  @action
-  clearResult() {
-    this.selectedResult = null;
-    this.action = null;
-  }
-
-  @action
-  attributes(model) {
-    const attrs = [];
-    model.eachAttribute((attr) => {
-      attrs.push(attr);
-    });
-
-    return attrs;
-  }
-
-  @action
-  setAction(action) {
-    switch (action) {
-      case 'quick_look': {
-        this.action = 'quick_look';
-        break;
-      }
-
-      case 'goto': {
-        this.router.transitionTo(
-          'scopes.scope.targets.target',
-          this.selectedResult.scope.id,
-          this.selectedResult.id,
-        );
-        break;
-      }
-    }
+  popFrame() {
+    this.frames.pop();
+    this.frames = this.frames;
   }
 }
 

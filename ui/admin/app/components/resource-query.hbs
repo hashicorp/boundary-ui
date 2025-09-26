@@ -1,57 +1,36 @@
 {{#if this.show}}
-  <Hds::Modal as |M|>
-    <M.Header>Super Query</M.Header>
-    <M.Body>
-      <button type='button' {{on 'click' this.clearResult}}>clear</button>
-      <input {{on 'input' this.onInput}} value={{this.searchText}} autofocus />
-      <br />
-      {{#if (and this.selectedResult (eq this.action 'quick_look'))}}
-        Selected Result
-        {{this.selectedResult.id}}
-        {{#let (this.attributes this.selectedResult) as |attributes|}}
-          <ul>
-            {{#each attributes as |attr|}}
-              <li>
-                <code>
-                  {{attr}}:
-                  {{get this.selectedResult attr}}
-                </code>
-              </li>
-            {{/each}}
-          </ul>
-        {{/let}}
-      {{else if this.selectedResult}}
-        <ul>
-          <li>
-            <button {{on 'click' (fn this.setAction 'quick_look')}}>Quick look</button>
-          </li>
-          <li>
-            <button {{on 'click' (fn this.setAction 'goto')}}>Go to</button>
-          </li>
-        </ul>
-      {{else}}
-        <ul>
-          {{this.highlightedIndex}}
-          {{#each this.results as |result i|}}
-            <li class='{{if (eq i this.highlightedIndex) "highlighted-index"}}'>
-              {{i}}
-              /
-              {{result.model.id}}
-              /
-              {{result.model.name}}
-              /
-              {{result.model.type}}
-              <button
-                {{on 'click' (fn this.selectResult result.model)}}
-                type='button'
-              >go</button>
-            </li>
-          {{/each}}
-        </ul>
+  <Hds::Modal @isDismissDisabled='true' as |M|>
+    <M.Header>
+      {{#if this.previousFrame}}
+        <button {{on 'click' this.popFrame}}>
+          🔙
+          {{this.previousFrame.name}}
+        </button>
       {{/if}}
+      {{this.currentFrame.name}}
+    </M.Header>
+    <M.Body>
+
+      <Hds::Form::TextInput::Field
+        @value={{this.currentFrame.searchText}}
+        autofocus='true'
+        {{on 'input' this.onInput}}
+      />
+
+      {{#each this.currentFrame.options as |option i|}}
+        <ul>
+          <li
+            id='{{this.currentFrame.name}}-{{option.name}}'
+            class='frame-option
+              {{if
+                (eq i this.currentFrame.selectedOptionIndex)
+                "highlighted-index"
+              }}'
+          >
+            {{option.name}}
+          </li>
+        </ul>
+      {{/each}}
     </M.Body>
-    <M.Footer>
-      Helpful things here...
-    </M.Footer>
   </Hds::Modal>
 {{/if}}
