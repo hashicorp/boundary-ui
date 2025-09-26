@@ -145,12 +145,12 @@ function addSearchConditions({
 
   // Use the special prefix indicator "*" for full-text search
   if (typeOf(search) === 'object') {
-    if (!search?.value) {
+    if (!search?.text) {
       return;
     }
 
     parameters.push(
-      or(search.fields.map((field) => `${field}:"${search.value}"*`)),
+      or(search.fields.map((field) => `${field}:"${search.text}"*`)),
     );
   } else {
     parameters.push(`"${search}"*`);

@@ -176,7 +176,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
       {
         select: config.select,
         query: {
-          search: { value: search, fields: config.searchFields },
+          search: { text: search, fields: config.searchFields },
         },
         page: 1,
         pageSize: 250,
@@ -187,13 +187,13 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     return results.map(config.mapper);
   }
 
-  async loadItems() {
+  loadItems = restartableTask(async () => {
     this.userFilters.options = await this.retrieveFilterOptions('userFilters');
     this.scopeFilters.options =
       await this.retrieveFilterOptions('scopeFilters');
     this.targetFilters.options =
       await this.retrieveFilterOptions('targetFilters');
-  }
+  });
 
   // =actions
 
