@@ -135,11 +135,10 @@ export default class LoadingService extends Service {
     return result;
   }
 
-  @task
-  async _runJob(...args) {
+  _runJob = task(async (...args) => {
     let [target, method, realArgs] = parseArgs(...args);
     return await method.apply(target, realArgs);
-  }
+  });
 
   @restartableTask
   async preDelayTask(delay) {
