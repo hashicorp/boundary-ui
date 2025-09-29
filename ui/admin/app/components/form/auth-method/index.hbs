@@ -2,16 +2,14 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-
 {{#if @model.type}}
-  {{component
-    (concat 'form/auth-method/' @model.type)
-    model=@model
-    edit=@edit
-    submit=@submit
-    cancel=@cancel
-    removeItemByIndex=@removeItemByIndex
-    addStringItem=@addStringItem
-    addAccountMapItem=@addAccountMapItem
-  }}
+  <this.authMethodFormComponent
+    @model={{@model}}
+    @edit={{@edit}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @removeItemByIndex={{@removeItemByIndex}}
+    @addStringItem={{@addStringItem}}
+    @addAccountMapItem={{@addAccountMapItem}}
+  />
 {{/if}}
