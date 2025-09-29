@@ -4,12 +4,11 @@
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/credential-library/' @model.type)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-    changeType=@changeType
-    edit=@edit
-  }}
+  <this.credentialLibraryFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @changeType={{@changeType}}
+    @edit={{@edit}}
+  />
 {{/if}}
