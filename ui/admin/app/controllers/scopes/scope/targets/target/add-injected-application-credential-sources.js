@@ -6,7 +6,7 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,

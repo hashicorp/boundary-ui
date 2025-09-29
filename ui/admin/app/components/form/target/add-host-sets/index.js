@@ -7,7 +7,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { service } from '@ember/service';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { notifyError } from 'core/decorators/notify';
 
 export default class FormTargetAddHostSetsComponent extends Component {

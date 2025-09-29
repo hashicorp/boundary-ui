@@ -7,7 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { defaultValidator } from 'ember-a11y-refocus';
 import { paramValueFinder } from 'admin/utils/param-value-finder';
 

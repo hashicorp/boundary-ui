@@ -6,7 +6,7 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 

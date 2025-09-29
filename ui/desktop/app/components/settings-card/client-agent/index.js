@@ -6,7 +6,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { notifyError } from 'core/decorators/notify';
 
 export default class SettingsCardClientAgentComponent extends Component {

@@ -1,7 +1,7 @@
 import { assert } from '@ember/debug';
 import { getOwner } from '@ember/application';
 
-export default function loading(_target, _propertyKey, desc) {
+export function loading(_target, _propertyKey, desc) {
   let orig = desc.value;
   assert(
     'The @loading decorator must be applied to methods',

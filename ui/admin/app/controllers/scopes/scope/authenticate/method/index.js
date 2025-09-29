@@ -7,7 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
+import { loading } from 'core/decorators/loading';
 import { notifyError } from 'core/decorators/notify';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
