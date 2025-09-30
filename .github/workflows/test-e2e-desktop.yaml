@@ -13,7 +13,6 @@ jobs:
     env:
       ENOS_VAR_boundary_edition: "ent"
       ENOS_VAR_e2e_debug_no_run: true
-      ENOS_VAR_boundary_license_path: "./license.hclic"
       SETUP_CLI: true
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -72,15 +71,14 @@ jobs:
           docker pull hashicorp/boundary-enterprise:latest
           docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
 
-        # TODO: Set up license in a better way? Use directly rather than writing to file and pull from secrets manager
       - name: Set up test infra
         id: infra
         run: |
-          echo "${{ secrets.BOUNDARY_ENT_LICENSE }}" > ./support/src/boundary-enterprise/enos/license.hclic
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
+          export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
           export ENOS_VAR_boundary_docker_image_name=hashicorp/boundary-enterprise:latest && \
           export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
           enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
