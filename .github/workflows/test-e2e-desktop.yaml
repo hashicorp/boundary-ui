@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    if: ${{contains(github.event.pull_request.labels.*.name, 'desktop')}}
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'desktop') }}
     name: Run Desktop E2E Tests
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     env:
