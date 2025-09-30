@@ -51,17 +51,17 @@ export default class GeneratedCredentialModel extends BaseModel {
   })
   version;
 
-  // =attributes (username_password, ssh_private_key)
+  // =attributes (username_password, ssh_private_key, username_password_domain)
   @attr('string', {
-    for: ['username_password', 'ssh_private_key'],
+    for: ['username_password', 'ssh_private_key', 'username_password_domain'],
     isNestedAttribute: true,
     description: 'The username for credential.',
   })
   username;
 
-  // =attributes (username_password)
+  // =attributes (username_password, username_password_domain)
   @attr('string', {
-    for: 'username_password',
+    for: ['username_password', 'username_password_domain'],
     isNestedAttribute: true,
     isSecret: true,
     description: 'The password for credential.',
@@ -92,4 +92,12 @@ export default class GeneratedCredentialModel extends BaseModel {
     description: 'The secret associated with credential.',
   })
   json_object;
+
+  // =attributes (username_password_domain)
+  @attr('string', {
+    for: 'username_password_domain',
+    isNestedAttribute: true,
+    description: 'The domain for credential.',
+  })
+  domain;
 }

@@ -5,7 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
 
 module('Unit | Model | credential library', function (hooks) {
   setupTest(hooks);
@@ -22,10 +26,18 @@ module('Unit | Model | credential library', function (hooks) {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
     });
     const modelB = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+    });
+    const modelC = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+    });
+    const modelD = store.createRecord('credential-library', {
       type: 'unknown',
     });
 
     assert.false(modelA.isUnknown);
-    assert.true(modelB.isUnknown);
+    assert.false(modelB.isUnknown);
+    assert.false(modelC.isUnknown);
+    assert.true(modelD.isUnknown);
   });
 });

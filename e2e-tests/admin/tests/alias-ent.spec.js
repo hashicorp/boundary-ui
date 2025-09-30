@@ -46,10 +46,11 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
 
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
@@ -165,11 +166,12 @@ test.describe('Aliases (Enterprise)', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAlias(
-          targetAddress,
-          targetPort,
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
           alias,
-        );
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
@@ -235,10 +237,11 @@ test.describe('Aliases (Enterprise)', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createSshTargetWithAddressEnt(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          targetType: 'ssh',
+          port: targetPort,
+          address: targetAddress,
+        });
         const credentialStoresPage = new CredentialStoresPage(page);
         await credentialStoresPage.createStaticCredentialStore();
         const credentialName =
@@ -268,16 +271,27 @@ test.describe('Aliases (Enterprise)', () => {
           targetName,
         );
 
+        await page
+          .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+          .click();
+        await page.getByRole('link', { name: 'Back to Global' }).click();
+        await page.getByRole('link', { name: 'Aliases' }).click();
+        await expect(
+          page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText('Aliases'),
+        ).toBeVisible();
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
-        connect = await boundaryCli.connectSshToAlias(alias);
+        await aliasesPage.createAliasForTarget(alias, targetId);
         await page
           .getByRole('navigation', { name: 'Application local navigation' })
           .getByRole('link', { name: 'Orgs' })
           .click();
         await page.getByRole('link', { name: orgName }).click();
         await page.getByRole('link', { name: projectName }).click();
+
+        connect = await boundaryCli.connectSshToAlias(alias);
         const sessionsPage = new SessionsPage(page);
         await sessionsPage.waitForSessionToBeVisible(targetName);
       } finally {

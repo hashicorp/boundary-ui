@@ -9,7 +9,13 @@ import { service } from '@ember/service';
 
 export const TYPE_TARGET_TCP = 'tcp';
 export const TYPE_TARGET_SSH = 'ssh';
-export const TYPES_TARGET = Object.freeze([TYPE_TARGET_TCP, TYPE_TARGET_SSH]);
+export const TYPE_TARGET_RDP = 'rdp';
+
+export const TYPES_TARGET = Object.freeze([
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+]);
 
 export default class TargetModel extends GeneratedTargetModel {
   // =services
@@ -346,5 +352,13 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   get isSSH() {
     return this.type === TYPE_TARGET_SSH;
+  }
+
+  /**
+   * True if the target type is rdp.
+   * @type {boolean}
+   */
+  get isRDP() {
+    return this.type === TYPE_TARGET_RDP;
   }
 }

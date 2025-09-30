@@ -3,6 +3,31 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
+{{#if this.showInjectedApplicationCredentialAlert}}
+  <Hds::Alert
+    data-test-injected-application-credential-alert
+    class='injected-app-credential-alert'
+    @type='inline'
+    @color='critical'
+    as |A|
+  >
+    <A.Title>{{t
+        'resources.target.injected-application-credential-source.messages.alert.title'
+      }}</A.Title>
+    <A.Description>{{t
+        'resources.target.injected-application-credential-source.messages.alert.description'
+      }}</A.Description>
+    <A.Button
+      @color='secondary'
+      @text={{t
+        'resources.target.injected-application-credential-source.messages.alert.action'
+      }}
+      @route='scopes.scope.targets.target.add-injected-application-credential-sources'
+      @model={{@model}}
+    />
+  </Hds::Alert>
+{{/if}}
+
 <Rose::Form
   class={{unless @model.isNew 'full-width'}}
   @onSubmit={{@submit}}
@@ -52,7 +77,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
+  {{#if this.showTargetTypeRadioGroup}}
     <Hds::Form::RadioCard::Group
       @name={{t 'form.type.label'}}
       @alignment='center'
@@ -152,9 +177,13 @@
     as |F|
   >
     <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.target.form.default_client_port.help'
-      }}</F.HelperText>
+    <F.HelperText data-test-default-client-port-helper-text>
+      {{t 'resources.target.form.default_client_port.help'}}
+      {{#if (eq @model.type 'rdp')}}
+        <br />
+        {{t 'resources.target.form.default_client_port.rdp-windows-notice'}}
+      {{/if}}
+    </F.HelperText>
     {{#if @model.errors.default_client_port}}
       <F.Error as |E|>
         {{#each @model.errors.default_client_port as |error|}}
@@ -196,7 +225,13 @@
     as |F|
   >
     <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
-    <F.HelperText>{{t 'form.session_connection_limit.help'}}</F.HelperText>
+    <F.HelperText data-test-max-connections-helper-text>
+      {{t 'form.session_connection_limit.help'}}
+      {{#if (eq @model.type 'rdp')}}
+        <br />
+        {{t 'form.session_connection_limit.rdp-windows-notice'}}
+      {{/if}}
+    </F.HelperText>
     {{#if @model.errors.session_connection_limit}}
       <F.Error as |E|>
         {{#each @model.errors.session_connection_limit as |error|}}

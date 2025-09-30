@@ -133,6 +133,8 @@ module.exports = function (environment) {
         'storage-policy.update':
           '/docs/configuration/session-recording/update-storage-policy',
         alias: '/docs/concepts/aliases',
+        'alias.single-word-aliases':
+          '/docs/targets/configuration#single-word-aliases-and-transparent-sessions',
         'support-page': 'https://support.hashicorp.com/hc/en-us',
       },
     },

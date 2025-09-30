@@ -8,7 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
@@ -16,7 +16,7 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupIndexedDb(hooks);
+    setupSqlite(hooks);
     setupIntl(hooks, 'en-us');
 
     let intl;

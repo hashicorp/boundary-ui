@@ -8,13 +8,51 @@ import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
-import { TYPES_TARGET, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPES_TARGET,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
+import {
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_JSON,
+} from 'api/models/credential';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const randomFilter = () =>
   `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
 const hostSetChance = 0.3;
 const types = [...TYPES_TARGET];
+
+/**
+ * Helper to select items from a collection based on a condition.
+ */
+const selectItems = (collection, condition) =>
+  collection
+    .where(condition)
+    .models.filter(() => randomBoolean())
+    .map((item) => item.id);
+
+/**
+ * Helper to update target with selected credential sources and host sets.
+ */
+const updateTarget = (
+  target,
+  hostSets,
+  isInjectable,
+  injectedSources,
+  brokeredSources,
+) => {
+  const fieldsToUpdate = {
+    hostSets,
+    brokeredCredentialSourceIds: brokeredSources,
+  };
+  if (isInjectable) {
+    fieldsToUpdate.injectedApplicationCredentialSourceIds = injectedSources;
+  }
+  target.update(fieldsToUpdate);
+};
 
 export default factory.extend({
   authorized_actions: () =>
@@ -45,29 +83,83 @@ export default factory.extend({
    */
   withAssociations: trait({
     afterCreate(target, server) {
-      let randomlySelectedHostSets,
-        randomlySelectedCredentialLibraries,
-        randomlySelectedCredentials;
-      randomlySelectedHostSets = server.schema.hostSets
+      const { scope } = target;
+
+      const randomlySelectedHostSets = server.schema.hostSets
         // BLERG:  fun fact, for no reason at all, the element passed
         // into a where function is not a full model instance, as you might
         // expect at this level of abstraction, but appears to be a serialized
         // representation of the model instance.  It's very confusing since
         // the result set of `where` _is a collection of model instances_.
-        .where((hostSet) => hostSet.scopeId === target.scope.id)
+        .where((hostSet) => hostSet.scopeId === scope.id)
         .models.filter(() => randomBoolean(hostSetChance));
 
-      randomlySelectedCredentialLibraries = server.schema.credentialLibraries
-        .where(
+      const randomlySelectedBrokeredCredentialSources = [
+        ...selectItems(
+          server.schema.credentialLibraries,
           (credentialLibrary) => credentialLibrary.scopeId === target.scope.id,
-        )
-        .models.filter(() => randomBoolean())
-        .map((cred) => cred.id);
-      randomlySelectedCredentials = server.schema.credentials
-        .where((credential) => credential.scopeId === target.scope.id)
-        .models.filter(() => randomBoolean())
-        .map((cred) => cred.id);
+        ),
+        ...selectItems(
+          server.schema.credentials,
+          (credential) => credential.scopeId === target.scope.id,
+        ),
+      ];
 
+      // Select compatible credential libraries and credentials for injection
+      // Since not every credential or credential library can be injected, we filter them to mimic the expected behavior.
+      const filteredCredentialLibraries = selectItems(
+        server.schema.credentialLibraries,
+        (cred) =>
+          cred.scopeId === scope.id &&
+          cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      );
+      const filteredCredentials = selectItems(
+        server.schema.credentials,
+        (cred) =>
+          cred.scopeId === scope.id &&
+          ![
+            TYPE_CREDENTIAL_JSON,
+            TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+          ].includes(cred.type),
+      );
+
+      // RDP specific credential libraries and credentials
+      const filteredCredentialLibrariesForRDP = selectItems(
+        server.schema.credentialLibraries,
+        (cred) =>
+          cred.scopeId === scope.id &&
+          [
+            TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+            TYPE_CREDENTIAL_USERNAME_PASSWORD,
+          ].includes(cred.credential_type),
+      );
+      const filteredCredentialsForRDP = selectItems(
+        server.schema.credentials,
+        (cred) =>
+          cred.scopeId === scope.id &&
+          [
+            TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+            TYPE_CREDENTIAL_USERNAME_PASSWORD,
+          ].includes(cred.type),
+      );
+
+      // Update target based on type
+      const isInjectable =
+        target.type === TYPE_TARGET_SSH || target.type === TYPE_TARGET_RDP;
+      const injectedCredentialSources =
+        target.type === TYPE_TARGET_RDP
+          ? [...filteredCredentialLibrariesForRDP, ...filteredCredentialsForRDP]
+          : [...filteredCredentialLibraries, ...filteredCredentials];
+
+      updateTarget(
+        target,
+        randomlySelectedHostSets,
+        isInjectable,
+        injectedCredentialSources,
+        randomlySelectedBrokeredCredentialSources,
+      );
+
+      // Add storage bucket for SSH targets
       const storageBuckets = server.schema.storageBuckets.all().models;
       const randomlySelectedStorageBucket =
         storageBuckets.length === 0
@@ -81,6 +173,7 @@ export default factory.extend({
         });
       }
 
+      // Add Aliases
       const aliases = server.schema.aliases.all().models;
       const randomlySelectedAliases =
         aliases.length === 0 ? undefined : faker.helpers.arrayElement(aliases);
@@ -89,17 +182,6 @@ export default factory.extend({
           aliases: randomlySelectedAliases.aliases,
         });
       }
-      target.update({
-        hostSets: randomlySelectedHostSets,
-        brokeredCredentialSourceIds: [
-          ...randomlySelectedCredentialLibraries,
-          ...randomlySelectedCredentials,
-        ],
-        injectedApplicationCredentialSourceIds: [
-          ...randomlySelectedCredentialLibraries,
-          ...randomlySelectedCredentials,
-        ],
-      });
     },
   }),
 

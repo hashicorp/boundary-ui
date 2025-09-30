@@ -4,22 +4,22 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, getContext } from '@ember/test-helpers';
+import { click, fillIn, getContext, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | create-alias', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let getAliasCount;

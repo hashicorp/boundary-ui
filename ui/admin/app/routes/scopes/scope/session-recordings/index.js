@@ -71,17 +71,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortState = (recordA, recordB) => {
-    const stateMap = {
-      [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
-      [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
-      [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
-    };
-    return String(stateMap[recordA.attributes.state]).localeCompare(
-      String(stateMap[recordB.attributes.state]),
-    );
-  };
-
   retrieveData = restartableTask(
     async ({
       search,
@@ -107,25 +96,35 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       let doStorageBucketsExist = false;
       const filters = {
         created_time: [],
-        'create_time_values.user.id': [],
-        'create_time_values.target.scope.id': [],
-        'create_time_values.target.id': [],
+        user_id: [],
+        target_scope_id: [],
+        target_id: [],
       };
       if (time) filters.created_time.push({ gte: new Date(time) });
       users.forEach((user) => {
-        filters['create_time_values.user.id'].push({ equals: user });
+        filters['user_id'].push({ equals: user });
       });
       scopes.forEach((scope) => {
-        filters['create_time_values.target.scope.id'].push({ equals: scope });
+        filters['target_scope_id'].push({ equals: scope });
       });
       targets.forEach((target) => {
-        filters['create_time_values.target.id'].push({ equals: target });
+        filters['target_id'].push({ equals: target });
       });
+
+      const stateMap = {
+        [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
+        [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
+        [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
+      };
 
       const sort =
         sortAttribute === 'state'
-          ? { sortFunction: this.sortState, direction: sortDirection }
-          : { attribute: sortAttribute, direction: sortDirection };
+          ? {
+              attributes: [sortAttribute],
+              customSort: { attributeMap: stateMap },
+              direction: sortDirection,
+            }
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       if (
         this.can.can('list scope', scope, {
@@ -171,7 +170,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    * @param {string} scope_id
    */
   async getAllSessionRecordings(scope_id) {
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     this.allSessionRecordings = await this.store.query(
       'session-recording',
       {
@@ -192,7 +191,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const sessionRecordings = await this.store.query(
       'session-recording',
       {

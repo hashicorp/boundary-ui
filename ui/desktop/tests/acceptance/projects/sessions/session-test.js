@@ -22,6 +22,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
+  const TOAST = '[data-test-toast-notification]';
+  const TOAST_DO_NOT_SHOW_AGAIN_BUTTON =
+    '[data-test-toast-notification] button';
+  const TOAST_DISMISS_BUTTON = '[aria-label="Dismiss"]';
 
   const instances = {
     scopes: {
@@ -44,8 +48,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     projects: null,
     targets: null,
     target: null,
+    rdpTarget: null,
     sessions: null,
     session: null,
+    rdpSession: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -94,6 +100,16 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       { scope: instances.scopes.project, address: 'localhost' },
       'withAssociations',
     );
+    instances.rdpTarget = this.server.create(
+      'target',
+      {
+        scope: instances.scopes.project,
+        address: 'rdp.example.com',
+        type: 'rdp',
+      },
+      'withAssociations',
+    );
+
     instances.session = this.server.create(
       'session',
       {
@@ -105,14 +121,29 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       'withAssociations',
     );
 
+    instances.rdpSession = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project,
+        status: STATUS_SESSION_ACTIVE,
+        user: instances.user,
+      },
+      'withAssociations',
+    );
+
+    instances.rdpSession.update({
+      target: instances.rdpTarget,
+    });
+
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
     urls.sessions = `${urls.projects}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
-
+    urls.rdpSession = `${urls.projects}/sessions/${instances.rdpSession.id}`;
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
@@ -239,6 +270,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .dom('.secret-container:nth-of-type(2)')
       .includesText('email.address');
     await click('.secret-container:nth-of-type(2) .hds-icon');
+
     assert
       .dom('.secret-container:nth-of-type(2) .secret-content')
       .hasText('test.com');
@@ -302,6 +334,89 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .hasText(expectedOutput);
   });
 
+  test('visiting an RDP session should display a toast notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+
+    // check if the toast notification is visible
+    assert.dom(TOAST).isVisible();
+    assert.dom(TOAST_DISMISS_BUTTON).isVisible();
+    assert.dom(TOAST_DO_NOT_SHOW_AGAIN_BUTTON).hasText('Do not show again');
+
+    // Click the dismiss button to close the toast
+    await click(TOAST_DISMISS_BUTTON);
+
+    assert.dom(TOAST).doesNotExist();
+  });
+
+  test('clicking on `do not show again` button prevents the toast warning from showing again', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    // First RDP Session visit should show the toast notification
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(TOAST).isVisible();
+
+    // Click the "Do not show again" button
+    await click(TOAST_DO_NOT_SHOW_AGAIN_BUTTON);
+    assert.dom(TOAST).doesNotExist();
+
+    // check that the localStorage item is set
+    assert.ok(
+      this.owner.lookup('service:storage').getItem('doNotShowRdpWarningAgain'),
+    );
+
+    // Second visit to the same RDP session should not show the toast again
+    await visit(urls.rdpTarget);
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.dom(TOAST).doesNotExist();
+    // Cleanup localStorage for other tests
+    this.owner.lookup('service:storage').removeItem('doNotShowRdpWarningAgain');
+
+    // Verify that the localStorage item is removed
+    assert.notOk(
+      this.owner.lookup('service:storage').getItem('doNotShowRdpWarningAgain'),
+    );
+  });
+
   test('visiting a session that does not have permissions to read a host', async function (assert) {
     setRunOptions({
       rules: {
@@ -324,6 +439,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     await visit(urls.target);
+
     await click(TARGET_CONNECT_BUTTON);
 
     assert.strictEqual(currentURL(), urls.session);
@@ -357,7 +473,9 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     await visit(urls.target);
+
     await click(TARGET_CONNECT_BUTTON);
+
     assert.strictEqual(currentURL(), urls.session);
   });
 
@@ -410,6 +528,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.expect(1);
 
     await visit(urls.session);
+
     await click('[data-test-session-detail-cancel-button]');
 
     assert
@@ -430,6 +549,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.expect(1);
 
     await visit(urls.session);
+
     await click('[data-test-session-detail-cancel-button]');
 
     assert.strictEqual(currentURL(), urls.targets);
@@ -449,6 +569,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.server.post('/sessions/:id_method', () => new Response(400));
 
     await visit(urls.session);
+
     await click('[data-test-session-detail-cancel-button]');
 
     assert
@@ -470,6 +591,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.ipcStub.withArgs('stop').throws();
 
     await visit(urls.session);
+
     await click('[data-test-session-detail-cancel-button]');
 
     assert

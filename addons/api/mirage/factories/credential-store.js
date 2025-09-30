@@ -58,7 +58,7 @@ export default factory.extend({
       const { scope, type } = credentialStore;
       switch (type) {
         case 'vault':
-          server.createList('credential-library', 2, {
+          server.createList('credential-library', 3, {
             scope,
             credentialStore,
           });

@@ -10,7 +10,11 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TYPES_TARGET } from 'api/models/target';
+import {
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+  TYPE_TARGET_TCP,
+} from 'api/models/target';
 
 export default class ScopesScopeTargetsIndexController extends Controller {
   // =services
@@ -19,6 +23,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   @service can;
   @service router;
   @service confirm;
+  @service features;
 
   // =attributes
 
@@ -68,13 +73,6 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     };
   }
 
-  get targetTypeOptions() {
-    return TYPES_TARGET.map((type) => ({
-      id: type,
-      name: this.intl.t(`resources.target.types.${type}`),
-    }));
-  }
-
   /**
    * If can list (at least): return default welcome message.
    * If can create (only): return create-but-not-list welcome message.
@@ -98,6 +96,47 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     }
 
     return this.intl.t(description, { resource });
+  }
+
+  get isRDPEnabled() {
+    return this.features.isEnabled('rdp-target');
+  }
+
+  get isSSHEnabled() {
+    return this.features.isEnabled('ssh-target');
+  }
+
+  /**
+   * Returns enabled target types based on feature flags.
+   * @returns {Array}
+   */
+  get enabledTargetTypes() {
+    const types = [TYPE_TARGET_TCP];
+    if (this.isSSHEnabled) types.push(TYPE_TARGET_SSH);
+    if (this.isRDPEnabled) types.push(TYPE_TARGET_RDP);
+    return types;
+  }
+
+  get targetTypeOptions() {
+    const enabledTypes = this.enabledTargetTypes;
+    return enabledTypes.map((type) => ({
+      id: type,
+      name: this.intl.t(`resources.target.types.${type}`),
+    }));
+  }
+
+  get showTargetTypeOptions() {
+    return this.isRDPEnabled || this.isSSHEnabled;
+  }
+
+  /**
+   * Returns filtered targets based on enabled features.
+   */
+  get targetsData() {
+    const enabledTypes = this.enabledTargetTypes;
+    return this.model.targets.filter((target) =>
+      enabledTypes.includes(target.type),
+    );
   }
 
   // =actions

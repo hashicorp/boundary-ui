@@ -73,6 +73,9 @@ test(
       await expect(
         page.getByRole('alert').getByText('Success', { exact: true }),
       ).toBeVisible();
+      await expect(
+        page.getByRole('heading', { name: 'Projects' }),
+      ).toBeVisible();
 
       // Confirm user cannot log in with old password
       await loginPage.logout(username);

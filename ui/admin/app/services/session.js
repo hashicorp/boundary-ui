@@ -5,10 +5,10 @@
 
 import BaseSessionService from 'ember-simple-auth/services/session';
 import { service } from '@ember/service';
-import { formatDbName } from 'api/services/indexed-db';
+import { formatDbName } from 'api/services/sqlite';
 
 export default class SessionService extends BaseSessionService {
-  @service indexedDb;
+  @service sqlite;
   @service('browser/window') window;
 
   /**
@@ -19,7 +19,7 @@ export default class SessionService extends BaseSessionService {
     const userId = this.data?.authenticated?.user_id;
     const hostUrl = this.window.location?.host;
     if (userId && hostUrl) {
-      await this.indexedDb.setup(formatDbName(userId, hostUrl));
+      await this.sqlite.setup(formatDbName(userId, hostUrl));
     }
 
     // We let ember-simple-auth handle transitioning back to the index after authentication.

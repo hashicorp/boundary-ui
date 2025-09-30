@@ -56,32 +56,33 @@ export default function setupStubs(hooks) {
       stubTypes = types;
 
       types.forEach((type, i) => {
-        let models;
-        let resourceName;
-        if (typeOf(type) === 'object') {
-          models = type.func();
-          resourceName = type.resource;
-        } else {
-          models = this.server.schema[type].all().models;
-          resourceName = type;
-        }
-
         this.ipcStub
           .withArgs('searchCacheDaemon')
           .onCall(i)
-          .returns({
-            [underscore(resourceNames[singularize(resourceName)])]: models.map(
-              (model) => {
-                // Use internal serializer to serialize the model correctly
-                // according to our mirage serializers
-                const modelData =
-                  this.server.serializerOrRegistry.serialize(model);
+          .callsFake(() => {
+            let models;
+            let resourceName;
+            if (typeOf(type) === 'object') {
+              models = type.func();
+              resourceName = type.resource;
+            } else {
+              models = this.server.schema[type].all().models;
+              resourceName = type;
+            }
 
-                // Serialize the data properly to standard JSON as that is what
-                // we're expecting from the cache daemon response
-                return JSON.parse(JSON.stringify(modelData));
-              },
-            ),
+            return {
+              [underscore(resourceNames[singularize(resourceName)])]:
+                models.map((model) => {
+                  // Use internal serializer to serialize the model correctly
+                  // according to our mirage serializers
+                  const modelData =
+                    this.server.serializerOrRegistry.serialize(model);
+
+                  // Serialize the data properly to standard JSON as that is what
+                  // we're expecting from the cache daemon response
+                  return JSON.parse(JSON.stringify(modelData));
+                }),
+            };
           });
       });
     };

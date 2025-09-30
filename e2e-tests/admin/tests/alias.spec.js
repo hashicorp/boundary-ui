@@ -44,10 +44,10 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddress(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+          address: targetAddress,
+        });
 
         // Create alias for target
         const aliasName = 'Alias ' + nanoid();
@@ -148,11 +148,11 @@ test.describe('Aliases', () => {
         await projectsPage.createProject();
         alias = 'example.alias.' + nanoid();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddressAndAlias(
-          targetAddress,
-          targetPort,
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+          address: targetAddress,
           alias,
-        );
+        });
 
         // Connect to target using alias
         connect = await boundaryCli.connectToAlias(alias, sshUser, sshKeyPath);
@@ -206,10 +206,10 @@ test.describe('Aliases', () => {
         const projectsPage = new ProjectsPage(page);
         const projectName = await projectsPage.createProject();
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTargetWithAddress(
-          targetAddress,
-          targetPort,
-        );
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+          address: targetAddress,
+        });
 
         // Create new alias from scope page
         await boundaryCli.authenticateBoundary(
@@ -228,9 +228,19 @@ test.describe('Aliases', () => {
           targetName,
         );
 
+        await page
+          .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+          .click();
+        await page.getByRole('link', { name: 'Back to Global' }).click();
+        await page.getByRole('link', { name: 'Aliases' }).click();
+        await expect(
+          page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText('Aliases'),
+        ).toBeVisible();
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
+        await aliasesPage.createAliasForTarget(alias, targetId);
         await page.getByRole('link', { name: 'Orgs', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
         await page.getByRole('link', { name: orgName }).click();

@@ -54,7 +54,20 @@
                   >
                     {{feature}}
                   </dd.Checkbox>
+
                 {{/each}}
+                <dd.Separator />
+                <dd.Title @text={{t 'actions.manage-db'}} />
+                <dd.Interactive
+                  @icon='save'
+                  @isLoading={{(is-loading)}}
+                  {{on 'click' this.downloadDatabase}}
+                >
+                  {{t 'actions.download-db'}}
+                </dd.Interactive>
+                <dd.Interactive @icon='trash' {{on 'click' this.clearDatabase}}>
+                  {{t 'actions.clear-db'}}
+                </dd.Interactive>
               </Hds::Dropdown>
             {{/if}}
 
@@ -124,12 +137,12 @@
     {{#each this.flashMessages.queue as |flash|}}
       <div class='ember-notify-show ember-notify'>
         <Hds::Toast
-          @color={{map-type-to-color flash.notificationType}}
+          @color={{flash.color}}
           @onDismiss={{fn flash.dismiss flash}}
           data-test-toast-notification
           as |T|
         >
-          <T.Title>{{t (concat 'states.' flash.notificationType)}}</T.Title>
+          <T.Title>{{flash.title}}</T.Title>
           <T.Description>{{flash.message}}</T.Description>
         </Hds::Toast>
       </div>

@@ -300,14 +300,10 @@
   .hds-copy-snippet {
     width: auto;
   }
+}
 
-  .copy-address {
-    max-width: 70%;
-  }
-
-  .copy-ssh-command {
-    max-width: 90%;
-  }
+.proxy-url-container.rdp-target {
+  margin-top: 1rem;
 }
 
 // Credentials Panel

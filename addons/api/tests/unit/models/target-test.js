@@ -6,7 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 
 module('Unit | Model | target', function (hooks) {
   setupTest(hooks);
@@ -386,6 +390,7 @@ module('Unit | Model | target', function (hooks) {
     });
     assert.true(modelSSH.isSSH);
     assert.false(modelSSH.isTCP);
+    assert.false(modelSSH.isRDP);
   });
 
   test('it has isTCP property and returns the expected values', function (assert) {
@@ -395,5 +400,16 @@ module('Unit | Model | target', function (hooks) {
     });
     assert.true(modelTCP.isTCP);
     assert.false(modelTCP.isSSH);
+    assert.false(modelTCP.isRDP);
+  });
+
+  test('it has isRDP property and returns the expected values', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const modelRDP = store.createRecord('target', {
+      type: TYPE_TARGET_RDP,
+    });
+    assert.true(modelRDP.isRDP);
+    assert.false(modelRDP.isSSH);
+    assert.false(modelRDP.isTCP);
   });
 });

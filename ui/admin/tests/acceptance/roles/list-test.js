@@ -15,7 +15,7 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 import * as selectors from './selectors';
@@ -26,7 +26,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
@@ -241,14 +241,6 @@ module('Acceptance | roles | list', function (hooks) {
         },
         expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
         column: 1,
-      },
-      'on grants applied': {
-        attribute: {
-          key: 'grant_scope_ids',
-          values: [[GRANT_SCOPE_THIS], [GRANT_SCOPE_THIS], [], [], []],
-        },
-        expectedAscendingSort: ['No', 'No', 'No', 'Yes', 'Yes'],
-        column: 2,
       },
       'on id': {
         attribute: {
