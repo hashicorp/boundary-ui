@@ -15,7 +15,7 @@ jobs:
       ENOS_VAR_e2e_debug_no_run: true
       SETUP_CLI: true
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
 
@@ -47,7 +47,7 @@ jobs:
           unzip /tmp/vault.zip -d /usr/local/bin
 
       - name: Checkout boundary-enterprise
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: hashicorp/boundary-enterprise
           #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
