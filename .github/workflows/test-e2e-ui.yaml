@@ -1,6 +1,9 @@
 name: Test E2E UI
 
-on: [workflow_dispatch]
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   test:
