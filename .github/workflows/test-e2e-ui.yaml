@@ -85,6 +85,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          ./support/src/boundary-enterprise make install
           pnpm install --frozen-lockfile
           cd e2e-tests
           pnpm playwright install --with-deps
