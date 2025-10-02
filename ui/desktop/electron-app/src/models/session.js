@@ -17,6 +17,7 @@ class Session {
   #process;
   #targetId;
   #proxyDetails;
+  #sessionMaxSeconds;
 
   /**
    * Initialize a session to a controller address
@@ -25,12 +26,14 @@ class Session {
    * @param {string} targetId
    * @param {string} token
    * @param {string} hostId
+   * @param {number} sessionMaxSeconds
    */
-  constructor(addr, targetId, token, hostId) {
+  constructor(addr, targetId, token, hostId, sessionMaxSeconds) {
     this.#addr = addr;
     this.#targetId = targetId;
     this.#token = token;
     this.#hostId = hostId;
+    this.#sessionMaxSeconds = sessionMaxSeconds;
   }
 
   /**
@@ -49,21 +52,47 @@ class Session {
   }
 
   /**
+   * Generate cli command for session.
+   * @returns {string[]}
+   */
+  get connectCommand() {
+    const sanitized = {
+      target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
+      addr: sanitizer.urlValidate(this.#addr),
+    };
+
+    const command = [
+      'connect',
+      `-target-id=${sanitized.target_id}`,
+      `-token=env://BOUNDARY_TOKEN`,
+      `-addr=${sanitized.addr}`,
+      '-format=json',
+    ];
+
+    if (this.#hostId) {
+      sanitized.host_id = sanitizer.base62EscapeAndValidate(this.#hostId);
+      command.push(`-host-id=${sanitized.host_id}`);
+    }
+    return command;
+  }
+
+  /**
    * Using cli, initialize a session to a target.
    * Tracks local proxy details if successful.
    */
   start() {
-    const command = this.cliCommand();
     const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-    return spawnAsyncJSONPromise(command, sanitizedToken).then(
-      (spawnedSession) => {
-        this.#process = spawnedSession.childProcess;
-        this.#proxyDetails = spawnedSession.response;
-        this.#process = spawnedSession.childProcess;
-        this.#id = this.#proxyDetails.session_id;
-        return this.#proxyDetails;
-      },
-    );
+    return spawnAsyncJSONPromise(
+      this.connectCommand,
+      sanitizedToken,
+      this.#sessionMaxSeconds,
+    ).then((spawnedSession) => {
+      this.#process = spawnedSession.childProcess;
+      this.#proxyDetails = spawnedSession.response;
+      this.#process = spawnedSession.childProcess;
+      this.#id = this.#proxyDetails.session_id;
+      return this.#proxyDetails;
+    });
   }
 
   /**
@@ -95,31 +124,6 @@ class Session {
         resolve();
       }
     });
-  }
-
-  /**
-   * Generate cli command for session.
-   * @returns {[]}
-   */
-  cliCommand() {
-    const sanitized = {
-      target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
-      addr: sanitizer.urlValidate(this.#addr),
-    };
-
-    const command = [
-      'connect',
-      `-target-id=${sanitized.target_id}`,
-      `-token=env://BOUNDARY_TOKEN`,
-      `-addr=${sanitized.addr}`,
-      '-format=json',
-    ];
-
-    if (this.#hostId) {
-      sanitized.host_id = sanitizer.base62EscapeAndValidate(this.#hostId);
-      command.push(`-host-id=${sanitized.host_id}`);
-    }
-    return command;
   }
 }
 
