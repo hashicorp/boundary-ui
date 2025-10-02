@@ -1,7 +1,6 @@
 name: Test E2E UI
 
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
 
 jobs:
   test:
