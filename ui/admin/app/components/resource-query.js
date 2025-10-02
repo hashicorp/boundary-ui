@@ -108,7 +108,7 @@ export default class ResourceQueryComponent extends Component {
     const resourceAttributeFrame = new Frame('Resource Attribute', {
       async select() {},
       async load(context) {
-        const { attr, model } = context;
+        // const { attr, model } = context;
         return [new Option('Copy Value', {})];
       },
     });
@@ -159,8 +159,6 @@ export default class ResourceQueryComponent extends Component {
       async select(option, context) {
         const { model } = context;
         if (option.name === 'Resource Attributes') {
-          console.log('Resource Attributes!');
-          console.log('context???', model);
           resourceAttributesFrame.context.model = model;
           resourceAttributesFrame.load();
           self.frames.push(resourceAttributesFrame);
@@ -241,12 +239,16 @@ export default class ResourceQueryComponent extends Component {
 
       if (e.code === 'ArrowUp') {
         this.highlightedIndex--;
-        this.currentFrame.selectedOptionIndex = Math.max(0, this.currentFrame.selectedOptionIndex - 1);
+        const newIndex = Math.max(0, this.currentFrame.selectedOptionIndex - 1);
+        this.selectIndex(newIndex);
+        return false;
       }
 
       if (e.code === 'ArrowDown') {
         this.highlightedIndex++;
-        this.currentFrame.selectedOptionIndex = Math.min(this.currentFrame.options.length - 1, this.currentFrame.selectedOptionIndex + 1);
+        const newIndex = Math.min(this.currentFrame.options.length - 1, this.currentFrame.selectedOptionIndex + 1);
+        this.selectIndex(newIndex);
+        return false;
       }
 
       if (e.code === 'Enter') {
@@ -277,6 +279,17 @@ export default class ResourceQueryComponent extends Component {
   }
 
   @action
+  selectIndex(index) {
+    this.currentFrame.selectedOptionIndex = index;
+  }
+
+  @action
+  clickOption(index) {
+    this.selectIndex(index);
+    this.currentFrame.select();
+  }
+
+  @action
   async onInput(e) {
     const input = e.target.value;
     this.currentFrame.searchText = input;
@@ -290,12 +303,13 @@ export default class ResourceQueryComponent extends Component {
     const resourceValue = resource.expression.value;
 
     const remaining = results.filter((r) => r !== resource);
-    let search;
+    let search = "";
     const filters = {};
 
     for (const result of remaining) {
+      console.log({ result });
       if (result.field.type === 'ImplicitField') {
-        search = !search ? result.expression.value : search;
+        search = search += result.expression.value;
         continue;
       }
 
@@ -303,7 +317,37 @@ export default class ResourceQueryComponent extends Component {
         result.expression.value &&
         result.expression.type === 'LiteralExpression'
       ) {
-        filters[result.field.name] = [{ equals: result.expression.value }];
+        if (result.operator.type === 'ComparisonOperator') {
+          filters[result.field.name] ??= [];
+
+          switch(result.operator.operator) {
+            case ":": {
+              filters[result.field.name].push({ equals: result.expression.value });
+              break;
+            }
+
+            case ":>": {
+              filters[result.field.name].push({ gt: result.expression.value });
+              break;
+            }
+
+            case ":>=": {
+              filters[result.field.name].push({ gte: result.expression.value });
+              break;
+            }
+
+            case ":<": {
+              filters[result.field.name].push({ lt: result.expression.value });
+              break;
+            }
+
+            case ":<=": {
+              filters[result.field.name].push({ lte: result.expression.value });
+              break;
+            }
+          }
+        }
+        continue;
       }
 
       if (result.expression.type === 'EmptyExpression') {

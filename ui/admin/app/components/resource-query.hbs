@@ -26,6 +26,7 @@
                 (eq i this.currentFrame.selectedOptionIndex)
                 "highlighted-index"
               }}'
+            {{on 'click' (fn this.clickOption i)}}
           >
             {{option.name}}
           </li>
