@@ -47,10 +47,42 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Fetch Secrets
+        id: secrets
+        uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b  # TSCCR: could not find tsccr entry for hashicorp/vault-action
+        with:
+          url: ${{ vars.CI_VAULT_URL }}
+          method: ${{ vars.CI_VAULT_METHOD }}
+          path: ${{ vars.CI_VAULT_PATH }}
+          jwtGithubAudience: ${{ vars.CI_VAULT_AUD }}
+          secrets: |
+            kv/data/github/${{ github.repository }} AWS_ACCESS_KEY_ID_CI;
+            kv/data/github/${{ github.repository }} AWS_ROLE_ARN_CI;
+            kv/data/github/${{ github.repository }} AWS_SECRET_ACCESS_KEY_CI;
+            kv/data/github/${{ github.repository }} BOUNDARY_LICENSE;
+            kv/data/github/${{ github.repository }} VAULT_LICENSE;
+            kv/data/github/${{ github.repository }} ENOS_GPG_PASSPHRASE;
+            kv/data/github/${{ github.repository }} ENOS_GPG_PRIVATE_KEY;
+            kv/data/github/${{ github.repository }} ENOS_GPG_UID;
+
       - name: Install Vault CLI
         run: |
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
           unzip /tmp/vault.zip -d /usr/local/bin
+
+      - name: Import GPG key for Boundary pass keystore
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # v6.3.0
+        with:
+          gpg_private_key: ${{ steps.secrets.outputs.ENOS_GPG_PRIVATE_KEY }}
+          passphrase: ${{ steps.secrets.outputs.ENOS_GPG_PASSPHRASE }}
+
+      - name: Trust the pass keystore GPG key
+        id: trust_gpg
+        run: |
+          gpg -a --encrypt -r ${{ steps.secrets.outputs.ENOS_GPG_UID }} --trust-model always
+          echo "trusted-key ${{ steps.secrets.outputs.ENOS_GPG_UID }}" >> ~/.gnupg/gpg.conf
+          cat ~/.gnupg/gpg.conf
 
       - name: Checkout boundary-enterprise
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
