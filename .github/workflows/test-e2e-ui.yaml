@@ -33,6 +33,12 @@ jobs:
             pnpm-lock.yaml
             ui/desktop/electron-app/pnpm-lock.yaml
 
+      - name: Set up boundary
+        uses: hashicorp/setup-boundary@main
+        id: setup
+        with:
+          version: "latest"
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
 
@@ -85,7 +91,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sh -c ./support/src/boundary-enterprise/scripts/build.sh
           pnpm install --frozen-lockfile
           cd e2e-tests
           pnpm playwright install --with-deps
