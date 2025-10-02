@@ -1,0 +1,104 @@
+name: Test E2E UI
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run UI E2E Tests
+    runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
+    env:
+      ENOS_VAR_boundary_edition: "ent"
+      ENOS_VAR_e2e_debug_no_run: true
+      SETUP_CLI: true
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
+        with:
+          run_install: false
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            ui/desktop/electron-app/pnpm-lock.yaml
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+
+      - name: Set up Enos
+        uses: hashicorp/action-setup-enos@b9fa53484a1e8fdcc7b02a118bcf01d65b9414c9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout boundary-enterprise
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          repository: hashicorp/boundary-enterprise
+          #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
+          path: support/src/boundary-enterprise
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+
+      - name: GH fix for localhost resolution
+        run: |
+          cat /etc/hosts && echo "-----------"
+          sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
+          cat /etc/hosts
+          ssh -V
+
+          echo "127.0.0.1 localhost boundary" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
+
+      # TODO: Build image ourselves in case we don't want to use latest?
+      - name: Get Boundary docker image
+        run: |
+          docker pull hashicorp/boundary-enterprise:latest
+          docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
+
+      - name: Set up test infra
+        id: infra
+        run: |
+          ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
+          mkdir -p ./enos/terraform-plugin-cache
+          export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
+          export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
+          export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
+          export ENOS_VAR_boundary_docker_image_name=hashicorp/boundary-enterprise:latest && \
+          export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
+          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          cd e2e-tests
+          pnpm playwright install --with-deps
+
+      - name: Run Tests
+        run: |
+          source <(bash ./support/src/boundary-enterprise/enos/scripts/test_e2e_env.sh)
+          cd e2e-tests
+          pnpm run admin:ent:docker
+
+            - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report
+          path: e2e-tests/playwright-report
+
+      - name: Clean up test infra
+        if: ${{ always() }}
+        run: |
+          export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
+          export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
+          enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
