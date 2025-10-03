@@ -40,9 +40,10 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   cancel(host) {
     const { isNew } = host;
     host.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
       );
+    }
   }
 }

@@ -33,16 +33,18 @@ export default class TargetSerializer extends ApplicationSerializer {
     const injectedApplicationCredentialSourceIDs =
       snapshot?.adapterOptions?.injectedApplicationCredentialSourceIDs;
 
-    if (brokeredCredentialSourceIDs)
+    if (brokeredCredentialSourceIDs) {
       serialized = this.serializeWithBrokeredCredentialSources(
         snapshot,
         brokeredCredentialSourceIDs,
       );
-    if (injectedApplicationCredentialSourceIDs)
+    }
+    if (injectedApplicationCredentialSourceIDs) {
       serialized = this.serializeWithInjectedApplicationCredentialSources(
         snapshot,
         injectedApplicationCredentialSourceIDs,
       );
+    }
 
     if (isNew && serialized?.with_aliases) {
       // API expects scope id along with every alias value
