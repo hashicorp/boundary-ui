@@ -127,7 +127,7 @@ jobs:
       - name: Install dependencies
         run: |
           sh -c ./support/src/boundary-enterprise/scripts/build.sh
-          export PATH=$PATH:./support/src/boundary-enterprise/bin
+          mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
           pnpm install --frozen-lockfile
           cd e2e-tests
           pnpm playwright install --with-deps
