@@ -74,6 +74,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(credentialLibrary) {
+    // Filter out empty critical_options before saving (only check key)
+    if (credentialLibrary.critical_options) {
+      credentialLibrary.critical_options =
+        credentialLibrary.critical_options.filter(
+          (item) => item.key != null && item.key.trim() !== '',
+        );
+    }
     await credentialLibrary.save();
     if (this.can.can('read model', credentialLibrary)) {
       await this.router.transitionTo(

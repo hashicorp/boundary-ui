@@ -355,10 +355,10 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await fillIn(selectors.FIELD_KEY_ID, selectors.FIELD_KEY_ID_VALUE);
     await fillIn(selectors.FIELD_CRIT_OPTS_KEY, 'co_key');
     await fillIn(selectors.FIELD_CRIT_OPTS_VALUE, 'co_value');
-    await click(selectors.FIELD_CRIT_OPTS_BTN);
     await fillIn(selectors.FIELD_EXT_KEY, 'ext_key');
     await fillIn(selectors.FIELD_EXT_VALUE, 'ext_value');
     await click(selectors.FIELD_EXT_BTN);
+
     await click(commonSelectors.SAVE_BTN);
 
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({

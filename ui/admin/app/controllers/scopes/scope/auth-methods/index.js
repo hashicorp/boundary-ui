@@ -147,6 +147,12 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(authMethod) {
+    // Filter out empty account claim maps before saving (only check key)
+    if (authMethod.account_claim_maps) {
+      authMethod.account_claim_maps = authMethod.account_claim_maps.filter(
+        (item) => item.key != null && item.key.trim() !== '',
+      );
+    }
     await authMethod.save();
     if (this.can.can('read model', authMethod)) {
       await this.router.transitionTo(
@@ -308,6 +314,10 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
       authMethod.account_claim_maps = structuredClone(
         authMethod.account_claim_maps,
       );
+      // Ensure at least one empty row exists for editing
+      if (authMethod.account_claim_maps.length === 0) {
+        authMethod.account_claim_maps = [{ key: '', value: '' }];
+      }
     }
     if (authMethod.certificates) {
       authMethod.certificates = structuredClone(authMethod.certificates);
