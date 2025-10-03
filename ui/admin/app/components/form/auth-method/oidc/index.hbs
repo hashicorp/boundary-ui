@@ -247,45 +247,22 @@
   </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='account_claim_maps'
+    @data={{@model.account_claim_maps}}
+    @onChange={{this.updateAccountClaimMaps}}
+    @legend={{t 'form.account_claim_maps.label'}}
+    @helperText={{t 'form.account_claim_maps.help'}}
+    @errors={{@model.errors.account_claim_maps}}
     @disabled={{form.disabled}}
-  >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'form.account_claim_maps.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'form.account_claim_maps.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.account_claim_maps}}
-        <F.Error as |E|>
-          {{#each @model.errors.account_claim_maps as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </:fieldset>
-    <:field as |F|>
-      <F.KeyValue
-        @name='account_claim_maps'
-        @options={{@model.account_claim_maps}}
-        @model={{@model}}
-        @keyLabel={{t 'form.from_claim.label'}}
-        @valueLabel={{t 'form.to_claim.label'}}
-        @width='100%'
-      >
-        <:key as |K|>
-          <K.text />
-        </:key>
-        <:value as |V|>
-          <V.select @selectOptions={{this.toClaims}} />
-        </:value>
-      </F.KeyValue>
-    </:field>
-  </Form::Field::ListWrapper>
+    @isOptional={{true}}
+    @keyFieldType='text'
+    @showValueField={{true}}
+    @valueFieldType='select'
+    @valueFieldOptions={{this.toClaims}}
+    @keyLabel={{t 'form.from_claim.label'}}
+    @valueLabel={{t 'form.to_claim.label'}}
+  />
 
   {{! Certificates }}
   <Form::Field::ListWrapper
