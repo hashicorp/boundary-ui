@@ -10,6 +10,13 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormAuthMethodOidcComponent extends Component {
   // =attributes
+
+  /**
+   * Default empty row for account claim maps
+   * Kept as a field to avoid creating a new object on every re-render
+   */
+  defaultAccountClaimMaps = [{ key: '', value: '' }];
+
   /**
    * @type {object}
    */
@@ -39,6 +46,14 @@ export default class FormAuthMethodOidcComponent extends Component {
   @tracked skipPromptsList = this.isToggleChecked();
 
   /**
+   * Returns account_claims data, defaulting to an empty row if not present
+   */
+  get accountClaimMapsData() {
+    const data = this.args.model.account_claim_maps;
+    return data ?? this.defaultAccountClaimMaps;
+  }
+
+  /**
    * @returns {string}
    */
   parsePromptsArray() {
@@ -53,6 +68,40 @@ export default class FormAuthMethodOidcComponent extends Component {
   }
 
   //actions
+
+  /**
+   * Adds a new empty row to account claim maps
+   */
+  @action
+  addAccountClaimMap() {
+    this.args.model.account_claim_maps = [
+      ...this.accountClaimMapsData,
+      { key: '', value: '' },
+    ];
+  }
+
+  /**
+   * Removes a row from account claim maps
+   * @param {Object} rowData - The row to remove
+   */
+  @action
+  removeAccountClaimMap(rowData) {
+    let newData = this.accountClaimMapsData.filter((item) => item !== rowData);
+    // Ensure at least one empty row remains in the UI
+    if (newData.length === 0) {
+      newData = [{ key: '', value: '' }];
+    }
+    this.args.model.account_claim_maps = newData;
+  }
+
+  /**
+   * Updates the account claim maps in the model
+   */
+  @action
+  updateAccountClaimMap(rowData, property, value) {
+    rowData[property] = value;
+    this.args.model.account_claim_maps = [...this.accountClaimMapsData];
+  }
 
   /**
    * @param {string} value
