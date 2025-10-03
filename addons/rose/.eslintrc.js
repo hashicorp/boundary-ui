@@ -26,6 +26,7 @@ module.exports = {
     browser: true,
   },
   rules: {
+    curly: ['error', 'multi-line', 'consistent'],
     'ember/no-jquery': 'error',
     'ember/no-new-mixins': 0,
     'ember/no-get': 'off',
