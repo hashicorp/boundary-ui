@@ -163,8 +163,16 @@ export default class SessionModel extends GeneratedSessionModel {
   /**
    * @type {boolean}
    */
+  get isExpired() {
+    const now = new Date();
+    return this.expiration_time <= now;
+  }
+
+  /**
+   * @type {boolean}
+   */
   get isAvailable() {
-    return this.isActive || this.isPending;
+    return (this.isActive || this.isPending) && !this.isExpired;
   }
 
   /**

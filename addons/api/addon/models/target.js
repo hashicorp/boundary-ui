@@ -135,9 +135,7 @@ export default class TargetModel extends GeneratedTargetModel {
    * @type {boolean}
    */
   get isActive() {
-    const pendingOrActiveSessions = this.sessions.filter(
-      (s) => s.isActive || s.isPending,
-    );
+    const pendingOrActiveSessions = this.sessions.filter((s) => s.isAvailable);
     return Boolean(pendingOrActiveSessions.length);
   }
 

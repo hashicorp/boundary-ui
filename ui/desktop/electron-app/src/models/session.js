@@ -47,8 +47,16 @@ class Session {
   /**
    * @return {boolean}
    */
+  get isExpired() {
+    const now = new Date();
+    return this.#proxyDetails.expiration <= now;
+  }
+
+  /**
+   * @return {boolean}
+   */
   get isRunning() {
-    return this.#process && !this.#process.killed;
+    return this.#process && !this.#process.killed && !this.isExpired;
   }
 
   /**
