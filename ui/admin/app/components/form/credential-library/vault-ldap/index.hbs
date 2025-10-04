@@ -96,25 +96,6 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <InfoField
-    @value={{t
-      (concat 'resources.credential-library.titles.' @model.credential_type)
-    }}
-    as |F|
-  >
-    <F.Label>{{t
-        'resources.credential-library.form.credential_type.label'
-      }}</F.Label>
-    <F.HelperText>
-      {{t 'resources.credential-library.form.credential_type.description'}}
-    </F.HelperText>
-  </InfoField>
-
-  <Form::CredentialLibrary::MappingOverrides
-    @model={{@model}}
-    @disabled={{form.disabled}}
-  />
-
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

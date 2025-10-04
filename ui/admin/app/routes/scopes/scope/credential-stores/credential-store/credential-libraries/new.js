@@ -7,10 +7,8 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
 } from 'api/models/credential-library';
-import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesNewRoute extends Route {
   // =services
@@ -57,7 +55,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       'scopes.scope.credential-stores.credential-store',
     );
 
-    let name, description, credential_type;
+    let name, description;
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
@@ -73,18 +71,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       resolvedType = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
     }
 
-    // Set the credential type to username_password_domain if the type is vault ldap
-    if (resolvedType === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP) {
-      credential_type = TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN;
-    }
-
     return this.store.createRecord('credential-library', {
       type: resolvedType,
       credential_store_id,
       name,
       description,
-      // credential_type is only set for vault ldap type
-      credential_type,
     });
   }
 }
