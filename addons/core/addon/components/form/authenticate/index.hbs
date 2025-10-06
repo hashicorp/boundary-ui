@@ -4,9 +4,8 @@
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/authenticate/' @model.type)
-    onSubmit=@submit
-    disabled=@disabled
-  }}
+  <this.authenticateFormComponent
+    @onSubmit={{@submit}}
+    @disabled={{@disabled}}
+  />
 {{/if}}
