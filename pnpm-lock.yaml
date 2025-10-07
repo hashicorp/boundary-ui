@@ -8747,8 +8747,8 @@ packages:
     resolution: {integrity: sha512-J7Z2K08jbGcdA1kkQpJSqLF6T0tdQqpR2pnSUXsIchbPdTI9v3e85cLW0d6WDhwuAleOV71j2xWs8qMPfK7nKw==}
     engines: {node: '>=6'}
 
-  tmp@0.2.3:
-    resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
+  tmp@0.2.5:
+    resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
     engines: {node: '>=14.14'}
 
   tmpl@1.0.5:
@@ -14879,7 +14879,7 @@ snapshots:
       globby: 11.1.0
       ora: 5.4.1
       slash: 3.0.0
-      tmp: 0.2.3
+      tmp: 0.2.5
       workerpool: 6.5.1
     transitivePeerDependencies:
       - supports-color
@@ -19289,7 +19289,7 @@ snapshots:
     dependencies:
       rimraf: 2.7.1
 
-  tmp@0.2.3: {}
+  tmp@0.2.5: {}
 
   tmpl@1.0.5: {}
 
