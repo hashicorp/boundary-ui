@@ -77,22 +77,7 @@ export default class ApplicationRoute extends Route {
         await this.sqlite.setup(formatDbName(userId, hostUrl));
       }
 
-      if (this.session.data?.authenticated?.account_id) {
-        try {
-          const account = await this.store.findRecord(
-            'account',
-            this.session.data.authenticated.account_id,
-          );
-          const username =
-            account.login_name ||
-            account.subject ||
-            account.email ||
-            account.full_name;
-          this.session.set('data.authenticated.username', username);
-        } catch (e) {
-          // no op
-        }
-      }
+      await this.session.loadAuthenticatedAccount();
     }
   }
 

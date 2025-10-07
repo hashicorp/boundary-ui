@@ -100,13 +100,25 @@ module('Acceptance | authentication', function (hooks) {
       scope: globalScope,
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
+    this.server.create('account', {
+      scope: globalScope,
+      authMethod: globalAuthMethod,
+    });
     authMethod = this.server.create('auth-method', {
       scope: orgScope1,
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
+    this.server.create('account', {
+      scope: orgScope1,
+      authMethod,
+    });
     authMethodOIDC = this.server.create('auth-method', {
       scope: orgScope2,
       type: TYPE_AUTH_METHOD_OIDC,
+    });
+    this.server.create('account', {
+      scope: orgScope2,
+      authMethod: authMethodOIDC,
     });
     orgScopeID = orgScope1.id;
     globalAuthMethodID = globalAuthMethod.id;

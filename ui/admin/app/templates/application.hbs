@@ -70,7 +70,7 @@
                 </dd.Interactive>
               </Hds::Dropdown>
             {{/if}}
-            {{#if this.session.data.authenticated.username}}
+            {{#if this.session.username}}
               <Hds::Dropdown
                 @enableCollisionDetection={{true}}
                 class='user-menu-dropdown'
@@ -79,14 +79,12 @@
               >
                 <dd.ToggleButton
                   @icon='user'
-                  @text={{this.session.data.authenticated.username}}
-                  {{hds-tooltip this.session.data.authenticated.username}}
+                  @text={{this.session.username}}
+                  {{hds-tooltip this.session.username}}
                   class='user-menu-dropdown__toggle-button'
                 />
                 <dd.Title @text={{t 'titles.authenticated'}} />
-                <dd.Description
-                  @text={{this.session.data.authenticated.username}}
-                />
+                <dd.Description @text={{this.session.username}} />
                 <dd.Separator />
 
                 <dd.Interactive @route='account.change-password'>{{t

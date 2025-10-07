@@ -81,14 +81,11 @@ module(
       });
       await settled();
 
-      const { authenticator: authAfter, username: usernameAfter } =
-        session.data.authenticated;
-
       assert.strictEqual(
-        authAfter,
+        session.data.authenticated.authenticator,
         `authenticator:${instances.authMethod.type}`,
       );
-      assert.strictEqual(usernameAfter, identification);
+      assert.strictEqual(session.username, identification);
       assert.strictEqual(currentURL(), urls.globalScope);
     });
   },

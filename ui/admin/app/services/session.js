@@ -24,25 +24,20 @@ export default class SessionService extends BaseSessionService {
       await this.sqlite.setup(formatDbName(userId, hostUrl));
     }
 
-    if (this.data?.authenticated?.account_id) {
-      try {
-        const account = await this.store.findRecord(
-          'account',
-          this.data.authenticated.account_id,
-        );
-        const username =
-          account.login_name ||
-          account.subject ||
-          account.email ||
-          account.full_name;
-        set(this, 'data.authenticated.username', username);
-      } catch (e) {
-        // no op
-      }
-    }
+    await this.loadAuthenticatedAccount();
 
     // We let ember-simple-auth handle transitioning back to the index after authentication.
     // This route can be configured in our environment config.
     super.handleAuthentication(...arguments);
+  }
+
+  async loadAuthenticatedAccount() {
+    if (this.data?.authenticated?.account_id) {
+      const account = await this.store.findRecord(
+        'account',
+        this.data.authenticated.account_id,
+      );
+      set(this, 'username', account.accountName);
+    }
   }
 }

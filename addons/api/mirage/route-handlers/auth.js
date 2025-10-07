@@ -61,7 +61,7 @@ const commandHandlers = {
           },
         },
       ),
-    token: (_, scopeAttrs) => {
+    token: (_, auth_method_id, account_id, scopeAttrs) => {
       oidcAttemptCounter++;
       if (oidcAttemptCounter < oidcRequiredAttempts) {
         return new Response(202);
@@ -74,9 +74,9 @@ const commandHandlers = {
               scope: scopeAttrs,
               id: 'token123',
               token: 'thetokenstring',
-              account_id: '1',
+              account_id: account_id || '1',
               user_id: 'authenticateduser',
-              auth_method_id: 'authmethod123',
+              auth_method_id: auth_method_id || 'authmethod123',
               created_time: '',
               updated_time: '',
               last_used_time: '',
