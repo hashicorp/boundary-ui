@@ -1,4 +1,4 @@
-name: Test E2E UI
+name: Test E2E Admin UI
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ on:
         type: string
 jobs:
   test:
-    name: Run UI E2E Tests
+    name: Run E2E Admin UI Tests
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
       matrix:
@@ -144,11 +144,14 @@ jobs:
         run: |
           git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
-      - name: Install dependencies
+      - name: Build Boundary
         run: |
           echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
           ( cd ./support/src/${{matrix.folder_name}}; make build )
           mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+
+      - name: Install node dependencies
+        run: |
           pnpm install --frozen-lockfile
           cd e2e-tests
           pnpm playwright install --with-deps
@@ -162,8 +165,6 @@ jobs:
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
-          export ENOS_VAR_boundary_docker_image_name=hashicorp/${{matrix.folder_name}}:latest && \
-          export ENOS_VAR_boundary_docker_image_file=/tmp/${{matrix.folder_name}}.zip && \
           enos scenario launch --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
 
       - name: Run Tests
@@ -177,11 +178,11 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: playwright-report
-          path: e2e-tests/playwright-report/index.html
+          path: /home/runner/work/boundary-ui/boundary-ui/e2e-tests/playwright-report/index.html
 
       - name: Clean up test infra
         if: ${{ always() }}
         run: |
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
-          enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:crt
+          enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
