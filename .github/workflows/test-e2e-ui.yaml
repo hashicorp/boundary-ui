@@ -17,7 +17,7 @@ on:
         type: string
 jobs:
   test:
-    name: Run E2E Admin UI Tests
+    name: Test
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
       matrix:
@@ -178,11 +178,12 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: playwright-report
-          path: /home/runner/work/boundary-ui/boundary-ui/e2e-tests/playwright-report/index.html
+          path: /home/runner/work/boundary-ui/boundary-ui/e2e-tests/playwright-report
 
       - name: Clean up test infra
         if: ${{ always() }}
         run: |
+          export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
