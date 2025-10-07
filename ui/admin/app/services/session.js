@@ -5,7 +5,6 @@
 
 import BaseSessionService from 'ember-simple-auth/services/session';
 import { service } from '@ember/service';
-import { set } from '@ember/object';
 import { formatDbName } from 'api/services/sqlite';
 
 export default class SessionService extends BaseSessionService {
@@ -31,13 +30,16 @@ export default class SessionService extends BaseSessionService {
     super.handleAuthentication(...arguments);
   }
 
+  /**
+   * Loads account used to authenticate so that it can be used to display
+   * the authenticated username.
+   */
   async loadAuthenticatedAccount() {
     if (this.data?.authenticated?.account_id) {
-      const account = await this.store.findRecord(
+      await this.store.findRecord(
         'account',
         this.data.authenticated.account_id,
       );
-      set(this, 'username', account.accountName);
     }
   }
 }

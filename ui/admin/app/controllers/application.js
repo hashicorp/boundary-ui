@@ -35,6 +35,7 @@ export default class ApplicationController extends Controller {
   @service flashMessages;
   @service router;
   @service sqlite;
+  @service store;
 
   /**
    * Returns available themes.
@@ -45,15 +46,28 @@ export default class ApplicationController extends Controller {
   }
 
   /**
+   * Returns authenticated username.
+   * @type {string}
+   */
+  get username() {
+    const account = this.store.peekRecord(
+      'account',
+      this.session.data.authenticated.account_id,
+    );
+    return account?.accountName;
+  }
+
+  /**
    * Shows side navigation only for routes nested under a scope
    * and if user has been authenticated.
    * @type {boolean}
    */
   get showSideNav() {
-    return (
-      this.router.currentRouteName.startsWith('scopes.scope') &&
-      this.session.isAuthenticated
-    );
+    return this.router.currentRouteName.startsWith('scopes.scope') &&
+      this.session.isAuthenticated &&
+      this.username
+      ? true
+      : false;
   }
 
   // =actions
