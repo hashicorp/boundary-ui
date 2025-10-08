@@ -171,14 +171,14 @@ jobs:
         run: |
           source <(bash ./support/src/${{matrix.folder_name}}/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
-          pnpm run ${{ matrix.test_command }}
+          pnpm run ${{ matrix.test_command }} --reporter=html
 
       - name: Upload Playwright report
-        if: ${{ always() }}
+        if: ${{ failure() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: playwright-report
-          path: /home/runner/work/boundary-ui/boundary-ui/e2e-tests/playwright-report
+          path: e2e-tests/playwright-report
 
       - name: Clean up test infra
         if: ${{ always() }}
