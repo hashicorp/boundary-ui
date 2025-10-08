@@ -50,6 +50,7 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
+  rdp-windows-notice: 'Note: The Windows Remote Desktop Connection client requires a connection limit of 2 or higher'
 session_id:
   label: Session ID
 worker_release_version:
