@@ -108,4 +108,21 @@ export default factory.extend({
       }
     },
   }),
+
+  withGlobalAuth: trait({
+    afterCreate(record, server) {
+      if (record.type === 'global') {
+        const authMethod = server.create('auth-method', {
+          type: 'password',
+          scope: record,
+        });
+        server.create('account', {
+          type: 'password',
+          full_name: 'admin',
+          scope: record,
+          authMethod,
+        });
+      }
+    },
+  }),
 });
