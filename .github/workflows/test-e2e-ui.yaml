@@ -37,9 +37,6 @@ jobs:
             test_command: admin:ent:docker
             boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
       fail-fast: false
-    env:
-      ENOS_VAR_e2e_debug_no_run: true
-      SETUP_CLI: true
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
