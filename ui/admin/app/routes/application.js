@@ -23,7 +23,6 @@ export default class ApplicationRoute extends Route {
   @service featureEdition;
   @service sqlite;
   @service('browser/window') window;
-  @service store;
 
   // =attributes
 
