@@ -25,7 +25,7 @@ jobs:
           run_install: false
 
       - name: Set up Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 20
           cache: "pnpm"
@@ -37,7 +37,7 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
 
       - name: Set up Enos
-        uses: hashicorp/action-setup-enos@b9fa53484a1e8fdcc7b02a118bcf01d65b9414c9
+        uses: hashicorp/action-setup-enos@39a8f388434bea5eeba6649b99aa9949a55a1150
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 

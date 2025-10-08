@@ -7,7 +7,6 @@ import ApplicationSerializer from './application';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
   options,
 } from '../models/credential-library';
 
@@ -30,8 +29,6 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         return this.serializeVaultGeneric(...arguments);
       case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
         return this.serializeVaultSshCertificate(...arguments);
-      case TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP:
-        return this.serializeVaultLdap(...arguments);
       default:
         return super.serialize(...arguments);
     }
@@ -60,15 +57,6 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         // If the key type is not RSA or ECDSA, set key_bits to null
         serialized.attributes.key_bits = null;
       }
-      return serialized;
-    }
-  }
-
-  serializeVaultLdap(snapshot) {
-    const { isNew } = snapshot;
-    const serialized = super.serialize(...arguments);
-    if (serialized.attributes) {
-      this.handleCredentialMappingOverrides(serialized, isNew);
       return serialized;
     }
   }
