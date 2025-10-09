@@ -28,8 +28,9 @@ export default class CredentialStoreSerializer extends ApplicationSerializer {
       if (
         !serialized.attributes?.client_certificate_key &&
         serialized.attributes?.client_certificate
-      )
+      ) {
         delete serialized.attributes.client_certificate_key;
+      }
     }
     return serialized;
   }

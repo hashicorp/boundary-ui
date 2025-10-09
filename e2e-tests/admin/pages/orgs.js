@@ -60,16 +60,15 @@ export class OrgsPage extends BaseResourcePage {
   async chooseScopeFromDropdown(fromScope, toScope) {
     await this.page
       .getByRole('button', { name: fromScope, exact: true })
-      .click()
-    await this.page
-      .getByRole('option', { name: toScope, exact: true })
-      .click()
+      .click();
+    await this.page.getByRole('option', { name: toScope, exact: true }).click();
     await expect(
-      this.page.getByRole('button', { name: toScope, exact: true })
-    ).toBeVisible()
-    if (toScope != 'Global')
+      this.page.getByRole('button', { name: toScope, exact: true }),
+    ).toBeVisible();
+    if (toScope !== 'Global') {
       await expect(
-        this.page.getByRole('link', { name: toScope, exact: true })
-      ).toBeVisible()
+        this.page.getByRole('link', { name: toScope, exact: true }),
+      ).toBeVisible();
+    }
   }
 }
