@@ -4,6 +4,7 @@
  */
 
 const Session = require('./session.js');
+const log = require('electron-log/main');
 
 class SessionManager {
   #sessions = [];
@@ -52,6 +53,8 @@ class SessionManager {
    * stopped before calling the next fn
    */
   stopAll() {
+    console.log('STOP ALL CALLED ------------------------------------');
+    log.info('Stop all sessions call.');
     return Promise.all(this.#sessions.map((session) => session.stop()));
   }
 }

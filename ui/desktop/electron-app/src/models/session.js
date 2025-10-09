@@ -8,6 +8,7 @@ const {
   spawnAsyncJSONPromise,
   spawnSync,
 } = require('../helpers/spawn-promise.js');
+const log = require('electron-log/main');
 
 class Session {
   #id;
@@ -89,8 +90,10 @@ class Session {
     ).then((spawnedSession) => {
       this.#process = spawnedSession.childProcess;
       this.#proxyDetails = spawnedSession.response;
-      this.#process = spawnedSession.childProcess;
+      this.#process = spawnedSession.childProcess; // this should get deleted lol
       this.#id = this.#proxyDetails.session_id;
+      // shouldn't we define the event listeners here & set this.#process to undefined
+      // in case that the process unexpectedly closes or exits or even on error?
       return this.#proxyDetails;
     });
   }
@@ -102,11 +105,25 @@ class Session {
     return new Promise((resolve, reject) => {
       if (this.isRunning) {
         this.#process.on('close', () => resolve());
-        this.#process.on('error', (e) => reject(e));
+        //this.#process.on('exit', () => resolve());
+        this.#process.on('error', (e) => {
+          if (e.code === 'ESRCH') {
+            console.log(
+              'Attempted to kill a non-existent process. It likely already terminated.',
+            );
+            log.info('Process error: attempted to kill non-existent process.');
+          } else {
+            console.log('PROCESS ERROR', e);
+            log.info('Process error: ', e);
+          }
+          return reject(e);
+        });
 
         // Cancel session before killing process
         const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
         const sanitizedAddr = sanitizer.urlValidate(this.#addr);
+        console.log('BEFORE CANCEL SESSION CMD ', this.#id);
+        log.info('Attempting to cancel session ', this.#id);
         const cancelSessionCommand = [
           'sessions',
           'cancel',
@@ -118,9 +135,18 @@ class Session {
           BOUNDARY_TOKEN: sanitizedToken,
         });
 
+        console.log('After CANCEL SESSION CMD (before kill)', this.#id);
+        log.info(
+          'Canceled session ',
+          this.#id,
+          ' successfully. Now initiating process kill.',
+        );
         this.#process.kill();
+        log.info('Process killed successfully. ', this.#id);
       } else {
         // Do nothing when process isn't running
+        console.log('SESSION IS NOT RUNNING ', this.#id);
+        log.info('Session is not running.', this.#id);
         resolve();
       }
     });

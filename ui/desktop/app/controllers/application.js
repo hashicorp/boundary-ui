@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+const { __electronLog } = globalThis;
 
 export default class ApplicationController extends Controller {
   // =services
@@ -60,8 +61,12 @@ export default class ApplicationController extends Controller {
   async showModalOrLogout() {
     const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
     if (hasRunningSessions) {
+      console.log('HAS RUNNING SESSIONS');
+      __electronLog?.info('Has running sessions so showing modal.');
       this.isLoggingOut = true;
     } else {
+      console.log('NO RUNNING SESSIONS');
+      __electronLog?.info('Has NO running sessions so NOT showing modal.');
       this.session.invalidate();
     }
   }
