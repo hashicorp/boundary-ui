@@ -111,10 +111,14 @@ class Session {
             console.log(
               'Attempted to kill a non-existent process. It likely already terminated.',
             );
-            log.info('Process error: attempted to kill non-existent process.');
+            log.info(
+              'Process error: attempted to kill non-existent process. ',
+              this.#process,
+            );
           } else {
             console.log('PROCESS ERROR', e);
             log.info('Process error: ', e);
+            log.info('Process info: ', this.#process);
           }
           return reject(e);
         });
@@ -139,7 +143,8 @@ class Session {
         log.info(
           'Canceled session ',
           this.#id,
-          ' successfully. Now initiating process kill.',
+          ' successfully. Now initiating process kill. ',
+          this.#process,
         );
         this.#process.kill();
         log.info('Process killed successfully. ', this.#id);
