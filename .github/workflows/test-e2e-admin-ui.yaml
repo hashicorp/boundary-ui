@@ -144,11 +144,11 @@ jobs:
         run: |
           git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
-      - name: Build Boundary
-        run: |
-          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
-          ( cd ./support/src/${{matrix.folder_name}}; make build )
-          mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+      #- name: Build Boundary
+      #  run: |
+      #    echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
+       #   ( cd ./support/src/${{matrix.folder_name}}; make build )
+      #    mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
 
       - name: Install node dependencies
         run: |
@@ -166,6 +166,11 @@ jobs:
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
           enos scenario launch --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
+
+      - name: Move boundary binary
+        run: |
+          mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+          boundary version
 
       - name: Run Tests
         run: |
