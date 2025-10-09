@@ -144,12 +144,6 @@ jobs:
         run: |
           git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
-      #- name: Build Boundary
-      #  run: |
-      #    echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
-       #   ( cd ./support/src/${{matrix.folder_name}}; make build )
-      #    mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
-
       - name: Install node dependencies
         run: |
           pnpm install --frozen-lockfile
@@ -161,6 +155,7 @@ jobs:
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
+          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
           export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
