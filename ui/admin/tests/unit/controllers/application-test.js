@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
@@ -17,7 +16,6 @@ module('Unit | Controller | application', function (hooks) {
   let router;
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     controller = this.owner.lookup('controller:application');
     featureEdition = this.owner.lookup('service:featureEdition');
     featuresService = this.owner.lookup('service:features');

@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import {
@@ -24,7 +22,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const CREATED_TIME_VALUES_ARRAY = [
@@ -63,7 +60,7 @@ module('Acceptance | sessions | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.admin = this.server.create('user', {
       scopeId: 'global',
       name: 'admin',
@@ -108,8 +105,6 @@ module('Acceptance | sessions | list', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `${urls.projectScope}/sessions`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting sessions', async function (assert) {

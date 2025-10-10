@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let intl;
@@ -27,7 +24,6 @@ module('Acceptance | targets | workers', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -48,7 +44,6 @@ module('Acceptance | targets | workers', function (hooks) {
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,8 +64,6 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targetWorkers = `${urls.target}/workers`;
     urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
     urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target workers', async function (assert) {

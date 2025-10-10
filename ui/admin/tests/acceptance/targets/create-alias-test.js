@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { click, fillIn, getContext, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -18,7 +16,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | create-alias', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -46,7 +43,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
   hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,8 +66,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias for a target of TCP type', async function (assert) {

@@ -13,8 +13,6 @@ import {
   find,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { HCP_MANAGED_KEY } from 'api/models/worker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -22,7 +20,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | worker | tags', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -38,7 +35,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -46,7 +43,6 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
     urls.createTags = `${urls.worker}/create-tags`;
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker tags', async function (assert) {

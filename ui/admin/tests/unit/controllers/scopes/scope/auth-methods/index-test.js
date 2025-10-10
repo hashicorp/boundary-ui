@@ -29,7 +29,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   let getAuthMethodCount;
 
   const instances = {
-    scope: {
+    scopes: {
       global: null,
     },
     authMethod: null,
@@ -40,16 +40,21 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup(
       'controller:scopes/scope/auth-methods/index',
     );
 
-    instances.scope.global = this.server.create('scope', { id: 'global' });
-    instances.authMethod = this.server.create('auth-method', {
-      scope: instances.scope.global,
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    instances.authMethod = this.server.schema.authMethods.first();
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
     });
 
     urls.authMethods = '/scopes/global/auth-methods';
@@ -148,7 +153,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     );
 
     await controller.makePrimary(authMethod);
-    const scope = await store.findRecord('scope', instances.scope.global.id);
+    const scope = await store.findRecord('scope', instances.scopes.global.id);
 
     assert.strictEqual(scope.primary_auth_method_id, instances.authMethod.id);
   });
@@ -161,7 +166,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     );
 
     await controller.removeAsPrimary(authMethod);
-    const scope = await store.findRecord('scope', instances.scope.global.id);
+    const scope = await store.findRecord('scope', instances.scopes.global.id);
 
     assert.notOk(scope.primary_auth_method_id);
   });
@@ -249,7 +254,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('messageDescription returns correct translation with create authorization', async function (assert) {
-    instances.scope.global.authorized_collection_actions['auth-methods'] = [
+    instances.scopes.global.authorized_collection_actions['auth-methods'] = [
       'create',
     ];
     await visit(urls.authMethods);
@@ -263,7 +268,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('messageDescription returns correct translation with no authorization', async function (assert) {
-    instances.scope.global.authorized_collection_actions['auth-methods'] = [];
+    instances.scopes.global.authorized_collection_actions['auth-methods'] = [];
     await visit(urls.authMethods);
 
     assert.strictEqual(

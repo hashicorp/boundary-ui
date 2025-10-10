@@ -25,7 +25,7 @@ function setupApplicationTest(hooks, options) {
   hooks.beforeEach(async function () {
     this.server.create('scope', { id: 'global' }, 'withGlobalAuth');
     const account_id = this.server.schema.accounts.first().id;
-    await authenticateSession({ account_id });
+    await authenticateSession({ isGlobal: true, account_id });
   });
   //
   // This is also a good place to call test setup functions coming

@@ -6,18 +6,15 @@
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let getWorkerCount, confirmService;
 
@@ -35,7 +32,7 @@ module('Acceptance | workers | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -46,8 +43,6 @@ module('Acceptance | workers | delete', function (hooks) {
 
     getWorkerCount = () => this.server.schema.workers.all().models.length;
     confirmService = this.owner.lookup('service:confirm');
-
-    await authenticateSession({});
   });
 
   test('can delete a worker', async function (assert) {

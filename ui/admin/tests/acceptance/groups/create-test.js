@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let groupsCount;
@@ -33,7 +30,6 @@ module('Acceptance | groups | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     instances.scopes.org = this.server.create(
       'scope',
       {
