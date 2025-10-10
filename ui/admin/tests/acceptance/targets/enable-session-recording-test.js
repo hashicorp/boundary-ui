@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, find, click, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { TYPE_TARGET_SSH } from 'api/models/target';
@@ -16,7 +14,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | enable session recording', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -48,7 +45,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -80,8 +77,6 @@ module('Acceptance | targets | enable session recording', function (hooks) {
     urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
     urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
     urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('cannot enable session recording for a target without proper authorization', async function (assert) {

@@ -6,25 +6,19 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { invalidateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | change password', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     account: null,
@@ -35,7 +29,6 @@ module('Acceptance | accounts | change password', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -46,10 +39,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     instances.account = this.server.create('account', {
       scope: instances.scopes.org,
     });
-    await authenticateSession({
-      account_id: instances.account.id,
-      username: 'admin',
-    });
+
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.changePassword = `/account/change-password`;

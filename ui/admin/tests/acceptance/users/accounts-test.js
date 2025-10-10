@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_LDAP,
@@ -21,7 +19,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | accounts', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let accountsCount;
@@ -29,7 +26,6 @@ module('Acceptance | users | accounts', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     user: null,
@@ -43,8 +39,6 @@ module('Acceptance | users | accounts', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -298,8 +292,8 @@ module('Acceptance | users | accounts', function (hooks) {
       authMethod,
     });
     const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
+      this.server.schema.accounts.where({ scopeId: instances.scopes.org.id })
+        .length - instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -332,8 +326,8 @@ module('Acceptance | users | accounts', function (hooks) {
       authMethod,
     });
     const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
+      this.server.schema.accounts.where({ scopeId: instances.scopes.org.id })
+        .length - instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -470,9 +464,7 @@ module('Acceptance | users | accounts', function (hooks) {
       },
     });
 
-    this.server.schema.authMethods.all().destroy();
     this.server.schema.users.all().destroy();
-    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',
@@ -508,9 +500,7 @@ module('Acceptance | users | accounts', function (hooks) {
       },
     });
 
-    this.server.schema.authMethods.all().destroy();
     this.server.schema.users.all().destroy();
-    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',

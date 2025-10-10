@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL, waitFor, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
@@ -16,7 +14,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let intl;
@@ -41,7 +38,7 @@ module('Acceptance | aliases | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -66,8 +63,6 @@ module('Acceptance | aliases | list', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.aliasWithTarget = `${urls.aliases}/${instances.aliasWithTarget.id}`;
     intl = this.owner.lookup('service:intl');
-
-    await authenticateSession({});
   });
 
   test('users can navigate to aliases with proper authorization', async function (assert) {

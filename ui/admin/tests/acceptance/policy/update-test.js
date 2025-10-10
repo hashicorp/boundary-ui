@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let features;
 
@@ -33,7 +30,7 @@ module('Acceptance | policies | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
 
     instances.policy = this.server.create('policy', {
       scope: instances.scopes.global,
@@ -45,7 +42,6 @@ module('Acceptance | policies | update', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    await authenticateSession({});
   });
 
   test('users can update forever select option to a custom input', async function (assert) {

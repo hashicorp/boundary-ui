@@ -13,15 +13,12 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { faker } from '@faker-js/faker';
 
 module('Acceptance | groups | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
@@ -29,7 +26,6 @@ module('Acceptance | groups | list', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     group1: null,
@@ -44,7 +40,6 @@ module('Acceptance | groups | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
       {
@@ -64,7 +59,6 @@ module('Acceptance | groups | list', function (hooks) {
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group1 = `${urls.groups}/${instances.group1.id}`;
     urls.group2 = `${urls.groups}/${instances.group2.id}`;
-    await authenticateSession({});
   });
 
   test('can navigate to groups with proper authorization', async function (assert) {

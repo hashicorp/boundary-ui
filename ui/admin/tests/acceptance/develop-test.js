@@ -6,13 +6,10 @@
 import { module, test } from 'qunit';
 import { visit, getContext } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | develop', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -21,12 +18,10 @@ module('Acceptance | develop', function (hooks) {
   hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
-    this.server.create('scope', { id: 'global' });
     this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    await authenticateSession({});
   });
 
   test('edition toggle is hidden when `dev-edition-toggle` is false', async function (assert) {

@@ -6,11 +6,9 @@
 import { module, test } from 'qunit';
 import { click, currentURL, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -18,7 +16,6 @@ import { TYPE_TARGET_RDP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -26,7 +23,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -45,7 +41,6 @@ module('Acceptance | targets | update', function (hooks) {
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -73,8 +68,6 @@ module('Acceptance | targets | update', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
-
-    await authenticateSession({});
   });
 
   test('can save changes to existing target', async function (assert) {

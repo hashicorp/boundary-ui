@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_TARGET_TCP,
   TYPE_TARGET_SSH,
@@ -21,7 +19,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -54,7 +51,7 @@ module('Acceptance | targets | read', function (hooks) {
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -94,8 +91,6 @@ module('Acceptance | targets | read', function (hooks) {
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
     urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting ssh target', async function (assert) {

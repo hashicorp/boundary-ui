@@ -6,26 +6,22 @@
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getHostSetCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
       hostCatalog: null,
@@ -46,7 +42,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -72,9 +67,8 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
     urls.newHostSet = `${urls.hostSets}/new`;
-    // Generate resource couner
+    // Generate resource counter
     getHostSetCount = () => this.server.schema.hostSets.all().models.length;
-    await authenticateSession({});
   });
 
   test('can delete host', async function (assert) {

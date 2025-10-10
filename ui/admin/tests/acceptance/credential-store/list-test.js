@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import {
   TYPE_CREDENTIAL_STORE_STATIC,
@@ -20,12 +18,10 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -42,7 +38,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -67,7 +62,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
 
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('static-credentials');
-    await authenticateSession({});
   });
 
   test('users can navigate to credential-stores with proper authorization', async function (assert) {

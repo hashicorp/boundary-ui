@@ -6,8 +6,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -16,7 +14,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | session-recordings | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -41,7 +38,7 @@ module('Acceptance | session-recordings | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -67,7 +64,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
     urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
     urls.channelRecording = `${urls.sessionRecording}/${instances.channelRecording.id}`;
-    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

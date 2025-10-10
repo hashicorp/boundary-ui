@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -91,7 +88,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

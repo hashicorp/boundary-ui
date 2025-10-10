@@ -75,6 +75,8 @@ export default class ApplicationRoute extends Route {
       if (userId && hostUrl) {
         await this.sqlite.setup(formatDbName(userId, hostUrl));
       }
+
+      await this.session.loadAuthenticatedAccount();
     }
   }
 

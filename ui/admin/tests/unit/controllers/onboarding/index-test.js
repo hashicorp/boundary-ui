@@ -36,13 +36,19 @@ module('Unit | Controller | onboarding/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:onboarding/index');
 
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      type: 'global',
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    instances.authMethod = this.server.schema.authMethods.first();
+    instances.account = this.server.schema.accounts.first();
+    await authenticateSession({
+      isGlobal: true,
+      account_id: instances.account.id,
     });
 
     urls.onboarding = '/onboarding';

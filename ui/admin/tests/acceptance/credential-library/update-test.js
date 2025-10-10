@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
@@ -22,12 +20,10 @@ import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential'
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -48,7 +44,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -93,7 +88,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
     urls.usernamePasswordDomainCredentialLibrary = `${urls.credentialLibraries}/${instances.usernamePasswordDomainCredentialLibrary.id}`;
     urls.vaultLDAPCredentialLibrary = `${urls.credentialLibraries}/${instances.vaultLDAPCredentialLibrary.id}`;
-    await authenticateSession({});
   });
 
   test('cannot update resource without proper authorization', async function (assert) {

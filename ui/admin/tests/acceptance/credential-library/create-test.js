@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
@@ -21,7 +19,6 @@ import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential'
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -30,7 +27,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -49,7 +45,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -83,7 +78,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
         credentialType: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
       }).length;
     };
-    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

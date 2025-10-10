@@ -6,24 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getTargetHostSetCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -42,7 +38,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -82,7 +77,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
     // Generate resource counter
     getTargetHostSetCount = () =>
       this.server.schema.targets.first().hostSets.models.length;
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target host sources', async function (assert) {

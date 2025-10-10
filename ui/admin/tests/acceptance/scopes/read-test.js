@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let features;
@@ -23,7 +20,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
   };
@@ -36,7 +32,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -48,7 +43,6 @@ module('Acceptance | scopes | read', function (hooks) {
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
-    await authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting org scope edit', async function (assert) {

@@ -6,17 +6,14 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getUsersCount, confirmService;
@@ -36,7 +33,6 @@ module('Acceptance | users | delete', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -49,8 +45,6 @@ module('Acceptance | users | delete', function (hooks) {
     urls.user = `${urls.users}/${instances.user.id}`;
     getUsersCount = () => this.server.schema.users.all().models.length;
     confirmService = this.owner.lookup('service:confirm');
-
-    await authenticateSession({});
   });
 
   test('can delete a user', async function (assert) {

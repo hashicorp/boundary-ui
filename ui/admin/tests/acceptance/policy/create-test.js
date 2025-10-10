@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let features;
   let getPolicyCount;
@@ -34,7 +31,7 @@ module('Acceptance | policies | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -45,7 +42,6 @@ module('Acceptance | policies | create', function (hooks) {
     getPolicyCount = () => this.server.schema.policies.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new policy with global scope', async function (assert) {

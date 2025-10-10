@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, find, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -19,7 +17,6 @@ module(
   'Acceptance | targets | enable session recording | index',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
     setupSqlite(hooks);
 
     let intl;
@@ -57,7 +54,7 @@ module(
     hooks.beforeEach(async function () {
       featuresService = this.owner.lookup('service:features');
       // Generate resources
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.scopes.global = this.server.schema.scopes.find('global');
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -88,8 +85,6 @@ module(
       urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 
       intl = this.owner.lookup('service:intl');
-
-      await authenticateSession({ username: 'admin' });
     });
 
     test('cannot enable session recording for a target without proper authorization', async function (assert) {

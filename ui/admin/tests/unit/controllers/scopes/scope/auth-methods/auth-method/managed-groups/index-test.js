@@ -36,16 +36,20 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       intl = this.owner.lookup('service:intl');
       controller = this.owner.lookup(
         'controller:scopes/scope/auth-methods/auth-method/managed-groups/index',
       );
       store = this.owner.lookup('service:store');
 
-      instances.scopes.global = this.server.create('scope', {
-        id: 'global',
-        type: 'global',
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      await authenticateSession({
+        isGlobal: true,
+        account_id: this.server.schema.accounts.first().id,
       });
       instances.authMethod = this.server.create('auth-method', {
         scope: instances.scopes.global,

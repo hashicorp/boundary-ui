@@ -6,11 +6,9 @@
 import { module, test } from 'qunit';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -18,7 +16,6 @@ import { TYPE_TARGET_RDP } from 'api/models/target';
 
 module('Acceptance | targets | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -28,7 +25,6 @@ module('Acceptance | targets | delete', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -46,7 +42,6 @@ module('Acceptance | targets | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -75,8 +70,6 @@ module('Acceptance | targets | delete', function (hooks) {
       this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models.length;
 
     featuresService = this.owner.lookup('service:features');
-
-    await authenticateSession({});
   });
 
   test('can delete target', async function (assert) {

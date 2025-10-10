@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_AWS,
@@ -23,12 +21,10 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -48,7 +44,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -85,8 +80,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     urls.awsHostCatalog = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}`;
     urls.azureHostCatalog = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}`;
     urls.gcpHostCatalog = `${urls.hostCatalogs}/${instances.gcpHostCatalog.id}`;
-
-    await authenticateSession({});
   });
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {
