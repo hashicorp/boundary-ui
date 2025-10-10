@@ -18,6 +18,7 @@ on:
 
 jobs:
   test:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'admin') }}
     name: Test
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
