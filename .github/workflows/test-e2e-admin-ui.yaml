@@ -30,14 +30,14 @@ jobs:
             boundary_edition_short: oss
             enos_scenario: e2e_ui_docker
             test_command: admin:ce:docker
-            boundary_branch: ${{ github.event.inputs.boundary-branch || 'main' }}
+            boundary_branch: ${{ github.event.inputs.boundary-branch || 'dbutler_build_override' }}
           - boundary_edition: enterprise
             github_repo: hashicorp/boundary-enterprise
             folder_name: boundary-enterprise
             boundary_edition_short: ent
             enos_scenario: e2e_ui_docker_ent
             test_command: admin:ent:docker
-            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
+            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'dbutler_build_override' }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
@@ -157,6 +157,7 @@ jobs:
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
           echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
+          export ENOS_VAR_ui_build_override="oss" && \
           export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
