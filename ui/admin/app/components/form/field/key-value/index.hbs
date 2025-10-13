@@ -47,6 +47,7 @@
         </F.Select>
       {{else if (eq @keyFieldType 'textarea')}}
         <F.Textarea
+          name={{@name}}
           @value={{R.rowData.key}}
           disabled={{@disabled}}
           data-test-key-input
