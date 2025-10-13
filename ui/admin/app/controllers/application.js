@@ -50,21 +50,23 @@ export default class ApplicationController extends Controller {
    * @type {string}
    */
   get username() {
-    const account = this.store.peekRecord(
-      'account',
-      this.session.data.authenticated.account_id,
-    );
+    let account;
+    if (this.session.isAuthenticated) {
+      account = this.store.peekRecord(
+        'account',
+        this.session.data.authenticated.account_id,
+      );
+    }
     return account?.accountName;
   }
 
   /**
-   * Shows side navigation only for routes nested under a scope
-   * and if user has been authenticated.
+   * Shows side navigation only for routes nested under a scope,
+   * if user has been authenticated, and if username has been loaded.
    * @type {boolean}
    */
   get showSideNav() {
     return this.router.currentRouteName.startsWith('scopes.scope') &&
-      this.session.isAuthenticated &&
       this.username
       ? true
       : false;

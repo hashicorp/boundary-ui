@@ -9,7 +9,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';
-import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
@@ -48,18 +47,13 @@ module(
       store = this.owner.lookup('service:store');
       session = this.owner.lookup('service:session');
 
-      instances.scopes.global = this.server.create('scope', {
-        id: 'global',
-        type: 'global',
-      });
-      instances.authMethod = this.server.create('auth-method', {
-        scope: instances.scopes.global,
-        type: TYPE_AUTH_METHOD_PASSWORD,
-      });
-      instances.account = this.server.create('account', {
-        scope: instances.scopes.global,
-        authMethod: instances.authMethod,
-      });
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      instances.authMethod = this.server.schema.authMethods.first();
+      instances.account = this.server.schema.accounts.first();
 
       urls.targets = '/scopes/global/projects/targets';
 
@@ -78,10 +72,10 @@ module(
         'auth-method',
         instances.authMethod.id,
       );
-      const { authenticator: authBefore, username: usernameBefore } =
+      const { authenticator: authBefore, account_id: accountIdBefore } =
         session.data.authenticated;
 
-      assert.notOk(usernameBefore);
+      assert.notOk(accountIdBefore);
       assert.notOk(authBefore);
       assert.ok(identification);
 
@@ -91,14 +85,14 @@ module(
       });
       await settled();
 
-      const { authenticator: authAfter, username: usernameAfter } =
+      const { authenticator: authAfter, account_id: accountIdAfter } =
         session.data.authenticated;
 
       assert.strictEqual(
         authAfter,
         `authenticator:${instances.authMethod.type}`,
       );
-      assert.strictEqual(usernameAfter, identification);
+      assert.strictEqual(instances.account.id, accountIdAfter);
       assert.strictEqual(currentURL(), urls.targets);
     });
   },

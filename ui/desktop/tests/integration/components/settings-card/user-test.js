@@ -39,7 +39,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -59,7 +59,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -79,7 +79,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');

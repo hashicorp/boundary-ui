@@ -5,18 +5,15 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import {
   currentSession,
-  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -58,10 +55,8 @@ module('Acceptance | projects', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-
-    // create scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.authMethods.global = this.server.schema.authMethods.first();
     stubs.global = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -73,10 +68,6 @@ module('Acceptance | projects', function (hooks) {
       scope: stubs.org,
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
-
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
 
     instances.hostCatalog = this.server.create(
       'host-catalog',

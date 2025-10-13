@@ -3,7 +3,10 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />
+<SettingsCard::User
+  @onSignout={{this.application.showModalOrLogout}}
+  @userInfo={{this.application.username}}
+/>
 <SettingsCard::Server @model={{@model}} />
 <SettingsCard::Application @model={{@model}} @toggle={{this.toggleTheme}} />
 <SettingsCard::ClientAgent @model={{@model}} />

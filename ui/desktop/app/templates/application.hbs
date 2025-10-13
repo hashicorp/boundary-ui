@@ -49,34 +49,16 @@
           />
         {{/if}}
 
-        {{#if this.session.isAuthenticated}}
-          {{#if this.session.data.authenticated.username}}
-            <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
-              <dd.ToggleButton
-                @icon='user-circle'
-                @text={{this.session.data.authenticated.username}}
-              />
-              <dd.Interactive
-                data-test-nav-signout-btn
-                {{on 'click' this.showModalOrLogout}}
-              >
-                {{t 'actions.deauthenticate'}}
-              </dd.Interactive>
-            </Hds::Dropdown>
-          {{else}}
-            <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
-              <dd.ToggleIcon
-                @icon='user-circle'
-                @text={{t 'titles.user-menu'}}
-              />
-              <dd.Interactive
-                data-test-nav-signout-btn
-                {{on 'click' this.showModalOrLogout}}
-              >
-                {{t 'actions.deauthenticate'}}
-              </dd.Interactive>
-            </Hds::Dropdown>
-          {{/if}}
+        {{#if this.showUserMenu}}
+          <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
+            <dd.ToggleButton @icon='user-circle' @text={{this.username}} />
+            <dd.Interactive
+              data-test-nav-signout-btn
+              {{on 'click' this.showModalOrLogout}}
+            >
+              {{t 'actions.deauthenticate'}}
+            </dd.Interactive>
+          </Hds::Dropdown>
         {{/if}}
 
       </header.utilities>

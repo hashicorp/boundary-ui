@@ -13,18 +13,6 @@ export default class SettingsUserInfoComponent extends Component {
   @service intl;
 
   // =attributes
-  /**
-   * Returns the username of the current user
-   * @type {string}
-   */
-  get userInfo() {
-    const {
-      data: {
-        authenticated: { username },
-      },
-    } = this.session;
-    return username;
-  }
 
   /**
    * Returns true if user is authenticated
@@ -36,7 +24,7 @@ export default class SettingsUserInfoComponent extends Component {
   }
 
   /**
-   * Returns the type of authmethod used by the user
+   * Returns the type of auth-method used by the user
    * @type {string}
    */
   get authMethod() {

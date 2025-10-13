@@ -6,7 +6,6 @@
 import { service } from '@ember/service';
 import BaseSessionService from 'ember-simple-auth/services/session';
 import { notifyError } from 'core/decorators/notify';
-import { set } from '@ember/object';
 
 export default class SessionService extends BaseSessionService {
   @service ipc;
@@ -26,23 +25,20 @@ export default class SessionService extends BaseSessionService {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
+      await this.loadAuthenticatedAccount();
+    }
+  }
 
-      if (sessionData?.account_id) {
-        try {
-          const account = await this.store.findRecord(
-            'account',
-            sessionData.account_id,
-          );
-          const username =
-            account.login_name ||
-            account.subject ||
-            account.email ||
-            account.full_name;
-          set(this, 'data.authenticated.username', username);
-        } catch (e) {
-          // no op
-        }
-      }
+  /**
+   * Loads account used to authenticate so that it can be used to display
+   * the authenticated username.
+   */
+  async loadAuthenticatedAccount() {
+    if (this.data?.authenticated?.account_id) {
+      await this.store.findRecord(
+        'account',
+        this.data.authenticated.account_id,
+      );
     }
   }
 }

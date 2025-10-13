@@ -51,22 +51,7 @@ export default class ApplicationRoute extends Route {
         token: sessionData?.token,
       });
 
-      if (sessionData?.account_id) {
-        try {
-          const account = await this.store.findRecord(
-            'account',
-            sessionData.account_id,
-          );
-          const username =
-            account.login_name ||
-            account.subject ||
-            account.email ||
-            account.full_name;
-          this.session.set('data.authenticated.username', username);
-        } catch (e) {
-          // no op
-        }
-      }
+      await this.session.loadAuthenticatedAccount();
     }
   }
 
