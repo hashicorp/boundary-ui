@@ -22,7 +22,7 @@ export default class ScopesScopeTargetsTargetRoute extends Route {
    * @return {Promise{TargetModel}}
    */
   async model({ target_id }) {
-    return this.store.findRecord('target', target_id, { reload: true });
+    return this.store.findRecord('targe', target_id, { reload: true });
   }
 
   /**
