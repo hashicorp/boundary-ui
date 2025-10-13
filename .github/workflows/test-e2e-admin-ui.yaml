@@ -156,7 +156,7 @@ jobs:
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
-          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/EDITION
+          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
           export ENOS_VAR_ui_build_override="oss" && \
           export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
