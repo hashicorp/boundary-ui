@@ -55,6 +55,14 @@ export default class FormAuthMethodOidcComponent extends Component {
   //actions
 
   /**
+   * Updates the account claim maps on the model with new data
+   * @param {Array} newData - Array of account claim map objects
+   */
+  @action
+  updateAccountClaimMaps(newData) {
+    this.args.model.account_claim_maps = newData;
+  }
+  /**
    * @param {string} value
    */
   @action
