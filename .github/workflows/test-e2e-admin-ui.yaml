@@ -30,14 +30,14 @@ jobs:
             boundary_edition_short: oss
             enos_scenario: e2e_ui_docker
             test_command: admin:ce:docker
-            boundary_branch: ${{ github.event.inputs.boundary-branch || 'dbutler_build_override' }}
+            boundary_branch: ${{ github.event.inputs.boundary-branch || 'main' }}
           - boundary_edition: enterprise
             github_repo: hashicorp/boundary-enterprise
             folder_name: boundary-enterprise
             boundary_edition_short: ent
             enos_scenario: e2e_ui_docker_ent
             test_command: admin:ent:docker
-            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'dbutler_build_override' }}
+            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
