@@ -14,14 +14,18 @@ export default class FormFieldKeyValueComponent extends Component {
     ? [...this.args.data]
     : [this.createEmptyRow()];
 
-  // Determine if the value field should be shown
-  get showValueField() {
-    return this.args.showValueField !== false;
+  /**
+   * Determine if the value field should be shown
+   * Defaults to false (show the value field by default)
+   * @type {boolean}
+   */
+  get hideValueField() {
+    return this.args.hideValueField ?? false;
   }
 
   createEmptyRow() {
     const row = { key: '' };
-    if (this.showValueField) {
+    if (!this.hideValueField) {
       row.value = '';
     }
     return row;

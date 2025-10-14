@@ -15,13 +15,6 @@
     {{#if @helperText}}
       <H.HelperText data-test-helper-text>{{@helperText}}</H.HelperText>
     {{/if}}
-    {{#if @errors}}
-      <H.Error data-test-error as |E|>
-        {{#each @errors as |error|}}
-          <E.Message data-test-error-message>{{error.message}}</E.Message>
-        {{/each}}
-      </H.Error>
-    {{/if}}
   </:header>
   <:row as |R|>
     <R.Field as |F|>
@@ -31,6 +24,7 @@
           name={{@name}}
           disabled={{@disabled}}
           data-test-key-input
+          @isInvalid={{@errors}}
           {{on 'change' (fn this.updateKey R.rowData)}}
         >
           <option disabled hidden selected value=''>
@@ -51,6 +45,7 @@
           @value={{R.rowData.key}}
           disabled={{@disabled}}
           data-test-key-input
+          @isInvalid={{@errors}}
           {{on 'input' (fn this.updateKey R.rowData)}}
         />
       {{else}}
@@ -60,12 +55,13 @@
           @value={{R.rowData.key}}
           disabled={{@disabled}}
           data-test-key-input
+          @isInvalid={{@errors}}
           {{on 'input' (fn this.updateKey R.rowData)}}
         />
       {{/if}}
     </R.Field>
 
-    {{#if this.showValueField}}
+    {{#unless this.hideValueField}}
       <R.Field as |F|>
         <F.Label>{{or @valueLabel (t 'form.value.label')}}</F.Label>
         {{#if (eq @valueFieldType 'select')}}
@@ -73,6 +69,7 @@
             name={{@name}}
             disabled={{@disabled}}
             data-test-value-input
+            @isInvalid={{@errors}}
             {{on 'change' (fn this.updateValue R.rowData)}}
           >
             <option disabled hidden selected value=''>
@@ -89,9 +86,11 @@
           </F.Select>
         {{else if (eq @valueFieldType 'textarea')}}
           <F.Textarea
+            name={{@name}}
             @value={{R.rowData.value}}
             disabled={{@disabled}}
             data-test-value-input
+            @isInvalid={{@errors}}
             {{on 'input' (fn this.updateValue R.rowData)}}
           />
         {{else}}
@@ -101,11 +100,12 @@
             @value={{R.rowData.value}}
             disabled={{@disabled}}
             data-test-value-input
+            @isInvalid={{@errors}}
             {{on 'input' (fn this.updateValue R.rowData)}}
           />
         {{/if}}
       </R.Field>
-    {{/if}}
+    {{/unless}}
 
     <R.DeleteRowButton
       data-test-delete-button
@@ -113,6 +113,14 @@
     />
   </:row>
   <:footer as |F|>
+
+    {{#if @errors}}
+      <F.Error as |E|>
+        {{#each @errors as |error|}}
+          <E.Message data-test-error-message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
     <F.AddRowButton
       @text={{t 'actions.add'}}
       data-test-add-button
