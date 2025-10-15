@@ -5,34 +5,39 @@
 
 {{page-title (app-name)}}
 
-<Hds::AppFrame @hasHeader={{false}} @hasSidebar={{this.showSideNav}} as |Frame|>
-  <Frame.Sidebar class='app-frame-sidebar-style-overrides'>
-    <Hds::SideNav
+<Hds::AppFrame
+  @hasHeader={{this.showSideNav}}
+  @hasSidebar={{this.showSideNav}}
+  as |Frame|
+>
+  <Frame.Header id='app-header-style-overrides'>
+    <Hds::AppHeader
       @a11yRefocusRouteChangeValidator={{this.customRouteChangeValidator}}
-      class='side-nav-style-overrides'
     >
-      <:header>
-        <Hds::SideNav::Header>
-          <:logo>
-            <Hds::SideNav::Header::HomeLink
-              @icon='boundary'
-              @color='var(--token-color-boundary-brand)'
-              @ariaLabel={{(app-name)}}
-              @route='index'
-            />
-          </:logo>
-          <:actions>
-            {{#if (feature-flag 'dev-edition-toggle')}}
-              <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
-                <dd.ToggleIcon
-                  @icon='layers'
-                  @text={{t
-                    'titles.feature-edition'
-                    edition=this.featureEdition.edition
-                  }}
-                  data-test-dev-edition-toggle
-                />
+      <:logo>
+        <Hds::AppHeader::HomeLink
+          @icon='boundary'
+          @color='var(--token-color-boundary-brand)'
+          @text={{(app-name)}}
+          @route='index'
+        />
+      </:logo>
 
+      <:globalActions>
+        <ScopePicker />
+      </:globalActions>
+
+      <:utilityActions>
+        {{#if (feature-flag 'dev-edition-toggle')}}
+          <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
+            <dd.ToggleIcon
+              @icon='layers'
+              @text={{t
+                'titles.feature-edition'
+                edition=this.featureEdition.edition
+              }}
+              data-test-dev-edition-toggle
+            />
                 <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
                 {{#each this.featureEdition.editions as |edition|}}
                   <dd.Radio
@@ -138,18 +143,15 @@
                 {{/each}}
               </Hds::Dropdown>
             {{/if}}
-          </:actions>
-        </Hds::SideNav::Header>
-      </:header>
+      </:utilityActions>
 
-      <:body>
-        <Hds::SideNav::Portal::Target />
-      </:body>
+    </Hds::AppHeader>
+  </Frame.Header>
 
-      <:footer>
-        <ScopePicker />
-      </:footer>
-    </Hds::SideNav>
+  <Frame.Sidebar>
+    <Hds::AppSideNav>
+      <Hds::AppSideNav::Portal::Target />
+    </Hds::AppSideNav>
   </Frame.Sidebar>
 
   <Frame.Main>
