@@ -59,29 +59,3 @@ form {
     color: inherit;
   }
 }
-
-// TODO: This is a temporary fix that ensures changing the color theme won't alter the dropdown colors.
-.app-frame-sidebar-style-overrides .side-nav-style-overrides {
-  .hds-button:not(
-    .hds-dropdown__content *,
-    .ember-basic-dropdown-content *,
-    .hds-dialog-primitive__wrapper *
-  ),
-  button[class*='hds-dropdown-toggle']:not(
-      .hds-dropdown__content *,
-      .ember-basic-dropdown-content *,
-      .hds-dialog-primitive__wrapper *
-    ) {
-    background: var(--token-color-palette-neutral-700);
-    border-color: var(--token-app-side-nav-color-foreground-faint);
-
-    &:hover {
-      background: var(--token-color-palette-neutral-600);
-    }
-
-    &:active,
-    &:focus {
-      background: var(--token-color-palette-neutral-700);
-    }
-  }
-}
