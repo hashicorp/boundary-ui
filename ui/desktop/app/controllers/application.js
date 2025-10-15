@@ -17,8 +17,6 @@ export default class ApplicationController extends Controller {
   @service ipc;
   @service session;
   @service('browser/window') window;
-  @service store;
-  @service router;
 
   // =attributes
 
@@ -34,33 +32,6 @@ export default class ApplicationController extends Controller {
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
-  }
-
-  /**
-   * Returns authenticated username.
-   * @type {string}
-   */
-  get username() {
-    let account;
-    if (this.session.isAuthenticated) {
-      account = this.store.peekRecord(
-        'account',
-        this.session.data.authenticated.account_id,
-      );
-    }
-    return account?.accountName;
-  }
-
-  /**
-   * Shows user menu only after transitioning to routes under a scope,
-   * if user has been authenticated, and if username has been loaded.
-   * @type {boolean}
-   */
-  get showUserMenu() {
-    return this.router.currentRouteName.startsWith('scopes.scope') &&
-      this.username
-      ? true
-      : false;
   }
 
   // =actions

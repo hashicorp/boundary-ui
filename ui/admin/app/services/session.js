@@ -5,12 +5,15 @@
 
 import BaseSessionService from 'ember-simple-auth/services/session';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { formatDbName } from 'api/services/sqlite';
 
 export default class SessionService extends BaseSessionService {
   @service sqlite;
   @service('browser/window') window;
   @service store;
+
+  @tracked username;
 
   /**
    * Extend ember simple auth's handleAuthentication method
@@ -36,10 +39,18 @@ export default class SessionService extends BaseSessionService {
    */
   async loadAuthenticatedAccount() {
     if (this.data?.authenticated?.account_id) {
-      await this.store.findRecord(
-        'account',
-        this.data.authenticated.account_id,
-      );
+      try {
+        const account = await this.store.findRecord(
+          'account',
+          this.data.authenticated.account_id,
+        );
+        this.username = account.accountName;
+      } catch (e) {
+        // We are purposefully ignoring errors since loading the
+        // authenticated account should not block a user because
+        // account information is for populating a username.
+        console.error(e);
+      }
     }
   }
 }

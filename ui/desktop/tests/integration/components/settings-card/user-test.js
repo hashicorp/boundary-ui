@@ -12,7 +12,6 @@ import Service from '@ember/service';
 
 const data = {
   authenticated: {
-    username: 'admin',
     authenticator: 'authenticator:password',
   },
 };
@@ -35,11 +34,12 @@ module('Integration | Component | settings-card/user', function (hooks) {
       class extends Service {
         data = data;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -55,11 +55,12 @@ module('Integration | Component | settings-card/user', function (hooks) {
       class extends Service {
         data = oidcData;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -75,11 +76,12 @@ module('Integration | Component | settings-card/user', function (hooks) {
       class extends Service {
         data = ldapData;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
     await render(
-      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} @userInfo='admin' />`,
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');

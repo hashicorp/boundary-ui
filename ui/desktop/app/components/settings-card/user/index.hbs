@@ -29,7 +29,7 @@
         {{t 'form.username.label'}}
       </Hds::Text::Display>
       <Hds::Text::Body @tag='p' @weight='medium' data-test-username>
-        {{@userInfo}}
+        {{this.session.username}}
       </Hds::Text::Body>
     </div>
   </:body>
