@@ -270,6 +270,28 @@ handle('getLogPath', () => {
 });
 
 /**
+ * Returns the available RDP clients
+ */
+handle('getRdpClients', async () => []);
+
+/**
+ * Returns the preferred RDP client
+ */
+handle('getPreferredRdpClient', async () => 'none');
+
+/**
+ * Sets the preferred RDP client
+ */
+handle('setPreferredRdpClient', async (rdpClient) => rdpClient);
+
+/**
+ * Launches the RDP client with the provided session ID.
+ */
+handle('launchRdpClient', async ({ sessionId }) => {
+  return;
+});
+
+/**
  * Handler to help create terminal windows. We don't use the helper `handle` method
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
