@@ -77,7 +77,7 @@ module('Unit | Service | rdp', function (hooks) {
     const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
     const sessionId = 'session-123';
     ipcServiceStubbed.withArgs('launchRdpClient', sessionId).resolves();
-    await service.launchRdpClient(sessionId, 'mstsc');
+    await service.launchRdpClient(sessionId);
     assert.ok(ipcServiceStubbed.calledOnce, 'ipc invoke was called once');
     assert.ok(
       ipcServiceStubbed.calledWith('launchRdpClient', sessionId),
