@@ -19,6 +19,7 @@ const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 const { releaseVersion } = require('../../config/config.js');
 const store = require('../services/electron-store-manager');
+const rdpClientManager = require('../services/rdp-client-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -259,9 +260,8 @@ handle('setLogLevel', (logLevel) => store.set('logLevel', logLevel));
 handle('getLogPath', () => {
   switch (os.platform()) {
     case 'win32':
-      return `${
-        process.env.USERPROFILE ?? '%USERPROFILE%'
-      }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
+      return `${process.env.USERPROFILE ?? '%USERPROFILE%'
+        }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
     case 'darwin':
       return '~/Library/Logs/Boundary/desktop-client.log';
     case 'linux':
@@ -272,23 +272,29 @@ handle('getLogPath', () => {
 /**
  * Returns the available RDP clients
  */
-handle('getRdpClients', async () => []);
+handle('getRdpClients', async () => {
+  return await rdpClientManager.getAvailableRdpClients();
+});
 
 /**
  * Returns the preferred RDP client
  */
-handle('getPreferredRdpClient', async () => 'none');
+handle('getPreferredRdpClient', async () => {
+  return await rdpClientManager.getPreferredRdpClient();
+});
 
 /**
  * Sets the preferred RDP client
  */
-handle('setPreferredRdpClient', async (rdpClient) => rdpClient);
+handle('setPreferredRdpClient', (preferredClient) => {
+  return rdpClientManager.setPreferredRdpClient(preferredClient);
+});
 
 /**
  * Launches the RDP client with the provided session ID.
  */
 handle('launchRdpClient', async (sessionId) => {
-  return;
+  return await rdpClientManager.launchRdpClient(sessionId, sessionManager);
 });
 
 /**

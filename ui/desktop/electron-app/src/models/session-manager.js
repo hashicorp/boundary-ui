@@ -47,6 +47,16 @@ class SessionManager {
   }
 
   /**
+   * Get proxy details for a session by identifier.
+   * @param {string} session_id
+   * @returns {Object} Proxy details with address and port
+   */
+  getProxyDetailsById(session_id) {
+    const session = this.#sessions.find((session) => session.id === session_id);
+    return session?.proxyDetails;
+  }
+
+  /**
    * Stop all active and pending target sessions
    * Returning Promise.all() ensures all sessions in the list have been
    * stopped before calling the next fn
