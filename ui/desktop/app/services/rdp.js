@@ -59,13 +59,13 @@ export default class RdpService extends Service {
    */
   async getRdpClients() {
     try {
-      const clients = await this.ipc.invoke('getRdpClients');
-      this._rdpClients = clients;
-      return clients;
+      this._rdpClients = await this.ipc.invoke('getRdpClients');
+      return this._rdpClients;
     } catch (error) {
       console.error('Failed to fetch RDP clients:', error);
-      this._rdpClients = [];
-      return [];
+      // default to having 1 option of 'none' if it fails
+      this._rdpClients = [{ value: 'none' }];
+      return this._rdpClients;
     }
   }
 
@@ -75,13 +75,12 @@ export default class RdpService extends Service {
    */
   async getPreferredRdpClient() {
     try {
-      const preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
-      this._preferredRdpClient = preferredRdpClient;
-      return preferredRdpClient;
+      this._preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
+      return this._preferredRdpClient;
     } catch (error) {
       console.error('Failed to get preferred RDP client:', error);
       this._preferredRdpClient = 'none';
-      return 'none';
+      return this._preferredRdpClient;
     }
   }
 
@@ -94,7 +93,7 @@ export default class RdpService extends Service {
     try {
       await this.ipc.invoke('setPreferredRdpClient', rdpClient);
       this._preferredRdpClient = rdpClient;
-      return rdpClient;
+      return this._preferredRdpClient;
     } catch (error) {
       console.error('Failed to set preferred RDP client:', error);
       throw error;
