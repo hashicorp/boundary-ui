@@ -45,8 +45,8 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Shows side navigation only for routes nested under a scope,
-   * if user has been authenticated.
+   * Shows side navigation only for routes nested under a scope
+   * and if user has been authenticated.
    * @type {boolean}
    */
   get showSideNav() {
