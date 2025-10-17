@@ -158,15 +158,9 @@
     .hds-dropdown-toggle-icon,
   .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
     .hds-app-header__home-link {
-    color: var(
-      --token-color-palette-neutral-200
-    ); // var(--token-color-foreground-disabled);
-    background-color: var(
-      --token-color-palette-neutral-50
-    ); // var(--token-color-palette-neutral-600);
-    border-color: var(
-      --token-color-palette-neutral-100
-    ); // var(--token-color-palette-neutral-500);
+    color: var(--token-color-palette-neutral-200);
+    background-color: var(--token-color-palette-neutral-50);
+    border-color: var(--token-color-palette-neutral-100);
   }
 }
 
@@ -200,16 +194,11 @@
 @mixin dark-mode-app-side-nav-override {
   .hds-app-side-nav {
     &__overlay {
-      background-color: var(
-        --token-color-palette-neutral-50
-      ); // another good options is background-color: var(--token-color-palette-neutral-0);
+      background-color: var(--token-color-palette-neutral-50);
     }
 
-    // this is supposed to be --token-color-palette-neutral-300 but it too closely resembles item link colors.
     &__list-title {
-      color: var(
-        --token-color-palette-neutral-300
-      ); // var(--token-color-foreground-faint); //--token-color-palette-neutral-500//var(--token-app-side-nav-color-foreground-faint);
+      color: var(--token-color-palette-neutral-300);
     }
 
     &__list-item-link.active {
