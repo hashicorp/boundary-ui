@@ -259,4 +259,24 @@
   --token-form-toggle-base-surface-color-default: var(
     --token-color-palette-neutral-100
   ); /* the toggle has a different base surface color, compared to the other controls */
+
+  // Hds app side nav color-mappings
+  --token-app-side-nav-color-foreground-primary: var(
+    --token-color-palette-neutral-600
+  ); // var(--token-color-foreground-primary);
+  --token-app-side-nav-color-surface-primary: var(
+    --token-color-palette-neutral-50
+  ); // var(--token-color-surface-faint);
+  --token-app-side-nav-wrapper-border-color: var(
+    --token-color-palette-neutral-200
+  );
+  --token-app-side-nav-color-foreground-faint: var(
+    --token-color-palette-neutral-500
+  ); // var(--token-color-foreground-faint)
+  --token-app-side-nav-color-surface-interactive-hover: var(
+    --token-color-palette-neutral-100
+  ); // var(--token-color-surface-interactive-hover)
+  --token-app-side-nav-color-surface-interactive-active: var(
+    --token-color-palette-neutral-300
+  );
 }
