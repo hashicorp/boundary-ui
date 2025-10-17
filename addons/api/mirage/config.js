@@ -542,10 +542,11 @@ function routes() {
           session.update({
             status: pickRandomStatusString(),
           });
-          if (session.id.split('-').pop() % 2)
+          if (session.id.split('-').pop() % 2) {
             session.update({
               userId: 'authenticateduser',
             });
+          }
         });
       }
       if (recursive && scope_id === 'global') {

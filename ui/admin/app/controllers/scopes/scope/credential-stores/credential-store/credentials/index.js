@@ -56,10 +56,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
   async cancel(credential) {
     const { isNew } = credential;
     credential.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credentials',
       );
+    }
   }
 
   /**

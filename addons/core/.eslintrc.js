@@ -26,6 +26,7 @@ module.exports = {
     browser: true,
   },
   rules: {
+    curly: ['error', 'multi-line', 'consistent'],
     'ember/no-get': 'off',
     'ember/no-get-with-default': 'off',
     'ember/no-computed-properties-in-native-classes': 'off',

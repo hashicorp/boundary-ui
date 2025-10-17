@@ -24,8 +24,9 @@ export default class OnboardingRoute extends Route {
       scope_id: 'global',
       query: { filters: { scope_id: [{ equals: 'global' }] } },
     });
-    if (!this.session.isAuthenticated || orgs.length)
+    if (!this.session.isAuthenticated || orgs.length) {
       this.router.transitionTo('index');
+    }
   }
 
   /**

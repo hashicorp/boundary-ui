@@ -56,8 +56,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsIndexController exte
   cancel(host) {
     const { isNew } = host;
     host.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       this.router.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
+    }
   }
 
   /**
