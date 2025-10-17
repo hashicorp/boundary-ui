@@ -132,11 +132,100 @@
   }
 }
 
+@mixin dark-mode-button-override {
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-app-frame:has(
+      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+    )
+    .hds-button,
+  .hds-app-frame:has(
+      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+    )
+    .hds-dropdown-toggle-button,
+  .hds-app-frame:has(
+      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+    )
+    .hds-dropdown-toggle-icon,
+  .hds-app-frame:has(
+      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+    )
+    .hds-app-header__home-link,
+  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
+    .hds-button,
+  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
+    .hds-dropdown-toggle-button,
+  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
+    .hds-dropdown-toggle-icon,
+  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
+    .hds-app-header__home-link {
+    color: var(
+      --token-color-palette-neutral-200
+    ); // var(--token-color-foreground-disabled);
+    background-color: var(
+      --token-color-palette-neutral-50
+    ); // var(--token-color-palette-neutral-600);
+    border-color: var(
+      --token-color-palette-neutral-100
+    ); // var(--token-color-palette-neutral-500);
+  }
+}
+
+@mixin dark-mode-app-header-override {
+  .hds-app-header {
+    color: var(--token-color-palette-neutral-700);
+    background: var(--token-color-palette-neutral-0);
+    border-bottom-color: var(--token-color-palette-neutral-100);
+
+    &__home-link {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+  }
+
+  .hds-dropdown-toggle-button,
+  .hds-dropdown-toggle-icon {
+    background: var(--token-color-palette-neutral-0);
+    border-color: var(--token-color-palette-neutral-100);
+
+    &:hover {
+      background: var(--token-color-palette-neutral-50);
+    }
+
+    &:active,
+    &:focus {
+      background: var(--token-color-palette-neutral-0);
+    }
+  }
+}
+
+@mixin dark-mode-app-side-nav-override {
+  .hds-app-side-nav {
+    &__overlay {
+      background-color: var(
+        --token-color-palette-neutral-50
+      ); // another good options is background-color: var(--token-color-palette-neutral-0);
+    }
+
+    // this is supposed to be --token-color-palette-neutral-300 but it too closely resembles item link colors.
+    &__list-title {
+      color: var(
+        --token-color-palette-neutral-300
+      ); // var(--token-color-foreground-faint); //--token-color-palette-neutral-500//var(--token-app-side-nav-color-foreground-faint);
+    }
+
+    &__list-item-link.active {
+      background: var(--token-color-palette-neutral-100);
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
     @include dark-mode-ember-dropdown-override;
+    @include dark-mode-app-header-override;
+    @include dark-mode-app-side-nav-override;
+    @include dark-mode-button-override;
   }
 }
 
@@ -144,4 +233,7 @@
   @include dark-mode;
   @include dark-mode-modal-override;
   @include dark-mode-ember-dropdown-override;
+  @include dark-mode-app-header-override;
+  @include dark-mode-app-side-nav-override;
+  @include dark-mode-button-override;
 }
