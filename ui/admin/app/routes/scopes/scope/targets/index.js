@@ -92,8 +92,12 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       });
 
       if (this.can.can('list model', scope, { collection: 'sessions' })) {
+        // Before querying sessions, unload sessions currently stored in ember data store
+        // so that we remove any expired sessions that still might be cached.
+        this.store.unloadAll('session');
         const sessions = await this.store.query('session', {
           scope_id,
+          include_terminated: true,
           query: {
             filters: {
               scope_id: [{ equals: scope_id }],
@@ -147,7 +151,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
               },
             },
           },
-          { pushToStore: true, peekDb: true },
+          { peekDb: true },
         );
       }
       return { targets, doTargetsExist, totalItems };
