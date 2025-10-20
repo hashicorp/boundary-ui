@@ -120,6 +120,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         filters.type.push({ equals: type });
       });
 
+      // Before querying sessions, unload sessions currently stored in ember data store
+      // so that we remove any expired sessions that still might be cached.
+      this.store.unloadAll('session');
+
       const sessions = await this.getSessions(orgScope, scopes, orgFilter);
       this.addActiveSessionFilters(filters, availableSessions, sessions);
 
@@ -159,17 +163,13 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       // To correctly show targets with active sessions, the associated
       // sessions need to be queried to sync all the session models in
       //  ember data and retrieve their updated `status` properties
-      const sessionsPromise = this.store.query(
-        'session',
-        {
-          query: {
-            filters: {
-              target_id: targets.map((target) => ({ equals: target.id })),
-            },
+      const sessionsPromise = this.store.query('session', {
+        query: {
+          filters: {
+            target_id: targets.map((target) => ({ equals: target.id })),
           },
         },
-        { pushToStore: true },
-      );
+      });
 
       // Load the sessions and aliases for the targets on the current page
       try {
