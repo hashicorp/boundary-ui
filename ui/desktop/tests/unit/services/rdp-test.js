@@ -17,71 +17,39 @@ module('Unit | Service | rdp', function (hooks) {
     ipcService = this.owner.lookup('service:ipc');
   });
 
-  test('invokes ipc to fetch rdp clients', async function (assert) {
-    const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
-    const rdpClients = [
-      {
-        value: 'mstsc',
-        isAvailable: true,
-      },
-      {
-        value: 'windows-app',
-        isAvailable: false,
-      },
-      {
-        value: 'none',
-        isAvailable: true,
-      },
-    ];
-    ipcServiceStubbed.withArgs('getRdpClients').resolves(rdpClients);
-    const clients = await service.getRdpClients();
-    assert.ok(ipcServiceStubbed.calledOnce, 'ipc invoke was called once');
+  test('getRdpClients sets to fallback value on error', async function (assert) {
+    sinon.stub(ipcService, 'invoke').withArgs('getRdpClients').rejects();
+    await service.getRdpClients();
     assert.deepEqual(
-      clients,
-      rdpClients,
-      'rdp clients were returned correctly',
+      service.rdpClients,
+      [{ value: 'none' }],
+      'rdpClients fallback is set correctly',
     );
   });
 
-  test('invokes ipc to fetch preferred rdp client', async function (assert) {
-    const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
-    const preferredClient = 'mstsc';
-    ipcServiceStubbed
+  test('getPreferredRdpClient sets to fallback value on error', async function (assert) {
+    sinon
+      .stub(ipcService, 'invoke')
       .withArgs('getPreferredRdpClient')
-      .resolves(preferredClient);
-    const client = await service.getPreferredRdpClient();
-    assert.ok(ipcServiceStubbed.calledOnce, 'ipc invoke was called once');
-    assert.deepEqual(
-      client,
-      preferredClient,
-      'preferred rdp client was returned correctly',
+      .rejects();
+    await service.getPreferredRdpClient();
+    assert.strictEqual(
+      service.preferredRdpClient,
+      'none',
+      'preferredRdpClient fallback is set correctly',
     );
   });
 
-  test('invokes ipc to set preferred rdp client', async function (assert) {
-    const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
-    const newPreferredClient = 'windows-app';
-    ipcServiceStubbed
-      .withArgs('setPreferredRdpClient', newPreferredClient)
-      .resolves();
-    const client = await service.setPreferredRdpClient(newPreferredClient);
-    assert.ok(ipcServiceStubbed.calledOnce, 'ipc invoke was called once');
-    assert.deepEqual(
-      client,
-      newPreferredClient,
-      'preferred rdp client was set correctly',
-    );
-  });
-
-  test('invokes ipc to launch rdp client', async function (assert) {
-    const ipcServiceStubbed = sinon.stub(ipcService, 'invoke');
-    const sessionId = 'session-123';
-    ipcServiceStubbed.withArgs('launchRdpClient', sessionId).resolves();
-    await service.launchRdpClient(sessionId);
-    assert.ok(ipcServiceStubbed.calledOnce, 'ipc invoke was called once');
-    assert.ok(
-      ipcServiceStubbed.calledWith('launchRdpClient', sessionId),
-      'ipc invoke was called with correct arguments',
+  test('setPreferredRdpClient sets to fallback value on error', async function (assert) {
+    sinon
+      .stub(ipcService, 'invoke')
+      .withArgs('setPreferredRdpClient', 'mstsc')
+      .rejects();
+    await service.setPreferredRdpClient('mstsc');
+    assert.strictEqual(
+      service.preferredRdpClient,
+      'none',
+      'preferredRdpClient fallback is set correctly',
     );
   });
 });

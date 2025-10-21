@@ -287,7 +287,7 @@ handle('setPreferredRdpClient', async (rdpClient) => rdpClient);
 /**
  * Launches the RDP client with the provided session ID.
  */
-handle('launchRdpClient', async ({ sessionId }) => {
+handle('launchRdpClient', async (sessionId) => {
   return;
 });
 

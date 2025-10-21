@@ -17,14 +17,16 @@ export default class RdpService extends Service {
   /**
    * The preferred RDP client set by the user.
    * @type {string|null}
+   * @private
    */
-  @tracked _preferredRdpClient = null;
+  @tracked #preferredRdpClient = null;
 
   /**
    * The list of available RDP clients fetched from the main process.
    * @type {Array<Object>}
+   * @private
    */
-  @tracked _rdpClients = [];
+  @tracked #rdpClients = [];
 
   // =attributes
 
@@ -35,21 +37,15 @@ export default class RdpService extends Service {
    * @returns {boolean}
    */
   get isPreferredRdpClientSet() {
-    return this.preferredRdpClient && this.preferredRdpClient !== 'none';
-  }
-
-  get rdpClients() {
-    if (this._rdpClients.length === 0) {
-      this.getRdpClients();
-    }
-    return this._rdpClients;
+    return this.#preferredRdpClient && this.#preferredRdpClient !== 'none';
   }
 
   get preferredRdpClient() {
-    if (this._preferredRdpClient === null) {
-      this.getPreferredRdpClient();
-    }
-    return this._preferredRdpClient;
+    return this.#preferredRdpClient;
+  }
+
+  get rdpClients() {
+    return this.#rdpClients;
   }
 
   // =methods
@@ -59,13 +55,12 @@ export default class RdpService extends Service {
    */
   async getRdpClients() {
     try {
-      this._rdpClients = await this.ipc.invoke('getRdpClients');
-      return this._rdpClients;
-    } catch (error) {
-      console.error('Failed to fetch RDP clients:', error);
+      this.#rdpClients = await this.ipc.invoke('getRdpClients');
+      return this.#rdpClients;
+    } catch {
       // default to having 1 option of 'none' if it fails
-      this._rdpClients = [{ value: 'none' }];
-      return this._rdpClients;
+      this.#rdpClients = [{ value: 'none' }];
+      return this.#rdpClients;
     }
   }
 
@@ -75,12 +70,12 @@ export default class RdpService extends Service {
    */
   async getPreferredRdpClient() {
     try {
-      this._preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
-      return this._preferredRdpClient;
-    } catch (error) {
-      console.error('Failed to get preferred RDP client:', error);
-      this._preferredRdpClient = 'none';
-      return this._preferredRdpClient;
+      this.#preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
+      return this.#preferredRdpClient;
+    } catch {
+      // default to 'none' if it fails
+      this.#preferredRdpClient = 'none';
+      return this.#preferredRdpClient;
     }
   }
 
@@ -92,30 +87,21 @@ export default class RdpService extends Service {
   async setPreferredRdpClient(rdpClient) {
     try {
       await this.ipc.invoke('setPreferredRdpClient', rdpClient);
-      this._preferredRdpClient = rdpClient;
-      return this._preferredRdpClient;
-    } catch (error) {
-      console.error('Failed to set preferred RDP client:', error);
-      throw error;
+      this.#preferredRdpClient = rdpClient;
+      return this.#preferredRdpClient;
+    } catch {
+      // set to 'none' if it fails
+      this.#preferredRdpClient = 'none';
     }
   }
 
   /**
    * Launches the RDP client for a given session.
-   * The session_id is passed to the main process, which securely retrieves
+   * The `sessionId` is passed to the main process, which securely retrieves
    * the proxy details and constructs the appropriate RDP connection parameters.
-   * @param {string} session_id - The ID of the active session
+   * @param {string} sessionId - The ID of the active session
    */
-  async launchRdpClient(session_id) {
-    if (!session_id) {
-      throw new Error('No session ID provided.');
-    }
-
-    try {
-      await this.ipc.invoke('launchRdpClient', session_id);
-    } catch (error) {
-      console.error('Failed to launch RDP client:', error);
-      throw error;
-    }
+  async launchRdpClient(sessionId) {
+    await this.ipc.invoke('launchRdpClient', sessionId);
   }
 }
