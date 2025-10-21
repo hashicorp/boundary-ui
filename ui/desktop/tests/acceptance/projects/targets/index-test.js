@@ -682,11 +682,14 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     assert.strictEqual(instances.session.status, STATUS_SESSION_ACTIVE);
     await visit(urls.targets);
-    const emberDataSessionModel = this.owner
+    const emberDataSessionModelBefore = this.owner
       .lookup('service:store')
       .peekRecord('session', instances.session.id);
 
-    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_ACTIVE);
+    assert.strictEqual(
+      emberDataSessionModelBefore.status,
+      STATUS_SESSION_ACTIVE,
+    );
 
     assert
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
@@ -704,7 +707,13 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_TERMINATED);
+    const emberDataSessionModelAfter = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+    assert.strictEqual(
+      emberDataSessionModelAfter.status,
+      STATUS_SESSION_TERMINATED,
+    );
     assert
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
       .doesNotExist();
