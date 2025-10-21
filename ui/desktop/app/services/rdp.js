@@ -19,14 +19,14 @@ export default class RdpService extends Service {
    * @type {string|null}
    * @private
    */
-  @tracked #preferredRdpClient = null;
+  @tracked _preferredRdpClient = null;
 
   /**
    * The list of available RDP clients fetched from the main process.
    * @type {Array<Object>}
    * @private
    */
-  @tracked #rdpClients = [];
+  @tracked _rdpClients = [];
 
   // =attributes
 
@@ -37,15 +37,15 @@ export default class RdpService extends Service {
    * @returns {boolean}
    */
   get isPreferredRdpClientSet() {
-    return this.#preferredRdpClient && this.#preferredRdpClient !== 'none';
+    return this._preferredRdpClient && this._preferredRdpClient !== 'none';
   }
 
   get preferredRdpClient() {
-    return this.#preferredRdpClient;
+    return this._preferredRdpClient;
   }
 
   get rdpClients() {
-    return this.#rdpClients;
+    return this._rdpClients;
   }
 
   // =methods
@@ -55,12 +55,12 @@ export default class RdpService extends Service {
    */
   async getRdpClients() {
     try {
-      this.#rdpClients = await this.ipc.invoke('getRdpClients');
-      return this.#rdpClients;
+      this._rdpClients = await this.ipc.invoke('getRdpClients');
+      return this._rdpClients;
     } catch {
       // default to having 1 option of 'none' if it fails
-      this.#rdpClients = [{ value: 'none' }];
-      return this.#rdpClients;
+      this._rdpClients = [{ value: 'none' }];
+      return this._rdpClients;
     }
   }
 
@@ -70,12 +70,12 @@ export default class RdpService extends Service {
    */
   async getPreferredRdpClient() {
     try {
-      this.#preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
-      return this.#preferredRdpClient;
+      this._preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
+      return this._preferredRdpClient;
     } catch {
       // default to 'none' if it fails
-      this.#preferredRdpClient = 'none';
-      return this.#preferredRdpClient;
+      this._preferredRdpClient = 'none';
+      return this._preferredRdpClient;
     }
   }
 
@@ -87,11 +87,11 @@ export default class RdpService extends Service {
   async setPreferredRdpClient(rdpClient) {
     try {
       await this.ipc.invoke('setPreferredRdpClient', rdpClient);
-      this.#preferredRdpClient = rdpClient;
-      return this.#preferredRdpClient;
+      this._preferredRdpClient = rdpClient;
+      return this._preferredRdpClient;
     } catch {
       // set to 'none' if it fails
-      this.#preferredRdpClient = 'none';
+      this._preferredRdpClient = 'none';
     }
   }
 
