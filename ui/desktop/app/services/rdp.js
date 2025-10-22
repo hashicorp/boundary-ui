@@ -7,6 +7,8 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+const { __electronLog } = globalThis;
+
 export default class RdpService extends Service {
   // =services
 
@@ -19,14 +21,14 @@ export default class RdpService extends Service {
    * @type {string|null}
    * @private
    */
-  @tracked _preferredRdpClient = null;
+  @tracked preferredRdpClient = null;
 
   /**
    * The list of available RDP clients fetched from the main process.
    * @type {Array<Object>}
    * @private
    */
-  @tracked _rdpClients = [];
+  @tracked rdpClients = [];
 
   // =attributes
 
@@ -37,15 +39,9 @@ export default class RdpService extends Service {
    * @returns {boolean}
    */
   get isPreferredRdpClientSet() {
-    return this._preferredRdpClient && this._preferredRdpClient !== 'none';
-  }
-
-  get preferredRdpClient() {
-    return this._preferredRdpClient;
-  }
-
-  get rdpClients() {
-    return this._rdpClients;
+    return (
+      this.preferredRdpClient !== null && this.preferredRdpClient !== 'none'
+    );
   }
 
   // =methods
@@ -54,13 +50,18 @@ export default class RdpService extends Service {
    * Fetches the list of available RDP clients from the main process.
    */
   async getRdpClients() {
+    // Return cached clients if already fetched
+    if (this.rdpClients.length > 0) {
+      return this.rdpClients;
+    }
     try {
-      this._rdpClients = await this.ipc.invoke('getRdpClients');
-      return this._rdpClients;
-    } catch {
-      // default to having 1 option of 'none' if it fails
-      this._rdpClients = [{ value: 'none' }];
-      return this._rdpClients;
+      this.rdpClients = await this.ipc.invoke('getRdpClients');
+      return this.rdpClients;
+    } catch (error) {
+      __electronLog?.error('Failed to fetch RDP clients', error.message);
+      // default to 'none' option if it fails
+      this.rdpClients = [{ value: 'none' }];
+      return this.rdpClients;
     }
   }
 
@@ -69,13 +70,21 @@ export default class RdpService extends Service {
    * @returns {string} The preferred RDP client
    */
   async getPreferredRdpClient() {
+    // Return cached preferred RDP client if already fetched
+    if (this.preferredRdpClient !== null) {
+      return this.preferredRdpClient;
+    }
     try {
-      this._preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
-      return this._preferredRdpClient;
-    } catch {
+      this.preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
+      return this.preferredRdpClient;
+    } catch (error) {
+      __electronLog?.error(
+        'Failed to fetch preferred RDP client',
+        error.message,
+      );
       // default to 'none' if it fails
-      this._preferredRdpClient = 'none';
-      return this._preferredRdpClient;
+      this.preferredRdpClient = 'none';
+      return this.preferredRdpClient;
     }
   }
 
@@ -87,11 +96,12 @@ export default class RdpService extends Service {
   async setPreferredRdpClient(rdpClient) {
     try {
       await this.ipc.invoke('setPreferredRdpClient', rdpClient);
-      this._preferredRdpClient = rdpClient;
-      return this._preferredRdpClient;
-    } catch {
+      this.preferredRdpClient = rdpClient;
+      return this.preferredRdpClient;
+    } catch (error) {
+      __electronLog?.error('Failed to set preferred RDP client', error.message);
       // set to 'none' if it fails
-      this._preferredRdpClient = 'none';
+      this.preferredRdpClient = 'none';
     }
   }
 
