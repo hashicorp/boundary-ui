@@ -134,33 +134,16 @@
 
 @mixin dark-mode-button-override {
   /* stylelint-disable-next-line selector-class-pattern */
-  .hds-app-frame:has(
-      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-    )
+  .hds-app-frame:has(.hds-app-side-nav--is-not-minimized) {
+    /* stylelint-disable-next-line selector-class-pattern */
     .hds-button,
-  .hds-app-frame:has(
-      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-    )
     .hds-dropdown-toggle-button,
-  .hds-app-frame:has(
-      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-    )
     .hds-dropdown-toggle-icon,
-  .hds-app-frame:has(
-      .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-    )
-    .hds-app-header__home-link,
-  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
-    .hds-button,
-  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
-    .hds-dropdown-toggle-button,
-  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
-    .hds-dropdown-toggle-icon,
-  .hds-app-frame:has(.hds-side-nav--is-mobile.hds-side-nav--is-not-minimized)
     .hds-app-header__home-link {
-    color: var(--token-color-palette-neutral-200);
-    background-color: var(--token-color-palette-neutral-50);
-    border-color: var(--token-color-palette-neutral-100);
+      color: var(--token-color-palette-neutral-200);
+      background-color: var(--token-color-palette-neutral-50);
+      border-color: var(--token-color-palette-neutral-100);
+    }
   }
 }
 
