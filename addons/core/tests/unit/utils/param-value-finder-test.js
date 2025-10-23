@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { paramValueFinder } from 'admin/utils/param-value-finder';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 module('Unit | Utility | param-value-finder', function (hooks) {
   setupTest(hooks);
