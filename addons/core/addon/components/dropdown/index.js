@@ -30,7 +30,7 @@ export default class DropdownComponent extends Component {
         return isNameMatch || isIdMatch;
       });
     }
-    return items.slice(0, 500);
+    return items.slice(0, 250);
   }
 
   // =methods

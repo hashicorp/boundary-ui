@@ -6,6 +6,7 @@
 import { modelMapping } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
 import { underscore } from '@ember/string';
+import { assert } from '@ember/debug';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -163,30 +164,56 @@ function addSearchConditions({
     `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
   );
 }
+
 function constructSelectClause(select = [{ field: '*' }], tableName) {
   const distinctColumns = select.filter(({ isDistinct }) => isDistinct);
+  const nonDistinctColumns = select.filter(({ isDistinct }) => !isDistinct);
+
+  const buildColumnExpression = ({ field, isCount, alias, isDistinct }) => {
+    let column = field;
+
+    // If there's just distinct with nothing else, this will be handled separately
+    // and we will just return the column back as is
+    if (isCount && isDistinct) {
+      column = `count(DISTINCT ${column})`;
+    } else if (isCount) {
+      column = `count(${column})`;
+    }
+
+    if (alias) {
+      column = `${column} as ${alias}`;
+    }
+
+    return column;
+  };
+
   let selectColumns;
 
-  // Special case for distinct columns as they must be grouped together.
-  // We're only handling simple use cases as anything more complicated
-  // like windows/CTEs can be custom SQL.
   if (distinctColumns.length > 0) {
-    selectColumns = `DISTINCT ${distinctColumns.map(({ field }) => field).join(', ')}`;
+    // Check if any columns also have COUNT (or other aggregate function in the future)
+    const hasAggregateDistinct = distinctColumns.some((col) => col.isCount);
+
+    if (hasAggregateDistinct) {
+      selectColumns = distinctColumns.map(buildColumnExpression).join(', ');
+
+      // Add back in the non distinct columns
+      if (nonDistinctColumns.length > 0) {
+        const regularPart = nonDistinctColumns
+          .map(buildColumnExpression)
+          .join(', ');
+        selectColumns = `${selectColumns}, ${regularPart}`;
+      }
+    } else {
+      assert(
+        'Can not combine non-distincts with multi column distincts',
+        nonDistinctColumns.length === 0,
+      );
+
+      // Only do multi column DISTINCT with no aggregate functions
+      selectColumns = `DISTINCT ${distinctColumns.map(buildColumnExpression).join(', ')}`;
+    }
   } else {
-    selectColumns = select
-      .map(({ field, isCount, alias }) => {
-        let column = field;
-
-        if (isCount) {
-          column = `count(${column})`;
-        }
-        if (alias) {
-          column = `${column} as ${alias}`;
-        }
-
-        return column;
-      })
-      .join(', ');
+    selectColumns = select.map(buildColumnExpression).join(', ');
   }
 
   return `SELECT ${selectColumns} FROM "${tableName}"`;

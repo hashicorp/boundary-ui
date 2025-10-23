@@ -247,7 +247,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    */
   @action
   refresh() {
-    this.send('refreshAll');
+    this.router.refresh('scopes.scope.session-recordings');
   }
 
   /**
