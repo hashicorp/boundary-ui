@@ -248,6 +248,14 @@ export default function initializeMockIPC(server, config) {
     resumeClientAgent() {}
     hasRunningSessions() {}
     stopAll() {}
+    getRdpClients() {
+      return ['windows-app', 'none', 'mstsc'];
+    }
+    getPreferredRdpClient() {
+      return 'windows-app';
+    }
+    setPreferredRdpClient() {}
+    launchRdpClient() {}
   }
 
   /**
