@@ -2,14 +2,12 @@
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
  */
-
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('../helpers/spawn-promise');
 const { shell } = require('electron');
 const fs = require('fs');
 const which = require('which');
 const { isMac, isWindows } = require('../helpers/platform.js');
 const store = require('./electron-store-manager');
-const log = require('electron-log/main');
 
 // RDP Client Configuration
 const RDP_CLIENTS = [
@@ -27,7 +25,7 @@ const RDP_CLIENTS = [
   },
   {
     value: 'windows-app',
-    isAvailable: async () => {
+    isAvailable: () => {
       if (!isMac()) return false;
       try {
         // Check for Windows App
@@ -36,23 +34,16 @@ const RDP_CLIENTS = [
         }
 
         // Fallback: Use mdfind for Microsoft Remote Desktop
-        return new Promise((resolve) => {
-          const mdfind = spawn('mdfind', [
-            'kMDItemCFBundleIdentifier == "com.microsoft.rdc.macos"',
-          ]);
-          let output = '';
-
-          mdfind.stdout.on('data', (data) => {
-            output += data.toString();
-          });
-
-          mdfind.on('close', (code) => {
-            const found = code === 0 && output.trim().length > 0;
-            resolve(found);
-          });
-
-          mdfind.on('error', () => resolve(false));
-        });
+        else {
+          const result = spawnSync(
+            ['kMDItemCFBundleIdentifier == "com.microsoft.rdc.macos"'],
+            {},
+            'mdfind',
+          );
+          // `mdfind` returns an object with stdout containing the path of the app if found
+          // Example: '/Applications/Windows App.app\n'
+          return result.stdout && result.stdout.trim().length > 0;
+        }
       } catch {
         return false;
       }
@@ -65,17 +56,17 @@ const RDP_CLIENTS = [
 ];
 
 class RdpClientManager {
+  // Track active RDP processes for cleanup
+  #activeProcesses = new Set();
   /**
    * Gets all available RDP clients on the current system
-   * @returns {Promise<Array>} Array of available RDP clients with value
+   * @returns {Promise<Array>} Array of available RDP client values
    */
   async getAvailableRdpClients() {
     const available = [];
     for (const client of RDP_CLIENTS) {
       if (await client.isAvailable()) {
-        available.push({
-          value: client.value,
-        });
+        available.push(client.value);
       }
     }
     return available;
@@ -87,10 +78,8 @@ class RdpClientManager {
    */
   async getBestDefaultRdpClient() {
     const availableClients = await this.getAvailableRdpClients();
-    const bestClient = availableClients.find(
-      (client) => client.value !== 'none',
-    );
-    return bestClient ? bestClient.value : 'none';
+    const bestClient = availableClients.find((client) => client !== 'none');
+    return bestClient || 'none';
   }
 
   /**
@@ -113,14 +102,10 @@ class RdpClientManager {
    * @param {string} preferredClient - The RDP client value to set as preferred
    */
   setPreferredRdpClient(preferredClient) {
-    try {
-      if (!preferredClient) {
-        store.set('preferredRdpClient', 'none');
-      } else {
-        store.set('preferredRdpClient', preferredClient);
-      }
-    } catch (error) {
-      log.error('Error setting preferred RDP client', error);
+    if (!preferredClient) {
+      store.set('preferredRdpClient', 'none');
+    } else {
+      store.set('preferredRdpClient', preferredClient);
     }
   }
 
@@ -131,21 +116,19 @@ class RdpClientManager {
    */
   async launchRdpConnection(address, port) {
     if (isWindows()) {
-      // Launch Windows mstsc
+      // Launch Windows mstsc and track it for cleanup
       const mstscArgs = [`/v:${address}:${port}`];
-      const child = spawn('mstsc', mstscArgs, {
-        detached: true,
-        stdio: 'ignore',
-      });
-      child.unref();
+      const result = await spawn(mstscArgs, {}, 'mstsc');
+      const child = result.childProcess;
+
+      // Add to activeprocesses set for cleanup
+      this.#activeProcesses.add(child);
     } else if (isMac()) {
-      // Launch macOS RDP URL rdp://full%20address=s:address:port
+      // Launch macOS RDP URL - no process to track as it's handled by the system
       const fullAddress = `${address}:${port}`;
       const encoded = encodeURIComponent(`full address=s:${fullAddress}`);
       const rdpUrl = `rdp://${encoded}`;
       await shell.openExternal(rdpUrl);
-    } else {
-      log.error('RDP launch is only supported on Windows and macOS');
     }
   }
 
@@ -169,8 +152,21 @@ class RdpClientManager {
       // Launch RDP connection
       await this.launchRdpConnection(address, port);
     } catch (error) {
-      log.error('Failed to launch RDP client', error);
+      throw error;
     }
+  }
+
+  /**
+   * Stop all active RDP processes
+   */
+  stopAll() {
+    for (const process of this.#activeProcesses) {
+      if (!process.killed) {
+        process.kill();
+      }
+    }
+    // Clear the active processes set after stopping all processes
+    this.#activeProcesses.clear();
   }
 }
 
