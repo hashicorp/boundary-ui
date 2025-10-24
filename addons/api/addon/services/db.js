@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Service, { service } from '@ember/service';
 import { modelMapping } from 'api/services/sqlite';
 import { assert } from '@ember/debug';
