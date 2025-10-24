@@ -22,7 +22,7 @@ module('Unit | Service | rdp', function (hooks) {
     await service.getRdpClients();
     assert.deepEqual(
       service.rdpClients,
-      [{ value: 'none' }],
+      ['none'],
       'rdpClients fallback is set correctly',
     );
   });

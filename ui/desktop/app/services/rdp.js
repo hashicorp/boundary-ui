@@ -25,7 +25,7 @@ export default class RdpService extends Service {
 
   /**
    * The list of available RDP clients fetched from the main process.
-   * @type {Array<Object>}
+   * @type {Array<String>}
    * @private
    */
   @tracked rdpClients = [];
@@ -60,7 +60,7 @@ export default class RdpService extends Service {
     } catch (error) {
       __electronLog?.error('Failed to fetch RDP clients', error.message);
       // default to 'none' option if it fails
-      this.rdpClients = [{ value: 'none' }];
+      this.rdpClients = ['none'];
       return this.rdpClients;
     }
   }
