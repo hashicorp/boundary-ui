@@ -1005,14 +1005,6 @@
   }
 }
 
-// scope picker
-.scope-picker {
-  li:has(.indentation),
-  li.indentation {
-    margin-left: 1.5rem;
-  }
-}
-
 // dropdown checkbox list
 .dropdown-checkbox-list {
   margin-bottom: 1rem;
