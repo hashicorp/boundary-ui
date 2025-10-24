@@ -20,6 +20,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
 
   @service store;
   @service intl;
+  @service db;
 
   // =attributes
 
@@ -167,22 +168,14 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     const config = this.filterConfigs[type];
     assert(`Unknown filter type: ${type}`, config);
 
-    const options = {
-      peekDb: true,
-      returnRawData: true,
-    };
-    const results = await this.store.query(
-      'session-recording',
-      {
-        select: config.select,
-        query: {
-          search: { text: search, fields: config.searchFields },
-        },
-        page: 1,
-        pageSize: 250,
+    const results = await this.db.query('session-recording', {
+      select: config.select,
+      query: {
+        search: { text: search, fields: config.searchFields },
       },
-      options,
-    );
+      page: 1,
+      pageSize: 250,
+    });
 
     return results.map(config.mapper);
   }

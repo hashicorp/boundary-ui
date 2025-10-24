@@ -35,7 +35,6 @@ export default class SqliteHandler {
             pushToStore = true,
             peekDb = false,
             storeToken = true,
-            returnRawData = false,
           } = {},
         } = data;
         const supportedModels = Object.keys(modelMapping);
@@ -133,10 +132,6 @@ export default class SqliteHandler {
           sql,
           parameters,
         });
-
-        if (returnRawData) {
-          return rows;
-        }
 
         const { sql: countSql, parameters: countParams } =
           generateSQLExpressions(type, queryObj, {
