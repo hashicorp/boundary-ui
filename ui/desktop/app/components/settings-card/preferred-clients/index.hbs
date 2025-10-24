@@ -1,0 +1,60 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<SettingsCard
+  @header={{t 'settings.preferred-clients.title'}}
+  @icon='external-link'
+  @description={{t 'settings.preferred-clients.description'}}
+>
+  <:body>
+    <Hds::Table
+      class='full-width'
+      @model={{this.protocolClients}}
+      @columns={{array
+        (hash
+          label=(t 'settings.preferred-clients.table.header.protocol')
+          width='50%'
+        )
+        (hash
+          label=(t 'settings.preferred-clients.table.header.client') width='50%'
+        )
+      }}
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td>{{t
+              (concat
+                'settings.preferred-clients.table.data.protocols.'
+                B.data.protocolType
+              )
+            }}
+          </B.Td>
+          <B.Td>
+            <Hds::Form::Select::Field
+              @width='100%'
+              {{on 'change' B.data.updateClient}}
+              as |F|
+            >
+              <F.Options>
+                {{#each B.data.clients as |client|}}
+                  <option
+                    value={{client}}
+                    selected={{eq B.data.preferredClient client}}
+                  >
+                    {{t
+                      (concat
+                        'settings.preferred-clients.table.data.clients.' client
+                      )
+                    }}
+                  </option>
+                {{/each}}
+              </F.Options>
+            </Hds::Form::Select::Field>
+          </B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
+  </:body>
+</SettingsCard>
