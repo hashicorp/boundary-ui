@@ -232,31 +232,9 @@ module('Acceptance | session-recordings | list', function (hooks) {
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('user'));
+    await waitFor(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
-  });
-
-  test('user can filter session recordings by scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.globalScope);
-
-    await click(commonSelectors.HREF(urls.sessionRecordings));
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
-
-    await click(commonSelectors.FILTER_DROPDOWN('target'));
-    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
-    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
@@ -277,7 +255,34 @@ module('Acceptance | session-recordings | list', function (hooks) {
 
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    await waitFor(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
+  });
+
+  test('user can filter session recordings by scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.globalScope);
+
+    await click(commonSelectors.HREF(urls.sessionRecordings));
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
+
     await click(commonSelectors.FILTER_DROPDOWN('scope'));
+    await waitFor(
+      commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.scope.id),
+    );
     await click(
       commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.scope.id),
     );

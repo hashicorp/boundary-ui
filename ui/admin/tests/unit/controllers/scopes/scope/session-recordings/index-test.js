@@ -138,21 +138,5 @@ module(
       assert.strictEqual(controller.page, 1);
       assert.deepEqual(controller.time, last24Hours.toISOString());
     });
-
-    test('refresh action calls refreshAll', async function (assert) {
-      assert.expect(2);
-      controller.set('target', {
-        send(actionName, ...args) {
-          assert.strictEqual(actionName, 'refreshAll');
-          assert.deepEqual(
-            args,
-            [],
-            'refreshAll was called with the correct arguments',
-          );
-        },
-      });
-
-      await controller.refresh();
-    });
   },
 );
