@@ -134,7 +134,9 @@
 
 @mixin dark-mode-button-override {
   /* stylelint-disable-next-line selector-class-pattern */
-  .hds-app-frame:has(.hds-app-side-nav--is-not-minimized) {
+  .hds-app-frame:has(
+    .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+  ) {
     /* stylelint-disable-next-line selector-class-pattern */
     .hds-button,
     .hds-dropdown-toggle-button,

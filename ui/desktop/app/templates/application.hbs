@@ -5,52 +5,31 @@
 
 {{page-title (app-name)}}
 
-<Rose::Layout::Global as |layout|>
-
-  <layout.header>
-    <Rose::Header
-      class='{{if (is-loading) " loading"}}
-        {{if this.hasMacOSChrome " header-cushion"}}'
-      as |header|
+<Hds::AppFrame @hasHeader={{true}} @hasSidebar={{this.showSideNav}} as |Frame|>
+  <Frame.Header>
+    <Hds::AppHeader
+      class='app-header {{if this.hasMacOSChrome " header-cushion"}}'
+      @a11yRefocusRouteChangeValidator={{this.customRouteChangeValidator}}
     >
-      <header.brand @logo='logo-app' @text={{(app-name)}} />
+      <:logo>
+        <Hds::AppHeader::HomeLink
+          @icon='boundary'
+          @color='var(--token-color-boundary-brand)'
+          @text={{(app-name)}}
+          @route='index'
+          class='app-header__logo'
+        />
+      </:logo>
 
-      <header.nav>
-        <div id='header-nav'></div>
-      </header.nav>
-
-      <header.utilities>
-        {{#if this.showWindowActions}}
-          <Hds::Button
-            {{on 'click' this.close}}
-            class='button-window-close'
-            title={{t 'actions.close'}}
-            @text={{t 'actions.close'}}
-            @icon='x'
-            @isIconOnly={{true}}
-          />
-          <Hds::Button
-            {{on 'click' this.toggleFullScreen}}
-            class='button-window-fullscreen'
-            title={{t 'actions.fullscreen'}}
-            @text={{t 'actions.fullscreen'}}
-            @icon='square'
-            @isIconOnly={{true}}
-            @color='secondary'
-          />
-          <Hds::Button
-            {{on 'click' this.minimize}}
-            class='button-window-minimize'
-            title={{t 'actions.minimize'}}
-            @text={{t 'actions.minimize'}}
-            @icon='minus'
-            @isIconOnly={{true}}
-            @color='secondary'
-          />
+      <:globalActions>
+        {{#if this.session.isAuthenticated}}
+          <ScopePicker class='app-header__global-actions' />
         {{/if}}
+      </:globalActions>
 
+      <:utilityActions>
         {{#if this.session.username}}
-          <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
+          <Hds::Dropdown class='app-header__utility-actions' as |dd|>
             <dd.ToggleButton
               @icon='user-circle'
               @text={{this.session.username}}
@@ -63,7 +42,7 @@
             </dd.Interactive>
           </Hds::Dropdown>
         {{else}}
-          <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
+          <Hds::Dropdown as |dd|>
             <dd.ToggleIcon @icon='user-circle' @text={{t 'titles.user-menu'}} />
             <dd.Interactive
               data-test-nav-signout-btn
@@ -74,15 +53,49 @@
           </Hds::Dropdown>
         {{/if}}
 
-      </header.utilities>
-    </Rose::Header>
-  </layout.header>
+        {{#if this.showWindowActions}}
+          <Hds::Button
+            {{on 'click' this.minimize}}
+            class='app-header__utility-actions button-window-minimize'
+            title={{t 'actions.minimize'}}
+            @text={{t 'actions.minimize'}}
+            @icon='minus'
+            @isIconOnly={{true}}
+            @color='secondary'
+          />
+          <Hds::Button
+            {{on 'click' this.toggleFullScreen}}
+            class='app-header__utility-actions button-window-fullscreen'
+            title={{t 'actions.fullscreen'}}
+            @text={{t 'actions.fullscreen'}}
+            @icon='square'
+            @isIconOnly={{true}}
+            @color='secondary'
+          />
+          <Hds::Button
+            {{on 'click' this.close}}
+            class='app-header__utility-actions button-window-close'
+            title={{t 'actions.close'}}
+            @text={{t 'actions.close'}}
+            @icon='x'
+            @isIconOnly={{true}}
+          />
+        {{/if}}
+      </:utilityActions>
 
-  <layout.body>
+    </Hds::AppHeader>
+  </Frame.Header>
+
+  <Frame.Sidebar>
+    <Hds::AppSideNav>
+      <Hds::AppSideNav::Portal::Target />
+    </Hds::AppSideNav>
+  </Frame.Sidebar>
+
+  <Frame.Main>
     {{outlet}}
-  </layout.body>
-
-</Rose::Layout::Global>
+  </Frame.Main>
+</Hds::AppFrame>
 
 {{#if this.flashMessages.queue}}
   <div class='ember-notify-cn'>
