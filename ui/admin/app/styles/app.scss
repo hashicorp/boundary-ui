@@ -11,12 +11,6 @@
 @use 'notify';
 @use 'asciinema-player/dist/bundle/asciinema-player.css';
 
-.rose-layout-global {
-  .rose-layout-global-body {
-    justify-content: center;
-  }
-}
-
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
@@ -87,14 +81,6 @@
       }
     }
   }
-}
-
-[class*='session-status-'] {
-  color: var(--ui-gray-subtler-2);
-}
-
-.session-status-active {
-  color: var(--success);
 }
 
 .nowrap {
