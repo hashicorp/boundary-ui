@@ -26,6 +26,7 @@ const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
 const cacheDaemonManager = require('./services/cache-daemon-manager');
+const rdpClientManager = require('./services/rdp-client-manager');
 const store = require('./services/electron-store-manager');
 
 const menu = require('./config/menu.js');
@@ -297,6 +298,8 @@ app.on('before-quit', async (event) => {
 
 app.on('quit', () => {
   cacheDaemonManager.stop();
+  // we should stop any active RDP client processes
+  rdpClientManager.stopAll();
 });
 
 // Handle an unhandled error in the main thread
