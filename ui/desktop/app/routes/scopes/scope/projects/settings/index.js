@@ -11,7 +11,6 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
   @service ipc;
   @service session;
   @service clusterUrl;
-  @service rdp;
 
   // =methods
   async model() {
@@ -25,10 +24,6 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     const logLevel = await this.ipc.invoke('getLogLevel');
     const logPath = await this.ipc.invoke('getLogPath');
     const serverInformation = this.clusterUrl.rendererClusterUrl;
-
-    // fetch RDP clients and preferred client
-    await this.rdp.getRdpClients();
-    await this.rdp.getPreferredRdpClient();
 
     return {
       desktopVersion: `v${desktopVersion}`,
