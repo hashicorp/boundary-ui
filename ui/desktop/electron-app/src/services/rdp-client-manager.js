@@ -138,7 +138,7 @@ class RdpClientManager {
    */
   async launchRdpClient(sessionId, sessionManager) {
     // Get session object from session manager
-    const session = sessionManager.getSessionById?.(sessionId).proxyDetails;
+    const session = sessionManager.getSessionById?.(sessionId);
 
     if (!session) {
       return;
