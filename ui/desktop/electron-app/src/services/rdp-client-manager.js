@@ -57,7 +57,7 @@ const RDP_CLIENTS = [
 
 class RdpClientManager {
   // Track active RDP processes for cleanup
-  #activeProcesses = new Set();
+  #activeProcesses = [];
   /**
    * Gets all available RDP clients on the current system
    * @returns {Promise<Array>} Array of available RDP client values
@@ -79,7 +79,7 @@ class RdpClientManager {
   async getBestDefaultRdpClient() {
     const availableClients = await this.getAvailableRdpClients();
     const bestClient = availableClients.find((client) => client !== 'none');
-    return bestClient || 'none';
+    return bestClient ?? 'none';
   }
 
   /**
@@ -118,11 +118,9 @@ class RdpClientManager {
     if (isWindows()) {
       // Launch Windows mstsc and track it for cleanup
       const mstscArgs = [`/v:${address}:${port}`];
-      const result = await spawn(mstscArgs, {}, 'mstsc');
-      const child = result.childProcess;
-
-      // Add to activeprocesses set for cleanup
-      this.#activeProcesses.add(child);
+      const { childProcess } = await spawn(mstscArgs, {}, 'mstsc');
+      // Add to activeProcesses array for cleanup
+      this.#activeProcesses.push(childProcess);
     } else if (isMac()) {
       // Launch macOS RDP URL - no process to track as it's handled by the system
       const fullAddress = `${address}:${port}`;
@@ -134,26 +132,23 @@ class RdpClientManager {
 
   /**
    * Launches RDP client using session ID
-   * Retrieves proxy details from session manager and launches appropriate RDP client
-   * @param {string} sessionId - The session ID to get proxy details for
-   * @param {Object} sessionManager - Session manager instance to get proxy details from
+   * Retrieves session object from session manager and launches appropriate RDP client
+   * @param {string} sessionId - The session ID to get session for
+   * @param {Object} sessionManager - Session manager instance to get session from
    */
   async launchRdpClient(sessionId, sessionManager) {
-    try {
-      // Get proxy details from session manager
-      const proxyDetails = sessionManager.getProxyDetailsById?.(sessionId);
+    // Get session object from session manager
+    const session = sessionManager.getSessionById?.(sessionId).proxyDetails;
 
-      if (!proxyDetails) {
-        return;
-      }
-
-      const { address, port } = proxyDetails;
-
-      // Launch RDP connection
-      await this.launchRdpConnection(address, port);
-    } catch (error) {
-      throw error;
+    if (!session) {
+      return;
     }
+
+    const {
+      proxyDetails: { address, port },
+    } = session;
+    // Launch RDP connection
+    await this.launchRdpConnection(address, port);
   }
 
   /**
@@ -165,8 +160,8 @@ class RdpClientManager {
         process.kill();
       }
     }
-    // Clear the active processes set after stopping all processes
-    this.#activeProcesses.clear();
+    // Clear the active processes array after stopping all processes
+    this.#activeProcesses = [];
   }
 }
 

@@ -260,8 +260,9 @@ handle('setLogLevel', (logLevel) => store.set('logLevel', logLevel));
 handle('getLogPath', () => {
   switch (os.platform()) {
     case 'win32':
-      return `${process.env.USERPROFILE ?? '%USERPROFILE%'
-        }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
+      return `${
+        process.env.USERPROFILE ?? '%USERPROFILE%'
+      }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
     case 'darwin':
       return '~/Library/Logs/Boundary/desktop-client.log';
     case 'linux':
@@ -272,30 +273,28 @@ handle('getLogPath', () => {
 /**
  * Returns the available RDP clients
  */
-handle('getRdpClients', async () => {
-  return await rdpClientManager.getAvailableRdpClients();
-});
+handle('getRdpClients', async () => rdpClientManager.getAvailableRdpClients());
 
 /**
  * Returns the preferred RDP client
  */
-handle('getPreferredRdpClient', async () => {
-  return await rdpClientManager.getPreferredRdpClient();
-});
+handle('getPreferredRdpClient', async () =>
+  rdpClientManager.getPreferredRdpClient(),
+);
 
 /**
  * Sets the preferred RDP client
  */
-handle('setPreferredRdpClient', (preferredClient) => {
-  return rdpClientManager.setPreferredRdpClient(preferredClient);
-});
+handle('setPreferredRdpClient', (preferredClient) =>
+  rdpClientManager.setPreferredRdpClient(preferredClient),
+);
 
 /**
  * Launches the RDP client with the provided session ID.
  */
-handle('launchRdpClient', async (sessionId) => {
-  return await rdpClientManager.launchRdpClient(sessionId, sessionManager);
-});
+handle('launchRdpClient', async (sessionId) =>
+  rdpClientManager.launchRdpClient(sessionId, sessionManager),
+);
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

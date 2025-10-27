@@ -47,13 +47,12 @@ class SessionManager {
   }
 
   /**
-   * Get proxy details for a session by identifier.
+   * Get session by identifier.
    * @param {string} sessionId
-   * @returns {Object} Proxy details with address and port
+   * @returns {Session} The session object
    */
-  getProxyDetailsById(sessionId) {
-    const session = this.#sessions.find((session) => session.id === sessionId);
-    return session?.proxyDetails;
+  getSessionById(sessionId) {
+    return this.#sessions.find((session) => session.id === sessionId);
   }
 
   /**
