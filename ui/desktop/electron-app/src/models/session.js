@@ -52,6 +52,14 @@ class Session {
   }
 
   /**
+   * Get proxy details for the session
+   * @return {Object}
+   */
+  get proxyDetails() {
+    return this.#proxyDetails;
+  }
+
+  /**
    * Generate cli command for session.
    * @returns {string[]}
    */
