@@ -7,6 +7,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
+const PROTOCOL_WINDOWS_RDP = 'windows-rdp';
+
 export default class SettingsCardPreferredClientsComponent extends Component {
   // =services
   @service rdp;
@@ -20,7 +22,7 @@ export default class SettingsCardPreferredClientsComponent extends Component {
   get protocolClients() {
     return [
       {
-        protocolType: 'windows-rdp',
+        protocolType: PROTOCOL_WINDOWS_RDP,
         clients: this.rdp.rdpClients,
         preferredClient: this.rdp.preferredRdpClient,
         updateClient: this.updatePreferredRDPClient,
