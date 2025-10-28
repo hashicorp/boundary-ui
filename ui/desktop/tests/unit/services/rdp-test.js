@@ -39,6 +39,14 @@ module('Unit | Service | rdp', function (hooks) {
       [RDP_CLIENT_NONE],
       'rdpClients fallback is set correctly',
     );
+    assert.deepEqual(
+      service.recommendedRdpClient,
+      {
+        name: RDP_CLIENT_WINDOWS_APP,
+        link: 'https://apps.apple.com/us/app/windows-app/id1295203466',
+      },
+      'recommendedRdpClient fallback is set correctly',
+    );
   });
 
   test('getPreferredRdpClient sets to fallback value on error', async function (assert) {

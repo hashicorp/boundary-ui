@@ -65,10 +65,6 @@ module('Acceptance | clusterUrl', function (hooks) {
   hooks.beforeEach(async function () {
     await invalidateSession();
 
-    let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
-
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
