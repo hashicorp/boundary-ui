@@ -163,19 +163,6 @@ class RdpClientManager {
     // Clear the active processes array after stopping all processes
     this.#activeProcesses = [];
   }
-
-  /**
-   * Stop all active RDP processes
-   */
-  stopAll() {
-    for (const process of this.#activeProcesses) {
-      if (!process.killed) {
-        process.kill();
-      }
-    }
-    // Clear the active processes set after stopping all processes
-    this.#activeProcesses.clear();
-  }
 }
 
 module.exports = new RdpClientManager();

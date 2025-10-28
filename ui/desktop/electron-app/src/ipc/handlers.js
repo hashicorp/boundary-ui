@@ -260,8 +260,9 @@ handle('setLogLevel', (logLevel) => store.set('logLevel', logLevel));
 handle('getLogPath', () => {
   switch (os.platform()) {
     case 'win32':
-      return `${process.env.USERPROFILE ?? '%USERPROFILE%'
-        }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
+      return `${
+        process.env.USERPROFILE ?? '%USERPROFILE%'
+      }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
     case 'darwin':
       return '~/Library/Logs/Boundary/desktop-client.log';
     case 'linux':
