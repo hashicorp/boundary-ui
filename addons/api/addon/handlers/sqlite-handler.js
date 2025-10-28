@@ -101,6 +101,7 @@ export default class SqliteHandler {
               payload,
               storeToken,
               tokenKey,
+              pushToStore,
               serializer,
               store,
               schema,
@@ -207,6 +208,7 @@ export default class SqliteHandler {
     payload,
     storeToken,
     tokenKey,
+    pushToStore,
     serializer,
     store,
     schema,
@@ -233,12 +235,14 @@ export default class SqliteHandler {
     if (payload.removed_ids?.length > 0) {
       await this.sqlite.deleteResource(type, payload.removed_ids);
 
-      payload.removed_ids.forEach((id) => {
-        const record = store.peekRecord(type, id);
-        if (record) {
-          store.unloadRecord(record);
-        }
-      });
+      if (pushToStore) {
+        payload.removed_ids.forEach((id) => {
+          const record = store.peekRecord(type, id);
+          if (record) {
+            store.unloadRecord(record);
+          }
+        });
+      }
     }
 
     // Store the new data we just got back from the API refresh
