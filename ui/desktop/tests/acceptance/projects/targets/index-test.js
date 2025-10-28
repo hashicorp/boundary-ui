@@ -25,6 +25,7 @@ import {
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
 import { TYPE_TARGET_RDP } from 'api/models/target';
+import sinon from 'sinon';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -171,6 +172,11 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'getRdpClients').resolves();
+    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
