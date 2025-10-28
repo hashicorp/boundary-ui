@@ -153,8 +153,9 @@ settings:
           windows-rdp: Windows RDP
         clients:
           none: None
-          mstsc: Microsoft Remote Desktop (mstsc)
+          mstsc: Remote Desktop Connection (mstsc)
           windows-app: Windows App
+          none-detected: None detected. We recommend
 worker-filter-generator:
   title: Filter generator
   description: Choose what you want to format into a filter.

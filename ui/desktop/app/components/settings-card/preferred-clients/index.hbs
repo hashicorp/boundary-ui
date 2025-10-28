@@ -32,26 +32,46 @@
             }}
           </B.Td>
           <B.Td>
-            <Hds::Form::Select::Field
-              @width='100%'
-              {{on 'change' B.data.updateClient}}
-              as |F|
-            >
-              <F.Options>
-                {{#each B.data.clients as |client|}}
-                  <option
-                    value={{client}}
-                    selected={{eq B.data.preferredClient client}}
-                  >
-                    {{t
-                      (concat
-                        'settings.preferred-clients.table.data.clients.' client
-                      )
-                    }}
-                  </option>
-                {{/each}}
-              </F.Options>
-            </Hds::Form::Select::Field>
+            {{#if this.rdp.recommendedRdpClient}}
+              <Hds::Text::Body>
+                {{t
+                  'settings.preferred-clients.table.data.clients.none-detected'
+                }}
+                <Hds::Link::Inline
+                  @href={{this.rdp.recommendedRdpClient.link}}
+                  @isHrefExternal={{true}}
+                >
+                  {{t
+                    (concat
+                      'settings.preferred-clients.table.data.clients.'
+                      this.rdp.recommendedRdpClient.name
+                    )
+                  }}
+                </Hds::Link::Inline>
+              </Hds::Text::Body>
+            {{else}}
+              <Hds::Form::Select::Field
+                @width='100%'
+                {{on 'change' B.data.updateClient}}
+                as |F|
+              >
+                <F.Options>
+                  {{#each B.data.clients as |client|}}
+                    <option
+                      value={{client}}
+                      selected={{eq B.data.preferredClient client}}
+                    >
+                      {{t
+                        (concat
+                          'settings.preferred-clients.table.data.clients.'
+                          client
+                        )
+                      }}
+                    </option>
+                  {{/each}}
+                </F.Options>
+              </Hds::Form::Select::Field>
+            {{/if}}
           </B.Td>
         </B.Tr>
       </:body>
