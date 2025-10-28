@@ -65,10 +65,6 @@ module('Acceptance | clusterUrl', function (hooks) {
   hooks.beforeEach(async function () {
     await invalidateSession();
 
-    let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
-
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
@@ -103,6 +99,11 @@ module('Acceptance | clusterUrl', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'getRdpClients').resolves();
+    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
   });
 
   hooks.afterEach(function () {

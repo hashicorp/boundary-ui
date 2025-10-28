@@ -164,13 +164,17 @@ const createWindow = async (partition, closeWindowCB) => {
   // Opens external links in the host default browser.
   // We allow developer.hashicorp.com domain to open on an external window
   // and releases.hashicorp.com domain to download the desktop app or
-  // link to the release page for the desktop app.
+  // link to the release page for the desktop app or
+  // apps.apple.com domain to open the app store page to download the Windows App or
+  // learn.microsoft.com domain to open the documentation for installing Remote Desktop Connection.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (
       isLocalhost(url) ||
       url.startsWith('https://developer.hashicorp.com/') ||
       url.startsWith('https://releases.hashicorp.com/boundary-desktop/') ||
-      url.startsWith('https://support.hashicorp.com/hc/en-us')
+      url.startsWith('https://support.hashicorp.com/hc/en-us') ||
+      url.startsWith('https://learn.microsoft.com/') ||
+      url.startsWith('https://apps.apple.com/')
     ) {
       shell.openExternal(url);
     }
