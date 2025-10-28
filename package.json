@@ -53,7 +53,8 @@
       "fireworm>async": "^2.6.4",
       "ember-cli-babel>@babel/runtime": "7.27.6",
       "ember-try-config>package-json": "^10.0.1",
-      "ember-stargate@^0.6.0>@glimmer/component": "^2.0.0"
+      "ember-stargate@^0.6.0>@glimmer/component": "^2.0.0",
+      "ember-loading>ember-concurrency": "^4.0.0"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
@@ -63,7 +64,10 @@
       "@nestjs/core",
       "@openapitools/openapi-generator-cli"
     ],
-    "onlyBuiltDependencies": []
+    "onlyBuiltDependencies": [],
+    "patchedDependencies": {
+      "ember-loading": "patches/ember-loading.patch"
+    }
   },
   "config": {
     "commitizen": {

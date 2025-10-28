@@ -16,8 +16,9 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated)
+    if (this.session.isAuthenticated) {
       this.router.transitionTo('scopes.scope.index');
+    }
   }
 
   /**

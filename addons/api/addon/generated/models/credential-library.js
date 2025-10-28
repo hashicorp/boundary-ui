@@ -76,13 +76,13 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   path;
 
   @attr('string', {
-    for: ['vault-generic', 'vault-ldap'],
+    for: 'vault-generic',
     description: 'It indicates the type of credential the library returns.',
   })
   credential_type;
 
   @attr('object-as-array', {
-    for: ['vault-generic', 'vault-ldap'],
+    for: 'vault-generic',
     description: 'It indicates the credential mapping overrides.',
   })
   credential_mapping_overrides;
