@@ -24,6 +24,7 @@ import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
+import { TYPE_TARGET_RDP } from 'api/models/target';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -708,5 +709,50 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
       .doesNotExist();
+  });
+
+  test('shows `Open` button for RDP target with preferred client', async function (assert) {
+    let rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'windows-app';
+    instances.target.update({
+      type: TYPE_TARGET_RDP,
+    });
+    await visit(urls.targets);
+
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .exists();
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .hasText('Open');
+    assert.dom('[data-test-icon=external-link]').exists();
+  });
+
+  test('shows `Connect` button for RDP target with no preferred client', async function (assert) {
+    let rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'none';
+    instances.target.update({
+      type: TYPE_TARGET_RDP,
+    });
+    await visit(urls.targets);
+
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .exists();
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .hasText('Connect');
+    assert.dom('[data-test-icon=external-link]').doesNotExist();
+  });
+
+  test('shows `Connect` button for non-RDP target', async function (assert) {
+    await visit(urls.targets);
+
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .exists();
+    assert
+      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
+      .hasText('Connect');
   });
 });
