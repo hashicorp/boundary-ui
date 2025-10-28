@@ -20,6 +20,7 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -103,6 +104,11 @@ module('Acceptance | projects | settings | index', function (hooks) {
     this.ipcStub
       .withArgs('cacheDaemonStatus')
       .returns({ version: 'Boundary CLI v0.1.0' });
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'getRdpClients').resolves();
+    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
   });
 
   test('can navigate to the settings page', async function (assert) {
