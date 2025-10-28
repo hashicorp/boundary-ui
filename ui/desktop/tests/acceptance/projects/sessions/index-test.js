@@ -536,7 +536,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       'sessions',
       'targets',
       'aliases',
-      'sessions',
       {
         resource: 'sessions',
         func: () => [instances.session2],
