@@ -47,7 +47,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
     '[data-test-targets-sessions-flyout] .hds-flyout__title';
   const SESSIONS_FLYOUT_CLOSE_BUTTON =
     '[data-test-targets-sessions-flyout] .hds-flyout__dismiss';
-
+  const TARGET_OPEN_BUTTON = (id) => `[data-test-targets-open-button="${id}"]`;
+  const TARGET_CONNECT_BUTTON = (id) =>
+    `[data-test-targets-connect-button="${id}"]`;
   const instances = {
     scopes: {
       global: null,
@@ -719,12 +721,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
     await visit(urls.targets);
 
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .exists();
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .hasText('Open');
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).hasText('Open');
     assert.dom('[data-test-icon=external-link]').exists();
   });
 
@@ -736,23 +734,89 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
     await visit(urls.targets);
 
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .exists();
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .hasText('Connect');
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).hasText('Connect');
     assert.dom('[data-test-icon=external-link]').doesNotExist();
   });
 
   test('shows `Connect` button for non-RDP target', async function (assert) {
     await visit(urls.targets);
 
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .exists();
-    assert
-      .dom(`[data-test-targets-connect-button=${instances.target.id}]`)
-      .hasText('Connect');
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).hasText('Connect');
+  });
+
+  test('clicking `Open` button for RDP target calls launchRdpClient IPC', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    const rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'windows-app';
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.ipcStub.withArgs('launchRdpClient').resolves();
+
+    // visit targets page
+    await visit(urls.targets);
+
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).exists();
+
+    await click(TARGET_OPEN_BUTTON(instances.target.id));
+
+    assert.ok(this.ipcStub.calledWith('launchRdpClient', instances.session.id));
+  });
+
+  test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    const rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'none';
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    // visit targets page
+    await visit(urls.targets);
+
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+
+    await click(TARGET_CONNECT_BUTTON(instances.target.id));
+
+    assert.ok(this.ipcStub.calledWith('connect'));
+  });
+
+  test('shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
+    let rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'windows-app';
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+    // target quick connection is a success but launching RDP client fails
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.ipcStub.withArgs('launchRdpClient').rejects();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.targets);
+    await click(`[data-test-targets-open-button="${instances.target.id}"]`);
+
+    // Assert that the confirm modal appears
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
   });
 });
