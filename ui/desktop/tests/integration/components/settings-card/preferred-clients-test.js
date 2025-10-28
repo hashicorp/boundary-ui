@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import Service from '@ember/service';
@@ -17,11 +17,15 @@ module(
     setupIntl(hooks, 'en-us');
 
     test('it renders protocol and preferred client correctly', async function (assert) {
+      let updatedPreferredRDPClient;
       this.owner.register(
         'service:rdp',
         class extends Service {
           rdpClients = ['windows-app', 'none'];
           preferredRdpClient = 'windows-app';
+          setPreferredRdpClient = (value) => {
+            updatedPreferredRDPClient = value;
+          };
         },
       );
       await render(hbs`<SettingsCard::PreferredClients />`);
@@ -32,6 +36,20 @@ module(
       assert
         .dom('select option:checked')
         .hasText('Windows App', 'Preferred client is selected');
+
+      let select = find('select');
+      select.value = 'none';
+      await triggerEvent(select, 'change');
+
+      assert
+        .dom('select option:checked')
+        .hasText('None', 'Preferred client is updated');
+
+      assert.strictEqual(
+        updatedPreferredRDPClient,
+        'none',
+        'setPreferredRdpClient is called with correct value',
+      );
     });
   },
 );
