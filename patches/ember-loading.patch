@@ -1,0 +1,112 @@
+diff --git a/addon/services/loading.ts b/addon/services/loading.ts
+index 34ac7eb0cdf4ee8f09661ba2459068307bb2792e..9d201c99046fb2e3d6ba3b49f8c1445a4c768c02 100644
+--- a/addon/services/loading.ts
++++ b/addon/services/loading.ts
+@@ -4,7 +4,6 @@ import { restartableTask, task, timeout } from 'ember-concurrency';
+ import RouterService from '@ember/routing/router-service';
+ import { getOwner } from '@ember/application';
+ import RSVP, { defer } from 'rsvp';
+-import { taskFor } from 'ember-concurrency-ts';
+ 
+ type ParseArgsValue = [any, Function, any[] | undefined];
+ 
+@@ -49,7 +48,6 @@ function parseArgs(): ParseArgsValue {
+ }
+ 
+ export default class LoadingService extends Service {
+-
+   @service
+   router!: RouterService;
+ 
+@@ -58,11 +56,11 @@ export default class LoadingService extends Service {
+   watchTransitions = true;
+ 
+   get isLoading(): boolean {
+-    return taskFor(this._runJob).isRunning;
++    return this._runJob.isRunning;
+   }
+ 
+   get showLoading(): boolean {
+-    return !taskFor(this.preDelayTask).isRunning && (this.isLoading || taskFor(this.postDelayTask).isRunning);
++    return !this.preDelayTask.isRunning && (this.isLoading || this.postDelayTask.isRunning);
+   }
+ 
+   _routerTransitionDeferred?: RSVP.Deferred<unknown>;
+@@ -132,33 +130,30 @@ export default class LoadingService extends Service {
+   // run<R>(fn: () => R): Promise<R>;
+   async run(...args: any[]) {
+     if (this.preDelay > 0) {
+-      taskFor(this.preDelayTask).perform(this.preDelay);
++      this.preDelayTask.perform(this.preDelay);
+     }
+ 
+-    let result = await taskFor(this._runJob).perform(...args);
++    let result = await this._runJob.perform(...args);
+ 
+     if (this.postDelay > 0) {
+-      taskFor(this.postDelayTask).perform(this.postDelay);
++      this.postDelayTask.perform(this.postDelay);
+     }
+ 
+     return result;
+   }
+ 
+-  @task
+-  async _runJob(...args: unknown[]): Promise<unknown> {
++  _runJob = task(async (...args: unknown[]) => {
+     let [target, method, realArgs] = parseArgs(...args);
+     return await method.apply(target, realArgs);
+-  }
++  });
+ 
+-  @restartableTask
+-  async preDelayTask(delay: number): Promise<void> {
++  preDelayTask = restartableTask(async (delay: number) => {
+     await timeout(delay);
+-  }
++  });
+ 
+-  @restartableTask
+-  async postDelayTask(delay: number): Promise<void> {
++  postDelayTask = restartableTask(async (delay: number) => {
+     await timeout(delay);
+-  }
++  });
+ }
+ 
+ // DO NOT DELETE: this is how TypeScript knows how to look up your services.
+diff --git a/index.js b/index.js
+index 0ca063d427d9441b9b3a1274bfcfe47186623c63..ca80a9382c6f5e64504048e0757215b1272fb849 100644
+--- a/index.js
++++ b/index.js
+@@ -2,4 +2,11 @@
+ 
+ module.exports = {
+   name: require('./package').name,
++  options: {
++    babel: {
++      plugins: [
++        require.resolve('ember-concurrency/async-arrow-task-transform'),
++      ],
++    },
++  },
+ };
+diff --git a/package.json b/package.json
+index 3b898dce9a160776192437af4c35b2038eb39232..2a37d3d6f179bfe62479c5141d705a2d3e4eeaeb 100644
+--- a/package.json
++++ b/package.json
+@@ -31,10 +31,10 @@
+   "dependencies": {
+     "ember-cli-babel": "^7.26.6",
+     "ember-cli-htmlbars": "^5.7.1",
+-    "ember-cli-typescript": "^4.1.0",
+-    "ember-concurrency": "^2.0.3",
+-    "ember-concurrency-async": "^1.0.0",
+-    "ember-concurrency-ts": "^0.3.0"
++    "ember-cli-typescript": "^4.1.0"
++  },
++  "peerDependencies": {
++    "ember-concurrency": "^4.0.0"
+   },
+   "devDependencies": {
+     "@ember/optional-features": "2.0.0",

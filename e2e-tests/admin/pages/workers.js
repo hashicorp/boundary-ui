@@ -40,7 +40,7 @@ export class WorkersPage extends BaseResourcePage {
     await this.page
       .getByRole('row')
       .filter({ has: this.page.getByRole('cell', { name: origKey }) })
-      .getByRole('cell', { name: 'Overflow Options' })
+      .getByRole('button', { name: 'Overflow Options' })
       .click();
     await this.page.getByRole('button', { name: 'Edit Tag' }).click();
 
@@ -59,7 +59,7 @@ export class WorkersPage extends BaseResourcePage {
     await this.page
       .getByRole('row')
       .filter({ has: this.page.getByRole('cell', { name: key }) })
-      .getByRole('cell', { name: 'Overflow Options' })
+      .getByRole('button', { name: 'Overflow Options' })
       .click();
     await this.page.getByRole('button', { name: 'Remove Tag' }).click();
 

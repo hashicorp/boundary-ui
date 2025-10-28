@@ -1,0 +1,191 @@
+name: Test E2E Admin UI
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      boundary-enterprise-branch:
+        description: 'Branch of boundary-enterprise to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
+      boundary-branch:
+        description: 'Branch of boundary to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
+
+jobs:
+  test:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'admin') }}
+    name: Test
+    runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
+    strategy:
+      matrix:
+        include:
+          - boundary_edition: community
+            github_repo: hashicorp/boundary
+            folder_name: boundary
+            boundary_edition_short: oss
+            enos_scenario: e2e_ui_docker
+            test_command: admin:ce:docker
+            boundary_branch: ${{ github.event.inputs.boundary-branch || 'main' }}
+          - boundary_edition: enterprise
+            github_repo: hashicorp/boundary-enterprise
+            folder_name: boundary-enterprise
+            boundary_edition_short: ent
+            enos_scenario: e2e_ui_docker_ent
+            test_command: admin:ent:docker
+            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
+      fail-fast: false
+    env:
+      ENOS_VAR_e2e_debug_no_run: true
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
+        with:
+          run_install: false
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            ui/desktop/electron-app/pnpm-lock.yaml
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+
+      - name: Set up Enos
+        uses: hashicorp/action-setup-enos@b9fa53484a1e8fdcc7b02a118bcf01d65b9414c9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Vault CLI
+        run: |
+          wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
+          unzip /tmp/vault.zip -d /usr/local/bin
+
+      - name: GPG setup
+        run: |
+          # Create a GPG key
+          export KEY_PW=boundary
+          gpg --generate-key --batch <<eoGpgConf
+              %echo Started!
+              Key-Type: RSA
+              Key-Length: default
+              Subkey-Type: RSA
+              Name-Real: boundary
+              Name-Comment: default
+              Name-Email: default
+              Expire-Date: 0
+              Passphrase: $KEY_PW
+              %commit
+              %echo Done.
+          eoGpgConf
+
+          # Enable gpg-preset-passphrase so that key passwords can be saved
+          echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
+          gpg-connect-agent reloadagent /bye &>/dev/null
+
+          # Get information about the created keys
+          export lines=$(gpg --list-secret-keys --with-colons --with-keygrip)
+          export KEY_ID=""
+          while read -r line
+          do
+            # Save the first key id to be used later
+            if [[ $line =~ "fpr"* ]]; then
+              if [[ $KEY_ID == "" ]]; then
+                KEY_ID="$(echo "$line" | sed -r 's/fpr|://g')"
+              fi
+            fi
+
+            # Cache the passphrases for the keys so passwords do not need to be entered
+            if [[ $line =~ "grp"* ]]; then
+              export KEYGRIP_ID="$(echo "$line" | sed -r 's/grp|://g')"
+              /usr/lib/gnupg/gpg-preset-passphrase --preset -P $KEY_PW $KEYGRIP_ID
+            fi
+          done <<< $lines
+
+          # Trust the key
+          touch /tmp/test.txt
+          gpg -a --encrypt -r $KEY_ID --trust-model always --batch --yes /tmp/test.txt
+          echo "trusted-key $KEY_ID" >> ~/.gnupg/gpg.conf
+
+          # Initialize the password store
+          pass init $KEY_ID &>/dev/null
+
+      - name: Checkout ${{ matrix.folder_name }} repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          repository: ${{ matrix.github_repo }}
+          path: support/src/${{ matrix.folder_name }}
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+          ref: ${{ matrix.boundary_branch }}
+
+      - name: GH fix for localhost resolution
+        run: |
+          cat /etc/hosts && echo "-----------"
+          sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
+          cat /etc/hosts
+          ssh -V
+
+          echo "127.0.0.1 localhost boundary" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
+
+      - name: Set git config
+        run: |
+          git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+
+      - name: Install node dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          cd e2e-tests
+          pnpm playwright install --with-deps
+
+      - name: Set up test infra
+        id: infra
+        run: |
+          ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
+          mkdir -p ./enos/terraform-plugin-cache
+          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
+          export ENOS_VAR_ui_build_override="oss" && \
+          export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
+          export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
+          export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
+          export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
+          enos scenario launch --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
+
+      - name: Move boundary binary
+        run: |
+          mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+          boundary version
+
+      - name: Run Tests
+        run: |
+          source <(bash ./support/src/${{matrix.folder_name}}/enos/scripts/test_e2e_env.sh)
+          cd e2e-tests
+          pnpm run ${{ matrix.test_command }} --reporter=html
+
+      - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: playwright-report-${{ matrix.boundary_edition }}
+          path: e2e-tests/playwright-report
+
+      - name: Clean up test infra
+        if: ${{ always() }}
+        run: |
+          export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
+          export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
+          export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
+          enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local

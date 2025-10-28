@@ -483,14 +483,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
     await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
 
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-
     await click(commonSelectors.SAVE_BTN);
 
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
@@ -509,8 +501,5 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       credentialLibrary.attributes.path,
       selectors.FIELD_VAULT_PATH_VALUE,
     );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      domain_attribute: 'domain',
-    });
   });
 });

@@ -57,7 +57,7 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(targetPort);
+      const targetName = await targetsPage.createTarget({ port: targetPort });
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
@@ -127,10 +127,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddress(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        port: targetPort,
+        address: targetAddress,
+      });
 
       await boundaryCli.authenticateBoundary(
         controllerAddr,
@@ -191,7 +191,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+      await targetsPage.createTarget({
+        port: targetPort,
+        address: targetAddress,
+      });
 
       // Update target
       await page.getByRole('button', { name: 'Edit Form' }).click();
@@ -234,7 +237,9 @@ test(
         .locator('.CodeMirror')
         .getByRole('textbox')
         .click({ force: true });
-      await page.keyboard.press('Meta+A');
+      const selectAllShortcut =
+        process.platform === 'darwin' ? 'Meta+A' : 'Control+A';
+      await page.keyboard.press(selectAllShortcut);
       await page.keyboard.press('Backspace');
       await page
         .locator('.CodeMirror')

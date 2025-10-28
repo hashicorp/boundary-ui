@@ -127,8 +127,12 @@ module(
 
       filteredCredentialLibraries = selectItems(
         this.server.schema.credentialLibraries,
-        (cred) =>
-          cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+        (cred) => {
+          return (
+            cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
+            cred.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
+          );
+        },
       );
 
       // credentials for RDP
@@ -138,7 +142,8 @@ module(
           [
             TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
             TYPE_CREDENTIAL_USERNAME_PASSWORD,
-          ].includes(cred.credential_type),
+          ].includes(cred.credential_type) ||
+          cred.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       );
       filteredCredentialsForRDP = selectItems(
         this.server.schema.credentials,
@@ -183,9 +188,13 @@ module(
 
       // SSH specific credential sources
       getCredentialLibraryCount = () =>
-        this.server.schema.credentialLibraries.where(
-          (c) => c.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-        ).models.length;
+        this.server.schema.credentialLibraries.where((c) => {
+          return (
+            c.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
+            c.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
+          );
+        }).models.length;
+
       getCredentialCount = () =>
         this.server.schema.credentials.where(
           (cred) =>
@@ -204,11 +213,13 @@ module(
           ].includes(cred.type),
         ).models.length;
       getCredentialLibraryForRDPCount = () =>
-        this.server.schema.credentialLibraries.where((cred) =>
-          [
-            TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-            TYPE_CREDENTIAL_USERNAME_PASSWORD,
-          ].includes(cred.credential_type),
+        this.server.schema.credentialLibraries.where(
+          (cred) =>
+            [
+              TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+              TYPE_CREDENTIAL_USERNAME_PASSWORD,
+            ].includes(cred.credential_type) ||
+            cred.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
         ).models.length;
 
       credentialSourceCount =

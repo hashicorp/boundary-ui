@@ -16,6 +16,12 @@ overrides:
   ember-cli-babel>@babel/runtime: 7.27.6
   ember-try-config>package-json: ^10.0.1
   ember-stargate@^0.6.0>@glimmer/component: ^2.0.0
+  ember-loading>ember-concurrency: ^4.0.0
+
+patchedDependencies:
+  ember-loading:
+    hash: 7d97519ce1955a5130edf885afb18c05d7253e2055b1b60cdcf6efc64cbdbff3
+    path: patches/ember-loading.patch
 
 importers:
 
@@ -394,7 +400,7 @@ importers:
         version: 7.1.8(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(typescript@5.8.3)(webpack@5.99.8)
       ember-loading:
         specifier: ^2.0.0
-        version: 2.0.0(@babel/core@7.27.1)
+        version: 2.0.0(patch_hash=7d97519ce1955a5130edf885afb18c05d7253e2055b1b60cdcf6efc64cbdbff3)(@babel/core@7.27.1)(@glint/template@1.5.2)
       ember-truth-helpers:
         specifier: ^4.0.3
         version: 4.0.3(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))
@@ -3992,8 +3998,8 @@ packages:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
     engines: {node: '>= 0.6'}
 
-  compression@1.8.0:
-    resolution: {integrity: sha512-k6WLKfunuqCYD3t6AsuPGvQWaKwuLLh2/xHNcX4qE+vIfDNXpSqnrhwA7O53R7WVQUnt8dVAIW+YHr7xTgOgGA==}
+  compression@1.8.1:
+    resolution: {integrity: sha512-9mAqGPHLakhCLeNyxPkK4xVo746zQ/czLH1Ky+vkitMnWfWZps8r0qXuwhwizagCRttsL4lfG4pIOvaWLpAP0w==}
     engines: {node: '>= 0.8.0'}
 
   concat-map@0.0.1:
@@ -4809,10 +4815,6 @@ packages:
     peerDependencies:
       ember-concurrency: ^1.2.1 || ^2.0.0-rc.1
 
-  ember-concurrency@2.3.7:
-    resolution: {integrity: sha512-sz6sTIXN/CuLb5wdpauFa+rWXuvXXSnSHS4kuNzU5GSMDX1pLBWSuovoUk61FUe6CYRqBmT1/UushObwBGickQ==}
-    engines: {node: 10.* || 12.* || 14.* || >= 16}
-
   ember-concurrency@4.0.4:
     resolution: {integrity: sha512-Y+PwbFE2r3+ANlT0lTBNokLXTRFLV6lnGkZ8u5tDhND5o2wD1wkh9JdP8KZ8aJ+J0dmhncVGQNi+Dbbtc6xTfg==}
     engines: {node: 16.* || >= 18}
@@ -4843,10 +4845,6 @@ packages:
         optional: true
       qunit:
         optional: true
-
-  ember-destroyable-polyfill@2.0.3:
-    resolution: {integrity: sha512-TovtNqCumzyAiW0/OisSkkVK93xnVF4NRU6+FN0ubpfwEOpRrmM2RqDwXI6YAChCgSHON1cz0DfQStpA1Gjuuw==}
-    engines: {node: 10.* || >= 12}
 
   ember-electron@6.0.0:
     resolution: {integrity: sha512-+vS5K+EYUo3XzClvPR83IECwwqda2rKymPfzCYnYbrzgqVPXFgtL/REh2PZNPrv1VB3UKLROfKeRtF/o/h6bXw==}
@@ -7071,8 +7069,8 @@ packages:
     resolution: {integrity: sha512-IXnMcJ6ZyTuhRmJSjzvHSRhlVPiN9Jwc6e59V0bEJ0ba6OBeX2L0E+mRN1QseeOF4mM+F1Rit6Nh7o+rl2Yn/A==}
     engines: {node: '>0.9'}
 
-  morgan@1.10.0:
-    resolution: {integrity: sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==}
+  morgan@1.10.1:
+    resolution: {integrity: sha512-223dMRJtI/l25dJKWpgij2cMtywuG/WiUKXdvwfbhGKBhy1puASqXwFzmWZ7+K73vUPoR7SS2Qz2cI/g9MKw0A==}
     engines: {node: '>= 0.8.0'}
 
   ms@2.0.0:
@@ -7271,8 +7269,8 @@ packages:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
     engines: {node: '>= 0.8'}
 
-  on-headers@1.0.2:
-    resolution: {integrity: sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==}
+  on-headers@1.1.0:
+    resolution: {integrity: sha512-737ZY3yNnXy37FHkQxPzt4UZ2UWPWiCZWLvFZ4fu5cueciegX0zGPnrlY6bwRg4FdQOe9YU8MkmJwGhoMybl8A==}
     engines: {node: '>= 0.8'}
 
   once@1.4.0:
@@ -13077,13 +13075,13 @@ snapshots:
     dependencies:
       mime-db: 1.54.0
 
-  compression@1.8.0:
+  compression@1.8.1:
     dependencies:
       bytes: 3.1.2
       compressible: 2.0.18
       debug: 2.6.9
       negotiator: 0.6.4
-      on-headers: 1.0.2
+      on-headers: 1.1.0
       safe-buffer: 5.2.1
       vary: 1.1.2
     transitivePeerDependencies:
@@ -14093,7 +14091,7 @@ snapshots:
       chalk: 4.1.2
       ci-info: 3.9.0
       clean-base-url: 1.0.0
-      compression: 1.8.0
+      compression: 1.8.1
       configstore: 5.0.1
       console-ui: 3.1.2
       content-tag: 2.0.3
@@ -14132,7 +14130,7 @@ snapshots:
       markdown-it: 13.0.2
       markdown-it-terminal: 0.4.0(markdown-it@13.0.2)
       minimatch: 7.4.6
-      morgan: 1.10.0
+      morgan: 1.10.1
       nopt: 3.0.6
       npm-package-arg: 10.1.0
       os-locale: 5.0.0
@@ -14226,37 +14224,23 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-concurrency-async@1.0.0(ember-concurrency@2.3.7(@babel/core@7.27.1)):
+  ember-concurrency-async@1.0.0(ember-concurrency@4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)):
     dependencies:
       '@babel/helper-plugin-utils': 7.27.1
       '@babel/types': 7.27.1
       ember-cli-babel: 7.26.11
       ember-cli-babel-plugin-helpers: 1.1.1
       ember-cli-htmlbars: 4.5.0
-      ember-concurrency: 2.3.7(@babel/core@7.27.1)
+      ember-concurrency: 4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)
     transitivePeerDependencies:
       - supports-color
 
-  ember-concurrency-ts@0.3.1(ember-concurrency@2.3.7(@babel/core@7.27.1)):
+  ember-concurrency-ts@0.3.1(ember-concurrency@4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)):
     dependencies:
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 4.5.0
-      ember-concurrency: 2.3.7(@babel/core@7.27.1)
+      ember-concurrency: 4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)
     transitivePeerDependencies:
-      - supports-color
-
-  ember-concurrency@2.3.7(@babel/core@7.27.1):
-    dependencies:
-      '@babel/helper-plugin-utils': 7.27.1
-      '@babel/types': 7.27.1
-      '@glimmer/tracking': 1.1.2
-      ember-cli-babel: 7.26.11
-      ember-cli-babel-plugin-helpers: 1.1.1
-      ember-cli-htmlbars: 5.7.2
-      ember-compatibility-helpers: 1.2.7(@babel/core@7.27.1)
-      ember-destroyable-polyfill: 2.0.3(@babel/core@7.27.1)
-    transitivePeerDependencies:
-      - '@babel/core'
       - supports-color
 
   ember-concurrency@4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2):
@@ -14305,15 +14289,6 @@ snapshots:
       - '@ember/string'
       - '@glint/template'
       - ember-inflector
-      - supports-color
-
-  ember-destroyable-polyfill@2.0.3(@babel/core@7.27.1):
-    dependencies:
-      ember-cli-babel: 7.26.11
-      ember-cli-version-checker: 5.1.2
-      ember-compatibility-helpers: 1.2.7(@babel/core@7.27.1)
-    transitivePeerDependencies:
-      - '@babel/core'
       - supports-color
 
   ember-electron@6.0.0(@babel/core@7.27.1)(ember-cli-dependency-checker@3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7)))(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(encoding@0.1.13):
@@ -14511,16 +14486,17 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-loading@2.0.0(@babel/core@7.27.1):
+  ember-loading@2.0.0(patch_hash=7d97519ce1955a5130edf885afb18c05d7253e2055b1b60cdcf6efc64cbdbff3)(@babel/core@7.27.1)(@glint/template@1.5.2):
     dependencies:
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 5.7.2
       ember-cli-typescript: 4.2.1
-      ember-concurrency: 2.3.7(@babel/core@7.27.1)
-      ember-concurrency-async: 1.0.0(ember-concurrency@2.3.7(@babel/core@7.27.1))
-      ember-concurrency-ts: 0.3.1(ember-concurrency@2.3.7(@babel/core@7.27.1))
+      ember-concurrency: 4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)
+      ember-concurrency-async: 1.0.0(ember-concurrency@4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2))
+      ember-concurrency-ts: 0.3.1(ember-concurrency@4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2))
     transitivePeerDependencies:
       - '@babel/core'
+      - '@glint/template'
       - supports-color
 
   ember-maybe-import-regenerator@1.0.0:
@@ -17346,13 +17322,13 @@ snapshots:
 
   mktemp@0.4.0: {}
 
-  morgan@1.10.0:
+  morgan@1.10.1:
     dependencies:
       basic-auth: 2.0.1
       debug: 2.6.9
       depd: 2.0.0
       on-finished: 2.3.0
-      on-headers: 1.0.2
+      on-headers: 1.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -17549,7 +17525,7 @@ snapshots:
     dependencies:
       ee-first: 1.1.1
 
-  on-headers@1.0.2: {}
+  on-headers@1.1.0: {}
 
   once@1.4.0:
     dependencies:
@@ -19167,7 +19143,7 @@ snapshots:
       bluebird: 3.7.2
       charm: 1.0.2
       commander: 2.20.3
-      compression: 1.8.0
+      compression: 1.8.1
       consolidate: 0.16.0(handlebars@4.7.8)(lodash@4.17.21)(mustache@4.2.0)(underscore@1.13.7)
       execa: 1.0.0
       express: 4.21.2
