@@ -9,7 +9,7 @@ import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { defaultValidator } from 'ember-a11y-refocus';
-import { paramValueFinder } from 'admin/utils/param-value-finder';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 const THEMES = [
   {

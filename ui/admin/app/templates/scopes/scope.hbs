@@ -33,7 +33,7 @@
   />
 {{/if}}
 
-<Hds::SideNav::Portal as |Nav|>
+<Hds::AppSideNav::Portal @ariaLabel='Primary' as |Nav|>
   {{#if @model.isGlobal}}
     <Nav.Title>{{t 'titles.scope-level' scope=(t 'titles.global')}}</Nav.Title>
 
@@ -243,6 +243,5 @@
       @route='scopes.scope.edit'
     />
   {{/if}}
-</Hds::SideNav::Portal>
-
+</Hds::AppSideNav::Portal>
 {{outlet}}

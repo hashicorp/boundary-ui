@@ -121,14 +121,80 @@
   }
 }
 
+@mixin dark-mode-button-override {
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-app-frame:has(
+    .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+  ) {
+    /* stylelint-disable-next-line selector-class-pattern */
+    .hds-button,
+    .hds-dropdown-toggle-button,
+    .hds-dropdown-toggle-icon,
+    .hds-app-header__home-link {
+      color: var(--token-color-palette-neutral-200);
+      background-color: var(--token-color-palette-neutral-50);
+      border-color: var(--token-color-palette-neutral-100);
+    }
+  }
+}
+
+@mixin dark-mode-app-header-override {
+  .hds-app-header {
+    color: var(--token-color-palette-neutral-700);
+    background: var(--token-color-palette-neutral-0);
+    border-bottom-color: var(--token-color-palette-neutral-100);
+
+    &__home-link {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+  }
+
+  .hds-dropdown-toggle-button,
+  .hds-dropdown-toggle-icon {
+    background: var(--token-color-palette-neutral-0);
+    border-color: var(--token-color-palette-neutral-100);
+
+    &:hover {
+      background: var(--token-color-palette-neutral-50);
+    }
+
+    &:active,
+    &:focus {
+      background: var(--token-color-palette-neutral-0);
+    }
+  }
+}
+
+@mixin dark-mode-app-side-nav-override {
+  .hds-app-side-nav {
+    &__overlay {
+      background-color: var(--token-color-palette-neutral-50);
+    }
+
+    &__list-title {
+      color: var(--token-color-palette-neutral-300);
+    }
+
+    &__list-item-link.active {
+      background: var(--token-color-palette-neutral-100);
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
+    @include dark-mode-app-header-override;
+    @include dark-mode-app-side-nav-override;
+    @include dark-mode-button-override;
   }
 }
 
 .ember-application.rose-theme-dark {
   @include dark-mode;
   @include dark-mode-modal-override;
+  @include dark-mode-app-header-override;
+  @include dark-mode-app-side-nav-override;
+  @include dark-mode-button-override;
 }
