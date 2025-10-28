@@ -4,11 +4,6 @@
  */
 
 import { faker } from '@faker-js/faker';
-import {
-  RDP_CLIENT_MSTSC,
-  RDP_CLIENT_NONE,
-  RDP_CLIENT_WINDOWS_APP,
-} from 'desktop/services/rdp';
 
 export default function initializeMockIPC(server, config) {
   const isTesting = config.environment === 'test';
@@ -254,10 +249,10 @@ export default function initializeMockIPC(server, config) {
     hasRunningSessions() {}
     stopAll() {}
     getRdpClients() {
-      return [RDP_CLIENT_MSTSC, RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE];
+      return ['windows-app', 'none', 'mstsc'];
     }
     getPreferredRdpClient() {
-      return RDP_CLIENT_WINDOWS_APP;
+      return 'windows-app';
     }
     setPreferredRdpClient() {}
     launchRdpClient() {}
