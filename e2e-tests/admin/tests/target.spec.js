@@ -237,7 +237,9 @@ test(
         .locator('.CodeMirror')
         .getByRole('textbox')
         .click({ force: true });
-      await page.keyboard.press('Meta+A');
+      const selectAllShortcut =
+        process.platform === 'darwin' ? 'Meta+A' : 'Control+A';
+      await page.keyboard.press(selectAllShortcut);
       await page.keyboard.press('Backspace');
       await page
         .locator('.CodeMirror')
