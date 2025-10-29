@@ -15,17 +15,27 @@
       </PH.Title>
       {{#if (can 'connect target' @model.target)}}
         <PH.Actions>
-          <Hds::Button
-            data-test-target-detail-connect-button
-            @text={{if
-              (gt @model.hosts.length 1)
-              (t 'resources.session.actions.quick-connect')
-              (t 'resources.session.actions.connect')
-            }}
-            @icon='entry-point'
-            @iconPosition='trailing'
-            {{on 'click' (fn this.connect @model.target)}}
-          />
+          {{#if (and @model.target.isRDP this.rdp.isPreferredRdpClientSet)}}
+            <Hds::Button
+              data-test-target-detail-open-button
+              @text={{t 'actions.open'}}
+              @icon='external-link'
+              @iconPosition='trailing'
+              {{on 'click' (fn this.connectAndLaunchRdp @model.target)}}
+            />
+          {{else}}
+            <Hds::Button
+              data-test-target-detail-connect-button
+              @text={{if
+                (gt @model.hosts.length 1)
+                (t 'resources.session.actions.quick-connect')
+                (t 'resources.session.actions.connect')
+              }}
+              @icon='entry-point'
+              @iconPosition='trailing'
+              {{on 'click' (fn this.connect @model.target)}}
+            />
+          {{/if}}
         </PH.Actions>
       {{/if}}
     </Hds::PageHeader>
