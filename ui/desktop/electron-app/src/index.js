@@ -45,6 +45,12 @@ const emberAppURL = `${emberAppProtocol}://${emberAppName}`;
 const emberAppDir = path.resolve(__dirname, '..', 'ember-dist');
 const preloadPath = path.resolve(__dirname, 'preload.js');
 
+if (process.env.NODE_ENV === 'test') {
+  globalThis.__test__ = {
+    sessionManager
+  };
+}
+
 protocol.registerSchemesAsPrivileged([
   {
     scheme: emberAppProtocol,

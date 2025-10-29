@@ -93,8 +93,9 @@ test.afterEach(async ({ request }) => {
 });
 
 test.describe('Sessions tests', () => {
-  test('Establishes two different sessions and cancels them', async ({
+  test.only('Establishes two different sessions and cancels them', async ({
     authedPage,
+    electronApp,
   }) => {
     // Connect to two targets
     await authedPage
@@ -111,6 +112,16 @@ test.describe('Sessions tests', () => {
       .getByRole('row', { name: targetWithHost.name })
       .getByRole('link', { name: 'Connect' })
       .click();
+
+    console.log('... before ...');
+    const result = await electronApp.evaluate(async ({ app }) => {
+      console.log('inside');
+      return globalThis.__test__.sessionManager.hasRunningSessions;
+      // const sessionManager = require('./services/session-manager.js');
+      // return JSON.stringify(sessionManager)
+    });
+    console.log('... after ...');
+    console.log({ result });
     await expect(
       authedPage.getByRole('heading', { name: 'Sessions' }),
     ).toBeVisible();
@@ -133,6 +144,16 @@ test.describe('Sessions tests', () => {
         .filter({ hasNot: authedPage.getByRole('columnheader') })
         .getByText('Canceling'),
     ).toHaveCount(2);
+
+    console.log('... before ...');
+    const result2 = await electronApp.evaluate(async ({ app }) => {
+      console.log('inside');
+      return globalThis.__test__.sessionManager.hasRunningSessions;
+      // const sessionManager = require('./services/session-manager.js');
+      // return JSON.stringify(sessionManager)
+    });
+    console.log('... after ...');
+    console.log({ result2 });
   });
 });
 
