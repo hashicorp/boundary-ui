@@ -29,7 +29,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
   const TARGET_TABLE_CONNECT_BUTTON = (id) =>
     `[data-test-targets-connect-button="${id}"]`;
-  const TARGET_TABLE_DETAILS_OPEN_BUTTON = `[data-test-target-detail-open-button]`;
+  const TARGET_OPEN_BUTTON = `[data-test-target-detail-open-button]`;
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
   const TARGET_HOST_SOURCE_CONNECT_BUTTON = (id) =>
     `[data-test-target-connect-button=${id}]`;
@@ -635,7 +635,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('shows "Open" button for RDP target with preferred client', async function (assert) {
+  test('shows `Open` and `Connect` button for RDP target with preferred client', async function (assert) {
     let rdpService = this.owner.lookup('service:rdp');
     rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
@@ -644,9 +644,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await visit(urls.target);
 
-    assert.dom(TARGET_TABLE_DETAILS_OPEN_BUTTON).exists();
-    assert.dom(TARGET_TABLE_DETAILS_OPEN_BUTTON).hasText('Open');
-    assert.dom('[data-test-icon=external-link]').exists();
+    assert.dom(TARGET_OPEN_BUTTON).exists();
+    assert.dom(TARGET_OPEN_BUTTON).hasText('Open');
+    assert.dom(TARGET_CONNECT_BUTTON).exists();
+    assert.dom(TARGET_CONNECT_BUTTON).hasText('Connect');
   });
 
   test('shows "Connect" button for RDP target without preferred client', async function (assert) {
@@ -682,7 +683,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await visit(urls.target);
 
-    await click(TARGET_TABLE_DETAILS_OPEN_BUTTON);
+    await click(TARGET_OPEN_BUTTON);
 
     assert.ok(this.ipcStub.calledWith('launchRdpClient', instances.session.id));
   });
@@ -704,6 +705,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     assert.dom(TARGET_CONNECT_BUTTON).exists();
     assert.dom(TARGET_CONNECT_BUTTON).hasText('Connect');
+    assert.dom(TARGET_OPEN_BUTTON).doesNotExist();
 
     await click(TARGET_CONNECT_BUTTON);
 

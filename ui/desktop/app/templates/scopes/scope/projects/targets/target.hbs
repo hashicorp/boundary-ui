@@ -17,6 +17,16 @@
         <PH.Actions>
           {{#if (and @model.target.isRDP this.rdp.isPreferredRdpClientSet)}}
             <Hds::Button
+              data-test-target-detail-connect-button
+              @text={{if
+                (gt @model.hosts.length 1)
+                (t 'resources.session.actions.quick-connect')
+                (t 'resources.session.actions.connect')
+              }}
+              @color='secondary'
+              {{on 'click' (fn this.connect @model.target)}}
+            />
+            <Hds::Button
               data-test-target-detail-open-button
               @text={{t 'actions.open'}}
               @icon='external-link'
