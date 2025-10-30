@@ -13,10 +13,8 @@ import {
   waitUntil,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -25,14 +23,12 @@ module(
   'Acceptance | credential-stores | credentials | update',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
     setupSqlite(hooks);
 
     let featuresService;
 
     const instances = {
       scopes: {
-        global: null,
         org: null,
         project: null,
       },
@@ -78,7 +74,6 @@ module(
 
     hooks.beforeEach(async function () {
       // Generate resources
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -126,7 +121,6 @@ module(
       urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
 
       featuresService = this.owner.lookup('service:features');
-      await authenticateSession({});
     });
 
     test('can save changes to existing username & password credential', async function (assert) {

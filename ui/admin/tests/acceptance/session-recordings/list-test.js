@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -20,9 +18,8 @@ import {
 } from 'api/models/session-recording';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
-module('Acceptance | session recordings | list', function (hooks) {
+module('Acceptance | session-recordings | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -62,7 +59,7 @@ module('Acceptance | session recordings | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -122,8 +119,6 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-session-recording');
-
-    await authenticateSession({});
   });
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {

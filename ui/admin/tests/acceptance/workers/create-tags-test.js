@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | worker | create-tags', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let confirmService;
 
@@ -33,7 +30,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -42,8 +39,6 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     urls.tags = `${urls.worker}/tags`;
     urls.createTags = `${urls.worker}/create-tags`;
     confirmService = this.owner.lookup('service:confirm');
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker create tags', async function (assert) {

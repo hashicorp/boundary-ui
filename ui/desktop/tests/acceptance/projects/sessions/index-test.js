@@ -5,13 +5,11 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   currentSession,
-  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import {
@@ -25,7 +23,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE =
@@ -75,20 +72,8 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.user = this.server.create('user', {
-      scope: instances.scopes.global,
-    });
-
-    await authenticateSession({
-      user_id: instances.user.id,
-      username: 'admin',
-    });
-
     // create scopes
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      name: 'Global',
-    });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -110,14 +95,13 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     });
 
     // create resources
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
       'withAssociations',
     );
+    instances.user = this.server.schema.users.first();
     instances.session = this.server.create(
       'session',
       {

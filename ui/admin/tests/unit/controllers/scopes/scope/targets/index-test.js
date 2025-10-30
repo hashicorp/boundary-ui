@@ -50,13 +50,20 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/targets/index');
     features = this.owner.lookup('service:features');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
+    });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

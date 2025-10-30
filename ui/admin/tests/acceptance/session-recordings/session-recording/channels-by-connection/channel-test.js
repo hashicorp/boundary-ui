@@ -6,8 +6,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
@@ -19,7 +17,6 @@ module(
   'Acceptance | session-recordings | session-recording | channels-by-connection | channel',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
     setupSqlite(hooks);
     setupIntl(hooks, 'en-us');
 
@@ -48,7 +45,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.scopes.global = this.server.schema.scopes.find('global');
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -81,7 +78,6 @@ module(
         this.server.schema.sessionRecordings.all().models.length;
 
       featuresService = this.owner.lookup('service:features');
-      await authenticateSession({});
     });
 
     test('user can navigate to a channel', async function (assert) {

@@ -5,8 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
@@ -16,7 +15,6 @@ import config from '../../config/environment';
 module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
   setupBrowserFakes(hooks, { window: true });
-  setupMirage(hooks);
 
   const currentOrigin = window.location.origin;
   let mockIPC;
@@ -79,10 +77,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
-
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },

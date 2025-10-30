@@ -6,9 +6,9 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
+import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
@@ -24,26 +24,41 @@ module(
     const instances = {
       scopes: {
         global: null,
+        org: null,
       },
       authMethod: null,
+      account: null,
+    };
+
+    const urls = {
+      targets: null,
+    };
+
+    const setDefaultClusterUrl = (test) => {
+      const windowOrigin = window.location.origin;
+      const clusterUrl = test.owner.lookup('service:clusterUrl');
+      clusterUrl.rendererClusterUrl = windowOrigin;
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
       );
       store = this.owner.lookup('service:store');
       session = this.owner.lookup('service:session');
 
-      instances.scopes.global = this.server.create('scope', {
-        id: 'global',
-        type: 'global',
-      });
-      instances.authMethod = this.server.create('auth-method', {
-        scope: instances.scopes.global,
-        type: TYPE_AUTH_METHOD_PASSWORD,
-      });
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      instances.authMethod = this.server.schema.authMethods.first();
+      instances.account = this.server.schema.accounts.first();
+
+      urls.targets = '/scopes/global/projects/targets';
+
+      this.owner.register('service:browser/window', WindowMockIPC);
+      setDefaultClusterUrl(this);
     });
 
     test('it exists', function (assert) {
@@ -51,29 +66,34 @@ module(
     });
 
     test('authenticate action saves login information', async function (assert) {
-      const identification = 'admin123';
+      await visit('/');
+      const identification = instances.account.attributes.login_name;
       const authMethod = await store.findRecord(
         'auth-method',
         instances.authMethod.id,
       );
-      const { authenticator: authBefore, username: usernameBefore } =
+      const { authenticator: authBefore, account_id: accountIdBefore } =
         session.data.authenticated;
 
-      assert.notOk(usernameBefore);
-      assert.strictEqual(authBefore, 'authenticator:test');
+      assert.notOk(accountIdBefore);
+      assert.notOk(authBefore);
+      assert.ok(identification);
 
       await controller.authenticate(authMethod, {
         identification,
         password: 'password',
       });
-      const { authenticator: authAfter, username: usernameAfter } =
+      await settled();
+
+      const { authenticator: authAfter, account_id: accountIdAfter } =
         session.data.authenticated;
 
       assert.strictEqual(
         authAfter,
         `authenticator:${instances.authMethod.type}`,
       );
-      assert.strictEqual(usernameAfter, identification);
+      assert.strictEqual(instances.account.id, accountIdAfter);
+      assert.strictEqual(currentURL(), urls.targets);
     });
   },
 );

@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, fillIn, click, findAll, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let globalScope;
   let workersURL;
@@ -24,14 +21,12 @@ module('Acceptance | workers | create', function (hooks) {
   let featuresService;
 
   hooks.beforeEach(async function () {
-    globalScope = this.server.create('scope', { id: 'global' });
+    globalScope = this.server.schema.scopes.find('global');
 
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
     getWorkersCount = () => this.server.schema.workers.all().length;
     featuresService = this.owner.lookup('service:features');
-
-    await authenticateSession({});
   });
 
   test('can create new workers', async function (assert) {

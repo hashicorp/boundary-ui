@@ -6,23 +6,19 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getUsersCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     user: null,
@@ -36,7 +32,6 @@ module('Acceptance | users | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -51,7 +46,6 @@ module('Acceptance | users | create', function (hooks) {
     getUsersCount = () => {
       return this.server.schema.users.all().models.length;
     };
-    await authenticateSession({});
   });
 
   test('can create new users', async function (assert) {

@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
@@ -33,7 +30,7 @@ module('Acceptance | aliases | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -45,8 +42,6 @@ module('Acceptance | aliases | read', function (hooks) {
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.unknownAlias = `${urls.aliases}/foo`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting an alias', async function (assert) {
