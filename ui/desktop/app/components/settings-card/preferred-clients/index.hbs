@@ -33,7 +33,7 @@
           </B.Td>
           <B.Td>
             {{#if this.showRecommendedRdpClient}}
-              <Hds::Text::Body>
+              <Hds::Text::Body data-test-recommended-rdp-client>
                 {{t
                   'settings.preferred-clients.table.data.clients.none-detected'
                   rdpClientLink=this.rdp.recommendedRdpClient.link
@@ -50,6 +50,7 @@
               <Hds::Form::Select::Field
                 @width='100%'
                 {{on 'change' B.data.updateClient}}
+                data-test-select-preferred-rdp-client
                 as |F|
               >
                 <F.Options>
