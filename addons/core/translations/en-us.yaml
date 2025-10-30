@@ -155,7 +155,7 @@ settings:
           none: None
           mstsc: Remote Desktop Connection (mstsc)
           windows-app: Windows App
-          none-detected: None detected. We recommend
+          none-detected: 'None detected. We recommend <a href={rdpClientLink} target="_blank" rel="noopener noreferrer">{rdpClientName}</a>.'
 worker-filter-generator:
   title: Filter generator
   description: Choose what you want to format into a filter.

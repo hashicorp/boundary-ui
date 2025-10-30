@@ -32,22 +32,19 @@
             }}
           </B.Td>
           <B.Td>
-            {{#if this.rdp.recommendedRdpClient}}
+            {{#if this.showRecommendedRdpClient}}
               <Hds::Text::Body>
                 {{t
                   'settings.preferred-clients.table.data.clients.none-detected'
-                }}
-                <Hds::Link::Inline
-                  @href={{this.rdp.recommendedRdpClient.link}}
-                  @isHrefExternal={{true}}
-                >
-                  {{t
+                  rdpClientLink=this.rdp.recommendedRdpClient.link
+                  rdpClientName=(t
                     (concat
                       'settings.preferred-clients.table.data.clients.'
                       this.rdp.recommendedRdpClient.name
                     )
-                  }}
-                </Hds::Link::Inline>
+                  )
+                  htmlSafe=true
+                }}
               </Hds::Text::Body>
             {{else}}
               <Hds::Form::Select::Field

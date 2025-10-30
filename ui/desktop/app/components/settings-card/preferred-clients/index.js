@@ -30,6 +30,12 @@ export default class SettingsCardPreferredClientsComponent extends Component {
     ];
   }
 
+  get showRecommendedRdpClient() {
+    return (
+      this.rdp.rdpClients.length === 1 && this.rdp.rdpClients[0] === 'none'
+    );
+  }
+
   // =methods
 
   /**

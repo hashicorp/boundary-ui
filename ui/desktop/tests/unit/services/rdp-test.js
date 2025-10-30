@@ -10,6 +10,8 @@ import {
   RDP_CLIENT_NONE,
   RDP_CLIENT_WINDOWS_APP,
   RDP_CLIENT_MSTSC,
+  RDP_CLIENT_WINDOWS_APP_LINK,
+  RDP_CLIENT_MSTSC_LINK,
 } from 'desktop/services/rdp';
 
 module('Unit | Service | rdp', function (hooks) {
@@ -36,14 +38,6 @@ module('Unit | Service | rdp', function (hooks) {
       service.rdpClients,
       [RDP_CLIENT_NONE],
       'rdpClients fallback is set correctly',
-    );
-    assert.deepEqual(
-      service.recommendedRdpClient,
-      {
-        name: RDP_CLIENT_WINDOWS_APP,
-        link: 'https://apps.apple.com/us/app/windows-app/id1295203466',
-      },
-      'recommendedRdpClient fallback is set correctly',
     );
   });
 
@@ -72,6 +66,36 @@ module('Unit | Service | rdp', function (hooks) {
       service.preferredRdpClient,
       RDP_CLIENT_NONE,
       'preferredRdpClient fallback is set correctly',
+    );
+  });
+
+  test('sets recommendedRdpClient correctly based on OS', async function (assert) {
+    sinon
+      .stub(ipcService, 'invoke')
+      .withArgs('checkOS')
+      .resolves({ isWindows: true });
+    await service.getRecommendedRdpClient();
+
+    assert.deepEqual(
+      service.recommendedRdpClient,
+      {
+        name: RDP_CLIENT_MSTSC,
+        link: RDP_CLIENT_MSTSC_LINK,
+      },
+      'recommendedRdpClient is set correctly for windows',
+    );
+
+    ipcService.invoke.withArgs('checkOS').resolves({ isMac: true });
+    service.recommendedRdpClient = null;
+    await service.getRecommendedRdpClient();
+
+    assert.deepEqual(
+      service.recommendedRdpClient,
+      {
+        name: RDP_CLIENT_WINDOWS_APP,
+        link: RDP_CLIENT_WINDOWS_APP_LINK,
+      },
+      'recommendedRdpClient is set correctly for mac',
     );
   });
 });

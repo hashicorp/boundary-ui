@@ -107,8 +107,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
 
     // mock RDP service calls
     let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   test('can navigate to the settings page', async function (assert) {

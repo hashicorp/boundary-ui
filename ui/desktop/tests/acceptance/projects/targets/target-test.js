@@ -163,8 +163,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     // mock RDP service calls
     let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   test('user can connect to a target with an address', async function (assert) {

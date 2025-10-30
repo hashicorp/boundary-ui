@@ -148,8 +148,7 @@ module('Acceptance | scopes', function (hooks) {
 
     // mock RDP service calls
     let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   test('visiting index', async function (assert) {

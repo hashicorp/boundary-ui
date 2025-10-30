@@ -10,15 +10,19 @@ import { tracked } from '@glimmer/tracking';
 export const RDP_CLIENT_NONE = 'none';
 export const RDP_CLIENT_WINDOWS_APP = 'windows-app';
 export const RDP_CLIENT_MSTSC = 'mstsc';
+export const RDP_CLIENT_WINDOWS_APP_LINK =
+  'https://apps.apple.com/us/app/windows-app/id1295203466';
+export const RDP_CLIENT_MSTSC_LINK =
+  'https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/uninstall-remote-desktop-connection';
 
 const { __electronLog } = globalThis;
 const macRecommendedRdpClient = {
   name: RDP_CLIENT_WINDOWS_APP,
-  link: 'https://apps.apple.com/us/app/windows-app/id1295203466',
+  link: RDP_CLIENT_WINDOWS_APP_LINK,
 };
 const windowsRecommendedRdpClient = {
   name: RDP_CLIENT_MSTSC,
-  link: 'https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/uninstall-remote-desktop-connection',
+  link: RDP_CLIENT_MSTSC_LINK,
 };
 
 export default class RdpService extends Service {
@@ -63,45 +67,42 @@ export default class RdpService extends Service {
 
   // =methods
 
+  async initialize() {
+    await Promise.all([
+      this.getRdpClients(),
+      this.getPreferredRdpClient(),
+      this.getRecommendedRdpClient(),
+    ]);
+  }
+
   /**
    * Fetches the list of available RDP clients from the main process.
    */
   async getRdpClients() {
     // Return cached clients if already fetched
     if (this.rdpClients.length > 0) {
-      // Reset recommendedRdpClient if clients change
-      if (
-        !(
-          this.rdpClients.length === 1 && this.rdpClients[0] === RDP_CLIENT_NONE
-        )
-      ) {
-        this.recommendedRdpClient = null;
-      }
       return this.rdpClients;
     }
     try {
       this.rdpClients = await this.ipc.invoke('getRdpClients');
-      if (
-        this.rdpClients.length === 1 &&
-        this.rdpClients[0] === RDP_CLIENT_NONE
-      ) {
-        await this.setRecommendedRdpClient();
-      }
       return this.rdpClients;
     } catch (error) {
       __electronLog?.error('Failed to fetch RDP clients', error.message);
       // default to 'none' option if it fails
       this.rdpClients = [RDP_CLIENT_NONE];
-      await this.setRecommendedRdpClient();
       return this.rdpClients;
     }
   }
 
   /**
-   * Sets the recommended RDP client based on OS platform.
+   * Gets the recommended RDP client based on OS platform.
    */
-  async setRecommendedRdpClient() {
+  async getRecommendedRdpClient() {
     try {
+      // return cached recommended client if already set
+      if (this.recommendedRdpClient !== null) {
+        return this.recommendedRdpClient;
+      }
       const { isWindows, isMac } = await this.ipc.invoke('checkOS');
       if (isWindows) {
         this.recommendedRdpClient = windowsRecommendedRdpClient;
@@ -110,7 +111,7 @@ export default class RdpService extends Service {
       }
     } catch (error) {
       __electronLog?.error(
-        'Failed to determine OS for recommended RDP client',
+        'Failed to set recommended RDP client',
         error.message,
       );
       this.recommendedRdpClient = null;

@@ -52,9 +52,8 @@ export default class ApplicationRoute extends Route {
       });
     }
 
-    // fetch RDP clients and preferred client
-    await this.rdp.getRdpClients();
-    await this.rdp.getPreferredRdpClient();
+    // initialize RDP service with rdp client data
+    await this.rdp.initialize();
   }
 
   /**

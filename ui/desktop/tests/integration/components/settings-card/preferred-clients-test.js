@@ -5,11 +5,15 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find, triggerEvent } from '@ember/test-helpers';
+import { render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 import Service from '@ember/service';
-import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
+import {
+  RDP_CLIENT_WINDOWS_APP,
+  RDP_CLIENT_NONE,
+  RDP_CLIENT_WINDOWS_APP_LINK,
+} from 'desktop/services/rdp';
 
 module(
   'Integration | Component | settings-card/preferred-clients',
@@ -38,9 +42,7 @@ module(
         .dom('select option:checked')
         .hasText('Windows App', 'Preferred client is selected');
 
-      let select = find('select');
-      select.value = RDP_CLIENT_NONE;
-      await triggerEvent(select, 'change');
+      await select('select', RDP_CLIENT_NONE);
 
       assert
         .dom('select option:checked')
@@ -53,14 +55,14 @@ module(
       );
     });
 
-    test('it renders recommended client link when only none is detected', async function (assert) {
+    test('it renders recommended client link only when none is detected', async function (assert) {
       this.owner.register(
         'service:rdp',
         class extends Service {
           rdpClients = [RDP_CLIENT_NONE];
           recommendedRdpClient = {
             name: RDP_CLIENT_WINDOWS_APP,
-            link: 'https://apps.apple.com/us/app/windows-app/id1295203466',
+            link: RDP_CLIENT_WINDOWS_APP_LINK,
           };
         },
       );
@@ -81,7 +83,7 @@ module(
         .dom('.hds-table tbody tr td:last-child a')
         .hasAttribute(
           'href',
-          'https://apps.apple.com/us/app/windows-app/id1295203466',
+          RDP_CLIENT_WINDOWS_APP_LINK,
           'windows app download link is rendered',
         );
     });

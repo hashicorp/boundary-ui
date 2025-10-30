@@ -167,8 +167,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     // mock RDP service calls
     let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'getRdpClients').resolves();
-    sinon.stub(rdpService, 'getPreferredRdpClient').resolves();
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
