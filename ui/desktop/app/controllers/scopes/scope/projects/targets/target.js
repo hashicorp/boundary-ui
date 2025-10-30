@@ -51,25 +51,11 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
   }
 
   /**
-   * Launch method that calls parent quickConnectAndLaunchRdp method and handles
-   * connection errors unique to this route
+   * Launch method that calls parent quickConnectAndLaunchRdp method
    * @param {TargetModel} target
    */
   @action
   async connectAndLaunchRdp(target) {
-    try {
-      await this.targets.quickConnectAndLaunchRdp(target);
-    } catch (error) {
-      this.isConnectionError = true;
-      this.confirm
-        .confirm(error.message)
-        // Retry
-        .then(() => this.connectAndLaunchRdp(target))
-        .catch(() => {
-          // Reset the flag as this was user initiated and we're not
-          // in a transition
-          this.isConnectionError = false;
-        });
-    }
+    await this.targets.quickConnectAndLaunchRdp(target);
   }
 }

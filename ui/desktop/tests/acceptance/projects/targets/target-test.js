@@ -712,4 +712,21 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.ok(this.ipcStub.calledWith('connect'));
     assert.notOk(this.ipcStub.calledWith('launchRdpClient'));
   });
+
+  test('shows confirm modal when quickConnectAndLaunchRdp fails', async function (assert) {
+    let rdpService = this.owner.lookup('service:rdp');
+    rdpService.preferredRdpClient = 'windows-app';
+    instances.target.update({ type: TYPE_TARGET_RDP });
+    this.stubCacheDaemonSearch();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.target);
+
+    await click('[data-test-target-detail-open-button]');
+
+    // The modal should be visible because cliExists was not stubbed, and the connection failed
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+  });
 });
