@@ -364,11 +364,11 @@ module('Acceptance | targets | list', function (hooks) {
       instances.sshTarget.id,
       'session is associated with correct target',
     );
-    const emberDataSessionModel = this.owner
+    const emberDataSessionModelBefore = this.owner
       .lookup('service:store')
       .peekRecord('session', instances.session.id);
     assert.strictEqual(
-      emberDataSessionModel.status,
+      emberDataSessionModelBefore.status,
       STATUS_SESSION_ACTIVE,
       'ember data session model is active',
     );
@@ -389,6 +389,10 @@ module('Acceptance | targets | list', function (hooks) {
     instances.session.status = STATUS_SESSION_TERMINATED;
 
     await click(commonSelectors.HREF(urls.targets));
+
+    const emberDataSessionModelAfter = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
     assert
       .dom(selectors.TABLE_TARGETS_ROW(instances.sshTarget.id))
       .exists('the target is still listed in the table');
@@ -396,7 +400,7 @@ module('Acceptance | targets | list', function (hooks) {
       .dom(selectors.TABLE_ACTIVE_SESSIONS(instances.sshTarget.id))
       .doesNotExist('the target does not have an active session');
     assert.strictEqual(
-      emberDataSessionModel.status,
+      emberDataSessionModelAfter.status,
       STATUS_SESSION_TERMINATED,
       'the session ember data model status is updated',
     );

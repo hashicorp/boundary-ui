@@ -137,7 +137,7 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
   });
 
   test('visiting index', async function (assert) {
@@ -234,22 +234,18 @@ module('Acceptance | scopes', function (hooks) {
       'sessions',
       'targets',
       'aliases',
-      'sessions',
 
       'sessions',
       'targets',
       'aliases',
-      'sessions',
 
       'sessions',
       'targets',
       'aliases',
-      'sessions',
 
       'sessions',
       'targets',
       'aliases',
-      'sessions',
     );
     await visit(urls.targets);
 
@@ -300,7 +296,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting empty targets', async function (assert) {
     this.server.schema.targets.all().destroy();
     this.server.schema.sessions.all().destroy();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
 
     await visit(urls.targets);
 

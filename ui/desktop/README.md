@@ -122,8 +122,8 @@ The static production assets are saved into the `dist/` folder.
 The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
 packaging. CLI version is defined in `electron-app/config/cli.js`.
 
-Similar to running in development, you can also use `BYPASS_CLI_SETUP=true` to
-bypass the download of the CLI, which can be useful for pre-release testing. See
+Similar to running in development, you can also use `SETUP_CLI=true` to
+enable the download of the CLI, which can be useful for pre-release testing. See
 [Developing Using Non-Release Versions of
 Boundary](#developing-using-non-release-versions-of-boundary) for more details.
 
