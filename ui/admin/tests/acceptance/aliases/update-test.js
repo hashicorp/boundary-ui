@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { click, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let aliasCount;
@@ -37,7 +34,7 @@ module('Acceptance | aliases | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -53,11 +50,9 @@ module('Acceptance | aliases | update', function (hooks) {
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     aliasCount = () => this.server.schema.aliases.all().models.length;
-
-    await authenticateSession({});
   });
 
-  test('users can update an exisiting alias', async function (assert) {
+  test('users can update an existing alias', async function (assert) {
     setRunOptions({
       rules: {
         'color-contrast': {

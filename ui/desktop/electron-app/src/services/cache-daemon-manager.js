@@ -177,7 +177,7 @@ const searchCliCommand = (requestData) => {
 
   // Log request data and response, but clean up token from log
   const requestCopy = { ...requestData };
-  delete requestData.token;
+  delete requestCopy.token;
   log.error(`searchCliCommand(${JSON.stringify(requestCopy)}):`, stderr);
 
   return generateErrorPromise(stderr);

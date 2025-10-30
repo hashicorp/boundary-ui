@@ -44,13 +44,17 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/projects/sessions/index',
       );
 
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      instances.account = this.server.schema.accounts.first();
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -73,6 +77,7 @@ module(
 
       this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
       this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
+      await authenticateSession({ account_id: instances.account.id });
     });
 
     test('it exists', function (assert) {

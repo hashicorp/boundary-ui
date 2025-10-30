@@ -6,21 +6,17 @@
 import { module, test } from 'qunit';
 import { currentURL, visit, fillIn, waitFor, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
 
 module('Acceptance | scopes | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org1: null,
       org2: null,
       project1: null,
@@ -35,7 +31,6 @@ module('Acceptance | scopes | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org1 = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -56,7 +51,6 @@ module('Acceptance | scopes | list', function (hooks) {
     urls.scopes = '/scopes';
     urls.globalScope = '/scopes/global/scopes';
     urls.orgScope = `/scopes/${instances.scopes.org1.id}/scopes`;
-    await authenticateSession({});
   });
 
   test('user gets redirected to scopes list view', async function (assert) {

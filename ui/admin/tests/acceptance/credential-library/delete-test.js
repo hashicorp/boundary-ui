@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
@@ -23,7 +21,6 @@ import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential'
 
 module('Acceptance | credential-libraries | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getCredentialLibraryCount;
@@ -32,7 +29,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -51,7 +47,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -106,7 +101,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       }).length;
     };
-    await authenticateSession({});
   });
 
   test('can delete resource', async function (assert) {

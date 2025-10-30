@@ -5,9 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
@@ -23,7 +21,6 @@ module(
   'Acceptance | credential-stores | credentials | delete',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
     setupSqlite(hooks);
 
     let getUsernamePasswordCredentialCount;
@@ -127,7 +124,6 @@ module(
           type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
         }).length;
       };
-      await authenticateSession({});
     });
 
     test('can delete username & password credential', async function (assert) {

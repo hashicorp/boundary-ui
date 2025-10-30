@@ -1025,3 +1025,18 @@
 .injected-app-credential-alert {
   margin-bottom: 1rem;
 }
+
+// User menu dropdown in global side nav
+.user-menu-dropdown {
+  max-width: 125px;
+
+  &__toggle-button {
+    width: 100%;
+
+    .hds-dropdown-toggle-button__text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

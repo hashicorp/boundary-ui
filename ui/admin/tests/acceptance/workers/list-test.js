@@ -6,15 +6,12 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   let featuresService;
 
@@ -34,7 +31,7 @@ module('Acceptance | workers | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -45,7 +42,6 @@ module('Acceptance | workers | list', function (hooks) {
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.workerTags = `${urls.worker}/tags`;
-    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 

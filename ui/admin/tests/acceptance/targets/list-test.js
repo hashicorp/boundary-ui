@@ -13,9 +13,7 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_TARGET_TCP,
   TYPE_TARGET_SSH,
@@ -32,7 +30,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -48,7 +45,6 @@ module('Acceptance | targets | list', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -69,7 +65,6 @@ module('Acceptance | targets | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -107,8 +102,6 @@ module('Acceptance | targets | list', function (hooks) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
     featuresService.enable('rdp-target');
-
-    await authenticateSession({});
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {

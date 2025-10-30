@@ -28,11 +28,18 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/roles/role/grants');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
+    });
     instances.role = this.server.create('role', {
       scope: instances.scopes.global,
     });

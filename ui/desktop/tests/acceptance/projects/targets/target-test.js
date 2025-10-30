@@ -13,16 +13,13 @@ import {
   fillIn,
   waitFor,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
@@ -82,12 +79,11 @@ module('Acceptance | projects | targets | target', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession();
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -100,9 +96,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     });
 
     // Generate resources
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },

@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click, waitFor, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
@@ -20,12 +18,10 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     passwordAuthMethod: null,
@@ -41,7 +37,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
       {
@@ -63,8 +58,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
     urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
-
-    await authenticateSession({});
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {

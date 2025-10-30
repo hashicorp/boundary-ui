@@ -13,9 +13,7 @@ import {
   blur,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import {
   TYPE_TARGET_TCP,
@@ -29,7 +27,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -60,7 +57,7 @@ module('Acceptance | targets | create', function (hooks) {
   hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -88,7 +85,6 @@ module('Acceptance | targets | create', function (hooks) {
       this.server.schema.targets.where({ type: TYPE_TARGET_TCP }).models.length;
     getRDPTargetCount = () =>
       this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models.length;
-    await authenticateSession({});
   });
 
   test('defaults to type `tcp` when no query param provided', async function (assert) {

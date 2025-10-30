@@ -9,7 +9,6 @@ import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module('Unit | Controller | account/change-password', function (hooks) {
   setupTest(hooks);
@@ -34,22 +33,20 @@ module('Unit | Controller | account/change-password', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    instances.authMethod = this.server.schema.authMethods.first();
+    instances.account = this.server.schema.accounts.first();
+    await authenticateSession({
+      isGlobal: true,
+      account_id: instances.account.id,
+    });
+
     controller = this.owner.lookup('controller:account/change-password');
     store = this.owner.lookup('service:store');
-
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      type: 'global',
-    });
-    instances.authMethod = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-      type: TYPE_AUTH_METHOD_PASSWORD,
-    });
-    instances.account = this.server.create('account', {
-      scope: instances.scopes.global,
-      authMethod: instances.authMethod,
-    });
 
     urls.globalScope = `/scopes/global`;
   });
