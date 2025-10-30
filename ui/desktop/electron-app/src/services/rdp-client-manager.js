@@ -116,17 +116,22 @@ class RdpClientManager {
    */
   async launchRdpConnection(address, port) {
     if (isWindows()) {
+      console.log('Launching Windows RDP client');
       // Launch Windows mstsc and track it for cleanup
       const mstscArgs = [`/v:${address}:${port}`];
       const { childProcess } = await spawn(mstscArgs, {}, 'mstsc');
       // Add to activeProcesses array for cleanup
       this.#activeProcesses.push(childProcess);
     } else if (isMac()) {
+      console.log('Launching macOS RDP client');
       // Launch macOS RDP URL - no process to track as it's handled by the system
       const fullAddress = `${address}:${port}`;
       const encoded = encodeURIComponent(`full address=s:${fullAddress}`);
       const rdpUrl = `rdp://${encoded}`;
-      await shell.openExternal(rdpUrl);
+      const { childProcess } = await spawn([rdpUrl], {}, 'open');
+      this.#activeProcesses.push(childProcess);
+      console.log(this.#activeProcesses, 'active processes');
+      // await shell.openExternal(rdpUrl);
     }
   }
 
@@ -155,12 +160,19 @@ class RdpClientManager {
    * Stop all active RDP processes
    */
   stopAll() {
+    console.log('before clearing active processes', this.#activeProcesses);
+
     for (const process of this.#activeProcesses) {
       if (!process.killed) {
+        console.log('killing process', process.pid);
         process.kill();
+        console.log('after killed process', process.pid);
       }
     }
+    // log killed processes
+    console.log('Cleared processes', this.#activeProcesses);
     // Clear the active processes array after stopping all processes
+    console.log('Clearing active processes', this.#activeProcesses);
     this.#activeProcesses = [];
   }
 }

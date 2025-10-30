@@ -21,7 +21,7 @@ export default class RdpService extends Service {
    * @type {string|null}
    * @private
    */
-  @tracked preferredRdpClient = null;
+  @tracked preferredRdpClient = 'windows-app';
 
   /**
    * The list of available RDP clients fetched from the main process.
