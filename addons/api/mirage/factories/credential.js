@@ -12,6 +12,8 @@ import {
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 
 const types = [...TYPES_CREDENTIAL];
@@ -20,14 +22,16 @@ export default factory.extend({
   type: (i) => types[i % types.length],
   id() {
     switch (this.type) {
-      case 'ssh_private_key':
+      case TYPE_CREDENTIAL_SSH_PRIVATE_KEY:
         return generatedId('credspk_');
-      case 'username_password':
+      case TYPE_CREDENTIAL_USERNAME_PASSWORD:
         return generatedId('credup_');
-      case 'json':
+      case TYPE_CREDENTIAL_JSON:
         return generatedId('credjson_');
-      case 'username_password_domain':
+      case TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN:
         return generatedId('credupd_');
+      case TYPE_CREDENTIAL_PASSWORD:
+        return generatedId('credp_');
     }
   },
   authorized_actions: () =>
