@@ -29,6 +29,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     '[data-test-toast-notification] button';
   const TOAST_DISMISS_BUTTON = '[aria-label="Dismiss"]';
   const RDP_OPEN_BUTTON = '[data-test-session-detail-open-button]';
+  const CANCEL_SESSION_BUTTON = '[data-test-session-detail-cancel-button]';
 
   const instances = {
     scopes: {
@@ -503,7 +504,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    assert.dom('[data-test-session-detail-cancel-button]').isVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isVisible();
   });
 
   test('cannot cancel a session without cancel permissions', async function (assert) {
@@ -521,7 +522,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    assert.dom('[data-test-session-detail-cancel-button]').isNotVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isNotVisible();
   });
 
   test('cancelling a session shows success alert', async function (assert) {
@@ -538,7 +539,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-success')
@@ -559,7 +560,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert.strictEqual(currentURL(), urls.targets);
   });
@@ -579,7 +580,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-critical')
@@ -601,7 +602,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-critical')
@@ -683,5 +684,27 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click(RDP_OPEN_BUTTON);
 
     assert.dom('.hds-modal').isVisible();
+  });
+
+  test('it displays open button without cancel session permission', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.rdpService.preferredRdpClient = 'windows-app';
+    instances.target.update({ type: TYPE_TARGET_RDP });
+    instances.rdpSession.update({ authorized_actions: [] });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+    assert.dom(RDP_OPEN_BUTTON).isVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isNotVisible();
   });
 });
