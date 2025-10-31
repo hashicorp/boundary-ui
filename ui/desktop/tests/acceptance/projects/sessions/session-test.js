@@ -13,6 +13,7 @@ import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -136,6 +137,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   hooks.afterEach(function () {

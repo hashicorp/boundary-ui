@@ -18,6 +18,7 @@ import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import { TYPE_TARGET_RDP } from 'api/models/target';
+import sinon from 'sinon';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -153,6 +154,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+
+    // mock RDP service calls
+    this.rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(this.rdpService, 'initialize').resolves();
   });
 
   test('user can connect to a target with an address', async function (assert) {
@@ -630,8 +635,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows `Open` and `Connect` button for RDP target with preferred client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.stubCacheDaemonSearch();
@@ -645,8 +649,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows "Connect" button for RDP target without preferred client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = null;
+    this.rdpService.preferredRdpClient = null;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.stubCacheDaemonSearch();
@@ -658,8 +661,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('clicking `open` button for RDP target triggers launchRdpClient', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -683,8 +685,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows `Connect` button for rdp target without preferred client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = null;
+    this.rdpService.preferredRdpClient = null;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.stubCacheDaemonSearch();
@@ -708,8 +709,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows confirm modal when quickConnectAndLaunchRdp fails', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
     this.stubCacheDaemonSearch();
 
