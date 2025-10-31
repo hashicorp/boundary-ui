@@ -7,7 +7,23 @@ import Service from '@ember/service';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+export const RDP_CLIENT_NONE = 'none';
+export const RDP_CLIENT_WINDOWS_APP = 'windows-app';
+export const RDP_CLIENT_MSTSC = 'mstsc';
+export const RDP_CLIENT_WINDOWS_APP_LINK =
+  'https://apps.apple.com/us/app/windows-app/id1295203466';
+export const RDP_CLIENT_MSTSC_LINK =
+  'https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/uninstall-remote-desktop-connection';
+
 const { __electronLog } = globalThis;
+const macRecommendedRdpClient = {
+  name: RDP_CLIENT_WINDOWS_APP,
+  link: RDP_CLIENT_WINDOWS_APP_LINK,
+};
+const windowsRecommendedRdpClient = {
+  name: RDP_CLIENT_MSTSC,
+  link: RDP_CLIENT_MSTSC_LINK,
+};
 
 export default class RdpService extends Service {
   // =services
@@ -19,16 +35,20 @@ export default class RdpService extends Service {
   /**
    * The preferred RDP client set by the user.
    * @type {string|null}
-   * @private
    */
   @tracked preferredRdpClient = null;
 
   /**
    * The list of available RDP clients fetched from the main process.
    * @type {Array<String>}
-   * @private
    */
   @tracked rdpClients = [];
+
+  /**
+   * The recommended RDP client based on platform when only 'none' is available.
+   * @type {Object|null}
+   */
+  @tracked recommendedRdpClient = null;
 
   // =attributes
 
@@ -40,11 +60,20 @@ export default class RdpService extends Service {
    */
   get isPreferredRdpClientSet() {
     return (
-      this.preferredRdpClient !== null && this.preferredRdpClient !== 'none'
+      this.preferredRdpClient !== null &&
+      this.preferredRdpClient !== RDP_CLIENT_NONE
     );
   }
 
   // =methods
+
+  async initialize() {
+    await Promise.all([
+      this.getRdpClients(),
+      this.getPreferredRdpClient(),
+      this.getRecommendedRdpClient(),
+    ]);
+  }
 
   /**
    * Fetches the list of available RDP clients from the main process.
@@ -60,8 +89,32 @@ export default class RdpService extends Service {
     } catch (error) {
       __electronLog?.error('Failed to fetch RDP clients', error.message);
       // default to 'none' option if it fails
-      this.rdpClients = ['none'];
+      this.rdpClients = [RDP_CLIENT_NONE];
       return this.rdpClients;
+    }
+  }
+
+  /**
+   * Gets the recommended RDP client based on OS platform.
+   */
+  async getRecommendedRdpClient() {
+    try {
+      // return cached recommended client if already set
+      if (this.recommendedRdpClient !== null) {
+        return this.recommendedRdpClient;
+      }
+      const { isWindows, isMac } = await this.ipc.invoke('checkOS');
+      if (isWindows) {
+        this.recommendedRdpClient = windowsRecommendedRdpClient;
+      } else if (isMac) {
+        this.recommendedRdpClient = macRecommendedRdpClient;
+      }
+    } catch (error) {
+      __electronLog?.error(
+        'Failed to set recommended RDP client',
+        error.message,
+      );
+      this.recommendedRdpClient = null;
     }
   }
 
@@ -83,7 +136,7 @@ export default class RdpService extends Service {
         error.message,
       );
       // default to 'none' if it fails
-      this.preferredRdpClient = 'none';
+      this.preferredRdpClient = RDP_CLIENT_NONE;
       return this.preferredRdpClient;
     }
   }
@@ -101,7 +154,7 @@ export default class RdpService extends Service {
     } catch (error) {
       __electronLog?.error('Failed to set preferred RDP client', error.message);
       // set to 'none' if it fails
-      this.preferredRdpClient = 'none';
+      this.preferredRdpClient = RDP_CLIENT_NONE;
     }
   }
 
