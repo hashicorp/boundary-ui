@@ -141,6 +141,21 @@ settings:
   alerts:
     cache-daemon: There may be a problem with the cache daemon
     client-agent: There may be a problem with the client agent
+  preferred-clients:
+    title: Preferred Clients
+    description: Select the applications for Boundary to use when opening these target types.
+    table:
+      header:
+        protocol: Protocol
+        client: Client
+      data:
+        protocols:
+          windows-rdp: Windows RDP
+        clients:
+          none: None
+          mstsc: Remote Desktop Connection (mstsc)
+          windows-app: Windows App
+          none-detected: 'None detected. We recommend <a href={rdpClientLink} target="_blank" rel="noopener noreferrer">{rdpClientName}</a>.'
 worker-filter-generator:
   title: Filter generator
   description: Choose what you want to format into a filter.

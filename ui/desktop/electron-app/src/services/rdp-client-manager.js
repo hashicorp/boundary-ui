@@ -9,10 +9,15 @@ const which = require('which');
 const { isMac, isWindows } = require('../helpers/platform.js');
 const store = require('./electron-store-manager');
 
+// RDP Clients
+const RDP_CLIENT_NONE = 'none';
+const RDP_CLIENT_WINDOWS_APP = 'windows-app';
+const RDP_CLIENT_MSTSC = 'mstsc';
+
 // RDP Client Configuration
 const RDP_CLIENTS = [
   {
-    value: 'mstsc',
+    value: RDP_CLIENT_MSTSC,
     isAvailable: async () => {
       if (!isWindows()) return false;
       try {
@@ -24,7 +29,7 @@ const RDP_CLIENTS = [
     },
   },
   {
-    value: 'windows-app',
+    value: RDP_CLIENT_WINDOWS_APP,
     isAvailable: () => {
       if (!isMac()) return false;
       try {
@@ -50,7 +55,7 @@ const RDP_CLIENTS = [
     },
   },
   {
-    value: 'none',
+    value: RDP_CLIENT_NONE,
     isAvailable: () => true,
   },
 ];
@@ -78,8 +83,10 @@ class RdpClientManager {
    */
   async getBestDefaultRdpClient() {
     const availableClients = await this.getAvailableRdpClients();
-    const bestClient = availableClients.find((client) => client !== 'none');
-    return bestClient ?? 'none';
+    const bestClient = availableClients.find(
+      (client) => client !== RDP_CLIENT_NONE,
+    );
+    return bestClient ?? RDP_CLIENT_NONE;
   }
 
   /**
@@ -103,7 +110,7 @@ class RdpClientManager {
    */
   setPreferredRdpClient(preferredClient) {
     if (!preferredClient) {
-      store.set('preferredRdpClient', 'none');
+      store.set('preferredRdpClient', RDP_CLIENT_NONE);
     } else {
       store.set('preferredRdpClient', preferredClient);
     }

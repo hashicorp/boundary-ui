@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service rdp;
 
   // =attributes
 
@@ -50,6 +51,9 @@ export default class ApplicationRoute extends Route {
         token: sessionData?.token,
       });
     }
+
+    // initialize RDP service with rdp client data
+    await this.rdp.initialize();
   }
 
   /**
