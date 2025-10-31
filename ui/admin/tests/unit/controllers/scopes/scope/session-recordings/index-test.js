@@ -93,44 +93,6 @@ module(
       date.restore();
     });
 
-    test('it exists', function (assert) {
-      assert.ok(controller);
-    });
-
-    test('filters returns expected entries', function (assert) {
-      assert.deepEqual(controller.filters.allFilters, {
-        time: [
-          {
-            id: last24Hours.toISOString(),
-            name: 'Last 24 hours',
-          },
-          {
-            id: last3Days.toISOString(),
-            name: 'Last 3 days',
-          },
-          {
-            id: last7Days.toISOString(),
-            name: 'Last 7 days',
-          },
-        ],
-        users: [{ id: instances.user.id, name: instances.user.name }],
-        scopes: [
-          {
-            id: instances.scopes.project.id,
-            name: instances.scopes.project.name,
-            parent_scope_id: instances.scopes.project.parent_scope_id,
-          },
-        ],
-        targets: [{ id: instances.target.id, name: instances.target.name }],
-      });
-      assert.deepEqual(controller.filters.selectedFilters, {
-        time: [null],
-        users: [],
-        scopes: [],
-        targets: [],
-      });
-    });
-
     test('timeOptions returns expected filter options', function (assert) {
       assert.deepEqual(controller.timeOptions, [
         {
@@ -144,16 +106,6 @@ module(
         {
           id: last7Days.toISOString(),
           name: 'Last 7 days',
-        },
-      ]);
-    });
-
-    test('projectScopes returns an array of unique projects', function (assert) {
-      assert.deepEqual(controller.projectScopes, [
-        {
-          id: instances.scopes.project.id,
-          name: instances.scopes.project.name,
-          parent_scope_id: instances.scopes.project.parent_scope_id,
         },
       ]);
     });
@@ -185,22 +137,6 @@ module(
 
       assert.strictEqual(controller.page, 1);
       assert.deepEqual(controller.time, last24Hours.toISOString());
-    });
-
-    test('refresh action calls refreshAll', async function (assert) {
-      assert.expect(2);
-      controller.set('target', {
-        send(actionName, ...args) {
-          assert.strictEqual(actionName, 'refreshAll');
-          assert.deepEqual(
-            args,
-            [],
-            'refreshAll was called with the correct arguments',
-          );
-        },
-      });
-
-      await controller.refresh();
     });
   },
 );

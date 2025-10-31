@@ -4,9 +4,9 @@
  */
 
 import { modelMapping } from 'api/services/sqlite';
-import { searchTables } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
 import { underscore } from '@ember/string';
+import { assert } from '@ember/debug';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -35,16 +35,14 @@ export function generateSQLExpressions(
   addFilterConditions({ filters, parameters, conditions });
   addSearchConditions({ search, resource, tableName, parameters, conditions });
 
+  const selectClause = constructSelectClause(select, tableName);
   const orderByClause = constructOrderByClause(resource, sort);
-
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';
 
   const paginationClause = page && pageSize ? `LIMIT ? OFFSET ?` : '';
   if (paginationClause) {
     parameters.push(pageSize, (page - 1) * pageSize);
   }
-
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${tableName}"`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
@@ -142,32 +140,83 @@ function addSearchConditions({
   parameters,
   conditions,
 }) {
-  if (!search) {
+  if (!search || !modelMapping[resource]) {
     return;
   }
 
-  if (searchTables.has(resource)) {
-    // Use the special prefix indicator "*" for full-text search
-    parameters.push(`"${search}"*`);
-    // Use a subquery to match against the FTS table with rowids as SQLite is
-    // much more efficient with FTS queries when using rowids or MATCH (or both).
-    // We could have also used a join here but a subquery is simpler.
-    conditions.push(
-      `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
+  // Use the special prefix indicator "*" for full-text search
+  if (typeOf(search) === 'object') {
+    if (!search?.text) {
+      return;
+    }
+
+    parameters.push(
+      or(search.fields.map((field) => `${field}:"${search.text}"*`)),
     );
-    return;
+  } else {
+    parameters.push(`"${search}"*`);
   }
 
-  const fields = Object.keys(modelMapping[resource]);
-  const searchConditions = parenthetical(
-    or(
-      fields.map((field) => {
-        parameters.push(`%${search}%`);
-        return `${field}${OPERATORS['contains']}`;
-      }),
-    ),
+  // Use a subquery to match against the FTS table with rowids as SQLite is
+  // much more efficient with FTS queries when using rowids or MATCH (or both).
+  // We could have also used a join here but a subquery is simpler.
+  conditions.push(
+    `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
   );
-  conditions.push(searchConditions);
+}
+
+function constructSelectClause(select = [{ field: '*' }], tableName) {
+  const distinctColumns = select.filter(({ isDistinct }) => isDistinct);
+  const nonDistinctColumns = select.filter(({ isDistinct }) => !isDistinct);
+
+  const buildColumnExpression = ({ field, isCount, alias, isDistinct }) => {
+    let column = field;
+
+    // If there's just distinct with nothing else, this will be handled separately
+    // and we will just return the column back as is
+    if (isCount && isDistinct) {
+      column = `count(DISTINCT ${column})`;
+    } else if (isCount) {
+      column = `count(${column})`;
+    }
+
+    if (alias) {
+      column = `${column} as ${alias}`;
+    }
+
+    return column;
+  };
+
+  let selectColumns;
+
+  if (distinctColumns.length > 0) {
+    // Check if any columns also have COUNT (or other aggregate function in the future)
+    const hasAggregateDistinct = distinctColumns.some((col) => col.isCount);
+
+    if (hasAggregateDistinct) {
+      selectColumns = distinctColumns.map(buildColumnExpression).join(', ');
+
+      // Add back in the non distinct columns
+      if (nonDistinctColumns.length > 0) {
+        const regularPart = nonDistinctColumns
+          .map(buildColumnExpression)
+          .join(', ');
+        selectColumns = `${selectColumns}, ${regularPart}`;
+      }
+    } else {
+      assert(
+        'Can not combine non-distincts with multi column distincts',
+        nonDistinctColumns.length === 0,
+      );
+
+      // Only do multi column DISTINCT with no aggregate functions
+      selectColumns = `DISTINCT ${distinctColumns.map(buildColumnExpression).join(', ')}`;
+    }
+  } else {
+    selectColumns = select.map(buildColumnExpression).join(', ');
+  }
+
+  return `SELECT ${selectColumns} FROM "${tableName}"`;
 }
 
 function constructOrderByClause(resource, sort) {

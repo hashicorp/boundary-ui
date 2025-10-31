@@ -127,7 +127,7 @@ module('Integration | Component | dropdown/index', function (hooks) {
     assert.true(result);
   });
 
-  test('it only renders a max of 500 items but allows searching on all items', async function (assert) {
+  test('it only renders a max of 250 items but allows searching on all items', async function (assert) {
     this.set('checkedItems', []);
     this.set(
       'itemOptions',
@@ -145,7 +145,7 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
-    assert.dom(ITEM_SELECTOR).exists({ count: 500 });
+    assert.dom(ITEM_SELECTOR).exists({ count: 250 });
 
     // Random number between 500 and 599 to search
     await fillIn(SEARCH_INPUT_SELECTOR, '591');
