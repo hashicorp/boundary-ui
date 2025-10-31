@@ -9,6 +9,8 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
 import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 
@@ -92,19 +94,25 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       });
 
       if (this.can.can('list model', scope, { collection: 'sessions' })) {
-        const sessions = await this.store.query('session', {
-          scope_id,
-          query: {
-            filters: {
-              scope_id: [{ equals: scope_id }],
-              status: [
-                { equals: STATUS_SESSION_ACTIVE },
-                { equals: STATUS_SESSION_PENDING },
-              ],
+        await this.store.query(
+          'session',
+          {
+            scope_id,
+            query: {
+              filters: {
+                scope_id: [{ equals: scope_id }],
+                status: [
+                  { equals: STATUS_SESSION_ACTIVE },
+                  { equals: STATUS_SESSION_PENDING },
+                ],
+              },
             },
+            page: 1,
+            pageSize: 1,
           },
-        });
-        this.addActiveSessionFilters(filters, availableSessions, sessions);
+          { pushToStore: false },
+        );
+        this.addActiveSessionFilters(filters, availableSessions);
       }
 
       const typeMap = {
@@ -186,13 +194,8 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
    * Add the filters for active sessions to the filter object.
    * @param filters
    * @param availableSessions
-   * @param sessions
    */
-  addActiveSessionFilters = (filters, availableSessions, sessions) => {
-    const uniqueTargetIdsWithSessions = new Set(
-      sessions.map((session) => session.target_id),
-    );
-
+  addActiveSessionFilters = (filters, availableSessions) => {
     // Don't add any filtering if the user selects both which is equivalent to no filters
     if (availableSessions.length === 2) {
       return;
@@ -200,24 +203,51 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     availableSessions.forEach((availability) => {
       if (availability === 'yes') {
-        filters.id.logicalOperator = 'or';
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
-          filters.id.values.push({ equals: targetId });
-        });
-
-        // If there's no sessions just set it to a dummy value
-        // so the search returns no results
-        if (uniqueTargetIdsWithSessions.size === 0) {
-          filters.id.values.push({ equals: 'none' });
-        }
+        filters.joins = [
+          {
+            resource: 'session',
+            query: {
+              filters: {
+                status: {
+                  logicalOperator: 'or',
+                  values: [
+                    { equals: STATUS_SESSION_ACTIVE },
+                    { equals: STATUS_SESSION_PENDING },
+                  ],
+                },
+              },
+            },
+            joinOn: 'target_id',
+            joinType: 'INNER',
+          },
+        ];
       }
 
       if (availability === 'no') {
-        filters.id.logicalOperator = 'and';
-
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
-          filters.id.values.push({ notEquals: targetId });
-        });
+        filters.joins = [
+          {
+            resource: 'session',
+            query: {
+              filters: {
+                status: {
+                  logicalOperator: 'or',
+                  values: [
+                    { equals: STATUS_SESSION_CANCELING },
+                    { equals: STATUS_SESSION_TERMINATED },
+                    // We include null here because traditionally with a LEFT JOIN we'd want to do a check on
+                    // `OR target_id IS NOT NULL` but this is tough to get right due to the presence of other
+                    // possible filters and operator precedence with the OR. We can check for a null status instead
+                    // which functionally is the same since status is normally a required field and that means
+                    // a session does not exist for a particular target.
+                    { equals: null },
+                  ],
+                },
+              },
+            },
+            joinOn: 'target_id',
+            joinType: 'LEFT',
+          },
+        ];
       }
     });
   };
