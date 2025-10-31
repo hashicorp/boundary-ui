@@ -15,6 +15,7 @@ import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
@@ -121,6 +122,7 @@ module(
         (cred) =>
           ![
             TYPE_CREDENTIAL_JSON,
+            TYPE_CREDENTIAL_PASSWORD,
             TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
           ].includes(cred.type),
       );
@@ -130,6 +132,7 @@ module(
         (cred) => {
           return (
             cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
+            cred.credential_type !== TYPE_CREDENTIAL_PASSWORD &&
             cred.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
           );
         },
@@ -191,6 +194,7 @@ module(
         this.server.schema.credentialLibraries.where((c) => {
           return (
             c.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
+            c.credential_type !== TYPE_CREDENTIAL_PASSWORD &&
             c.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
           );
         }).models.length;
@@ -200,6 +204,7 @@ module(
           (cred) =>
             ![
               TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+              TYPE_CREDENTIAL_PASSWORD,
               TYPE_CREDENTIAL_JSON,
             ].includes(cred.type),
         ).models.length;
