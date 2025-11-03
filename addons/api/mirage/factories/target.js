@@ -17,7 +17,9 @@ import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
 const randomFilter = () =>
@@ -111,7 +113,9 @@ export default factory.extend({
         server.schema.credentialLibraries,
         (cred) =>
           cred.scopeId === scope.id &&
-          cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+          cred.credential_type !== TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN &&
+          cred.credential_type !== TYPE_CREDENTIAL_PASSWORD &&
+          cred.type !== TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       );
       const filteredCredentials = selectItems(
         server.schema.credentials,
@@ -119,6 +123,7 @@ export default factory.extend({
           cred.scopeId === scope.id &&
           ![
             TYPE_CREDENTIAL_JSON,
+            TYPE_CREDENTIAL_PASSWORD,
             TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
           ].includes(cred.type),
       );
@@ -127,11 +132,12 @@ export default factory.extend({
       const filteredCredentialLibrariesForRDP = selectItems(
         server.schema.credentialLibraries,
         (cred) =>
-          cred.scopeId === scope.id &&
-          [
-            TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-            TYPE_CREDENTIAL_USERNAME_PASSWORD,
-          ].includes(cred.credential_type),
+          (cred.scopeId === scope.id &&
+            [
+              TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+              TYPE_CREDENTIAL_USERNAME_PASSWORD,
+            ].includes(cred.credential_type)) ||
+          cred.type == TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       );
       const filteredCredentialsForRDP = selectItems(
         server.schema.credentials,
