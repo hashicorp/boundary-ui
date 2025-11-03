@@ -65,7 +65,7 @@ export default factory.extend({
           break;
         case 'static':
         default:
-          server.createList('credential', 3, {
+          server.createList('credential', 5, {
             scope,
             credentialStore,
           });

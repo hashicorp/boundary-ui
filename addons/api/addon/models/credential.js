@@ -12,13 +12,16 @@ import GeneratedCredentialModel from '../generated/models/credential';
 export const TYPE_CREDENTIAL_USERNAME_PASSWORD = 'username_password';
 export const TYPE_CREDENTIAL_SSH_PRIVATE_KEY = 'ssh_private_key';
 export const TYPE_CREDENTIAL_JSON = 'json';
-export const TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN = 'username_password_domain';
+export const TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN =
+  'username_password_domain';
+export const TYPE_CREDENTIAL_PASSWORD = 'password';
 
 export const TYPES_CREDENTIAL = Object.freeze([
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 ]);
 
 export default class CredentialModel extends GeneratedCredentialModel {

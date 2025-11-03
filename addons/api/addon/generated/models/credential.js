@@ -59,9 +59,9 @@ export default class GeneratedCredentialModel extends BaseModel {
   })
   username;
 
-  // =attributes (username_password, username_password_domain)
+  // =attributes (username_password, username_password_domain, password)
   @attr('string', {
-    for: ['username_password', 'username_password_domain'],
+    for: ['username_password', 'username_password_domain', 'password'],
     isNestedAttribute: true,
     isSecret: true,
     description: 'The password for credential.',
