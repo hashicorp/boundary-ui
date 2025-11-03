@@ -165,8 +165,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     // mock RDP service calls
-    let rdpService = this.owner.lookup('service:rdp');
-    sinon.stub(rdpService, 'initialize').resolves();
+    this.rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(this.rdpService, 'initialize').resolves();
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -719,8 +719,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Open` button for RDP target with preferred client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({
       type: TYPE_TARGET_RDP,
     });
@@ -732,8 +731,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Connect` button for RDP target with no preferred client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'none';
+    this.rdpService.preferredRdpClient = 'none';
     instances.target.update({
       type: TYPE_TARGET_RDP,
     });
@@ -754,8 +752,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('clicking `Open` button for RDP target calls launchRdpClient IPC', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    const rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -779,8 +776,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    const rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'none';
+    this.rdpService.preferredRdpClient = 'none';
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -801,8 +797,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
-    let rdpService = this.owner.lookup('service:rdp');
-    rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = 'windows-app';
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('cliExists').returns(true);
