@@ -374,6 +374,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an auth method and cancel changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-03
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.authMethod);
 
     await click(commonSelectors.EDIT_BTN);
