@@ -54,7 +54,7 @@
       pointer-events: none;
       content: ' ';
       border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-      border-radius: sizing.rems(xxxs);
+      border-radius: var(--token-form-checkbox-border-radius);
     }
 
     &::after {
