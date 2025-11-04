@@ -22,7 +22,6 @@ const baseEdition = {
   ...licensedFeatures,
   byow: false,
   'byow-pki-hcp-cluster-id': false,
-  'json-credentials': false,
   'static-credentials': false,
   'target-network-address': false,
   'ldap-auth-methods': false,
@@ -31,12 +30,11 @@ const baseEdition = {
   // TODO: Remove this flag when Vault-ldap credential library is supported
   'vault-ldap-credential': false,
 };
-// Editions maps edition keys to their associated featuresets.
+// Editions maps edition keys to their associated feature sets.
 const featureEditions = {};
 featureEditions.oss = {
   ...baseEdition,
   byow: true,
-  'json-credentials': true,
   'static-credentials': true,
   'target-network-address': true,
   'ldap-auth-methods': true,
