@@ -12,7 +12,23 @@ import { restartableTask } from 'ember-concurrency';
 
 class FilterOptions {
   @tracked search;
-  @tracked options = [];
+  @tracked _options = [];
+  #allOptions = new Map();
+
+  get options() {
+    return this._options;
+  }
+
+  set options(newOptions) {
+    this._options = newOptions;
+    newOptions.forEach((option) => {
+      this.#allOptions.set(option.id, option);
+    });
+  }
+
+  get allOptions() {
+    return Array.from(this.#allOptions.values());
+  }
 }
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
@@ -60,9 +76,9 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     return {
       allFilters: {
         time: this.timeOptions,
-        users: this.userFilters.options,
-        scopes: this.scopeFilters.options,
-        targets: this.targetFilters.options,
+        users: this.userFilters.allOptions,
+        scopes: this.scopeFilters.allOptions,
+        targets: this.targetFilters.allOptions,
       },
       selectedFilters: {
         time: [this.time],

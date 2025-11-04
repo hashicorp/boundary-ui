@@ -17,16 +17,23 @@ export default class FilterTagsIndexComponent extends Component {
 
   get filters() {
     const { allFilters, selectedFilters } = this.args.filters;
-    return Object.entries(allFilters).flatMap(([key, value]) => {
-      assert(`Tags must be an array for key ${key}`, Array.isArray(value));
-      const paramsSet = new Set(selectedFilters[key]);
-      const filters = value.filter((item) => paramsSet.has(item.id));
+    return Object.entries(allFilters).flatMap(([key, values]) => {
+      assert(`Tags must be an array for key ${key}`, Array.isArray(values));
+      const uniqueSelectedFilters = [...new Set(selectedFilters[key])];
+      const valueMap = new Map(values.map((value) => [value.id, value.name]));
 
-      return filters.map((item) => ({
-        id: item.id,
-        name: item.name,
-        type: key,
-      }));
+      return uniqueSelectedFilters.filter(Boolean).map((item) => {
+        const filter = {
+          id: item,
+          type: key,
+        };
+
+        if (valueMap.has(item)) {
+          filter.name = valueMap.get(item);
+        }
+
+        return filter;
+      });
     });
   }
 
