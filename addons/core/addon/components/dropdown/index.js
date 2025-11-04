@@ -21,7 +21,8 @@ export default class DropdownComponent extends Component {
    */
   get itemOptions() {
     let items = this.args.itemOptions;
-    if (this.searchTerm) {
+
+    if (this.searchTerm && !this.args.updateSearchTerm) {
       const searchTerm = this.searchTerm.toLowerCase();
       items = this.args.itemOptions.filter((item) => {
         const isNameMatch = item.name?.toLowerCase().includes(searchTerm);
@@ -29,7 +30,7 @@ export default class DropdownComponent extends Component {
         return isNameMatch || isIdMatch;
       });
     }
-    return items.slice(0, 500);
+    return items.slice(0, 250);
   }
 
   // =methods
@@ -39,10 +40,15 @@ export default class DropdownComponent extends Component {
    * @param {object} event
    */
   @action
-  @debounce(150)
-  filterItems(event) {
+  @debounce(250)
+  async filterItems(event) {
     const { value } = event.target;
-    this.searchTerm = value;
+
+    if (this.args.updateSearchTerm) {
+      this.args.updateSearchTerm(value);
+    } else {
+      this.searchTerm = value;
+    }
   }
 
   /**
