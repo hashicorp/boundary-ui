@@ -419,6 +419,64 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           ORDER BY "target".created_time DESC`,
         expectedParams: ['name:"favorite"* OR description:"favorite"*'],
       },
+      'search with related searches': {
+        query: {
+          search: {
+            text: 'dev',
+            select: 'id',
+            relatedSearches: [
+              {
+                resource: 'alias',
+                fields: ['name', 'description'],
+                join: {
+                  joinOn: 'destination_id',
+                  joinFrom: 'id',
+                },
+              },
+            ],
+          },
+        },
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".id IN (SELECT id FROM target_fts WHERE target_fts MATCH ?
+                                UNION SELECT "target".id FROM alias_fts JOIN "target" ON "target".id = alias_fts.destination_id WHERE alias_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['"dev"*', 'name:"dev"* OR description:"dev"*'],
+      },
+      'search with multiple related searches': {
+        query: {
+          search: {
+            text: 'dev',
+            relatedSearches: [
+              {
+                resource: 'alias',
+                fields: ['name', 'description'],
+                join: {
+                  joinOn: 'destination_id',
+                },
+              },
+              {
+                resource: 'session',
+                fields: ['name'],
+                join: {
+                  joinOn: 'target_id',
+                },
+              },
+            ],
+          },
+        },
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?
+                                   UNION SELECT "target".rowid FROM alias_fts JOIN "target" ON "target".id = alias_fts.destination_id WHERE alias_fts MATCH ?
+                                   UNION SELECT "target".rowid FROM session_fts JOIN "target" ON "target".id = session_fts.target_id WHERE session_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: [
+          '"dev"*',
+          'name:"dev"* OR description:"dev"*',
+          'name:"dev"*',
+        ],
+      },
     },
     function (assert, { query, expectedSql, expectedParams }) {
       const { sql, parameters } = generateSQLExpressions('target', query);
