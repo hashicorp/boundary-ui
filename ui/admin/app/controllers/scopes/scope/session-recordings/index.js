@@ -26,6 +26,8 @@ class FilterOptions {
     });
   }
 
+  // Keep track of all filter options that are loaded so they can be
+  // displayed in the selected filters regardless of search input
   get allOptions() {
     return Array.from(this.#allOptions.values());
   }
