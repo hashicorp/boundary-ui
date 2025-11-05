@@ -6,6 +6,7 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { textToMatch } from '../fixtures/tesseractTest.js';
+import { execSync } from 'node:child_process';
 
 const hostName = 'Host name for test';
 let org;
@@ -15,6 +16,40 @@ let sshTarget;
 let credential;
 let updCredential;
 let rdpTarget;
+
+function killRdpProcesses() {
+  try {
+    if (process.platform === 'win32') {
+      execSync('taskkill /F /IM mstsc.exe', { stdio: 'ignore' });
+    } else if (process.platform === 'darwin') {
+      execSync('pkill -x "Windows App"', { stdio: 'ignore' });
+    }
+  } catch {
+    return false;
+  }
+}
+
+function isRdpRunning() {
+  try {
+    let result;
+    if (process.platform === 'win32') {
+      result = execSync('tasklist /FI "IMAGENAME eq mstsc.exe" /FO CSV /NH', {
+        encoding: 'utf-8',
+      });
+      console.log('Windows RDP process:', result);
+      return result.includes('mstsc.exe');
+    } else if (process.platform === 'darwin') {
+      result = execSync('pgrep -x "Windows App"', {
+        encoding: 'utf-8',
+      }).trim();
+      console.log('Mac RDP process:', result);
+      return result.length > 0;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 test.beforeEach(
   async ({ request, targetAddress, targetPort, sshUser, sshKeyPath }) => {
@@ -284,5 +319,25 @@ test.describe('Targets tests', () => {
     await expect(
       authedPage.getByRole('link', { name: targetWithHost.name }),
     ).toBeVisible();
+  });
+
+  test('Launches RDP client when connecting to an RDP target', async ({
+    authedPage,
+  }) => {
+    expect(isRdpRunning()).toBe(false);
+
+    await authedPage.getByRole('link', { name: rdpTarget.name }).click();
+    await authedPage.getByRole('button', { name: 'Open' }).click();
+
+    await expect(
+      authedPage.getByRole('heading', { name: 'Sessions' }),
+    ).toBeVisible();
+
+    expect(isRdpRunning()).toBe(true);
+
+    await authedPage.getByRole('button', { name: 'End Session' }).click();
+    await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
+
+    killRdpProcesses();
   });
 });
