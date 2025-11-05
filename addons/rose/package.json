@@ -30,9 +30,9 @@
   },
   "dependencies": {
     "@babel/core": "^7.26.10",
-    "@hashicorp/design-system-components": "5.0.0-rc-20251103205314",
+    "@hashicorp/design-system-components": "5.0.0-rc-20251105174540",
     "@hashicorp/design-system-tokens": "^2.3.0",
-    "@hashicorp/flight-icons": "4.0.0-rc-20251103205314",
+    "@hashicorp/flight-icons": "4.0.0-rc-20251105174540",
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.10",
     "codemirror": "5.65.7",
     "ember-auto-import": "^2.10.0",
