@@ -83,7 +83,6 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           relatedSearches: [
             {
               resource: 'target',
-              text: search,
               fields: ['name'],
               join: {
                 joinFrom: 'destination_id',

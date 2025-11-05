@@ -25,8 +25,7 @@ const createTargetTables = `
 );
 CREATE INDEX IF NOT EXISTS idx_target_scope_id_created_time ON target(scope_id, created_time DESC);
 
--- Create a contentless FTS table as we will only use the rowids.
--- Note that this only creates the FTS index and cannot reference the target content
+-- Create a content FTS table that references the original table
 CREATE VIRTUAL TABLE IF NOT EXISTS target_fts USING fts5(
     id,
     type,
