@@ -28,8 +28,6 @@ const baseEdition = {
   'ldap-auth-methods': false,
   'worker-filter': false,
   'worker-filter-hcp': false,
-  // TODO: Remove this flag when Vault-ldap credential library is supported
-  'vault-ldap-credential': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};
