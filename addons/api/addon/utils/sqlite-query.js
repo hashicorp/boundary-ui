@@ -272,9 +272,7 @@ function addSearchConditions({
   // Use a subquery to match against the FTS table with rowids as SQLite is
   // much more efficient with FTS queries when using rowids or MATCH (or both).
   // We could have also used a join here but a subquery is simpler.
-  conditions.push(
-    `"${tableName}".${search?.select ?? 'rowid'} IN (${searchSql})`,
-  );
+  conditions.push(`"${tableName}".${searchSelect} IN (${searchSql})`);
 }
 
 function constructSelectClause(select = [{ field: '*' }], tableName) {
