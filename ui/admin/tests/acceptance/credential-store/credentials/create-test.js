@@ -236,7 +236,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
       await visit(urls.credentials);
@@ -319,7 +318,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -376,8 +374,6 @@ module(
           },
         },
       });
-
-      featuresService.enable('json-credentials');
 
       await visit(urls.credentials);
       await click(commonSelectors.HREF(urls.newCredential));
@@ -572,7 +568,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
@@ -601,37 +596,6 @@ module(
       await click(commonSelectors.SAVE_BTN);
 
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
-    });
-
-    test.skip('cannot navigate to json credential when feature is disabled', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
-      await visit(urls.credentials);
-
-      await click(commonSelectors.HREF(urls.newCredential));
-
-      assert.false(featuresService.isEnabled('json-credentials'));
-      assert.true(
-        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create',
-        ),
-      );
-      assert
-        .dom(selectors.FIELD_TYPE_USERNAME_PASSWORD)
-        .exists()
-        .hasAttribute('value', 'username_password');
-      assert
-        .dom(selectors.FIELD_TYPE_SSH)
-        .exists()
-        .hasAttribute('value', 'ssh_private_key');
-      assert.dom(selectors.FIELD_TYPE_JSON).doesNotExist();
     });
 
     test('users cannot create a new credential without proper authorization', async function (assert) {

@@ -14,8 +14,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
-  let featuresService;
-
   const instances = {
     scopes: {
       org: null,
@@ -88,7 +86,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting username & password credential', async function (assert) {
@@ -141,7 +138,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       },
     });
 
-    featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
 
@@ -267,27 +263,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
           urls.usernamePasswordDomainCredential,
         ),
       )
-      .doesNotExist();
-  });
-
-  test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.credentials);
-
-    assert.false(featuresService.isEnabled('json-credentials'));
-    assert
-      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
-      .isVisible();
-    assert
-      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.jsonCredential))
       .doesNotExist();
   });
 
