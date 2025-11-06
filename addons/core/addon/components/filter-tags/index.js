@@ -20,6 +20,10 @@ export default class FilterTagsIndexComponent extends Component {
     return Object.entries(allFilters).flatMap(([key, values]) => {
       assert(`Tags must be an array for key ${key}`, Array.isArray(values));
       const uniqueSelectedFilters = [...new Set(selectedFilters[key])];
+      if (!uniqueSelectedFilters.length) {
+        return [];
+      }
+
       const valueMap = new Map(values.map((value) => [value.id, value.name]));
 
       return uniqueSelectedFilters.filter(Boolean).map((item) => {
