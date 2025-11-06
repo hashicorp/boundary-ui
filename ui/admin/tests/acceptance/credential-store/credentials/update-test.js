@@ -25,8 +25,6 @@ module(
     setupApplicationTest(hooks);
     setupSqlite(hooks);
 
-    let featuresService;
-
     const instances = {
       scopes: {
         org: null,
@@ -119,8 +117,6 @@ module(
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
       urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
       urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
-
-      featuresService = this.owner.lookup('service:features');
     });
 
     test('can save changes to existing username & password credential', async function (assert) {
@@ -186,7 +182,6 @@ module(
     });
 
     test('can save changes to existing JSON credential', async function (assert) {
-      featuresService.enable('json-credentials');
       assert.notEqual(
         instances.jsonCredential.name,
         commonSelectors.FIELD_NAME,
