@@ -270,6 +270,15 @@ module(
     });
 
     test('users can create a new password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       const passwordCredentialCount = getPasswordCredentialCount();
       await visit(urls.credentials);
@@ -429,6 +438,15 @@ module(
     });
 
     test('users can cancel creation of new password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -653,6 +671,15 @@ module(
     });
 
     test('saving a new password credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a password credential.';

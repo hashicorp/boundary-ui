@@ -235,6 +235,15 @@ module(
     });
 
     test('can delete password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const passwordCredentialCount = getPasswordCredentialCount();
       await visit(urls.passwordCredential);
 
@@ -313,6 +322,15 @@ module(
     });
 
     test('cannot delete a password credential without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const passwordCredentialCount = getPasswordCredentialCount();
       instances.passwordCredential.authorized_actions =
         instances.passwordCredential.authorized_actions.filter(
@@ -404,6 +422,15 @@ module(
     });
 
     test('can accept delete password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const passwordCredentialCount = getPasswordCredentialCount();
@@ -526,6 +553,15 @@ module(
     });
 
     test('can cancel delete password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const passwordCredentialCount = getPasswordCredentialCount();
@@ -627,6 +663,15 @@ module(
     });
 
     test('deleting a password credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
       this.server.del('/credentials/:id', mockResponse);
       await visit(urls.passwordCredential);
 

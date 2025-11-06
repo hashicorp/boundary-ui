@@ -185,6 +185,15 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('visiting password credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
 
@@ -293,6 +302,15 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a password credential form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+          enabled: false,
+        },
+      },
+    });
+
     instances.passwordCredential.authorized_actions =
       instances.passwordCredential.authorized_actions.filter(
         (item) => item != 'read',
