@@ -211,26 +211,68 @@ function addSearchConditions({
   if (!search || !modelMapping[resource]) {
     return;
   }
+  const searchSelect = search?.select ?? 'rowid';
+  const searchSql = `SELECT ${searchSelect} FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?`;
+  const getParameter = (fields, text) =>
+    fields?.length > 0
+      ? or(fields.map((field) => `${field}:"${text}"*`))
+      : `"${text}"*`;
 
   // Use the special prefix indicator "*" for full-text search
   if (typeOf(search) === 'object') {
-    if (!search?.text) {
+    if (!search.text) {
       return;
     }
 
-    parameters.push(
-      or(search.fields.map((field) => `${field}:"${search.text}"*`)),
-    );
+    const parameter = getParameter(search.fields, search.text);
+    parameters.push(parameter);
   } else {
     parameters.push(`"${search}"*`);
+  }
+
+  // If there are extra related searches on other tables, add them too
+  if (search?.relatedSearches?.length > 0) {
+    const relatedSearchQueries = [];
+
+    search.relatedSearches.forEach((relatedSearch) => {
+      const { resource: relatedResource, fields, join } = relatedSearch;
+      const relatedTableName = underscore(relatedResource);
+
+      const parameter = getParameter(fields, search.text);
+      parameters.push(parameter);
+
+      // Build the related FTS query with optional join
+      let relatedQuery = [];
+      relatedQuery.push(
+        `SELECT "${tableName}".${searchSelect} FROM ${relatedTableName}_fts`,
+      );
+
+      if (join) {
+        const { joinFrom = 'id', joinOn } = join;
+        relatedQuery.push(
+          `JOIN "${tableName}" ON "${tableName}".${joinFrom} = ${relatedResource}_fts.${joinOn}`,
+        );
+      }
+      relatedQuery.push(`WHERE ${relatedTableName}_fts MATCH ?`);
+
+      relatedSearchQueries.push(relatedQuery.join(' '));
+    });
+
+    // Add the original search first since we've already added the original parameter first
+    const conditionStatement = [searchSql, ...relatedSearchQueries].join(
+      '\nUNION ',
+    );
+    conditions.push(
+      `"${tableName}".${searchSelect} IN (${conditionStatement})`,
+    );
+
+    return;
   }
 
   // Use a subquery to match against the FTS table with rowids as SQLite is
   // much more efficient with FTS queries when using rowids or MATCH (or both).
   // We could have also used a join here but a subquery is simpler.
-  conditions.push(
-    `"${tableName}".rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
-  );
+  conditions.push(`"${tableName}".${searchSelect} IN (${searchSql})`);
 }
 
 function constructSelectClause(select = [{ field: '*' }], tableName) {
