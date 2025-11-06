@@ -989,12 +989,14 @@ credential:
     ssh_private_key: Username & Key Pair
     username_password_domain: Username, Password & Domain
     json: JSON
+    password: Password
     unknown: Unknown
   help:
     username_password: Connect using the provided username and password.
     ssh_private_key: Connect using a username, public key, and private key.
     json: Connect using a JSON blob containing the credentials.
-    username_password_domain: Includes a domain field for Active Directory
+    username_password_domain: Includes a domain field for Active Directory.
+    password: Connect using only a provided password.
   form:
     username:
       label: Username

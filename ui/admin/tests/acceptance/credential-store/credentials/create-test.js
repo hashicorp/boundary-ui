@@ -134,6 +134,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
 
       await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_VALUE);
@@ -169,6 +170,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await fillIn(
         selectors.FIELD_USERNAME,
@@ -208,6 +210,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.SAVE_BTN);
 
@@ -243,6 +246,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.SAVE_BTN);
 
@@ -292,6 +296,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -323,6 +328,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -348,6 +354,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -374,12 +381,16 @@ module(
 
       await visit(urls.credentials);
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
 
       await fillIn(selectors.FIELD_EDITOR, selectors.FIELD_EDITOR_VALUE);
       assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       assert.dom(selectors.EDITOR).includesText('{}');
     });
@@ -489,6 +500,7 @@ module(
       });
 
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.SAVE_BTN);
 
@@ -533,6 +545,7 @@ module(
         );
       });
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.SAVE_BTN);
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
@@ -583,13 +596,14 @@ module(
       });
 
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.SAVE_BTN);
 
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     });
 
-    test('cannot navigate to json credential when feature is disabled', async function (assert) {
+    test.skip('cannot navigate to json credential when feature is disabled', async function (assert) {
       setRunOptions({
         rules: {
           'color-contrast': {

@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const FIELD_TYPE_SSH = '[value=ssh_private_key]';
-export const FIELD_TYPE_USERNAME_PASSWORD = '[value=username_password]';
-export const FIELD_TYPE_USERNAME_PASSWORD_DOMAIN =
-  '[value=username_password_domain]';
-export const FIELD_DOMAIN =
-  '[name=domain]';
+export const FIELD_TYPE_SSH = '[data-option-index="1"]';
+export const FIELD_TYPE_USERNAME_PASSWORD = '[data-option-index="0"]';
+export const FIELD_TYPE_USERNAME_PASSWORD_DOMAIN = '[data-option-index="2"]';
+export const FIELD_DOMAIN = '[name=domain]';
 export const FIELD_PASSWORD = '[name=password]';
 export const FIELD_USERNAME = '[name=username]';
-export const FIELD_TYPE_JSON = '[value=json]';
+export const FIELD_TYPE_JSON = '[data-option-index="3"]';
 export const FIELD_DOMAIN_VALUE = 'g.com';
 export const FIELD_USERNAME_VALUE = 'username123';
 export const FIELD_PASSWORD_VALUE = 'password123';
@@ -37,3 +35,5 @@ export const MANAGE_DROPDOWN_CREDENTIAL_STORE =
   '[data-test-manage-credential-stores-dropdown] button';
 
 export const REPLACE_SECRET_BTN = '.secret-editor button';
+
+export const TYPE_SELECT = '[name=Type]';
