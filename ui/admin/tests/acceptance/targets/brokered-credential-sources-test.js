@@ -32,7 +32,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   let credentialSourceCount;
   let randomlySelectedCredentialLibraries;
   let randomlySelectedCredentials;
-  let featuresService;
 
   const instances = {
     scopes: {
@@ -64,7 +63,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -205,14 +203,12 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         targetName: 'tcpTarget',
         link: 'jsonCredential',
         expectedUrl: 'jsonCredential',
-        enableJsonFeature: true,
       },
       'json credential type for RDP target': {
         route: 'brokeredCredentialSourcesForRDPTarget',
         targetName: 'rdpTarget',
         link: 'jsonCredential',
         expectedUrl: 'jsonCredential',
-        enableJsonFeature: true,
       },
     },
     async function (assert, input) {
@@ -225,51 +221,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         },
       });
 
-      // needed only if the test is for json credential
-      if (input.enableJsonFeature) {
-        featuresService.enable('json-credentials');
-      }
       await visit(urls[input.route]);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls[input.link]));
 
       assert.strictEqual(currentURL(), urls[input.expectedUrl]);
-    },
-  );
-
-  test.each(
-    'cannot navigate to a json type credential when feature is disabled',
-    {
-      'for TCP target': {
-        route: 'brokeredCredentialSourcesForTCPTarget',
-        targetName: 'tcpTarget',
-      },
-      'for RDP target': {
-        route: 'brokeredCredentialSourcesForRDPTarget',
-        targetName: 'rdpTarget',
-      },
-    },
-    async function (assert, input) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
-      const jsonCredential = instances.credentials[3];
-      instances[input.targetName].update({
-        brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-      });
-      await visit(urls[input.route]);
-
-      assert.false(featuresService.isEnabled('json-credentials'));
-      assert
-        .dom(commonSelectors.TABLE_ROW(4))
-        .includesText(jsonCredential.name);
-      assert.dom(commonSelectors.HREF(urls.jsonCredential)).doesNotExist();
     },
   );
 
