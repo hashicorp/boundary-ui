@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { hash } from 'rsvp';
 import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeAliasesIndexRoute extends Route {
@@ -79,28 +78,68 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           direction: sortDirection,
         };
 
+        const searchOptions = {
+          text: search,
+          relatedSearches: [
+            {
+              resource: 'target',
+              fields: ['name'],
+              join: {
+                joinFrom: 'destination_id',
+                joinOn: 'id',
+              },
+            },
+          ],
+        };
+
+        const targetPromise = this.store.query(
+          'target',
+          {
+            scope_id,
+            recursive: true,
+            page: 1,
+            pageSize: 1,
+          },
+          { pushToStore: false },
+        );
+
         aliases = await this.store.query('alias', {
           scope_id,
-          query: { search, sort },
+          query: { search: searchOptions, sort },
           page,
           pageSize,
         });
 
         totalItems = aliases.meta?.totalItems;
-        // since we don't receive target info from aliases list API,
-        // we query the store to fetch target information based on the destination id
-        aliases = await Promise.all(
-          aliases.map((alias) =>
-            hash({
-              alias,
-              target: alias.destination_id
-                ? this.store.findRecord('target', alias.destination_id, {
-                    backgroundReload: false,
-                  })
-                : null,
-            }),
+
+        await targetPromise;
+        // All the targets should have been retrieved just before this so we don't need to make another API request
+        // Check for actual aliases with destinations as an empty array will bring back all targets which we don't want
+        const associatedTargets = aliases.some((alias) => alias.destination_id)
+          ? await this.store.query(
+              'target',
+              {
+                query: {
+                  filters: {
+                    id: aliases
+                      .filter((alias) => alias.destination_id)
+                      .map((alias) => ({
+                        equals: alias.destination_id,
+                      })),
+                  },
+                },
+              },
+              { pushToStore: true, peekDb: true },
+            )
+          : [];
+
+        aliases = aliases.map((alias) => ({
+          alias,
+          target: associatedTargets.find(
+            (target) => target.id === alias.destination_id,
           ),
-        );
+        }));
+
         doAliasesExist = await this.getDoAliasesExist(scope_id, totalItems);
       }
 

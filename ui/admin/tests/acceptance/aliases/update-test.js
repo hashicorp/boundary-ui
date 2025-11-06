@@ -39,6 +39,10 @@ module('Acceptance | aliases | update', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
     });
