@@ -6,7 +6,12 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { textToMatch } from '../fixtures/tesseractTest.js';
-import { execSync } from 'node:child_process';
+import {
+  isRdpClientInstalled,
+  isRdpRunning,
+  killRdpProcesses,
+  isOSForRdpSupported,
+} from '../../helpers/rdp.js';
 
 const hostName = 'Host name for test';
 let org;
@@ -16,40 +21,6 @@ let sshTarget;
 let credential;
 let updCredential;
 let rdpTarget;
-
-function killRdpProcesses() {
-  try {
-    if (process.platform === 'win32') {
-      execSync('taskkill /F /IM mstsc.exe', { stdio: 'ignore' });
-    } else if (process.platform === 'darwin') {
-      execSync('pkill -x "Windows App"', { stdio: 'ignore' });
-    }
-  } catch {
-    return false;
-  }
-}
-
-function isRdpRunning() {
-  try {
-    let result;
-    if (process.platform === 'win32') {
-      result = execSync('tasklist /FI "IMAGENAME eq mstsc.exe" /FO CSV /NH', {
-        encoding: 'utf-8',
-      });
-      console.log('Windows RDP process:', result);
-      return result.includes('mstsc.exe');
-    } else if (process.platform === 'darwin') {
-      result = execSync('pgrep -x "Windows App"', {
-        encoding: 'utf-8',
-      }).trim();
-      console.log('Mac RDP process:', result);
-      return result.length > 0;
-    }
-    return false;
-  } catch {
-    return false;
-  }
-}
 
 test.beforeEach(
   async ({ request, targetAddress, targetPort, sshUser, sshKeyPath }) => {
@@ -152,7 +123,6 @@ test.beforeEach(
     });
 
     // Create an RDP target and add host source and credential sources
-    // TODO: A test for RDP target connection will be added later when the Proxy is in place.
     rdpTarget = await boundaryHttp.createTarget(request, {
       scopeId: project.id,
       type: 'rdp',
@@ -324,6 +294,14 @@ test.describe('Targets tests', () => {
   test('Launches RDP client when connecting to an RDP target', async ({
     authedPage,
   }) => {
+    let isRdpClientInstalledCheck = await isRdpClientInstalled();
+    let isOSForRdpSupportedCheck = await isOSForRdpSupported();
+
+    test.skip(
+      !isRdpClientInstalledCheck || !isOSForRdpSupportedCheck,
+      'RDP client is not installed/supported on this system',
+    );
+
     expect(isRdpRunning()).toBe(false);
 
     await authedPage.getByRole('link', { name: rdpTarget.name }).click();
@@ -339,5 +317,7 @@ test.describe('Targets tests', () => {
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
 
     killRdpProcesses();
+
+    expect(isRdpRunning()).toBe(false);
   });
 });

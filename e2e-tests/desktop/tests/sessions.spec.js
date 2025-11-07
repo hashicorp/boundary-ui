@@ -7,12 +7,20 @@ import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import SessionPage from '../pages/sessionPage.js';
 import { textToMatch } from '../fixtures/tesseractTest.js';
+import {
+  isRdpClientInstalled,
+  isOSForRdpSupported,
+  killRdpProcesses,
+  isRdpRunning,
+} from '../../helpers/rdp.js';
 
 let org;
 let targetWithHost;
 let sshTarget;
 let sshTarget2;
 let credential;
+let rdpTarget;
+let updCredential;
 
 test.beforeEach(
   async ({ request, targetAddress, targetPort, sshUser, sshKeyPath }) => {
@@ -45,6 +53,13 @@ test.beforeEach(
       username: sshUser,
       sshKeyPath,
     });
+    updCredential =
+      await boundaryHttp.createStaticCredentialUsernamePasswordDomain(request, {
+        credentialStoreId: credentialStore.id,
+        username: sshUser,
+        password: 'password',
+        domain: 'domain',
+      });
 
     // Create tcp target with host set and 1 host
     targetWithHost = await boundaryHttp.createTarget(request, {
@@ -82,6 +97,25 @@ test.beforeEach(
     sshTarget2 = await boundaryHttp.addInjectedCredentials(request, {
       target: sshTarget2,
       credentialIds: [credential.id],
+    });
+
+    // Create an RDP target and add host source and credential sources
+    rdpTarget = await boundaryHttp.createTarget(request, {
+      scopeId: project.id,
+      type: 'rdp',
+      port: 3389,
+    });
+    rdpTarget = await boundaryHttp.addHostSource(request, {
+      target: rdpTarget,
+      hostSourceIds: [hostSet.id],
+    });
+    rdpTarget = await boundaryHttp.addBrokeredCredentials(request, {
+      target: rdpTarget,
+      credentialIds: [updCredential.id],
+    });
+    rdpTarget = await boundaryHttp.addInjectedCredentials(request, {
+      target: rdpTarget,
+      credentialIds: [updCredential.id],
     });
   },
 );
@@ -133,6 +167,37 @@ test.describe('Sessions tests', () => {
         .filter({ hasNot: authedPage.getByRole('columnheader') })
         .getByText('Canceling'),
     ).toHaveCount(2);
+  });
+
+  test('Displays Open button for RDP target session', async ({
+    authedPage,
+  }) => {
+    let isRdpClientInstalledCheck = await isRdpClientInstalled();
+    let isOSForRdpSupportedCheck = await isOSForRdpSupported();
+
+    test.skip(
+      !isRdpClientInstalledCheck || !isOSForRdpSupportedCheck,
+      'RDP client is not installed/supported on this system',
+    );
+
+    await authedPage
+      .getByRole('row', { name: rdpTarget.name })
+      .getByRole('button', { name: 'Open' })
+      .click();
+    await expect(
+      authedPage.getByRole('heading', { name: 'Sessions' }),
+    ).toBeVisible();
+
+    expect(await isRdpRunning()).toBe(true);
+
+    await expect(
+      authedPage.getByRole('button', { name: 'Open' }),
+    ).toBeVisible();
+
+    await authedPage.getByRole('button', { name: 'End Session' }).click();
+    await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
+
+    killRdpProcesses();
   });
 });
 
