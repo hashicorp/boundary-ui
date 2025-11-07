@@ -160,7 +160,7 @@
 
 .branded-card {
   border: 1px solid var(--ui-border-subtler-1);
-  border-radius: sizing.rems(xxxs);
+  border-radius: var(--token-border-radius-x-small);
   margin: 0 auto;
   margin-top: sizing.rems(l) * 1.25;
   padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2)
@@ -173,8 +173,8 @@
     background-image: url('/brand-background.svg');
     background-position: right;
     background-repeat: no-repeat;
-    border-top-left-radius: sizing.rems(xxxs);
-    border-top-right-radius: sizing.rems(xxxs);
+    border-top-left-radius: var(--token-border-radius-x-small);
+    border-top-right-radius: var(--token-border-radius-x-small);
     content: ' ';
     height: sizing.rems(l) * 3.25;
     left: 0;
@@ -246,7 +246,7 @@
 
 .details-sidebar {
   background-color: var(--token-color-palette-neutral-50);
-  border-radius: 0.313rem;
+  border-radius: var(--token-border-radius-small);
   padding: 1.5rem 2.5rem;
 
   > :not(:last-child) {
@@ -324,7 +324,7 @@
 
 .credential-panel-body {
   border: 1px solid var(--token-color-border-primary);
-  border-radius: 5px;
+  border-radius: var(--token-border-radius-small);
   display: flex;
   margin-top: 0.75rem;
 

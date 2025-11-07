@@ -11,29 +11,6 @@
  * SASS variables defining typography.
  */
 
-$family-primary:
-  system-ui,
-  -apple-system,
-  blinkmacsystemfont,
-  'Segoe UI',
-  'Roboto',
-  'Oxygen',
-  'Ubuntu',
-  'Cantarell',
-  'Fira Sans',
-  'Droid Sans',
-  'Helvetica Neue',
-  sans-serif;
-$family-monospace:
-  'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace;
-
-// Available font weights by name
-$font-weights: (
-  normal: 400,
-  semibold: 600,
-  bold: 700,
-);
-
 // unitless value to start, but think pixels or points
 $base-font-size: 16;
 
@@ -83,11 +60,4 @@ $line-heights: (
  */
 @function line-height($name) {
   @return map.get($line-heights, $name);
-}
-
-/**
- * Returns a named font weight.
- */
-@function font-weight($name) {
-  @return map.get($font-weights, $name);
 }

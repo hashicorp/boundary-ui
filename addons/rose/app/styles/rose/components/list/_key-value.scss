@@ -43,7 +43,7 @@
     // First cell (key) is approximately 25%
     &:nth-child(1) {
       width: 25%;
-      font-weight: typography.font-weight(semibold);
+      font-weight: var(--token-typography-font-weight-semibold);
     }
 
     // Second cell (value) is approximately 75%
