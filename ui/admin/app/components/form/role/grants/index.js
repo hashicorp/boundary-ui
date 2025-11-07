@@ -14,6 +14,7 @@ export default class FormRoleGrantsComponent extends Component {
    * @type {string}
    */
   @tracked newGrantString = '';
+  @tracked value = '';C
 
   /**
    * Returns grants currently on model, in addition to

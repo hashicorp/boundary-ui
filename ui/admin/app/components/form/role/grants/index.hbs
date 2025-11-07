@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{#if (can 'setGrants role' @model)}}
+{{!--{{#if (can 'setGrants role' @model)}}
   <Rose::Form
     @onSubmit={{fn this.createGrant @addGrant}}
     @cancel={{@cancel}}
@@ -46,7 +46,6 @@
   @disabled={{@model.isSaving}}
   as |form|
 >
-
   <Rose::List::KeyValue as |list|>
     {{#each this.grants as |grant index|}}
       <list.item as |item|>
@@ -90,4 +89,89 @@
     />
   {{/if}}
 
-</Rose::Form>
+</Rose::Form> --}}
+
+<div class='grant-grid'>
+  <div class='content'>
+    <Rose::CodeEditor as |c|>
+      @onInput={{@onInput}}
+      @value={{this.value}}
+      @options={{hash mode='javascript' autocomplete=true}}
+    </Rose::CodeEditor>
+  </div>
+  <Hds::Card::Container @level='mid' @hasBorder={{true}} class='explanation'>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+    >Explanation</Hds::Text::Display>
+  </Hds::Card::Container>
+  <Hds::Card::Container @level='mid' @hasBorder={{true}} class='example'>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+    >Validator</Hds::Text::Display>
+  </Hds::Card::Container>
+  <Hds::Card::Container @level='mid' @hasBorder={{true}} class='reference'>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+    >Reference</Hds::Text::Display>
+    <Hds::Accordion @size='large' as |A|>
+      <A.Item>
+        <:toggle>Grant String Format</:toggle>
+        <:content>
+          <p>A grant string has a form similar to:</p>
+          <Hds::Text::Code @tag='code'><strong>ids=</strong>&lt;id&gt;;<strong
+            >type=</strong>&lt;type&gt;;<strong>actions=</strong>&lt;action
+            list&gt;;<strong>output_fields=</strong>&lt;fields list&gt;</Hds::Text::Code>
+
+          <Hds::Text::Body @tag='div' @size='200' @color='strong'>
+            <ul class='margin-top-s'>
+              <li>An
+                <code>ids</code>
+                field that indicates a specific resource or a wildcard to match
+                all. You can enter multiple comma-separated ID values in a grant
+                string.</li><li>A
+                <code>type</code>
+                field that indicates a specific resource type or a wildcard to
+                match all; this might also be used to grant permissions on
+                collections of resources.</li></ul>
+          </Hds::Text::Body>
+        </:content>
+      </A.Item>
+      <A.Item>
+        <:toggle>Target</:toggle>
+        <:content>
+          <Hds::Text::Display @tag='p'>read: Read a target</Hds::Text::Display>
+          <ul>
+            <li>
+              <Hds::Text::Code
+                @tag='code'
+                @size='200'
+              >ids=&lt;id&gt;;actions=read</Hds::Text::Code>
+            </li>
+          </ul>
+          <Hds::Text::Display @tag='p'>update: Update a target</Hds::Text::Display>
+          <ul>
+            <li>
+              <Hds::Text::Code
+                @tag='code'
+                @size='200'
+              >ids=&lt;id&gt;;actions=update</Hds::Text::Code>
+            </li>
+          </ul>
+
+        </:content>
+      </A.Item>
+      <A.Item>
+        <:toggle>Session</:toggle>
+        <:content>
+          Additional content
+        </:content>
+      </A.Item>
+    </Hds::Accordion>
+  </Hds::Card::Container>
+</div>

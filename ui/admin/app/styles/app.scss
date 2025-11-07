@@ -1034,3 +1034,55 @@
     }
   }
 }
+
+.grant-grid {
+  display: grid;
+  grid-template-areas:
+    'content explanation'
+    '. example'
+    '. reference';
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, minmax(200px, 300px));
+  gap: 10px;
+
+  .content {
+    grid-area: content;
+  }
+
+  .explanation {
+    grid-area: explanation;
+    padding: 0 16px;
+  }
+
+  .example {
+    grid-area: example;
+    padding: 0 16px;
+  }
+
+  .reference {
+    grid-area: reference;
+    padding: 0 16px;
+    overflow: auto;
+
+    code {
+      background-color: var(--token-color-surface-strong);
+      border: 1px solid var(--token-color-border-primary);
+      border-radius: var(--token-border-radius-small);
+      padding: sizing.rems(xxxs) sizing.rems(xxs);
+
+      strong {
+        font-weight: bold;
+      }
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    li {
+      margin: sizing.rems(xs);
+      list-style-type: circle;
+      list-style-position: inside;
+    }
+  }
+}

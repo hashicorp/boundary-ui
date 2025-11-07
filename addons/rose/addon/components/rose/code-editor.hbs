@@ -1,0 +1,11 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<div
+  class="rose-code-editor {{if @class @class}}"
+  {{did-insert this.setupEditor}}
+  {{did-update this.updateValue @value}}
+  ...attributes
+></div>

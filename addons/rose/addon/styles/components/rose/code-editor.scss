@@ -1,0 +1,92 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+.rose-code-editor {
+  position: relative;
+  border: 1px solid var(--token-color-border-primary);
+  border-radius: 4px;
+  overflow: hidden;
+
+  .cm-editor {
+    outline: none;
+
+    &.cm-focused {
+      border-color: var(--token-color-border-strong);
+      box-shadow: 0 0 0 2px var(--token-color-focus-action-internal);
+    }
+  }
+
+  .cm-content {
+    padding: 8px;
+    min-height: 100px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .cm-placeholder {
+    color: var(--token-color-foreground-faint);
+    font-style: italic;
+  }
+
+  .cm-autocomplete {
+    border: 1px solid var(--token-color-border-primary);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background: var(--token-color-surface-primary);
+
+    .cm-completionLabel {
+      color: var(--token-color-foreground-primary);
+    }
+
+    .cm-completionDetail {
+      color: var(--token-color-foreground-faint);
+      font-style: italic;
+    }
+
+    .cm-completionInfo {
+      border-left: 1px solid var(--token-color-border-primary);
+      background: var(--token-color-surface-faint);
+    }
+
+    [aria-selected] {
+      background: var(--token-color-surface-action);
+      color: var(--token-color-foreground-primary);
+    }
+  }
+
+  // Size variants
+  &.rose-code-editor--small {
+    .cm-content {
+      min-height: 60px;
+      font-size: 12px;
+    }
+  }
+
+  &.rose-code-editor--large {
+    .cm-content {
+      min-height: 200px;
+      font-size: 16px;
+    }
+  }
+
+  // State variants
+  &.rose-code-editor--error {
+    border-color: var(--token-color-border-critical);
+
+    .cm-editor.cm-focused {
+      border-color: var(--token-color-border-critical);
+      box-shadow: 0 0 0 2px var(--token-color-focus-critical-internal);
+    }
+  }
+
+  &.rose-code-editor--readonly {
+    background-color: var(--token-color-surface-faint);
+
+    .cm-content {
+      color: var(--token-color-foreground-faint);
+    }
+  }
+}
