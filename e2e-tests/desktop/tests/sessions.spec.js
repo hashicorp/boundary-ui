@@ -172,8 +172,8 @@ test.describe('Sessions tests', () => {
   test('Displays Open button for RDP target session', async ({
     authedPage,
   }) => {
-    let isRdpClientInstalledCheck = await isRdpClientInstalled();
-    let isOSForRdpSupportedCheck = await isOSForRdpSupported();
+    const isRdpClientInstalledCheck = await isRdpClientInstalled();
+    const isOSForRdpSupportedCheck = await isOSForRdpSupported();
 
     test.skip(
       !isRdpClientInstalledCheck || !isOSForRdpSupportedCheck,

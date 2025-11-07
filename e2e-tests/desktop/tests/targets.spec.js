@@ -294,8 +294,8 @@ test.describe('Targets tests', () => {
   test('Launches RDP client when connecting to an RDP target', async ({
     authedPage,
   }) => {
-    let isRdpClientInstalledCheck = await isRdpClientInstalled();
-    let isOSForRdpSupportedCheck = await isOSForRdpSupported();
+    const isRdpClientInstalledCheck = await isRdpClientInstalled();
+    const isOSForRdpSupportedCheck = await isOSForRdpSupported();
 
     test.skip(
       !isRdpClientInstalledCheck || !isOSForRdpSupportedCheck,
