@@ -302,7 +302,8 @@ test.describe('Targets tests', () => {
       'RDP client is not installed/supported on this system',
     );
 
-    expect(isRdpRunning()).toBe(false);
+    const beforeLaunchRunning = await isRdpRunning();
+    expect(beforeLaunchRunning).toBe(false);
 
     await authedPage.getByRole('link', { name: rdpTarget.name }).click();
     await authedPage.getByRole('button', { name: 'Open' }).click();
@@ -311,13 +312,15 @@ test.describe('Targets tests', () => {
       authedPage.getByRole('heading', { name: 'Sessions' }),
     ).toBeVisible();
 
-    expect(isRdpRunning()).toBe(true);
+    const afterLaunchRunning = await isRdpRunning();
+    expect(afterLaunchRunning).toBe(true);
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
 
     killRdpProcesses();
 
-    expect(isRdpRunning()).toBe(false);
+    const afterKillRunning = await isRdpRunning();
+    expect(afterKillRunning).toBe(false);
   });
 });

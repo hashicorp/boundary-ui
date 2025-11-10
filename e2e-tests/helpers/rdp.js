@@ -16,12 +16,12 @@ export async function isRdpRunning() {
       result = execSync('tasklist /FI "IMAGENAME eq mstsc.exe" /FO CSV /NH', {
         encoding: 'utf-8',
       });
-      return result.includes('mstsc.exe');
+      return result && result.includes('mstsc.exe');
     } else if (process.platform === 'darwin') {
       result = execSync('pgrep -x "Windows App"', {
         encoding: 'utf-8',
-      }).trim();
-      return result.length > 0;
+      });
+      return result && result.trim().length > 0;
     }
     return false;
   } catch {
@@ -36,12 +36,10 @@ export async function isRdpClientInstalled() {
       return true;
     } else if (process.platform === 'darwin') {
       const result = execSync(
-        ['kMDItemCFBundleIdentifier == "com.microsoft.rdc.macos"'],
-        {},
-        'mdfind',
+        'mdfind "kMDItemCFBundleIdentifier == \'com.microsoft.rdc.macos\'"',
+        { encoding: 'utf-8' },
       );
-      console.log('mdfind result:', result.result.toString());
-      return result && result.toString().trim().length > 0;
+      return result && result.trim().length > 0;
     }
     return false;
   } catch {

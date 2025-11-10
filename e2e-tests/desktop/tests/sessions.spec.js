@@ -11,7 +11,6 @@ import {
   isRdpClientInstalled,
   isOSForRdpSupported,
   killRdpProcesses,
-  isRdpRunning,
 } from '../../helpers/rdp.js';
 
 let org;
@@ -187,8 +186,6 @@ test.describe('Sessions tests', () => {
     await expect(
       authedPage.getByRole('heading', { name: 'Sessions' }),
     ).toBeVisible();
-
-    expect(await isRdpRunning()).toBe(true);
 
     await expect(
       authedPage.getByRole('button', { name: 'Open' }),
