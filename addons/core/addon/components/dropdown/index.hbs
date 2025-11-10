@@ -20,7 +20,7 @@
     <DD.Header @hasDivider={{true}}>
       <Hds::Form::TextInput::Base
         @type='search'
-        @value={{this.searchTerm}}
+        @value={{or this.searchTerm @searchTerm}}
         placeholder={{t 'actions.narrow-results'}}
         aria-label={{t 'actions.narrow-results'}}
         {{on 'input' this.filterItems}}
@@ -28,11 +28,18 @@
       />
     </DD.Header>
   {{/if}}
-  {{#unless this.itemOptions}}
+
+  {{#unless (or this.itemOptions @isLoading)}}
     <DD.Description @text={{t 'titles.no-results'}} />
   {{/unless}}
 
-  {{#if (has-block)}}
+  {{#if @isLoading}}
+    <DD.Generic>
+      <Hds::Layout::Flex @align='center' @justify='center'>
+        <Hds::Icon @name='loading' @size='24' class='margin-y-xs' />
+      </Hds::Layout::Flex>
+    </DD.Generic>
+  {{else if (has-block)}}
     {{yield DD this.selectItem this.itemOptions}}
   {{else}}
     {{#each this.itemOptions as |itemOption|}}
@@ -47,13 +54,15 @@
     {{/each}}
   {{/if}}
 
-  <DD.Footer @hasDivider={{true}}>
-    <Hds::Button
-      @text='Apply'
-      @isFullWidth={{true}}
-      @size='small'
-      {{on 'click' (fn this.applyFilter DD.close)}}
-      data-test-dropdown-apply-button
-    />
-  </DD.Footer>
+  {{#unless @isLoading}}
+    <DD.Footer @hasDivider={{true}}>
+      <Hds::Button
+        @text='Apply'
+        @isFullWidth={{true}}
+        @size='small'
+        {{on 'click' (fn this.applyFilter DD.close)}}
+        data-test-dropdown-apply-button
+      />
+    </DD.Footer>
+  {{/unless}}
 </Hds::Dropdown>

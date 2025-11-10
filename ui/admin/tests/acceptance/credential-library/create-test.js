@@ -444,8 +444,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       },
     });
 
-    featuresService.enable('vault-ldap-credential');
-
     await visit(urls.newCredentialLibrary);
 
     await click(selectors.TYPE_VAULT_LDAP);
@@ -475,22 +473,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     );
   });
 
-  test('cannot select vault ldap when feature is disabled', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-09-04
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.newCredentialLibrary);
-
-    assert.false(featuresService.isEnabled('vault-ldap-credential'));
-    assert.dom(selectors.TYPE_VAULT_LDAP).doesNotExist();
-  });
-
   test('default `vault-generic` credential library is selected when `ssh-target` feature is not enabled and user manually sets `type` in the query params', async function (assert) {
     setRunOptions({
       rules: {
@@ -500,8 +482,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
         },
       },
     });
-
-    featuresService.enable('vault-ldap-credential');
 
     await visit(`${urls.newCredentialLibrary}?type=vault-ssh-certificate`);
 

@@ -6,11 +6,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { modelMapping, searchTables } from 'api/services/sqlite';
+import { modelMapping } from 'api/services/sqlite';
 import { underscore } from '@ember/string';
 
 const supportedModels = Object.keys(modelMapping);
-const supportedFtsTables = [...searchTables];
 
 module('Unit | Service | sqlite', function (hooks) {
   setupTest(hooks);
@@ -38,7 +37,7 @@ module('Unit | Service | sqlite', function (hooks) {
 
   test.each(
     'Mapping matches fts table columns',
-    supportedFtsTables,
+    supportedModels,
     async function (assert, resource) {
       const service = this.owner.lookup('service:sqlite');
 

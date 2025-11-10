@@ -49,7 +49,13 @@ export default class SqliteHandler {
         const schema = store.modelFor(type);
         const serializer = store.serializerFor(type);
 
-        let { page, pageSize, query: queryObj, ...remainingQuery } = query;
+        let {
+          page,
+          pageSize,
+          select,
+          query: queryObj,
+          ...remainingQuery
+        } = query;
         let payload,
           listToken,
           writeToDbPromise,
@@ -120,7 +126,7 @@ export default class SqliteHandler {
         const { sql, parameters } = generateSQLExpressions(type, queryObj, {
           page,
           pageSize,
-          select: ['data'],
+          select: select ?? [{ field: 'data' }],
         });
 
         const rows = await this.sqlite.fetchResource({
@@ -130,7 +136,7 @@ export default class SqliteHandler {
 
         const { sql: countSql, parameters: countParams } =
           generateSQLExpressions(type, queryObj, {
-            select: ['count(*) as total'],
+            select: [{ field: '*', isCount: true, alias: 'total' }],
           });
         const count = await this.sqlite.fetchResource({
           sql: countSql,

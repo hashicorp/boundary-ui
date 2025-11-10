@@ -10,7 +10,9 @@
   margin-bottom: sizing.rems(m);
 
   .rose-form-fieldset-title {
-    @include type.type(s, semibold);
+    @include type.type(s);
+
+    font-weight: var(--token-typography-font-weight-semibold);
   }
 
   .rose-form-fieldset-body {

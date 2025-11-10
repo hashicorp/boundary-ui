@@ -25,8 +25,7 @@ const createTargetTables = `
 );
 CREATE INDEX IF NOT EXISTS idx_target_scope_id_created_time ON target(scope_id, created_time DESC);
 
--- Create a contentless FTS table as we will only use the rowids.
--- Note that this only creates the FTS index and cannot reference the target content
+-- Create a content FTS table that references the original table
 CREATE VIRTUAL TABLE IF NOT EXISTS target_fts USING fts5(
     id,
     type,
@@ -35,7 +34,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS target_fts USING fts5(
     address,
     scope_id,
     created_time,
-    content='',
+    content='target',
 );
 
 -- Create triggers to keep the FTS table in sync with the target table
@@ -68,6 +67,7 @@ CREATE TABLE IF NOT EXISTS alias (
     data TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_alias_created_time ON alias(created_time DESC);
+CREATE INDEX IF NOT EXISTS idx_alias_destination_id ON alias(destination_id);
 
 CREATE VIRTUAL TABLE IF NOT EXISTS alias_fts USING fts5(
     id,
@@ -78,7 +78,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS alias_fts USING fts5(
     value,
     scope_id,
     created_time,
-    content='',
+    content='alias',
 );
 
 CREATE TRIGGER IF NOT EXISTS alias_ai AFTER INSERT ON alias BEGIN
@@ -111,7 +111,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS group_fts USING fts5(
     description,
     scope_id,
     created_time,
-    content='',
+    content='group',
 );
 
 CREATE TRIGGER IF NOT EXISTS group_ai AFTER INSERT ON "group" BEGIN
@@ -144,7 +144,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS role_fts USING fts5(
     description,
     scope_id,
     created_time,
-    content='',
+    content='role',
 );
 
 CREATE TRIGGER IF NOT EXISTS role_ai AFTER INSERT ON role BEGIN
@@ -177,7 +177,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS user_fts USING fts5(
     description,
     scope_id,
     created_time,
-    content='',
+    content='user',
 );
 
 CREATE TRIGGER IF NOT EXISTS user_ai AFTER INSERT ON user BEGIN
@@ -212,7 +212,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS credential_store_fts USING fts5(
     description,
     scope_id,
     created_time,
-    content='',
+    content='credential_store',
 );
 
 CREATE TRIGGER IF NOT EXISTS credential_store_ai AFTER INSERT ON credential_store BEGIN
@@ -247,7 +247,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS scope_fts USING fts5(
     description,
     scope_id,
     created_time,
-    content='',
+    content='scope',
 );
 
 CREATE TRIGGER IF NOT EXISTS scope_ai AFTER INSERT ON scope BEGIN
@@ -284,7 +284,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS auth_method_fts USING fts5(
     is_primary,
     scope_id,
     created_time,
-    content='',
+    content='auth_method',
 );
 
 CREATE TRIGGER IF NOT EXISTS auth_method_ai AFTER INSERT ON auth_method BEGIN
@@ -321,7 +321,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS host_catalog_fts USING fts5(
     plugin_name,
     scope_id,
     created_time,
-    content='',
+    content='host_catalog',
 );
 
 CREATE TRIGGER IF NOT EXISTS host_catalog_ai AFTER INSERT ON host_catalog BEGIN
@@ -352,6 +352,7 @@ CREATE TABLE IF NOT EXISTS session_recording (
     target_name TEXT,
     target_scope_id TEXT,
     target_scope_name TEXT,
+    target_scope_parent_scope_id TEXT,
     created_time TEXT NOT NULL,
     data TEXT NOT NULL
 );
@@ -371,21 +372,22 @@ CREATE VIRTUAL TABLE IF NOT EXISTS session_recording_fts USING fts5(
     target_name,
     target_scope_id,
     target_scope_name,
+    target_scope_parent_scope_id,
     created_time,
-    content='',
+    content='session_recording',
 );
 
 CREATE TRIGGER IF NOT EXISTS session_recording_ai AFTER INSERT ON session_recording BEGIN
     INSERT INTO session_recording_fts(
-        rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time
+        rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, target_scope_parent_scope_id, created_time
     ) VALUES (
-        new.rowid, new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.created_time
+        new.rowid, new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.target_scope_parent_scope_id, new.created_time
     );
 END;
 
 CREATE TRIGGER IF NOT EXISTS session_recording_ad AFTER DELETE ON session_recording BEGIN
-    INSERT INTO session_recording_fts(session_recording_fts, rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time)
-    VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.created_time);
+    INSERT INTO session_recording_fts(session_recording_fts, rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, target_scope_parent_scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.target_scope_parent_scope_id, old.created_time);
 END;`;
 
 const createSessionTables = `
@@ -411,7 +413,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS session_fts USING fts5(
     user_id,
     scope_id,
     created_time,
-    content='',
+    content='session',
 );
 
 CREATE TRIGGER IF NOT EXISTS session_ai AFTER INSERT ON session BEGIN

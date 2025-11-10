@@ -28,9 +28,10 @@
 
   .rose-form-checkbox-label {
     // label styles
-    @include type.type(s, semibold);
+    @include type.type(s);
 
     color: currentcolor;
+    font-weight: var(--token-typography-font-weight-semibold);
 
     &,
     .rose-form-checkbox-label-description {
@@ -53,7 +54,7 @@
       pointer-events: none;
       content: ' ';
       border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-      border-radius: sizing.rems(xxxs);
+      border-radius: var(--token-form-checkbox-border-radius);
     }
 
     &::after {

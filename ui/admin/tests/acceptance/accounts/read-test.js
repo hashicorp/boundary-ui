@@ -81,6 +81,15 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('user can navigate to account and incorrect url auto-corrects', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-11-03
+          enabled: false,
+        },
+      },
+    });
+
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
     });

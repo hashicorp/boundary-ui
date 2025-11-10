@@ -22,10 +22,11 @@
 
   // TODO revisit the title
   .rose-nav-title {
-    @include type.type(xs, semibold);
+    @include type.type(xs);
 
     display: none;
     color: #{sass.color(ui-gray, 400)};
+    font-weight: var(--token-typography-font-weight-semibold);
     text-transform: uppercase;
 
     $line-height: math.div(20, 12);
