@@ -80,7 +80,7 @@ module(
       urls.targets = `${urls.projectScope}/targets`;
 
       this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await authenticateSession({ account_id: instances.account.id });
     });
 
@@ -98,7 +98,7 @@ module(
 
     test('noResults returns truthy when no targets exist but there is a search term', async function (assert) {
       this.server.schema.targets.all().destroy();
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       controller.search = 'target that does not exist';
       await visit(urls.targets);
 
@@ -107,7 +107,7 @@ module(
 
     test('noTargets returns truthy when no targets exist', async function (assert) {
       this.server.schema.targets.all().destroy();
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await visit(urls.targets);
 
       assert.ok(controller.noTargets);
@@ -148,7 +148,7 @@ module(
         'target',
         instances.target.id,
       );
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await visit(urls.targets);
 
       const sortedSessions = controller.sortedTargetSessions;

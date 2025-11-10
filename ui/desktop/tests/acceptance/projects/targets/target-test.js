@@ -150,7 +150,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
   });
 
   test('user can connect to a target with an address', async function (assert) {
