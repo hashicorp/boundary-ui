@@ -35,6 +35,7 @@ export default class ApplicationController extends Controller {
   @service flashMessages;
   @service router;
   @service sqlite;
+  @service hdsTheming;
 
   /**
    * Returns available themes.
@@ -125,6 +126,17 @@ export default class ApplicationController extends Controller {
   async clearDatabase() {
     await this.sqlite.clearDatabase();
     this.router.refresh();
+  }
+
+  @action
+  onSetTheme({ currentTheme, currentMode }) {
+    // eslint-disable-next-line no-console
+    console.log(`onSetTheme invoked`, currentTheme, currentMode);
+  }
+
+  @action
+  removeTheming() {
+    this.hdsTheming.setTheme({ theme: undefined });
   }
 
   /**
