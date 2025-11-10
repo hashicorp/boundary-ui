@@ -147,7 +147,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       await this.page.getByRole('link', { name: 'New Credential' }).click();
     }
 
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
@@ -207,7 +207,7 @@ export class CredentialStoresPage extends BaseResourcePage {
     }
 
     const credentialName = 'Credential ' + nanoid();
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
@@ -271,7 +271,7 @@ export class CredentialStoresPage extends BaseResourcePage {
     }
 
     const credentialName = 'Credential ' + nanoid();
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page

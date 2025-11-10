@@ -16,6 +16,7 @@ import {
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
@@ -56,6 +57,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     credentialLibrary: null,
     credential: null,
     jsonCredential: null,
+    passwordCredential: null,
     addBrokeredCredentialSourcesForTCPTarget: null,
     brokeredCredentialSourcesForTCPTarget: null,
     addBrokeredCredentialSourcesForRDPTarget: null,
@@ -80,7 +82,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       type: 'static',
       scope: instances.scopes.project,
     });
-    instances.credentials = this.server.createList('credential', 4, {
+    instances.credentials = this.server.createList('credential', 5, {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
     });
@@ -132,6 +134,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
     urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[3].credentialStoreId}/credentials/${instances.credentials[3].id}`;
+    urls.passwordCredential = `${urls.projectScope}/credential-stores/${instances.credentials[4].credentialStoreId}/credentials/${instances.credentials[4].id}`;
     urls.addBrokeredCredentialSourcesForTCPTarget = `${urls.tcpTarget}/add-brokered-credential-sources`;
     urls.addBrokeredCredentialSourcesForRDPTarget = `${urls.rdpTarget}/add-brokered-credential-sources`;
     getCredentialLibraryCount = () =>
@@ -209,6 +212,18 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         targetName: 'rdpTarget',
         link: 'jsonCredential',
         expectedUrl: 'jsonCredential',
+      },
+      'password credential type for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+        link: 'passwordCredential',
+        expectedUrl: 'passwordCredential',
+      },
+      'password credential type for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+        link: 'passwordCredential',
+        expectedUrl: 'passwordCredential',
       },
     },
     async function (assert, input) {
@@ -427,6 +442,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.SAVE_BTN,
         expectedCount: 1,
       },
+      'save password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
       'save credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,
@@ -530,6 +550,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.SAVE_BTN,
         expectedCount: 1,
       },
+      'save password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
       'save credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,
@@ -572,7 +597,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.CANCEL_BTN,
         expectedCount: 0,
       },
-
+      'cancel password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
       'cancel credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,
