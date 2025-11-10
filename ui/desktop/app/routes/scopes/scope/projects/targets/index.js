@@ -174,7 +174,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
           aliasPromise,
           sessionsPromise,
         ]);
-        console.log('loaded results ', loadedResults);
         allAssociatedSessions = loadedResults[1];
       } catch (e) {
         __electronLog?.warn(
