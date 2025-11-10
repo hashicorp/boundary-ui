@@ -15,6 +15,8 @@ import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 
 module(
@@ -27,6 +29,7 @@ module(
     let getUsernameKeyPairCredentialCount;
     let getJSONCredentialCount;
     let getUsernamePasswordDomainCredentialCount;
+    let getPasswordCredentialCount;
 
     const mockResponseMessage = 'Oops.';
     const mockResponse = () => {
@@ -57,6 +60,7 @@ module(
       usernameKeyPairCredential: null,
       jsonCredential: null,
       usernamePasswordDomainCredential: null,
+      passwordCredential: null,
     };
 
     hooks.beforeEach(async function () {
@@ -94,7 +98,12 @@ module(
       instances.jsonCredential = this.server.create('credential', {
         scope: instances.scopes.project,
         credentialStore: instances.staticCredentialStore,
-        type: 'json',
+        type: TYPE_CREDENTIAL_JSON,
+      });
+      instances.passwordCredential = this.server.create('credential', {
+        scope: instances.scopes.project,
+        credentialStore: instances.staticCredentialStore,
+        type: TYPE_CREDENTIAL_PASSWORD,
       });
       // Generate route URLs for resources
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -105,6 +114,7 @@ module(
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
       urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
       urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
+      urls.passwordCredential = `${urls.credentials}/${instances.passwordCredential.id}`;
       // Generate resource counter
       getUsernamePasswordCredentialCount = () => {
         return this.server.schema.credentials.where({
@@ -122,6 +132,11 @@ module(
       getUsernamePasswordDomainCredentialCount = () => {
         return this.server.schema.credentials.where({
           type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+        }).length;
+      };
+      getPasswordCredentialCount = () => {
+        return this.server.schema.credentials.where({
+          type: TYPE_CREDENTIAL_PASSWORD,
         }).length;
       };
     });
@@ -219,6 +234,29 @@ module(
       );
     });
 
+    test('can delete password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const passwordCredentialCount = getPasswordCredentialCount();
+      await visit(urls.passwordCredential);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getPasswordCredentialCount(),
+        passwordCredentialCount - 1,
+      );
+    });
+
     test('cannot delete a username & password credential without proper authorization', async function (assert) {
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
@@ -281,6 +319,30 @@ module(
         getUsernamePasswordDomainCredentialCount(),
         usernamePasswordDomainCredentialCount,
       );
+    });
+
+    test('cannot delete a password credential without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const passwordCredentialCount = getPasswordCredentialCount();
+      instances.passwordCredential.authorized_actions =
+        instances.passwordCredential.authorized_actions.filter(
+          (item) => item !== 'delete',
+        );
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.passwordCredential));
+
+      assert.strictEqual(currentURL(), urls.passwordCredential);
+      assert.dom(selectors.MANAGE_DROPDOWN).doesNotExist();
+      assert.strictEqual(getPasswordCredentialCount(), passwordCredentialCount);
     });
 
     test('can accept delete username & password credential via dialog', async function (assert) {
@@ -357,6 +419,33 @@ module(
 
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
+    });
+
+    test('can accept delete password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const passwordCredentialCount = getPasswordCredentialCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.passwordCredential));
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
+
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(
+        getPasswordCredentialCount(),
+        passwordCredentialCount - 1,
+      );
     });
 
     test('can cancel delete username & password credential via dialog', async function (assert) {
@@ -463,6 +552,30 @@ module(
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
+    test('can cancel delete password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const passwordCredentialCount = getPasswordCredentialCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.passwordCredential));
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
+      assert.strictEqual(currentURL(), urls.passwordCredential);
+      assert.strictEqual(getPasswordCredentialCount(), passwordCredentialCount);
+    });
+
     test('deleting a username & password credential which errors displays error message', async function (assert) {
       setRunOptions({
         rules: {
@@ -547,6 +660,25 @@ module(
       await click(selectors.MANAGE_DROPDOWN_DELETE);
 
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+    });
+
+    test('deleting a password credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      this.server.del('/credentials/:id', mockResponse);
+      await visit(urls.passwordCredential);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
     });
   },
 );
