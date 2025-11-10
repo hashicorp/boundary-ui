@@ -429,6 +429,49 @@ CREATE TRIGGER IF NOT EXISTS session_ad AFTER DELETE ON session BEGIN
     VALUES('delete', old.rowid, old.id, old.type, old.status, old.endpoint, old.target_id, old.user_id, old.scope_id, old.created_time);
 END;`;
 
+const createAppTokenTables = `
+CREATE TABLE IF NOT EXISTS app_token (
+    id TEXT NOT NULL PRIMARY KEY,
+    status TEXT,
+    name TEXT,
+    description TEXT,
+    created_time TEXT,
+    approximate_last_access_time TEXT,
+    scope_id TEXT NOT NULL,
+    expire_time TEXT,
+    time_to_live_seconds INTEGER,
+    time_to_stale_seconds INTEGER,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_app_token_scope_id_created_time ON app_token(scope_id, created_timed DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS app_token_fts USING fts5(
+    id,
+    status,
+    name,
+    description,
+    created_time,
+    approximate_last_access_time,
+    scope_id,
+    expire_time,
+    time_to_live_seconds,
+    time_to_stale_seconds,
+    content='app_token',
+);
+
+CREATE TRIGGER IF NOT EXISTS app_token_ai AFTER INSERT ON app_token BEGIN
+    INSERT INTO app_token_fts(
+        rowid, id, status, name, description, created_time, approximate_last_access_time, scope_id, expire_time, time_to_live_seconds, time_to_stale_seconds
+    ) VALUES (
+        new.rowid, new.id, new.status, new.name, new.description, new.created_time, new.approximate_last_access_time, new.scope_id, new.expire_time, new.time_to_live_seconds, new.time_to_stale_seconds
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS app_token_ad AFTER DELETE ON app_token BEGIN
+    INSERT INTO app_token_fts(app_token_fts, rowid, id, status, name, description, create_time, approximate_last_access_time, scope_id, expire_time, time_to_live_seconds, time_to_stale_seconds)
+    VALUES('delete', old.rowid, old.id, old.status, old.name, old.description, old.create_time, old.approximate_last_access_time, old.scope_id, old.expire_time, old.time_to_live_seconds, old.time_to_stale_seconds);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -452,6 +495,7 @@ ${createAuthMethodTables}
 ${createHostCatalogTables}
 ${createSessionRecordingTables}
 ${createSessionTables}
+${createAppTokenTables}
 
 COMMIT;`;
 
