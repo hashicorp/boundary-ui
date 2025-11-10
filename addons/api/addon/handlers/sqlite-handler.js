@@ -244,9 +244,7 @@ export default class SqliteHandler {
       if (pushToStore) {
         payload.removed_ids.forEach((id) => {
           const record = store.peekRecord(type, id);
-          if (record) {
-            store.unloadRecord(record);
-          }
+          store.unloadRecord(record);
         });
       }
     }
