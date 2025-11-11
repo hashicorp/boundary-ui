@@ -107,6 +107,7 @@ export default class SqliteHandler {
               payload,
               storeToken,
               tokenKey,
+              pushToStore,
               serializer,
               store,
               schema,
@@ -213,6 +214,7 @@ export default class SqliteHandler {
     payload,
     storeToken,
     tokenKey,
+    pushToStore,
     serializer,
     store,
     schema,
@@ -224,11 +226,6 @@ export default class SqliteHandler {
       ]);
     }
 
-    // Remove any records from the DB if the API indicates they've been deleted
-    if (payload.removed_ids?.length > 0) {
-      await this.sqlite.deleteResource(type, payload.removed_ids);
-    }
-
     const normalizedPayload = serializer.normalizeResponse(
       store,
       schema,
@@ -238,6 +235,19 @@ export default class SqliteHandler {
     );
 
     const { data: payloadData } = normalizedPayload;
+
+    // Remove any records from the DB if the API indicates they've been deleted
+    // Additionally remove deleted records from ember data store for symmetry
+    if (payload.removed_ids?.length > 0) {
+      await this.sqlite.deleteResource(type, payload.removed_ids);
+
+      if (pushToStore) {
+        payload.removed_ids.forEach((id) => {
+          const record = store.peekRecord(type, id);
+          store.unloadRecord(record);
+        });
+      }
+    }
 
     // Store the new data we just got back from the API refresh
     const items = payloadData.map((datum) => {

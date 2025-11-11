@@ -8,6 +8,7 @@ const {
   spawnAsyncJSONPromise,
   spawnSync,
 } = require('../helpers/spawn-promise.js');
+const log = require('electron-log/main');
 
 class Session {
   #id;
@@ -89,7 +90,6 @@ class Session {
     ).then((spawnedSession) => {
       this.#process = spawnedSession.childProcess;
       this.#proxyDetails = spawnedSession.response;
-      this.#process = spawnedSession.childProcess;
       this.#id = this.#proxyDetails.session_id;
       return this.#proxyDetails;
     });
@@ -102,7 +102,10 @@ class Session {
     return new Promise((resolve, reject) => {
       if (this.isRunning) {
         this.#process.on('close', () => resolve());
-        this.#process.on('error', (e) => reject(e));
+        this.#process.on('error', (e) => {
+          log.error('Process error in session stop method: ', e);
+          return reject(e);
+        });
 
         // Cancel session before killing process
         const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);

@@ -98,6 +98,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
           'session',
           {
             scope_id,
+            include_terminated: true,
             query: {
               filters: {
                 scope_id: [{ equals: scope_id }],
@@ -155,7 +156,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
               },
             },
           },
-          { pushToStore: true, peekDb: true },
+          { peekDb: true },
         );
       }
       return { targets, doTargetsExist, totalItems };
