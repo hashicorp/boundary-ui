@@ -114,6 +114,18 @@ export const modelMapping = {
     scope_id: 'scope.scope_id',
     created_time: 'created_time',
   },
+  'app-token': {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    scope_id: 'scope_id',
+    created_time: 'created_time',
+    approximate_last_access_time: 'approximate_last_access_time',
+    status: 'status',
+    expire_time: 'expire_time',
+    time_to_live_seconds: 'time_to_live_seconds',
+    time_to_stale_seconds: 'time_to_stale_seconds',
+  },
 };
 
 export default class SqliteDbService extends Service {
