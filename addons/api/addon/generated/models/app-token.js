@@ -7,9 +7,9 @@ import BaseModel from '../../models/base';
 import { attr } from '@ember-data/model';
 
 /**
- * Account contains all fields related to an account resource
+ * App Token contains all fields related to an app token resource
  */
-export default class GeneratedAccountModel extends BaseModel {
+export default class GeneratedAppTokenModel extends BaseModel {
   // =attributes
 
   @attr('string', {
@@ -31,7 +31,6 @@ export default class GeneratedAccountModel extends BaseModel {
   @attr('string', {
     description: 'The token returned after creation only\nOutput only.',
     readOnly: true,
-    isSecret: true,
   })
   token;
 
@@ -41,12 +40,6 @@ export default class GeneratedAccountModel extends BaseModel {
     readOnly: true,
   })
   approximate_last_access_time;
-
-  @attr('string', {
-    description: 'The scope the app token was created in\nOutput only.',
-    readOnly: true,
-  })
-  scope_id;
 
   @attr('string', {
     description: 'The status of the app token\nOutput only.',

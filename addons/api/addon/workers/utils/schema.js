@@ -435,7 +435,7 @@ CREATE TABLE IF NOT EXISTS app_token (
     status TEXT,
     name TEXT,
     description TEXT,
-    created_time TEXT,
+    created_time TEXT NOT NULL,
     approximate_last_access_time TEXT,
     scope_id TEXT NOT NULL,
     expire_time TEXT,
