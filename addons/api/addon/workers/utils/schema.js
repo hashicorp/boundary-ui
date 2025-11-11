@@ -432,27 +432,27 @@ END;`;
 const createAppTokenTables = `
 CREATE TABLE IF NOT EXISTS app_token (
     id TEXT NOT NULL PRIMARY KEY,
-    status TEXT,
     name TEXT,
     description TEXT,
+    scope_id TEXT NOT NULL,
     created_time TEXT NOT NULL,
     approximate_last_access_time TEXT,
-    scope_id TEXT NOT NULL,
+    status TEXT,
     expire_time TEXT,
     time_to_live_seconds INTEGER,
     time_to_stale_seconds INTEGER,
     data TEXT NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_app_token_scope_id_created_time ON app_token(scope_id, created_timed DESC);
+CREATE INDEX IF NOT EXISTS idx_app_token_scope_id_created_time ON app_token(scope_id, created_time DESC);
 
 CREATE VIRTUAL TABLE IF NOT EXISTS app_token_fts USING fts5(
     id,
-    status,
     name,
     description,
+    scope_id,
     created_time,
     approximate_last_access_time,
-    scope_id,
+    status,
     expire_time,
     time_to_live_seconds,
     time_to_stale_seconds,
@@ -468,8 +468,8 @@ CREATE TRIGGER IF NOT EXISTS app_token_ai AFTER INSERT ON app_token BEGIN
 END;
 
 CREATE TRIGGER IF NOT EXISTS app_token_ad AFTER DELETE ON app_token BEGIN
-    INSERT INTO app_token_fts(app_token_fts, rowid, id, status, name, description, create_time, approximate_last_access_time, scope_id, expire_time, time_to_live_seconds, time_to_stale_seconds)
-    VALUES('delete', old.rowid, old.id, old.status, old.name, old.description, old.create_time, old.approximate_last_access_time, old.scope_id, old.expire_time, old.time_to_live_seconds, old.time_to_stale_seconds);
+    INSERT INTO app_token_fts(app_token_fts, rowid, id, status, name, description, created_time, approximate_last_access_time, scope_id, expire_time, time_to_live_seconds, time_to_stale_seconds)
+    VALUES('delete', old.rowid, old.id, old.status, old.name, old.description, old.created_time, old.approximate_last_access_time, old.scope_id, old.expire_time, old.time_to_live_seconds, old.time_to_stale_seconds);
 END;`;
 
 export const CREATE_TABLES = (version) => `
