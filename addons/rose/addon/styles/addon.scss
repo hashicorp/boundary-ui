@@ -3,6 +3,65 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@use '@hashicorp/design-system-components';
+@use 'products/css/themed-tokens/with-combined-strategies/tokens.css';
+@use 'styles/@hashicorp/design-system-components-common.scss';
 @use 'hds/themes/dark-mode';
 @use 'hds/overrides';
+
+// IBM Plex fonts
+
+// @use '@ibm/plex-sans/scss' as PlexSans with (
+//   $font-weights: (
+//     bold: true,
+//     boldItalic: true,
+//     extralight: false,
+//     extralightItalic: false,
+//     italic: true,
+//     light: false,
+//     lightItalic: false,
+//     medium: true,
+//     mediumItalic: false,
+//     regular: true,
+//     semibold: true,
+//     semiboldItalic: true,
+//     text: true,
+//     textItalic: true,
+//     thin: false,
+//     thinItalic: false
+//   )
+// );
+// @include PlexSans.all();
+
+// @use '@ibm/plex-mono/scss' as PlexMono with (
+//   $font-weights: (
+//     bold: false,
+//     boldItalic: false,
+//     extralight: false,
+//     extralightItalic: false,
+//     italic: false,
+//     light: false,
+//     lightItalic: false,
+//     medium: false,
+//     mediumItalic: false,
+//     regular: false,
+//     semibold: false,
+//     semiboldItalic: false,
+//     text: false,
+//     textItalic: false,
+//     thin: false,
+//     thinItalic: false
+//   )
+// );
+// @include PlexMono.all();
+
+// these are coming from the `@ibm` packages
+
+@use 'plex-sans/scss' as PlexSans with (
+  $font-prefix: '/core'
+);
+@use 'plex-mono/scss' as PlexMono with (
+  $font-prefix: '/core'
+);
+
+@include PlexSans.default;
+@include PlexMono.default;

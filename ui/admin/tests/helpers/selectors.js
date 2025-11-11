@@ -53,7 +53,7 @@ export const SIDEBAR_SCOPE_DROPDOWN =
 export const SIDEBAR_SCOPE_LINK = (url) =>
   `[data-test-side-nav-scope-dropdown] a[href="${url}"]`;
 export const TOGGLE_THEME_DEFAULT =
-  '[data-test-side-nav-user-dropdown] [value=system-default-theme]';
+  '[data-test-side-nav-user-dropdown] [value=system]';
 export const TOGGLE_THEME_LIGHT =
   '[data-test-side-nav-user-dropdown] [value=light]';
 export const TOGGLE_THEME_DARK =

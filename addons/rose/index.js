@@ -18,6 +18,7 @@ module.exports = {
     this.import('node_modules/jsonlint/lib/jsonlint.js');
 
     this.includeHDSStyles(app);
+    this.includeIbmPlexFonts(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
@@ -41,11 +42,11 @@ module.exports = {
   includeHDSStyles(app) {
     const tokensPath = path.resolve(
       __dirname,
-      'node_modules/@hashicorp/design-system-tokens/dist/products/css',
+      'node_modules/@hashicorp/design-system-tokens/dist',
     );
     const hdsPath = path.resolve(
       __dirname,
-      'node_modules/@hashicorp/design-system-components/dist/styles',
+      'node_modules/@hashicorp/design-system-components/dist',
     );
 
     // Setup default sassOptions on the running application
@@ -55,6 +56,22 @@ module.exports = {
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(tokensPath, hdsPath);
+  },
+
+  /**
+   * Includes the IBM Plex folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeIbmPlexFonts(app) {
+    const ibmModulesPath = path.resolve(__dirname, 'node_modules/@ibm');
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(ibmModulesPath);
   },
 
   /**
