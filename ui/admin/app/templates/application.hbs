@@ -161,22 +161,11 @@
       <AF.Link @href={{(doc-url)}}>{{t 'titles.documentation'}}</AF.Link>
       <AF.LegalLinks />
       <AF.ExtraAfter>
-        {{! template-lint-disable no-inline-styles }}
-        <Hds::ButtonSet style='gap: 4px; align-items: center'>
-          <Hds::ThemeSwitcher
-            @toggleSize='small'
-            @hasDefaultOption={{true}}
-            @onSetTheme={{this.onSetTheme}}
-          />
-          <Hds::Button
-            @color='secondary'
-            @size='small'
-            @icon='trash'
-            @isIconOnly={{true}}
-            @text='Remove theme'
-            {{on 'click' this.removeTheming}}
-          />
-        </Hds::ButtonSet>
+        <Hds::ThemeSwitcher
+          @toggleSize='small'
+          @hasDefaultOption={{true}}
+          @onSetTheme={{this.onSetTheme}}
+        />
       </AF.ExtraAfter>
     </Hds::AppFooter>
   </Frame.Footer>

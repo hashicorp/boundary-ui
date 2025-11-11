@@ -14,7 +14,7 @@ import { paramValueFinder } from 'admin/utils/param-value-finder';
 const THEMES = [
   {
     label: 'system',
-    value: 'system-default-theme',
+    value: 'system',
   },
   {
     label: 'light',
@@ -91,6 +91,20 @@ export default class ApplicationController extends Controller {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
+
+    // set the HDS theme too
+    this.hdsTheming.setTheme({
+      theme,
+      onSetTheme: ({ currentTheme, currentMode }) => {
+        // eslint-disable-next-line no-console
+        console.log(
+          `BOUNDARY SWITCHER - onSetTheme invoked`,
+          theme,
+          currentTheme,
+          currentMode,
+        );
+      },
+    });
   }
 
   /**
@@ -131,12 +145,8 @@ export default class ApplicationController extends Controller {
   @action
   onSetTheme({ currentTheme, currentMode }) {
     // eslint-disable-next-line no-console
-    console.log(`onSetTheme invoked`, currentTheme, currentMode);
-  }
-
-  @action
-  removeTheming() {
-    this.hdsTheming.setTheme({ theme: undefined });
+    console.log(`HDS SWITCHER - onSetTheme invoked`, currentTheme, currentMode);
+    this.toggleTheme(currentTheme);
   }
 
   /**
