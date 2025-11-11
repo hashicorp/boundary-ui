@@ -15,7 +15,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
-  let featuresService;
   const instances = {
     scopes: {
       org: null,
@@ -59,7 +58,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.vaultLDAPCredentialLibrary = `${urls.credentialLibraries}/${instances.vaultLDAPCredentialLibrary.id}`;
-    featuresService = this.owner.lookup('service:features');
   });
 
   test('Users can navigate to credential libraries with proper authorization', async function (assert) {
@@ -108,28 +106,10 @@ module('Acceptance | credential-libraries | list', function (hooks) {
       },
     });
 
-    featuresService.enable('vault-ldap-credential');
     await visit(urls.credentialLibraries);
 
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultLDAPCredentialLibrary))
       .isVisible();
-  });
-
-  test('User cannot navigate to vault ldap credential library details when feature is not enabled', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-09-04
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.credentialLibraries);
-
-    assert
-      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultLDAPCredentialLibrary))
-      .doesNotExist();
   });
 });

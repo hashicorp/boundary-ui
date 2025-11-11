@@ -14,7 +14,7 @@ html {
 body {
   // Used by Rose::Tabs and '/' in breadcrumbs
   // and link list panel
-  font-family: typography.$family-primary;
+  font-family: var(--token-typography-font-stack-text);
 
   // this is used across the app
   line-height: typography.line-height(m);

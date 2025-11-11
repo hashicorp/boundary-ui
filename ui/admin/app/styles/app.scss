@@ -171,7 +171,7 @@
 
 .worker-create-section {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-  border-radius: sizing.rems(xxs);
+  border-radius: var(--token-border-radius-small);
   margin-bottom: sizing.rems(xl);
   padding: sizing.rems(l);
 
@@ -181,7 +181,7 @@
 
   > p span {
     background-color: var(--token-color-surface-strong);
-    border-radius: 5px;
+    border-radius: var(--token-border-radius-small);
     padding: sizing.rems(xxxs) sizing.rems(xxs);
   }
 
@@ -231,7 +231,7 @@
     grid-template-areas: 'label' 'text-input' 'helper-text';
 
     .hds-form-label {
-      font-size: sizing.rems(m);
+      font-size: var(--token-typography-body-300-font-size);
       grid-area: label;
       line-height: sizing.rems(m) + sizing.rems(xxs);
     }
@@ -241,7 +241,7 @@
       border: 0;
       color: var(--token-form-label-color);
       grid-area: text-input;
-      font-size: sizing.rems(m);
+      font-size: var(--token-typography-body-300-font-size);
       padding: 0;
     }
 
@@ -274,14 +274,14 @@
   --secret-editor-height: 210px;
 
   background: var(--secret-editor-body);
-  border-radius: sizing.rems(xxs);
+  border-radius: var(--token-border-radius-small);
   height: var(--secret-editor-height);
   margin-bottom: sizing.rems(l);
   width: 100%;
 
   .secret-editor-json {
     .CodeMirror {
-      border-radius: sizing.rems(xxs);
+      border-radius: var(--token-border-radius-small);
       height: var(--secret-editor-height);
       display: block;
     }
@@ -303,7 +303,8 @@
 
   .secret-editor-skeleton-gutter {
     background: var(--secret-editor-gutter);
-    border-radius: sizing.rems(xxs) 0 0 sizing.rems(xxs);
+    border-radius: var(--token-border-radius-small) 0 0
+      var(--token-border-radius-small);
     width: sizing.rems(xxl) + sizing.rems(xxs); // 52
   }
 
@@ -343,7 +344,7 @@
   }
 
   .secret-editor-skeleton-message {
-    font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
+    font-size: var(--token-typography-body-200-font-size);
     left: 50%;
     position: absolute;
     top: 50%;
@@ -605,7 +606,7 @@
     position: absolute;
     bottom: 2.15rem;
     left: 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: var(--token-border-radius-small);
     z-index: 1;
     background-color: var(--token-color-palette-neutral-200);
   }
@@ -688,7 +689,7 @@
         .ap-playback-button {
           background: var(--player-play-button);
           border: var(--player-play-button-border) 0.063rem solid;
-          border-radius: 0.313rem;
+          border-radius: var(--token-border-radius-small);
           margin: 0.75rem;
           padding: 0.625rem 1rem;
 
