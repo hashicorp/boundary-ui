@@ -14,6 +14,7 @@ import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
+import { generateBase62Token } from './helpers/token-generator';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
@@ -597,6 +598,47 @@ function routes() {
     // Set to 401 or 404 to simulate token invalidation, which will
     // cause the session to fail restoration and logout the user.
     return new Response(200);
+  });
+
+  // app-tokens
+
+  this.post('/app-tokens', function ({ appTokens, scopes }) {
+    const attrs = this.normalizedRequestAttrs();
+
+    // Find the scope for the app token. Scope can be global, org or proj level.
+    const scope = scopes.find(attrs.scopeId);
+    if (!scope) {
+      return new Response(
+        404,
+        {},
+        {
+          errors: [
+            {
+              status: 404,
+              message: 'Scope not found',
+            },
+          ],
+        },
+      );
+    }
+
+    const appTokenAttrs = {
+      ...attrs,
+      token: generateBase62Token(), // Generate a 24-character Base62 token
+      status: 'active',
+      created_time: new Date().toISOString(),
+      expire_time: attrs.time_to_live_seconds
+        ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
+        : faker.date.future().toISOString(),
+      created_by_user_id: `u_${faker.string.alphanumeric(5)}`, // TODO: how can i get the logged in user id here?
+      scope: scope.attrs,
+      permissions: (attrs.permissions || []).map((permission) => ({
+        ...permission,
+        deleted_scopes: permission.deleted_scopes || [],
+      })),
+    };
+
+    return appTokens.create(appTokenAttrs);
   });
 
   // credential-stores
