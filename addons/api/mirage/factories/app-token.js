@@ -7,6 +7,7 @@ import factory from '../generated/factories/app-token';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 import { STATUSES_APP_TOKEN as statuses } from 'api/models/app-token';
 
 export default factory.extend({
@@ -23,8 +24,14 @@ export default factory.extend({
   permissions: () => [
     {
       grant: ['ids=*;actions=*'],
-      grant_scope_id: ['this'],
-      deleted_scopes: [generateId('p_')],
+      grant_scope_id: [GRANT_SCOPE_THIS],
+      deleted_scopes: [
+        { scope_id: generateId('p_'), deleted_at: faker.date.past() },
+      ],
+    },
+    {
+      grant: ['ids=*;actions=*', 'type=user;actions=read,list'],
+      grant_scope_id: [GRANT_SCOPE_THIS, generateId('o_')],
     },
   ],
 });
