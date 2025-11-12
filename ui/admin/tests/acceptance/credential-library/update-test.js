@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -57,6 +57,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     });
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       credentialStore: instances.credentialStore,
     });
     instances.usernamePasswordDomainCredentialLibrary = this.server.create(
@@ -145,12 +146,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_SSH, 'key');
     await click(commonSelectors.SAVE_BTN);
 
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
@@ -192,13 +188,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_DOMAIN, 'domain');
     await click(commonSelectors.SAVE_BTN);
 
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({

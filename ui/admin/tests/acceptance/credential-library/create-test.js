@@ -118,12 +118,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       selectors.FIELD_CRED_TYPE,
       selectors.FIELD_CRED_TYPE_SSH_VALUE,
     );
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_SSH, 'key');
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
@@ -164,14 +159,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       selectors.FIELD_CRED_TYPE,
       selectors.FIELD_CRED_TYPE_UPD_VALUE,
     );
-
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_DOMAIN, 'domain');
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getCredentialLibraryCount(), credentialLibraryCount + 1);
