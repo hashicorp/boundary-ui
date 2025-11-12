@@ -819,6 +819,17 @@ function routes() {
 
   this.del('/session-recordings/:id');
 
+  // app-tokens
+
+  this.get(
+    '/app-tokens',
+    ({ appTokens }, { queryParams: { scope_id: scopeId } }) => {
+      return appTokens.where({ scopeId });
+    },
+  );
+  this.get('/app-tokens/:id');
+  this.del('/app-tokens/:id');
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));
