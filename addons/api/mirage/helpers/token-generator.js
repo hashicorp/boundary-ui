@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+/**
  * Generates a random Base62 token of specified length
  * Base62 uses A-Z, a-z, 0-9 (62 total characters)
  * @param {number} length - Length of token to generate (default: 24)
