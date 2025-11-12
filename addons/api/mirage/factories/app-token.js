@@ -4,12 +4,13 @@
  */
 
 import factory from '../generated/factories/app-token';
+import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import { STATUSES_APP_TOKEN as statuses } from 'api/models/app-token';
 
 export default factory.extend({
-  id: () => generateId('at_'),
+  id: () => generateId('appt_'),
   authorized_actions: () =>
     permissions.authorizedActionsFor('app-token') || [
       'no-op',
@@ -17,7 +18,7 @@ export default factory.extend({
       'update',
       'delete',
     ],
-  status: (i) => statuses[i % statuses.length],
+  status: faker.helpers.arrayElement(statuses),
   created_by_user_id: () => generateId('u_'),
   permissions: () => [
     {
