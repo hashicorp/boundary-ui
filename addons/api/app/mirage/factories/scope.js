@@ -33,6 +33,7 @@ export default factory.extend({
       scopes: ['create', 'list'],
       groups: ['create', 'list'],
       roles: ['create', 'list'],
+      'app-tokens': ['create', 'list'],
     };
 
     // Resources that are available only on the global scope
