@@ -603,6 +603,7 @@ function routes() {
   // app-tokens
 
   this.post('/app-tokens', function ({ appTokens, scopes }) {
+    // Create new app token or handle clone
     const attrs = this.normalizedRequestAttrs();
 
     // Find the scope for the app token. Scope can be global, org or proj level.
@@ -630,7 +631,7 @@ function routes() {
       expire_time: attrs.time_to_live_seconds
         ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
         : faker.date.future().toISOString(),
-      created_by_user_id: `u_${faker.string.alphanumeric(5)}`, // TODO: how can i get the logged in user id here?
+      created_by_user_id: `u_authenticateduser`,
       scope: scope.attrs,
       permissions: (attrs.permissions || []).map((permission) => ({
         ...permission,
