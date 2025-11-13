@@ -830,6 +830,35 @@ function routes() {
   this.get('/app-tokens/:id');
   this.del('/app-tokens/:id');
 
+  this.post('/app-tokens', function ({ appTokens, scopes, users }) {
+    // Create new app token or handle clone
+    const attrs = this.normalizedRequestAttrs();
+
+    // Find the scope for the app token. Scope can be global, org or proj level.
+    const scope = scopes.find(attrs.scopeId) || scopes.find('global');
+
+    let scopeUser = users.where({ scopeId: scope.id }).first();
+    const userId = scopeUser ? scopeUser.id : 'authenticateduser';
+
+    const appTokenAttrs = {
+      ...attrs,
+      token: faker.string.alphanumeric(24),
+      status: 'active',
+      created_time: new Date().toISOString(),
+      expire_time: attrs.time_to_live_seconds
+        ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
+        : faker.date.future().toISOString(),
+      created_by_user_id: userId,
+      scope: scope.attrs,
+      permissions: (attrs.permissions || []).map((permission) => ({
+        ...permission,
+        deleted_scopes: permission.deleted_scopes || [],
+      })),
+    };
+
+    return appTokens.create(appTokenAttrs);
+  });
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));
