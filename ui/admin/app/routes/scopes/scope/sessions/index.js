@@ -135,7 +135,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       const orgScope = await this.store.findRecord('scope', scope.scope.id);
       const globalScope = await this.store.findRecord('scope', 'global');
       const canListUsers =
-        this.can.can('list model', globalScope, { collection: 'users' }) &&
+        this.can.can('list model', globalScope, { collection: 'users' }) ||
         this.can.can('list model', orgScope, { collection: 'users' });
 
       if (canListUsers) {
