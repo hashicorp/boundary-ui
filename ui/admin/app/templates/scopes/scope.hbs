@@ -88,6 +88,14 @@
       />
     {{/if}}
 
+    {{#if (can 'navigate model' @model collection='app-tokens')}}
+      <Nav.Link
+        @icon='token'
+        @text={{t 'resources.app-token.title_plural'}}
+        @route='scopes.scope.app-tokens'
+      />
+    {{/if}}
+
     <Nav.Title>{{t 'titles.scope-iam' scope=(t 'titles.global')}}</Nav.Title>
   {{/if}}
 
@@ -116,6 +124,14 @@
         @icon='hourglass'
         @text={{t 'resources.policy.title_plural'}}
         @route='scopes.scope.policies'
+      />
+    {{/if}}
+
+    {{#if (can 'navigate model' @model collection='app-tokens')}}
+      <Nav.Link
+        @icon='token'
+        @text={{t 'resources.app-token.title_plural'}}
+        @route='scopes.scope.app-tokens'
       />
     {{/if}}
 
@@ -163,6 +179,14 @@
         @icon='entry-point'
         @text={{t 'resources.session.title_plural'}}
         @route='scopes.scope.sessions'
+      />
+    {{/if}}
+
+    {{#if (can 'navigate model' @model collection='app-tokens')}}
+      <Nav.Link
+        @icon='token'
+        @text={{t 'resources.app-token.title_plural'}}
+        @route='scopes.scope.app-tokens'
       />
     {{/if}}
 

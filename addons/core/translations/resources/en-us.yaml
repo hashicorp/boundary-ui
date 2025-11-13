@@ -1236,3 +1236,5 @@ alias:
     alias:
       label: Aliases
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
+app-token:
+  title_plural: App Tokens
