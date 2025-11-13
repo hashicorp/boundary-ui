@@ -17,6 +17,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
+import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -843,7 +844,7 @@ function routes() {
     const appTokenAttrs = {
       ...attrs,
       token: faker.string.alphanumeric(24),
-      status: 'active',
+      status: STATUSES_APP_TOKEN.STATUSES_APP_TOKEN_ACTIVE,
       created_time: new Date().toISOString(),
       expire_time: attrs.time_to_live_seconds
         ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
@@ -871,7 +872,7 @@ function routes() {
       if (method === 'revoke') {
         updatedAttrs = {
           version: attrs.version,
-          status: 'revoked',
+          status: STATUSES_APP_TOKEN.STATUSES_APP_TOKEN_REVOKED,
         };
       }
 
