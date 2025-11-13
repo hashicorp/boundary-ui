@@ -14,7 +14,6 @@ import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
 import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
-import { generateBase62Token } from './helpers/token-generator';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
@@ -600,48 +599,6 @@ function routes() {
     return new Response(200);
   });
 
-  // app-tokens
-
-  this.post('/app-tokens', function ({ appTokens, scopes }) {
-    // Create new app token or handle clone
-    const attrs = this.normalizedRequestAttrs();
-
-    // Find the scope for the app token. Scope can be global, org or proj level.
-    const scope = scopes.find(attrs.scopeId);
-    if (!scope) {
-      return new Response(
-        404,
-        {},
-        {
-          errors: [
-            {
-              status: 404,
-              message: 'Scope not found',
-            },
-          ],
-        },
-      );
-    }
-
-    const appTokenAttrs = {
-      ...attrs,
-      token: generateBase62Token(), // Generate a 24-character Base62 token
-      status: 'active',
-      created_time: new Date().toISOString(),
-      expire_time: attrs.time_to_live_seconds
-        ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
-        : faker.date.future().toISOString(),
-      created_by_user_id: `u_authenticateduser`,
-      scope: scope.attrs,
-      permissions: (attrs.permissions || []).map((permission) => ({
-        ...permission,
-        deleted_scopes: permission.deleted_scopes || [],
-      })),
-    };
-
-    return appTokens.create(appTokenAttrs);
-  });
-
   // credential-stores
 
   this.get('/credential-stores');
@@ -872,6 +829,35 @@ function routes() {
   );
   this.get('/app-tokens/:id');
   this.del('/app-tokens/:id');
+
+  this.post('/app-tokens', function ({ appTokens, scopes, users }) {
+    // Create new app token or handle clone
+    const attrs = this.normalizedRequestAttrs();
+
+    // Find the scope for the app token. Scope can be global, org or proj level.
+    const scope = scopes.find(attrs.scopeId) || scopes.find('global');
+
+    let scopeUser = users.where({ scopeId: scope.id }).first();
+    const userId = scopeUser ? scopeUser.id : 'authenticateduser';
+
+    const appTokenAttrs = {
+      ...attrs,
+      token: faker.string.alphanumeric(24),
+      status: 'active',
+      created_time: new Date().toISOString(),
+      expire_time: attrs.time_to_live_seconds
+        ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
+        : faker.date.future().toISOString(),
+      created_by_user_id: userId,
+      scope: scope.attrs,
+      permissions: (attrs.permissions || []).map((permission) => ({
+        ...permission,
+        deleted_scopes: permission.deleted_scopes || [],
+      })),
+    };
+
+    return appTokens.create(appTokenAttrs);
+  });
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
