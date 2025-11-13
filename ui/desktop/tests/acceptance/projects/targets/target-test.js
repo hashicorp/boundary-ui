@@ -19,6 +19,7 @@ import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import { TYPE_TARGET_RDP } from 'api/models/target';
 import sinon from 'sinon';
+import { RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -635,7 +636,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows `Open` and `Connect` button for RDP target with preferred client', async function (assert) {
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.stubCacheDaemonSearch();
@@ -661,7 +662,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('clicking `open` button for RDP target triggers launchRdpClient', async function (assert) {
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -709,7 +710,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows confirm modal when quickConnectAndLaunchRdp fails', async function (assert) {
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
     this.stubCacheDaemonSearch();
 

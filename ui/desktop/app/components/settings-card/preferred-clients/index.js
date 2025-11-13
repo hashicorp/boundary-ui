@@ -6,6 +6,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 const PROTOCOL_WINDOWS_RDP = 'windows-rdp';
 
@@ -32,7 +33,8 @@ export default class SettingsCardPreferredClientsComponent extends Component {
 
   get showRecommendedRdpClient() {
     return (
-      this.rdp.rdpClients.length === 1 && this.rdp.rdpClients[0] === 'none'
+      this.rdp.rdpClients.length === 1 &&
+      this.rdp.rdpClients[0] === RDP_CLIENT_NONE
     );
   }
 
