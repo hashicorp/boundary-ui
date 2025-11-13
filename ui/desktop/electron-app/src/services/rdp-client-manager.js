@@ -94,13 +94,23 @@ class RdpClientManager {
    * @returns {Promise<string>} Preferred RDP client value
    */
   async getPreferredRdpClient() {
+    // check user stored preference
     let preferredClient = store.get('preferredRdpClient');
 
     if (!preferredClient) {
-      // Auto-detect and set the best available client
+      // Auto-detect and return the best available client
       preferredClient = await this.getBestDefaultRdpClient();
-      store.set('preferredRdpClient', preferredClient);
+      return preferredClient;
     }
+
+    // Validate preferred client is still available
+    if (preferredClient !== RDP_CLIENT_NONE) {
+      const availableClient = await this.getBestDefaultRdpClient();
+      if (availableClient === RDP_CLIENT_NONE) {
+        preferredClient = RDP_CLIENT_NONE;
+      }
+    }
+
     return preferredClient;
   }
 
