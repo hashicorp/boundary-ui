@@ -15,6 +15,7 @@ import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import sinon from 'sinon';
 import { TYPE_TARGET_RDP } from 'api/models/target';
+import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -598,7 +599,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   test('visiting an RDP session should display "open" button when preferred client is set', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -625,7 +626,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   test('visiting an RDP session should not display "open" button when preferred client is set to none', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    this.rdpService.preferredRdpClient = 'none';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -646,7 +647,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   test('it shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -674,7 +675,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   test('it displays open button without cancel session permission', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
     instances.rdpSession.update({ authorized_actions: [] });
 

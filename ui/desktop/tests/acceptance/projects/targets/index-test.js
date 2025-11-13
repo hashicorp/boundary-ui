@@ -24,6 +24,7 @@ import {
 } from 'api/models/session';
 import { TYPE_TARGET_RDP } from 'api/models/target';
 import sinon from 'sinon';
+import { RDP_CLIENT_NONE, RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -719,7 +720,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Open` button for RDP target with preferred client', async function (assert) {
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({
       type: TYPE_TARGET_RDP,
     });
@@ -731,7 +732,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Connect` button for RDP target with no preferred client', async function (assert) {
-    this.rdpService.preferredRdpClient = 'none';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({
       type: TYPE_TARGET_RDP,
     });
@@ -752,7 +753,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('clicking `Open` button for RDP target calls launchRdpClient IPC', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -776,7 +777,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
 
-    this.rdpService.preferredRdpClient = 'none';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('connect').returns({
@@ -797,7 +798,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
-    this.rdpService.preferredRdpClient = 'windows-app';
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
     this.ipcStub.withArgs('cliExists').returns(true);
