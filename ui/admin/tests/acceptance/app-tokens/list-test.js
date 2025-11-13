@@ -51,73 +51,42 @@ module('Acceptance | app tokens | list', function (hooks) {
 
   test.each(
     'users can navigate to app tokens with proper authorization',
-    {
-      'in global scope': {
-        scope: 'global',
-        scopeUrl: 'globalScope',
-        appTokenUrl: 'globalAppTokens',
-      },
-      'in org scope': {
-        scope: 'org',
-        scopeUrl: 'orgScope',
-        appTokenUrl: 'orgAppTokens',
-      },
-      'in project scope': {
-        scope: 'project',
-        scopeUrl: 'projectScope',
-        appTokenUrl: 'projectAppTokens',
-      },
-    },
-    async function (assert, input) {
-      await visit(urls[input.scopeUrl]);
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}Scope`]);
 
       assert.true(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('list'),
       );
       assert.true(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('create'),
       );
 
-      await click(commonSelectors.HREF(urls[input.appTokenUrl]));
+      await click(commonSelectors.HREF(urls[`${scope}AppTokens`]));
 
-      assert.equal(currentURL(), urls[input.appTokenUrl]);
+      assert.equal(currentURL(), urls[`${scope}AppTokens`]);
     },
   );
 
   test.each(
     'users cannot navigate to app tokens without either list or create actions',
-    {
-      'in global scope': {
-        scope: 'global',
-        scopeUrl: 'globalScope',
-      },
-      'in org scope': {
-        scope: 'org',
-        scopeUrl: 'orgScope',
-      },
-      'in project scope': {
-        scope: 'project',
-        scopeUrl: 'projectScope',
-      },
-    },
-    async function (assert, input) {
-      instances.scopes[input.scope].authorized_collection_actions[
-        'app-tokens'
-      ] = [];
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.scopes[scope].authorized_collection_actions['app-tokens'] = [];
 
-      await visit(urls[input.scopeUrl]);
+      await visit(urls[`${scope}Scope`]);
 
       assert.false(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('list'),
       );
       assert.false(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('create'),
       );
@@ -129,89 +98,55 @@ module('Acceptance | app tokens | list', function (hooks) {
 
   test.each(
     'users can navigate to app tokens with only create action',
-    {
-      'in global scope': {
-        scope: 'global',
-        scopeUrl: 'globalScope',
-        appTokenUrl: 'globalAppTokens',
-      },
-      'in org scope': {
-        scope: 'org',
-        scopeUrl: 'orgScope',
-        appTokenUrl: 'orgAppTokens',
-      },
-      'in project scope': {
-        scope: 'project',
-        scopeUrl: 'projectScope',
-        appTokenUrl: 'projectAppTokens',
-      },
-    },
-    async function (assert, input) {
-      instances.scopes[input.scope].authorized_collection_actions[
-        'app-tokens'
-      ] = instances.scopes[input.scope].authorized_collection_actions[
-        'app-tokens'
-      ].filter((item) => item !== 'list');
-      await visit(urls[input.scopeUrl]);
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.scopes[scope].authorized_collection_actions['app-tokens'] =
+        instances.scopes[scope].authorized_collection_actions[
+          'app-tokens'
+        ].filter((item) => item !== 'list');
+      await visit(urls[`${scope}Scope`]);
 
       assert.false(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('list'),
       );
       assert.true(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('create'),
       );
 
-      await click(commonSelectors.HREF(urls[input.appTokenUrl]));
+      await click(commonSelectors.HREF(urls[`${scope}AppTokens`]));
 
-      assert.equal(currentURL(), urls[input.appTokenUrl]);
+      assert.equal(currentURL(), urls[`${scope}AppTokens`]);
     },
   );
 
   test.each(
     'users can navigate to app tokens with only list action',
-    {
-      'in global scope': {
-        scope: 'global',
-        scopeUrl: 'globalScope',
-        appTokenUrl: 'globalAppTokens',
-      },
-      'in org scope': {
-        scope: 'org',
-        scopeUrl: 'orgScope',
-        appTokenUrl: 'orgAppTokens',
-      },
-      'in project scope': {
-        scope: 'project',
-        scopeUrl: 'projectScope',
-        appTokenUrl: 'projectAppTokens',
-      },
-    },
-    async function (assert, input) {
-      instances.scopes[input.scope].authorized_collection_actions[
-        'app-tokens'
-      ] = instances.scopes[input.scope].authorized_collection_actions[
-        'app-tokens'
-      ].filter((item) => item !== 'create');
-      await visit(urls[input.scopeUrl]);
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.scopes[scope].authorized_collection_actions['app-tokens'] =
+        instances.scopes[scope].authorized_collection_actions[
+          'app-tokens'
+        ].filter((item) => item !== 'create');
+      await visit(urls[`${scope}Scope`]);
 
       assert.true(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('list'),
       );
       assert.false(
-        instances.scopes[input.scope].authorized_collection_actions[
+        instances.scopes[scope].authorized_collection_actions[
           'app-tokens'
         ].includes('create'),
       );
 
-      await click(commonSelectors.HREF(urls[input.appTokenUrl]));
+      await click(commonSelectors.HREF(urls[`${scope}AppTokens`]));
 
-      assert.equal(currentURL(), urls[input.appTokenUrl]);
+      assert.equal(currentURL(), urls[`${scope}AppTokens`]);
     },
   );
 });
