@@ -17,6 +17,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
+import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -843,7 +844,7 @@ function routes() {
     const appTokenAttrs = {
       ...attrs,
       token: faker.string.alphanumeric(24),
-      status: 'active',
+      status: STATUSES_APP_TOKEN.STATUSES_APP_TOKEN_ACTIVE,
       created_time: new Date().toISOString(),
       expire_time: attrs.time_to_live_seconds
         ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
@@ -858,6 +859,26 @@ function routes() {
 
     return appTokens.create(appTokenAttrs);
   });
+
+  this.post(
+    '/app-tokens/:idMethod',
+    function ({ appTokens }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const appToken = appTokens.find(id);
+      let updatedAttrs = {};
+
+      if (method === 'revoke') {
+        updatedAttrs = {
+          version: attrs.version,
+          status: STATUSES_APP_TOKEN.STATUSES_APP_TOKEN_REVOKED,
+        };
+      }
+
+      return appToken.update(updatedAttrs);
+    },
+  );
 
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
