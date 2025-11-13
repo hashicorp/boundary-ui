@@ -859,6 +859,26 @@ function routes() {
     return appTokens.create(appTokenAttrs);
   });
 
+  this.post(
+    '/app-tokens/:idMethod',
+    function ({ appTokens }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const appToken = appTokens.find(id);
+      let updatedAttrs = {};
+
+      if (method === 'revoke') {
+        updatedAttrs = {
+          version: attrs.version,
+          status: 'revoked',
+        };
+      }
+
+      return appToken.update(updatedAttrs);
+    },
+  );
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));
