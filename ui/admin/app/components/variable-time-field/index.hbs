@@ -1,0 +1,56 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+<Hds::Form::KeyValueInputs
+  @isRequired={{@isRequired}}
+  @data={{this.data}}
+>
+  <:header as |H|>
+    <H.Legend>{{@legend}}</H.Legend>
+  </:header>
+  <:row as |R|>
+    <R.Field as |F|>
+      <F.Label>
+        Days
+      </F.Label>
+      <F.TextInput
+        type='number'
+        @name='days'
+        @value={{R.rowData.days}}
+        {{on 'input' (fn this.updateTime 'days')}}
+      />
+    </R.Field>
+    <R.Field as |F|>
+      <F.Label>
+        Hours
+      </F.Label>
+      <F.TextInput
+        type='number'
+        @name='hours'
+        @value={{R.rowData.hours}}
+        {{on 'input' (fn this.updateTime 'hours')}}
+      />
+    </R.Field>
+    <R.Field as |F|>
+      <F.Label>
+        Minutes
+      </F.Label>
+      <F.TextInput
+        type='number'
+        @name='minutes'
+        @value={{R.rowData.minutes}}
+        {{on 'input' (fn this.updateTime 'minutes')}}
+      />
+    </R.Field>
+    {{#if @max}}
+      <R.Generic>
+        <Hds::Button
+          @text='Set to Max'
+          variant='secondary'
+          {{on 'click' this.setMax}}
+        />
+      </R.Generic>
+    {{/if}}
+  </:row>
+</Hds::Form::KeyValueInputs>

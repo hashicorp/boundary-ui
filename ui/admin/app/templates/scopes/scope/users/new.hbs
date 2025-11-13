@@ -29,6 +29,10 @@
   <page.body>
     <Form::User
       @model={{@model}}
+      @ttl={{this.timeToLiveSeconds}}
+      @tts={{this.timeToStaleSeconds}}
+      @updateTTL={{this.updateTTL}}
+      @updateTTS={{this.updateTTS}}
       @submit={{fn this.users.save @model}}
       @cancel={{fn this.users.cancel @model}}
     />
