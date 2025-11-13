@@ -26,6 +26,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service store;
   @service can;
   @service intl;
+  @service rdp;
 
   // =attributes
 
@@ -244,6 +245,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       'scopes.scope.projects.sessions.session',
       session_id,
     );
+
+    return session;
   }
 
   /**
@@ -310,5 +313,24 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   async refresh() {
     await this.currentRoute.refreshAll();
+  }
+
+  /**
+   * Quick connect method used to call main connect method and
+   * then launch RDP client
+   * @param {TargetModel} target
+   */
+  @action
+  async quickConnectAndLaunchRdp(target) {
+    try {
+      const session = await this.connect(target);
+      // Launch RDP client
+      await this.rdp.launchRdpClient(session.id);
+    } catch (error) {
+      this.confirm
+        .confirm(error.message, { isConnectError: true })
+        // Retry
+        .then(() => this.quickConnectAndLaunchRdp(target));
+    }
   }
 }

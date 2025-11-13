@@ -15,6 +15,7 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
 
   @service store;
   @service confirm;
+  @service rdp;
 
   // =attributes
 
@@ -47,5 +48,14 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
           this.isConnectionError = false;
         });
     }
+  }
+
+  /**
+   * Launch method that calls parent quickConnectAndLaunchRdp method
+   * @param {TargetModel} target
+   */
+  @action
+  async connectAndLaunchRdp(target) {
+    await this.targets.quickConnectAndLaunchRdp(target);
   }
 }

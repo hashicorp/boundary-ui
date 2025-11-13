@@ -19,6 +19,7 @@ const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 const { releaseVersion } = require('../../config/config.js');
 const store = require('../services/electron-store-manager');
+const rdpClientManager = require('../services/rdp-client-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -268,6 +269,32 @@ handle('getLogPath', () => {
       return '~/.config/Boundary/logs/desktop-client.log';
   }
 });
+
+/**
+ * Returns the available RDP clients
+ */
+handle('getRdpClients', async () => rdpClientManager.getAvailableRdpClients());
+
+/**
+ * Returns the preferred RDP client
+ */
+handle('getPreferredRdpClient', async () =>
+  rdpClientManager.getPreferredRdpClient(),
+);
+
+/**
+ * Sets the preferred RDP client
+ */
+handle('setPreferredRdpClient', (preferredClient) =>
+  rdpClientManager.setPreferredRdpClient(preferredClient),
+);
+
+/**
+ * Launches the RDP client with the provided session ID.
+ */
+handle('launchRdpClient', async (sessionId) =>
+  rdpClientManager.launchRdpClient(sessionId, sessionManager),
+);
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

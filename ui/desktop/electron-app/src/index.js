@@ -26,6 +26,7 @@ const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
 const cacheDaemonManager = require('./services/cache-daemon-manager');
+const rdpClientManager = require('./services/rdp-client-manager');
 const store = require('./services/electron-store-manager');
 
 const menu = require('./config/menu.js');
@@ -163,13 +164,17 @@ const createWindow = async (partition, closeWindowCB) => {
   // Opens external links in the host default browser.
   // We allow developer.hashicorp.com domain to open on an external window
   // and releases.hashicorp.com domain to download the desktop app or
-  // link to the release page for the desktop app.
+  // link to the release page for the desktop app or
+  // apps.apple.com domain to open the app store page to download the Windows App or
+  // learn.microsoft.com domain to open the documentation for installing Remote Desktop Connection.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (
       isLocalhost(url) ||
       url.startsWith('https://developer.hashicorp.com/') ||
       url.startsWith('https://releases.hashicorp.com/boundary-desktop/') ||
-      url.startsWith('https://support.hashicorp.com/hc/en-us')
+      url.startsWith('https://support.hashicorp.com/hc/en-us') ||
+      url.startsWith('https://learn.microsoft.com/') ||
+      url.startsWith('https://apps.apple.com/')
     ) {
       shell.openExternal(url);
     }
@@ -297,6 +302,8 @@ app.on('before-quit', async (event) => {
 
 app.on('quit', () => {
   cacheDaemonManager.stop();
+  // we should stop any active RDP client processes
+  rdpClientManager.stopAll();
 });
 
 // Handle an unhandled error in the main thread

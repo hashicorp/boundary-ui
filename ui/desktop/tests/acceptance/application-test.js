@@ -34,6 +34,10 @@ module('Acceptance | Application', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   hooks.afterEach(function () {
