@@ -175,6 +175,11 @@ jobs:
           cd e2e-tests
           pnpm run ${{ matrix.test_command }} --reporter=html
 
+      - name: Debug
+        if: ${{ failure() }}
+        run: |
+          docker logs worker
+
       - name: Upload Playwright report
         if: ${{ failure() }}
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
