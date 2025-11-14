@@ -50,7 +50,6 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: hashicorp/boundary-enterprise
-          #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
           path: support/src/boundary-enterprise
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
@@ -79,7 +78,6 @@ jobs:
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
-          export ENOS_VAR_boundary_docker_image_name=hashicorp/boundary-enterprise:latest && \
           export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
           enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
 
