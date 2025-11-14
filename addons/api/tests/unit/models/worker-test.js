@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupMirage } from 'ember-mirage/test-support';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
 
 module('Unit | Model | worker', function (hooks) {
