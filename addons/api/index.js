@@ -9,6 +9,7 @@ const { WatchedDir } = require('broccoli-source');
 const funnel = require('broccoli-funnel');
 const merge = require('broccoli-merge-trees');
 const path = require('path');
+const Funnel = require('broccoli-funnel');
 
 const buildWorkers = require('./broccoli-plugins/build-workers');
 
@@ -36,6 +37,15 @@ module.exports = {
   treeForPublic(tree) {
     const env = this.parent?.app?.env ?? 'production';
     const { enableSqlite } = this.parent?.app?.options[this.name] ?? {};
+
+    const isProduction = process.env.EMBER_ENV === 'production';
+    let f = new Funnel(tree, {
+      // Paths are **relative to the root of the addon tree**.
+      // `exclude` accepts an array of glob patterns.
+      exclude: isProduction ? ['mirage/**/*.js'] : [],
+    });
+
+    tree = this._super.treeForAddon.call(this, f);
 
     // If sqlite is not enabled and we're not running a test directly in the addon,
     // we don't need to build the workers
