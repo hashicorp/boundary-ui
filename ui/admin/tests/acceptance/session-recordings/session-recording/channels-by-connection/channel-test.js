@@ -6,18 +6,21 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from '../../selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | session-recordings | session-recording | channels-by-connection | channel',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupSqlite(hooks);
+    setupMirage(hooks);
+    setupIndexedDb(hooks);
     setupIntl(hooks, 'en-us');
 
     let featuresService;
@@ -45,7 +48,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      instances.scopes.global = this.server.schema.scopes.find('global');
+      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -78,36 +81,20 @@ module(
         this.server.schema.sessionRecordings.all().models.length;
 
       featuresService = this.owner.lookup('service:features');
+      await authenticateSession({});
     });
 
     test('user can navigate to a channel', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.sessionRecording);
 
       // Visit channel
       await click(commonSelectors.HREF(urls.channelRecording));
+      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls.channelRecording);
     });
 
     test('user can view recording with proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.sessionRecording);
 
       // Visit channel
@@ -118,15 +105,6 @@ module(
     });
 
     test('user cannot view recording without proper authorization: channel mime_types', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       instances.channelRecording.mime_types = [];
       await visit(urls.sessionRecording);
 
@@ -138,15 +116,6 @@ module(
     });
 
     test('user cannot view recording without proper authorization: session recording download action', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       instances.sessionRecording.authorized_actions =
         instances.sessionRecording.authorized_actions.filter(
           (item) => item !== 'download',
@@ -160,15 +129,6 @@ module(
     });
 
     test('user cannot view recording if asciicast download errors out', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       this.server.get(
         `/session-recordings/${instances.channelRecording.id}:download`,
         () =>
@@ -196,15 +156,6 @@ module(
     });
 
     test('user can navigate back to session recording screen', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.sessionRecording);
 
       // Visit channel
@@ -216,15 +167,6 @@ module(
     });
 
     test('users can navigate to channel recording and incorrect url auto corrects', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('ssh-session-recording');
       const sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
@@ -239,15 +181,6 @@ module(
     });
 
     test('users are redirected to session-recordings list with incorrect url', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('ssh-session-recording');
       const sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
@@ -267,15 +200,6 @@ module(
     });
 
     test('user cannot view manage dropdown without proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       // Visit channel
       featuresService.enable('ssh-session-recording');
 
@@ -289,15 +213,6 @@ module(
     });
 
     test('user can view manage dropdown with proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       // Visit channel
       featuresService.enable('ssh-session-recording');
       await visit(urls.sessionRecordings);
@@ -308,15 +223,6 @@ module(
     });
 
     test('user can delete a recording with proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       // Visit channel
       const count = getRecordingCount();
       featuresService.enable('ssh-session-recording');
@@ -335,15 +241,6 @@ module(
     });
 
     test('user cannot delete a recording without proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       // Visit channel
       featuresService.enable('ssh-session-recording');
       instances.sessionRecording.authorized_actions =
@@ -358,15 +255,6 @@ module(
     });
 
     test('both retain until and delete after can be seen with proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       // Visit channel
       featuresService.enable('ssh-session-recording');
       await visit(urls.sessionRecordings);

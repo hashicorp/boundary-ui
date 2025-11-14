@@ -6,23 +6,26 @@
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let getStaticCredentialStoresCount;
   let getVaultCredentialStoresCount;
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -36,6 +39,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -65,18 +69,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       return this.server.schema.credentialStores.where({ type: 'vault' }).models
         .length;
     };
+    await authenticateSession({});
   });
 
   test('can delete credential store of type vault', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
 
@@ -87,15 +83,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can delete credential store of type static', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
 
@@ -130,15 +117,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can accept delete static credential store via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -153,15 +131,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can accept delete vault credential store via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -176,15 +145,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot cancel delete for static credential store via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -199,15 +159,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot cancel delete for vault credential store via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -222,15 +173,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('deleting a static credential store which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.del('/credential-stores/:id', () => {
       return new Response(
         490,
@@ -251,15 +193,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('deleting a vault credential store which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.del('/credential-stores/:id', () => {
       return new Response(
         490,

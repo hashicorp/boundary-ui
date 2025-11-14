@@ -6,18 +6,22 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | principals', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     role: null,
@@ -31,6 +35,8 @@ module('Acceptance | roles | principals', function (hooks) {
   let principalsCount;
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -54,31 +60,14 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('visiting role principals', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.rolePrincipals);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
   });
 
   test('principal can be removed from a role', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.rolePrincipals);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
@@ -92,15 +81,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('principal cannot be removed from a role without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'remove-principals',
     );
@@ -112,15 +92,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('shows error message on principal remove', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -146,15 +117,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('cannot navigate to add principals without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'add-principals',
     );
@@ -167,15 +129,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('select and save principals to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
 
@@ -197,15 +150,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('select and cancel principals to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.rolePrincipals);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
@@ -233,15 +177,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('shows error message on principal add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,

@@ -5,15 +5,19 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'desktop/tests/helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
+  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -55,8 +59,10 @@ module('Acceptance | projects', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
-    instances.authMethods.global = this.server.schema.authMethods.first();
+    await authenticateSession({ username: 'admin' });
+
+    // create scopes
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -68,6 +74,10 @@ module('Acceptance | projects', function (hooks) {
       scope: stubs.org,
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
+
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
 
     instances.hostCatalog = this.server.create(
       'host-catalog',
@@ -95,7 +105,7 @@ module('Acceptance | projects', function (hooks) {
     await invalidateSession();
     assert.expect(2);
     await visit(urls.projects);
-
+    await a11yAudit();
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
@@ -103,7 +113,7 @@ module('Acceptance | projects', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.projects);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.projects);
   });
 });

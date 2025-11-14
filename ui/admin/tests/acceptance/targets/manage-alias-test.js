@@ -6,17 +6,23 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | manage-alias', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
-
+  setupMirage(hooks);
   let aliasResourceTwo, aliasResourceOne, getAliasCount;
+  const ALIASES_SIDEBAR = '.target-sidebar-aliases';
+  const ALIASES_SIDEBAR_LIST = '.link-list-item';
+  const DROPDOWN_ACTION = '[data-test-manage-target-alias] button';
+  const CLEAR_BTN_SELECTOR = '.hds-dropdown-list-item--color-action button';
+  const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
+  const DEST_FIELD_SELECTOR = '[name="destination_id"]';
+  const ITEM_SELECTOR = '.link-list-item a';
 
   const instances = {
     scopes: {
@@ -28,8 +34,9 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     tcpTarget: null,
     alias: null,
   };
-
   const urls = {
+    globalScope: null,
+    orgScope: null,
     projectScope: null,
     targets: null,
     sshTarget: null,
@@ -40,7 +47,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -71,90 +78,79 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     });
 
     // Generate route URLs for resources
+    urls.globalScope = `/scopes/global`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
+
     urls.tcpAlias = `${urls.tcpTarget}/${aliasResourceOne.id}`;
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
+
+    await authenticateSession({ username: 'admin' });
   });
 
   test('clicking on manage should take you to manage page', async function (assert) {
     await visit(urls.tcpTarget);
-
-    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
-    assert.dom(selectors.ALIASES_SIDEBAR_LIST).isVisible();
-
-    await click(selectors.LINK_LIST_ITEM);
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
+    await click(ITEM_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
+    await a11yAudit();
   });
 
   test('clicking on `clear alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     aliasResourceOne.update({
       destination_id: instances.tcpTarget.id,
     });
     await visit(urls.tcpTarget);
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
 
-    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
-    assert.dom(selectors.ALIASES_SIDEBAR_LIST).isVisible();
-
-    await click(selectors.LINK_LIST_ITEM);
+    await click(ITEM_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
+    await click(DROPDOWN_ACTION);
 
-    await click(selectors.MANAGE_ALIAS_DROPDOWN);
-    await click(selectors.MANAGE_ALIAS_DROPDOWN_CLEAR);
+    await click(CLEAR_BTN_SELECTOR);
 
     const id = aliasResourceOne.id;
     const associatedAlias = this.server.schema.aliases.findBy({ id });
     assert.strictEqual(associatedAlias.destinationId, null);
+
     assert.strictEqual(currentURL(), urls.tcpTarget);
-    assert.dom(selectors.ALIASES_SIDEBAR_LIST).doesNotExist();
-    assert.dom(selectors.ALIASES_NEW_LINK).isVisible();
+
+    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+    assert.dom(LINK_TO_NEW_ALIAS).exists;
   });
 
   test('clicking on `delete alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar and deleted from aliases list', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const aliasCount = getAliasCount();
     aliasResourceOne.update({
       destination_id: instances.tcpTarget.id,
     });
     await visit(urls.tcpTarget);
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
 
-    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
-    assert.dom(selectors.ALIASES_SIDEBAR_LIST).isVisible();
+    await click(ITEM_SELECTOR);
 
-    await click(selectors.LINK_LIST_ITEM);
+    assert.dom(DEST_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
 
-    assert.dom(selectors.FIELD_DESTINATION_ID).doesNotHaveAttribute('readOnly');
     assert.strictEqual(currentURL(), urls.tcpAlias);
+    await click(DROPDOWN_ACTION);
 
-    await click(selectors.MANAGE_ALIAS_DROPDOWN);
     await click(commonSelectors.DELETE_BTN);
 
     assert.strictEqual(getAliasCount(), aliasCount - 1);
+
     assert.strictEqual(currentURL(), urls.tcpTarget);
-    assert.dom(selectors.ALIASES_SIDEBAR_LIST).doesNotExist();
-    assert.dom(selectors.ALIASES_NEW_LINK).isVisible();
+
+    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+    assert.dom(LINK_TO_NEW_ALIAS).exists;
   });
 });

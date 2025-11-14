@@ -13,18 +13,21 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     user1: null,
@@ -40,6 +43,7 @@ module('Acceptance | users | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -55,18 +59,10 @@ module('Acceptance | users | list', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user1 = `${urls.users}/${instances.user1.id}`;
     urls.user2 = `${urls.users}/${instances.user2.id}`;
+    await authenticateSession({});
   });
 
   test('users can navigate to users with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.orgScope));
@@ -83,15 +79,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('user cannot navigate to users tab without either list or create actions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.org.authorized_collection_actions.users = [];
     await visit(urls.globalScope);
 
@@ -109,15 +96,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('user can navigate to users tab with only create action', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'list',
@@ -143,15 +121,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('user can navigate to users tab with only list action', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'create',
@@ -176,15 +145,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('user can search for a user by id', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.users));
@@ -202,15 +162,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('user can search for users and get no results', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.users));
@@ -227,15 +178,6 @@ module('Acceptance | users | list', function (hooks) {
   });
 
   test('users are sorted by created_time descending by default', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.schema.users.all().destroy();
 
     const years = ['2026', '2025', '2024', '2023'];
@@ -284,15 +226,6 @@ module('Acceptance | users | list', function (hooks) {
       },
     },
     async function (assert, input) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
-            enabled: false,
-          },
-        },
-      });
-
       this.server.schema.users.all().destroy();
 
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {

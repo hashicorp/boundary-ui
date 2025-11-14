@@ -5,7 +5,9 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'desktop/tests/helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
@@ -15,6 +17,7 @@ import config from '../../config/environment';
 module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
   setupBrowserFakes(hooks, { window: true });
+  setupMirage(hooks);
 
   const currentOrigin = window.location.origin;
   let mockIPC;
@@ -77,7 +80,10 @@ module('Acceptance | clusterUrl', function (hooks) {
     });
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
-    instances.authMethods.global = this.server.schema.authMethods.first();
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
+
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -103,7 +109,7 @@ module('Acceptance | clusterUrl', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.clusterUrl);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
@@ -111,7 +117,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.expect(2);
     setupMockIpc(this);
     await visit(urls.index);
-
+    await a11yAudit();
     assert.notOk(mockIPC.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });

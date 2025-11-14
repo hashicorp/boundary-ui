@@ -6,14 +6,18 @@
 import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | members', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethod: null,
@@ -29,6 +33,8 @@ module('Acceptance | managed-groups | members', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -52,18 +58,10 @@ module('Acceptance | managed-groups | members', function (hooks) {
   });
 
   test('User can navigate to index', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
 
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.managedGroupMembers);
     assert.ok(membersCount);
     assert.dom('tbody tr').exists({ count: membersCount });

@@ -6,22 +6,24 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
-  let featureEdition;
   let getHostCatalogCount;
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -42,6 +44,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.orgScope = this.server.create(
       'scope',
       {
@@ -75,11 +78,12 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     urls.newAzureDynamicHostCatalog = `${urls.newHostCatalog}?type=azure`;
     urls.newGCPDynamicHostCatalog = `${urls.newHostCatalog}?type=gcp`;
     featuresService = this.owner.lookup('service:features');
-    featureEdition = this.owner.lookup('service:featureEdition');
 
     // Generate resource counter
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
+
+    await authenticateSession({});
   });
 
   test('Users can create new static host catalogs', async function (assert) {
@@ -98,15 +102,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new dynamic aws host catalogs with aws provider', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
 
@@ -122,15 +117,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new dynamic azure host catalogs with azure provider', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
 
@@ -146,15 +132,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new dynamic host catalogs with GCP provider ', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newGCPDynamicHostCatalog);
 
@@ -175,15 +152,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new static host catalogs', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newStaticHostCatalog);
 
@@ -195,15 +163,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new dynamic host catalogs with AWS provider', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
 
@@ -215,15 +174,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new dynamic host catalogs with GCP provider', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newGCPDynamicHostCatalog);
 
@@ -235,15 +185,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new dynamic host catalogs with Azure provider', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
 
@@ -255,15 +196,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can navigate to new static host catalogs route with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.hostCatalogs);
 
     assert.ok(
@@ -319,85 +251,25 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('users should not see worker filter field in community edition when AWS host catalog is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.newAWSDynamicHostCatalog);
 
     assert.dom(selectors.FIELD_WORKER_FILTER).doesNotExist();
   });
 
   test('users should not see worker filter field in community edition when GCP host catalog is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.newGCPDynamicHostCatalog);
 
     assert.dom(selectors.FIELD_WORKER_FILTER).doesNotExist();
   });
 
-  test('users should see optional worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+  test('users should see worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
     featuresService.enable('worker-filter');
-    featureEdition.setEdition('enterprise');
     await visit(urls.newAWSDynamicHostCatalog);
 
     assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
-    assert
-      .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
-      .includesText('Optional');
-  });
-
-  test('users should see required worker filter field in hcp edition when AWS host catalog is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    featuresService.enable('worker-filter');
-    featureEdition.setEdition('hcp');
-    await visit(urls.newAWSDynamicHostCatalog);
-
-    assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
-    assert
-      .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
-      .includesText('Required');
   });
 
   test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
 
@@ -405,15 +277,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'

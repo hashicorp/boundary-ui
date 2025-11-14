@@ -6,14 +6,14 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { currentURL, waitUntil, visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | onboarding/success', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
-  setupSqlite(hooks);
+  setupIndexedDb(hooks);
 
   let controller;
   let store;
@@ -33,19 +33,13 @@ module('Unit | Controller | onboarding/success', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({});
     controller = this.owner.lookup('controller:onboarding/success');
     store = this.owner.lookup('service:store');
 
-    instances.scopes.global = this.server.create(
-      'scope',
-      { id: 'global' },
-      'withGlobalAuth',
-    );
-    instances.authMethod = this.server.schema.authMethods.first();
-    instances.account = this.server.schema.accounts.first();
-    await authenticateSession({
-      isGlobal: true,
-      account_id: instances.account.id,
+    instances.scopes.global = this.server.create('scope', {
+      id: 'global',
+      type: 'global',
     });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

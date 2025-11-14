@@ -12,18 +12,21 @@ import {
   findAll,
   waitFor,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'desktop/tests/helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
+  authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE = '.hds-application-state__title';
@@ -78,11 +81,12 @@ module('Acceptance | scopes', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // create scopes
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -98,7 +102,9 @@ module('Acceptance | scopes', function (hooks) {
       scope: orgScope,
     });
 
-    instances.authMethods.global = this.server.schema.authMethods.first();
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
 
     instances.hostCatalog = this.server.create(
       'host-catalog',
@@ -137,19 +143,10 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
   });
 
   test('visiting index', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(2);
     const targetsCount = this.server.schema.targets.all().models.length;
 
@@ -160,18 +157,16 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting global scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     assert.expect(1);
 
     await visit(urls.scopes.global);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
@@ -181,15 +176,12 @@ module('Acceptance | scopes', function (hooks) {
   // In order to resolve this, we might hoist authentication routes up from
   // under scopes.
   test('visiting global scope is not successful when the global scope cannot be fetched', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
@@ -198,58 +190,41 @@ module('Acceptance | scopes', function (hooks) {
     });
 
     await visit(urls.scopes.global);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   test('visiting org scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     assert.expect(1);
 
     await visit(urls.scopes.org);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targets);
   });
 
   test('can navigate among org scopes via header navigation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(3);
     this.stubCacheDaemonSearch(
       'sessions',
       'targets',
       'aliases',
       'sessions',
-
+      'targets',
+      'aliases',
       'sessions',
       'targets',
       'aliases',
       'sessions',
-
-      'sessions',
       'targets',
       'aliases',
-      'sessions',
-
-      'sessions',
-      'targets',
-      'aliases',
-      'sessions',
     );
     await visit(urls.targets);
 
@@ -274,21 +249,13 @@ module('Acceptance | scopes', function (hooks) {
     this.stubCacheDaemonSearch();
 
     await visit(urls.targets);
+    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting a target', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(1);
 
     await visit(urls.targets);
@@ -300,7 +267,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting empty targets', async function (assert) {
     this.server.schema.targets.all().destroy();
     this.server.schema.sessions.all().destroy();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
 
     await visit(urls.targets);
 

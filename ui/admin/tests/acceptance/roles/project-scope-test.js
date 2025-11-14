@@ -6,18 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | project-scope', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -30,6 +32,8 @@ module('Acceptance | roles | project-scope', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -49,18 +53,10 @@ module('Acceptance | roles | project-scope', function (hooks) {
   });
 
   test('visiting role scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_THIS)).isVisible();
@@ -70,15 +66,6 @@ module('Acceptance | roles | project-scope', function (hooks) {
   });
 
   test('search and pagination is not visible for project role scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
@@ -89,15 +76,6 @@ module('Acceptance | roles | project-scope', function (hooks) {
   });
 
   test('user cannot manage scopes for project role scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));

@@ -6,12 +6,16 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | grants', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   // This is unique to permissions tests and only used once here
   const FIELD_GRANT_DISABLED = 'input[disabled]';
@@ -20,6 +24,7 @@ module('Acceptance | roles | grants', function (hooks) {
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     role: null,
@@ -31,6 +36,8 @@ module('Acceptance | roles | grants', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -47,6 +54,7 @@ module('Acceptance | roles | grants', function (hooks) {
 
   test('visiting role grants', async function (assert) {
     await visit(urls.grants);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.grants);
     assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });

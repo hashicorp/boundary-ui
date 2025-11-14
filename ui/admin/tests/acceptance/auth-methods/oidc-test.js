@@ -6,15 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 
 module('Acceptance | auth-methods | oidc', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethod: null,
@@ -26,6 +31,8 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -42,6 +49,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
 
   test('visiting oidc auth method', async function (assert) {
     await visit(urls.authMethod);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.authMethod);
   });

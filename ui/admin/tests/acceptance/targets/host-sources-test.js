@@ -6,20 +6,24 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   let getTargetHostSetCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-targets-dropdown] button:first-child';
+  const ADD_HOSTSOURCE_SELECTOR = '[data-test-manage-targets-dropdown] ul li a';
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -29,6 +33,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
   };
 
   const urls = {
+    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -38,6 +43,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -68,71 +74,47 @@ module('Acceptance | targets | host-sources', function (hooks) {
       hostSets: instances.hostCatalog.hostSets,
     });
     // Generate route URLs for resources
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetHostSources = `${urls.target}/host-sources`;
     urls.targetAddHostSources = `${urls.target}/add-host-sources`;
     urls.hostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostCatalog.hostSetIds[0]}`;
-    // Generate resource counter
-    getTargetHostSetCount = () =>
-      this.server.schema.targets.first().hostSets.models.length;
+    urls.unknownHostSet =
+      // Generate resource counter
+      getTargetHostSetCount = () =>
+        this.server.schema.targets.first().hostSets.models.length;
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target host sources', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(`[href="${urls.targetHostSources}"]`);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targetHostSources);
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount });
+    assert.dom('tbody tr').exists({ count: targetHostSetCount });
   });
 
   test('can navigate to a known host set type', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targetHostSources);
 
-    await click(commonSelectors.HREF(urls.hostSet));
+    await click(`[href="${urls.hostSet}"]`);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
   });
 
   test('cannot navigate to an unknown host set type', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.target.update({
       hostSets: instances.hostCatalogPlugin.hostSets,
     });
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(`[href="${urls.targetHostSources}"]`);
 
     assert
       .dom(
@@ -144,59 +126,30 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('can remove a host set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+    await click(`[href="${urls.targetHostSources}"]`);
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount - 1 });
+    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
   });
 
   test('cannot remove a host set without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'remove-host-sources',
       );
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(`[href="${urls.targetHostSources}"]`);
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
+    assert.dom(`tbody tr ${commonSelectors.DELETE_BTN}`).doesNotExist();
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -212,128 +165,73 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+    await click(`[href="${urls.targetHostSources}"]`);
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
 
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount });
+    assert.dom('tbody tr').exists({ count: targetHostSetCount });
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
   test('select and save host sets to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.target.update({ hostSetIds: [] });
-    const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
-
-    await click(commonSelectors.HREF(urls.targetHostSources));
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-
+    const targetHostSetCount = getTargetHostSetCount();
+    await click(`[href="${urls.targetHostSources}"]`);
+    assert.dom('tbody tr').exists({ count: 0 });
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
-    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click('tbody label');
+    await click('tbody label');
+    await click('tbody label');
+    await click('form [type="submit"]');
+    await click(`[href="${urls.targetHostSources}"]`);
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount + 1);
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount + 1 });
+    assert.dom('tbody tr').exists({ count: targetHostSetCount + 1 });
   });
 
   test('cannot add host sources without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'add-host-sources',
       );
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
-    await click(selectors.MANAGE_DROPDOWN);
-
-    assert.dom(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES).doesNotExist();
+    await click(`[href="${urls.targetHostSources}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(ADD_HOSTSOURCE_SELECTOR).doesNotIncludeText('Add Host Sources');
   });
 
   test('select and cancel host sets to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(commonSelectors.HREF(urls.targetHostSources));
-
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount });
+    await click(`[href="${urls.targetHostSources}"]`);
+    assert.dom('tbody tr').exists({ count: targetHostSetCount });
 
     // first, remove a target host set (otherwise none would be available to add)
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
+    await click('tbody tr .hds-dropdown-list-item button');
+    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
 
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount - 1 });
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
-
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.CANCEL_BTN);
+    await click('tbody label');
+    await click('form [type="button"]');
 
     assert.strictEqual(currentURL(), urls.targetHostSources);
+    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
-    assert
-      .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: targetHostSetCount - 1 });
   });
 
   test('adding a target host set which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -350,13 +248,11 @@ module('Acceptance | targets | host-sources', function (hooks) {
     instances.target.update({ hostSetIds: [] });
     const targetHostSetCount = getTargetHostSetCount();
 
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(targetHostSetCount, 0);
-
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
+    await click('tbody label');
+    await click('form [type="submit"]');
 
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount);
@@ -366,15 +262,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('saving host source with address brings up confirmation modal and removes address', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const target = this.server.create('target', {
@@ -387,17 +274,17 @@ module('Acceptance | targets | host-sources', function (hooks) {
       this.server.schema.targets.find(target.id).address,
       '0.0.0.0',
     );
+
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
+    await click(`[href="${targetUrl}/host-sources"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
 
-    await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
+    await click('tbody label');
+    await click('form [type="submit"]');
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
-
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
@@ -411,15 +298,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
   });
 
   test('saving host source with address brings up confirmation modal and can cancel', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const target = this.server.create('target', {
@@ -432,17 +310,17 @@ module('Acceptance | targets | host-sources', function (hooks) {
       this.server.schema.targets.find(target.id).address,
       '0.0.0.0',
     );
+
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
+    await click(`[href="${targetUrl}/host-sources"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
 
-    await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
+    await click('tbody label');
+    await click('form [type="submit"]');
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
-
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(

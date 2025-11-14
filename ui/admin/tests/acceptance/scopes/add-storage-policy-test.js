@@ -6,13 +6,16 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
-module('Acceptance | scopes | add storage policy', function (hooks) {
+module('Acceptance | scope | add storage policy', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   let featuresService;
   let policyOne;
@@ -21,6 +24,7 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   // Instances
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     sessionRecording: null,
@@ -40,6 +44,7 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -60,26 +65,19 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
     urls.policy = `${urls.policies}/${policyOne.id}`;
     urls.addStoragePolicy = `${urls.orgScope}/add-storage-policy`;
     urls.newPolicy = `${urls.addStoragePolicy}/create`;
+    await authenticateSession({ username: 'admin' });
   });
 
   test('cannot attach policy on a scope without proper authorization', async function (assert) {
     assert.false(featuresService.isEnabled('ssh-session-recording'));
 
     await visit(urls.orgScopeEdit);
+    await a11yAudit();
 
     assert.dom(selectors.STORAGE_POLICY_SIDEBAR).doesNotExist();
   });
 
   test('users can click on add storage policy button in the sidebar and it takes them to add a policy', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
 
@@ -91,15 +89,6 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   });
 
   test('users can click on settings link in the sidebar and it takes them to enable session recording', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ssh-session-recording');
     instances.scopes.org.update({
       storagePolicyId: policyOne.id,
@@ -112,15 +101,6 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   });
 
   test('link to add new storage policy should be displayed and redirect to new storage policy form', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
     await click(selectors.ADD_STORAGE_POLICY_BTN);
@@ -134,15 +114,6 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   });
 
   test('can assign a storage policy for the scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
     await click(selectors.ADD_STORAGE_POLICY_BTN);
@@ -162,15 +133,6 @@ module('Acceptance | scopes | add storage policy', function (hooks) {
   });
 
   test('can cancel changes to an existing storage policy selection', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ssh-session-recording');
     instances.scopes.org.update({
       storagePolicyId: policyOne.id,

@@ -6,20 +6,21 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   let getHostCount;
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
       hostCatalog: null,
@@ -40,6 +41,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -66,20 +68,12 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
-    // Generate resource counter
+    // Generate resource couner
     getHostCount = () => this.server.schema.hosts.all().models.length;
+    await authenticateSession({});
   });
 
   test('can create new host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCount();
     await visit(urls.newHost);
 
@@ -106,15 +100,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('Users can navigate to new host route with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.hosts);
 
     assert.ok(
@@ -143,15 +128,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('can cancel create new host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostCount();
     await visit(urls.newHost);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -162,15 +138,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('saving a new host with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/hosts', () => {
       return new Response(
         400,
@@ -201,15 +168,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.hostCatalog.authorized_collection_actions.hosts =
       instances.hostCatalog.authorized_collection_actions.hosts.filter(
         (item) => item !== 'create',

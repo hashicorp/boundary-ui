@@ -4,17 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import { click, currentURL, fillIn, visit } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let features;
   let getAliasCount;
@@ -32,25 +35,17 @@ module('Acceptance | aliases | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     urls.globalScope = `/scopes/global`;
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.newAlias = `${urls.aliases}/new`;
     getAliasCount = () => this.server.schema.aliases.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
+    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias with host and target info', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
 
@@ -67,15 +62,6 @@ module('Acceptance | aliases | create', function (hooks) {
   });
 
   test('users can create a new alias without host or target info', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -90,15 +76,6 @@ module('Acceptance | aliases | create', function (hooks) {
   });
 
   test('user can cancel new alias creation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -109,15 +86,6 @@ module('Acceptance | aliases | create', function (hooks) {
   });
 
   test('saving a new alias with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/aliases', () => {
       return new Response(
         400,
@@ -139,6 +107,7 @@ module('Acceptance | aliases | create', function (hooks) {
     });
     await visit(urls.newAlias);
     await click(commonSelectors.SAVE_BTN);
+    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
@@ -147,15 +116,6 @@ module('Acceptance | aliases | create', function (hooks) {
   });
 
   test('can navigate to new aliases route with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.aliases);
 
     assert.ok(

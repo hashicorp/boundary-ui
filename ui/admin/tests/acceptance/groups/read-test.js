@@ -6,16 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | groups | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     group: null,
@@ -28,6 +32,8 @@ module('Acceptance | groups | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -43,6 +49,7 @@ module('Acceptance | groups | read', function (hooks) {
   test('visiting a group', async function (assert) {
     await visit(urls.newGroup);
 
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.newGroup);
   });
 
@@ -55,15 +62,6 @@ module('Acceptance | groups | read', function (hooks) {
   });
 
   test('users can navigate to group and incorrect url auto-corrects', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

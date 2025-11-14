@@ -6,7 +6,10 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -14,17 +17,18 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let getManagedGroupCount;
   let featuresService;
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethod: null,
@@ -41,6 +45,8 @@ module('Acceptance | managed-groups | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,15 +75,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new managed group', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -102,15 +99,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new ldap managed group', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -143,15 +131,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new managed group without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.authMethod.authorized_collection_actions['managed-groups'] =
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
@@ -169,15 +148,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new ldap managed group without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       instances.ldapAuthMethod.authorized_collection_actions[
@@ -196,15 +166,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new managed group creation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -218,15 +179,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new ldap managed group creation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -240,15 +192,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new managed group with invalid fields displays error message', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/managed-groups', () => {
       return new Response(
         400,
@@ -273,6 +216,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
     await click(commonSelectors.HREF(urls.newManagedGroup));
     await click(commonSelectors.SAVE_BTN);
+    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
@@ -281,15 +225,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new ldap managed group with invalid fields displays error message', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/managed-groups', () => {
       return new Response(
         400,
@@ -314,6 +249,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
     await click(commonSelectors.SAVE_BTN);
+    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)

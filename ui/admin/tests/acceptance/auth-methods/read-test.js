@@ -6,7 +6,10 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_LDAP,
   TYPE_AUTH_METHOD_OIDC,
@@ -14,11 +17,11 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -41,7 +44,8 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Setup Mirage mock resources for this test
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -64,49 +68,24 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('visiting auth methods in org scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.orgAuthMethods));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgAuthMethods);
   });
 
   test('visiting auth methods in global scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.globalAuthMethods));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalAuthMethods);
   });
 
   test('can navigate to an auth method form in org scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.orgAuthMethods));
@@ -121,20 +100,12 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await click(
       selectors.TABLE_ROW_NAME_LINK(instances.passwordAuthMethodOrg.id),
     );
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.passwordAuthMethodOrg);
   });
 
   test('can navigate to an auth method form in global scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.globalAuthMethods));
@@ -149,20 +120,12 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await click(
       selectors.TABLE_ROW_NAME_LINK(instances.oidcAuthMethodGlobal.id),
     );
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);
   });
 
   test('cannot navigate to an auth method form without proper authorization in org scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.passwordAuthMethodOrg.authorized_actions =
       instances.passwordAuthMethodOrg.authorized_actions.filter(
         (item) => item !== 'read',
@@ -177,15 +140,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an auth method form without proper authorization in global scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.oidcAuthMethodGlobal.authorized_actions =
       instances.oidcAuthMethodGlobal.authorized_actions.filter(
         (item) => item !== 'read',
@@ -200,15 +154,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an ldap auth method form in global scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.ldapAuthMethod = this.server.create('auth-method', {
       scope: instances.scopes.global,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -229,15 +174,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an ldap auth method form in org scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.ldapAuthMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -258,15 +194,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('users can navigate to auth method and incorrect url autocorrects', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

@@ -6,13 +6,16 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
 
@@ -32,7 +35,7 @@ module('Acceptance | workers | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     //Generate the resources
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -47,19 +50,18 @@ module('Acceptance | workers | read', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow');
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     await visit(urls.workers);
+    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.worker));
 
@@ -67,15 +69,6 @@ module('Acceptance | workers | read', function (hooks) {
   });
 
   test('cannot navigate to an worker form without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((itm) => itm !== 'read');
     await visit(urls.globalScope);
@@ -86,15 +79,6 @@ module('Acceptance | workers | read', function (hooks) {
   });
 
   test('can navigate to an worker form with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.workers));

@@ -6,12 +6,14 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | update', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   let features;
 
@@ -30,7 +32,7 @@ module('Acceptance | policies | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
 
     instances.policy = this.server.create('policy', {
       scope: instances.scopes.global,
@@ -42,18 +44,10 @@ module('Acceptance | policies | update', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
+    await authenticateSession({});
   });
 
   test('users can update forever select option to a custom input', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.policy));
@@ -79,15 +73,6 @@ module('Acceptance | policies | update', function (hooks) {
   });
 
   test('users can update a custom input', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.policy));
@@ -114,15 +99,6 @@ module('Acceptance | policies | update', function (hooks) {
   });
 
   test('users can update from do_not_delete to a custom input', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.policy));
@@ -148,15 +124,6 @@ module('Acceptance | policies | update', function (hooks) {
   });
 
   test('users cannot update delete override when do_not_protect is selected', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.policy));
@@ -167,15 +134,6 @@ module('Acceptance | policies | update', function (hooks) {
   });
 
   test('can cancel changes to an existing storage policy', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const name = instances.policy.name;
     await visit(urls.policies);
 

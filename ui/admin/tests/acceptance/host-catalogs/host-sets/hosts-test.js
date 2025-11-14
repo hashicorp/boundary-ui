@@ -4,22 +4,36 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  findAll,
+  fillIn,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   let getHostSetHostCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] button:first-child';
+  const CREATE_AND_ADD_HOSTS_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
+  const ADD_EXISTING_HOSTS_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div ul li:nth-child(2) a';
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
       hostCatalog: null,
@@ -41,6 +55,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -71,81 +86,38 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     // Generate resource counter
     getHostSetHostCount = () =>
       this.server.schema.hostSets.all().models[0].hosts.length;
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host set hosts', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostSetHosts);
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
+    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
   });
 
   test('can remove a host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'target-size': {
-          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
+    assert.strictEqual(findAll('tbody tr').length, count);
 
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: count - 1 });
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
   test('cannot remove a host without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const authorized_actions = instances.hostSet.authorized_actions.filter(
       (item) => item !== 'remove-hosts',
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
+    assert.notOk(
+      find('tbody tr [data-test-host-set-hosts-dropdown-remove-host]'),
+    );
   });
 
   test('shows error message on host remove error', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
-    const count = getHostSetHostCount();
     this.server.post('/host-sets/:idMethod', () => {
       return new Response(
         400,
@@ -159,47 +131,24 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       );
     });
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
+    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
   test('visiting add hosts', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.addHosts);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.addHosts);
   });
 
   test('can navigate to add hosts with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.hostSet);
-
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
-
-    assert.dom(commonSelectors.HREF(urls.addHosts)).isVisible();
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.ok(find(`[href="${urls.addHosts}"]`));
   });
 
   test('cannot navigate to add hosts without proper authorization', async function (assert) {
@@ -208,81 +157,42 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSet);
-
-    assert.dom(commonSelectors.HREF(urls.addHosts)).doesNotExist();
+    assert.notOk(find(`[href="${urls.addHosts}"]`));
   });
 
   test('select and save hosts to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).doesNotExist();
-
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_ADD_EXISTING_HOST);
-
+    assert.strictEqual(findAll('tbody tr').length, 0);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_EXISTING_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
+    await click('tbody label');
+    await click('tbody label');
+    await click('tbody label');
+    await click('form [type="submit"]');
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('select and cancel hosts to add', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
-
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
-    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: count - 1 });
-
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_ADD_EXISTING_HOST);
-
+    assert.strictEqual(findAll('tbody tr').length, count);
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_EXISTING_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addHosts);
-
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.CANCEL_BTN);
+    await click('tbody .hds-table__tr .hds-form-label');
+    await click('form [type="button"]');
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: count - 1 });
+    assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
   test('shows error message on host add error', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/host-sets/:idMethod', () => {
       return new Response(
         400,
@@ -297,85 +207,40 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.addHosts);
-
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.SAVE_BTN);
-
+    await click('tbody .hds-table__tr .hds-form-label');
+    await click('form [type="submit"]');
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
   test('visiting host creation from a host set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.createAndAddHost);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.createAndAddHost);
   });
 
   test('create and add host to host set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.hostSet.update({ hostIds: [] });
-    await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).doesNotExist();
-
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
-    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_CREATE_AND_ADD);
-
+    await visit(urls.hostSet);
+    assert.strictEqual(findAll('tbody tr').length, 0);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(CREATE_AND_ADD_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.createAndAddHost);
-
-    await fillIn(commonSelectors.FIELD_NAME, 'Test Name');
-    await fillIn(commonSelectors.FIELD_DESCRIPTION, 'description');
-    await click(commonSelectors.SAVE_BTN);
+    await fillIn('[name="name"]', 'Test Name');
+    await fillIn('[name="description"]', 'description');
+    await click('form [type="submit"]:not(:disabled)');
     await visit(urls.hostSetHosts);
-
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert.strictEqual(findAll('tbody tr').length, 1);
   });
 
   test('create and cancel host add to host set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.createAndAddHost);
-
-    await click(commonSelectors.CANCEL_BTN);
-
+    await click('form [type="button"]');
     assert.strictEqual(currentURL(), urls.hostSetHosts);
   });
 
   test('shows error message on host creation error', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/hosts', () => {
       return new Response(
         400,
@@ -390,25 +255,14 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.createAndAddHost);
-
-    await fillIn(commonSelectors.FIELD_NAME, 'New Host');
-    await click(commonSelectors.SAVE_BTN);
-
+    await fillIn('[name="name"]', 'New Host');
+    await click('form [type="submit"]');
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
   test('shows error message on host addition to host set error', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/host-sets/:idMethod', () => {
       return new Response(
         400,
@@ -423,25 +277,14 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.createAndAddHost);
-
-    await fillIn(commonSelectors.FIELD_NAME, 'New Host');
-    await click(commonSelectors.SAVE_BTN);
-
+    await fillIn('[name="name"]', 'New Host');
+    await click('form [type="submit"]');
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
   test('users can navigate to host and incorrect url autocorrects', async function (assert) {
-    setRunOptions({
-      rules: {
-        label: {
-          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'plugin',

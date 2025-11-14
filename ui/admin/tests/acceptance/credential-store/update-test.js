@@ -6,18 +6,21 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -32,6 +35,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -55,6 +59,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.workerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/worker-filter`;
     urls.editWorkerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/edit-worker-filter`;
+    await authenticateSession({});
 
     // Enable feature flag
     const featuresService = this.owner.lookup('service:features');
@@ -79,15 +84,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can save changes to existing vault credential store', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
 
     await visit(urls.vaultCredentialStore);
@@ -143,15 +139,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can cancel changes to existing vault credential store', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.vaultCredentialStore);
 
     await click(commonSelectors.EDIT_BTN);
@@ -191,15 +178,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('saving an existing vault credential store with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const desc = 'Field required for creating a vault credential store.';
     const msg = 'The request was invalid';
     this.server.patch('/credential-stores/:id', () => {
@@ -232,15 +210,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can discard unsaved static credential store changes via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -274,15 +243,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can discard unsaved vault credential store changes via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -342,15 +302,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can cancel discard unsaved vault credential store via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -397,20 +348,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('manage actions dropdown displays edit option and routes to correct url', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        label: {
-          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.vaultCredentialStore);
 
     await click(commonSelectors.HREF(urls.workerFilter));
@@ -421,15 +358,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('when work filters code editor is empty, save btn reroutes to empty state template', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.vaultCredentialStore.update({
       attributes: { worker_filter: null },
     });
@@ -444,20 +372,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('when worker filter exists, readonly code block displays the filter text', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        label: {
-          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.vaultCredentialStore.update({
       attributes: { worker_filter: null },
     });
@@ -467,7 +381,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click(commonSelectors.HREF(urls.workerFilter));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.EDIT_WORKER_FILTER_ACTION);
-    await fillIn(commonSelectors.CODE_EDITOR_CONTENT, '"bar" in "/tags/foo"');
+    await fillIn(selectors.CODE_EDITOR_BODY, '"bar" in "/tags/foo"');
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.CODE_BLOCK_BODY).exists();

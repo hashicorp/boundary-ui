@@ -5,15 +5,15 @@
 
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { visit, fillIn, click, currentURL } from '@ember/test-helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | onboarding', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   const urls = {
     onboarding: '/onboarding',
@@ -21,16 +21,11 @@ module('Acceptance | onboarding', function (hooks) {
     orgs: '/scopes/global/scopes',
   };
 
-  test('show targetAddress and targetPort fields', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
+  });
 
+  test('show targetAddress and targetPort fields', async function (assert) {
     await visit(urls.onboarding);
 
     assert.dom(selectors.FIELD_TARGET_ADDRESS).isVisible();
@@ -38,15 +33,6 @@ module('Acceptance | onboarding', function (hooks) {
   });
 
   test('redirect user to success when fill targetAddress, targetPort and click Save', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.onboarding);
 
     await fillIn(
@@ -63,15 +49,6 @@ module('Acceptance | onboarding', function (hooks) {
   });
 
   test('redirect user to orgs screen when click do this later', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.onboarding);
 
     await click(selectors.DO_THIS_LATER_BTN);

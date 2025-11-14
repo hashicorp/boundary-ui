@@ -6,11 +6,14 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | workers | update', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -26,14 +29,15 @@ module('Acceptance | workers | update', function (hooks) {
 
   hooks.beforeEach(async function () {
     //Generate the resources
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
     // Generate route URLs for resources
     urls.globalScope = '/scopes/global';
     urls.workers = `${urls.globalScope}/workers`;
-    urls.worker = `${urls.workers}/${instances.worker.id}`;
+    (urls.worker = `${urls.workers}/${instances.worker.id}`),
+      await authenticateSession({});
   });
 
   test('can save changes to an existing worker', async function (assert) {

@@ -4,17 +4,21 @@
  */
 
 import { module, test } from 'qunit';
-import { visit } from '@ember/test-helpers';
+import { visit, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import * as commonSelectors from 'admin/tests/helpers/selectors';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | host-catalogs | host sets | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] button:first-child';
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
       hostCatalog: null,
@@ -34,6 +38,7 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -58,29 +63,28 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
     urls.hostSets = `${urls.hostCatalog}/host-sets`;
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.newHostSet = `${urls.hostSets}/new`;
+    await authenticateSession({});
   });
 
   test('Users can navigate to host-sets with proper authorization', async function (assert) {
     await visit(urls.hostCatalog);
-
     assert.ok(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'list',
       ),
     );
-    assert.dom(commonSelectors.HREF(urls.hostSets)).isVisible();
+    assert.ok(find(`[href="${urls.hostSets}"]`));
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
-
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'list',
       ),
     );
-    assert.dom(commonSelectors.HREF(urls.hostSets)).doesNotExist();
+    assert.notOk(find(`[href="${urls.hostSets}"]`));
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
@@ -89,6 +93,8 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
     ];
     await visit(urls.hostCatalog);
 
-    assert.dom(commonSelectors.HREF(urls.hostSets)).isVisible();
+    assert.ok(find(`[href="${urls.hostSets}"]`));
+
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
   });
 });

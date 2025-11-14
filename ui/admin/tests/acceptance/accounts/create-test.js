@@ -6,16 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | create', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethods: null,
@@ -32,12 +36,13 @@ module('Acceptance | accounts | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
     instances.authMethod = this.server.create('auth-method', {
-      type: 'password',
       scope: instances.scopes.org,
     });
     instances.account = this.server.create('account', {
@@ -61,30 +66,12 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('visiting accounts', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.accounts);
-
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.accounts);
   });
 
   test('can create a new account', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
@@ -107,15 +94,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can create a new LDAP account', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
@@ -134,15 +112,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users cannot create a new account without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.authMethod);
 
@@ -157,15 +126,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users can navigate to new account route with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.accounts);
 
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -179,15 +139,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users cannot navigate to new account route without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.accounts);
 
@@ -202,15 +153,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can cancel a new account creation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
@@ -225,15 +167,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can cancel a new LDAP account creation', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
@@ -248,15 +181,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/accounts', () => {
       return new Response(
         400,
@@ -281,6 +205,7 @@ module('Acceptance | accounts | create', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
+    await a11yAudit();
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -288,15 +213,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new account route without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.authMethod.authorized_collection_actions.accounts =
       instances.authMethod.authorized_collection_actions.accounts.filter(
         (item) => item !== 'create',

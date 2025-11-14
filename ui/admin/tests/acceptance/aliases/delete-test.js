@@ -4,15 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { click, visit } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let aliasCount;
 
@@ -33,7 +35,8 @@ module('Acceptance | aliases | delete', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    await authenticateSession({});
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -56,15 +59,6 @@ module('Acceptance | aliases | delete', function (hooks) {
   });
 
   test('users can delete an alias with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = aliasCount();
 
     assert.true(instances.alias.authorized_actions.includes('delete'));
@@ -77,15 +71,6 @@ module('Acceptance | aliases | delete', function (hooks) {
   });
 
   test('users cannot delete an alias without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'delete');
 

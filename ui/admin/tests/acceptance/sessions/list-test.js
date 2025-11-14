@@ -4,12 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
-import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_CANCELING,
@@ -18,11 +21,11 @@ import {
 } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const CREATED_TIME_VALUES_ARRAY = [
     '2020-01-01T00:00:01.010Z',
@@ -60,7 +63,7 @@ module('Acceptance | sessions | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.admin = this.server.create('user', {
       scopeId: 'global',
       name: 'admin',
@@ -105,21 +108,16 @@ module('Acceptance | sessions | list', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `${urls.projectScope}/sessions`;
+
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting sessions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
+    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.sessions));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert
@@ -128,16 +126,8 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('users cannot navigate to sessions tab without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
+    await a11yAudit();
     instances.scopes.project.authorized_collection_actions.sessions =
       instances.scopes.project.authorized_collection_actions.sessions.filter(
         (item) => item !== 'list',
@@ -155,15 +145,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.projectScope));
@@ -177,15 +158,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('visiting sessions without users or targets is OK', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     instances.sessions[0].update({
       userId: null,
@@ -200,15 +172,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('cancelling a session', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.sessions));
@@ -220,15 +183,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     this.server.post('/sessions/:id_method', () => new Response(400));
 
@@ -239,15 +193,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('users can link to docs page for sessions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const docsUrl =
       'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/sessions';
     await visit(urls.projectScope);
@@ -258,15 +203,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('user can search for a specific session by id', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     const sessionId = instances.sessions[0].id;
 
@@ -278,15 +214,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('user can search for sessions and get no results', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     const sessionId = 'fake session that does not exist';
 
@@ -298,15 +225,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('user can filter for sessions by user', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     instances.sessions[2].update({
       userId: instances.dev.id,
@@ -322,15 +240,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('users filter is hidden if no users returned or no list permissions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.global.authorized_collection_actions.users =
       instances.scopes.global.authorized_collection_actions.users.filter(
         (item) => item !== 'list',
@@ -346,15 +255,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('user can filter for sessions by target', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
     instances.sessions[2].update({
       targetId: instances.sshTarget.id,
@@ -370,15 +270,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('targets filter is hidden if no targets returned or no list permissions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'list',
@@ -390,15 +281,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('user can filter for sessions by status', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.sessions));
@@ -410,15 +292,6 @@ module('Acceptance | sessions | list', function (hooks) {
   });
 
   test('sessions table is sorted by `created_time` descending by default', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.schema.sessions.all().destroy();
     const expectedDescendingSort = CREATED_TIME_ISO_VALUES_ARRAY.toReversed();
     faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
@@ -474,15 +347,6 @@ module('Acceptance | sessions | list', function (hooks) {
     },
 
     async function (assert, input) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
-            enabled: false,
-          },
-        },
-      });
-
       this.server.schema.sessions.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('session', {

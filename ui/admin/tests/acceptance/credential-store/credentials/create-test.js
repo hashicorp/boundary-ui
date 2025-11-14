@@ -6,22 +6,23 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | create',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupSqlite(hooks);
+    setupMirage(hooks);
+    setupIndexedDb(hooks);
 
     let getCredentialsCount;
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;
-    let getUsernamePasswordDomainCredentialCount;
     let getJsonCredentialCount;
     let featuresService;
 
@@ -78,23 +79,10 @@ module(
       getJsonCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'json' }).length;
       };
-      getUsernamePasswordDomainCredentialCount = () => {
-        return this.server.schema.credentials.where({
-          type: 'username_password_domain',
-        }).length;
-      };
+      await authenticateSession({});
     });
 
     test('users can create a new username & password credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const credentialsCount = getCredentialsCount();
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
@@ -114,90 +102,7 @@ module(
       );
     });
 
-    test('users can create a new username, password & domain credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const credentialsCount = getCredentialsCount();
-      const usernamePasswordDomainCredentialCount =
-        getUsernamePasswordDomainCredentialCount();
-      await visit(urls.credentials);
-
-      await click(commonSelectors.HREF(urls.newCredential));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
-
-      await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_VALUE);
-      await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
-      await fillIn(selectors.FIELD_DOMAIN, selectors.FIELD_DOMAIN_VALUE);
-
-      await click(commonSelectors.SAVE_BTN);
-
-      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
-      assert.strictEqual(
-        getUsernamePasswordDomainCredentialCount(),
-        usernamePasswordDomainCredentialCount + 1,
-      );
-    });
-
-    test('users can create a new username & password credential with domain in username field', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const credentialsCount = getCredentialsCount();
-      const usernamePasswordDomainCredentialCount =
-        getUsernamePasswordDomainCredentialCount();
-      await visit(urls.credentials);
-
-      await click(commonSelectors.HREF(urls.newCredential));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
-      await fillIn(
-        selectors.FIELD_USERNAME,
-        selectors.FIELD_USERNAME_WITH_DOMAIN_VALUE,
-      );
-      await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
-
-      // check that the domain field is filled in
-      assert.dom(selectors.FIELD_DOMAIN).hasValue(selectors.FIELD_DOMAIN_VALUE);
-
-      await click(commonSelectors.SAVE_BTN);
-
-      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
-      assert.strictEqual(
-        getUsernamePasswordDomainCredentialCount(),
-        usernamePasswordDomainCredentialCount + 1,
-      );
-    });
-
     test('users can create a new username & key pair credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const credentialsCount = getCredentialsCount();
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
@@ -219,20 +124,6 @@ module(
     });
 
     test('users can create a new json credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
@@ -251,15 +142,6 @@ module(
     });
 
     test('users can cancel create new username & password credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -275,15 +157,6 @@ module(
     });
 
     test('users can cancel create new username & key pair credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -300,20 +173,6 @@ module(
     });
 
     test('users can cancel create new json credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
@@ -330,46 +189,7 @@ module(
       assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
-    test('users can cancel creation of new username, password & domain credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const credentialsCount = getCredentialsCount();
-      await visit(urls.credentials);
-
-      await click(commonSelectors.HREF(urls.newCredential));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
-      await click(commonSelectors.CANCEL_BTN);
-
-      assert.strictEqual(currentURL(), urls.credentials);
-      assert.strictEqual(getCredentialsCount(), credentialsCount);
-    });
-
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('json-credentials');
 
       await visit(urls.credentials);
@@ -385,15 +205,6 @@ module(
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('static-credentials');
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
@@ -414,15 +225,6 @@ module(
     });
 
     test('saving a new username & password credential with invalid fields displays error messages', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a username-password credential.';
@@ -455,15 +257,6 @@ module(
     });
 
     test('saving a new username & key pair credential with invalid fields displays error messages', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a username-key-pair credential.';
@@ -498,67 +291,7 @@ module(
         .hasText(errorDescription);
     });
 
-    test('saving a new username, password & domain credential with invalid fields displays error messages', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const errorMessage = 'Error in provided request.';
-      const errorDescription =
-        'Field required for creating a username-password-domain credential.';
-      await visit(urls.credentials);
-
-      this.server.post('/credentials', () => {
-        return new Response(
-          400,
-          {},
-          {
-            status: 400,
-            code: 'invalid_argument',
-            message: errorMessage,
-            details: {
-              request_fields: [
-                {
-                  name: 'attributes.domain',
-                  description: errorDescription,
-                },
-              ],
-            },
-          },
-        );
-      });
-      await click(commonSelectors.HREF(urls.newCredential));
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
-      await click(commonSelectors.SAVE_BTN);
-      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
-
-      assert
-        .dom(selectors.FIELD_DOMAIN_ERROR)
-        .hasText(
-          'Field required for creating a username-password-domain credential.',
-        );
-    });
-
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       featuresService.enable('json-credentials');
       const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);
@@ -590,15 +323,6 @@ module(
     });
 
     test('cannot navigate to json credential when feature is disabled', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.credentials);
 
       await click(commonSelectors.HREF(urls.newCredential));
@@ -618,32 +342,6 @@ module(
         .exists()
         .hasAttribute('value', 'ssh_private_key');
       assert.dom(selectors.FIELD_TYPE_JSON).doesNotExist();
-    });
-
-    test('users cannot create a new credential without proper authorization', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
-      instances.staticCredentialStore.authorized_collection_actions.credentials =
-        instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
-          (item) => item !== 'create',
-        );
-
-      await visit(urls.credentials);
-      await click(selectors.MANAGE_DROPDOWN_CREDENTIAL_STORE);
-
-      assert.false(
-        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create',
-        ),
-      );
-      assert.dom(commonSelectors.HREF(urls.newCredential)).doesNotExist();
     });
 
     test('users cannot directly navigate to new credential route without proper authorization', async function (assert) {

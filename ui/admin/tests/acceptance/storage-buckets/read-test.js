@@ -6,13 +6,16 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | storage-buckets | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let features;
 
@@ -32,7 +35,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -47,35 +50,19 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting a storage bucket', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucket));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.storageBucket);
   });
 
   test('cannot navigate to a storage bucket without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
       instances.storageBucket.authorized_actions.filter(
@@ -90,16 +77,8 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.unknownStorageBucket);
+    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
@@ -107,15 +86,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('users can navigate to storage bucket and incorrect url auto-corrects', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/storage-buckets/${instances.storageBucket.id}`;
 
     await visit(incorrectUrl);

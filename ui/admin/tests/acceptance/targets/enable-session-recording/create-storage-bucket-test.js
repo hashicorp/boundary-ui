@@ -6,34 +6,42 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | enable session recording | create storage bucket',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupSqlite(hooks);
+    setupMirage(hooks);
 
     let features;
     let getStorageBucketCount;
 
-    const FIELD_BUCKET_NAME = '[name="bucket_name"]';
-    const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
-    const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
-    const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
-    const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
+    const SAVE_BTN_SELECTOR = '[type="submit"]';
+    const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
+    const NAME_FIELD_SELECTOR = '[name="name"]';
+    const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
+    const NAME_FIELD_TEXT = 'random string';
+    const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
+    const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
+    const EDITOR_WORKER_FILTER =
+      '[data-test-code-editor-field-editor] textarea';
+    const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
 
     const instances = {
       scopes: {
+        global: null,
         org: null,
       },
     };
 
     const urls = {
+      globalScope: null,
+      projectScope: null,
       targets: null,
       target: null,
       enableSessionRecording: null,
@@ -41,6 +49,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
+      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -54,8 +63,10 @@ module(
         scope: instances.scopes.project,
         type: TYPE_TARGET_SSH,
       });
+      urls.globalScope = `/scopes/global`;
 
-      urls.targets = `/scopes/${instances.scopes.project.id}/targets`;
+      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+      urls.targets = `${urls.projectScope}/targets`;
       urls.target = `${urls.targets}/${instances.target.id}`;
       urls.enableSessionRecording = `${urls.target}/enable-session-recording`;
       urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
@@ -64,136 +75,70 @@ module(
 
       features = this.owner.lookup('service:features');
       features.enable('ssh-session-recording');
+      await authenticateSession({ username: 'admin' });
     });
 
     test('users can create a new storage bucket with global scope', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(commonSelectors.HREF(urls.newStorageBucket));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(FIELD_SCOPE('global'));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await click(`[href="${urls.newStorageBucket}"]`);
+      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+      await click('[value="global"]');
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
 
-      assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
-      assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
-      assert.dom(FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
-      assert.dom(FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
+      assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
+      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
+      assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
 
-      await click(commonSelectors.SAVE_BTN);
+      await click(SAVE_BTN_SELECTOR);
       const storageBucket = this.server.schema.storageBuckets.findBy({
-        name: commonSelectors.FIELD_NAME_VALUE,
+        name: NAME_FIELD_TEXT,
       });
 
-      assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
+      assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
       assert.strictEqual(storageBucket.scopeId, 'global');
       assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
     });
 
     test('users can create a new storage bucket with org scope', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(commonSelectors.HREF(urls.newStorageBucket));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(FIELD_SCOPE(instances.scopes.org.scope.id));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await click(`[href="${urls.newStorageBucket}"]`);
+      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+      await click(`[value="${instances.scopes.org.scope.id}"]`);
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
 
-      assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
-      assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
-      assert.dom(FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
-      assert.dom(FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
+      assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
+      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
+      assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
 
-      await click(commonSelectors.SAVE_BTN);
+      await click(SAVE_BTN_SELECTOR);
       const storageBucket = this.server.schema.storageBuckets.findBy({
-        name: commonSelectors.FIELD_NAME_VALUE,
+        name: NAME_FIELD_TEXT,
       });
 
-      assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
+      assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
       assert.strictEqual(storageBucket.scopeId, instances.scopes.org.scope.id);
       assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
     });
 
     test('user can cancel new storage bucket creation', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(commonSelectors.HREF(urls.newStorageBucket));
-      await fillIn(
-        commonSelectors.FIELD_NAME,
-        commonSelectors.FIELD_NAME_VALUE,
-      );
-      await click(commonSelectors.CANCEL_BTN);
+      await click(`[href="${urls.newStorageBucket}"]`);
+      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+      await click(CANCEL_BTN_SELECTOR);
 
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
       assert.strictEqual(getStorageBucketCount(), storageBucketCount);
     });
 
     test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
-      const errorMessage = 'The request was invalid.';
-      const errorDescription = 'Name is required.';
       this.server.post('/storage-buckets', () => {
         return new Response(
           400,
@@ -201,12 +146,12 @@ module(
           {
             status: 400,
             code: 'invalid_argument',
-            message: errorMessage,
+            message: 'The request was invalid.',
             details: {
               request_fields: [
                 {
                   name: 'name',
-                  description: errorDescription,
+                  description: 'Name is required.',
                 },
               ],
             },
@@ -215,12 +160,14 @@ module(
       });
       await visit(urls.enableSessionRecording);
 
-      await click(commonSelectors.HREF(urls.newStorageBucket));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
-      await click(commonSelectors.SAVE_BTN);
+      await click(`[href="${urls.newStorageBucket}"]`);
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
+      await click(SAVE_BTN_SELECTOR);
 
-      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
-      assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
+      assert
+        .dom(commonSelectors.ALERT_TOAST_BODY)
+        .hasText('The request was invalid.');
+      assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
     });
   },
 );

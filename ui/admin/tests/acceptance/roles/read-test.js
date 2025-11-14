@@ -6,15 +6,20 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -28,6 +33,8 @@ module('Acceptance | roles | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -54,6 +61,7 @@ module('Acceptance | roles | read', function (hooks) {
 
   test('visiting roles', async function (assert) {
     await visit(urls.roles);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roles);
   });
@@ -63,6 +71,7 @@ module('Acceptance | roles | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roles));
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.role));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.role);
   });
@@ -85,6 +94,7 @@ module('Acceptance | roles | read', function (hooks) {
     await visit(urls.roles);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.role));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.role);
   });

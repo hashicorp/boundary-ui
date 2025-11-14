@@ -14,7 +14,10 @@ import {
   waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
@@ -23,11 +26,11 @@ import {
 import { TYPE_SCOPE_ORG } from 'api/models/scope';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | global-scope', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let confirmService;
 
@@ -49,9 +52,10 @@ module('Acceptance | roles | global-scope', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     confirmService = this.owner.lookup('service:confirm');
 
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -77,18 +81,16 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('visiting role scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert
@@ -97,15 +99,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can navigate to scope from role grant scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const grantScopeUrl = `/scopes/${instances.role.grant_scope_ids[1]}`;
     await visit(urls.role);
 
@@ -116,15 +109,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for existing grant scope on a role', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
@@ -156,15 +140,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for grant scopes on a role and get no results', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
@@ -196,20 +171,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can filter for grant scopes on a role by parent scope', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'target-size': {
-          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
@@ -236,15 +197,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can filter for grant scopes on a role by type', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
@@ -269,15 +221,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can navigate to parent scope from role grant scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({
       grant_scope_ids: ['this', instances.scopes.org.id],
     });
@@ -293,15 +236,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user sees no scopes message and action when role has no grant scopes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -326,15 +260,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('correct toggles are visible for global level role on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
@@ -347,15 +272,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('manage custom scopes button is not visible when "descendants" is toggled on for global level role on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
@@ -370,15 +286,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can save scope keywords to add on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -388,6 +295,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
@@ -402,15 +310,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can cancel scope keywords to add on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -434,15 +333,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('shows error message on scope save on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -467,15 +357,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.role);
@@ -493,15 +374,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user user can cancel transition when there are unsaved changes on manage scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.role);
@@ -538,6 +410,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.strictEqual(currentURL(), urls.manageScopes);
 
     await click(commonSelectors.HREF(urls.manageCustomScopes));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageCustomScopes);
 
@@ -557,15 +430,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can cancel custom scopes to add on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -595,15 +459,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('shows error message on custom scope save on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -629,15 +484,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.manageScopes);
@@ -655,15 +501,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user user can cancel transition when there are unsaved changes on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.manageScopes);
@@ -681,15 +518,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can choose to only deselect an org using modal on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({
       grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
     });
@@ -713,15 +541,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can choose to deselect an org and projects using modal on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({
       grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
     });
@@ -745,15 +564,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user cannot trigger modal when deselecting an org with no projects selected on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [instances.scopes.org.id] });
     await visit(urls.manageScopes);
 
@@ -774,15 +584,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can choose to only deselect all orgs using modal on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({
       grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
     });
@@ -809,15 +610,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can choose to deselect all orgs and projects using modal on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({
       grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
     });
@@ -844,15 +636,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user cannot trigger modal when deselecting all orgs with no projects selected on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [instances.scopes.org.id] });
     await visit(urls.manageScopes);
 
@@ -876,15 +659,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for a specific org scope by id on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const anotherOrg = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -911,15 +685,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for org scopes and get no results on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const anotherOrg = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -951,15 +716,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can select projects when `children` is applied on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
     await visit(urls.role);
 
@@ -995,15 +751,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for a specific project scope by id on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
     const anotherProject = this.server.create('scope', {
       type: 'project',
@@ -1034,15 +781,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for a specific project scope by id and get no results on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
     await visit(urls.manageScopes);
 
@@ -1064,15 +802,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can filter a project scope by parent scope on manage custom scopes page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
     const anotherOrg = this.server.create('scope', {
       type: 'org',
@@ -1099,15 +828,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can save custom scopes to add on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -1119,6 +839,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
+    await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(
@@ -1146,15 +867,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can cancel custom scopes to add on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
@@ -1192,15 +904,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('shows error message on custom scope save on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -1229,15 +932,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.manageScopes);
@@ -1257,15 +951,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user user can cancel transition when there are unsaved changes on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.role.update({ grant_scope_ids: [] });
     confirmService.enabled = true;
     await visit(urls.manageScopes);
@@ -1288,15 +973,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for a specific project scope by id on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const anotherProject = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
@@ -1331,15 +1007,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can search for project scopes and get no results on manage org projects page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const anotherProject = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },

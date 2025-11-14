@@ -6,14 +6,14 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as credentialStoreSelectors from '../selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | credentials | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -69,18 +69,10 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.credentials = `${urls.staticCredentialStore}/credentials`;
     urls.newCredential = `${urls.staticCredentialStore}/credentials/new`;
+    await authenticateSession({});
   });
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.staticCredentialStore);
 
     assert.ok(
@@ -117,15 +109,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   });
 
   test('User can navigate to new credential screen with only create action', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       ['create'];
     await visit(urls.staticCredentialStore);

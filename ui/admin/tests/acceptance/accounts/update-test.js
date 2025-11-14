@@ -6,15 +6,19 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | update', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethod: null,
@@ -28,6 +32,8 @@ module('Acceptance | accounts | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -47,15 +53,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update resource and save changes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -63,21 +60,12 @@ module('Acceptance | accounts | update', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(
-      this.server.schema.accounts.find(instances.account.id).name,
+      this.server.schema.accounts.all().models[0].name,
       commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
   test('can update resource and save LDAP account changes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -89,11 +77,11 @@ module('Acceptance | accounts | update', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(
-      this.server.schema.accounts.find(instances.account.id).name,
+      this.server.schema.accounts.all().models[0].name,
       commonSelectors.FIELD_NAME_VALUE,
     );
     assert.strictEqual(
-      this.server.schema.accounts.find(instances.account.id).description,
+      this.server.schema.accounts.all().models[0].description,
       commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
   });
@@ -107,15 +95,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update an account and cancel changes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -129,15 +108,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('errors are displayed when save on account fails', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.patch('/accounts/:id', () => {
       return new Response(
         490,
@@ -155,19 +125,11 @@ module('Acceptance | accounts | update', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
+    await a11yAudit();
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('saving an existing account with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.patch('/accounts/:id', () => {
       return new Response(
         400,
@@ -193,6 +155,7 @@ module('Acceptance | accounts | update', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
+    await a11yAudit();
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');

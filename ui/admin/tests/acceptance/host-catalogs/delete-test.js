@@ -6,24 +6,27 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let getHostCatalogCount;
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
       project: null,
     },
@@ -41,6 +44,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,18 +73,10 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     // Generate resource counter
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
+    await authenticateSession({});
   });
 
   test('can delete host catalog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const hostCatalogCount = getHostCatalogCount();
     await visit(urls.hostCatalogs);
 
@@ -92,15 +88,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can delete GCP host catalog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const hostCatalogCount = getHostCatalogCount();
 
     await visit(urls.hostCatalogs);
@@ -113,15 +100,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('cannot delete host catalog without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -135,15 +113,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can accept delete host catalog via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const hostCatalogCount = getHostCatalogCount();
@@ -162,15 +131,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can cancel delete host catalog via dialog', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const hostCatalogCount = getHostCatalogCount();
@@ -186,15 +146,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('deleting a host catalog which errors displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.hostCatalogs);
     this.server.del('/host-catalogs/:id', () => {
       return new Response(

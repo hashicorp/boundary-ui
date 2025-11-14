@@ -13,13 +13,15 @@ import {
   fillIn,
   waitFor,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'desktop/tests/helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
   setupStubs(hooks);
 
   const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
@@ -79,11 +81,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession();
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -96,7 +99,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
     });
 
     // Generate resources
-    instances.authMethods.global = this.server.schema.authMethods.first();
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -150,19 +155,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
   });
 
   test('user can connect to a target with an address', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(3);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
@@ -184,15 +180,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('handles cli error on connect', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(4);
     this.ipcStub.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
@@ -209,15 +196,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('handles connect error', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(4);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
@@ -255,15 +233,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target with one host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(2);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
@@ -284,15 +253,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can search for a host source by name, description, and address', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const host1 =
       instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0];
     const host2 =
@@ -333,15 +293,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can search for host sources and get no results', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targets);
     await click(`[href="${urls.targetWithTwoHosts}"]`);
 
@@ -354,15 +305,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can see host source table when visiting a target via resource link', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const targetId = instances.targetWithTwoHosts.id;
 
     await visit(urls.targets);
@@ -372,15 +314,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can see host source table when visiting a target via connect button', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const targetId = instances.targetWithTwoHosts.id;
 
     await visit(urls.targets);
@@ -390,15 +323,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target with two hosts using host source table', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const hostId =
       instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0].id;
 
@@ -435,15 +359,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
       },
     },
     async function (assert, input) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.targets);
 
       await click(`[href="${urls[input.target]}"]`);
@@ -453,15 +368,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   );
 
   test('user can use table pagination to see more hosts', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targets);
     await click(`[href="${urls.targetWithManyHosts}"]`);
 
@@ -474,15 +380,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can change page size', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targets);
     await click(`[href="${urls.targetWithManyHosts}"]`);
 
@@ -494,15 +391,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details screen without read permissions for host-set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
 
@@ -514,15 +402,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details screen without read permissions for host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
 
@@ -534,15 +413,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details and should not see the associated aliases if there are none', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targets);
 
     await click(`[href="${urls.targetWithOneHost}"]`);
@@ -552,15 +422,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details and see the associated aliases', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.targets);
     instances.targetWithOneHost.update({
       aliases: [{ id: instances.alias.id, value: instances.alias.value }],
@@ -571,15 +432,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom('.aliases').exists();
   });
   test('user can connect to a target without read permissions for host-set', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -599,15 +451,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target without read permissions for host', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
     this.ipcStub.withArgs('cliExists').returns(true);

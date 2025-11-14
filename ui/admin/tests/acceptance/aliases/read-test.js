@@ -4,15 +4,18 @@
  */
 
 import { module, test } from 'qunit';
-import { click, currentURL, visit } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -30,7 +33,7 @@ module('Acceptance | aliases | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -42,36 +45,23 @@ module('Acceptance | aliases | read', function (hooks) {
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.unknownAlias = `${urls.aliases}/foo`;
+
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting an alias', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
+    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.aliases));
+    await a11yAudit();
     await click(commonSelectors.HREF(urls.alias));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.alias);
   });
 
   test('cannot navigate to an alias without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.globalScope);
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'read');
@@ -82,16 +72,8 @@ module('Acceptance | aliases | read', function (hooks) {
   });
 
   test('visiting an unknown alias displays 404 message', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.unknownAlias);
+    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)

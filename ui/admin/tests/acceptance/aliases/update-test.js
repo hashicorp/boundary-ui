@@ -4,15 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { click, fillIn, visit } from '@ember/test-helpers';
+import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let aliasCount;
 
@@ -34,14 +36,10 @@ module('Acceptance | aliases | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
-    });
-    instances.scopes.project = this.server.create('scope', {
-      type: 'project',
-      scope: { id: instances.scopes.org.id, type: 'org' },
     });
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
@@ -54,18 +52,11 @@ module('Acceptance | aliases | update', function (hooks) {
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     aliasCount = () => this.server.schema.aliases.all().models.length;
+
+    await authenticateSession({});
   });
 
-  test('users can update an existing alias', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
+  test('users can update an exisiting alias', async function (assert) {
     await visit(urls.aliases);
     await click(commonSelectors.HREF(urls.alias));
     await click(commonSelectors.EDIT_BTN);
@@ -76,15 +67,6 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('can cancel changes to an existing alias', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const name = instances.alias.name;
     await visit(urls.aliases);
 
@@ -100,15 +82,6 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('users have the option to clear an alias', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const count = aliasCount();
     assert.true(instances.alias.authorized_actions.includes('update'));
     await visit(urls.globalScope);
@@ -125,15 +98,6 @@ module('Acceptance | aliases | update', function (hooks) {
   });
 
   test('users can not see the option to clear an alias without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.globalScope);

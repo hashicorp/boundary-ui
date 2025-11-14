@@ -12,9 +12,11 @@ import {
   getRootElement,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -29,7 +31,8 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
-  setupSqlite(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
   let indexURL;
@@ -41,10 +44,8 @@ module('Acceptance | authentication', function (hooks) {
   let orgScopeURL;
   let scope;
   let globalAuthMethod;
-  let globalAccount;
   let globalAuthMethodID;
   let authMethod;
-  let account;
   let authMethodID;
   let authMethodOIDC;
   let authMethodOIDCID;
@@ -69,9 +70,7 @@ module('Acceptance | authentication', function (hooks) {
   hooks.beforeEach(async function () {
     await invalidateSession();
     indexURL = '/';
-    globalScope = this.server.schema.scopes.find('global');
-    globalAuthMethod = this.server.schema.authMethods.first();
-    globalAccount = this.server.schema.accounts.first();
+    globalScope = this.server.create('scope', { id: 'global' });
     orgScope1 = this.server.create(
       'scope',
       {
@@ -98,21 +97,17 @@ module('Acceptance | authentication', function (hooks) {
       'withChildren',
     );
     scope = { id: orgScope1.id, type: orgScope1.type };
+    globalAuthMethod = this.server.create('auth-method', {
+      scope: globalScope,
+      type: TYPE_AUTH_METHOD_PASSWORD,
+    });
     authMethod = this.server.create('auth-method', {
       scope: orgScope1,
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
-    account = this.server.create('account', {
-      scope: orgScope1,
-      authMethod,
-    });
     authMethodOIDC = this.server.create('auth-method', {
       scope: orgScope2,
       type: TYPE_AUTH_METHOD_OIDC,
-    });
-    this.server.create('account', {
-      scope: orgScope2,
-      authMethod: authMethodOIDC,
     });
     orgScopeID = orgScope1.id;
     globalAuthMethodID = globalAuthMethod.id;
@@ -141,6 +136,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
     await visit(authenticateURL);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
@@ -150,6 +146,7 @@ module('Acceptance | authentication', function (hooks) {
       return new Response(404);
     });
     await visit(authMethodAuthenticateURL);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
@@ -252,11 +249,12 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting auth method authenticate route', async function (assert) {
     await visit(authMethodAuthenticateURL);
 
+    await a11yAudit();
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 
   test('visiting any authentication parent route while already authenticated with an org redirects to projects', async function (assert) {
-    await authenticateSession({ scope, account_id: account.id });
+    await authenticateSession({ scope });
     await visit(indexURL);
 
     assert.strictEqual(currentURL(), projectsURL);
@@ -282,7 +280,6 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index or scopes routes while already authenticated with global redirects to orgs', async function (assert) {
     await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
-      account_id: globalAccount.id,
     });
     await visit(indexURL);
 
@@ -347,7 +344,6 @@ module('Acceptance | authentication', function (hooks) {
   test('401 responses result in deauthentication', async function (assert) {
     await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
-      account_id: globalAccount.id,
     });
     await visit(orgsURL);
 
@@ -368,9 +364,7 @@ module('Acceptance | authentication', function (hooks) {
   test('color theme is applied from session data', async function (assert) {
     await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
-      account_id: globalAccount.id,
     });
-    currentSession().set('data.theme', 'light');
     await visit(orgsURL);
 
     // light mode

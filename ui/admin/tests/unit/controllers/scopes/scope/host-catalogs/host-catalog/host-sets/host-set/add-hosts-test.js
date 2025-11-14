@@ -6,8 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
@@ -15,13 +14,13 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupSqlite(hooks);
 
     let store;
     let controller;
 
     const instances = {
       scopes: {
+        global: null,
         org: null,
         project: null,
       },
@@ -35,16 +34,13 @@ module(
     };
 
     hooks.beforeEach(async function () {
+      await authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/host-catalogs/host-catalog/host-sets/host-set/add-hosts',
       );
 
-      this.server.create('scope', { id: 'global' }, 'withGlobalAuth');
-      await authenticateSession({
-        isGlobal: true,
-        account_id: this.server.schema.accounts.first().id,
-      });
+      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },

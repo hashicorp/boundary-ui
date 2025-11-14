@@ -6,13 +6,15 @@
 import { module, test } from 'qunit';
 import { visit, fillIn, click, findAll, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   let globalScope;
   let workersURL;
@@ -21,29 +23,17 @@ module('Acceptance | workers | create', function (hooks) {
   let featuresService;
 
   hooks.beforeEach(async function () {
-    globalScope = this.server.schema.scopes.find('global');
+    globalScope = this.server.create('scope', { id: 'global' });
 
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
     getWorkersCount = () => this.server.schema.workers.all().length;
     featuresService = this.owner.lookup('service:features');
+
+    await authenticateSession({});
   });
 
   test('can create new workers', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const workersCount = getWorkersCount();
     await visit(newWorkerURL);
 
@@ -57,20 +47,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
 
@@ -81,20 +57,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(newWorkerURL);
 
     const labels = findAll(selectors.WORKER_CREATE_SECTION_FORM_LABEL);
@@ -105,20 +67,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(newWorkerURL);
 
     const createSection = findAll(selectors.WORKER_CREATE_SECTION);
@@ -137,20 +85,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
 
@@ -169,15 +103,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(workersURL);
 
     assert.ok(
@@ -201,20 +126,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('saving a new worker with invalid fields displays error messages', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-
-        'heading-order': {
-          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     this.server.post('/workers:create:worker-led', () => {
       return new Response(
         500,

@@ -13,22 +13,23 @@ import {
   waitUntil,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import setupMirage from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | update',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupSqlite(hooks);
+    setupMirage(hooks);
 
     let featuresService;
 
     const instances = {
       scopes: {
+        global: null,
         org: null,
         project: null,
       },
@@ -36,7 +37,6 @@ module(
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
       jsonCredential: null,
-      usernamePasswordDomainCredential: null,
     };
 
     const urls = {
@@ -47,7 +47,6 @@ module(
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
       jsonCredential: null,
-      usernamePasswordDomainCredential: null,
     };
 
     const mockResponseMessage = 'Error in provided request.';
@@ -74,6 +73,7 @@ module(
 
     hooks.beforeEach(async function () {
       // Generate resources
+      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -101,15 +101,6 @@ module(
         credentialStore: instances.staticCredentialStore,
         type: 'json',
       });
-      instances.usernamePasswordDomainCredential = this.server.create(
-        'credential',
-        {
-          scope: instances.scopes.project,
-          credentialStore: instances.staticCredentialStore,
-          type: 'username_password_domain',
-        },
-      );
-
       // Generate route URLs for resources
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.credentialStores = `${urls.projectScope}/credential-stores`;
@@ -118,21 +109,12 @@ module(
       urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
       urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
-      urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
 
       featuresService = this.owner.lookup('service:features');
+      await authenticateSession({});
     });
 
     test('can save changes to existing username & password credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
       assert.notEqual(
         instances.usernamePasswordCredential.name,
         commonSelectors.FIELD_NAME_VALUE,
@@ -155,15 +137,6 @@ module(
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       assert.notEqual(
         instances.usernameKeyPairCredential.name,
         commonSelectors.FIELD_NAME_VALUE,
@@ -207,35 +180,6 @@ module(
       );
     });
 
-    test('can save changes to existing username, password & domain credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const mockInput = 'random string';
-
-      await visit(urls.usernamePasswordDomainCredential);
-
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn(selectors.FIELD_USERNAME, mockInput);
-      await fillIn(selectors.FIELD_DOMAIN, 'g.com');
-      await click(commonSelectors.SAVE_BTN);
-
-      assert.strictEqual(currentURL(), urls.usernamePasswordDomainCredential);
-
-      const credential = this.server.schema.credentials.where({
-        type: 'username_password_domain',
-      }).models[0];
-
-      assert.strictEqual(credential.attributes.username, mockInput);
-      assert.strictEqual(credential.attributes.domain, 'g.com');
-    });
-
     test('cannot make changes to an existing username & password credential without proper authorization', async function (assert) {
       instances.usernamePasswordCredential.authorized_actions =
         instances.usernamePasswordCredential.authorized_actions.filter(
@@ -268,15 +212,6 @@ module(
     });
 
     test('can cancel changes to existing username & password credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.usernamePasswordCredential);
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
@@ -295,15 +230,6 @@ module(
     });
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.usernameKeyPairCredential);
 
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
@@ -342,15 +268,6 @@ module(
     });
 
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
 
@@ -368,15 +285,6 @@ module(
     });
 
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
 
@@ -411,15 +319,6 @@ module(
     });
 
     test('can discard unsaved username & password credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -452,15 +351,6 @@ module(
     });
 
     test('can discard unsaved username & key pair credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -495,15 +385,6 @@ module(
     });
 
     test('can discard unsaved JSON credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       assert.expect(5);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -536,15 +417,6 @@ module(
     });
 
     test('can cancel discard unsaved username & password credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
       assert.expect(6);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -583,15 +455,6 @@ module(
     });
 
     test('can cancel discard unsaved username & key pair credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       assert.expect(6);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
@@ -629,28 +492,6 @@ module(
       }
     });
 
-    test('can cancel unsaved username, password & domain credential changes via dialog', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
-      const name = instances.usernamePasswordDomainCredential.name;
-      await visit(urls.usernamePasswordDomainCredential);
-
-      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
-      await fillIn('[name="username"]', 'random string');
-
-      // cancel changes
-      await click(commonSelectors.CANCEL_BTN);
-
-      assert.strictEqual(instances.usernamePasswordDomainCredential.name, name);
-    });
-
     test('can cancel discard unsaved JSON credential changes via dialog', async function (assert) {
       assert.expect(6);
       const confirmService = this.owner.lookup('service:confirm');
@@ -685,15 +526,6 @@ module(
     });
 
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.usernamePasswordCredential);
 
       assert.dom(commonSelectors.FIELD_PASSWORD).doesNotExist();
@@ -705,15 +537,6 @@ module(
     });
 
     test('private_key and private_key_passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.usernameKeyPairCredential);
 
       assert.dom(selectors.FIELD_SSH_PRIVATE_KEY).doesNotExist();
@@ -738,15 +561,6 @@ module(
     });
 
     test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
-      setRunOptions({
-        rules: {
-          label: {
-            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
       await visit(urls.jsonCredential);
 
       await click(commonSelectors.EDIT_BTN);

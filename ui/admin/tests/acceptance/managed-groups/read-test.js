@@ -6,18 +6,22 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
+import setupMirage from 'api/test-support/helpers/mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | read', function (hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   const instances = {
     scopes: {
+      global: null,
       org: null,
     },
     authMethod: null,
@@ -37,6 +41,8 @@ module('Acceptance | managed-groups | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,49 +75,24 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User can navigate to a managed group form', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.managedGroups);
 
     await click(commonSelectors.HREF(urls.managedGroup));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.managedGroup);
   });
 
   test('User can navigate to a ldap managed group form', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     await visit(urls.ldapManagedGroups);
 
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);
   });
 
   test('User cannot navigate to a managed group form without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
         (item) => item !== 'read',
@@ -124,15 +105,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User cannot navigate to a ldap managed group form without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
         (item) => item !== 'read',
@@ -145,15 +117,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User can navigate to managed group and incorrect url autocorrects', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
