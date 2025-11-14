@@ -297,6 +297,71 @@ module('Acceptance | sessions | list', function (hooks) {
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
+  test('user can search for sessions by associated user name', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.sessions[0].update({
+      userId: instances.admin.id,
+    });
+    instances.sessions[1].update({
+      userId: instances.dev.id,
+    });
+    instances.sessions[2].update({
+      userId: instances.dev.id,
+    });
+
+    await visit(urls.projectScope);
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, 'dev');
+    await waitFor(selectors.TABLE_SESSION_ID(instances.sessions[0].id), {
+      count: 0,
+    });
+
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[1].id)).exists();
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+  });
+
+  test('user can search for sessions by associated target name', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.sessions[0].update({
+      targetId: instances.tcpTarget.id,
+    });
+    instances.sessions[1].update({
+      targetId: instances.sshTarget.id,
+    });
+    instances.sessions[2].update({
+      targetId: instances.sshTarget.id,
+    });
+
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.sshTarget.name);
+    await waitFor(selectors.TABLE_SESSION_ID(instances.sessions[0].id), {
+      count: 0,
+    });
+
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[1].id)).exists();
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+  });
+
   test('user can filter for sessions by user', async function (assert) {
     setRunOptions({
       rules: {

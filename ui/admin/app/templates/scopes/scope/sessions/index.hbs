@@ -21,7 +21,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if @model.allSessions}}
+    {{#if @model.doSessionsExist}}
       <div class='search-filtering-toolbar'>
         <Hds::SegmentedGroup data-test-sessions-bar as |S|>
           <S.TextInput
@@ -31,15 +31,24 @@
             aria-label={{t 'actions.search'}}
             {{on 'input' this.handleSearchInput}}
           />
-          {{#if @model.associatedUsers}}
+          {{#if @model.canListUsers}}
             <S.Generic>
               <Dropdown
                 name='user'
                 @toggleText={{t 'resources.user.title'}}
-                @itemOptions={{@model.associatedUsers}}
+                @itemOptions={{this.userFilters.options}}
                 @checkedItems={{this.users}}
                 @applyFilter={{fn this.applyFilter 'users'}}
                 @isSearchable={{true}}
+                @searchTerm={{this.userFilters.search}}
+                @updateSearchTerm={{fn
+                  this.onFilterSearch.perform
+                  'userFilters'
+                }}
+                @isLoading={{or
+                  this.onFilterSearch.isRunning
+                  this.loadItems.isRunning
+                }}
                 as |FD selectItem itemOptions|
               >
                 {{#each itemOptions as |itemOption|}}
@@ -48,22 +57,42 @@
                     checked={{includes itemOption.id this.users}}
                     {{on 'change' selectItem}}
                   >
-                    {{itemOption.name}}
+                    {{or itemOption.name itemOption.id}}
                   </FD.Checkbox>
                 {{/each}}
               </Dropdown>
             </S.Generic>
           {{/if}}
-          {{#if @model.associatedTargets}}
+          {{#if @model.canListTargets}}
             <S.Generic>
               <Dropdown
                 name='target'
                 @toggleText={{t 'resources.target.title'}}
-                @itemOptions={{@model.associatedTargets}}
+                @itemOptions={{this.targetFilters.options}}
                 @checkedItems={{this.targets}}
                 @applyFilter={{fn this.applyFilter 'targets'}}
                 @isSearchable={{true}}
-              />
+                @searchTerm={{this.targetFilters.search}}
+                @updateSearchTerm={{fn
+                  this.onFilterSearch.perform
+                  'targetFilters'
+                }}
+                @isLoading={{or
+                  this.onFilterSearch.isRunning
+                  this.loadItems.isRunning
+                }}
+                as |FD selectItem itemOptions|
+              >
+                {{#each itemOptions as |itemOption|}}
+                  <FD.Checkbox
+                    @value={{itemOption.id}}
+                    checked={{includes itemOption.id this.targets}}
+                    {{on 'change' selectItem}}
+                  >
+                    {{itemOption.name}}
+                  </FD.Checkbox>
+                {{/each}}
+              </Dropdown>
             </S.Generic>
           {{/if}}
           <S.Generic>

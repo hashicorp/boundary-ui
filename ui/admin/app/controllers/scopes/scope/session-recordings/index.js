@@ -9,29 +9,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { assert } from '@ember/debug';
 import { restartableTask } from 'ember-concurrency';
-
-class FilterOptions {
-  @tracked search;
-  @tracked _options = [];
-  #allOptions = new Map();
-
-  get options() {
-    return this._options;
-  }
-
-  set options(newOptions) {
-    this._options = newOptions;
-    newOptions.forEach((option) => {
-      this.#allOptions.set(option.id, option);
-    });
-  }
-
-  // Keep track of all filter options that are loaded so they can be
-  // displayed in the selected filters regardless of search input
-  get allOptions() {
-    return Array.from(this.#allOptions.values());
-  }
-}
+import FilterOptions from 'admin/utils/filter-options';
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
   // =services
