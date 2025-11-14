@@ -102,29 +102,46 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
         direction: sortDirection,
       };
 
+      const searchOptions = {
+        text: search,
+        relatedSearches: [
+          {
+            resource: 'target',
+            fields: ['name'],
+            join: {
+              joinFrom: 'target_id',
+              joinOn: 'id',
+            },
+          },
+          {
+            resource: 'user',
+            fields: ['name'],
+            join: {
+              joinFrom: 'user_id',
+              joinOn: 'id',
+            },
+          },
+        ],
+      };
+
       const queryOptions = {
         scope_id,
         include_terminated: true,
-        query: { search, filters, sort },
+        query: { search: searchOptions, filters, sort },
         page,
         pageSize,
       };
 
       // Preload the associated targets and users into the cache
-      let usersPromise, targetsPromise;
+      let refreshUsersPromise, refreshTargetsPromise;
       const canListTargets = this.can.can('list model', scope, {
         collection: 'targets',
       });
       if (canListTargets) {
-        targetsPromise = await this.store.query(
+        refreshTargetsPromise = this.store.query(
           'target',
           {
             scope_id: scope.id,
-            query: {
-              filters: {
-                scope_id: [{ equals: scope.id }],
-              },
-            },
             page: 1,
             pageSize: 1,
           },
@@ -139,7 +156,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
         this.can.can('list model', orgScope, { collection: 'users' });
 
       if (canListUsers) {
-        usersPromise = this.store.query(
+        refreshUsersPromise = this.store.query(
           'user',
           {
             scope_id: 'global',
@@ -158,7 +175,40 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
         scope_id,
         totalItems,
       );
-      await Promise.all([targetsPromise, usersPromise]);
+
+      const associatedTargetsPromise = this.store.query(
+        'target',
+        {
+          query: {
+            filters: {
+              id: sessions.map((session) => ({
+                equals: session.target_id,
+              })),
+            },
+          },
+        },
+        { peekDb: true },
+      );
+      const associatedUsersPromise = this.store.query(
+        'user',
+        {
+          query: {
+            filters: {
+              id: sessions.map((user) => ({
+                equals: user.user_id,
+              })),
+            },
+          },
+        },
+        { peekDb: true },
+      );
+
+      await Promise.all([
+        refreshTargetsPromise,
+        refreshUsersPromise,
+        associatedTargetsPromise,
+        associatedUsersPromise,
+      ]);
 
       return {
         sessions,
