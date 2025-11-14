@@ -40,7 +40,6 @@
     "ember-cli-htmlbars": "^6.3.0",
     "ember-data": "~5.3.12",
     "esbuild": "^0.25.4",
-    "ember-mirage": "^0.4.2",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "miragejs": "^0.1.48",
     "promise-worker-bi": "^5.0.1",
