@@ -7,13 +7,12 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import RESTAdapter from '@ember-data/adapter/rest';
 import { InvalidError } from '@ember-data/adapter/error';
-import { setupMirage } from 'ember-mirage/test-support';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 import { Response } from 'miragejs';
-import createServer from 'api/mirage/config';
 
 module('Unit | Adapter | application', function (hooks) {
   setupTest(hooks);
-  setupMirage(hooks, { createServer });
+  setupMirage(hooks);
 
   let config;
 
