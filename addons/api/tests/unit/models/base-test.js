@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupMirage } from 'ember-mirage/test-support';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 
 module('Unit | Model | base', function (hooks) {
   setupTest(hooks);
