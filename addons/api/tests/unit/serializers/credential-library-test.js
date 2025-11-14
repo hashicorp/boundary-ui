@@ -25,9 +25,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       http_method: 'GET',
       version: 1,
       credential_type: 'ssh_private_key',
-      credential_mapping_overrides: [
-        { key: 'username_attribute', value: 'user' },
-      ],
+      credential_mapping_overrides: { username_attribute: 'user' },
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -64,9 +62,7 @@ module('Unit | Serializer | credential library', function (hooks) {
           http_method: 'GET',
           version: 1,
           credential_type: 'ssh_private_key',
-          credential_mapping_overrides: [
-            { key: 'private_key_attribute', value: 'test' },
-          ],
+          credential_mapping_overrides: { private_key_attribute: 'test' },
         },
       },
     });
