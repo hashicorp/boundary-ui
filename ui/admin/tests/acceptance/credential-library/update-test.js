@@ -4,19 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
+import { faker } from '@faker-js/faker';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
-import * as selectors from './selectors';
-import * as commonSelectors from 'admin/tests/helpers/selectors';
-import { setRunOptions } from 'ember-a11y-testing/test-support';
-import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
+import { options } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -57,17 +58,9 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     });
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       credentialStore: instances.credentialStore,
     });
-    instances.usernamePasswordDomainCredentialLibrary = this.server.create(
-      'credential-library',
-      {
-        scope: instances.scopes.project,
-        credentialStore: instances.credentialStore,
-        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-      },
-    );
     instances.vaultLDAPCredentialLibrary = this.server.create(
       'credential-library',
       {
@@ -86,7 +79,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    urls.usernamePasswordDomainCredentialLibrary = `${urls.credentialLibraries}/${instances.usernamePasswordDomainCredentialLibrary.id}`;
     urls.vaultLDAPCredentialLibrary = `${urls.credentialLibraries}/${instances.vaultLDAPCredentialLibrary.id}`;
   });
 
@@ -126,100 +118,67 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       .hasValue(instances.credentialLibrary.name);
   });
 
-  test('can update a vault generic credential library and save changes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
+  test.each(
+    'can update a vault generic credential library with credential type and save changes',
+    options.credential_types,
+    async function (assert, type) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
         },
-      },
-    });
+      });
+      instances.credentialLibrary.update({ credentialType: type });
+      await visit(urls.credentialLibraries);
 
-    await visit(urls.credentialLibrary);
+      await click(commonSelectors.HREF(urls.credentialLibrary));
+      await click(commonSelectors.EDIT_BTN);
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await fillIn(
+        commonSelectors.FIELD_DESCRIPTION,
+        commonSelectors.FIELD_DESCRIPTION_VALUE,
+      );
+      await fillIn(
+        selectors.FIELD_VAULT_PATH,
+        selectors.FIELD_VAULT_PATH_VALUE,
+      );
+      const credentialMappingOverrides = {};
+      options.mapping_overrides[type].forEach(async (overrideField) => {
+        const randName = faker.word.words();
+        credentialMappingOverrides[overrideField] = randName;
+        await fillIn(
+          selectors.FIELD_CRED_MAP_OVERRIDES(overrideField),
+          randName,
+        );
+      });
+      await click(commonSelectors.SAVE_BTN);
 
-    await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await fillIn(
-      commonSelectors.FIELD_DESCRIPTION,
-      commonSelectors.FIELD_DESCRIPTION_VALUE,
-    );
-    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-    await click(commonSelectors.SAVE_BTN);
-
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      name: commonSelectors.FIELD_NAME_VALUE,
-    });
-    assert.strictEqual(
-      credentialLibrary.name,
-      commonSelectors.FIELD_NAME_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.description,
-      commonSelectors.FIELD_DESCRIPTION_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.attributes.path,
-      selectors.FIELD_VAULT_PATH_VALUE,
-    );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      private_key_attribute: 'key',
-    });
-  });
-
-  test('can update a vault generic credential library of username, password and domain type and save changes', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.usernamePasswordDomainCredentialLibrary);
-
-    await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await fillIn(
-      commonSelectors.FIELD_DESCRIPTION,
-      commonSelectors.FIELD_DESCRIPTION_VALUE,
-    );
-    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-    await click(commonSelectors.SAVE_BTN);
-
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      credentialType: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-    });
-    assert.strictEqual(
-      credentialLibrary.name,
-      commonSelectors.FIELD_NAME_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.description,
-      commonSelectors.FIELD_DESCRIPTION_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.attributes.path,
-      selectors.FIELD_VAULT_PATH_VALUE,
-    );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      domain_attribute: 'domain',
-    });
-  });
+      const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+        credentialType: type,
+      });
+      assert.strictEqual(
+        credentialLibrary.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      assert.strictEqual(
+        credentialLibrary.description,
+        commonSelectors.FIELD_DESCRIPTION_VALUE,
+      );
+      assert.strictEqual(
+        credentialLibrary.attributes.path,
+        selectors.FIELD_VAULT_PATH_VALUE,
+      );
+      assert.deepEqual(
+        credentialLibrary.credentialMappingOverrides,
+        credentialMappingOverrides,
+      );
+    },
+  );
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
     setRunOptions({

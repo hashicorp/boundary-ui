@@ -8,6 +8,7 @@ import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
+import { faker } from '@faker-js/faker';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
   TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
@@ -15,7 +16,7 @@ import {
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
-import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
+import { options } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -23,7 +24,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   let featuresService;
   let getCredentialLibraryCount;
-  let getUsernamePasswordDomainCredentialLibraryCount;
+  let getTypeCredentialLibraryCount;
 
   const instances = {
     scopes: {
@@ -73,10 +74,9 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
-    getUsernamePasswordDomainCredentialLibraryCount = () => {
-      return this.server.schema.credentialLibraries.where({
-        credentialType: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-      }).length;
+    getTypeCredentialLibraryCount = (credentialType) => {
+      return this.server.schema.credentialLibraries.where({ credentialType })
+        .length;
     };
     featuresService = this.owner.lookup('service:features');
   });
@@ -100,102 +100,68 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
-  test('can create a new credential library of type vault generic', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
+  test.each(
+    'can create a new credential library with credential type for vault generic',
+    options.credential_types,
+    async function (assert, type) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+            enabled: false,
+          },
         },
-      },
-    });
+      });
 
-    const count = getCredentialLibraryCount();
-    await visit(urls.newCredentialLibrary);
+      const credentialLibraryCount = getCredentialLibraryCount();
+      const typeCredentialLibraryCount = getTypeCredentialLibraryCount(type);
+      await visit(urls.newCredentialLibrary);
 
-    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await select(
-      selectors.FIELD_CRED_TYPE,
-      selectors.FIELD_CRED_TYPE_SSH_VALUE,
-    );
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-    await click(commonSelectors.SAVE_BTN);
+      await fillIn(
+        selectors.FIELD_VAULT_PATH,
+        selectors.FIELD_VAULT_PATH_VALUE,
+      );
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await select(selectors.FIELD_CRED_TYPE, type);
 
-    assert.strictEqual(getCredentialLibraryCount(), count + 1);
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      name: commonSelectors.FIELD_NAME_VALUE,
-    });
-    assert.strictEqual(
-      credentialLibrary.name,
-      commonSelectors.FIELD_NAME_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.credentialType,
-      selectors.FIELD_CRED_TYPE_SSH_VALUE,
-    );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      private_key_attribute: 'key',
-    });
-  });
+      const credentialMappingOverrides = {};
+      options.mapping_overrides[type].forEach(async (overrideField) => {
+        const randName = faker.word.words();
+        credentialMappingOverrides[overrideField] = randName;
+        await fillIn(
+          selectors.FIELD_CRED_MAP_OVERRIDES(overrideField),
+          randName,
+        );
+      });
+      await click(commonSelectors.SAVE_BTN);
 
-  test('can create a new credential library with username, password and domain type for vault generic', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
-          enabled: false,
-        },
-      },
-    });
+      assert.strictEqual(
+        getCredentialLibraryCount(),
+        credentialLibraryCount + 1,
+      );
+      assert.strictEqual(
+        getTypeCredentialLibraryCount(),
+        typeCredentialLibraryCount + 1,
+      );
 
-    const credentialLibraryCount = getCredentialLibraryCount();
-    const usernamePasswordDomainCredentialLibraryCount =
-      getUsernamePasswordDomainCredentialLibraryCount();
-    await visit(urls.newCredentialLibrary);
+      const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+        credentialType: type,
+      });
 
-    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
-    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await select(
-      selectors.FIELD_CRED_TYPE,
-      selectors.FIELD_CRED_TYPE_UPD_VALUE,
-    );
-
-    await select(
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
-    );
-    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
-
-    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
-    await click(commonSelectors.SAVE_BTN);
-
-    assert.strictEqual(getCredentialLibraryCount(), credentialLibraryCount + 1);
-    assert.strictEqual(
-      getUsernamePasswordDomainCredentialLibraryCount(),
-      usernamePasswordDomainCredentialLibraryCount + 1,
-    );
-
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      credentialType: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-    });
-
-    assert.strictEqual(
-      credentialLibrary.name,
-      commonSelectors.FIELD_NAME_VALUE,
-    );
-    assert.strictEqual(
-      credentialLibrary.credentialType,
-      selectors.FIELD_CRED_TYPE_UPD_VALUE,
-    );
-    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
-      domain_attribute: 'domain',
-    });
-  });
+      assert.strictEqual(
+        credentialLibrary.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      assert.strictEqual(credentialLibrary.credentialType, type);
+      assert.deepEqual(
+        credentialLibrary.credentialMappingOverrides,
+        credentialMappingOverrides,
+      );
+    },
+  );
 
   test('can create a new credential library of type vault ssh cert', async function (assert) {
     setRunOptions({
