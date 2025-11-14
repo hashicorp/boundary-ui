@@ -25,11 +25,16 @@ module.exports = {
   },
 
   treeForAddon() {
+    const env = this.parent?.app?.env ?? 'production';
+
     // Exclude anything in the workers folder from being bundled in the final
     // build as we're manually bundling the files ourselves below.
     const tree = this._super.treeForAddon.apply(this, arguments);
     return funnel(tree, {
-      exclude: ['api/workers/**/*'],
+      exclude: [
+        'api/workers/**/*',
+        env === 'production' && 'api/mirage/**/*',
+      ].filter(Boolean),
     });
   },
 
