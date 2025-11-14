@@ -92,7 +92,7 @@ import targetFactory from './factories/target';
 import userFactory from './factories/user';
 import workerFactory from './factories/worker';
 
-const environmentConfig = config.environment;
+const environmentConfig = config;
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
