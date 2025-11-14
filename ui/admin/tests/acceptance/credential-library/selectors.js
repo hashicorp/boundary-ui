@@ -26,8 +26,7 @@ export const FIELD_TTL_VALUE = 'ttl';
 export const FIELD_KEY_ID = '[name=key_id]';
 export const FIELD_KEY_ID_VALUE = 'key_id';
 
-export const FIELD_CRED_MAP_OVERRIDES_SSH = '[name=private_key_attribute]';
-export const FIELD_CRED_MAP_OVERRIDES_DOMAIN = '[name=domain_attribute]';
+export const FIELD_CRED_MAP_OVERRIDES = (field) => `[name=${field}]`;
 
 export const TYPE_VAULT_SSH_CERT = '[value="vault-ssh-certificate"]';
 export const TYPE_VAULT_LDAP = '[value="vault-ldap"]';
