@@ -99,11 +99,9 @@ test(
       await page.getByRole('link', { name: 'Credential Libraries' }).click();
       await page.getByRole('link', { name: 'New', exact: true }).click();
       await page
-        .getByLabel('Name (Optional)', { exact: true })
+        .getByLabel('Name', { exact: true })
         .fill(credentialLibraryName);
-      await page
-        .getByLabel('Description (Optional)')
-        .fill('This is an automated test');
+      await page.getByLabel('Description').fill('This is an automated test');
       await page
         .getByLabel('Vault Path')
         .fill(`${secretsPath}/data/${secretName}`);

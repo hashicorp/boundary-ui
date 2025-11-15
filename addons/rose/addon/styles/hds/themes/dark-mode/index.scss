@@ -121,14 +121,27 @@
   }
 }
 
+@mixin dark-mode-ember-dropdown-override {
+  .ember-basic-dropdown-content {
+    background-color: var(--token-color-palette-neutral-0);
+
+    /* stylelint-disable-next-line selector-class-pattern */
+    &.ember-basic-dropdown-content--in-place {
+      box-shadow: none;
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
+    @include dark-mode-ember-dropdown-override;
   }
 }
 
 .ember-application.rose-theme-dark {
   @include dark-mode;
   @include dark-mode-modal-override;
+  @include dark-mode-ember-dropdown-override;
 }

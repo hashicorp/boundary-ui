@@ -26,15 +26,7 @@ export const FIELD_TTL_VALUE = 'ttl';
 export const FIELD_KEY_ID = '[name=key_id]';
 export const FIELD_KEY_ID_VALUE = 'key_id';
 
-export const FIELD_CRED_MAP_OVERRIDES_SELECT =
-  '[name="credential_mapping_overrides"] select';
-export const FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE =
-  'private_key_attribute';
-export const FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE = 'domain_attribute';
-export const FIELD_CRED_MAP_OVERRIDES_INPUT =
-  '[name="credential_mapping_overrides"] input';
-export const FIELD_CRED_MAP_OVERRIDES_BTN =
-  '[name="credential_mapping_overrides"] button';
+export const FIELD_CRED_MAP_OVERRIDES = (field) => `[name=${field}]`;
 
 export const TYPE_VAULT_SSH_CERT = '[value="vault-ssh-certificate"]';
 export const TYPE_VAULT_LDAP = '[value="vault-ldap"]';

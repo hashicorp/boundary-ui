@@ -331,6 +331,8 @@
   .credential-header {
     padding: 1.5rem;
     width: 33%;
+    display: flex;
+    flex-direction: column;
   }
 
   .credential-secret {

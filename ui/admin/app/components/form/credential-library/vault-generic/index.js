@@ -28,7 +28,7 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
    */
   @action
   selectCredentialType({ target: { value } }) {
-    this.args.model.credential_mapping_overrides = [];
+    this.args.model.credential_mapping_overrides = {};
     this.args.model.credential_type = value;
   }
 }

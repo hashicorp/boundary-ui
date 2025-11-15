@@ -191,12 +191,10 @@ test(
         .getByRole('link', { name: 'Credentials', exact: true })
         .click();
       await page.getByRole('link', { name: 'New', exact: true }).click();
-      await page.getByLabel('Name (Optional)').fill(credentialName);
+      await page.getByLabel('Name', { exact: true }).fill(credentialName);
       await page.getByLabel('Description').fill('This is an automated test');
-      await page
-        .getByRole('group', { name: 'Type' })
-        .getByLabel('JSON')
-        .click();
+      await page.getByRole('combobox', { name: 'Type' }).click();
+      await page.getByRole('option', { name: 'JSON' }).click();
       await page.getByText('{}').click();
       const testName = 'name-json';
       const testPassword = 'password-json';

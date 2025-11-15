@@ -913,11 +913,12 @@ credential-library:
     ssh_private_key: SSH Private Key
     username_password: Username & Password
     username_password_domain: Username, Password & Domain
-    username_attribute: Username
-    password_attribute: Password
-    private_key_passphrase_attribute: Private Key Passphrase
-    private_key_attribute: Private Key
-    domain_attribute: Domain
+    password: Password
+    username_attribute: username_attribute
+    password_attribute: password_attribute
+    private_key_passphrase_attribute: private_key_passphrase_attribute
+    private_key_attribute: private_key_attribute
+    domain_attribute: domain_attribute
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -989,12 +990,14 @@ credential:
     ssh_private_key: Username & Key Pair
     username_password_domain: Username, Password & Domain
     json: JSON
+    password: Password
     unknown: Unknown
   help:
     username_password: Connect using the provided username and password.
     ssh_private_key: Connect using a username, public key, and private key.
     json: Connect using a JSON blob containing the credentials.
-    username_password_domain: Includes a domain field for Active Directory
+    username_password_domain: Includes a domain field for Active Directory.
+    password: Connect using only a provided password.
   form:
     username:
       label: Username

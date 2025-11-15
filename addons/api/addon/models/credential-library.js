@@ -8,6 +8,7 @@ import {
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 /**
  * Enum options for credential library.
@@ -19,6 +20,7 @@ export const options = {
     TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
     TYPE_CREDENTIAL_USERNAME_PASSWORD,
     TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+    TYPE_CREDENTIAL_PASSWORD,
   ],
   mapping_overrides: {
     username_password: ['username_attribute', 'password_attribute'],
@@ -32,6 +34,7 @@ export const options = {
       'password_attribute',
       'domain_attribute',
     ],
+    password: ['password_attribute'],
   },
 };
 
