@@ -11,8 +11,7 @@ import {
   getRootElement,
   select,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import {
   authenticateSession,
   currentSession,
@@ -23,7 +22,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   const instances = {
@@ -35,6 +33,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     authMethods: {
       global: null,
     },
+    account: null,
     target: null,
     target2: null,
     session: null,
@@ -67,13 +66,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession();
-
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      name: 'Global',
-    });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
 
     instances.scopes.org = this.server.create('scope', {
@@ -86,6 +80,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
       type: 'project',
       scope: orgScope,
     });
+    instances.account = this.server.schema.accounts.first();
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
@@ -184,10 +179,10 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    await authenticateSession({ username: 'testuser' });
+    await authenticateSession({ account_id: instances.account.id });
     assert.expect(2);
 
-    await authenticateSession({ username: 'testuser' });
+    await authenticateSession({ account_id: instances.account.id });
     assert.ok(currentSession().isAuthenticated);
 
     await visit(urls.settings);
@@ -215,7 +210,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     const stopAllSessions = this.ipcStub.withArgs('stopAll');
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
-    await authenticateSession({ username: 'testuser' });
+    await authenticateSession({ account_id: instances.account.id });
     assert.ok(currentSession().isAuthenticated);
 
     await visit(urls.settings);

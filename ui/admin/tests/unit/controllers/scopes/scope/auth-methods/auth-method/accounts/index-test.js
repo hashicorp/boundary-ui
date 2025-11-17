@@ -9,7 +9,6 @@ import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module(
   'Unit | Controller | scopes/scope/auth-methods/auth-method/accounts/index',
@@ -36,24 +35,22 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       intl = this.owner.lookup('service:intl');
       controller = this.owner.lookup(
         'controller:scopes/scope/auth-methods/auth-method/accounts/index',
       );
       store = this.owner.lookup('service:store');
 
-      instances.scopes.global = this.server.create('scope', {
-        id: 'global',
-        type: 'global',
-      });
-      instances.authMethod = this.server.create('auth-method', {
-        scope: instances.scopes.global,
-        type: TYPE_AUTH_METHOD_PASSWORD,
-      });
-      instances.account = this.server.create('account', {
-        scope: instances.scopes.global,
-        authMethod: instances.authMethod,
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      instances.authMethod = this.server.schema.authMethods.first();
+      instances.account = this.server.schema.accounts.first();
+      await authenticateSession({
+        isGlobal: true,
+        account_id: instances.account.id,
       });
 
       getAccountCount = () => this.server.schema.accounts.all().models.length;

@@ -159,21 +159,22 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       // To correctly show targets with active sessions, the associated
       // sessions need to be queried to sync all the session models in
       //  ember data and retrieve their updated `status` properties
-      const sessionsPromise = this.store.query(
-        'session',
-        {
-          query: {
-            filters: {
-              target_id: targets.map((target) => ({ equals: target.id })),
-            },
+      const sessionsPromise = this.store.query('session', {
+        query: {
+          filters: {
+            target_id: targets.map((target) => ({ equals: target.id })),
           },
         },
-        { pushToStore: true },
-      );
+      });
 
+      let allAssociatedSessions;
       // Load the sessions and aliases for the targets on the current page
       try {
-        await Promise.all([aliasPromise, sessionsPromise]);
+        const loadedResults = await Promise.all([
+          aliasPromise,
+          sessionsPromise,
+        ]);
+        allAssociatedSessions = loadedResults[1];
       } catch (e) {
         __electronLog?.warn(
           'Could not retrieve aliases and/or sessions for targets',
@@ -181,6 +182,27 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         );
         // Separately await and catch the error here so we can continue loading
         // the page in case the controller doesn't support aliases yet
+      }
+
+      // Remove expired sessions in ember data store for symmetry with cache.
+      if (allAssociatedSessions) {
+        const targetIds = targets.map(({ id }) => id);
+        const allAssociatedSessionIds = new Set(
+          allAssociatedSessions.map(({ id }) => id),
+        );
+        const storedSessionIds = new Set(
+          this.store
+            .peekAll('session')
+            .filter((s) => targetIds.includes(s?.target_id))
+            .map(({ id }) => id),
+        );
+        const removedSessions = storedSessionIds.difference(
+          allAssociatedSessionIds,
+        );
+        removedSessions.forEach((id) => {
+          const record = this.store.peekRecord('session', id);
+          this.store.unloadRecord(record);
+        });
       }
 
       return {

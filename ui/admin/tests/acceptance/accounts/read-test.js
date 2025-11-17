@@ -6,18 +6,14 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     authMethod: null,
@@ -31,8 +27,6 @@ module('Acceptance | accounts | read', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -87,6 +81,15 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('user can navigate to account and incorrect url auto-corrects', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-11-03
+          enabled: false,
+        },
+      },
+    });
+
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
     });

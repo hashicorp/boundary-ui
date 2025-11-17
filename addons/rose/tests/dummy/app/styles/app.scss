@@ -16,7 +16,7 @@
   width: 9rem;
 
   // border: 1px solid var(--ui-gray-subtler-4);
-  border-radius: 4px;
+  border-radius: var(--token-border-radius-small);
   margin: 0 0.5rem 0.5rem 0 !important;
   box-shadow: 0 3px 6px rgba(var(--stark-components), var(--opacity-3));
   list-style-type: none;
@@ -36,7 +36,7 @@
 .swatch-chip {
   height: 5rem;
   border: 0.5rem solid var(--subtle);
-  border-radius: 4px;
+  border-radius: var(--token-border-radius-small);
 }
 
 .swatch-detail {

@@ -20,6 +20,7 @@ module.exports = {
     es2021: true,
   },
   rules: {
+    curly: ['error', 'multi-line', 'consistent'],
     'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
   },
   overrides: [

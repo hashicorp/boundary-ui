@@ -7,10 +7,8 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
@@ -18,7 +16,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
@@ -63,17 +60,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   let originalUncaughtException = QUnit.onUncaughtException;
 
   hooks.beforeEach(async function () {
-    instances.user = this.server.create('user', {
-      scope: instances.scopes.global,
-    });
-
-    await authenticateSession({
-      user_id: instances.user.id,
-      username: 'admin',
-    });
-
     // create scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -92,9 +80,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       scope: instances.scopes.project,
       hostCatalog: instances.hostCatalog,
     });
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
+    instances.user = this.server.schema.users.first();
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project, address: 'localhost' },

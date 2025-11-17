@@ -6,16 +6,13 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as credentialStoreSelectors from '../selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | credentials | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
@@ -72,7 +69,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.credentials = `${urls.staticCredentialStore}/credentials`;
     urls.newCredential = `${urls.staticCredentialStore}/credentials/new`;
-    await authenticateSession({});
   });
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {

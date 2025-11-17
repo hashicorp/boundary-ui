@@ -17,13 +17,11 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
     status: 'active',
     created_time: '2024-03-12T20:44:14.808699Z',
   };
-  const user = { id: 'u_123', name: 'admin' };
-  const target = { id: 't_123', name: 'target' };
   const model = {
     sessions: [session],
-    associatedUsers: [user],
-    associatedTargets: [target],
-    allSessions: [session],
+    canListUsers: true,
+    canListTargets: true,
+    doSessionsExist: true,
     totalItems: 1,
   };
 
@@ -58,18 +56,8 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
           name: 'Terminated',
         },
       ],
-      targets: [
-        {
-          id: 't_123',
-          name: 'target',
-        },
-      ],
-      users: [
-        {
-          id: 'u_123',
-          name: 'admin',
-        },
-      ],
+      targets: [],
+      users: [],
     });
     assert.deepEqual(controller.filters.selectedFilters, {
       users: [],
@@ -111,24 +99,5 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
 
     assert.strictEqual(controller.page, 1);
     assert.deepEqual(controller.users, selectedItems);
-  });
-
-  test('refresh action calls refreshAll', async function (assert) {
-    assert.expect(2);
-    let controller = this.owner.lookup(
-      'controller:scopes/scope/sessions/index',
-    );
-    controller.set('target', {
-      send(actionName, ...args) {
-        assert.strictEqual(actionName, 'refreshAll');
-        assert.deepEqual(
-          args,
-          [],
-          'refreshAll was called with the correct arguments',
-        );
-      },
-    });
-
-    await controller.refresh();
   });
 });

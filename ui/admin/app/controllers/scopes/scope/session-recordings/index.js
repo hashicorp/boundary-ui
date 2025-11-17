@@ -7,12 +7,16 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { assert } from '@ember/debug';
+import { restartableTask } from 'ember-concurrency';
+import FilterOptions from 'admin/utils/filter-options';
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
   // =services
 
   @service store;
   @service intl;
+  @service db;
 
   // =attributes
 
@@ -29,6 +33,10 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   ];
 
   now = new Date();
+
+  userFilters = new FilterOptions();
+  scopeFilters = new FilterOptions();
+  targetFilters = new FilterOptions();
 
   @tracked search;
   @tracked time = null;
@@ -48,9 +56,9 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     return {
       allFilters: {
         time: this.timeOptions,
-        users: this.filterOptions('user'),
-        scopes: this.projectScopes,
-        targets: this.filterOptions('target'),
+        users: this.userFilters.allOptions,
+        scopes: this.scopeFilters.allOptions,
+        targets: this.targetFilters.allOptions,
       },
       selectedFilters: {
         time: [this.time],
@@ -95,28 +103,86 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   }
 
   /**
-   * Returns unique project scopes from targets
-   * linked to the session recordings
+   * Configurations for different filter options
    * @returns {[object]}
    */
-  get projectScopes() {
-    const uniqueMap = new Map();
-    this.model.allSessionRecordings.forEach(
-      ({
-        create_time_values: {
-          target: {
-            scope: { id, name, parent_scope_id },
-          },
-        },
-      }) => {
-        if (!uniqueMap.has(id)) {
-          const projectName = name || id;
-          uniqueMap.set(id, { id, name: projectName, parent_scope_id });
-        }
+  get filterConfigs() {
+    return {
+      userFilters: {
+        select: [
+          { field: 'user_id', isDistinct: true },
+          { field: 'user_name', isDistinct: true },
+        ],
+        searchFields: ['user_id', 'user_name'],
+        mapper: ({ user_id, user_name }) => ({
+          id: user_id,
+          name: user_name,
+        }),
       },
-    );
-    return Array.from(uniqueMap.values());
+      scopeFilters: {
+        select: [
+          { field: 'target_scope_id', isDistinct: true },
+          { field: 'target_scope_name', isDistinct: true },
+          { field: 'target_scope_parent_scope_id', isDistinct: true },
+        ],
+        searchFields: [
+          'target_scope_id',
+          'target_scope_name',
+          'target_scope_parent_scope_id',
+        ],
+        mapper: ({
+          target_scope_id,
+          target_scope_name,
+          target_scope_parent_scope_id,
+        }) => ({
+          id: target_scope_id,
+          name: target_scope_name ?? target_scope_id,
+          parent_scope_id: target_scope_parent_scope_id,
+        }),
+      },
+      targetFilters: {
+        select: [
+          { field: 'target_id', isDistinct: true },
+          { field: 'target_name', isDistinct: true },
+        ],
+        searchFields: ['target_id', 'target_name'],
+        mapper: ({ target_id, target_name }) => ({
+          id: target_id,
+          name: target_name,
+        }),
+      },
+    };
   }
+
+  /**
+   * Generic retrieve function for session recording options
+   * @param {string} type - The type of options to retrieve (user, scope, target)
+   * @param {string} search - Search term
+   * @returns {Promise<Array>}
+   */
+  async retrieveFilterOptions(type, search) {
+    const config = this.filterConfigs[type];
+    assert(`Unknown filter type: ${type}`, config);
+
+    const results = await this.db.query('session-recording', {
+      select: config.select,
+      query: {
+        search: { text: search, fields: config.searchFields },
+      },
+      page: 1,
+      pageSize: 250,
+    });
+
+    return results.map(config.mapper);
+  }
+
+  loadItems = restartableTask(async () => {
+    this.userFilters.options = await this.retrieveFilterOptions('userFilters');
+    this.scopeFilters.options =
+      await this.retrieveFilterOptions('scopeFilters');
+    this.targetFilters.options =
+      await this.retrieveFilterOptions('targetFilters');
+  });
 
   // =actions
 
@@ -129,28 +195,6 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   orgName(orgID) {
     const org = this.store.peekRecord('scope', orgID);
     return org.displayName;
-  }
-
-  /**
-   * Returns all filter options for key for session recordings
-   * @param {string} key
-   * @returns {[object]}
-   */
-  @action
-  filterOptions(key) {
-    const uniqueMap = new Map();
-    this.model.allSessionRecordings.forEach(
-      ({
-        create_time_values: {
-          [key]: { id, name },
-        },
-      }) => {
-        if (!uniqueMap.has(id)) {
-          uniqueMap.set(id, { id, name });
-        }
-      },
-    );
-    return Array.from(uniqueMap.values());
   }
 
   /**
@@ -192,7 +236,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    */
   @action
   refresh() {
-    this.send('refreshAll');
+    this.router.refresh('scopes.scope.session-recordings');
   }
 
   /**
@@ -206,4 +250,9 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     this.sortDirection = sortOrder;
     this.page = 1;
   }
+
+  onFilterSearch = restartableTask(async (filter, value) => {
+    this[filter].search = value;
+    this[filter].options = await this.retrieveFilterOptions(filter, value);
+  });
 }

@@ -11,8 +11,7 @@ import {
   click,
   triggerEvent,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
 import {
   currentSession,
@@ -26,7 +25,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -39,6 +37,7 @@ module('Acceptance | authentication', function (hooks) {
       global: null,
       org: null,
     },
+    account: null,
     user: null,
     target: null,
     session: null,
@@ -80,17 +79,13 @@ module('Acceptance | authentication', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.user = this.server.create('user', {
-      scope: instances.scopes.global,
-    });
-
     await invalidateSession();
 
     const ipcService = this.owner.lookup('service:ipc');
     this.ipcStub = sinon.stub(ipcService, 'invoke');
 
     // create scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     stubs.global = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -108,15 +103,13 @@ module('Acceptance | authentication', function (hooks) {
       type: 'org',
       scope: stubs.global,
     });
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-      type: 'password',
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
+    instances.account = this.server.schema.accounts.first();
+    instances.user = this.server.schema.users.first();
     instances.authMethods.org = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: 'password',
     });
-
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
@@ -235,6 +228,7 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.expect(3);
     await authenticateSession({
+      account_id: instances.account.id,
       scope: {
         id: instances.scopes.global.id,
         type: instances.scopes.global.type,
@@ -285,7 +279,7 @@ module('Acceptance | authentication', function (hooks) {
 
     await visit(urls.authenticate.methods.global);
 
-    await authenticateSession({ username: 'test' });
+    await authenticateSession({ account_id: instances.account.id });
 
     assert.ok(currentSession().isAuthenticated);
 
@@ -317,7 +311,7 @@ module('Acceptance | authentication', function (hooks) {
 
     await visit(urls.authenticate.methods.global);
 
-    await authenticateSession({ username: 'test' });
+    await authenticateSession({ account_id: instances.account.id });
 
     assert.ok(currentSession().isAuthenticated);
 
@@ -367,7 +361,7 @@ module('Acceptance | authentication', function (hooks) {
 
     await visit(urls.authenticate.methods.global);
 
-    await authenticateSession({ username: 'test' });
+    await authenticateSession({ account_id: instances.account.id });
 
     assert.ok(currentSession().isAuthenticated);
 

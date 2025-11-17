@@ -133,9 +133,7 @@ test(
       ).toBeVisible();
 
       // Log back in as an admin
-      await page.getByRole('button', { name: 'User Menu' }).click();
-      await page.getByRole('button', { name: 'Sign Out' }).click();
-      await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+      await loginPage.logout(email);
       await loginPage.login(adminLoginName, adminPassword);
       await expect(
         page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),

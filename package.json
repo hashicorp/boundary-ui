@@ -39,7 +39,8 @@
     "git-cz": "^4.9.0",
     "husky": "^9.1.6",
     "license-checker": "^25.0.1",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "esbuild": "^0.25.4"
   },
   "pnpm": {
     "overrides": {
@@ -53,7 +54,8 @@
       "fireworm>async": "^2.6.4",
       "ember-cli-babel>@babel/runtime": "7.27.6",
       "ember-try-config>package-json": "^10.0.1",
-      "ember-stargate@^0.6.0>@glimmer/component": "^2.0.0"
+      "ember-stargate@^0.6.0>@glimmer/component": "^2.0.0",
+      "ember-loading>ember-concurrency": "^4.0.0"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
@@ -63,7 +65,10 @@
       "@nestjs/core",
       "@openapitools/openapi-generator-cli"
     ],
-    "onlyBuiltDependencies": []
+    "onlyBuiltDependencies": [],
+    "patchedDependencies": {
+      "ember-loading": "patches/ember-loading.patch"
+    }
   },
   "config": {
     "commitizen": {

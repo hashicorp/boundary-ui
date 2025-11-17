@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import {
@@ -24,7 +22,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const CREATED_TIME_VALUES_ARRAY = [
@@ -63,7 +60,7 @@ module('Acceptance | sessions | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.admin = this.server.create('user', {
       scopeId: 'global',
       name: 'admin',
@@ -108,8 +105,6 @@ module('Acceptance | sessions | list', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `${urls.projectScope}/sessions`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting sessions', async function (assert) {
@@ -300,6 +295,71 @@ module('Acceptance | sessions | list', function (hooks) {
     await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
 
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
+  });
+
+  test('user can search for sessions by associated user name', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.sessions[0].update({
+      userId: instances.admin.id,
+    });
+    instances.sessions[1].update({
+      userId: instances.dev.id,
+    });
+    instances.sessions[2].update({
+      userId: instances.dev.id,
+    });
+
+    await visit(urls.projectScope);
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, 'dev');
+    await waitFor(selectors.TABLE_SESSION_ID(instances.sessions[0].id), {
+      count: 0,
+    });
+
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[1].id)).exists();
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+  });
+
+  test('user can search for sessions by associated target name', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.sessions[0].update({
+      targetId: instances.tcpTarget.id,
+    });
+    instances.sessions[1].update({
+      targetId: instances.sshTarget.id,
+    });
+    instances.sessions[2].update({
+      targetId: instances.sshTarget.id,
+    });
+
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.sshTarget.name);
+    await waitFor(selectors.TABLE_SESSION_ID(instances.sessions[0].id), {
+      count: 0,
+    });
+
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[1].id)).exists();
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
   });
 
   test('user can filter for sessions by user', async function (assert) {

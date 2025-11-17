@@ -5,8 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, find, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
@@ -14,7 +13,6 @@ import { setupBrowserFakes } from 'ember-browser-services/test-support';
 module('Acceptance | Application', function (hooks) {
   setupApplicationTest(hooks);
   setupBrowserFakes(hooks, { window: true });
-  setupMirage(hooks);
 
   const TOAST = '[data-test-toast-notification]';
   const TOAST_DO_NOT_SHOW_AGAIN_BUTTON =

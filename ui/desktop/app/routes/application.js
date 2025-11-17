@@ -49,6 +49,8 @@ export default class ApplicationRoute extends Route {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
+
+      await this.session.loadAuthenticatedAccount();
     }
   }
 

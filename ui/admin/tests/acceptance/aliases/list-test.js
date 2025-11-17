@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, click, currentURL, waitFor, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
@@ -16,7 +14,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let intl;
@@ -41,7 +38,7 @@ module('Acceptance | aliases | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -66,8 +63,6 @@ module('Acceptance | aliases | list', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.aliasWithTarget = `${urls.aliases}/${instances.aliasWithTarget.id}`;
     intl = this.owner.lookup('service:intl');
-
-    await authenticateSession({});
   });
 
   test('users can navigate to aliases with proper authorization', async function (assert) {
@@ -282,6 +277,46 @@ module('Acceptance | aliases | list', function (hooks) {
     assert
       .dom(commonSelectors.PAGE_MESSAGE_HEADER)
       .includesText(intl.t('titles.no-results-found'));
+  });
+
+  test('user can search for aliases by associated target name', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    // Create a target with a specific name
+    const targetWithName = this.server.create('target', {
+      name: 'A real production target',
+      scope: instances.scopes.project,
+    });
+
+    // Create an alias associated with this target
+    const aliasWithNamedTarget = this.server.create('alias', {
+      scope: instances.scopes.global,
+      destination_id: targetWithName.id,
+    });
+
+    const urlAliasWithNamedTarget = `${urls.aliases}/${aliasWithNamedTarget.id}`;
+
+    await visit(urls.globalScope);
+
+    await click(commonSelectors.HREF(urls.aliases));
+
+    assert.dom(commonSelectors.HREF(urls.alias)).exists();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).exists();
+    assert.dom(commonSelectors.HREF(urlAliasWithNamedTarget)).exists();
+
+    await fillIn(commonSelectors.SEARCH_INPUT, 'production target');
+    await waitFor(commonSelectors.HREF(urls.alias), { count: 0 });
+
+    assert.dom(commonSelectors.HREF(urlAliasWithNamedTarget)).exists();
+    assert.dom(commonSelectors.HREF(urls.alias)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).doesNotExist();
   });
 
   test('aliases are sorted by created_time descending by default', async function (assert) {

@@ -10,11 +10,9 @@ import {
   currentRouteName,
   click,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
-  authenticateSession,
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
@@ -27,7 +25,6 @@ import {
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   let getTargetCount;
@@ -88,15 +85,11 @@ module('Acceptance | projects | targets | index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      name: 'Global',
-    });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -118,9 +111,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
 
     // Generate resources
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -682,11 +673,14 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     assert.strictEqual(instances.session.status, STATUS_SESSION_ACTIVE);
     await visit(urls.targets);
-    const emberDataSessionModel = this.owner
+    const emberDataSessionModelBefore = this.owner
       .lookup('service:store')
       .peekRecord('session', instances.session.id);
 
-    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_ACTIVE);
+    assert.strictEqual(
+      emberDataSessionModelBefore.status,
+      STATUS_SESSION_ACTIVE,
+    );
 
     assert
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
@@ -704,7 +698,13 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.strictEqual(emberDataSessionModel.status, STATUS_SESSION_TERMINATED);
+    const emberDataSessionModelAfter = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+    assert.strictEqual(
+      emberDataSessionModelAfter.status,
+      STATUS_SESSION_TERMINATED,
+    );
     assert
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
       .doesNotExist();

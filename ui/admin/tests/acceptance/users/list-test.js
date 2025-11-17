@@ -13,9 +13,7 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
@@ -23,12 +21,10 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     user1: null,
@@ -44,7 +40,6 @@ module('Acceptance | users | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -60,7 +55,6 @@ module('Acceptance | users | list', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user1 = `${urls.users}/${instances.user1.id}`;
     urls.user2 = `${urls.users}/${instances.user2.id}`;
-    await authenticateSession({});
   });
 
   test('users can navigate to users with proper authorization', async function (assert) {

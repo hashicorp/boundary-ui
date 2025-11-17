@@ -8,6 +8,7 @@ import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import { faker } from '@faker-js/faker';
+import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 export default factory.extend({
   type: 'global',
@@ -104,6 +105,23 @@ export default factory.extend({
         server.createList('scope', 3, {
           type: 'project',
           scope: { id: record.id, type: record.type },
+        });
+      }
+    },
+  }),
+
+  withGlobalAuth: trait({
+    afterCreate(record, server) {
+      if (record.type === 'global') {
+        const authMethod = server.create('auth-method', {
+          type: TYPE_AUTH_METHOD_PASSWORD,
+          scope: record,
+        });
+        server.create('account', {
+          type: TYPE_AUTH_METHOD_PASSWORD,
+          full_name: 'admin',
+          scope: record,
+          authMethod,
         });
       }
     },

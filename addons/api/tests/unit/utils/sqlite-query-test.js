@@ -20,21 +20,6 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     delete String.prototype.removeExtraWhiteSpace;
   });
 
-  // TODO: Add a normal LIKE search when we add a resource that uses it
-  test('it generates search correctly with FTS5', function (assert) {
-    const query = { search: 'favorite' };
-
-    const { sql, parameters } = generateSQLExpressions('target', query);
-    assert.strictEqual(
-      sql,
-      `
-        SELECT * FROM "target"
-        WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
-    );
-    assert.deepEqual(parameters, ['"favorite"*']);
-  });
-
   test('it grabs resources not in the model mapping', function (assert) {
     const query = {
       filters: { id: [{ equals: 'tokenKey' }] },
@@ -45,14 +30,14 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
         SELECT * FROM "token"
-        WHERE (id = ?)`.removeExtraWhiteSpace(),
+        WHERE ("token".id = ?)`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, ['tokenKey']);
   });
 
   test('it executes count queries correctly', function (assert) {
     const select = {
-      select: ['count(*) as total'],
+      select: [{ field: '*', isCount: true, alias: 'total' }],
     };
 
     const { sql, parameters } = generateSQLExpressions('target', {}, select);
@@ -60,10 +45,127 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
       SELECT count(*) as total FROM "target"
-      ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+      ORDER BY "target".created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, []);
   });
+
+  test.each(
+    'it generates select clause with various options',
+    {
+      'single field': {
+        select: [{ field: 'name' }],
+        expectedSelect: '"target".name',
+      },
+      'multiple fields': {
+        select: [{ field: 'name' }, { field: 'type' }, { field: 'id' }],
+        expectedSelect: '"target".name, "target".type, "target".id',
+      },
+      'field with alias': {
+        select: [{ field: 'name', alias: 'resource_name' }],
+        expectedSelect: '"target".name as resource_name',
+      },
+      'multiple fields with aliases': {
+        select: [
+          { field: 'name', alias: 'resource_name' },
+          { field: 'type', alias: 'resource_type' },
+        ],
+        expectedSelect: '"target".name as resource_name, "target".type as resource_type',
+      },
+      'count with alias': {
+        select: [{ field: 'id', isCount: true, alias: 'total_count' }],
+        expectedSelect: 'count("target".id) as total_count',
+      },
+      'count without alias': {
+        select: [{ field: '*', isCount: true }],
+        expectedSelect: 'count(*)',
+      },
+      'count distinct': {
+        select: [{ field: 'status', isCount: true, isDistinct: true }],
+        expectedSelect: 'count(DISTINCT "target".status)',
+      },
+      'count distinct with alias': {
+        select: [
+          {
+            field: 'type',
+            isCount: true,
+            isDistinct: true,
+            alias: 'unique_types',
+          },
+        ],
+        expectedSelect: 'count(DISTINCT "target".type) as unique_types',
+      },
+      'mixed regular and count fields': {
+        select: [
+          { field: 'name' },
+          { field: 'id', isCount: true, alias: 'count' },
+        ],
+        expectedSelect: '"target".name, count("target".id) as count',
+      },
+      'field with distinct': {
+        select: [{ field: 'type', isDistinct: true }],
+        expectedSelect: 'DISTINCT "target".type',
+      },
+      'multiple distinct fields': {
+        select: [
+          { field: 'type', isDistinct: true },
+          { field: 'status', isDistinct: true },
+        ],
+        expectedSelect: 'DISTINCT "target".type, "target".status',
+      },
+      'multiple distinct with count fields': {
+        select: [
+          { field: 'type', isDistinct: true, isCount: true },
+          { field: 'status', isDistinct: true, isCount: true },
+        ],
+        expectedSelect: 'count(DISTINCT "target".type), count(DISTINCT "target".status)',
+      },
+      'distinct with alias': {
+        select: [{ field: 'type', isDistinct: true, alias: 'unique_type' }],
+        expectedSelect: 'DISTINCT "target".type as unique_type',
+      },
+      'multiple distinct fields with aliases': {
+        select: [
+          { field: 'type', isDistinct: true, alias: 'unique_type' },
+          { field: 'status', isDistinct: true, alias: 'unique_status' },
+        ],
+        expectedSelect: 'DISTINCT "target".type as unique_type, "target".status as unique_status',
+      },
+      'count distinct multiple fields': {
+        select: [
+          {
+            field: 'type',
+            isCount: true,
+            isDistinct: true,
+            alias: 'type_count',
+          },
+          {
+            field: 'status',
+            isCount: true,
+            isDistinct: true,
+            alias: 'status_count',
+          },
+        ],
+        expectedSelect:
+          'count(DISTINCT "target".type) as type_count, count(DISTINCT "target".status) as status_count',
+      },
+    },
+    function (assert, { select, expectedSelect }) {
+      const { sql, parameters } = generateSQLExpressions(
+        'target',
+        {},
+        { select },
+      );
+
+      assert.strictEqual(
+        sql,
+        `
+        SELECT ${expectedSelect} FROM "target"
+        ORDER BY "target".created_time DESC`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, []);
+    },
+  );
 
   test.each(
     'it generates filters correctly',
@@ -74,7 +176,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             type: [{ equals: 'ssh' }],
           },
         },
-        expectedWhereClause: 'WHERE (type = ?)',
+        expectedWhereClause: 'WHERE ("target".type = ?)',
         expectedParams: ['ssh'],
       },
       notEquals: {
@@ -83,7 +185,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             type: [{ notEquals: 'ssh' }],
           },
         },
-        expectedWhereClause: 'WHERE (type != ?)',
+        expectedWhereClause: 'WHERE ("target".type != ?)',
         expectedParams: ['ssh'],
       },
       contains: {
@@ -92,7 +194,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             type: [{ contains: 'ssh' }],
           },
         },
-        expectedWhereClause: 'WHERE (type LIKE ?)',
+        expectedWhereClause: 'WHERE ("target".type LIKE ?)',
         expectedParams: ['%ssh%'],
       },
       greaterThan: {
@@ -102,7 +204,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             numberField: [{ gt: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_time > ?) AND (numberField > ?)',
+        expectedWhereClause:
+          'WHERE ("target".created_time > ?) AND ("target".numberField > ?)',
         expectedParams: [isoDateString, 10],
       },
       lessThan: {
@@ -112,7 +215,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             numberField: [{ lt: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_time < ?) AND (numberField < ?)',
+        expectedWhereClause:
+          'WHERE ("target".created_time < ?) AND ("target".numberField < ?)',
         expectedParams: [isoDateString, 10],
       },
       greaterThanOrEqual: {
@@ -122,7 +226,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             numberField: [{ gte: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_time >= ?) AND (numberField >= ?)',
+        expectedWhereClause:
+          'WHERE ("target".created_time >= ?) AND ("target".numberField >= ?)',
         expectedParams: [isoDateString, 10],
       },
       lessThanOrEqual: {
@@ -132,7 +237,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
             numberField: [{ lte: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_time <= ?) AND (numberField <= ?)',
+        expectedWhereClause:
+          'WHERE ("target".created_time <= ?) AND ("target".numberField <= ?)',
         expectedParams: [isoDateString, 10],
       },
       logicalOperators: {
@@ -150,8 +256,41 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           },
         },
         expectedWhereClause:
-          'WHERE (id NOT IN (?, ?)) AND (status IN (?, ?)) AND (type = ?)',
+          'WHERE ("target".id NOT IN (?, ?)) AND ("target".status IN (?, ?)) AND ("target".type = ?)',
         expectedParams: ['id1', 'id2', 'active', 'pending', 'ssh'],
+      },
+      equalsNull: {
+        query: {
+          filters: {
+            description: [{ equals: null }],
+          },
+        },
+        expectedWhereClause: 'WHERE ("target".description IS NULL)',
+        expectedParams: [],
+      },
+      notEqualsNull: {
+        query: {
+          filters: {
+            description: [{ notEquals: null }],
+          },
+        },
+        expectedWhereClause: 'WHERE ("target".description IS NOT NULL)',
+        expectedParams: [],
+      },
+      mixedNullAndValues: {
+        query: {
+          filters: {
+            status: [
+              { equals: 'active' },
+              { equals: 'pending' },
+              { equals: null },
+            ],
+            type: [{ notEquals: null }, { notEquals: 'ssh' }],
+          },
+        },
+        expectedWhereClause:
+          'WHERE ("target".status IN (?, ?) OR "target".status IS NULL) AND ("target".type NOT IN (?) OR "target".type IS NOT NULL)',
+        expectedParams: ['active', 'pending', 'ssh'],
       },
     },
 
@@ -162,7 +301,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         `
         SELECT * FROM "target"
         ${expectedWhereClause}
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+        ORDER BY "target".created_time DESC`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, expectedParams);
     },
@@ -184,7 +323,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         sql,
         `
         SELECT * FROM "target"
-        ORDER BY name COLLATE NOCASE ${expectedDirection}, name ${expectedDirection}`.removeExtraWhiteSpace(),
+        ORDER BY "target".name COLLATE NOCASE ${expectedDirection}, "target".name ${expectedDirection}`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, []);
     },
@@ -198,20 +337,20 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           attributes: ['name', 'id'],
           isCoalesced: true,
         },
-        expectedOrderByClause: `ORDER BY COALESCE(name, id) COLLATE NOCASE DESC, COALESCE(name, id) DESC`,
+        expectedOrderByClause: `ORDER BY COALESCE("target".name, "target".id) COLLATE NOCASE DESC, COALESCE("target".name, "target".id) DESC`,
       },
       'sort on multiple attributes': {
         sort: {
           attributes: ['name', 'id'],
         },
-        expectedOrderByClause: `ORDER BY name COLLATE NOCASE DESC, id COLLATE NOCASE DESC, name DESC, id DESC`,
+        expectedOrderByClause: `ORDER BY "target".name COLLATE NOCASE DESC, "target".id COLLATE NOCASE DESC, "target".name DESC, "target".id DESC`,
       },
       'sort on mapped attributes': {
         sort: {
           attributes: ['type'],
           customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
         },
-        expectedOrderByClause: `ORDER BY CASE type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
+        expectedOrderByClause: `ORDER BY CASE "target".type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
       },
     },
     function (assert, { sort, expectedOrderByClause }) {
@@ -247,41 +386,189 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         sql,
         `
         SELECT * FROM "target"
-        ORDER BY created_time DESC
+        ORDER BY "target".created_time DESC
         LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, expectedParams);
     },
   );
 
-  test('it generates FTS5 search with filters', function (assert) {
-    const query = {
-      search: 'favorite',
-      filters: {
-        id: {
-          logicalOperator: 'and',
-          values: [{ notEquals: 'id1' }, { notEquals: 'id2' }],
+  test.each(
+    'it generates FTS5 search correctly',
+    {
+      'string search with filters': {
+        query: {
+          search: 'favorite',
         },
-        status: [{ equals: 'active' }, { equals: 'pending' }],
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['"favorite"*'],
       },
-    };
+      'object search with field-specific searches': {
+        query: {
+          search: {
+            text: 'favorite',
+            fields: ['name', 'description'],
+          },
+        },
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['name:"favorite"* OR description:"favorite"*'],
+      },
+      'search with related searches': {
+        query: {
+          search: {
+            text: 'dev',
+            select: 'id',
+            relatedSearches: [
+              {
+                resource: 'alias',
+                fields: ['name', 'description'],
+                join: {
+                  joinOn: 'destination_id',
+                  joinFrom: 'id',
+                },
+              },
+            ],
+          },
+        },
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".id IN (SELECT id FROM target_fts WHERE target_fts MATCH ?
+                                UNION SELECT "target".id FROM alias_fts JOIN "target" ON "target".id = alias_fts.destination_id WHERE alias_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['"dev"*', 'name:"dev"* OR description:"dev"*'],
+      },
+      'search with multiple related searches': {
+        query: {
+          search: {
+            text: 'dev',
+            relatedSearches: [
+              {
+                resource: 'alias',
+                fields: ['name', 'description'],
+                join: {
+                  joinOn: 'destination_id',
+                },
+              },
+              {
+                resource: 'session',
+                fields: ['name'],
+                join: {
+                  joinOn: 'target_id',
+                },
+              },
+            ],
+          },
+        },
+        expectedSql: `
+          SELECT * FROM "target"
+          WHERE "target".rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?
+                                   UNION SELECT "target".rowid FROM alias_fts JOIN "target" ON "target".id = alias_fts.destination_id WHERE alias_fts MATCH ?
+                                   UNION SELECT "target".rowid FROM session_fts JOIN "target" ON "target".id = session_fts.target_id WHERE session_fts MATCH ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: [
+          '"dev"*',
+          'name:"dev"* OR description:"dev"*',
+          'name:"dev"*',
+        ],
+      },
+    },
+    function (assert, { query, expectedSql, expectedParams }) {
+      const { sql, parameters } = generateSQLExpressions('target', query);
+      assert.strictEqual(sql, expectedSql.removeExtraWhiteSpace());
+      assert.deepEqual(parameters, expectedParams);
+    },
+  );
 
-    const { sql, parameters } = generateSQLExpressions('target', query);
-    assert.strictEqual(
-      sql,
-      `
-        SELECT * FROM "target"
-        WHERE (id NOT IN (?, ?)) AND (status IN (?, ?)) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
-    );
-    assert.deepEqual(parameters, [
-      'id1',
-      'id2',
-      'active',
-      'pending',
-      '"favorite"*',
-    ]);
-  });
+  test.each(
+    'it generates joins with filters',
+    {
+      'basic joins with filters': {
+        query: {
+          filters: {
+            type: [{ equals: 'ssh' }],
+            joins: [
+              {
+                resource: 'session',
+                query: {
+                  filters: {
+                    status: [{ equals: 'active' }],
+                  },
+                },
+                joinOn: 'target_id',
+                joinType: 'INNER',
+              },
+              {
+                resource: 'session-recording',
+                query: {
+                  filters: {
+                    state: [{ equals: 'available' }],
+                  },
+                },
+                joinFrom: 'idx',
+                joinOn: 'target_id',
+                joinType: 'LEFT',
+              },
+            ],
+          },
+        },
+        select: [{ field: 'data' }],
+        expectedSql: `
+          SELECT "target".data FROM "target"
+          INNER JOIN "session" session1 ON "target".id = session1.target_id LEFT JOIN "session_recording" session_recording1 ON "target".idx = session_recording1.target_id
+          WHERE ("target".type = ?) AND ("session1".status = ?) AND ("session_recording1".state = ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['ssh', 'active', 'available'],
+      },
+      'multiple joins same table': {
+        query: {
+          filters: {
+            joins: [
+              {
+                resource: 'session',
+                query: {
+                  filters: {
+                    status: [{ equals: 'active' }],
+                  },
+                },
+                joinOn: 'target_id',
+                joinType: 'INNER',
+              },
+              {
+                resource: 'session',
+                query: {
+                  filters: {
+                    status: [{ equals: 'pending' }],
+                  },
+                },
+                joinOn: 'host_id',
+                joinType: 'LEFT',
+              },
+            ],
+          },
+        },
+        select: [{ field: 'id' }],
+        expectedSql: `
+          SELECT "target".id FROM "target"
+          INNER JOIN "session" session1 ON "target".id = session1.target_id LEFT JOIN "session" session2 ON "target".id = session2.host_id
+          WHERE ("session1".status = ?) AND ("session2".status = ?)
+          ORDER BY "target".created_time DESC`,
+        expectedParams: ['active', 'pending'],
+      },
+    },
+    function (assert, { query, select, expectedSql, expectedParams }) {
+      const { sql, parameters } = generateSQLExpressions('target', query, {
+        select,
+      });
+      assert.strictEqual(sql, expectedSql.removeExtraWhiteSpace());
+      assert.deepEqual(parameters, expectedParams);
+    },
+  );
 
   test('it generates SQL with all clauses combined', function (assert) {
     const query = {
@@ -300,15 +587,15 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', query, {
       page: 2,
       pageSize: 15,
-      select: ['data'],
+      select: [{ field: 'data' }],
     });
 
     assert.strictEqual(
       sql,
       `
-      SELECT data FROM "target"
-      WHERE (type = ?) AND (status IN (?, ?)) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
-      ORDER BY name COLLATE NOCASE DESC, name DESC
+      SELECT "target".data FROM "target"
+      WHERE ("target".type = ?) AND ("target".status IN (?, ?)) AND ("target".created_time >= ?) AND "target".rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+      ORDER BY "target".name COLLATE NOCASE DESC, "target".name DESC
       LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
     );
 
@@ -322,6 +609,35 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       15,
     ]);
   });
+
+  test.each(
+    'it throws assertion error for invalid select combinations',
+    {
+      'mixing distinct with non-distinct columns': {
+        select: [
+          { field: 'type', isDistinct: true },
+          { field: 'status', isDistinct: true },
+          { field: 'name' },
+        ],
+        expectedError:
+          /Can not combine non-distincts with multi column distincts/,
+      },
+      'mixing distinct with aggregate non-distinct columns': {
+        select: [
+          { field: 'type', isDistinct: true },
+          { field: 'status', isDistinct: true },
+          { field: 'name', isCount: true },
+        ],
+        expectedError:
+          /Can not combine non-distincts with multi column distincts/,
+      },
+    },
+    function (assert, { select, expectedError }) {
+      assert.throws(() => {
+        generateSQLExpressions('target', {}, { select });
+      }, expectedError);
+    },
+  );
 
   test.each(
     'it handles empty and invalid fields',
@@ -350,7 +666,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         targetSql,
         `
         SELECT * FROM "target"
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+        ORDER BY "target".created_time DESC`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(targetParameters, []);
 

@@ -13,9 +13,7 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_TARGET_TCP,
   TYPE_TARGET_SSH,
@@ -32,7 +30,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
@@ -48,7 +45,6 @@ module('Acceptance | targets | list', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -69,7 +65,6 @@ module('Acceptance | targets | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -107,8 +102,6 @@ module('Acceptance | targets | list', function (hooks) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
     featuresService.enable('rdp-target');
-
-    await authenticateSession({});
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {
@@ -371,11 +364,11 @@ module('Acceptance | targets | list', function (hooks) {
       instances.sshTarget.id,
       'session is associated with correct target',
     );
-    const emberDataSessionModel = this.owner
+    const emberDataSessionModelBefore = this.owner
       .lookup('service:store')
       .peekRecord('session', instances.session.id);
     assert.strictEqual(
-      emberDataSessionModel.status,
+      emberDataSessionModelBefore.status,
       STATUS_SESSION_ACTIVE,
       'ember data session model is active',
     );
@@ -396,6 +389,10 @@ module('Acceptance | targets | list', function (hooks) {
     instances.session.status = STATUS_SESSION_TERMINATED;
 
     await click(commonSelectors.HREF(urls.targets));
+
+    const emberDataSessionModelAfter = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
     assert
       .dom(selectors.TABLE_TARGETS_ROW(instances.sshTarget.id))
       .exists('the target is still listed in the table');
@@ -403,7 +400,7 @@ module('Acceptance | targets | list', function (hooks) {
       .dom(selectors.TABLE_ACTIVE_SESSIONS(instances.sshTarget.id))
       .doesNotExist('the target does not have an active session');
     assert.strictEqual(
-      emberDataSessionModel.status,
+      emberDataSessionModelAfter.status,
       STATUS_SESSION_TERMINATED,
       'the session ember data model status is updated',
     );

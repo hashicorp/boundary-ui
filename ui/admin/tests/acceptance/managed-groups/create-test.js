@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -20,7 +18,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let getManagedGroupCount;
@@ -28,7 +25,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     authMethod: null,
@@ -45,8 +41,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

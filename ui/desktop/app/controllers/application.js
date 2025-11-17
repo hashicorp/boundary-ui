@@ -18,10 +18,11 @@ export default class ApplicationController extends Controller {
   @service session;
   @service('browser/window') window;
 
+  // =attributes
+
   @tracked isLoggingOut = false;
   @tracked isAppQuitting = false;
 
-  // =attributes
   removeOnAppQuitListener;
 
   constructor() {

@@ -6,9 +6,7 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -18,7 +16,6 @@ module(
   'Acceptance | credential-stores | credentials | create',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
     setupSqlite(hooks);
 
     let getCredentialsCount;
@@ -86,7 +83,6 @@ module(
           type: 'username_password_domain',
         }).length;
       };
-      await authenticateSession({});
     });
 
     test('users can create a new username & password credential', async function (assert) {

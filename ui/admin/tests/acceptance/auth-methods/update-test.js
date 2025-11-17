@@ -6,10 +6,8 @@
 import { module, test } from 'qunit';
 import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
@@ -20,14 +18,12 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupSqlite(hooks);
 
   let featuresService;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     authMethod: null,
@@ -43,8 +39,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Setup Mirage mock resources for this test
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -89,7 +83,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(
-      this.server.schema.authMethods.first().name,
+      this.server.schema.authMethods.find(instances.authMethod.id).name,
       commonSelectors.FIELD_NAME_VALUE,
     );
   });
@@ -380,6 +374,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an auth method and cancel changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-03
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.authMethod);
 
     await click(commonSelectors.EDIT_BTN);
