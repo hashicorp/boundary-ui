@@ -78,40 +78,23 @@ class RdpClientManager {
   }
 
   /**
-   * Gets the best default RDP client (first available that's not 'none')
-   * @returns {Promise<string>} Best RDP client value or 'none'
-   */
-  async getBestDefaultRdpClient() {
-    const availableClients = await this.getAvailableRdpClients();
-    const bestClient = availableClients.find(
-      (client) => client !== RDP_CLIENT_NONE,
-    );
-    return bestClient ?? RDP_CLIENT_NONE;
-  }
-
-  /**
    * Gets the user's preferred RDP client, auto-detecting if not set
    * @returns {Promise<string>} Preferred RDP client value
    */
   async getPreferredRdpClient() {
-    // check user stored preference
-    let preferredClient = store.get('preferredRdpClient');
+    const availableClients = await this.getAvailableRdpClients();
+    const installedClients = availableClients.filter(
+      (client) => client !== RDP_CLIENT_NONE,
+    );
 
-    if (!preferredClient) {
-      // Auto-detect and return the best available client
-      preferredClient = await this.getBestDefaultRdpClient();
-      return preferredClient;
-    }
+    if (installedClients.length === 0) return RDP_CLIENT_NONE;
 
-    // Validate preferred client is still available
-    if (preferredClient !== RDP_CLIENT_NONE) {
-      const availableClient = await this.getBestDefaultRdpClient();
-      if (availableClient === RDP_CLIENT_NONE) {
-        preferredClient = RDP_CLIENT_NONE;
-      }
-    }
-
-    return preferredClient;
+    const preferredClient =
+      store.get('preferredRdpClient') ?? installedClients[0];
+    // check if preferred client is still installed
+    return installedClients.includes(preferredClient)
+      ? preferredClient
+      : RDP_CLIENT_NONE;
   }
 
   /**
