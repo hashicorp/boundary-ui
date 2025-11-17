@@ -58,7 +58,7 @@ test(
       await expect(
         page.getByRole('heading', { name: 'Auth Methods' }),
       ).toBeVisible();
-      await page.getByRole('button', { name: 'New' }).click();
+      await page.getByRole('button', { name: 'New', exact: true }).click();
       await page.getByRole('link', { name: 'LDAP' }).click();
 
       const ldapAuthMethodName = 'LDAP ' + nanoid();
