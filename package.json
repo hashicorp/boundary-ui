@@ -55,7 +55,8 @@
       "ember-cli-babel>@babel/runtime": "7.27.6",
       "ember-try-config>package-json": "^10.0.1",
       "ember-stargate@^0.6.0>@glimmer/component": "^2.0.0",
-      "ember-loading>ember-concurrency": "^4.0.0"
+      "ember-loading>ember-concurrency": "^4.0.0",
+      "tmp": "^0.2.5"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
