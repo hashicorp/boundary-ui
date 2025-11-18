@@ -3,15 +3,11 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{! TODO: Add breadcrumbs }}
-
-<Hds::Breadcrumb>
-  <Hds::Breadcrumb::Item
-    @text={{t 'resources.app-token.title_plural'}}
-    @current={{true}}
-    data-test-breadcrumb
-  />
-</Hds::Breadcrumb>
-
 {{page-title (t 'resources.app-token.title_plural')}}
+<Hds::Breadcrumb::Item
+  @text={{t 'resources.app-token.title_plural'}}
+  @current={{true}}
+  data-test-breadcrumb
+/>
+
 {{outlet}}
