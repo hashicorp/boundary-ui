@@ -3,6 +3,11 @@ name: Test E2E Admin UI
 on:
   pull_request:
     types: [labeled, opened, synchronize, reopened]
+    paths:
+      - 'ui/admin/**'
+      - 'e2e-tests/*'
+      - 'e2e-tests/admin/**'
+      - '.github/workflows/test-e2e-admin-ui.yaml'
   workflow_dispatch:
     inputs:
       boundary-enterprise-branch:
@@ -18,8 +23,7 @@ on:
 
 jobs:
   test:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'admin') }}
-    name: Test
+    name: test
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
       matrix:
