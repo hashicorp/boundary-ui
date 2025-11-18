@@ -6,6 +6,8 @@ on:
     paths:
       - 'ui/admin/**'
       - 'e2e-tests/*'
+      - 'e2e-tests/api-client/**'
+      - 'e2e-tests/helpers/**'
       - 'e2e-tests/admin/**'
       - '.github/workflows/test-e2e-admin-ui.yaml'
   workflow_dispatch:
