@@ -90,7 +90,10 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 /**
  * Stop all active and pending target sessions.
  */
-handle('stopAll', async () => sessionManager.stopAll());
+handle('stopAll', async () => {
+  await sessionManager.stopAll();
+  rdpClientManager.stopAll();
+});
 
 /**
  * Check for OS window chrome. Enabled on MacOS only.
