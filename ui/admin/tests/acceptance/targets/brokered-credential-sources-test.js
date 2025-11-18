@@ -16,6 +16,7 @@ import {
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
@@ -32,7 +33,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   let credentialSourceCount;
   let randomlySelectedCredentialLibraries;
   let randomlySelectedCredentials;
-  let featuresService;
 
   const instances = {
     scopes: {
@@ -57,6 +57,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     credentialLibrary: null,
     credential: null,
     jsonCredential: null,
+    passwordCredential: null,
     addBrokeredCredentialSourcesForTCPTarget: null,
     brokeredCredentialSourcesForTCPTarget: null,
     addBrokeredCredentialSourcesForRDPTarget: null,
@@ -64,7 +65,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -82,7 +82,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       type: 'static',
       scope: instances.scopes.project,
     });
-    instances.credentials = this.server.createList('credential', 4, {
+    instances.credentials = this.server.createList('credential', 5, {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
     });
@@ -134,6 +134,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
     urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[3].credentialStoreId}/credentials/${instances.credentials[3].id}`;
+    urls.passwordCredential = `${urls.projectScope}/credential-stores/${instances.credentials[4].credentialStoreId}/credentials/${instances.credentials[4].id}`;
     urls.addBrokeredCredentialSourcesForTCPTarget = `${urls.tcpTarget}/add-brokered-credential-sources`;
     urls.addBrokeredCredentialSourcesForRDPTarget = `${urls.rdpTarget}/add-brokered-credential-sources`;
     getCredentialLibraryCount = () =>
@@ -205,14 +206,24 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         targetName: 'tcpTarget',
         link: 'jsonCredential',
         expectedUrl: 'jsonCredential',
-        enableJsonFeature: true,
       },
       'json credential type for RDP target': {
         route: 'brokeredCredentialSourcesForRDPTarget',
         targetName: 'rdpTarget',
         link: 'jsonCredential',
         expectedUrl: 'jsonCredential',
-        enableJsonFeature: true,
+      },
+      'password credential type for TCP target': {
+        route: 'brokeredCredentialSourcesForTCPTarget',
+        targetName: 'tcpTarget',
+        link: 'passwordCredential',
+        expectedUrl: 'passwordCredential',
+      },
+      'password credential type for RDP target': {
+        route: 'brokeredCredentialSourcesForRDPTarget',
+        targetName: 'rdpTarget',
+        link: 'passwordCredential',
+        expectedUrl: 'passwordCredential',
       },
     },
     async function (assert, input) {
@@ -225,51 +236,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         },
       });
 
-      // needed only if the test is for json credential
-      if (input.enableJsonFeature) {
-        featuresService.enable('json-credentials');
-      }
       await visit(urls[input.route]);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls[input.link]));
 
       assert.strictEqual(currentURL(), urls[input.expectedUrl]);
-    },
-  );
-
-  test.each(
-    'cannot navigate to a json type credential when feature is disabled',
-    {
-      'for TCP target': {
-        route: 'brokeredCredentialSourcesForTCPTarget',
-        targetName: 'tcpTarget',
-      },
-      'for RDP target': {
-        route: 'brokeredCredentialSourcesForRDPTarget',
-        targetName: 'rdpTarget',
-      },
-    },
-    async function (assert, input) {
-      setRunOptions({
-        rules: {
-          'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-            enabled: false,
-          },
-        },
-      });
-
-      const jsonCredential = instances.credentials[3];
-      instances[input.targetName].update({
-        brokeredCredentialSourceIds: [...randomlySelectedCredentials],
-      });
-      await visit(urls[input.route]);
-
-      assert.false(featuresService.isEnabled('json-credentials'));
-      assert
-        .dom(commonSelectors.TABLE_ROW(4))
-        .includesText(jsonCredential.name);
-      assert.dom(commonSelectors.HREF(urls.jsonCredential)).doesNotExist();
     },
   );
 
@@ -471,6 +442,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.SAVE_BTN,
         expectedCount: 1,
       },
+      'save password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
       'save credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,
@@ -574,6 +550,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.SAVE_BTN,
         expectedCount: 1,
       },
+      'save password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.SAVE_BTN,
+        expectedCount: 1,
+      },
       'save credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,
@@ -616,7 +597,11 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         action: commonSelectors.CANCEL_BTN,
         expectedCount: 0,
       },
-
+      'cancel password credential': {
+        credentialSources: [TYPE_CREDENTIAL_PASSWORD],
+        action: commonSelectors.CANCEL_BTN,
+        expectedCount: 0,
+      },
       'cancel credentials and credential-libraries': {
         credentialSources: [
           TYPE_CREDENTIAL_USERNAME_PASSWORD,

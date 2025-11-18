@@ -9,12 +9,17 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
+} from 'api/models/credential';
 
 module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
-
-  let featuresService;
 
   const instances = {
     scopes: {
@@ -26,6 +31,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     usernameKeyPairCredential: null,
     jsonCredential: null,
     usernamePasswordDomainCredential: null,
+    passwordCredential: null,
   };
 
   const urls = {
@@ -38,6 +44,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     jsonCredential: null,
     unknownCredential: null,
     usernamePasswordDomainCredential: null,
+    passwordCredential: null,
   };
 
   hooks.beforeEach(async function () {
@@ -57,26 +64,31 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     instances.usernamePasswordCredential = this.server.create('credential', {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
-      type: 'username_password',
+      type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
     });
     instances.usernameKeyPairCredential = this.server.create('credential', {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
-      type: 'ssh_private_key',
+      type: TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
     });
     instances.jsonCredential = this.server.create('credential', {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
-      type: 'json',
+      type: TYPE_CREDENTIAL_JSON,
     });
     instances.usernamePasswordDomainCredential = this.server.create(
       'credential',
       {
         scope: instances.scopes.project,
         credentialStore: instances.staticCredentialStore,
-        type: 'username_password_domain',
+        type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
       },
     );
+    instances.passwordCredential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore: instances.staticCredentialStore,
+      type: TYPE_CREDENTIAL_PASSWORD,
+    });
 
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -87,8 +99,8 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.usernamePasswordDomainCredential = `${urls.credentials}/${instances.usernamePasswordDomainCredential.id}`;
+    urls.passwordCredential = `${urls.credentials}/${instances.passwordCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting username & password credential', async function (assert) {
@@ -141,7 +153,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       },
     });
 
-    featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
 
@@ -171,6 +182,26 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     await click(commonSelectors.HREF(urls.usernamePasswordDomainCredential));
 
     assert.strictEqual(currentURL(), urls.usernamePasswordDomainCredential);
+  });
+
+  test('visiting password credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.staticCredentialStore);
+    await click(commonSelectors.HREF(urls.credentials));
+
+    assert.strictEqual(currentURL(), urls.credentials);
+
+    await click(commonSelectors.HREF(urls.passwordCredential));
+
+    assert.strictEqual(currentURL(), urls.passwordCredential);
   });
 
   test('cannot navigate to a username & password credential form without proper authorization', async function (assert) {
@@ -270,24 +301,27 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       .doesNotExist();
   });
 
-  test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
+  test('cannot navigate to a password credential form without proper authorization', async function (assert) {
     setRunOptions({
       rules: {
         'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
           enabled: false,
         },
       },
     });
 
+    instances.passwordCredential.authorized_actions =
+      instances.passwordCredential.authorized_actions.filter(
+        (item) => item != 'read',
+      );
     await visit(urls.credentials);
 
-    assert.false(featuresService.isEnabled('json-credentials'));
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
       .isVisible();
     assert
-      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.jsonCredential))
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.passwordCredential))
       .doesNotExist();
   });
 

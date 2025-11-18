@@ -147,11 +147,11 @@ export class CredentialStoresPage extends BaseResourcePage {
       await this.page.getByRole('link', { name: 'New Credential' }).click();
     }
 
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('Username & Key Pair')
+      .getByRole('option', { name: 'Username & Key Pair' })
       .click();
     await this.page
       .getByLabel('Username Required', { exact: true })
@@ -207,11 +207,11 @@ export class CredentialStoresPage extends BaseResourcePage {
     }
 
     const credentialName = 'Credential ' + nanoid();
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('Username & Password')
+      .getByRole('option', { name: 'Username & Password' })
       .click();
     await this.page
       .getByLabel('Username Required', { exact: true })
@@ -271,11 +271,11 @@ export class CredentialStoresPage extends BaseResourcePage {
     }
 
     const credentialName = 'Credential ' + nanoid();
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('Username, Password & Domain')
+      .getByRole('option', { name: 'Username, Password & Domain' })
       .click();
     await this.page
       .getByLabel('Username Required', { exact: true })
@@ -308,11 +308,9 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'Credential Libraries' }).click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page
-      .getByLabel('Name (Optional)', { exact: true })
+      .getByLabel('Name', { exact: true })
       .fill(credentialLibraryName);
-    await this.page
-      .getByLabel('Description (Optional)')
-      .fill('This is an automated test');
+    await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
       .getByLabel('Generic Secrets')
@@ -345,11 +343,9 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
 
     await this.page
-      .getByLabel('Name (Optional)', { exact: true })
+      .getByLabel('Name', { exact: true })
       .fill(credentialLibraryName);
-    await this.page
-      .getByLabel('Description (Optional)')
-      .fill('This is an automated test');
+    await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
       .getByLabel('SSH Certificates')
