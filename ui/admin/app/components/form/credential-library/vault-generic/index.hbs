@@ -14,7 +14,6 @@
     name='name'
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
-    @isOptional={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
@@ -36,7 +35,6 @@
     name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -70,7 +68,6 @@
 
   <Hds::Form::TextInput::Field
     @isRequired={{true}}
-    @isOptional={{false}}
     @value={{@model.path}}
     @isInvalid={{@model.errors.path}}
     @type='text'
@@ -98,7 +95,6 @@
 
   {{#if @model.isNew}}
     <Hds::Form::Select::Field
-      @isOptional={{true}}
       @width='100%'
       name='credential_type'
       disabled={{form.disabled}}
@@ -128,7 +124,7 @@
         </F.Error>
       {{/if}}
     </Hds::Form::Select::Field>
-  {{else}}
+  {{else if @model.credential_type}}
     <InfoField
       @value={{t
         (concat 'resources.credential-library.titles.' @model.credential_type)
@@ -179,7 +175,6 @@
   {{#if this.isHttpRequestBodyAllowed}}
     <Hds::Form::Textarea::Field
       @isRequired={{true}}
-      @isOptional={{false}}
       @value={{@model.http_request_body}}
       @isInvalid={{@model.errors.http_request_body}}
       name='http_request_body'

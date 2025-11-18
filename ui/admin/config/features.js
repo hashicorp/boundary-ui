@@ -22,19 +22,17 @@ const baseEdition = {
   ...licensedFeatures,
   byow: false,
   'byow-pki-hcp-cluster-id': false,
-  'json-credentials': false,
   'static-credentials': false,
   'target-network-address': false,
   'ldap-auth-methods': false,
   'worker-filter': false,
   'worker-filter-hcp': false,
 };
-// Editions maps edition keys to their associated featuresets.
+// Editions maps edition keys to their associated feature sets.
 const featureEditions = {};
 featureEditions.oss = {
   ...baseEdition,
   byow: true,
-  'json-credentials': true,
   'static-credentials': true,
   'target-network-address': true,
   'ldap-auth-methods': true,
