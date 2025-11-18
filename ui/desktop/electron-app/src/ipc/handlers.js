@@ -88,7 +88,7 @@ handle('connect', ({ target_id, token, host_id, session_max_seconds }) =>
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 
 /**
- * Stop all active and pending target sessions.
+ * Stop all active and pending target sessions and rdp processes.
  */
 handle('stopAll', async () => {
   await sessionManager.stopAll();
