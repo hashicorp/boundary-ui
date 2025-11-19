@@ -6,9 +6,14 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
 export default class ScopesScopeAppTokensIndexController extends Controller {
+  // =services
+
+  @service router;
+
   // =attributes
 
   queryParams = [
@@ -38,121 +43,17 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   }
 
   /**
-   * Filtered app tokens based on search and status
+   * App tokens (already filtered and sorted by API)
    */
-  get filteredAppTokens() {
-    if (!this.model?.appTokens) return [];
-
-    let appTokens = [...this.model.appTokens];
-
-    // Apply status filter
-    if (this.statuses.length > 0) {
-      appTokens = appTokens.filter((token) =>
-        this.statuses.includes(token.status),
-      );
-    }
-
-    // Apply search filter
-    const search = this.search?.toLowerCase().trim();
-    if (search) {
-      appTokens = appTokens.filter((token) => {
-        const searchFields = [
-          token.name,
-          token.description,
-          token.id,
-          token.status,
-        ];
-
-        return searchFields.some((field) =>
-          field?.toLowerCase().includes(search),
-        );
-      });
-    }
-
-    return appTokens;
+  get appTokens() {
+    return this.model?.appTokens || [];
   }
 
   /**
-   * Returns the filtered tokens sorted according to the current sort field and order.
-   */
-  get sortedAppTokens() {
-    const filteredTokens = this.filteredAppTokens;
-    const { sortBy, sortOrder } = this;
-
-    return filteredTokens.sort((a, b) => {
-      let aValue = this.getSortValue(a, sortBy);
-      let bValue = this.getSortValue(b, sortBy);
-
-      // Handle null/undefined values
-      if (aValue === null || aValue === undefined) aValue = '';
-      if (bValue === null || bValue === undefined) bValue = '';
-
-      // Handle date sorting
-      if (aValue instanceof Date && bValue instanceof Date) {
-        const result = aValue.getTime() - bValue.getTime();
-        return sortOrder === 'asc' ? result : -result;
-      }
-
-      // Handle string/numeric sorting
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        const result = aValue.toLowerCase().localeCompare(bValue.toLowerCase());
-        return sortOrder === 'asc' ? result : -result;
-      }
-
-      // Handle numeric sorting (like expiresIn days)
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        const result = aValue - bValue;
-        return sortOrder === 'asc' ? result : -result;
-      }
-
-      // Fallback to string comparison
-      const result = String(aValue)
-        .toLowerCase()
-        .localeCompare(String(bValue).toLowerCase());
-      return sortOrder === 'asc' ? result : -result;
-    });
-  }
-
-  /**
-   * Paginated app tokens
-   */
-  get paginatedAppTokens() {
-    const sortedTokens = this.sortedAppTokens;
-    const startIndex = (this.page - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    return sortedTokens.slice(startIndex, endIndex);
-  }
-
-  /**
-   * Total number of app tokens after filtering
+   * Total number of app tokens (from API response)
    */
   get totalItems() {
-    return this.filteredAppTokens?.length || 0;
-  }
-
-  /**
-   * Get the sort value for a given property path
-   * @param {object} item - The app token object
-   * @param {string} sortBy - The property to sort by
-   * @returns {any} - The value to sort by
-   */
-  getSortValue(item, sortBy) {
-    switch (sortBy) {
-      case 'name':
-        return item.name;
-      case 'status':
-        return item.status;
-      case 'approximate_last_access_time':
-        return item.approximate_last_access_time;
-      case 'expire_time':
-        return item.expire_time;
-      case 'expiresIn':
-        return item.expiresIn;
-      case 'id':
-        return item.id;
-      default:
-        return item[sortBy];
-    }
+    return this.model?.totalItems || 0;
   }
 
   // =actions
@@ -164,8 +65,9 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @action
   handleSearchInput(event) {
     const { value } = event.target;
-    this.search = value;
-    this.page = 1;
+    this.router.transitionTo({
+      queryParams: { search: value || null, page: 1 },
+    });
   }
 
   /**
@@ -175,8 +77,12 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   applyFilter(paramKey, selectedItems) {
-    this[paramKey] = [...selectedItems];
-    this.page = 1;
+    this.router.transitionTo({
+      queryParams: {
+        [paramKey]: selectedItems.length > 0 ? selectedItems : null,
+        page: 1,
+      },
+    });
   }
 
   /**
@@ -186,8 +92,12 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   onSort(sortBy, sortOrder) {
-    this.sortBy = sortBy;
-    this.sortOrder = sortOrder;
-    this.page = 1;
+    this.router.transitionTo({
+      queryParams: {
+        sortBy,
+        sortOrder,
+        page: 1,
+      },
+    });
   }
 }

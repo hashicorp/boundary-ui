@@ -1,42 +1,127 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Route from '@ember/routing/route';
+import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeAppTokensIndexRoute extends Route {
-  async model() {
-    const parentModel = this.modelFor('scopes.scope.app-tokens');
-    const scope = this.modelFor('scopes.scope');
+  // =services
+  @service store;
+  @service can;
 
-    // Fetch app tokens directly from API to avoid Ember Data caching issues
-    // When navigating between scopes (Global -> Org A -> Org B), Ember Data's store.query()
-    // was accumulating records instead of replacing them, causing incorrect token counts.
-    // Direct fetch ensures fresh data for each scope without cache accumulation.
+  // =attributes
 
-    const response = await fetch(`/v1/app-tokens?scope_id=${scope.id}`);
-    const data = await response.json();
+  queryParams = {
+    search: {
+      refreshModel: true,
+      replace: true,
+    },
+    statuses: {
+      refreshModel: true,
+      replace: true,
+    },
+    page: {
+      refreshModel: true,
+    },
+    pageSize: {
+      refreshModel: true,
+    },
+    sortBy: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortOrder: {
+      refreshModel: true,
+      replace: true,
+    },
+  };
 
-    const appTokens = (data.items || []).map((item) => ({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      status: item.status,
-      created_time: item.created_time ? new Date(item.created_time) : null,
-      approximate_last_access_time: item.approximate_last_access_time
-        ? new Date(item.approximate_last_access_time)
-        : null,
-      expire_time: item.expire_time ? new Date(item.expire_time) : null,
-      // Calculate expires in days
-      get expiresIn() {
-        if (!this.expire_time) return null;
-        const now = new Date();
-        const diffMs = this.expire_time.getTime() - now.getTime();
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        return diffDays > 0 ? diffDays : 0;
-      },
-    }));
-
-    return {
-      ...parentModel,
-      scope,
-      appTokens,
-    };
+  /**
+   * Load all app tokens for the scope.
+   * @return {Promise<{ totalItems: number, appTokens: [AppTokenModel], scope: ScopeModel }>}
+   */
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({
+      search,
+      statuses,
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
+      useDebounce,
+    }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const parentModel = this.modelFor('scopes.scope.app-tokens');
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+      let appTokens;
+      let totalItems = 0;
+
+      // Build filters
+      const filters = {};
+      if (statuses && statuses.length > 0) {
+        filters.status = statuses.map((status) => ({ equals: status }));
+      }
+
+      // Build sort
+      const sort = sortBy
+        ? {
+            attributes: [sortBy],
+            direction: sortOrder || 'asc',
+          }
+        : undefined;
+
+      if (this.can.can('list scope', scope, { collection: 'app-tokens' })) {
+        const queryOptions = {
+          scope_id,
+          recursive: true,
+          query: {
+            search: search
+              ? { text: search, fields: ['name', 'description', 'id'] }
+              : undefined,
+            filters,
+            sort,
+          },
+          page: page || 1,
+          pageSize: pageSize || 10,
+        };
+
+        // Remove undefined values from query
+        if (!queryOptions.query.search) delete queryOptions.query.search;
+        if (Object.keys(queryOptions.query.filters).length === 0) {
+          delete queryOptions.query.filters;
+        }
+        if (!queryOptions.query.sort) delete queryOptions.query.sort;
+
+        appTokens = await this.store.query('app-token', queryOptions);
+        totalItems = appTokens.meta?.totalItems || appTokens.length;
+
+        return {
+          ...parentModel,
+          scope,
+          appTokens,
+          totalItems,
+        };
+      }
+
+      return {
+        ...parentModel,
+        scope,
+        appTokens: [],
+        totalItems: 0,
+      };
+    },
+  );
 }
