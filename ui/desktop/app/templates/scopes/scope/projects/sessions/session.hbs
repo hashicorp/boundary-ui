@@ -19,15 +19,27 @@
           @icon='loading'
         />
       </PH.Badges>
-      {{#if (can 'cancel session' @model)}}
+      {{#if (or (can 'cancel session' @model) this.showOpenButton)}}
         <PH.Actions>
-          <Hds::Button
-            data-test-session-detail-cancel-button
-            @text={{t 'resources.session.actions.end'}}
-            @icon='x'
-            @color='secondary'
-            {{on 'click' (fn this.sessions.cancelSession @model)}}
-          />
+          {{#if (can 'cancel session' @model)}}
+            <Hds::Button
+              data-test-session-detail-cancel-button
+              @text={{t 'resources.session.actions.end'}}
+              @icon='x'
+              @color='secondary'
+              {{on 'click' (fn this.sessions.cancelSession @model)}}
+            />
+          {{/if}}
+          {{#if this.showOpenButton}}
+            <Hds::Button
+              data-test-session-detail-open-button
+              @text={{t 'actions.open'}}
+              @icon='external-link'
+              @iconPosition='trailing'
+              @color='primary'
+              {{on 'click' this.launchRdpClient}}
+            />
+          {{/if}}
         </PH.Actions>
       {{/if}}
     </Hds::PageHeader>

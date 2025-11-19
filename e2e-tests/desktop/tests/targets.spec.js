@@ -6,6 +6,12 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { textToMatch } from '../fixtures/tesseractTest.js';
+import {
+  isRdpClientInstalled,
+  isRdpRunning,
+  killRdpProcesses,
+  isOSForRdpSupported,
+} from '../../helpers/rdp.js';
 
 const hostName = 'Host name for test';
 let org;
@@ -117,7 +123,6 @@ test.beforeEach(
     });
 
     // Create an RDP target and add host source and credential sources
-    // TODO: A test for RDP target connection will be added later when the Proxy is in place.
     rdpTarget = await boundaryHttp.createTarget(request, {
       scopeId: project.id,
       type: 'rdp',
@@ -284,5 +289,38 @@ test.describe('Targets tests', () => {
     await expect(
       authedPage.getByRole('link', { name: targetWithHost.name }),
     ).toBeVisible();
+  });
+
+  test('Launches RDP client when connecting to an RDP target', async ({
+    authedPage,
+  }) => {
+    const isRdpClientInstalledCheck = await isRdpClientInstalled();
+    const isOSForRdpSupportedCheck = await isOSForRdpSupported();
+
+    test.skip(
+      !isRdpClientInstalledCheck || !isOSForRdpSupportedCheck,
+      'RDP client is not installed/supported on this system',
+    );
+
+    const beforeLaunchRunning = await isRdpRunning();
+    expect(beforeLaunchRunning).toBe(false);
+
+    await authedPage.getByRole('link', { name: rdpTarget.name }).click();
+    await authedPage.getByRole('button', { name: 'Open' }).click();
+
+    await expect(
+      authedPage.getByRole('heading', { name: 'Sessions' }),
+    ).toBeVisible();
+
+    const afterLaunchRunning = await isRdpRunning();
+    expect(afterLaunchRunning).toBe(true);
+
+    await authedPage.getByRole('button', { name: 'End Session' }).click();
+    await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
+
+    killRdpProcesses();
+
+    const afterKillRunning = await isRdpRunning();
+    expect(afterKillRunning).toBe(false);
   });
 });
