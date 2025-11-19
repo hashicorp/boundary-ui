@@ -68,7 +68,9 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
    */
   handleCredentialMappingOverrides(serialized, isNew) {
     const { credential_type, credential_mapping_overrides } = serialized;
-
+    if (Object.keys(credential_mapping_overrides).length === 0) {
+      serialized.credential_mapping_overrides = null;
+    }
     // API expects to send null to fields if it is undefined or deleted
     if (credential_mapping_overrides && !isNew) {
       serialized.credential_mapping_overrides = options.mapping_overrides[

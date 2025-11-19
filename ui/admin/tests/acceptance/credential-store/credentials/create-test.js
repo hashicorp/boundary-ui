@@ -11,6 +11,13 @@ import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_PASSWORD,
+} from 'api/models/credential';
 
 module(
   'Acceptance | credential-stores | credentials | create',
@@ -23,6 +30,7 @@ module(
     let getUsernameKeyPairCredentialCount;
     let getUsernamePasswordDomainCredentialCount;
     let getJsonCredentialCount;
+    let getPasswordCredentialCount;
     let featuresService;
 
     const instances = {
@@ -68,19 +76,27 @@ module(
       };
       getUsernamePasswordCredentialCount = () => {
         return this.server.schema.credentials.where({
-          type: 'username_password',
+          type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
         }).length;
       };
       getUsernameKeyPairCredentialCount = () => {
-        return this.server.schema.credentials.where({ type: 'ssh_private_key' })
-          .length;
+        return this.server.schema.credentials.where({
+          type: TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+        }).length;
       };
       getJsonCredentialCount = () => {
-        return this.server.schema.credentials.where({ type: 'json' }).length;
+        return this.server.schema.credentials.where({
+          type: TYPE_CREDENTIAL_JSON,
+        }).length;
       };
       getUsernamePasswordDomainCredentialCount = () => {
         return this.server.schema.credentials.where({
-          type: 'username_password_domain',
+          type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+        }).length;
+      };
+      getPasswordCredentialCount = () => {
+        return this.server.schema.credentials.where({
+          type: TYPE_CREDENTIAL_PASSWORD,
         }).length;
       };
     });
@@ -134,6 +150,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
 
       await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_VALUE);
@@ -169,6 +186,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await fillIn(
         selectors.FIELD_USERNAME,
@@ -208,6 +226,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.SAVE_BTN);
 
@@ -233,7 +252,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
       await visit(urls.credentials);
@@ -243,11 +261,42 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.SAVE_BTN);
 
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(getJsonCredentialCount(), jsonCredentialCount + 1);
+    });
+
+    test('users can create a new password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const credentialsCount = getCredentialsCount();
+      const passwordCredentialCount = getPasswordCredentialCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.TYPE_SELECT);
+      await click(selectors.FIELD_TYPE_PASSWORD);
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(
+        getPasswordCredentialCount(),
+        passwordCredentialCount + 1,
+      );
     });
 
     test('users can cancel create new username & password credential', async function (assert) {
@@ -292,6 +341,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -314,7 +364,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -323,6 +372,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -348,6 +398,7 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.CANCEL_BTN);
 
@@ -370,18 +421,46 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
-
       await visit(urls.credentials);
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
 
       await fillIn(selectors.FIELD_EDITOR, selectors.FIELD_EDITOR_VALUE);
       assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       assert.dom(selectors.EDITOR).includesText('{}');
+    });
+
+    test('users can cancel creation of new password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
+            enabled: false,
+          },
+        },
+      });
+
+      const credentialsCount = getCredentialsCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.TYPE_SELECT);
+      await click(selectors.FIELD_TYPE_PASSWORD);
+      await click(commonSelectors.CANCEL_BTN);
+
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(getCredentialsCount(), credentialsCount);
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
@@ -489,6 +568,7 @@ module(
       });
 
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_SSH);
       await click(commonSelectors.SAVE_BTN);
 
@@ -533,6 +613,7 @@ module(
         );
       });
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.SAVE_BTN);
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
@@ -559,7 +640,6 @@ module(
         },
       });
 
-      featuresService.enable('json-credentials');
       const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
@@ -583,41 +663,54 @@ module(
       });
 
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
       await click(commonSelectors.SAVE_BTN);
 
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     });
 
-    test('cannot navigate to json credential when feature is disabled', async function (assert) {
+    test('saving a new password credential with invalid fields displays error messages', async function (assert) {
       setRunOptions({
         rules: {
           'color-contrast': {
-            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-11-06
             enabled: false,
           },
         },
       });
 
+      const errorMessage = 'Error in provided request.';
+      const errorDescription =
+        'Field required for creating a password credential.';
       await visit(urls.credentials);
+      this.server.post('/credentials', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: errorMessage,
+            details: {
+              request_fields: [
+                {
+                  name: 'attributes.password',
+                  description: errorDescription,
+                },
+              ],
+            },
+          },
+        );
+      });
 
       await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.TYPE_SELECT);
+      await click(selectors.FIELD_TYPE_PASSWORD);
+      await click(commonSelectors.SAVE_BTN);
 
-      assert.false(featuresService.isEnabled('json-credentials'));
-      assert.true(
-        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create',
-        ),
-      );
-      assert
-        .dom(selectors.FIELD_TYPE_USERNAME_PASSWORD)
-        .exists()
-        .hasAttribute('value', 'username_password');
-      assert
-        .dom(selectors.FIELD_TYPE_SSH)
-        .exists()
-        .hasAttribute('value', 'ssh_private_key');
-      assert.dom(selectors.FIELD_TYPE_JSON).doesNotExist();
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+      assert.dom(selectors.FIELD_PASSWORD_ERROR).hasText(errorDescription);
     });
 
     test('users cannot create a new credential without proper authorization', async function (assert) {
