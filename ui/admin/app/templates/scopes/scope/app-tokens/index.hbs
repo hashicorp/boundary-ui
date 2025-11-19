@@ -10,10 +10,169 @@
         <DocLink @doc='app-tokens' />
       </PH.Title>
       <PH.Description>
-        {{! TODO: Check with design what to show the description text for org and proj level scopes }}
         {{t 'resources.app-token.description'}}
       </PH.Description>
     </Hds::PageHeader>
   </page.header>
+
+  <page.body class='search-filtering'>
+    {{#if @model.appTokens.length}}
+
+      <Hds::SegmentedGroup data-test-app-tokens-bar as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Generic>
+          <Dropdown
+            name='status'
+            @toggleText={{t 'resources.app-token.form.status.label'}}
+            @itemOptions={{this.statusOptions}}
+            @checkedItems={{this.statuses}}
+            @applyFilter={{fn this.applyFilter 'statuses'}}
+            as |FD selectItem itemOptions|
+          >
+            {{#each itemOptions as |itemOption|}}
+              <FD.Checkbox
+                @value={{itemOption.id}}
+                checked={{includes itemOption.id this.statuses}}
+                {{on 'change' selectItem}}
+              >
+                {{itemOption.name}}
+              </FD.Checkbox>
+            {{/each}}
+          </Dropdown>
+        </S.Generic>
+      </Hds::SegmentedGroup>
+
+      {{#if this.totalItems}}
+        <Hds::Table
+          @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortBy}}
+          @sortOrder={{this.sortOrder}}
+        >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'approximate_last_access_time'}}
+                @sortOrder={{if
+                  (eq 'approximate_last_access_time' H.sortBy)
+                  H.sortOrder
+                }}
+              >{{t
+                  'resources.app-token.form.approximate_last_access_time.label'
+                }}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'expiresIn'}}
+                @sortOrder={{if (eq 'expiresIn' H.sortBy) H.sortOrder}}
+              >{{t 'resources.app-token.form.expires_in.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'status'}}
+                @sortOrder={{if (eq 'status' H.sortBy) H.sortOrder}}
+              >{{t 'resources.app-token.form.status.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each this.paginatedAppTokens as |token|}}
+              <B.Tr>
+                <B.Td>
+                  <div class='hds-font-weight-semibold'>
+                    {{token.name}}
+                  </div>
+                  {{#if token.description}}
+                    <div class='hds-foreground-faint hds-typography-body-100'>
+                      {{token.description}}
+                    </div>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if token.approximate_last_access_time}}
+                    <Hds::Text::Body>
+                      <Hds::Time
+                        @date={{token.approximate_last_access_time}}
+                        @display='relative'
+                      />
+                    </Hds::Text::Body>
+                  {{else}}
+                    <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if token.expiresIn}}
+                    {{format-day-year token.expiresIn}}
+                  {{else}}
+                    <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                {{! TODO: Add status text for translations }}
+                <B.Td>
+                  {{#if (eq token.status 'active')}}
+                    <Hds::Badge @text='Active' @color='success' />
+                  {{else if (eq token.status 'expired')}}
+                    <Hds::Badge @text='Expired' @color='warning' />
+                  {{else if (eq token.status 'revoked')}}
+                    <Hds::Badge @text='Revoked' @color='critical' />
+                  {{else}}
+                    <Hds::Badge @text={{token.status}} @color='neutral' />
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{token.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{this.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              'descriptions.no-search-results'
+              query=this.search
+              resource=(t 'resources.app-token.title_plural')
+            }}
+          />
+        </Hds::ApplicationState>
+      {{/if}}
+
+    {{else}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'titles.no-results-found'}} />
+        {{! TODO: Add the correct text for global/org/project scope }}
+        <A.Body
+          @text={{if
+            @model.scope.isGlobal
+            'No app tokens have been created at the global scope level.'
+            (if
+              @model.scope.isOrg
+              'No app tokens have been created for this organization.'
+              'No app tokens have been created for this project.'
+            )
+          }}
+        />
+      </Hds::ApplicationState>
+    {{/if}}
+  </page.body>
 
 </Rose::Layout::Page>

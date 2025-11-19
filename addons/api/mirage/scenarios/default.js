@@ -171,4 +171,52 @@ export default function (server) {
     'withConnectionAndChannels',
     'withExistingUserAndTarget',
   );
+
+  // App Tokens
+  const statuses = ['active', 'expired', 'revoked', 'stale', 'unknown'];
+
+  // Global scope tokens
+  statuses.forEach((status) => {
+    server.createList('app-token', 3, {
+      scope: globalScope,
+      scopeId: globalScope.id,
+      status: status,
+    });
+  });
+
+  // Org scope tokens
+  const allOrgScopes = server.schema.scopes.where({ type: 'org' }).models;
+  allOrgScopes.forEach((orgScope) => {
+    server.create('app-token', {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: 'active',
+    });
+    server.create('app-token', {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: 'expired',
+    });
+    server.createList('app-token', 5, {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: () => statuses[Math.floor(Math.random() * statuses.length)],
+    });
+  });
+
+  // Project scope tokens
+  server.schema.scopes
+    .where({ type: 'project' })
+    .models.forEach((projectScope) => {
+      server.create('app-token', {
+        scope: projectScope,
+        scopeId: projectScope.id,
+        status: 'active',
+      });
+      server.createList('app-token', 4, {
+        scope: projectScope,
+        scopeId: projectScope.id,
+        status: () => statuses[Math.floor(Math.random() * statuses.length)],
+      });
+    });
 }

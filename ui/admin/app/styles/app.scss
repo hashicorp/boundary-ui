@@ -1041,3 +1041,20 @@
     }
   }
 }
+
+// Update dropdown count badge visibility in dark mode
+@media (prefers-color-scheme: dark) {
+  .ember-application:not(.rose-theme-light) {
+    .hds-dropdown-toggle-button__count {
+      background: var(--token-color-palette-neutral-700);
+      color: var(--token-color-palette-neutral-100);
+    }
+  }
+}
+
+.ember-application.rose-theme-dark {
+  .hds-dropdown-toggle-button__count {
+    background: var(--token-color-palette-neutral-700);
+    color: var(--token-color-palette-neutral-100);
+  }
+}

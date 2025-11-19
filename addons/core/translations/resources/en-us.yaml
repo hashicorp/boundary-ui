@@ -1235,4 +1235,11 @@ alias:
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
 app-token:
   title_plural: App Tokens
-  description: These are the app tokens that are in your global scope
+  description: Long- live, fine grained token for authorization/authentication
+  form:
+    approximate_last_access_time:
+      label: Last used at
+    expires_in:
+      label: Expires in
+    status:
+      label: Status
