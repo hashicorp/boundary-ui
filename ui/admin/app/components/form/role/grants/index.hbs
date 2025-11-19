@@ -93,11 +93,13 @@
 
 <div class='grant-grid'>
   <div class='content'>
-    <Rose::CodeEditor as |c|>
+    <Rose::CodeEditor
       @onInput={{@onInput}}
       @value={{this.value}}
       @options={{hash mode='javascript' autocomplete=true}}
-    </Rose::CodeEditor>
+      @lint={{true}}
+      as |c|
+    />
   </div>
   <Hds::Card::Container @level='mid' @hasBorder={{true}} class='explanation'>
     <Hds::Text::Display
