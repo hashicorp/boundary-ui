@@ -69,10 +69,16 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
       let appTokens;
       let totalItems = 0;
 
-      // Build filters
-      const filters = {};
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        status: [],
+      };
+
+      // Add status filters if provided
       if (statuses && statuses.length > 0) {
-        filters.status = statuses.map((status) => ({ equals: status }));
+        statuses.forEach((status) => {
+          filters.status.push({ equals: status });
+        });
       }
 
       // Build sort
@@ -86,7 +92,6 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
       if (this.can.can('list scope', scope, { collection: 'app-tokens' })) {
         const queryOptions = {
           scope_id,
-          recursive: true,
           query: {
             search: search
               ? { text: search, fields: ['name', 'description', 'id'] }
@@ -100,9 +105,6 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
 
         // Remove undefined values from query
         if (!queryOptions.query.search) delete queryOptions.query.search;
-        if (Object.keys(queryOptions.query.filters).length === 0) {
-          delete queryOptions.query.filters;
-        }
         if (!queryOptions.query.sort) delete queryOptions.query.sort;
 
         appTokens = await this.store.query('app-token', queryOptions);
