@@ -12,7 +12,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
-import config from 'ember-get-config';
+import environmentConfig from 'ember-get-config';
 
 // mirage models (alphabetical)
 import accountModel from './models/account';
@@ -92,7 +92,6 @@ import targetFactory from './factories/target';
 import userFactory from './factories/user';
 import workerFactory from './factories/worker';
 
-const environmentConfig = config;
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
