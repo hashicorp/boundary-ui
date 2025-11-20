@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { waitUntil } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import sinon from 'sinon';
 
