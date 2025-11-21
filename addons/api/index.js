@@ -24,6 +24,19 @@ module.exports = {
     },
   },
 
+  included() {
+    const env = this.parent?.app?.env ?? 'production';
+    this._super.included.apply(this, arguments);
+
+    if (env === 'production') {
+      this.options.autoImport.exclude.push(
+        'miragejs',
+        'sinon',
+        '@faker-js/faker',
+      );
+    }
+  },
+
   treeForAddon() {
     const env = this.parent?.app?.env ?? 'production';
 
