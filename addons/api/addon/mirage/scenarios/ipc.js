@@ -22,6 +22,14 @@ export default function initializeMockIPC(server, config) {
 
     clusterUrl = null;
 
+    checkOS() {
+      return {
+        isLinux: false,
+        isMac: true,
+        isWindows: false,
+      };
+    }
+
     getClusterUrl() {
       return this.clusterUrl;
     }
@@ -273,7 +281,7 @@ export default function initializeMockIPC(server, config) {
    * We mock certain functions even in electron (e.g. hasMacOSChrome) when running
    * locally which will force a certain appearance regardless of platform
    */
-  if (true && !isTesting) {
+  if (config.mirage?.enabled && !isTesting) {
     const mockIPC = new MockIPC();
 
     window.addEventListener('message', async function (event) {
