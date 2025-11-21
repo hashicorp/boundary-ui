@@ -33,11 +33,6 @@ module.exports = function (environment) {
       ? JSON.parse(process.env.EMBER_CLI_ELECTRON)
       : false,
 
-    'ember-cli-mirage': {
-      //enabled: ENABLE_MIRAGE,
-      directory: '../../addons/api/mirage',
-    },
-
     api: {
       // there is no default API host in desktop
       //host: API_HOST,
@@ -79,9 +74,11 @@ module.exports = function (environment) {
     // usually the same as the application origin.
     ENV.autoOrigin = true;
 
-    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
-      ? JSON.parse(process.env.ENABLE_MIRAGE)
-      : true;
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
 
     ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
     ENV.COLOR_THEME = COLOR_THEME;
