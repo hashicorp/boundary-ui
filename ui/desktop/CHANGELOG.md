@@ -2,6 +2,19 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.5.0 [CLI 0.21.0] (2025.12.11)
+
+### New & Improved
+
+- Upgrade CLI to v0.21.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/3087))
+- Add RDP client launch support with improved connection flow ([PR](https://github.com/hashicorp/boundary-ui/pull/3037))
+
+### Bug Fixes
+
+- Fix sanitizing of tokens when logging ([PR](https://github.com/hashicorp/boundary-ui/pull/3036))
+- Show username for OIDC auth method in user menu ([PR](https://github.com/hashicorp/boundary-ui/pull/2930))
+- Clear expired sessions from the store to prevent stale session data ([PR](https://github.com/hashicorp/boundary-ui/pull/3033))
+
 ## V2.4.0 [CLI 0.20.0] (2025.09.25)
 
 ### New & Improved
