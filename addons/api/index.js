@@ -25,14 +25,20 @@ module.exports = {
   },
 
   included() {
-    const env = this.parent?.app?.env ?? 'production';
     this._super.included.apply(this, arguments);
+    const env = this.parent?.app?.env ?? 'production';
 
+    // these are dependencies used our mirage code within the
+    // api addon and should not be included in production builds,
+    // after this addon has been migrated to a v2 addon this can
+    // be removed as the addon's dependencies will be statically
+    // analyzable
     if (env === 'production') {
       this.options.autoImport.exclude.push(
         'miragejs',
         'sinon',
         '@faker-js/faker',
+        'js-bexpr',
       );
     }
   },
