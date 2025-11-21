@@ -41,10 +41,6 @@ module.exports = function (environment) {
       namespace: 'v1',
     },
 
-    'ember-cli-mirage': {
-      directory: '../api/mirage',
-    },
-
     enableConfirmService: false,
   };
 
