@@ -29,28 +29,34 @@ export default class VariableTimeFieldIndex extends Component {
   }
 
   createDataRow() {
-    return [
-      { days: this.days, hours: this.hours, minutes: this.minutes },
-    ];
+    return [{ days: this.days, hours: this.hours, minutes: this.minutes }];
   }
 
   @action
-  updateTime(key, { target: { value }}) {
+  updateTime(key, { target: { value } }) {
     this.data[0][key] = Number(value);
     const days = this.data[0].days;
     const hours = this.data[0].hours;
     const minutes = this.data[0].minutes;
 
-    let totalSeconds = (days || 0) * 86400 + (hours || 0) * 3600 + (minutes || 0) * 60;
+    let totalSeconds =
+      (days || 0) * 86400 + (hours || 0) * 3600 + (minutes || 0) * 60;
     this.args.updateTime(totalSeconds);
   }
 
   @action
   setMax() {
-    this.days = 0;
-    this.hours = 0;
-    this.minutes = 0;
+    if (this.args.max == null) {
+      return;
+    }
+    let maxSeconds = this.args.max;
+    this.days = Math.floor(maxSeconds / 86400);
+    maxSeconds %= 86400;
+    this.hours = Math.floor(maxSeconds / 3600);
+    maxSeconds %= 3600;
+    this.minutes = Math.floor(maxSeconds / 60);
     this.data = this.createDataRow();
-    this.args.updateTime('days', { target: { value: this.args.max } });
+
+    this.args.updateTime(this.args.max);
   }
 }

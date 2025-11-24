@@ -2,43 +2,40 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-<Hds::Form::KeyValueInputs
-  @isRequired={{@isRequired}}
-  @data={{this.data}}
->
+<Hds::Form::KeyValueInputs @isRequired={{@isRequired}} @data={{this.data}}>
   <:header as |H|>
     <H.Legend>{{@legend}}</H.Legend>
   </:header>
   <:row as |R|>
     <R.Field as |F|>
       <F.Label>
-        Days
+        {{t 'form.variable-time-field.days'}}
       </F.Label>
       <F.TextInput
         type='number'
-        @name='days'
+        name='days'
         @value={{R.rowData.days}}
         {{on 'input' (fn this.updateTime 'days')}}
       />
     </R.Field>
     <R.Field as |F|>
       <F.Label>
-        Hours
+        {{t 'form.variable-time-field.hours'}}
       </F.Label>
       <F.TextInput
         type='number'
-        @name='hours'
+        name='hours'
         @value={{R.rowData.hours}}
         {{on 'input' (fn this.updateTime 'hours')}}
       />
     </R.Field>
     <R.Field as |F|>
       <F.Label>
-        Minutes
+        {{t 'form.variable-time-field.minutes'}}
       </F.Label>
       <F.TextInput
         type='number'
-        @name='minutes'
+        name='minutes'
         @value={{R.rowData.minutes}}
         {{on 'input' (fn this.updateTime 'minutes')}}
       />
@@ -46,7 +43,7 @@
     {{#if @max}}
       <R.Generic>
         <Hds::Button
-          @text='Set to Max'
+          @text={{t 'form.variable-time-field.set-to-max'}}
           variant='secondary'
           {{on 'click' this.setMax}}
         />

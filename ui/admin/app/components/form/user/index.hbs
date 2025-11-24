@@ -11,9 +11,16 @@
   as |form|
 >
   <VariableTimeField
-    @legend='Time to Live (TTL)'
+    @legend='Time to Live (3 years)'
     @isRequired={{true}}
     @max={{94608000}}
+    @time={{@ttl}}
+    @updateTime={{@updateTTL}}
+  />
+  <VariableTimeField
+    @legend='Time to Live (1 day, 1 hour, 1 minute)'
+    @isRequired={{true}}
+    @max={{90061}}
     @time={{@ttl}}
     @updateTime={{@updateTTL}}
   />
