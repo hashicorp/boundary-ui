@@ -98,6 +98,6 @@ module.exports = {
   _includeMirageInBuild() {
     const env = this.parent.app?.env ?? 'production';
     const config = this.project.config(env);
-    return config.mirage?.enabled || env !== 'production';
+    return Boolean(config.mirage?.enabled);
   },
 };

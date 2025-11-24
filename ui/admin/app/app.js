@@ -8,12 +8,7 @@ import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from 'admin/config/environment';
 import 'ember-power-select/styles';
-import {
-  macroCondition,
-  isDevelopingApp,
-  isTesting,
-  importSync,
-} from '@embroider/macros';
+import { macroCondition, importSync, getOwnConfig } from '@embroider/macros';
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
@@ -23,9 +18,7 @@ export default class App extends Application {
 
 loadInitializers(App, config.modulePrefix);
 
-if (macroCondition(isDevelopingApp() && !isTesting())) {
-  if (config.mirage?.enabled) {
-    const startServer = importSync('api/mirage/config').default;
-    startServer({});
-  }
+if (macroCondition(getOwnConfig().startMirageWithApp)) {
+  const startServer = importSync('api/mirage/config').default;
+  startServer({});
 }
