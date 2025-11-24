@@ -4,18 +4,20 @@
  */
 
 import Component from '@glimmer/component';
+import { assert } from '@ember/debug';
 import {
   TYPES_CREDENTIAL,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
   TYPE_CREDENTIAL_JSON,
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
 import usernamePasswordFormComponent from './username_password';
 import sshPrivateKeyFormComponent from './ssh_private_key';
 import jsonFormComponent from './json';
 import usernamePasswordDomainFormComponent from './username_password_domain';
-import { assert } from '@ember/debug';
+import passwordFormComponent from './password';
 
 const modelTypeToComponent = {
   [TYPE_CREDENTIAL_USERNAME_PASSWORD]: usernamePasswordFormComponent,
@@ -23,6 +25,7 @@ const modelTypeToComponent = {
   [TYPE_CREDENTIAL_JSON]: jsonFormComponent,
   [TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN]:
     usernamePasswordDomainFormComponent,
+  [TYPE_CREDENTIAL_PASSWORD]: passwordFormComponent,
 };
 
 export default class FormCredentialComponent extends Component {
