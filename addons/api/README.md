@@ -55,14 +55,13 @@ module.exports = async function (defaults) {
 3. Finally, use the `@embroider/macros` config value for `startMirageWithApp` in `app/app.js` to conditionally start mirage:
 
 ```js
-import { macroCondition, importSync, getOwnConfig } from '@embroider/macros';
+import { macroCondition, importSync, getOwnConfig, isTesting } from '@embroider/macros';
 
-if (macroCondition(getOwnConfig().startMirageWithApp)) {
+if (macroCondition(getOwnConfig().startMirageWithApp && !isTesting())) {
   const startServer = importSync('api/mirage/config').default;
   startServer({});
 }
 ```
-
 ## Installation
 
 See monorepo README for installation instructions.
