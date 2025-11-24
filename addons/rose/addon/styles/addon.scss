@@ -7,3 +7,68 @@
 @use 'styles/@hashicorp/design-system-components-common.scss';
 @use 'hds/themes/dark-mode';
 @use 'hds/overrides';
+
+// IBM Plex fonts
+// these are coming from the `@ibm` packages
+
+@use 'plex-sans/scss' as PlexSans with (
+  $font-prefix: '/core',
+  $font-weights: (
+    // ❌ 100
+    thin: false,
+    thinItalic: false,
+    // ❌ 200
+    extralight: false,
+    extralightItalic: false,
+    // ❌ 300
+    light: false,
+    lightItalic: false,
+    // ✅ 400
+    regular: true,
+    italic: true,
+    // ❌ 500
+    medium: false,
+    mediumItalic: false,
+    // ❌ 450
+    text: false,
+    textItalic: false,
+    // ✅ 600
+    semibold: true,
+    semiboldItalic: true,
+    // ❌ 700
+    bold: false,
+    boldItalic: false,
+  )
+);
+@use 'plex-mono/scss' as PlexMono with (
+  $font-prefix: '/core',
+  $font-weights: (
+    // ❌ 100
+    thin: false,
+    thinItalic: false,
+    // ❌ 200
+    extralight: false,
+    extralightItalic: false,
+    // ❌ 300
+    light: false,
+    lightItalic: false,
+    // ✅ 400
+    regular: true,
+    italic: true,
+    // ❌ 500
+    medium: false,
+    mediumItalic: false,
+    // ❌ 450
+    text: false,
+    textItalic: false,
+    // ✅ 600
+    semibold: true,
+    semiboldItalic: true,
+    // ❌ 700
+    bold: false,
+    boldItalic: false,
+  )
+);
+
+@include PlexSans.all;
+@include PlexMono.all;
