@@ -6,51 +6,105 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
 export default class ScopesScopeAppTokensIndexController extends Controller {
   // =services
 
-  @service router;
+  @service intl;
 
   // =attributes
 
   queryParams = [
     'search',
-    'sortBy',
-    'sortOrder',
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
     { statuses: { type: 'array' } },
   ];
 
   @tracked search;
-  @tracked sortBy = 'name';
-  @tracked sortOrder = 'asc';
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
   @tracked statuses = [];
 
   /**
-   * Available status options for filtering
+   * Status options for filtering
    */
   get statusOptions() {
     return STATUSES_APP_TOKEN.map((status) => ({
       id: status,
-      name: status.charAt(0).toUpperCase() + status.slice(1), // Capitalize first letter
+      name: this.intl.t(`resources.app-token.status.${status}`),
     }));
   }
 
   /**
-   * App tokens (already filtered and sorted by API)
+   * Returns status badge configuration for app tokens
+   * @param {string} status
+   * @returns {object}
+   */
+  @action
+  getStatusBadge(status) {
+    const statusConfig = {
+      active: { color: 'success' },
+      expired: { color: 'critical' },
+      revoked: { color: 'critical' },
+      stale: { color: 'critical' },
+      unknown: { color: 'neutral' },
+    };
+
+    const config = statusConfig[status] || { color: 'neutral' };
+    return {
+      text: this.intl.t(`resources.app-token.status.${status}`),
+      color: config.color,
+    };
+  }
+
+  /**
+   * Formats date for tooltip display
+   * @param {Date} date
+   * @returns {string}
+   */
+  @action
+  formatTooltipDate(date) {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  }
+
+  /**
+   * Returns object of filters to be used for displaying selected filters
+   * @returns {object}
+   */
+  get filters() {
+    return {
+      allFilters: {
+        statuses: this.statusOptions,
+      },
+      selectedFilters: {
+        statuses: this.statuses,
+      },
+    };
+  }
+
+  /**
+   * App tokens
    */
   get appTokens() {
     return this.model?.appTokens || [];
   }
 
   /**
-   * Total number of app tokens (from API response)
+   * Total number of app tokens
    */
   get totalItems() {
     return this.model?.totalItems || 0;
@@ -59,15 +113,14 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   // =actions
 
   /**
-   * Handles input on each keystroke and updates the search queryParam
+   * Handles input on each keystroke and the search queryParam
    * @param {object} event
    */
   @action
   handleSearchInput(event) {
     const { value } = event.target;
-    this.router.transitionTo({
-      queryParams: { search: value || null, page: 1 },
-    });
+    this.search = value;
+    this.page = 1;
   }
 
   /**
@@ -77,27 +130,19 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   applyFilter(paramKey, selectedItems) {
-    this.router.transitionTo({
-      queryParams: {
-        [paramKey]: selectedItems.length > 0 ? selectedItems : null,
-        page: 1,
-      },
-    });
+    this[paramKey] = [...selectedItems];
+    this.page = 1;
   }
 
   /**
-   * Sets sort values and resets page to 1
+   * Sets sort values and sets page to 1
    * @param {string} sortBy
    * @param {string} sortOrder
    */
   @action
   onSort(sortBy, sortOrder) {
-    this.router.transitionTo({
-      queryParams: {
-        sortBy,
-        sortOrder,
-        page: 1,
-      },
-    });
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }

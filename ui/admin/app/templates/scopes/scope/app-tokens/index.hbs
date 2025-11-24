@@ -16,7 +16,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if @model.appTokens.length}}
+    {{#if @model.doAppTokensExist}}
 
       <Hds::SegmentedGroup data-test-app-tokens-bar as |S|>
         <S.TextInput
@@ -48,12 +48,12 @@
         </S.Generic>
       </Hds::SegmentedGroup>
 
-      {{#if this.totalItems}}
+      {{#if @model.appTokens}}
         <Hds::Table
           @valign='middle'
           @onSort={{this.onSort}}
-          @sortBy={{this.sortBy}}
-          @sortOrder={{this.sortOrder}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
           <:head as |H|>
             <H.Tr>
@@ -71,8 +71,8 @@
                   'resources.app-token.form.approximate_last_access_time.label'
                 }}</H.ThSort>
               <H.ThSort
-                @onClickSort={{fn H.setSortBy 'expiresIn'}}
-                @sortOrder={{if (eq 'expiresIn' H.sortBy) H.sortOrder}}
+                @onClickSort={{fn H.setSortBy 'expire_time'}}
+                @sortOrder={{if (eq 'expire_time' H.sortBy) H.sortOrder}}
               >{{t 'resources.app-token.form.expires_in.label'}}</H.ThSort>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'status'}}
@@ -88,13 +88,12 @@
             {{#each this.appTokens as |token|}}
               <B.Tr>
                 <B.Td>
-                  <div class='hds-font-weight-semibold'>
-                    {{token.name}}
-                  </div>
+                  {{! TODO: Add the LinkTo component when route is implemented }}
+                  {{token.name}}
                   {{#if token.description}}
-                    <div class='hds-foreground-faint hds-typography-body-100'>
+                    <Hds::Text::Body @tag='p' class='p'>
                       {{token.description}}
-                    </div>
+                    </Hds::Text::Body>
                   {{/if}}
                 </B.Td>
                 <B.Td>
@@ -106,27 +105,30 @@
                       />
                     </Hds::Text::Body>
                   {{else}}
+                    {{! TODO: Check with design team to handle null values in the cell }}
                     <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
                   {{/if}}
                 </B.Td>
                 <B.Td>
-                  {{#if token.expiresIn}}
-                    {{format-day-year token.expiresIn}}
+                  {{#if token.expire_time}}
+                    <span class='expires-in-tooltip'>
+                      <Hds::TooltipButton
+                        @text={{this.formatTooltipDate token.expire_time}}
+                        @placement='bottom'
+                      >
+                        <Hds::Text::Body>
+                          {{format-day-year token.expiresIn}}
+                        </Hds::Text::Body>
+                      </Hds::TooltipButton>
+                    </span>
                   {{else}}
                     <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
                   {{/if}}
                 </B.Td>
-                {{! TODO: Add status text for translations }}
                 <B.Td>
-                  {{#if (eq token.status 'active')}}
-                    <Hds::Badge @text='Active' @color='success' />
-                  {{else if (eq token.status 'expired')}}
-                    <Hds::Badge @text='Expired' @color='warning' />
-                  {{else if (eq token.status 'revoked')}}
-                    <Hds::Badge @text='Revoked' @color='critical' />
-                  {{else}}
-                    <Hds::Badge @text={{token.status}} @color='neutral' />
-                  {{/if}}
+                  {{#let (this.getStatusBadge token.status) as |badge|}}
+                    <Hds::Badge @text={{badge.text}} @color={{badge.color}} />
+                  {{/let}}
                 </B.Td>
                 <B.Td>
                   <Hds::Copy::Snippet
@@ -139,7 +141,7 @@
           </:body>
         </Hds::Table>
         <Rose::Pagination
-          @totalItems={{this.totalItems}}
+          @totalItems={{@model.totalItems}}
           @currentPage={{this.page}}
           @currentPageSize={{this.pageSize}}
         />
@@ -148,7 +150,11 @@
           <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
-              'descriptions.no-search-results'
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
               query=this.search
               resource=(t 'resources.app-token.title_plural')
             }}
@@ -158,16 +164,18 @@
 
     {{else}}
       <Hds::ApplicationState as |A|>
-        <A.Header @title={{t 'titles.no-results-found'}} />
-        {{! TODO: Add the correct text for global/org/project scope }}
+        <A.Header @title={{t 'resources.app-token.messages.none.title'}} />
+        {{! TODO: Check with the product/design team for status text of translations }}
         <A.Body
-          @text={{if
-            @model.scope.isGlobal
-            'No app tokens have been created at the global scope level.'
+          @text={{t
             (if
-              @model.scope.isOrg
-              'No app tokens have been created for this organization.'
-              'No app tokens have been created for this project.'
+              @model.scope.isGlobal
+              'resources.app-token.messages.none.global-scope'
+              (if
+                @model.scope.isOrg
+                'resources.app-token.messages.none.org-scope'
+                'resources.app-token.messages.none.project-scope'
+              )
             )
           }}
         />

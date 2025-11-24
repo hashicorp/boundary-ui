@@ -29,11 +29,11 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
-    sortBy: {
+    sortAttribute: {
       refreshModel: true,
       replace: true,
     },
-    sortOrder: {
+    sortDirection: {
       refreshModel: true,
       replace: true,
     },
@@ -55,8 +55,8 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
       statuses,
       page,
       pageSize,
-      sortBy,
-      sortOrder,
+      sortAttribute,
+      sortDirection,
       useDebounce,
     }) => {
       if (useDebounce) {
@@ -74,7 +74,7 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
         status: [],
       };
 
-      // Add status filters if provided
+      // Add status filters
       if (statuses && statuses.length > 0) {
         statuses.forEach((status) => {
           filters.status.push({ equals: status });
@@ -82,10 +82,10 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
       }
 
       // Build sort
-      const sort = sortBy
+      const sort = sortAttribute
         ? {
-            attributes: [sortBy],
-            direction: sortOrder || 'asc',
+            attributes: [sortAttribute],
+            direction: sortDirection || 'asc',
           }
         : undefined;
 
@@ -103,18 +103,20 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
           pageSize: pageSize || 10,
         };
 
-        // Remove undefined values from query
-        if (!queryOptions.query.search) delete queryOptions.query.search;
-        if (!queryOptions.query.sort) delete queryOptions.query.sort;
-
         appTokens = await this.store.query('app-token', queryOptions);
         totalItems = appTokens.meta?.totalItems || appTokens.length;
+
+        const doAppTokensExist = await this.getDoAppTokensExist(
+          scope_id,
+          totalItems,
+        );
 
         return {
           ...parentModel,
           scope,
           appTokens,
           totalItems,
+          doAppTokensExist,
         };
       }
 
@@ -123,7 +125,31 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
         scope,
         appTokens: [],
         totalItems: 0,
+        doAppTokensExist: false,
       };
     },
   );
+
+  /**
+   * Sets doAppTokensExist to true if there are any app tokens.
+   * @param {string} scope_id
+   * @param {number} totalItems
+   * @returns {Promise<boolean>}
+   */
+  async getDoAppTokensExist(scope_id, totalItems) {
+    if (totalItems > 0) {
+      return true;
+    }
+    const options = { pushToStore: false, peekDb: true };
+    const appTokens = await this.store.query(
+      'app-token',
+      {
+        scope_id,
+        page: 1,
+        pageSize: 1,
+      },
+      options,
+    );
+    return appTokens.length > 0;
+  }
 }

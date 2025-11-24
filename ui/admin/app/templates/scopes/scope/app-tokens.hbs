@@ -4,10 +4,9 @@
 }}
 
 {{page-title (t 'resources.app-token.title_plural')}}
-<Hds::Breadcrumb::Item
+<Breadcrumbs::Item
   @text={{t 'resources.app-token.title_plural'}}
-  @current={{true}}
-  data-test-breadcrumb
+  @route='scopes.scope.app-tokens'
 />
 
 {{outlet}}

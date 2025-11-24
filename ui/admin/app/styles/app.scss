@@ -1058,3 +1058,12 @@
     color: var(--token-color-palette-neutral-100);
   }
 }
+
+// Custom styling for expires-in tooltip to match Hds::Time component
+.expires-in-tooltip {
+  .hds-text {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: currentColor;
+  }
+}
