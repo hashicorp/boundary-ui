@@ -41,6 +41,10 @@ module.exports = function (environment) {
       namespace: 'v1',
     },
 
+    mirage: {
+      enabled: true,
+    },
+
     enableConfirmService: false,
   };
 
