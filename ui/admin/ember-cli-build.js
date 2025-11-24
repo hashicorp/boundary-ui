@@ -11,15 +11,9 @@ module.exports = async function (defaults) {
   const { setConfig } = await import('@warp-drive/build-config');
   const { EMBER_ENV } = process.env;
   var config = require('./config/environment')(EMBER_ENV);
-  const exclude = [
-    ...(!config.mirage?.enabled ? ['miragejs', '@faker-js/faker'] : []),
-  ];
-
-  console.log({ exclude });
 
   const app = new EmberApp(defaults, {
     hinting: false,
-    autoImport: { exclude },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
     },
@@ -38,6 +32,11 @@ module.exports = async function (defaults) {
     },
     api: {
       enableSqlite: true,
+    },
+    '@embroider/macros': {
+      setOwnConfig: {
+        startMirageWithApp: config.mirage?.enabled ?? false,
+      },
     },
   });
 
