@@ -111,6 +111,12 @@ module.exports = function (environment) {
 
     ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
     ENV.COLOR_THEME = COLOR_THEME;
+
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
   }
 
   if (environment === 'production') {
