@@ -95,7 +95,8 @@ import workerFactory from './factories/worker';
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
-// More info about server configuration https://www.ember-cli-mirage.com/docs/advanced/server-configuration
+// More info about server configuration:
+// https://github.com/miragejs/miragejs/blob/7ff4f3f6fe56bf0cb1648f5af3f5210fcb07e20b/types/index.d.ts#L375-L404
 export default function (mirageConfig) {
   let finalConfig = {
     ...mirageConfig,
