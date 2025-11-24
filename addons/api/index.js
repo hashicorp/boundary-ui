@@ -26,14 +26,15 @@ module.exports = {
 
   included() {
     this._super.included.apply(this, arguments);
-    const env = this.parent?.app?.env ?? 'production';
+    const includeMirage = this._includeMirageInBuild();
 
     // these are dependencies used our mirage code within the
     // api addon and should not be included in production builds,
     // after this addon has been migrated to a v2 addon this can
     // be removed as the addon's dependencies will be statically
     // analyzable
-    if (env === 'production') {
+    if (!includeMirage) {
+      // exclude mirage and dependencies from this addon that are used by mirage
       this.options.autoImport.exclude.push(
         'miragejs',
         'sinon',
@@ -44,16 +45,15 @@ module.exports = {
   },
 
   treeForAddon() {
-    const env = this.parent?.app?.env ?? 'production';
+    const includeMirage = this._includeMirageInBuild();
 
     // Exclude anything in the workers folder from being bundled in the final
     // build as we're manually bundling the files ourselves below.
     const tree = this._super.treeForAddon.apply(this, arguments);
     return funnel(tree, {
-      exclude: [
-        'api/workers/**/*',
-        env === 'production' && 'api/mirage/**/*',
-      ].filter(Boolean),
+      exclude: ['api/workers/**/*', !includeMirage && 'api/mirage/**/*'].filter(
+        Boolean,
+      ),
     });
   },
 
@@ -93,5 +93,11 @@ module.exports = {
     }
 
     return merge(trees);
+  },
+
+  _includeMirageInBuild() {
+    const env = this.parent.app?.env ?? 'production';
+    const config = this.project.config(env);
+    return config.mirage.enabled || env !== 'production';
   },
 };
