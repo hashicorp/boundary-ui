@@ -118,7 +118,7 @@ export const modelMapping = {
     id: 'id',
     name: 'name',
     description: 'description',
-    scope_id: 'scope_id',
+    scope_id: 'scope.scope_id',
     created_time: 'created_time',
     approximate_last_access_time: 'approximate_last_access_time',
     status: 'status',
