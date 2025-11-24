@@ -23,12 +23,43 @@ This addon contains the API data access layer for Boundary.
 Add this addon to an Ember application's `devDependencies` as:
 `"api": "workspace:*"`, for applications included in this monorepo.
 
-Since this addon also includes Mirage mocks, be sure to install
-`ember-cli-mirage` and add the following config to your UI project:
+This addon also includes Mirage mocks. To include the `miragejs` dependency and this addon's mirage handlers configure the consuming app's `config/environment.js`
 
 ```js
-'ember-cli-mirage': {
-  directory: '../../addons/api/mirage'
+mirage: {
+  enabled: true
+}
+```
+
+To have mirage start and intercept requests when the application starts:
+1. Add the `@embroider/macros` dependency to your application
+2. Configure `@embroider/macros` with `startMirageWithApp` based on app's config within `ember-cli-build.js`:
+
+```js
+// ember-cli-build.js
+module.exports = async function (defaults) {
+  // load the app's config 
+  const { EMBER_ENV } = process.env;
+  var config = require('./config/environment')(EMBER_ENV);
+
+  const app = new EmberApp(defaults, {
+    '@embroider/macros': {
+      setOwnConfig: {
+        startMirageWithApp: config.mirage?.enabled ?? false
+      },
+    },
+  });
+}
+```
+
+3. Finally, use the `@embroider/macros` config value for `startMirageWithApp` in `app/app.js` to conditionally start mirage:
+
+```js
+import { macroCondition, importSync, getOwnConfig } from '@embroider/macros';
+
+if (macroCondition(getOwnConfig().startMirageWithApp)) {
+  const startServer = importSync('api/mirage/config').default;
+  startServer({});
 }
 ```
 
