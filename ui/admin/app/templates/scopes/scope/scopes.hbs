@@ -23,4 +23,19 @@
   />
 {{/if}}
 
+<div class='projects-theming-test'>
+  {{! template-lint-disable no-bare-strings }}
+  <p
+    class='hds-typography-body-200 hds-font-weight-semibold hds-foreground-primary hds-surface-faint'
+  >Test CSS helper classes for "sans" font</p>
+  <p class='projects-theming-test-normal-local-classes'>Test normal local CSS
+    classes</p>
+  <p class='projects-theming-test-aliased-local-classes'>Test normal aliased CSS
+    classes</p>
+  <p
+    class='hds-typography-code-200 hds-font-weight-semibold hds-foreground-primary hds-surface-faint'
+  >Test CSS helper classes for "mono" font</p>
+  {{! template-lint-enable no-bare-strings }}
+</div>
+
 {{outlet}}
