@@ -3,6 +3,8 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
+{{! TODO Consolidate overlapping translations once roles manage scopes gets refactored. }}
+
 <div class='search-filtering'>
   <Hds::Layout::Flex @direction='column' @gap='16' class='margin-bottom-l'>
     <Hds::Form::Toggle::Field
@@ -13,12 +15,10 @@
       {{on 'change' this.toggleField}}
       as |F|
     >
-      <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
+      <F.Label>{{t 'resources.app-token.form.this.label'}}</F.Label>
       <F.HelperText>{{t
-          'resources.role.scope.form.this.help'
-          scopeDisplayName=(if
-            @model.scope.name @model.scope.name @model.scope.id
-          )
+          'resources.app-token.form.this.help'
+          scope=this.scopeDisplayName
         }}</F.HelperText>
     </Hds::Form::Toggle::Field>
 
@@ -30,11 +30,10 @@
       {{on 'change' this.toggleField}}
       as |F|
     >
-      <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
-      <F.HelperText>{{if
-          @model.scope.isGlobal
-          (t 'resources.role.scope.form.children.help.0')
-          (t 'resources.role.scope.form.children.help.1')
+      <F.Label>{{t 'resources.app-token.form.children.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.app-token.form.children.help'
+          scopes=(if @model.scope.isGlobal 'orgs' 'projects')
         }}</F.HelperText>
     </Hds::Form::Toggle::Field>
 
@@ -47,9 +46,9 @@
         {{on 'change' this.toggleField}}
         as |F|
       >
-        <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
+        <F.Label>{{t 'resources.app-token.form.descendants.label'}}</F.Label>
         <F.HelperText>{{t
-            'resources.role.scope.form.descendants.help'
+            'resources.app-token.form.descendants.help'
           }}</F.HelperText>
       </Hds::Form::Toggle::Field>
     {{/if}}
@@ -196,7 +195,7 @@
                   </B.Td>
                   <B.Td>
                     <Hds::Text::Body @tag='p'>
-                      {{or B.data.scope.name B.data.scope.id}}
+                      {{this.scopeDisplayName}}
                     </Hds::Text::Body>
                   </B.Td>
                 </B.Tr>
