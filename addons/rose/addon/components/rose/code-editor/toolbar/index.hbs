@@ -21,14 +21,12 @@
         data-test-code-editor-toolbar-menu-divider
       ></div>
     {{/if}}
-    <CopyButton
-      @text={{@copyText}}
-      @onSuccess={{this.copied}}
+    <div
       class='rose-code-editor-toolbar__copy-button'
       data-test-code-editor-toolbar-copy-button
     >
       <Hds::Icon @name={{this.copyIconType}} @isInline={{true}} />
       Copy code
-    </CopyButton>
+    </div>
   </div>
 </div>

@@ -10,12 +10,12 @@ module('Unit | Abilities | Scope', function (hooks) {
   setupTest(hooks);
 
   let features;
-  let canService;
+  let abilitiesService;
   let store;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
-    canService = this.owner.lookup('service:can');
+    abilitiesService = this.owner.lookup('service:abilities');
     features = this.owner.lookup('service:features');
   });
 
@@ -25,7 +25,7 @@ module('Unit | Abilities | Scope', function (hooks) {
     const scopeModel = store.createRecord('scope', {
       authorized_actions: ['attach-storage-policy'],
     });
-    assert.true(canService.can('attachStoragePolicy scope', scopeModel));
+    assert.true(abilitiesService.can('attachStoragePolicy scope', scopeModel));
   });
 
   test('cannot attach storage policy when unauthorized', function (assert) {
@@ -35,7 +35,7 @@ module('Unit | Abilities | Scope', function (hooks) {
       authorized_actions: [],
     });
 
-    assert.false(canService.can('attachStoragePolicy scope', scopeModel));
+    assert.false(abilitiesService.can('attachStoragePolicy scope', scopeModel));
   });
 
   test('can detach storage policy when authorized', function (assert) {
@@ -44,6 +44,6 @@ module('Unit | Abilities | Scope', function (hooks) {
     const scopeModel = store.createRecord('scope', {
       authorized_actions: ['detach-storage-policy'],
     });
-    assert.true(canService.can('detachStoragePolicy scope', scopeModel));
+    assert.true(abilitiesService.can('detachStoragePolicy scope', scopeModel));
   });
 });

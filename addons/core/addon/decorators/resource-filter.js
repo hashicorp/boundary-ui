@@ -272,3 +272,5 @@ export function resourceFilter({
     };
   };
 }
+
+export default resourceFilter;

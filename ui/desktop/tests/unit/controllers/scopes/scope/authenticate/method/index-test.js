@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'api/test-support/helpers/mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';

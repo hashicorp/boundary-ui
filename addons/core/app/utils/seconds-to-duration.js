@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export { default } from 'core/utils/seconds-to-duration';
+export { secondsToDuration as default } from 'core/utils/seconds-to-duration';

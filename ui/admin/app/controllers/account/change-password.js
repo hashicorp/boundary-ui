@@ -6,7 +6,7 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { notifyError } from 'core/decorators/notify';
 
 export default class AccountChangePasswordController extends Controller {
   // =services
@@ -24,7 +24,6 @@ export default class AccountChangePasswordController extends Controller {
    */
   @action
   @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.save-success')
   async changePassword(account, currentPassword, newPassword) {
     await account.changePassword(currentPassword, newPassword);
     // Transition to index after success.  We ignore errors in the transition,

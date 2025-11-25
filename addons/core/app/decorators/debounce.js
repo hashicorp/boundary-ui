@@ -4,3 +4,4 @@
  */
 
 export { default } from 'core/decorators/debounce';
+export { default as debounce } from 'core/decorators/debounce';

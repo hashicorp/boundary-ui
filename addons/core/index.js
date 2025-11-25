@@ -38,7 +38,7 @@ module.exports = {
     if (this.isDevelopingAddon()) app.options.svg.paths.push(dummyPublicPath);
 
     this.addons.forEach((addon) => {
-      if (addon.name === 'ember-inline-svg') addon.included(app);
+      // if (addon.name === 'ember-inline-svg') addon.included(app);
     });
   },
 

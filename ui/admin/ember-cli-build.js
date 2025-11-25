@@ -3,12 +3,21 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-'use strict';
-
+'use strict';;
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
+const {
+  compatBuild
+} = require("@embroider/compat");
+
 module.exports = async function (defaults) {
+  const {
+    buildOnce
+  } = await import("@embroider/vite");
+
   const { setConfig } = await import('@warp-drive/build-config');
+  const { EMBER_ENV } = process.env;
+  var config = require('./config/environment')(EMBER_ENV);
 
   const app = new EmberApp(defaults, {
     hinting: false,
@@ -30,6 +39,11 @@ module.exports = async function (defaults) {
     },
     api: {
       enableSqlite: true,
+    },
+    '@embroider/macros': {
+      setOwnConfig: {
+        startMirageWithApp: config.mirage?.enabled ?? false,
+      },
     },
   });
 
@@ -57,5 +71,5 @@ module.exports = async function (defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
-  return app.toTree();
+  return compatBuild(app, buildOnce);
 };
