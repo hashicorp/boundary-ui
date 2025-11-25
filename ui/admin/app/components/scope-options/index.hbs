@@ -195,7 +195,11 @@
                   </B.Td>
                   <B.Td>
                     <Hds::Text::Body @tag='p'>
-                      {{this.scopeDisplayName}}
+                      {{if
+                        B.data.scope.isGlobal
+                        'Global'
+                        (or B.data.scope.name B.data.scope.id)
+                      }}
                     </Hds::Text::Body>
                   </B.Td>
                 </B.Tr>
