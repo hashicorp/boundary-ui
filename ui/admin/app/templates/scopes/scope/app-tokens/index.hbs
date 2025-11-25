@@ -53,6 +53,8 @@
         </S.Generic>
       </Hds::SegmentedGroup>
 
+      <FilterTags @filters={{this.filters}} />
+
       {{#if @model.appTokens}}
         <Hds::Table
           @valign='middle'
@@ -90,7 +92,7 @@
             </H.Tr>
           </:head>
           <:body as |B|>
-            {{#each this.appTokens as |token|}}
+            {{#each @model.appTokens as |token|}}
               <B.Tr>
                 <B.Td>
                   {{! TODO: Add the LinkTo component when route is implemented }}
@@ -110,8 +112,7 @@
                       />
                     </Hds::Text::Body>
                   {{else}}
-                    {{! TODO: Check with design team to handle null values in the cell }}
-                    <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
+                    <Hds::Text::Body @color='faint'>—</Hds::Text::Body>
                   {{/if}}
                 </B.Td>
                 <B.Td>
@@ -127,7 +128,7 @@
                       </Hds::TooltipButton>
                     </span>
                   {{else}}
-                    <Hds::Text::Body @color='faint'>-</Hds::Text::Body>
+                    <Hds::Text::Body @color='faint'>—</Hds::Text::Body>
                   {{/if}}
                 </B.Td>
                 <B.Td>
@@ -182,6 +183,7 @@
                 'resources.app-token.messages.none.project-scope'
               )
             )
+            scopeName=@model.scope.displayName
           }}
         />
       </Hds::ApplicationState>

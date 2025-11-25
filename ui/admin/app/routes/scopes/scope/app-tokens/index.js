@@ -63,11 +63,12 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
         await timeout(250);
       }
 
-      const parentModel = this.modelFor('scopes.scope.app-tokens');
       const scope = this.modelFor('scopes.scope');
       const { id: scope_id } = scope;
-      let appTokens;
+
+      let appTokens = [];
       let totalItems = 0;
+      let doAppTokensExist = false;
 
       const filters = {
         scope_id: [{ equals: scope_id }],
@@ -99,33 +100,21 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
             filters,
             sort,
           },
-          page: page || 1,
-          pageSize: pageSize || 10,
+          page,
+          pageSize,
         };
 
         appTokens = await this.store.query('app-token', queryOptions);
         totalItems = appTokens.meta?.totalItems || appTokens.length;
 
-        const doAppTokensExist = await this.getDoAppTokensExist(
-          scope_id,
-          totalItems,
-        );
-
-        return {
-          ...parentModel,
-          scope,
-          appTokens,
-          totalItems,
-          doAppTokensExist,
-        };
+        doAppTokensExist = await this.getDoAppTokensExist(scope_id, totalItems);
       }
 
       return {
-        ...parentModel,
         scope,
-        appTokens: [],
-        totalItems: 0,
-        doAppTokensExist: false,
+        appTokens,
+        totalItems,
+        doAppTokensExist,
       };
     },
   );

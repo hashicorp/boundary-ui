@@ -1253,5 +1253,5 @@ app-token:
     none:
       title: No App Tokens Available
       global-scope: No app tokens have been created at the global scope level.
-      org-scope: No app tokens have been created for this organization.
-      project-scope: No app tokens have been created for this project.
+      org-scope: No app tokens have been created for {scopeName}.
+      project-scope: No app tokens have been created for {scopeName}.

@@ -96,20 +96,6 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     };
   }
 
-  /**
-   * App tokens
-   */
-  get appTokens() {
-    return this.model?.appTokens || [];
-  }
-
-  /**
-   * Total number of app tokens
-   */
-  get totalItems() {
-    return this.model?.totalItems || 0;
-  }
-
   // =actions
 
   /**
