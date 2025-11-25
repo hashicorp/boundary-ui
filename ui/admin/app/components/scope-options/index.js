@@ -22,6 +22,17 @@ export default class ScopeOptionsIndexComponent extends Component {
   };
 
   /**
+   * Returns root scope displayName.
+   * @type {string}
+   */
+  get scopeDisplayName() {
+    if (this.args.model.scope.isGlobal) {
+      return 'Global';
+    }
+    return this.args.model.scope.name ?? this.args.model.scope.id;
+  }
+
+  /**
    * Returns selected grant scope ids.
    * @type {array}
    */
