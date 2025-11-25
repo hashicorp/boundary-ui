@@ -116,3 +116,5 @@ export function notifyError(
     };
   };
 }
+
+export default notifySuccess;

@@ -12,7 +12,6 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
-import environmentConfig from 'ember-get-config';
 
 // mirage models (alphabetical)
 import accountModel from './models/account';
@@ -92,7 +91,8 @@ import targetFactory from './factories/target';
 import userFactory from './factories/user';
 import workerFactory from './factories/worker';
 
-const isTesting = environmentConfig.environment === 'test';
+const environmentConfig = {};
+const isTesting = false; // environmentConfig.environment === 'test';
 
 // Main function
 // More info about server configuration:
@@ -210,8 +210,9 @@ function routes() {
     return metadata;
   });
 
+  debugger;
   // make this `/api`, for example, if your API is namespaced
-  this.namespace = environmentConfig.api?.namespace;
+  this.namespace = '/v1';
   // delay for each request, automatically set to 0 during testing
   this.timing = 1;
 

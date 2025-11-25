@@ -4,3 +4,4 @@
  */
 
 export { default } from 'core/decorators/notify';
+export { notifySuccess, notifyError } from 'core/decorators/notify';

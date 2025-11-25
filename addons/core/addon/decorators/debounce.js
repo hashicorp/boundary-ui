@@ -24,3 +24,5 @@ export function debounce(timeToWait, options) {
     );
   };
 }
+
+export default debounce;

@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export { default } from 'core/decorators/confirm';
+export { confirm, confirm as default } from 'core/decorators/confirm';
