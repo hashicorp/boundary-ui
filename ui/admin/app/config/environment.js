@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import loadConfigFromMeta from '@embroider/config-meta-loader';
 import { assert } from '@ember/debug';
 
