@@ -79,7 +79,7 @@
   {{#if (includes this.keywords.keyDescendants this.grantScopeIds)}}
     <Hds::Alert @type='inline' class='margin-bottom-l' as |A|>
       <A.Title>{{t
-          'resources.app-token.form.scope-options.descendants-selected.title'
+          'resources.app-token.form.descendants-selected.title'
         }}</A.Title>
       <A.Description>
         <ul class='grant-scope-selection-alert-list'>
@@ -98,7 +98,7 @@
           </li>
           <li>
             {{t
-              'resources.app-token.form.scope-options.descendants-selected.description'
+              'resources.app-token.form.descendants-selected.description'
               htmlSafe=true
             }}
           </li>
