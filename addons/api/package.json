@@ -37,9 +37,10 @@
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-data": "~5.3.12",
+    "ember-inflector": "^6.0.0",
     "esbuild": "^0.25.4",
-    "promise-worker-bi": "^5.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
+    "promise-worker-bi": "^5.0.1",
     "tracked-built-ins": "^4.0.0",
     "uuid": "^11.0.3"
   },
