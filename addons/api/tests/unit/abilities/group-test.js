@@ -10,7 +10,7 @@ module('Unit | Abilities | Group', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a given group resource may add members based on authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:can');
+    const service = this.owner.lookup('service:abilities');
     const model = {
       authorized_actions: ['add-members'],
     };
@@ -20,7 +20,7 @@ module('Unit | Abilities | Group', function (hooks) {
   });
 
   test('it reflects when a given group resource may remove members based on authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:can');
+    const service = this.owner.lookup('service:abilities');
     const model = {
       authorized_actions: ['remove-members'],
     };

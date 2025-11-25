@@ -15,7 +15,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsIndexControlle
 
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -28,10 +28,10 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsIndexControlle
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.authMethod, {
+    const canList = this.abilities.can('list model', this.authMethod, {
       collection: 'managed-groups',
     });
-    const canCreate = this.can.can('create model', this.authMethod, {
+    const canCreate = this.abilities.can('create model', this.authMethod, {
       collection: 'managed-groups',
     });
     const resource = this.intl.t('resources.managed-group.title_plural');
@@ -75,7 +75,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsIndexControlle
   )
   async save(managedGroup) {
     await managedGroup.save();
-    if (this.can.can('read model', managedGroup)) {
+    if (this.abilities.can('read model', managedGroup)) {
       await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
         managedGroup,
