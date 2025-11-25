@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelIndexRoute extends Route {
   // =services
-  @service can;
+  @service abilities;
   @service flashMessages;
   @service intl;
 
@@ -22,7 +22,9 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
     );
 
-    if (this.can.can('getAsciicast channel-recording', channelRecording)) {
+    if (
+      this.abilities.can('getAsciicast channel-recording', channelRecording)
+    ) {
       try {
         asciicast = await channelRecording.getAsciicast();
       } catch (e) {
