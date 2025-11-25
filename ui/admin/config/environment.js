@@ -136,6 +136,7 @@ module.exports = function (environment) {
         'alias.single-word-aliases':
           '/docs/targets/configuration#single-word-aliases-and-transparent-sessions',
         'support-page': 'https://support.hashicorp.com/hc/en-us',
+        'app-tokens': '/docs/concepts/domain-model/app-tokens', // TODO: Update when doc when available
       },
     },
 
