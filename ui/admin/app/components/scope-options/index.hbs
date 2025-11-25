@@ -1,0 +1,231 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<div class='search-filtering'>
+  <Hds::Layout::Flex @direction='column' @gap='16' class='margin-bottom-l'>
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyThis}}
+      name={{this.keywords.keyThis}}
+      checked={{includes this.keywords.keyThis this.grantScopeIds}}
+      disabled={{@disabled}}
+      {{on 'change' this.toggleField}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.role.scope.form.this.help'
+          scopeDisplayName=(if
+            @model.scope.name @model.scope.name @model.scope.id
+          )
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyChildren}}
+      name={{this.keywords.keyChildren}}
+      checked={{includes this.keywords.keyChildren this.grantScopeIds}}
+      disabled={{@disabled}}
+      {{on 'change' this.toggleField}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
+      <F.HelperText>{{if
+          @model.scope.isGlobal
+          (t 'resources.role.scope.form.children.help.0')
+          (t 'resources.role.scope.form.children.help.1')
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+
+    {{#if @model.scope.isGlobal}}
+      <Hds::Form::Toggle::Field
+        @value={{this.keywords.keyDescendants}}
+        name={{this.keywords.keyDescendants}}
+        checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
+        disabled={{@disabled}}
+        {{on 'change' this.toggleField}}
+        as |F|
+      >
+        <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
+        <F.HelperText>{{t
+            'resources.role.scope.form.descendants.help'
+          }}</F.HelperText>
+      </Hds::Form::Toggle::Field>
+    {{/if}}
+  </Hds::Layout::Flex>
+
+  {{#if
+    (and
+      @model.scope.isGlobal
+      (includes this.keywords.keyChildren this.grantScopeIds)
+    )
+  }}
+    <Hds::Alert @type='compact' class='margin-bottom-l' as |A|>
+      <A.Description>
+        {{t
+          'resources.role.scope.messages.keywords-selected.description'
+          htmlSafe=true
+        }}
+        <Hds::Link::Inline
+          @color='secondary'
+          @href={{doc-url 'role.add-grant-scopes'}}
+        >
+          {{t 'resources.role.scope.messages.keywords-selected.link'}}
+        </Hds::Link::Inline>
+      </A.Description>
+    </Hds::Alert>
+  {{/if}}
+
+  {{#if (includes this.keywords.keyDescendants this.grantScopeIds)}}
+    <Hds::Alert @type='inline' class='margin-bottom-l' as |A|>
+      <A.Title>{{t
+          'resources.app-token.form.scope-options.descendants-selected.title'
+        }}</A.Title>
+      <A.Description>
+        <ul class='grant-scope-selection-alert-list'>
+          <li class='margin-bottom-xs'>
+            {{t
+              'resources.role.scope.messages.keywords-selected.description'
+              htmlSafe=true
+            }}
+            {{!TODO: Update with correct doc url for app-tokens.}}
+            <Hds::Link::Inline
+              @color='secondary'
+              @href={{doc-url 'role.add-grant-scopes'}}
+            >
+              {{t 'resources.role.scope.messages.keywords-selected.link'}}
+            </Hds::Link::Inline>
+          </li>
+          <li>
+            {{t
+              'resources.app-token.form.scope-options.descendants-selected.description'
+              htmlSafe=true
+            }}
+          </li>
+        </ul>
+      </A.Description>
+    </Hds::Alert>
+  {{/if}}
+
+  {{#if this.allowCustomScopesSelection}}
+    <Hds::Accordion @size='large' as |A|>
+      <A.Item>
+        <:toggle>
+          <Hds::Layout::Flex @gap='8' @align='center'>
+            {{t 'resources.app-token.form.custom-scopes.label'}}
+            {{#if this.customScopesSelectionTotal}}
+              <Hds::Text::Body @tag='p' @color='faint'>{{t
+                  'resources.app-token.form.custom-scopes.help'
+                  itemCount=this.customScopesSelectionTotal
+                }}</Hds::Text::Body>
+            {{/if}}
+          </Hds::Layout::Flex>
+        </:toggle>
+        <:content>
+          <Hds::Layout::Flex
+            @justify='space-between'
+            @align='end'
+            class='margin-bottom-m'
+          >
+            <Hds::SegmentedGroup as |S|>
+              <S.TextInput
+                @value={{@search}}
+                @type='search'
+                placeholder={{t 'actions.search'}}
+                aria-label={{t 'actions.search'}}
+                {{on 'input' @handleSearchInput}}
+              />
+              {{#if (has-block 'filter')}}
+                <S.Generic>
+                  {{yield S to='filter'}}
+                </S.Generic>
+              {{/if}}
+            </Hds::SegmentedGroup>
+
+            {{#if this.customScopesSelectionTotal}}
+              <Hds::Form::Toggle::Field
+                {{on 'change' this.toggleShowSelectedOnly}}
+                as |F|
+              >
+                <F.Label>
+                  {{t
+                    'resources.app-token.form.custom-scopes.toggle'
+                    itemCount=this.customScopesSelectionTotal
+                  }}
+                </F.Label>
+              </Hds::Form::Toggle::Field>
+            {{/if}}
+          </Hds::Layout::Flex>
+
+          <FilterTags @filters={{@filters}} class='margin-bottom-m' />
+
+          {{#if @scopes}}
+            <Hds::Table
+              @columns={{array
+                (hash label=(t 'resources.role.scope.title'))
+                (hash label=(t 'form.id.label'))
+                (hash
+                  label=(t
+                    'resources.app-token.form.custom-scopes.parent-scope'
+                  )
+                )
+              }}
+              @model={{@scopes}}
+              @isSelectable={{true}}
+              @onSelectionChange={{this.selectionChange}}
+              @valign='middle'
+              class='margin-bottom-m'
+            >
+              <:body as |B|>
+                <B.Tr
+                  @selectionKey={{B.data.id}}
+                  @isSelected={{includes B.data.id this.grantScopeIds}}
+                  @selectionAriaLabelSuffix='row {{B.data.id}}'
+                >
+                  <B.Td>
+                    <Hds::Text::Body @tag='p'>
+                      {{B.data.displayName}}
+                    </Hds::Text::Body>
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Copy::Snippet
+                      @textToCopy={{B.data.id}}
+                      @color='secondary'
+                    />
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Text::Body @tag='p'>
+                      {{or B.data.scope.name B.data.scope.id}}
+                    </Hds::Text::Body>
+                  </B.Td>
+                </B.Tr>
+              </:body>
+            </Hds::Table>
+
+            <Rose::Pagination
+              @totalItems={{@totalItems}}
+              @currentPage={{@page}}
+              @currentPageSize={{@pageSize}}
+            />
+          {{else}}
+            <Hds::ApplicationState data-test-no-scope-results as |A|>
+              <A.Header @title={{t 'titles.no-results-found'}} />
+              <A.Body
+                @text={{t
+                  (if
+                    @search
+                    'descriptions.no-search-results'
+                    'descriptions.no-filter-results'
+                  )
+                  query=@search
+                  resource=(t 'resources.app-token.title_plural')
+                }}
+              />
+            </Hds::ApplicationState>
+          {{/if}}
+        </:content>
+      </A.Item>
+    </Hds::Accordion>
+  {{/if}}
+</div>

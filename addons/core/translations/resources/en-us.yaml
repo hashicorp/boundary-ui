@@ -1235,3 +1235,18 @@ alias:
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
 app-token:
   title_plural: App Tokens
+  form:
+    scope-options:
+      label: Scope options
+      help: Select which scopes the permission is applied to. These will apply to all grant strings.
+      descendants-selected:
+        title: Multiple alerts about your scope selection
+        description: You can't customize scopes if you've selected <strong>add all descendants</strong>.
+    custom-scopes:
+      label: Custom scopes
+      help: '({itemCount} scopes)'
+      parent-scope: Parent scope
+      toggle: '{itemCount, plural,
+        =0 {Show selected only}
+        other {Show selected only (#)}
+        }'
