@@ -11,7 +11,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods
