@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import sinon from 'sinon';
 
 module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
   setupRenderingTest(hooks);
@@ -43,6 +44,9 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
   });
 
   test('it calls onCopy callback', async function (assert) {
+    // `writeText` could fail if the document is not in focus which is common during test runs
+    sinon.stub(window.navigator.clipboard, 'writeText').resolves();
+
     const onCopy = () => {
       this.set('called', true);
     };
@@ -53,8 +57,9 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
     assert.dom(toolbarSelector).isVisible();
     assert.dom(copyButtonSelector).isVisible();
     assert.dom(menuDividerSelector).doesNotExist();
-
     await click(copyButtonSelector);
     assert.true(this.called);
+
+    sinon.restore();
   });
 });

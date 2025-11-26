@@ -707,6 +707,9 @@ importers:
       qunit-dom:
         specifier: ^3.2.1
         version: 3.4.0
+      sinon:
+        specifier: ^19.0.2
+        version: 19.0.5
       stylelint:
         specifier: ^15.11.0
         version: 15.11.0(typescript@5.8.3)
