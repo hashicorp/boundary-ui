@@ -19,6 +19,12 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  RDP_CLIENT_MSTSC_LINK,
+  RDP_CLIENT_MSTSC,
+  RDP_CLIENT_NONE,
+  RDP_CLIENT_WINDOWS_APP,
+} from 'desktop/services/rdp';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -58,6 +64,9 @@ module('Acceptance | projects | settings | index', function (hooks) {
   const SIGNOUT_BTN = '[data-test-settings-signout-btn]';
   const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
   const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
+  const RDP_PREFERRED_CLIENT = '[data-test-select-preferred-rdp-client]';
+  const RDP_RECOMMENDED_CLIENT = '[data-test-recommended-rdp-client]';
+  const RDP_RECOMMENDED_CLIENT_LINK = '[data-test-recommended-rdp-client] a';
 
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
@@ -98,6 +107,13 @@ module('Acceptance | projects | settings | index', function (hooks) {
     this.ipcStub
       .withArgs('cacheDaemonStatus')
       .returns({ version: 'Boundary CLI v0.1.0' });
+
+    // mock RDP client data
+    this.ipcStub
+      .withArgs('getRdpClients')
+      .returns([RDP_CLIENT_MSTSC, RDP_CLIENT_NONE]);
+    this.ipcStub.withArgs('getPreferredRdpClient').returns(RDP_CLIENT_MSTSC);
+    this.ipcStub.withArgs('checkOS').returns({ isWindows: true, isMac: false });
   });
 
   test('can navigate to the settings page', async function (assert) {
@@ -225,5 +241,54 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
     assert.ok(stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('preferred RDP client is selected correctly for Windows', async function (assert) {
+    await visit(urls.settings);
+
+    assert.dom(RDP_PREFERRED_CLIENT).isVisible().hasValue(RDP_CLIENT_MSTSC);
+  });
+
+  test('preferred RDP client is selected correctly for Mac', async function (assert) {
+    // update IPC stub fo mac
+    this.ipcStub.withArgs('checkOS').returns({ isWindows: false, isMac: true });
+    this.ipcStub
+      .withArgs('getRdpClients')
+      .returns([RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE]);
+    this.ipcStub
+      .withArgs('getPreferredRdpClient')
+      .returns(RDP_CLIENT_WINDOWS_APP);
+    await visit(urls.settings);
+
+    assert
+      .dom(RDP_PREFERRED_CLIENT)
+      .isVisible()
+      .hasValue(RDP_CLIENT_WINDOWS_APP);
+  });
+
+  test('recommended RDP client is shown when no RDP clients are detected', async function (assert) {
+    // update IPC stub for no RDP clients
+    this.ipcStub.withArgs('getRdpClients').returns([RDP_CLIENT_NONE]);
+    this.ipcStub.withArgs('getPreferredRdpClient').returns(RDP_CLIENT_NONE);
+    await visit(urls.settings);
+
+    assert.dom(RDP_RECOMMENDED_CLIENT).isVisible();
+    assert
+      .dom(RDP_RECOMMENDED_CLIENT_LINK)
+      .hasAttribute('href', RDP_CLIENT_MSTSC_LINK)
+      .hasText('Remote Desktop Connection (mstsc)');
+  });
+
+  test('preferred RDP client is updated correctly', async function (assert) {
+    const rdpService = this.owner.lookup('service:rdp');
+    this.ipcStub.withArgs('setPreferredRdpClient').resolves();
+    await visit(urls.settings);
+
+    await select(RDP_PREFERRED_CLIENT, RDP_CLIENT_NONE);
+
+    assert.ok(
+      this.ipcStub.calledWith('setPreferredRdpClient', RDP_CLIENT_NONE),
+    );
+    assert.strictEqual(rdpService.preferredRdpClient, RDP_CLIENT_NONE);
   });
 });

@@ -4,11 +4,10 @@
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/credential-store/' @model.type)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-    changeType=@changeType
-  }}
+  <this.credentialStoreFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @changeType={{@changeType}}
+  />
 {{/if}}

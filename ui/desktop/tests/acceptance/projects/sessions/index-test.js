@@ -20,6 +20,7 @@ import {
 } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import sinon from 'sinon';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -147,6 +148,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
+
+    // mock RDP service calls
+    let rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(rdpService, 'initialize').resolves();
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

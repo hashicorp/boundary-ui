@@ -3,12 +3,18 @@ name: Test E2E Desktop Client
 on:
   pull_request:
     types: [labeled, opened, synchronize, reopened]
+    paths:
+      - 'ui/desktop/**'
+      - 'e2e-tests/*'
+      - 'e2e-tests/api-client/**'
+      - 'e2e-tests/helpers/**'
+      - 'e2e-tests/desktop/**'
+      - '.github/workflows/test-e2e-desktop.yaml'
   workflow_dispatch:
 
 jobs:
   test:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'desktop') }}
-    name: Run Desktop E2E Tests
+    name: test
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     env:
       ENOS_VAR_boundary_edition: "ent"
@@ -119,4 +125,4 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: ":x: desktop client e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.event.ref }}"
+            text: ":x: desktop client e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref }}"

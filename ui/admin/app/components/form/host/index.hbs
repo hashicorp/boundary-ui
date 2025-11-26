@@ -4,20 +4,17 @@
 }}
 
 {{#if @model.compositeType}}
-  {{component
-    (concat 'form/host/' @model.compositeType)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-  }}
+  <this.hostFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+  />
 {{else}}
-  {{! create-and-add-host cancel route doesn't
-have a model and this else part is required to prevent
-erroring out here. This has been noted in the tech debt doc to further investigate }}
-  {{component
-    (concat 'form/host/' 'static')
-    model=@model
-    submit=@submit
-    cancel=@cancel
-  }}
+  {{! create-and-add-host cancel route doesn't have a model and this else part is required
+      to prevent erroring out here. This has been noted in the tech debt doc to further investigate }}
+  <Form::Host::Static
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+  />
 {{/if}}

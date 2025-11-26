@@ -47,6 +47,15 @@ class SessionManager {
   }
 
   /**
+   * Get session by identifier.
+   * @param {string} sessionId
+   * @returns {Session} The session object
+   */
+  getSessionById(sessionId) {
+    return this.#sessions.find((session) => session.id === sessionId);
+  }
+
+  /**
    * Stop all active and pending target sessions
    * Returning Promise.all() ensures all sessions in the list have been
    * stopped before calling the next fn

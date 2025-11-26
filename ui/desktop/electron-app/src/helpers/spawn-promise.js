@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { path } = require('../cli/path.js');
+const { path: boundaryPath } = require('../cli/path.js');
 const { spawn, spawnSync } = require('child_process');
 const jsonify = require('../utils/jsonify.js');
 
@@ -34,7 +34,7 @@ module.exports = {
    */
   spawnAsyncJSONPromise(command, token, timeout) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path, command, {
+      const childProcess = spawn(boundaryPath, command, {
         env: {
           ...process.env,
           BOUNDARY_TOKEN: token,
@@ -78,8 +78,9 @@ module.exports = {
    * This function is intended for non-connection related tasks.
    * @param {string[]} args
    * @param {object} envVars
+   * @param {string} path
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
-  spawnSync(args, envVars = {}) {
+  spawnSync(args, envVars = {}, path = boundaryPath) {
     const childProcess = spawnSync(path, args, {
       // Some of our outputs (namely cache daemon searching) can be very large.
       // This an undocumented hack to allow for an unlimited buffer size which
@@ -103,8 +104,9 @@ module.exports = {
    * Resolves on any output from stdout or stderr.
    * @param command
    * @param options
+   * @param path
    */
-  spawn(command, options) {
+  spawn(command, options, path = boundaryPath) {
     return new Promise((resolve, reject) => {
       const childProcess = spawn(path, command, options);
       childProcess.stdout.on('data', (data) => {

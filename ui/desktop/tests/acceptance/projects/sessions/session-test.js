@@ -13,6 +13,9 @@ import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import sinon from 'sinon';
+import { TYPE_TARGET_RDP } from 'api/models/target';
+import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -23,6 +26,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   const TOAST_DO_NOT_SHOW_AGAIN_BUTTON =
     '[data-test-toast-notification] button';
   const TOAST_DISMISS_BUTTON = '[aria-label="Dismiss"]';
+  const RDP_OPEN_BUTTON = '[data-test-session-detail-open-button]';
+  const CANCEL_SESSION_BUTTON = '[data-test-session-detail-cancel-button]';
 
   const instances = {
     scopes: {
@@ -35,6 +40,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     },
     user: null,
     session: null,
+    rdpSession: null,
   };
 
   const urls = {
@@ -136,6 +142,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+
+    // mock RDP service calls
+    this.rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(this.rdpService, 'initialize').resolves();
   });
 
   hooks.afterEach(function () {
@@ -481,7 +491,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    assert.dom('[data-test-session-detail-cancel-button]').isVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isVisible();
   });
 
   test('cannot cancel a session without cancel permissions', async function (assert) {
@@ -499,7 +509,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    assert.dom('[data-test-session-detail-cancel-button]').isNotVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isNotVisible();
   });
 
   test('cancelling a session shows success alert', async function (assert) {
@@ -516,7 +526,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-success')
@@ -537,7 +547,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert.strictEqual(currentURL(), urls.targets);
   });
@@ -557,7 +567,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-critical')
@@ -579,10 +589,109 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await visit(urls.session);
 
-    await click('[data-test-session-detail-cancel-button]');
+    await click(CANCEL_SESSION_BUTTON);
 
     assert
       .dom('[data-test-toast-notification].hds-alert--color-critical')
       .isVisible();
+  });
+
+  test('visiting an RDP session should display "open" button when preferred client is set', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+    assert.dom(RDP_OPEN_BUTTON).isVisible();
+
+    await click(RDP_OPEN_BUTTON);
+
+    assert.ok(
+      this.ipcStub.calledWith('launchRdpClient', instances.rdpSession.id),
+    );
+  });
+
+  test('visiting an RDP session should not display "open" button when preferred client is set to none', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+    assert.dom(RDP_OPEN_BUTTON).doesNotExist();
+  });
+
+  test('it shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.ipcStub.withArgs('launchRdpClient', instances.rdpSession.id).rejects();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.rdpTarget);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+    assert.dom(RDP_OPEN_BUTTON).isVisible();
+
+    await click(RDP_OPEN_BUTTON);
+
+    assert.dom('.hds-modal').isVisible();
+  });
+
+  test('it displays open button without cancel session permission', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+    instances.rdpSession.update({ authorized_actions: [] });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.rdpSession.id,
+      host_id: 'h_123',
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    await visit(urls.rdpTarget);
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.rdpSession);
+    assert.dom(RDP_OPEN_BUTTON).isVisible();
+    assert.dom(CANCEL_SESSION_BUTTON).isNotVisible();
   });
 });
