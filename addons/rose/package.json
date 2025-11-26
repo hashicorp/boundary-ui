@@ -37,7 +37,6 @@
     "codemirror": "5.65.7",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
-    "ember-cli-clipboard": "^1.2.1",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-cli-sass": "^11.0.1",
     "ember-focus-trap": "^1.0.1",
