@@ -43,7 +43,9 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
   });
 
   test('it calls onCopy callback', async function (assert) {
+    const { promise: onCopyPromise, resolve } = Promise.withResolvers();
     const onCopy = () => {
+      resolve();
       this.set('called', true);
     };
     this.set('onCopy', onCopy);
@@ -55,6 +57,7 @@ module('Integration | Component | rose/code-editor/toolbar', function (hooks) {
     assert.dom(menuDividerSelector).doesNotExist();
 
     await click(copyButtonSelector);
+    await onCopyPromise;
     assert.true(this.called);
   });
 });
