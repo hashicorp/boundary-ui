@@ -67,19 +67,4 @@
       height: sizing.rems(xl);
     }
   }
-
-  &__copy-button {
-    border: none;
-    background-color: inherit;
-    cursor: pointer;
-    color: var(--ui-gray-starker-2);
-    margin-right: sizing.rems(xs);
-    margin-left: sizing.rems(s);
-    height: sizing.rems(xl);
-    white-space: nowrap;
-
-    .hds-icon {
-      vertical-align: top;
-    }
-  }
 }
