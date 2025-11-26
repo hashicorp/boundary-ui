@@ -26,16 +26,22 @@
         'rose/form/checkbox/group' disabled=this.disabled
       )
       fieldset=(component 'rose/form/fieldset')
-      actions=(component
-        (if
-          this.showEditToggleButton
+      actions=(if
+        this.showEditToggleButton
+        (component
           'rose/form/actions/edit-toggle'
-          'rose/form/actions'
+          submitDisabled=this.disabled
+          cancelDisabled=(if @showEditToggle @disabled this.disabled)
+          cancel=this.handleCancel
+          enableEdit=this.enableEdit
         )
-        submitDisabled=this.disabled
-        cancelDisabled=(if @showEditToggle @disabled this.disabled)
-        cancel=this.handleCancel
-        enableEdit=this.enableEdit
+        (component
+          'rose/form/actions'
+          submitDisabled=this.disabled
+          cancelDisabled=(if @showEditToggle @disabled this.disabled)
+          cancel=this.handleCancel
+          enableEdit=this.enableEdit
+        )
       )
       isEditable=this.isEditable
       disabled=this.disabled
