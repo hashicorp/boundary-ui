@@ -4,12 +4,11 @@
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/target/' @model.type)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-    globalScope=@globalScope
-    changeType=@changeType
-  }}
+  <this.targetFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @globalScope={{@globalScope}}
+    @changeType={{@changeType}}
+  />
 {{/if}}
