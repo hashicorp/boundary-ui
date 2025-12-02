@@ -573,7 +573,7 @@ user:
     delete: Delete User
     edit-details:
       button-text: 'Edit User details'
-      aria-describedby: 'user-details'
+      aria-describedby: 'edit-user-details'
 role:
   title: Role
   title_plural: Roles
