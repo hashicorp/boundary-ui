@@ -3,11 +3,4 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<div
-  class='heap-player'
-  ...attributes
-  {{did-insert this.initializePlayer}}
-  {{will-destroy this.destroyPlayer}}
->
-
-</div>
+<div class='heap-player' ...attributes {{this.initializePlayer}}></div>

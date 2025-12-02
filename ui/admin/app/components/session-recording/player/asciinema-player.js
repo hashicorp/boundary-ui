@@ -5,9 +5,8 @@
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import { later } from '@ember/runloop';
 import * as AsciinemaPlayer from 'asciinema-player';
+import { modifier } from 'ember-modifier';
 
 export default class HeapPlayerComponent extends Component {
   // =properties
@@ -87,22 +86,12 @@ export default class HeapPlayerComponent extends Component {
     this.player = null;
   }
 
-  // =actions
-
   /**
    * Creates an AsciinemaPlayer within the passed `containerElement`.
    */
-  @action
-  initializePlayer(containerElement) {
+  initializePlayer = modifier((containerElement) => {
     const { data } = this.args;
     this.create({ data }, containerElement, this.options);
-  }
-
-  /**
-   * Destroys the currently initialized AsciinemaPlayer, if any.
-   */
-  @action
-  destroyPlayer() {
-    later(() => this.dispose(), 250);
-  }
+    return () => this.dispose();
+  });
 }
