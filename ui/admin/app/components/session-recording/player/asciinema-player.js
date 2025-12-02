@@ -4,7 +4,6 @@
  */
 
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import * as AsciinemaPlayer from 'asciinema-player';
 import { modifier } from 'ember-modifier';
 
@@ -14,7 +13,7 @@ export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Comp
   /**
    * @type {?AsciinemaPlayer}
    */
-  @tracked player = null;
+  player = null;
 
   /**
    * Options of the underlying AsciinemaPlayer supported by this component,
@@ -59,7 +58,6 @@ export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Comp
    */
   initializePlayer = modifier((containerElement, _, { data }) => {
     if (!data) return;
-
     this.player = AsciinemaPlayer.create(
       { data },
       containerElement,
