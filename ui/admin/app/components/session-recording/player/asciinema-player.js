@@ -53,14 +53,11 @@ export default class HeapPlayerComponent extends Component {
    * @see https://github.com/asciinema/asciinema-player#options
    */
   get options() {
-    return this.supportedOptions.reduce(
-      (obj, key) => {
-        return this.args?.[key] !== undefined
-          ? { ...obj, [key]: this.args[key] }
-          : obj
-      },
-      {}
-    );
+    return this.supportedOptions.reduce((obj, key) => {
+      return this.args?.[key] !== undefined
+        ? { ...obj, [key]: this.args[key] }
+        : obj;
+    }, {});
   }
 
   // =methods
@@ -77,8 +74,7 @@ export default class HeapPlayerComponent extends Component {
     // cleanup previous player, if any
     this.dispose();
     // initialize a new AsciinemaPlayer
-    this.player =
-      AsciinemaPlayer.create(source, containerElement, options);
+    this.player = AsciinemaPlayer.create(source, containerElement, options);
     return this.player;
   }
 
