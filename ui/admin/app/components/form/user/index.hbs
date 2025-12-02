@@ -4,7 +4,6 @@
 }}
 
 <Rose::Form
-  id={{t 'resources.user.actions.edit-details.aria-describedby'}}
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
@@ -53,9 +52,6 @@
 
   {{#if (can 'save model' @model)}}
     <form.actions
-      @ariaDescribedBy={{t
-        'resources.user.actions.edit-details.aria-describedby'
-      }}
       @enableEditText={{t 'resources.user.actions.edit-details.button-text'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
