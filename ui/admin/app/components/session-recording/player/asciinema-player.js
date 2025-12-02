@@ -8,7 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import * as AsciinemaPlayer from 'asciinema-player';
 import { modifier } from 'ember-modifier';
 
-export default class HeapPlayerComponent extends Component {
+export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Component {
   // =properties
 
   /**
