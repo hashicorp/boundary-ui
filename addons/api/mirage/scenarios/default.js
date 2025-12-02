@@ -4,6 +4,13 @@
  */
 
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import {
+  STATUS_APP_TOKEN_ACTIVE,
+  STATUS_APP_TOKEN_EXPIRED,
+  STATUS_APP_TOKEN_REVOKED,
+  STATUS_APP_TOKEN_STALE,
+} from 'api/models/app-token';
+import { faker } from '@faker-js/faker';
 
 export default function (server) {
   // Scope resources
@@ -171,4 +178,57 @@ export default function (server) {
     'withConnectionAndChannels',
     'withExistingUserAndTarget',
   );
+
+  // App Tokens
+  const statuses = [
+    STATUS_APP_TOKEN_ACTIVE,
+    STATUS_APP_TOKEN_EXPIRED,
+    STATUS_APP_TOKEN_REVOKED,
+    STATUS_APP_TOKEN_STALE,
+  ];
+
+  // Global scope tokens
+  statuses.forEach((status) => {
+    server.createList('app-token', 3, {
+      scope: globalScope,
+      scopeId: globalScope.id,
+      status: status,
+    });
+  });
+
+  // Org scope tokens
+  const allOrgScopes = server.schema.scopes.where({ type: 'org' }).models;
+  allOrgScopes.forEach((orgScope) => {
+    server.create('app-token', {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: STATUS_APP_TOKEN_ACTIVE,
+    });
+    server.create('app-token', {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: STATUS_APP_TOKEN_EXPIRED,
+    });
+    server.createList('app-token', 5, {
+      scope: orgScope,
+      scopeId: orgScope.id,
+      status: () => faker.helpers.arrayElement(statuses),
+    });
+  });
+
+  // Project scope tokens
+  server.schema.scopes
+    .where({ type: 'project' })
+    .models.forEach((projectScope) => {
+      server.create('app-token', {
+        scope: projectScope,
+        scopeId: projectScope.id,
+        status: STATUS_APP_TOKEN_ACTIVE,
+      });
+      server.createList('app-token', 4, {
+        scope: projectScope,
+        scopeId: projectScope.id,
+        status: () => faker.helpers.arrayElement(statuses),
+      });
+    });
 }
