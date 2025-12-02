@@ -1,0 +1,182 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.app-token.title_plural'}}
+        <DocLink @doc='app-tokens' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.app-token.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
+  </page.header>
+
+  <page.body class='search-filtering'>
+    {{#if @model.doAppTokensExist}}
+
+      <Hds::SegmentedGroup data-test-app-tokens-bar as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Generic>
+          <Dropdown
+            name='status'
+            @toggleText={{t 'resources.app-token.form.status.label'}}
+            @itemOptions={{this.statusOptions}}
+            @checkedItems={{this.statuses}}
+            @applyFilter={{fn this.applyFilter 'statuses'}}
+          />
+        </S.Generic>
+      </Hds::SegmentedGroup>
+
+      <FilterTags @filters={{this.filters}} />
+
+      {{#if @model.appTokens}}
+        <Hds::Table
+          @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+        >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'approximate_last_access_time'}}
+                @sortOrder={{if
+                  (eq 'approximate_last_access_time' H.sortBy)
+                  H.sortOrder
+                }}
+              >{{t
+                  'resources.app-token.form.approximate_last_access_time.label'
+                }}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'expire_time'}}
+                @sortOrder={{if (eq 'expire_time' H.sortBy) H.sortOrder}}
+              >{{t 'resources.app-token.form.expires_in.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'status'}}
+                @sortOrder={{if (eq 'status' H.sortBy) H.sortOrder}}
+              >{{t 'resources.app-token.form.status.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each @model.appTokens as |token|}}
+              <B.Tr>
+                <B.Td>
+                  {{! TODO: Add the LinkTo component when route is implemented }}
+                  {{token.name}}
+                  {{#if token.description}}
+                    <Hds::Text::Body @tag='p' class='p'>
+                      {{token.description}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if token.approximate_last_access_time}}
+                    <Hds::Text::Body>
+                      <Hds::Time
+                        @date={{token.approximate_last_access_time}}
+                        @display='relative'
+                      />
+                    </Hds::Text::Body>
+                  {{else}}
+                    <Hds::Text::Body @color='faint'>—</Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if token.expire_time}}
+                    <span class='expires-in-tooltip'>
+                      <Hds::TooltipButton
+                        @text={{this.formatTooltipDate token.expire_time}}
+                        @placement='bottom'
+                      >
+                        <Hds::Text::Body>
+                          {{format-day-year token.expiresIn}}
+                        </Hds::Text::Body>
+                      </Hds::TooltipButton>
+                    </span>
+                  {{else}}
+                    <Hds::Text::Body @color='faint'>—</Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#let (this.getStatusBadge token.status) as |badge|}}
+                    <Hds::Badge @text={{badge.text}} @color={{badge.color}} />
+                  {{/let}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{token.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
+              query=this.search
+              resource=(t 'resources.app-token.title_plural')
+            }}
+          />
+        </Hds::ApplicationState>
+      {{/if}}
+
+    {{else}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'resources.app-token.messages.none.title'}} />
+        {{! TODO: Check with the product/design team for status text of translations }}
+        <A.Body
+          @text={{t
+            (if
+              @model.scope.isGlobal
+              'resources.app-token.messages.none.global-scope'
+              (if
+                @model.scope.isOrg
+                'resources.app-token.messages.none.org-scope'
+                'resources.app-token.messages.none.project-scope'
+              )
+            )
+            scopeName=@model.scope.displayName
+          }}
+        />
+      </Hds::ApplicationState>
+    {{/if}}
+  </page.body>
+
+</Rose::Layout::Page>

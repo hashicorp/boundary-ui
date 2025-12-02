@@ -3,6 +3,10 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{! TODO: Add breadcrumbs }}
 {{page-title (t 'resources.app-token.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.app-token.title_plural'}}
+  @route='scopes.scope.app-tokens'
+/>
+
 {{outlet}}

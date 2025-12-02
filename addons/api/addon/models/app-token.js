@@ -41,4 +41,16 @@ export default class AppTokenModel extends GeneratedAppTokenModel {
       ? this.time_to_stale_seconds * 1000
       : null;
   }
+
+  /**
+   * Calculate expires in days from now
+   * @returns {number|null} Days until expiration, or null if no expiration set
+   */
+  get expiresIn() {
+    if (!this.expire_time) return null;
+    const now = new Date();
+    const diffMs = this.expire_time.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
+  }
 }
