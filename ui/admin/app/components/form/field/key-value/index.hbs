@@ -3,114 +3,31 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 <Hds::Form::KeyValueInputs
+  name={{@name}}
   @data={{this.data}}
   @isRequired={{@isRequired}}
   @isOptional={{@isOptional}}
   disabled={{@disabled}}
 >
   <:header as |H|>
-    {{#if @legend}}
-      <H.Legend data-test-legend>{{@legend}}</H.Legend>
-    {{/if}}
+    <H.Legend data-test-legend>{{@legend}}</H.Legend>
     {{#if @helperText}}
       <H.HelperText data-test-helper-text>{{@helperText}}</H.HelperText>
     {{/if}}
   </:header>
+
   <:row as |R|>
-    <R.Field as |F|>
-      <F.Label>{{or @keyLabel (t 'form.key.label')}}</F.Label>
-      {{#if (eq @keyFieldType 'select')}}
-        <F.Select
-          name={{@name}}
-          disabled={{@disabled}}
-          data-test-key-input
-          @isInvalid={{@errors}}
-          {{on 'change' (fn this.updateKey R.rowData)}}
-        >
-          <option disabled hidden selected value=''>
-            {{t 'titles.choose-an-option'}}
-          </option>
-          {{#each @keyFieldOptions as |selectOption|}}
-            <option
-              value={{selectOption}}
-              selected={{eq R.rowData.key selectOption}}
-            >
-              {{selectOption}}
-            </option>
-          {{/each}}
-        </F.Select>
-      {{else if (eq @keyFieldType 'textarea')}}
-        <F.Textarea
-          name={{@name}}
-          @value={{R.rowData.key}}
-          disabled={{@disabled}}
-          data-test-key-input
-          @isInvalid={{@errors}}
-          {{on 'input' (fn this.updateKey R.rowData)}}
-        />
-      {{else}}
-        {{! Default to text input }}
-        <F.TextInput
-          name={{@name}}
-          @value={{R.rowData.key}}
-          disabled={{@disabled}}
-          data-test-key-input
-          @isInvalid={{@errors}}
-          {{on 'input' (fn this.updateKey R.rowData)}}
-        />
-      {{/if}}
-    </R.Field>
-
-    {{#unless this.hideValueField}}
-      <R.Field as |F|>
-        <F.Label>{{or @valueLabel (t 'form.value.label')}}</F.Label>
-        {{#if (eq @valueFieldType 'select')}}
-          <F.Select
-            name={{@name}}
-            disabled={{@disabled}}
-            data-test-value-input
-            @isInvalid={{@errors}}
-            {{on 'change' (fn this.updateValue R.rowData)}}
-          >
-            <option disabled hidden selected value=''>
-              {{t 'titles.choose-an-option'}}
-            </option>
-            {{#each @valueFieldOptions as |selectOption|}}
-              <option
-                value={{selectOption}}
-                selected={{eq R.rowData.value selectOption}}
-              >
-                {{selectOption}}
-              </option>
-            {{/each}}
-          </F.Select>
-        {{else if (eq @valueFieldType 'textarea')}}
-          <F.Textarea
-            name={{@name}}
-            @value={{R.rowData.value}}
-            disabled={{@disabled}}
-            data-test-value-input
-            @isInvalid={{@errors}}
-            {{on 'input' (fn this.updateValue R.rowData)}}
-          />
-        {{else}}
-          {{! Default to text input }}
-          <F.TextInput
-            name={{@name}}
-            @value={{R.rowData.value}}
-            disabled={{@disabled}}
-            data-test-value-input
-            @isInvalid={{@errors}}
-            {{on 'input' (fn this.updateValue R.rowData)}}
-          />
-        {{/if}}
-      </R.Field>
-    {{/unless}}
-
-    <R.DeleteRowButton
-      data-test-delete-button
-      onclick={{fn this.removeRow R.rowData}}
-    />
+    {{yield
+      (hash
+        Field=R.Field
+        DeleteRowButton=R.DeleteRowButton
+        rowData=R.rowData
+        hasData=(fn this.hasData R.rowData)
+        removeRow=(fn this.removeRow R.rowData)
+        updateAndNotify=(fn this.updateAndNotify R.rowData)
+      )
+      to='row'
+    }}
   </:row>
   <:footer as |F|>
 
@@ -124,7 +41,7 @@
     <F.AddRowButton
       @text={{t 'actions.add'}}
       data-test-add-button
-      onclick={{this.addNewRow}}
+      @onClick={{this.addNewRow}}
     />
   </:footer>
 </Hds::Form::KeyValueInputs>

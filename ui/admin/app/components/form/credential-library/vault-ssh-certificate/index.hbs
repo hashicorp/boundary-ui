@@ -234,9 +234,34 @@
     @errors={{@model.errors.critical_options}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
-    @keyFieldType='text'
-    @valueFieldType='text'
-  />
+  >
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Label>{{t 'form.key.label'}}</F.Label>
+        <F.TextInput
+          data-test-key-input
+          @value={{R.rowData.key}}
+          @isInvalid={{@model.errors.critical_options}}
+          {{on 'input' (fn R.updateAndNotify 'key')}}
+        />
+      </R.Field>
+
+      <R.Field as |F|>
+        <F.Label>{{t 'form.value.label'}}</F.Label>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          @isInvalid={{@model.errors.critical_options}}
+          {{on 'input' (fn R.updateAndNotify 'value')}}
+        />
+      </R.Field>
+
+      {{#if (R.hasData)}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+      {{/if}}
+    </:row>
+
+  </Form::Field::KeyValue>
 
   <Form::Field::ListWrapper
     @layout='horizontal'

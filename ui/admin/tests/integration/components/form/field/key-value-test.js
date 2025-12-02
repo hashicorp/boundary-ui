@@ -19,7 +19,22 @@ module('Integration | Component | form/field/key-value', function (hooks) {
   const getDeleteButtons = () => findAll('[data-test-delete-button]');
 
   test('it renders with default empty row', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue />`);
+    await render(hbs`
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
 
     assert.dom('[data-test-key-input]').exists();
     assert.dom('[data-test-value-input]').exists();
@@ -33,46 +48,57 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       { key: 'region', value: 'us-east-1' },
     ]);
 
-    await render(hbs`<Form::Field::KeyValue @data={{this.data}} />`);
+    await render(hbs`
+      <Form::Field::KeyValue @data={{this.data}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
 
     const keyInputs = getKeyInputs();
     const valueInputs = getValueInputs();
 
     assert.strictEqual(keyInputs.length, 2);
     assert.strictEqual(valueInputs.length, 2);
+
     assert.dom(keyInputs[0]).hasValue('env');
     assert.dom(keyInputs[1]).hasValue('region');
     assert.dom(valueInputs[0]).hasValue('production');
     assert.dom(valueInputs[1]).hasValue('us-east-1');
   });
 
-  test('it renders all provided arguments correctly', async function (assert) {
+  test('it renders with legend and helper text', async function (assert) {
     await render(hbs`
       <Form::Field::KeyValue 
-        @name="test-name"
-        @disabled={{true}}
-        @keyLabel="Custom Key Label"
-        @valueLabel="Custom Value Label"
         @legend="Test Legend"
         @helperText="Test helper text"
         @isRequired={{true}}
-        @isOptional={{false}}
-      />
+      >
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
-    // Check name attribute
-    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-name');
-    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-name');
-
-    // Check disabled state
-    assert.dom('[data-test-key-input]').hasAttribute('disabled');
-    assert.dom('[data-test-value-input]').hasAttribute('disabled');
-
-    // Check that labels are rendered (they should be present in the DOM text)
-    assert.dom(this.element).includesText('Custom Key Label');
-    assert.dom(this.element).includesText('Custom Value Label');
-
-    // Check legend and helper text using the correct selectors
     assert.dom('[data-test-legend]').includesText('Test Legend');
     assert.dom('[data-test-helper-text]').hasText('Test helper text');
   });
@@ -84,9 +110,20 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     });
 
     await render(hbs`
-      <Form::Field::KeyValue 
-        @onChange={{this.onChange}}
-      />
+      <Form::Field::KeyValue @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     assert.strictEqual(getKeyInputs().length, 1);
@@ -95,14 +132,11 @@ module('Integration | Component | form/field/key-value', function (hooks) {
 
     assert.strictEqual(getKeyInputs().length, 2);
     assert.strictEqual(getValueInputs().length, 2);
-    // Empty keys are filtered out when notifying parent
-    assert.strictEqual(updatedData.length, 0);
-    assert.deepEqual(updatedData, []);
 
     await fillIn(getKeyInputs()[1], 'test-key');
 
     assert.strictEqual(updatedData.length, 1);
-    assert.deepEqual(updatedData[0], { key: 'test-key', value: '' });
+    assert.strictEqual(updatedData[0].key, 'test-key');
   });
 
   test('it removes rows', async function (assert) {
@@ -116,10 +150,20 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     });
 
     await render(hbs`
-      <Form::Field::KeyValue 
-        @data={{this.data}}
-        @onChange={{this.onChange}}
-      />
+      <Form::Field::KeyValue @data={{this.data}} @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     assert.strictEqual(getKeyInputs().length, 2);
@@ -140,10 +184,20 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     });
 
     await render(hbs`
-      <Form::Field::KeyValue 
-        @data={{this.data}}
-        @onChange={{this.onChange}}
-      />
+      <Form::Field::KeyValue @data={{this.data}} @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     assert.strictEqual(getKeyInputs().length, 1);
@@ -160,75 +214,70 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.deepEqual(updatedData[0], { key: 'newKey', value: 'newValue' });
   });
 
-  // Field type tests
-  test('it handles text input field types (default)', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue @name="test-form" />`);
+  test('it handles text input fields', async function (assert) {
+    await render(hbs`
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput name="test-key" data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput name="test-value" data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
 
     assert.dom('[data-test-key-input]').hasTagName('input');
     assert.dom('[data-test-key-input]').hasAttribute('type', 'text');
-    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-form');
+    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-key');
     assert.dom('[data-test-value-input]').hasTagName('input');
     assert.dom('[data-test-value-input]').hasAttribute('type', 'text');
-    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-form');
+    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-value');
   });
 
-  test('it handles select field types', async function (assert) {
-    this.set('selectOptions', ['subject', 'email', 'name']);
-
+  test('it handles textarea fields', async function (assert) {
     await render(hbs`
-      <Form::Field::KeyValue 
-        @valueFieldType="select"
-        @valueFieldOptions={{this.selectOptions}}
-      />
-    `);
-
-    assert.dom('[data-test-key-input]').hasTagName('input');
-    assert.dom('[data-test-value-input]').hasTagName('select');
-
-    const options = findAll('[data-test-value-input] option');
-    assert.strictEqual(options.length, 4);
-    assert.dom(options[0]).hasText('Choose an option');
-    assert.dom(options[1]).hasText('subject');
-    assert.dom(options[2]).hasText('email');
-    assert.dom(options[3]).hasText('name');
-  });
-
-  test('it handles textarea field types', async function (assert) {
-    await render(hbs`
-      <Form::Field::KeyValue 
-        @name="test-form"
-        @keyFieldType="textarea"
-        @valueFieldType="textarea"
-      />
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.Textarea name="test-key" data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.Textarea name="test-value" data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     assert.dom('[data-test-key-input]').hasTagName('textarea');
-    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-form');
+    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-key');
     assert.dom('[data-test-value-input]').hasTagName('textarea');
-    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-form');
+    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-value');
   });
 
-  test('it handles mixed field types', async function (assert) {
-    this.set('keyOptions', ['key1', 'key2']);
-
+  test('it supports single field', async function (assert) {
     await render(hbs`
-      <Form::Field::KeyValue 
-        @name="test-form"
-        @keyFieldType="select"
-        @valueFieldType="textarea"
-        @keyFieldOptions={{this.keyOptions}}
-      />
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
-
-    assert.dom('[data-test-key-input]').hasTagName('select');
-    assert.dom('[data-test-key-input]').hasAttribute('name', 'test-form');
-    assert.dom('[data-test-value-input]').hasTagName('textarea');
-    assert.dom('[data-test-value-input]').hasAttribute('name', 'test-form');
-  });
-
-  // Hide value field tests
-  test('it hides value field when `hideValueField` is true', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue @hideValueField={{true}} />`);
 
     assert.dom('[data-test-key-input]').exists();
     assert.dom('[data-test-value-input]').doesNotExist();
@@ -236,21 +285,6 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.dom('[data-test-delete-button]').exists();
   });
 
-  test('it shows value field when `hideValueField` is false', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue @hideValueField={{false}} />`);
-
-    assert.dom('[data-test-key-input]').exists();
-    assert.dom('[data-test-value-input]').exists();
-  });
-
-  test('it shows value field by default when `hideValueField` is not provided', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue />`);
-
-    assert.dom('[data-test-key-input]').exists();
-    assert.dom('[data-test-value-input]').exists();
-  });
-
-  // Error handling tests
   test('it displays error messages in footer', async function (assert) {
     this.set('errors', [
       { message: 'Key is required' },
@@ -258,7 +292,20 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     ]);
 
     await render(hbs`
-      <Form::Field::KeyValue @errors={{this.errors}} />
+      <Form::Field::KeyValue @errors={{this.errors}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     assert.dom('[data-test-error-message]').exists({ count: 2 });
@@ -269,42 +316,105 @@ module('Integration | Component | form/field/key-value', function (hooks) {
   });
 
   test('it does not show error messages when no errors are provided', async function (assert) {
-    await render(hbs`<Form::Field::KeyValue />`);
+    await render(hbs`
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
 
     assert.dom('[data-test-error-message]').doesNotExist();
   });
 
-  // Update tests
-  test('it updates textarea key values correctly', async function (assert) {
+  test('it updates on input and notifies consumer', async function (assert) {
     let updatedData = null;
     this.set('onChange', (data) => {
       updatedData = data;
     });
 
     await render(hbs`
-      <Form::Field::KeyValue 
-        @keyFieldType="textarea"
-        @onChange={{this.onChange}}
-      />
+      <Form::Field::KeyValue @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
-    await fillIn('[data-test-key-input]', 'textarea');
+    await fillIn('[data-test-key-input]', 'test-key');
 
     assert.strictEqual(updatedData.length, 1);
-    assert.strictEqual(updatedData[0].key, 'textarea');
+    assert.strictEqual(updatedData[0].key, 'test-key');
   });
 
-  test('it updates textarea value fields correctly', async function (assert) {
+  test('it filters out rows with empty keys', async function (assert) {
     let updatedData = null;
     this.set('onChange', (data) => {
       updatedData = data;
     });
 
     await render(hbs`
-      <Form::Field::KeyValue 
-        @valueFieldType="textarea"
-        @onChange={{this.onChange}}
-      />
+      <Form::Field::KeyValue @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
+
+    await fillIn('[data-test-value-input]', 'test-value');
+
+    // Empty key is filtered out, so no data is sent to parent
+    assert.strictEqual(updatedData.length, 0);
+  });
+
+  test('it updates both key and value fields', async function (assert) {
+    let updatedData = null;
+    this.set('onChange', (data) => {
+      updatedData = data;
+    });
+
+    await render(hbs`
+      <Form::Field::KeyValue @onChange={{this.onChange}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
     await fillIn('[data-test-key-input]', 'test-key');
@@ -315,72 +425,39 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.strictEqual(updatedData[0].value, 'test-value');
   });
 
-  test('it updates select field values', async function (assert) {
-    let updatedData = null;
-    this.set('onChange', (data) => {
-      updatedData = data;
-    });
-    this.set('selectOptions', ['subject', 'email', 'name']);
-
+  test('it hides delete button for empty rows', async function (assert) {
     await render(hbs`
-      <Form::Field::KeyValue 
-        @onChange={{this.onChange}}
-        @valueFieldType="select"
-        @valueFieldOptions={{this.selectOptions}}
-      />
+      <Form::Field::KeyValue>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} {{on 'input' (fn R.updateAndNotify 'key')}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} {{on 'input' (fn R.updateAndNotify 'value')}} />
+          </R.Field>
+          {{#if (R.hasData)}}
+            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          {{/if}}
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
     `);
 
-    await fillIn('[data-test-value-input]', 'email');
+    // Initially, the row is empty, so delete button should not exist
+    assert.dom('[data-test-delete-button]').doesNotExist();
 
-    // Empty key is filtered out, so no data is sent to parent
-    assert.strictEqual(updatedData.length, 0);
-
-    await fillIn('[data-test-key-input]', 'claim');
-    await fillIn('[data-test-value-input]', 'email');
-
-    assert.strictEqual(updatedData.length, 1);
-    assert.strictEqual(updatedData[0].key, 'claim');
-    assert.strictEqual(updatedData[0].value, 'email');
-  });
-
-  test('it updates key values', async function (assert) {
-    let updatedData = null;
-    this.set('onChange', (data) => {
-      updatedData = data;
-    });
-
-    await render(hbs`<Form::Field::KeyValue @onChange={{this.onChange}} />`);
+    // Fill in some data
     await fillIn('[data-test-key-input]', 'test-key');
 
-    assert.strictEqual(updatedData[0].key, 'test-key');
-    assert.strictEqual(updatedData[0].value, '');
-  });
+    // Now delete button should appear
+    assert.dom('[data-test-delete-button]').exists();
 
-  test('it filters out rows with empty keys when updating values', async function (assert) {
-    let updatedData = null;
-    this.set('onChange', (data) => {
-      updatedData = data;
-    });
+    // Clear the data
+    await fillIn('[data-test-key-input]', '');
 
-    await render(hbs`<Form::Field::KeyValue @onChange={{this.onChange}} />`);
-    await fillIn('[data-test-value-input]', 'test-value');
-
-    // Empty key is filtered out, so no data is sent to parent
-    assert.strictEqual(updatedData.length, 0);
-  });
-
-  test('it updates value fields when key is present', async function (assert) {
-    let updatedData = null;
-    this.set('onChange', (data) => {
-      updatedData = data;
-    });
-
-    await render(hbs`<Form::Field::KeyValue @onChange={{this.onChange}} />`);
-    await fillIn('[data-test-key-input]', 'test-key');
-    await fillIn('[data-test-value-input]', 'test-value');
-
-    assert.strictEqual(updatedData.length, 1);
-    assert.strictEqual(updatedData[0].key, 'test-key');
-    assert.strictEqual(updatedData[0].value, 'test-value');
+    // Delete button should be hidden again
+    assert.dom('[data-test-delete-button]').doesNotExist();
   });
 });

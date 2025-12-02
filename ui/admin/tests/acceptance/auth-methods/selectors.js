@@ -26,10 +26,10 @@ export const FIELD_CLAIMS_SCOPES_ADD_BTN = '[name=claims_scopes] button';
 export const FIELD_CLAIMS_SCOPES_DELETE_BTN =
   '[name=claims_scopes] tbody td:last-child button[aria-label=Remove]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM =
-  '[name=account_claim_maps][data-test-key-input]';
+  '[name=account_claim_maps] [data-test-key-input]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE = 'from_claim';
 export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM =
-  '[name=account_claim_maps][data-test-value-input]';
+  '[name=account_claim_maps] [data-test-value-input]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE = 'email';
 export const FIELD_ACCOUNT_CLAIM_MAPS_DELETE_BTN = '[data-test-delete-button]';
 export const FIELD_IDP_CERTS = '[name=idp_ca_certs] textarea';

@@ -256,12 +256,42 @@
     @errors={{@model.errors.account_claim_maps}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
-    @keyFieldType='text'
-    @valueFieldType='select'
-    @valueFieldOptions={{this.toClaims}}
-    @keyLabel={{t 'form.from_claim.label'}}
-    @valueLabel={{t 'form.to_claim.label'}}
-  />
+  >
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Label>{{t 'form.from_claim.label'}}</F.Label>
+        <F.TextInput
+          data-test-key-input
+          @value={{R.rowData.key}}
+          @isInvalid={{@model.errors.account_claim_maps}}
+          {{on 'input' (fn R.updateAndNotify 'key')}}
+        />
+      </R.Field>
+
+      <R.Field as |F|>
+        <F.Label>{{t 'form.to_claim.label'}}</F.Label>
+        <F.Select
+          data-test-value-input
+          @isInvalid={{@model.errors.account_claim_maps}}
+          {{on 'change' (fn R.updateAndNotify 'value')}}
+        >
+          <option disabled hidden selected value=''>
+            {{t 'titles.choose-an-option'}}
+          </option>
+          {{#each this.toClaims as |claim|}}
+            <option value={{claim}} selected={{eq R.rowData.value claim}}>
+              {{claim}}
+            </option>
+          {{/each}}
+        </F.Select>
+      </R.Field>
+
+      {{#if (R.hasData)}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+      {{/if}}
+    </:row>
+
+  </Form::Field::KeyValue>
 
   {{! Certificates }}
   <Form::Field::ListWrapper
