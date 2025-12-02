@@ -38,18 +38,7 @@
             @itemOptions={{this.statusOptions}}
             @checkedItems={{this.statuses}}
             @applyFilter={{fn this.applyFilter 'statuses'}}
-            as |FD selectItem itemOptions|
-          >
-            {{#each itemOptions as |itemOption|}}
-              <FD.Checkbox
-                @value={{itemOption.id}}
-                checked={{includes itemOption.id this.statuses}}
-                {{on 'change' selectItem}}
-              >
-                {{itemOption.name}}
-              </FD.Checkbox>
-            {{/each}}
-          </Dropdown>
+          />
         </S.Generic>
       </Hds::SegmentedGroup>
 

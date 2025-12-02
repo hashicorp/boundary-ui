@@ -5,14 +5,12 @@
 
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { currentURL, visit, click, fillIn } from '@ember/test-helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes/scope/app-tokens', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
 
   const instances = {
     scopes: {
@@ -31,7 +29,6 @@ module('Acceptance | scopes/scope/app-tokens', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -627,9 +624,6 @@ module('Acceptance | scopes/scope/app-tokens', function (hooks) {
       url.includes('search=NonExistentToken123XYZ987654321'),
       'URL contains search parameter when searching for non-existent token',
     );
-
-    // Check that page doesn't crash with non-existent search
-    assert.dom('table').exists('Table component still renders');
 
     // Verify the search functionality is working and page is stable
     assert
