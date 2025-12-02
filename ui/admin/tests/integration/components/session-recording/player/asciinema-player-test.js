@@ -4,8 +4,8 @@
  */
 
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'dummy/tests/helpers';
 import { render, waitUntil } from '@ember/test-helpers';
+import { setupRenderingTest } from 'admin/tests/helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module(
