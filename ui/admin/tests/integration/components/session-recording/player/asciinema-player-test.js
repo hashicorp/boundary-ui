@@ -16,7 +16,7 @@ module(
     test('it renders', async function (assert) {
       assert.expect(1);
 
-      const asciicast = await fetch('/example.cast');
+      const asciicast = await fetch('/session.cast');
       const asciicastContent = await asciicast.text();
       this.set('data', asciicastContent);
 
