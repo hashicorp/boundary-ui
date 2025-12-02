@@ -1238,3 +1238,23 @@ alias:
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
 app-token:
   title_plural: App Tokens
+  description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
+  form:
+    approximate_last_access_time:
+      label: Last used at
+    expires_in:
+      label: Expires in
+    status:
+      label: Status
+  status:
+    unknown: Unknown
+    active: Active
+    revoked: Revoked
+    expired: Expired
+    stale: Stale
+  messages:
+    none:
+      title: No App Tokens Available
+      global-scope: No app tokens have been created at the global scope level.
+      org-scope: No app tokens have been created for {scopeName}.
+      project-scope: No app tokens have been created for {scopeName}.
