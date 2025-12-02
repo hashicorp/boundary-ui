@@ -60,7 +60,11 @@ export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Comp
   initializePlayer = modifier((containerElement, _, { data }) => {
     if (!data) return;
 
-    this.player = AsciinemaPlayer.create(data, containerElement, this.options);
+    this.player = AsciinemaPlayer.create(
+      { data },
+      containerElement,
+      this.options,
+    );
 
     return () => {
       this.player?.dispose();
