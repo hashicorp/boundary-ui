@@ -54,39 +54,17 @@ export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Comp
     }, {});
   }
 
-  // =methods
-
-  /**
-   * Initializes the asciinema player within the current element.
-   * @param {object|string}
-   *   source - URL or object passed through to AsciinemaPlayer.create(source).
-   * @param {Element}
-   *   containerElement - DOM element passed from the did-insert modifier.
-   * @returns {AsciinemaPlayer}
-   */
-  create(source, containerElement, options) {
-    // cleanup previous player, if any
-    this.dispose();
-    // initialize a new AsciinemaPlayer
-    this.player = AsciinemaPlayer.create(source, containerElement, options);
-    return this.player;
-  }
-
-  /**
-   * Calls asciinema-player's `dispose()` method to destroy the player and
-   * cleanup the DOM.  Unsets this component's `player` property.
-   */
-  dispose() {
-    this.player?.dispose();
-    this.player = null;
-  }
-
   /**
    * Creates an AsciinemaPlayer within the passed `containerElement`.
    */
-  initializePlayer = modifier((containerElement) => {
-    const { data } = this.args;
-    this.create({ data }, containerElement, this.options);
-    return () => this.dispose();
+  initializePlayer = modifier((containerElement, _, { data }) => {
+    if (!data) return;
+
+    this.player = AsciinemaPlayer.create(data, containerElement, this.options);
+
+    return () => {
+      this.player?.dispose();
+      this.player = null;
+    };
   });
 }
