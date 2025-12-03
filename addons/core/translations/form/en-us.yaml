@@ -186,6 +186,11 @@ other_fields:
   help: This information is provided by the server and cannot be edited in Boundary
 worker_filter:
   label: Worker Filter
+variable-time-field:
+  days: Days
+  hours: Hours
+  minutes: Minutes
+  set-to-max: Set to Max
 scope-options:
   label: Scope options
   help: Select which scopes the permission is applied to. These will apply to all grant strings.
