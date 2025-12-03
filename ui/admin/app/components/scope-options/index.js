@@ -4,6 +4,7 @@
  */
 
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import {
   GRANT_SCOPE_THIS,
@@ -13,6 +14,10 @@ import {
 } from 'api/models/role';
 
 export default class ScopeOptionsIndexComponent extends Component {
+  // =services
+
+  @service router;
+
   // =attributes
 
   keywords = {
@@ -29,7 +34,7 @@ export default class ScopeOptionsIndexComponent extends Component {
     if (this.args.model.scope.isGlobal) {
       return 'Global';
     }
-    return this.args.model.scope.name ?? this.args.model.scope.id;
+    return this.args.model.scope.displayName;
   }
 
   /**
@@ -73,7 +78,7 @@ export default class ScopeOptionsIndexComponent extends Component {
    * @param {object} event
    */
   @action
-  toggleField(event) {
+  async toggleField(event) {
     const { checked, value } = event.target;
     const field = this.args.field || this.args.model;
     if (!field[this.args.name]) {
@@ -89,7 +94,7 @@ export default class ScopeOptionsIndexComponent extends Component {
       if (value === GRANT_SCOPE_CHILDREN) {
         if (this.args.model.scope.isGlobal) {
           removeValues([GRANT_SCOPE_DESCENDANTS, 'o_']);
-          this.args.updateDisplayedScopes();
+          await this.updateDisplayedData();
         } else {
           removeValues(['p_']);
         }
@@ -97,13 +102,13 @@ export default class ScopeOptionsIndexComponent extends Component {
       if (value === GRANT_SCOPE_DESCENDANTS) {
         removeValues([GRANT_SCOPE_CHILDREN, 'o_', 'p_']);
         if (this.args.model.scope.isGlobal) {
-          this.args.updateDisplayedScopes();
+          await this.updateDisplayedData();
         }
       }
     } else {
       removeValues([value]);
       if (this.args.model.scope.isGlobal && value === GRANT_SCOPE_CHILDREN) {
-        this.args.updateDisplayedScopes();
+        await this.updateDisplayedData();
       }
     }
   }
@@ -113,7 +118,7 @@ export default class ScopeOptionsIndexComponent extends Component {
    * @param {object} selectableRowsStates
    */
   @action
-  selectionChange({ selectableRowsStates }) {
+  selectionChange({ selectableRowsStates, selectedRowsKeys }) {
     const field = this.args.field || this.args.model;
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
@@ -126,19 +131,16 @@ export default class ScopeOptionsIndexComponent extends Component {
         );
       }
     });
+    if (!selectedRowsKeys.length && this.args.showSelectedOnly) {
+      this.args.toggleShowSelectedOnly();
+    }
   }
 
   /**
-   * Refreshes table data to only show selected rows.
-   * @param {object} event
+   * Refresh current route model data and reset toggle.
    */
-  @action
-  toggleShowSelectedOnly(event) {
-    const { checked } = event.target;
-    let showSelectedOnly = false;
-    if (checked) {
-      showSelectedOnly = true;
-    }
-    this.args.updateDisplayedScopes(showSelectedOnly);
+  async updateDisplayedData() {
+    await this.router.refresh(this.router.currentRouteName);
+    this.args.toggleShowSelectedOnly();
   }
 }

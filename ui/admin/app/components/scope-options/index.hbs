@@ -6,53 +6,49 @@
 {{! TODO Consolidate overlapping translations once roles manage scopes gets refactored. }}
 
 <div class='search-filtering'>
-  <Hds::Layout::Flex @direction='column' @gap='16' class='margin-bottom-l'>
+  <Hds::Form::Toggle::Field
+    @value={{this.keywords.keyThis}}
+    name={{this.keywords.keyThis}}
+    checked={{includes this.keywords.keyThis this.grantScopeIds}}
+    disabled={{@disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'form.this.label'}}</F.Label>
+    <F.HelperText>{{t
+        'form.this.help'
+        scope=this.scopeDisplayName
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Form::Toggle::Field
+    @value={{this.keywords.keyChildren}}
+    name={{this.keywords.keyChildren}}
+    checked={{includes this.keywords.keyChildren this.grantScopeIds}}
+    disabled={{@disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'form.children.label'}}</F.Label>
+    <F.HelperText>{{t
+        'form.children.help'
+        scopes=(if @model.scope.isGlobal 'orgs' 'projects')
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  {{#if @model.scope.isGlobal}}
     <Hds::Form::Toggle::Field
-      @value={{this.keywords.keyThis}}
-      name={{this.keywords.keyThis}}
-      checked={{includes this.keywords.keyThis this.grantScopeIds}}
+      @value={{this.keywords.keyDescendants}}
+      name={{this.keywords.keyDescendants}}
+      checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
       disabled={{@disabled}}
       {{on 'change' this.toggleField}}
       as |F|
     >
-      <F.Label>{{t 'resources.app-token.form.this.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.app-token.form.this.help'
-          scope=this.scopeDisplayName
-        }}</F.HelperText>
+      <F.Label>{{t 'form.descendants.label'}}</F.Label>
+      <F.HelperText>{{t 'form.descendants.help'}}</F.HelperText>
     </Hds::Form::Toggle::Field>
-
-    <Hds::Form::Toggle::Field
-      @value={{this.keywords.keyChildren}}
-      name={{this.keywords.keyChildren}}
-      checked={{includes this.keywords.keyChildren this.grantScopeIds}}
-      disabled={{@disabled}}
-      {{on 'change' this.toggleField}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.app-token.form.children.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.app-token.form.children.help'
-          scopes=(if @model.scope.isGlobal 'orgs' 'projects')
-        }}</F.HelperText>
-    </Hds::Form::Toggle::Field>
-
-    {{#if @model.scope.isGlobal}}
-      <Hds::Form::Toggle::Field
-        @value={{this.keywords.keyDescendants}}
-        name={{this.keywords.keyDescendants}}
-        checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
-        disabled={{@disabled}}
-        {{on 'change' this.toggleField}}
-        as |F|
-      >
-        <F.Label>{{t 'resources.app-token.form.descendants.label'}}</F.Label>
-        <F.HelperText>{{t
-            'resources.app-token.form.descendants.help'
-          }}</F.HelperText>
-      </Hds::Form::Toggle::Field>
-    {{/if}}
-  </Hds::Layout::Flex>
+  {{/if}}
 
   {{#if
     (and
@@ -78,9 +74,7 @@
 
   {{#if (includes this.keywords.keyDescendants this.grantScopeIds)}}
     <Hds::Alert @type='inline' class='margin-bottom-l' as |A|>
-      <A.Title>{{t
-          'resources.app-token.form.descendants-selected.title'
-        }}</A.Title>
+      <A.Title>{{t 'form.descendants-selected.title'}}</A.Title>
       <A.Description>
         <ul class='grant-scope-selection-alert-list'>
           <li class='margin-bottom-xs'>
@@ -97,10 +91,7 @@
             </Hds::Link::Inline>
           </li>
           <li>
-            {{t
-              'resources.app-token.form.descendants-selected.description'
-              htmlSafe=true
-            }}
+            {{t 'form.descendants-selected.description' htmlSafe=true}}
           </li>
         </ul>
       </A.Description>
@@ -112,10 +103,10 @@
       <A.Item>
         <:toggle>
           <Hds::Layout::Flex @gap='8' @align='center'>
-            {{t 'resources.app-token.form.custom-scopes.label'}}
+            {{t 'form.custom-scopes.label'}}
             {{#if this.customScopesSelectionTotal}}
               <Hds::Text::Body @tag='p' @color='faint'>{{t
-                  'resources.app-token.form.custom-scopes.help'
+                  'form.custom-scopes.help'
                   itemCount=this.customScopesSelectionTotal
                 }}</Hds::Text::Body>
             {{/if}}
@@ -144,12 +135,13 @@
 
             {{#if this.customScopesSelectionTotal}}
               <Hds::Form::Toggle::Field
-                {{on 'change' this.toggleShowSelectedOnly}}
+                checked={{@showSelectedOnly}}
+                {{on 'change' @toggleShowSelectedOnly}}
                 as |F|
               >
                 <F.Label>
                   {{t
-                    'resources.app-token.form.custom-scopes.toggle'
+                    'form.selected-only-toggle.label'
                     itemCount=this.customScopesSelectionTotal
                   }}
                 </F.Label>
@@ -164,11 +156,7 @@
               @columns={{array
                 (hash label=(t 'resources.role.scope.title'))
                 (hash label=(t 'form.id.label'))
-                (hash
-                  label=(t
-                    'resources.app-token.form.custom-scopes.parent-scope'
-                  )
-                )
+                (hash label=(t 'form.parent-scope.label'))
               }}
               @model={{@scopes}}
               @isSelectable={{true}}

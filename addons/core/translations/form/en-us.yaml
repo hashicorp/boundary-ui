@@ -186,3 +186,25 @@ other_fields:
   help: This information is provided by the server and cannot be edited in Boundary
 worker_filter:
   label: Worker Filter
+scope-options:
+  label: Scope options
+  help: Select which scopes the permission is applied to. These will apply to all grant strings.
+this:
+  label: Add this scope
+  help: Adds the root ({scope}).
+children:
+  label: Add all children
+  help: Add all of the {scopes} underneath the root.
+descendants:
+  label: Add all descendants
+  help: Add all of the orgs and the projects in the orgs that are underneath the root.
+descendants-selected:
+  title: Multiple alerts about your scope selection
+  description: You can't customize scopes if you've selected <strong>add all descendants</strong>.
+custom-scopes:
+  label: Custom scopes
+  help: '({itemCount} scopes)'
+parent-scope:
+  label: Parent scope
+selected-only-toggle:
+  label: 'Show selected only ({itemCount})'
