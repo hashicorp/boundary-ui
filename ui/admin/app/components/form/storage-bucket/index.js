@@ -7,11 +7,18 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { set } from '@ember/object';
-
+import { assert } from '@ember/debug';
 import {
   TYPE_CREDENTIAL_DYNAMIC,
   TYPES_STORAGE_BUCKET_PLUGIN,
 } from 'api/models/storage-bucket';
+import awsFormComponent from './aws';
+import minioFormComponent from './minio';
+
+const modelCompositeTypeToComponent = {
+  aws: awsFormComponent,
+  minio: minioFormComponent,
+};
 
 export default class FormStorageBucketComponent extends Component {
   // =attributes
@@ -22,6 +29,19 @@ export default class FormStorageBucketComponent extends Component {
    */
   get pluginTypes() {
     return TYPES_STORAGE_BUCKET_PLUGIN;
+  }
+
+  /**
+   * returns the associated storage bucket form component for the model's composite type
+   */
+  get storageBucketFormComponent() {
+    const component =
+      modelCompositeTypeToComponent[this.args.model.compositeType];
+    assert(
+      `Mapped component must exist for storage bucket composite type: ${this.args.model.compositeType}`,
+      component,
+    );
+    return component;
   }
 
   // =actions
