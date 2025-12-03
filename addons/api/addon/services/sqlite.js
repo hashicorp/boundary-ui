@@ -66,6 +66,7 @@ export const modelMapping = {
     name: 'name',
     description: 'description',
     scope_id: 'scope.scope_id',
+    scope_name: 'scope.name',
     created_time: 'created_time',
   },
   'auth-method': {
