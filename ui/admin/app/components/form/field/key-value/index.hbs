@@ -1,0 +1,47 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+<Hds::Form::KeyValueInputs
+  name={{@name}}
+  @data={{this.data}}
+  @isRequired={{@isRequired}}
+  @isOptional={{@isOptional}}
+  disabled={{@disabled}}
+>
+  <:header as |H|>
+    <H.Legend data-test-legend>{{@legend}}</H.Legend>
+    {{#if @helperText}}
+      <H.HelperText data-test-helper-text>{{@helperText}}</H.HelperText>
+    {{/if}}
+  </:header>
+
+  <:row as |R|>
+    {{yield
+      (hash
+        Field=R.Field
+        DeleteRowButton=R.DeleteRowButton
+        rowData=R.rowData
+        hasData=(fn this.hasData R.rowData)
+        removeRow=(fn this.removeRow R.rowData)
+        updateAndNotify=(fn this.updateAndNotify R.rowData)
+      )
+      to='row'
+    }}
+  </:row>
+  <:footer as |F|>
+
+    {{#if @errors}}
+      <F.Error as |E|>
+        {{#each @errors as |error|}}
+          <E.Message data-test-error-message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+    <F.AddRowButton
+      @text={{t 'actions.add'}}
+      data-test-add-button
+      @onClick={{this.addNewRow}}
+    />
+  </:footer>
+</Hds::Form::KeyValueInputs>

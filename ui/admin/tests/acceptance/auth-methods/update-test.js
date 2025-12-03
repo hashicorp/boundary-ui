@@ -181,8 +181,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
     );
 
-    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_ADD_BTN);
-
     // Remove all certificates
     const certificatesList = findAll(selectors.FIELD_IDP_CERTS_DELETE_BTN);
 
