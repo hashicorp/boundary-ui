@@ -22,6 +22,8 @@ class Frame {
   state = '';
 
   #load;
+
+  @tracked
   context;
 
   #select;
@@ -171,7 +173,9 @@ export default class ResourceQueryComponent extends Component {
         }
 
         if (option.name === 'Goto') {
-          self.router.transitionTo(`/scopes/${model.scope.id}/targets/${model.id}`);
+          self.router.transitionTo(
+            `/scopes/${model.scope.id}/targets/${model.id}`,
+          );
         }
       },
 
@@ -188,7 +192,7 @@ export default class ResourceQueryComponent extends Component {
       },
     });
 
-    const initialFrame = new Frame('Super Query', {
+    const initialFrame = new Frame('Global Query', {
       async select(option) {
         console.log('option selected!', option);
         resourceOptionsFrame.context.model = option.context.model;
@@ -207,17 +211,29 @@ export default class ResourceQueryComponent extends Component {
           recursive: true,
           query,
         };
+
         const queryResults = await store.query(resource, q, {
-          peekDb: true,
+          // this should be peek in practice but for demo purposes with mirage
+          // this can be left off
+          // peekDb: true,
         });
 
         const results = queryResults.map((r) => ({ model: r }));
         console.log('store results', { results });
 
-        return results.map(
-          ({ model }) =>
-            new Option(model.id, { category: 'result', context: { model } }),
-        );
+        return results.map(({ model }) => {
+          let optionName = `${model.id}`;
+          if (model.name) {
+            optionName += ` (${model.name})`;
+          }
+          if (model.scope) {
+            optionName += ` (${model.scope.id})`;
+          }
+          return new Option(optionName, {
+            category: 'result',
+            context: { model },
+          });
+        });
       },
     });
 
@@ -246,7 +262,10 @@ export default class ResourceQueryComponent extends Component {
 
       if (e.code === 'ArrowDown') {
         this.highlightedIndex++;
-        const newIndex = Math.min(this.currentFrame.options.length - 1, this.currentFrame.selectedOptionIndex + 1);
+        const newIndex = Math.min(
+          this.currentFrame.options.length - 1,
+          this.currentFrame.selectedOptionIndex + 1,
+        );
         this.selectIndex(newIndex);
         return false;
       }
@@ -303,7 +322,7 @@ export default class ResourceQueryComponent extends Component {
     const resourceValue = resource.expression.value;
 
     const remaining = results.filter((r) => r !== resource);
-    let search = "";
+    let search = '';
     const filters = {};
 
     for (const result of remaining) {
@@ -320,28 +339,30 @@ export default class ResourceQueryComponent extends Component {
         if (result.operator.type === 'ComparisonOperator') {
           filters[result.field.name] ??= [];
 
-          switch(result.operator.operator) {
-            case ":": {
-              filters[result.field.name].push({ equals: result.expression.value });
+          switch (result.operator.operator) {
+            case ':': {
+              filters[result.field.name].push({
+                equals: result.expression.value,
+              });
               break;
             }
 
-            case ":>": {
+            case ':>': {
               filters[result.field.name].push({ gt: result.expression.value });
               break;
             }
 
-            case ":>=": {
+            case ':>=': {
               filters[result.field.name].push({ gte: result.expression.value });
               break;
             }
 
-            case ":<": {
+            case ':<': {
               filters[result.field.name].push({ lt: result.expression.value });
               break;
             }
 
-            case ":<=": {
+            case ':<=': {
               filters[result.field.name].push({ lte: result.expression.value });
               break;
             }
@@ -355,10 +376,20 @@ export default class ResourceQueryComponent extends Component {
       }
     }
 
+    const attrs = [];
+    try {
+      const resource = this.store.createRecord(resourceValue);
+      resource.eachAttribute((attr) => {
+        attrs.push(attr);
+      });
+      debugger;
+    } catch {}
+
     this.currentFrame.context = {
       store: this.store,
       resource: resourceValue,
       query: { filters, search },
+      attrs,
     };
 
     this.currentFrame.load();

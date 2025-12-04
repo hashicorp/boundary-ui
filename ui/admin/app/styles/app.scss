@@ -11,8 +11,12 @@
 @use 'notify';
 @use '@hashicorp/ember-asciinema-player';
 
+.resource-query-input {
+  margin-bottom: 1rem;
+}
+
 .highlighted-index {
-  background-color: aquamarine;
+  background-color: #cce3fe;
 }
 
 .frame-option {

@@ -11,11 +11,19 @@
     </M.Header>
     <M.Body>
 
-      <Hds::Form::TextInput::Field
-        @value={{this.currentFrame.searchText}}
-        autofocus='true'
-        {{on 'input' this.onInput}}
-      />
+      <div class='resource-query-input'>
+        <Hds::Form::TextInput::Field
+          @value={{this.currentFrame.searchText}}
+          autofocus='true'
+          {{on 'input' this.onInput}}
+        />
+      </div>
+
+      {{#if this.currentFrame.context.attrs.length}}
+        {{#each this.currentFrame.context.attrs as |attr|}}
+          <Hds::Tag @text={{attr}} />
+        {{/each}}
+      {{/if}}
 
       {{#each this.currentFrame.options as |option i|}}
         <ul>
