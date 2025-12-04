@@ -1236,6 +1236,8 @@ alias:
 app-token:
   title_plural: App Tokens
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
+  titles:
+    new: New App Token
   form:
     approximate_last_access_time:
       label: Last used at
