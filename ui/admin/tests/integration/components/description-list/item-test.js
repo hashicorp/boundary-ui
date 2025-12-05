@@ -14,9 +14,12 @@ module('Integration | Component | description-list/item', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   test('it renders label (dt)', async function (assert) {
+    this.set('label', 'Test Label');
+    this.set('value', 'Test Value');
+
     await render(hbs`
-      <DescriptionList::Item @label="Test Label">
-        Test Value
+      <DescriptionList::Item @label={{this.label}}>
+        {{this.value}}
       </DescriptionList::Item>
     `);
 
@@ -26,9 +29,12 @@ module('Integration | Component | description-list/item', function (hooks) {
   });
 
   test('it renders yielded content (dd)', async function (assert) {
+    this.set('label', 'Label');
+    this.set('value', 'Test Value Content');
+
     await render(hbs`
-      <DescriptionList::Item @label="Label">
-        Test Value Content
+      <DescriptionList::Item @label={{this.label}}>
+        {{this.value}}
       </DescriptionList::Item>
     `);
 
@@ -37,9 +43,12 @@ module('Integration | Component | description-list/item', function (hooks) {
   });
 
   test('it applies correct structure', async function (assert) {
+    this.set('label', 'Structure Test');
+    this.set('value', 'Value');
+
     await render(hbs`
-      <DescriptionList::Item @label="Structure Test">
-        Value
+      <DescriptionList::Item @label={{this.label}}>
+        {{this.value}}
       </DescriptionList::Item>
     `);
 
@@ -56,10 +65,13 @@ module('Integration | Component | description-list/item', function (hooks) {
   });
 
   test('it renders with complex content', async function (assert) {
+    this.set('label', 'Complex');
+    this.set('nestedText', 'Nested Content');
+
     await render(hbs`
-      <DescriptionList::Item @label="Complex">
+      <DescriptionList::Item @label={{this.label}}>
         <div class="nested">
-          <span>Nested Content</span>
+          <span>{{this.nestedText}}</span>
         </div>
       </DescriptionList::Item>
     `);
@@ -71,8 +83,10 @@ module('Integration | Component | description-list/item', function (hooks) {
   });
 
   test('it renders with empty content', async function (assert) {
+    this.set('label', 'Empty');
+
     await render(hbs`
-      <DescriptionList::Item @label="Empty">
+      <DescriptionList::Item @label={{this.label}}>
       </DescriptionList::Item>
     `);
 
@@ -83,9 +97,12 @@ module('Integration | Component | description-list/item', function (hooks) {
   });
 
   test('it renders with component content', async function (assert) {
+    this.set('label', 'With Component');
+    this.set('badgeText', 'Active');
+
     await render(hbs`
-      <DescriptionList::Item @label="With Component">
-        <Hds::Badge @text="Active" @color="success" />
+      <DescriptionList::Item @label={{this.label}}>
+        <Hds::Badge @text={{this.badgeText}} @color="success" />
       </DescriptionList::Item>
     `);
 

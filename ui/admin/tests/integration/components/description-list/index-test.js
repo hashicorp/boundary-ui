@@ -14,10 +14,16 @@ module('Integration | Component | description-list', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   test('it renders with title', async function (assert) {
+    this.set('title', 'Section Title');
+    this.set('label1', 'Label 1');
+    this.set('value1', 'Value 1');
+    this.set('label2', 'Label 2');
+    this.set('value2', 'Value 2');
+
     await render(hbs`
-      <DescriptionList @title="Section Title" as |DL|>
-        <DL.Item @label="Label 1">Value 1</DL.Item>
-        <DL.Item @label="Label 2">Value 2</DL.Item>
+      <DescriptionList @title={{this.title}} as |DL|>
+        <DL.Item @label={{this.label1}}>{{this.value1}}</DL.Item>
+        <DL.Item @label={{this.label2}}>{{this.value2}}</DL.Item>
       </DescriptionList>
     `);
 
@@ -27,9 +33,12 @@ module('Integration | Component | description-list', function (hooks) {
   });
 
   test('it renders without title', async function (assert) {
+    this.set('label', 'Label 1');
+    this.set('value', 'Value 1');
+
     await render(hbs`
       <DescriptionList as |DL|>
-        <DL.Item @label="Label 1">Value 1</DL.Item>
+        <DL.Item @label={{this.label}}>{{this.value}}</DL.Item>
       </DescriptionList>
     `);
 
@@ -38,9 +47,12 @@ module('Integration | Component | description-list', function (hooks) {
   });
 
   test('it yields Item component correctly', async function (assert) {
+    this.set('label', 'Test Label');
+    this.set('value', 'Test Value');
+
     await render(hbs`
       <DescriptionList as |DL|>
-        <DL.Item @label="Test Label">Test Value</DL.Item>
+        <DL.Item @label={{this.label}}>{{this.value}}</DL.Item>
       </DescriptionList>
     `);
 
@@ -51,11 +63,19 @@ module('Integration | Component | description-list', function (hooks) {
   });
 
   test('it renders multiple items', async function (assert) {
+    this.set('title', 'Multiple Items');
+    this.set('label1', 'Item 1');
+    this.set('value1', 'Value 1');
+    this.set('label2', 'Item 2');
+    this.set('value2', 'Value 2');
+    this.set('label3', 'Item 3');
+    this.set('value3', 'Value 3');
+
     await render(hbs`
-      <DescriptionList @title="Multiple Items" as |DL|>
-        <DL.Item @label="Item 1">Value 1</DL.Item>
-        <DL.Item @label="Item 2">Value 2</DL.Item>
-        <DL.Item @label="Item 3">Value 3</DL.Item>
+      <DescriptionList @title={{this.title}} as |DL|>
+        <DL.Item @label={{this.label1}}>{{this.value1}}</DL.Item>
+        <DL.Item @label={{this.label2}}>{{this.value2}}</DL.Item>
+        <DL.Item @label={{this.label3}}>{{this.value3}}</DL.Item>
       </DescriptionList>
     `);
 
@@ -64,9 +84,13 @@ module('Integration | Component | description-list', function (hooks) {
   });
 
   test('it applies correct CSS classes', async function (assert) {
+    this.set('title', 'Test');
+    this.set('label', 'Label');
+    this.set('value', 'Value');
+
     await render(hbs`
-      <DescriptionList @title="Test" as |DL|>
-        <DL.Item @label="Label">Value</DL.Item>
+      <DescriptionList @title={{this.title}} as |DL|>
+        <DL.Item @label={{this.label}}>{{this.value}}</DL.Item>
       </DescriptionList>
     `);
 
@@ -75,12 +99,16 @@ module('Integration | Component | description-list', function (hooks) {
   });
 
   test('it renders with complex content in items', async function (assert) {
+    this.set('label', 'Complex Item');
+    this.set('text1', 'Complex');
+    this.set('text2', 'Content');
+
     await render(hbs`
       <DescriptionList as |DL|>
-        <DL.Item @label="Complex Item">
+        <DL.Item @label={{this.label}}>
           <div class="test-content">
-            <span>Complex</span>
-            <strong>Content</strong>
+            <span>{{this.text1}}</span>
+            <strong>{{this.text2}}</strong>
           </div>
         </DL.Item>
       </DescriptionList>
