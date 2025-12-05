@@ -4,13 +4,12 @@
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/managed-group/' @model.type)
-    model=@model
-    edit=@edit
-    submit=@submit
-    cancel=@cancel
-    removeItemByIndex=@removeItemByIndex
-    addStringItem=@addStringItem
-  }}
+  <this.managedGroupForm
+    @model={{@model}}
+    @edit={{@edit}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @removeItemByIndex={{@removeItemByIndex}}
+    @addStringItem={{@addStringItem}}
+  />
 {{/if}}
