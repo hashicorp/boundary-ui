@@ -1,0 +1,99 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form>
+  <Hds::Form::TextInput::Field
+    @value={{@model.name}}
+    @type='text'
+    disabled={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.app-token.form.name.help'}}</F.HelperText>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @value={{@model.description}}
+    @isOptional={{true}}
+    disabled={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.app-token.form.description.help'
+      }}</F.HelperText>
+  </Hds::Form::Textarea::Field>
+
+  <DescriptionList @title={{t 'resources.app-token.about.title'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.status.label'}}>
+      <Hds::Badge
+        @text={{this.statusBadge.text}}
+        @color={{this.statusBadge.color}}
+      />
+    </DL.Item>
+    {{! TODO: Check where to navigate the user for global/org/proj levels }}
+    <DL.Item @label={{t 'resources.app-token.form.created_by.label'}}>
+      <div class='hds-inline-flex hds-items-center hds-gap-8'>
+        <Hds::Icon @name='user' @size='16' @isInline={{true}} />
+        <Hds::Link::Inline
+          @href='#'
+        >{{@model.created_by_user_id}}</Hds::Link::Inline>
+      </div>
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.scope.label'}}>
+      <div class='hds-inline-flex hds-items-center hds-gap-8'>
+        <Hds::Icon
+          @name={{this.scopeInfo.icon}}
+          @size='16'
+          @isInline={{true}}
+        />
+        <Hds::Link::Inline @href={{this.scopeInfo.route}}>
+          {{this.scopeInfo.text}}
+        </Hds::Link::Inline>
+      </div>
+    </DL.Item>
+  </DescriptionList>
+
+  <DescriptionList @title={{t 'resources.app-token.ttl.title'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.ttl.label'}}>
+      {{#if this.ttlFormatted}}
+        {{format-day-year this.ttlFormatted}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.expiration_date.label'}}>
+      {{#if @model.expire_time}}
+        {{format-date-long @model.expire_time}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.created_time.label'}}>
+      {{#if @model.created_time}}
+        {{format-date-long @model.created_time}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+  </DescriptionList>
+
+  <DescriptionList @title={{t 'resources.app-token.tts.title'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.tts.label'}}>
+      {{#if this.ttsFormatted}}
+        {{format-day-year this.ttsFormatted}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.last_used.label'}}>
+      {{#if @model.approximate_last_access_time}}
+        {{relative-datetime-live @model.approximate_last_access_time}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+  </DescriptionList>
+</Rose::Form>

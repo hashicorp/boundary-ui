@@ -1238,13 +1238,39 @@ app-token:
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
     new: New App Token
+  tabs:
+    permissions: Permissions
+  about:
+    title: About this token
+  ttl:
+    title: Time to live (TTL)
+  tts:
+    title: Time to stale (TTS)
   form:
+    name:
+      help: Name to identify this app token
+    description:
+      help: A description of this app token
     approximate_last_access_time:
       label: Last used at
     expires_in:
       label: Expires in
     status:
       label: Status
+    created_by:
+      label: Created by
+    scope:
+      label: Scope
+    ttl:
+      label: TTL
+    expiration_date:
+      label: Expiration date
+    created_time:
+      label: Created at
+    tts:
+      label: TTS
+    last_used:
+      label: Last used
   status:
     unknown: Unknown
     active: Active
