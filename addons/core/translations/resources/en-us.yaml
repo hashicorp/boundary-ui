@@ -1275,6 +1275,7 @@ app-token:
       label: TTS
     last_used:
       label: Last used
+      tooltip: This value is an approximate value, not an exact value.
     root-scope:
       label: Root Scope
       help: The scope that the app token resides in and where permissions start. You can't change this.

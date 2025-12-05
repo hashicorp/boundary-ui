@@ -1082,6 +1082,15 @@
   }
 }
 
+// Styling for last used tooltip with underlined text
+.last-used-tooltip {
+  font-weight: 500;
+  font-size: var(--token-typography-body-200-font-size); // size/medium
+  text-decoration: underline;
+  text-decoration-style: solid;
+  cursor: pointer;
+}
+
 // App token details page - description list styling
 .rose-form {
   .description-list {
@@ -1111,6 +1120,12 @@
     dt {
       font-size: 14px;
       font-weight: var(--token-typography-font-weight-semibold);
+
+      &.label-with-tooltip {
+        display: inline-flex;
+        align-items: center;
+        gap: sizing.rems(xs); // 8px gap between label and icon
+      }
     }
 
     dd {
