@@ -1081,3 +1081,40 @@
     margin-bottom: sizing.rems(l);
   }
 }
+
+// App token details page - description list styling
+.rose-form {
+  .description-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: sizing.rems(m) sizing.rems(l); // 16px top/bottom, 24px left/right
+    border: sizing.rems(xxxxs) solid var(--token-color-border-primary);
+    border-radius: var(--token-border-radius-medium);
+    margin-bottom: sizing.rems(xl);
+
+    .description-list-title {
+      width: 100%;
+      margin-bottom: sizing.rems(l); // 24px gap between title and items
+
+      h3 {
+        margin: 0;
+      }
+    }
+
+    .description-list-item {
+      display: flex;
+      flex-direction: column;
+      gap: sizing.rems(xs); // 8px vertical gap between dt and dd
+      margin-right: sizing.rems(l); // 24px horizontal gap between items
+    }
+
+    dt {
+      font-size: 14px;
+      font-weight: var(--token-typography-font-weight-semibold);
+    }
+
+    dd {
+      font-size: var(--token-typography-body-200-font-size); // size/medium
+    }
+  }
+}

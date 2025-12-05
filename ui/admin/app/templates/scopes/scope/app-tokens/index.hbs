@@ -92,8 +92,13 @@
             {{#each @model.appTokens as |token|}}
               <B.Tr>
                 <B.Td>
-                  {{! TODO: Add the LinkTo component when route is implemented }}
-                  {{token.name}}
+                  <LinkTo
+                    @route='scopes.scope.app-tokens.token'
+                    @models={{array @model.scope.id token.id}}
+                    class='app-token-link'
+                  >
+                    {{token.name}}
+                  </LinkTo>
                   {{#if token.description}}
                     <Hds::Text::Body @tag='p' class='p'>
                       {{token.description}}
@@ -168,7 +173,6 @@
     {{else}}
       <Hds::ApplicationState as |A|>
         <A.Header @title={{t 'resources.app-token.messages.none.title'}} />
-        {{! TODO: Check with the product/design team for status text of translations }}
         <A.Body
           @text={{t
             (if
