@@ -1271,6 +1271,7 @@ app-token:
       label: TTS
     last_used:
       label: Last used
+      tooltip: This value is an approximate value, not an exact value.
   status:
     unknown: Unknown
     active: Active

@@ -36,7 +36,7 @@
     {{! TODO: Check where to navigate the user for global/org/proj levels }}
     <DL.Item @label={{t 'resources.app-token.form.created_by.label'}}>
       <div class='hds-inline-flex hds-items-center hds-gap-8'>
-        <Hds::Icon @name='user' @size='16' @isInline={{true}} />
+        <Hds::Icon @name='user' @isInline={{true}} />
         <Hds::Link::Inline
           @href='#'
         >{{@model.created_by_user_id}}</Hds::Link::Inline>
@@ -44,11 +44,7 @@
     </DL.Item>
     <DL.Item @label={{t 'resources.app-token.form.scope.label'}}>
       <div class='hds-inline-flex hds-items-center hds-gap-8'>
-        <Hds::Icon
-          @name={{this.scopeInfo.icon}}
-          @size='16'
-          @isInline={{true}}
-        />
+        <Hds::Icon @name={{this.scopeInfo.icon}} @isInline={{true}} />
         <Hds::Link::Inline @href={{this.scopeInfo.route}}>
           {{this.scopeInfo.text}}
         </Hds::Link::Inline>
@@ -88,12 +84,29 @@
         {{t 'labels.none'}}
       {{/if}}
     </DL.Item>
-    <DL.Item @label={{t 'resources.app-token.form.last_used.label'}}>
-      {{#if @model.approximate_last_access_time}}
-        {{relative-datetime-live @model.approximate_last_access_time}}
-      {{else}}
-        {{t 'labels.none'}}
-      {{/if}}
-    </DL.Item>
+    <div class='description-list-item'>
+      <dt class='label-with-tooltip'>
+        {{t 'resources.app-token.form.last_used.label'}}
+        <Hds::Icon
+          @name='info'
+          @isInline={{true}}
+          {{hds-tooltip (t 'resources.app-token.form.last_used.tooltip')}}
+        />
+      </dt>
+      <dd>
+        {{#if @model.approximate_last_access_time}}
+          <span
+            class='last-used-tooltip'
+            {{hds-tooltip
+              (format-date-long @model.approximate_last_access_time)
+            }}
+          >
+            {{relative-datetime-live @model.approximate_last_access_time}}
+          </span>
+        {{else}}
+          {{t 'labels.none'}}
+        {{/if}}
+      </dd>
+    </div>
   </DescriptionList>
 </Rose::Form>
