@@ -7,6 +7,8 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
 export default class ScopesScopeAppTokensIndexController extends Controller {
@@ -130,5 +132,37 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     this.sortAttribute = sortBy;
     this.sortDirection = sortOrder;
     this.page = 1;
+  }
+
+  /**
+   * Rollback changes to an app-token.
+   * @param {AppTokenModel} appToken
+   */
+  @action
+  cancel(appToken) {
+    appToken.rollbackAttributes();
+    this.router.transitionTo('scopes.scope.app-tokens');
+  }
+
+  /**
+   * Save an app-token in current scope.
+   * @param {AppTokenModel} appToken
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(() => 'notifications.create-success')
+  async create(appToken) {
+    console.log('app token ', appToken);
+    await appToken.save();
+    if (this.can.can('read model', appToken)) {
+      await this.router.transitionTo(
+        'scopes.scope.app-tokens.app-token',
+        appToken,
+      );
+    } else {
+      this.router.transitionTo('scopes.scope.app-tokens');
+    }
+    await this.router.refresh();
   }
 }

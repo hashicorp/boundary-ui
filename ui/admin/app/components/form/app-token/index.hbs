@@ -1,0 +1,175 @@
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+  <Hds::Form::TextInput::Field
+    name='name'
+    @value={{@model.name}}
+    @isInvalid={{@model.errors.name}}
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    {{#if @model.errors.name}}
+      <F.Error as |E|>
+        {{#each @model.errors.name as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    name='description'
+    @value={{@model.description}}
+    @isInvalid={{@model.errors.description}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'description')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Textarea::Field>
+
+  {{#if @model.isNew}}
+    <InfoField
+      @value={{if
+        @model.scope.isGlobal
+        (t 'resources.global.title')
+        @model.scope.displayName
+      }}
+      @icon={{if @model.scope.isGlobal 'globe' (if @model.isOrg 'org' 'grid')}}
+      readonly={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.app-token.form.root-scope.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.app-token.form.root-scope.help'
+        }}</F.HelperText>
+    </InfoField>
+
+    <Hds::Separator />
+
+    <VariableTimeField
+      name='time_to_live_seconds'
+      @legend={{t 'resources.app-token.form.ttl.label'}}
+      @helperText={{t 'resources.app-token.form.ttl.help'}}
+      @isRequired={{true}}
+      @time={{@model.time_to_live_seconds}}
+      @max={{this.maxTTL}}
+      @updateTime={{fn this.updateTime 'time_to_live_seconds'}}
+    />
+
+    <br class='margin-l' />
+
+    <VariableTimeField
+      name='time_to_stale_seconds'
+      @legend={{t 'resources.app-token.form.tts.label'}}
+      @helperText={{t 'resources.app-token.form.tts.help'}}
+      @updateTime={{fn this.updateTime 'time_to_stale_seconds'}}
+    />
+
+    <Hds::Separator />
+
+    <Hds::Form::Fieldset @isRequired={{true}} as |F|>
+      <F.Legend>{{t 'resources.app-token.form.permissions.label'}}</F.Legend>
+      {{#unless @model.permissions.length}}
+        <F.HelperText>{{t
+            'resources.app-token.form.permissions.help'
+          }}</F.HelperText>
+      {{/unless}}
+
+      <F.Control>
+        <Hds::Button
+          @text={{t 'resources.app-token.actions.add-permission'}}
+          @icon='plus'
+          @color='secondary'
+        />
+        {{#if this.testPermission.length}}
+          <Hds::Table
+            @columns={{array
+              (hash label=(t 'titles.label'))
+              (hash label=(t 'resources.app-token.titles.grants'))
+              (hash
+                label=(t 'resources.app-token.titles.active-scopes')
+                tooltip=(t
+                  'resources.app-token.messages.tooltips.active-scopes'
+                )
+              )
+              (hash label=(t 'titles.actions'))
+            }}
+            @model={{this.testPermission}}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Hds::Text::Body @tag='p'>
+                    {{~or B.data.label '—'}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::Text::Body @tag='p'>
+                    {{~or B.data.grant.length '—'}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::Text::Body @tag='p'>
+                    {{~or B.data.grant_scope_id.length '—'}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::ButtonSet>
+                    <Hds::Button
+                      @text={{t 'actions.edit'}}
+                      @icon='edit'
+                      @color='secondary'
+                      @isIconOnly={{true}}
+                    />
+                    <Hds::Button
+                      @text={{t 'actions.delete'}}
+                      @icon='trash'
+                      @color='critical'
+                      @isIconOnly={{true}}
+                    />
+                  </Hds::ButtonSet>
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{/if}}
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/if}}
+
+  {{#if (can 'save model' @model)}}
+    <Hds::Layout::Flex @gap='16'>
+      <form.actions
+        @submitText={{t 'actions.create'}}
+        @cancelText={{t 'actions.cancel'}}
+      />
+      <Hds::Alert
+        @type='compact'
+        @icon='alert-triangle-fill'
+        @color='warning'
+        as |A|
+      >
+        <A.Description>{{t
+            'resources.app-token.messages.create.description'
+          }}</A.Description>
+      </Hds::Alert>
+    </Hds::Layout::Flex>
+  {{/if}}
+</Rose::Form>
