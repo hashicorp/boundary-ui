@@ -14,7 +14,9 @@ import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 export default class ScopesScopeAppTokensIndexController extends Controller {
   // =services
 
+  @service can;
   @service intl;
+  @service router;
 
   // =attributes
 
@@ -153,13 +155,13 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @notifyError(({ message }) => message)
   @notifySuccess(() => 'notifications.create-success')
   async create(appToken) {
-    console.log('app token ', appToken);
     await appToken.save();
     if (this.can.can('read model', appToken)) {
-      await this.router.transitionTo(
-        'scopes.scope.app-tokens.app-token',
-        appToken,
-      );
+      // TODO: Uncomment transition once details route has been created.
+      // await this.router.transitionTo(
+      //   'scopes.scope.app-tokens.app-token',
+      //   appToken,
+      // );
     } else {
       this.router.transitionTo('scopes.scope.app-tokens');
     }

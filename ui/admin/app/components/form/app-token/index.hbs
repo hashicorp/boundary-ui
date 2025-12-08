@@ -1,5 +1,5 @@
 <Rose::Form
-  @onSubmit={{@submit}}
+  @onSubmit={{this.createAppToken}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   as |form|
@@ -18,7 +18,7 @@
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
@@ -48,9 +48,13 @@
       @value={{if
         @model.scope.isGlobal
         (t 'resources.global.title')
-        @model.scope.displayName
+        @model.scopeModel.displayName
       }}
-      @icon={{if @model.scope.isGlobal 'globe' (if @model.isOrg 'org' 'grid')}}
+      @icon={{if
+        @model.scope.isGlobal
+        'globe'
+        (if @model.scope.isOrg 'org' 'grid')
+      }}
       readonly={{true}}
       as |F|
     >
@@ -83,9 +87,9 @@
 
     <Hds::Separator />
 
-    <Hds::Form::Fieldset @isRequired={{true}} as |F|>
-      <F.Legend>{{t 'resources.app-token.form.permissions.label'}}</F.Legend>
-      {{#unless @model.permissions.length}}
+    <Hds::Form::Field @isRequired={{true}} as |F|>
+      <F.Label>{{t 'resources.app-token.form.permissions.label'}}</F.Label>
+      {{#unless @model.permissions.addedPermissions.length}}
         <F.HelperText>{{t
             'resources.app-token.form.permissions.help'
           }}</F.HelperText>
@@ -93,65 +97,86 @@
 
       <F.Control>
         <Hds::Button
+          id={{F.id}}
           @text={{t 'resources.app-token.actions.add-permission'}}
           @icon='plus'
           @color='secondary'
+          {{on 'click' this.openPermissionFlyout}}
         />
-        {{#if this.testPermission.length}}
-          <Hds::Table
-            @columns={{array
-              (hash label=(t 'titles.label'))
-              (hash label=(t 'resources.app-token.titles.grants'))
-              (hash
-                label=(t 'resources.app-token.titles.active-scopes')
-                tooltip=(t
-                  'resources.app-token.messages.tooltips.active-scopes'
-                )
-              )
-              (hash label=(t 'titles.actions'))
-            }}
-            @model={{this.testPermission}}
-            @valign='middle'
-          >
-            <:body as |B|>
-              <B.Tr>
-                <B.Td>
-                  <Hds::Text::Body @tag='p'>
-                    {{~or B.data.label '—'}}
-                  </Hds::Text::Body>
-                </B.Td>
-                <B.Td>
-                  <Hds::Text::Body @tag='p'>
-                    {{~or B.data.grant.length '—'}}
-                  </Hds::Text::Body>
-                </B.Td>
-                <B.Td>
-                  <Hds::Text::Body @tag='p'>
-                    {{~or B.data.grant_scope_id.length '—'}}
-                  </Hds::Text::Body>
-                </B.Td>
-                <B.Td>
-                  <Hds::ButtonSet>
-                    <Hds::Button
-                      @text={{t 'actions.edit'}}
-                      @icon='edit'
-                      @color='secondary'
-                      @isIconOnly={{true}}
-                    />
-                    <Hds::Button
-                      @text={{t 'actions.delete'}}
-                      @icon='trash'
-                      @color='critical'
-                      @isIconOnly={{true}}
-                    />
-                  </Hds::ButtonSet>
-                </B.Td>
-              </B.Tr>
-            </:body>
-          </Hds::Table>
-        {{/if}}
       </F.Control>
-    </Hds::Form::Fieldset>
+    </Hds::Form::Field>
+
+    {{#if @model.permissions.addedPermissions.length}}
+      <Hds::Table
+        @columns={{array
+          (hash label=(t 'titles.label'))
+          (hash label=(t 'resources.app-token.titles.grants'))
+          (hash
+            label=(t 'resources.app-token.titles.active-scopes')
+            tooltip=(t 'resources.app-token.messages.tooltips.active-scopes')
+          )
+          (hash label=(t 'titles.actions'))
+        }}
+        @model={{@model.permissions.addedPermissions}}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Text::Body @tag='p'>
+                {{~or B.data.label '—'}}
+              </Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Body @tag='p'>
+                {{~or B.data.grant.length '—'}}
+              </Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Body @tag='p'>
+                {{~or B.data.grant_scope_id.length '—'}}
+              </Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <Hds::ButtonSet>
+                <Hds::Button
+                  @text={{t 'actions.edit'}}
+                  @icon='edit'
+                  @color='secondary'
+                  @isIconOnly={{true}}
+                />
+                <Hds::Button
+                  @text={{t 'actions.delete'}}
+                  @icon='trash'
+                  @color='critical'
+                  @isIconOnly={{true}}
+                />
+              </Hds::ButtonSet>
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{/if}}
+
+    {{#if this.showPermissionFlyout}}
+      {{! TODO: Populate flyout with scope options.}}
+      <Hds::Flyout @onClose={{this.closePermissionFlyout}} as |M|>
+        <M.Header>{{t 'resources.app-token.actions.add-permission'}}</M.Header>
+        <M.Footer>
+          <Hds::ButtonSet>
+            <Hds::Button
+              @text={{t 'actions.add'}}
+              {{on 'click' this.addPermission}}
+            />
+            <Hds::Button
+              @text={{t 'actions.cancel'}}
+              @color='secondary'
+              {{on 'click' this.closePermissionFlyout}}
+            />
+          </Hds::ButtonSet>
+        </M.Footer>
+      </Hds::Flyout>
+    {{/if}}
   {{/if}}
 
   {{#if (can 'save model' @model)}}
