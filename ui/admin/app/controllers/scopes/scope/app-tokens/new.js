@@ -8,7 +8,8 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
-
+import { GRANT_SCOPE_CHILDREN } from 'api/models/role';
+import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 class FilterOptions {
   @tracked search;
   @tracked options = [];
@@ -91,12 +92,19 @@ export default class ScopesScopeAppTokensNewController extends Controller {
    */
   async retrieveScopeFilterOptions(search) {
     const config = this.filterConfig;
+    const query = { search: { text: search, fields: config.searchFields } };
+    if (
+      this.model.scope.isGlobal &&
+      this.model.permissions?.newPermission?.grant_scope_id.includes(
+        GRANT_SCOPE_CHILDREN,
+      )
+    ) {
+      query.filters = { type: [{ equals: TYPE_SCOPE_PROJECT }] };
+    }
 
     const results = await this.db.query('scope', {
       select: config.select,
-      query: {
-        search: { text: search, fields: config.searchFields },
-      },
+      query,
       page: 1,
       pageSize: 250,
     });

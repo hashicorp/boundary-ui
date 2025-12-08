@@ -6,7 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { TrackedObject } from 'tracked-built-ins';
+import { TrackedArray } from 'tracked-built-ins';
 import { GRANT_SCOPE_CHILDREN } from 'api/models/role';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 
@@ -55,18 +55,18 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
 
   /**
    * Loads all scopes and creates new app-token record.
-   * @returns {Promise<{appToken: AppTokenModel, permission: object, scopes: [ScopeModel], totalItems: number}>}
+   * @returns {Promise<{appToken: AppTokenModel, scopes: [ScopeModel], totalItems: number}>}
    */
   async model(params) {
     const scopeModel = this.modelFor('scopes.scope');
-    let record, permission;
+    let record;
     if (this.currentModel?.appToken?.isNew) {
       record = this.currentModel.appToken;
-      permission = this.currentModel.permission;
     } else {
       record = this.store.createRecord('app-token');
+      record.time_to_live_seconds = 5184000; // Set default TTL
+      record.permissions = { addedPermissions: new TrackedArray([]) };
       record.scopeModel = scopeModel;
-      permission = new TrackedObject({ grant_scope_id: [] });
     }
 
     const useDebounce =
@@ -74,7 +74,6 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
     return this.retrieveData.perform({
       ...params,
       appToken: record,
-      permission,
       useDebounce,
     });
   }
@@ -87,13 +86,14 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
       pageSize,
       showSelectedOnly,
       appToken,
-      permission,
       useDebounce,
     }) => {
       if (useDebounce) {
         await timeout(250);
       }
-
+      // `newPermission` is the temporary field in the permissions field
+      // added to facilitate search for a new permission being created.
+      const permission = appToken.permissions?.newPermission;
       let filters;
       if (appToken.scope.isGlobal) {
         // Global level filters
@@ -132,7 +132,7 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
 
       const totalItems = scopes.meta?.totalItems;
 
-      return { appToken, permission: permission, scopes, totalItems };
+      return { appToken, scopes, totalItems };
     },
   );
 
