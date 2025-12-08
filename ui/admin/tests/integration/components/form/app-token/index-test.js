@@ -179,7 +179,6 @@ module('Integration | Component | form/app-token', function (hooks) {
   test('it displays expiration date', async function (assert) {
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    // Should use format-date-long helper to display expiration date
     const text = this.element.textContent;
     const hasExpiration = text.includes('Dec') && text.includes('2025');
     assert.ok(hasExpiration, 'Should display expiration date');
@@ -193,14 +192,14 @@ module('Integration | Component | form/app-token', function (hooks) {
     assert.ok(hasCreatedTime, 'Should display created time');
   });
 
-  test('it displays last used time with tooltip', async function (assert) {
+  test('it displays last used time', async function (assert) {
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    // Should have tooltip icon
+    // Should have tooltip icon for the label
     assert.dom('[data-test-icon="info"]').exists();
 
-    // Should have last-used-tooltip class for the value
-    assert.dom('.last-used-tooltip').exists();
+    // Use HDS Time component with relative format
+    assert.dom('.hds-time').exists();
   });
 
   test('it renders created by user with link', async function (assert) {

@@ -59,11 +59,10 @@ module('Acceptance | app-tokens | read', function (hooks) {
       },
     });
 
-    await visit(urls.orgScope);
-    await click(commonSelectors.HREF(urls.appTokens));
-    await click(commonSelectors.HREF(urls.appToken));
+    await visit(urls.appToken);
 
     assert.strictEqual(currentURL(), urls.appToken);
+    assert.dom('.hds-page-header__title').containsText('App Tokens');
   });
 
   test('app token detail page displays correct title and breadcrumbs', async function (assert) {
@@ -78,7 +77,6 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await visit(urls.appToken);
 
     // Check page header title
-    assert.dom('.hds-page-header__title').exists();
     assert.dom('.hds-page-header__title').containsText('App Tokens');
 
     // Check breadcrumbs
@@ -97,7 +95,6 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await visit(urls.appToken);
 
     // Check for copy snippet with token ID
-    assert.dom('.hds-copy-snippet').exists();
     assert
       .dom('.hds-copy-snippet')
       .containsText(instances.appToken.id.substring(0, 10));
@@ -175,21 +172,48 @@ module('Acceptance | app-tokens | read', function (hooks) {
     assert.dom('.hds-badge').exists();
   });
 
-  test('app token page displays status badge', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
+  test.each(
+    'app token page displays correct status badge',
+    {
+      active: {
+        status: 'active',
+        expectedText: 'Active',
       },
-    });
+      expired: {
+        status: 'expired',
+        expectedText: 'Expired',
+      },
+      revoked: {
+        status: 'revoked',
+        expectedText: 'Revoked',
+      },
+      stale: {
+        status: 'stale',
+        expectedText: 'Stale',
+      },
+      unknown: {
+        status: 'unknown',
+        expectedText: 'Unknown',
+      },
+    },
+    async function (assert, { status, expectedText }) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            enabled: false,
+          },
+        },
+      });
 
-    await visit(urls.appToken);
+      // Update the token status
+      instances.appToken.update({ status });
 
-    // Check for status badge
-    assert.dom('.hds-badge').exists();
-    assert.dom('.hds-badge').containsText('Active');
-  });
+      await visit(urls.appToken);
+
+      // Check for status badge with correct text
+      assert.dom('.hds-badge').containsText(expectedText);
+    },
+  );
 
   test('Permissions tab renders placeholder', async function (assert) {
     setRunOptions({
@@ -204,20 +228,5 @@ module('Acceptance | app-tokens | read', function (hooks) {
 
     // Permissions tab should have a form (even if empty for now)
     assert.dom('.rose-form').exists();
-  });
-
-  test('page title is set to app token display name', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-
-    // Check that page title includes token name
-    assert.dom('.hds-page-header__title').exists();
   });
 });

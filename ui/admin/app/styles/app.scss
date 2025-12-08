@@ -1112,12 +1112,3 @@
 .grant-scope-selection-alert-list {
   list-style: disc;
 }
-
-// Styling for last used tooltip with underlined text
-.last-used-tooltip {
-  font-weight: 500;
-  font-size: var(--token-typography-body-200-font-size); // size/medium
-  text-decoration: underline;
-  text-decoration-style: solid;
-  cursor: pointer;
-}
