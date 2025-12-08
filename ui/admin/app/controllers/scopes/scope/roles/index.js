@@ -15,7 +15,7 @@ import { GRANT_SCOPE_THIS } from 'api/models/role';
 export default class ScopesScopeRolesIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -44,10 +44,10 @@ export default class ScopesScopeRolesIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scope, {
+    const canList = this.abilities.can('list model', this.scope, {
       collection: 'roles',
     });
-    const canCreate = this.can.can('create model', this.scope, {
+    const canCreate = this.abilities.can('create model', this.scope, {
       collection: 'roles',
     });
     const resource = this.intl.t('resources.role.title_plural');
@@ -98,7 +98,7 @@ export default class ScopesScopeRolesIndexController extends Controller {
   )
   async save(role) {
     await role.save();
-    if (this.can.can('read model', role)) {
+    if (this.abilities.can('read model', role)) {
       await this.router.transitionTo('scopes.scope.roles.role', role);
     } else {
       this.router.transitionTo('scopes.scope.roles');

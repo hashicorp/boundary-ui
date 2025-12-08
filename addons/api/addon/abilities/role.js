@@ -16,7 +16,7 @@ class InvalidRolePrincipalTypeError extends Error {
 export default class RoleAbility extends ModelAbility {
   // =services
 
-  @service can;
+  @service abilities;
 
   // =permissions
 
@@ -64,6 +64,6 @@ export default class RoleAbility extends ModelAbility {
         `Expected a role principal of type 'user', 'group', or 'managed-group'.  Got '${type}'.`,
       );
     }
-    return this.can.can(`read ${type}`, this.model);
+    return this.abilities.can(`read ${type}`, this.model);
   }
 }

@@ -14,7 +14,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeGroupsIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -41,10 +41,10 @@ export default class ScopesScopeGroupsIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scope, {
+    const canList = this.abilities.can('list model', this.scope, {
       collection: 'groups',
     });
-    const canCreate = this.can.can('create model', this.scope, {
+    const canCreate = this.abilities.can('create model', this.scope, {
       collection: 'groups',
     });
     const resource = this.intl.t('resources.group.title_plural');
@@ -84,7 +84,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   )
   async save(group) {
     await group.save();
-    if (this.can.can('read model', group)) {
+    if (this.abilities.can('read model', group)) {
       await this.router.transitionTo('scopes.scope.groups.group', group);
     } else {
       this.router.transitionTo('scopes.scope.groups');

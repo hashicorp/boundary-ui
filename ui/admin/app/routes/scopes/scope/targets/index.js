@@ -17,7 +17,7 @@ import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 export default class ScopesScopeTargetsIndexRoute extends Route {
   // =services
 
-  @service can;
+  @service abilities;
   @service store;
   @service session;
   @service intl;
@@ -93,7 +93,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         filters.type.push({ equals: type });
       });
 
-      if (this.can.can('list model', scope, { collection: 'sessions' })) {
+      if (this.abilities.can('list model', scope, { collection: 'sessions' })) {
         await this.store.query(
           'session',
           {
@@ -133,7 +133,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       let targets;
       let totalItems = 0;
       let doTargetsExist = false;
-      if (this.can.can('list model', scope, { collection: 'targets' })) {
+      if (this.abilities.can('list model', scope, { collection: 'targets' })) {
         targets = await this.store.query('target', {
           scope_id,
           query: { search, filters, sort },

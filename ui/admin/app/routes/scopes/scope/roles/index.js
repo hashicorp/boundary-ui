@@ -33,7 +33,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
   // =services
 
-  @service can;
+  @service abilities;
   @service store;
 
   // =methods
@@ -79,7 +79,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       let roles;
       let totalItems = 0;
       let doRolesExist = false;
-      if (this.can.can('list model', scope, { collection: 'roles' })) {
+      if (this.abilities.can('list model', scope, { collection: 'roles' })) {
         roles = await this.store.query('role', {
           scope_id,
           query: { search, filters, sort },

@@ -10,7 +10,7 @@ export default class ScopesScopeGroupsNewRoute extends Route {
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods
@@ -20,7 +20,11 @@ export default class ScopesScopeGroupsNewRoute extends Route {
    */
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
-    if (this.can.cannot('create model', scopeModel, { collection: 'groups' })) {
+    if (
+      this.abilities.cannot('create model', scopeModel, {
+        collection: 'groups',
+      })
+    ) {
       this.router.replaceWith('scopes.scope.groups');
     }
   }

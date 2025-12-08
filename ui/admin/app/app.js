@@ -14,11 +14,12 @@ import {
   getOwnConfig,
   isTesting,
 } from '@embroider/macros';
+import { extendResolver } from 'ember-can';
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
   podModulePrefix = config.podModulePrefix;
-  Resolver = Resolver;
+  Resolver = extendResolver(Resolver);
 }
 
 loadInitializers(App, config.modulePrefix);
