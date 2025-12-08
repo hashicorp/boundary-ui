@@ -6,7 +6,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { TrackedArray } from 'tracked-built-ins';
 import { GRANT_SCOPE_CHILDREN } from 'api/models/role';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 
@@ -65,7 +64,7 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
     } else {
       record = this.store.createRecord('app-token');
       record.time_to_live_seconds = 5184000; // Set default TTL
-      record.permissions = { addedPermissions: new TrackedArray([]) };
+      record.permissions = { addedPermissions: [], newPermission: {} };
       record.scopeModel = scopeModel;
     }
 
@@ -98,7 +97,7 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
       if (appToken.scope.isGlobal) {
         // Global level filters
         const canSelectOrgs =
-          !permission?.grant_scope_id.includes(GRANT_SCOPE_CHILDREN);
+          !permission?.grant_scope_id?.includes(GRANT_SCOPE_CHILDREN);
         if (canSelectOrgs) {
           filters = { scope_id: [] };
         } else {

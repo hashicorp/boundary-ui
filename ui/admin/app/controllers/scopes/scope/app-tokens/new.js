@@ -94,8 +94,8 @@ export default class ScopesScopeAppTokensNewController extends Controller {
     const config = this.filterConfig;
     const query = { search: { text: search, fields: config.searchFields } };
     if (
-      this.model.scope.isGlobal &&
-      this.model.permissions?.newPermission?.grant_scope_id.includes(
+      this.model.appToken.scope.isGlobal &&
+      this.model.appToken.permissions?.newPermission?.grant_scope_id?.includes(
         GRANT_SCOPE_CHILDREN,
       )
     ) {
