@@ -6,7 +6,7 @@
 {{page-title @model.displayName}}
 <Breadcrumbs::Item
   @text={{@model.displayName}}
-  @route='scopes.scope.app-tokens.token'
+  @route='scopes.scope.app-tokens.app-token'
   @model={{@model}}
 />
 
@@ -31,10 +31,10 @@
 
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.app-tokens.token.index'>
+      <nav.link @route='scopes.scope.app-tokens.app-token.index'>
         {{t 'titles.details'}}
       </nav.link>
-      <nav.link @route='scopes.scope.app-tokens.token.permissions'>
+      <nav.link @route='scopes.scope.app-tokens.app-token.permissions'>
         {{t 'resources.app-token.tabs.permissions'}}
       </nav.link>
     </Rose::Nav::Tabs>

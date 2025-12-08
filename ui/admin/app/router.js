@@ -189,7 +189,7 @@ Router.map(function () {
       });
       this.route('app-tokens', function () {
         this.route('new');
-        this.route('token', { path: ':token_id' }, function () {
+        this.route('app-token', { path: ':token_id' }, function () {
           this.route('permissions');
         });
       });

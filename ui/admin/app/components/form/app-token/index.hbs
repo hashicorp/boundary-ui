@@ -62,14 +62,14 @@
     </DL.Item>
     <DL.Item @label={{t 'resources.app-token.form.expiration_date.label'}}>
       {{#if @model.expire_time}}
-        {{format-date-long @model.expire_time}}
+        <Hds::Time @date={{@model.expire_time}} />
       {{else}}
         {{t 'labels.none'}}
       {{/if}}
     </DL.Item>
     <DL.Item @label={{t 'resources.app-token.form.created_time.label'}}>
       {{#if @model.created_time}}
-        {{format-date-long @model.created_time}}
+        <Hds::Time @date={{@model.created_time}} />
       {{else}}
         {{t 'labels.none'}}
       {{/if}}
@@ -95,14 +95,10 @@
       </dt>
       <dd>
         {{#if @model.approximate_last_access_time}}
-          <span
-            class='last-used-tooltip'
-            {{hds-tooltip
-              (format-date-long @model.approximate_last_access_time)
-            }}
-          >
-            {{relative-datetime-live @model.approximate_last_access_time}}
-          </span>
+          <Hds::Time
+            @date={{@model.approximate_last_access_time}}
+            @format='relative'
+          />
         {{else}}
           {{t 'labels.none'}}
         {{/if}}
