@@ -10,7 +10,7 @@ export default class ScopesScopePoliciesNewRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods
@@ -21,9 +21,7 @@ export default class ScopesScopePoliciesNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create model', scopeModel, {
-        collection: 'policies',
-      })
+      this.can.cannot('create model', scopeModel, { collection: 'policies' })
     ) {
       this.router.replaceWith('scopes.scope.policies');
     }

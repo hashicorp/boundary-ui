@@ -20,7 +20,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   // =services
 
   @service intl;
-  @service abilities;
+  @service can;
   @service router;
   @service confirm;
   @service features;
@@ -80,10 +80,10 @@ export default class ScopesScopeTargetsIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.abilities.can('list model', this.scope, {
+    const canList = this.can.can('list model', this.scope, {
       collection: 'targets',
     });
-    const canCreate = this.abilities.can('create model', this.scope, {
+    const canCreate = this.can.can('create model', this.scope, {
       collection: 'targets',
     });
     const resource = this.intl.t('resources.target.title_plural');
@@ -187,7 +187,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   )
   async save(target) {
     await target.save();
-    if (this.abilities.can('read model', target)) {
+    if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {
       this.router.transitionTo('scopes.scope.targets');

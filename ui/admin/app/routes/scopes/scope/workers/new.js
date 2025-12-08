@@ -10,7 +10,7 @@ export default class ScopesScopeWorkersNewRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods
@@ -21,7 +21,7 @@ export default class ScopesScopeWorkersNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create worker led worker', scopeModel, {
+      this.can.cannot('create worker led worker', scopeModel, {
         collection: 'workers',
       })
     ) {

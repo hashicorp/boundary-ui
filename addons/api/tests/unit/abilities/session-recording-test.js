@@ -14,11 +14,11 @@ import {
 module('Unit | Ability | session-recording', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
   });
 
@@ -42,13 +42,13 @@ module('Unit | Ability | session-recording', function (hooks) {
     );
 
     assert.true(
-      abilitiesService.can(
+      canService.can(
         'download session-recording',
         recordingWithAuthorizedAction,
       ),
     );
     assert.false(
-      abilitiesService.can(
+      canService.can(
         'download session-recording',
         recordingWithoutAuthorizedAction,
       ),
@@ -70,16 +70,10 @@ module('Unit | Ability | session-recording', function (hooks) {
       state: STATE_SESSION_RECORDING_AVAILABLE,
     });
     assert.false(
-      abilitiesService.can(
-        'delete session-recording',
-        recordingNotinAvaialableState,
-      ),
+      canService.can('delete session-recording', recordingNotinAvaialableState),
     );
     assert.true(
-      abilitiesService.can(
-        'delete session-recording',
-        recordingInAvailableState,
-      ),
+      canService.can('delete session-recording', recordingInAvailableState),
     );
   });
 
@@ -89,7 +83,7 @@ module('Unit | Ability | session-recording', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('reapplyStoragePolicy session-recording', recording),
+      canService.can('reapplyStoragePolicy session-recording', recording),
     );
   });
 });

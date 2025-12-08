@@ -17,7 +17,7 @@ const { __electronLog } = globalThis;
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
 
-  @service abilities;
+  @service can;
   @service clusterUrl;
   @service resourceFilterStore;
   @service router;
@@ -138,7 +138,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
       // Filter out targets to which users do not have the connect ability
       targets = targets.filter((target) =>
-        this.abilities.can('connect target', target),
+        this.can.can('connect target', target),
       );
 
       const aliasPromise = this.store.query('alias', {

@@ -9,59 +9,55 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | Target', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
   });
 
   test('it reflects when a given target may connect based on authorized_actions', function (assert) {
     const model = {
       authorized_actions: ['authorize-session'],
     };
-    assert.true(abilitiesService.can('connect target', model));
+    assert.true(canService.can('connect target', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('connect target', model));
+    assert.false(canService.can('connect target', model));
   });
 
   test('it reflects when a given target may add host sources', function (assert) {
     const model = {
       authorized_actions: ['add-host-sources'],
     };
-    assert.true(abilitiesService.can('addHostSources target', model));
+    assert.true(canService.can('addHostSources target', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('addHostSources target', model));
+    assert.false(canService.can('addHostSources target', model));
   });
 
   test('it reflects when a given target may remove host sources', function (assert) {
     const model = {
       authorized_actions: ['remove-host-sources'],
     };
-    assert.true(abilitiesService.can('removeHostSources target', model));
+    assert.true(canService.can('removeHostSources target', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('removeHostSources target', model));
+    assert.false(canService.can('removeHostSources target', model));
   });
 
   test('it reflects when a given target may add brokered credential sources', function (assert) {
     const model = {
       authorized_actions: ['add-credential-sources'],
     };
-    assert.true(
-      abilitiesService.can('addBrokeredCredentialSources target', model),
-    );
+    assert.true(canService.can('addBrokeredCredentialSources target', model));
     model.authorized_actions = [];
-    assert.false(
-      abilitiesService.can('addBrokeredCredentialSources target', model),
-    );
+    assert.false(canService.can('addBrokeredCredentialSources target', model));
   });
 
   test('it reflects when a given target may remove credential sources', function (assert) {
     const model = {
       authorized_actions: ['remove-credential-sources'],
     };
-    assert.true(abilitiesService.can('removeCredentialSources target', model));
+    assert.true(canService.can('removeCredentialSources target', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('removeCredentialSources target', model));
+    assert.false(canService.can('removeCredentialSources target', model));
   });
 
   test('it reflects when a given ssh target may add injected application credential sources', function (assert) {
@@ -78,19 +74,16 @@ module('Unit | Abilities | Target', function (hooks) {
     };
 
     assert.true(
-      abilitiesService.can(
-        'addInjectedApplicationCredentialSources target',
-        model,
-      ),
+      canService.can('addInjectedApplicationCredentialSources target', model),
     );
     assert.false(
-      abilitiesService.can(
+      canService.can(
         'addInjectedApplicationCredentialSources target',
         modelWithoutAuthorizedActions,
       ),
     );
     assert.false(
-      abilitiesService.can(
+      canService.can(
         'addInjectedApplicationCredentialSources target',
         modelWithoutSSHType,
       ),

@@ -14,7 +14,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   // =attributes
@@ -32,7 +32,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create scope', scopeModel, {
+      this.can.cannot('create scope', scopeModel, {
         collection: 'storage-buckets',
       })
     ) {

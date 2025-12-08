@@ -34,7 +34,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
 
   // =methods
 
@@ -80,7 +80,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       let users;
       let totalItems = 0;
       let doUsersExist = false;
-      if (this.abilities.can('list model', scope, { collection: 'users' })) {
+      if (this.can.can('list model', scope, { collection: 'users' })) {
         users = await this.store.query('user', {
           scope_id,
           query: { search, filters, sort },

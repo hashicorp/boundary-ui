@@ -11,7 +11,7 @@ module('Unit | Abilities | model', function (hooks) {
 
   test('it reflects when a resource may be navigated to based on list and create actions', function (assert) {
     assert.expect(4);
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_collection_actions: { foobars: [] },
     };

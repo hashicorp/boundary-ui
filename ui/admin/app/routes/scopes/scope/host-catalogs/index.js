@@ -11,7 +11,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
 
   // =attributes
 
@@ -82,9 +82,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       let hostCatalogs;
       let totalItems = 0;
       let doHostCatalogsExist = false;
-      if (
-        this.abilities.can('list model', scope, { collection: 'host-catalogs' })
-      ) {
+      if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
         hostCatalogs = await this.store.query('host-catalog', {
           scope_id,
           query: { search, filters, sort },

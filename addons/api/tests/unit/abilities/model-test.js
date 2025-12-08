@@ -10,7 +10,7 @@ module('Unit | Abilities | Model', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a given model may be read based on authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['read'],
     };
@@ -20,7 +20,7 @@ module('Unit | Abilities | Model', function (hooks) {
   });
 
   test('it reflects when a given model may be updated based on authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['update'],
     };
@@ -30,7 +30,7 @@ module('Unit | Abilities | Model', function (hooks) {
   });
 
   test('it reflects when a given model may be saved based on isNew and authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     let model = {
       isNew: false,
       authorized_actions: ['update'],
@@ -58,7 +58,7 @@ module('Unit | Abilities | Model', function (hooks) {
   });
 
   test('it reflects when a given model may be deleted based on authorized_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['delete'],
     };
@@ -70,7 +70,7 @@ module('Unit | Abilities | Model', function (hooks) {
   // =collections
 
   test('it reflects when a resource may be listed based on authorized_collection_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_collection_actions: {
         foobars: ['list'],
@@ -82,7 +82,7 @@ module('Unit | Abilities | Model', function (hooks) {
   });
 
   test('it reflects when a resource may be created based on authorized_collection_actions', function (assert) {
-    const service = this.owner.lookup('service:abilities');
+    const service = this.owner.lookup('service:can');
     const model = {
       authorized_collection_actions: {
         foobars: ['create'],

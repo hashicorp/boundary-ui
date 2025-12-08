@@ -15,7 +15,7 @@ import { TYPE_CREDENTIAL_STATIC } from 'api/models/host-catalog';
 export default class ScopesScopeHostCatalogsIndexController extends Controller {
   // =services
 
-  @service abilities;
+  @service can;
   @service intl;
   @service router;
 
@@ -42,10 +42,10 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.abilities.can('list model', this.scope, {
+    const canList = this.can.can('list model', this.scope, {
       collection: 'host-catalogs',
     });
-    const canCreate = this.abilities.can('create model', this.scope, {
+    const canCreate = this.can.can('create model', this.scope, {
       collection: 'host-catalogs',
     });
     const resource = this.intl.t('resources.host-catalog.title_plural');
@@ -101,7 +101,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
       hostCatalog.credentialType = TYPE_CREDENTIAL_STATIC;
     }
     await hostCatalog.save();
-    if (this.abilities.can('read host-catalog', hostCatalog)) {
+    if (this.can.can('read host-catalog', hostCatalog)) {
       await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog',
         hostCatalog,

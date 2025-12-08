@@ -12,7 +12,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   @service store;
   @service router;
   @service features;
-  @service abilities;
+  @service can;
 
   // =attributes
 
@@ -30,7 +30,7 @@ export default class ScopesScopeCredentialStoresNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create model', scopeModel, {
+      this.can.cannot('create model', scopeModel, {
         collection: 'credential-stores',
       })
     ) {

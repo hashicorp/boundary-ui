@@ -9,7 +9,7 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | Worker', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
 
   const instances = {
@@ -17,7 +17,7 @@ module('Unit | Abilities | Worker', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
     instances.worker = store.createRecord('worker');
   });
@@ -27,7 +27,7 @@ module('Unit | Abilities | Worker', function (hooks) {
       authorized_collection_actions: { workers: ['create:worker-led'] },
     };
     assert.true(
-      abilitiesService.can('createWorkerLed worker', model, {
+      canService.can('createWorkerLed worker', model, {
         collection: 'workers',
       }),
     );
@@ -38,7 +38,7 @@ module('Unit | Abilities | Worker', function (hooks) {
       authorized_collection_actions: { workers: [] },
     };
     assert.true(
-      abilitiesService.cannot('createWorkerLed worker', model, {
+      canService.cannot('createWorkerLed worker', model, {
         collection: 'workers',
       }),
     );
@@ -46,13 +46,11 @@ module('Unit | Abilities | Worker', function (hooks) {
 
   test('can set worker tags', function (assert) {
     instances.worker.authorized_actions = ['set-worker-tags'];
-    assert.true(abilitiesService.can('setWorkerTags worker', instances.worker));
+    assert.true(canService.can('setWorkerTags worker', instances.worker));
   });
 
   test('cannot set worker tags', function (assert) {
     instances.worker.authorized_actions = [];
-    assert.true(
-      abilitiesService.cannot('setWorkerTags worker', instances.worker),
-    );
+    assert.true(canService.cannot('setWorkerTags worker', instances.worker));
   });
 });

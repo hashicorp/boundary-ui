@@ -11,7 +11,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
 
   @service store;
   @service router;
-  @service abilities;
+  @service can;
 
   // =attributes
 
@@ -29,7 +29,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create model', scopeModel, {
+      this.can.cannot('create model', scopeModel, {
         collection: 'host-catalogs',
       })
     ) {

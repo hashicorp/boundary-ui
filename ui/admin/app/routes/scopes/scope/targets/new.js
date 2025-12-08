@@ -13,7 +13,7 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   @service store;
   @service router;
   @service features;
-  @service abilities;
+  @service can;
 
   // =attributes
   queryParams = {
@@ -30,9 +30,7 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create model', scopeModel, {
-        collection: 'targets',
-      })
+      this.can.cannot('create model', scopeModel, { collection: 'targets' })
     ) {
       this.router.replaceWith('scopes.scope.targets');
     }

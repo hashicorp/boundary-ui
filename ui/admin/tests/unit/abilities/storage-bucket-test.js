@@ -14,12 +14,12 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
   setupTest(hooks);
 
   let features;
-  let abilitiesService;
+  let canService;
   let store;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     features = this.owner.lookup('service:features');
   });
 
@@ -32,7 +32,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
     });
 
-    assert.true(abilitiesService.can('read storage-bucket', storageBucket));
+    assert.true(canService.can('read storage-bucket', storageBucket));
   });
 
   test('cannot read storage bucket when unauthorized and feature is enabled', function (assert) {
@@ -44,7 +44,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
     });
 
-    assert.false(abilitiesService.can('read storage-bucket', storageBucket));
+    assert.false(canService.can('read storage-bucket', storageBucket));
   });
 
   test('cannot read storage bucket when authorized and feature is disabled', function (assert) {
@@ -54,7 +54,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
     });
 
-    assert.false(abilitiesService.can('read storage-bucket', storageBucket));
+    assert.false(canService.can('read storage-bucket', storageBucket));
   });
 
   test('cannot read storage bucket when unauthorized and feature is disabled', function (assert) {
@@ -64,7 +64,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
     });
 
-    assert.false(abilitiesService.can('read storage-bucket', storageBucket));
+    assert.false(canService.can('read storage-bucket', storageBucket));
   });
 
   test('can list storage bucket when authorized and in global scope', function (assert) {
@@ -77,7 +77,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('list scope', scopeModel, {
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -93,7 +93,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.false(
-      abilitiesService.can('list scope', scopeModel, {
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -109,7 +109,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('list scope', scopeModel, {
+      canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -125,7 +125,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('create scope', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -141,7 +141,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('create scope', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -157,7 +157,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('create scope', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -173,7 +173,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.false(
-      abilitiesService.can('create scope', scopeModel, {
+      canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -189,7 +189,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.true(
-      abilitiesService.can('navigate scope', scopeModel, {
+      canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
@@ -203,7 +203,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     });
 
     assert.false(
-      abilitiesService.can('navigate scope', scopeModel, {
+      canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
       }),
     );
