@@ -13,7 +13,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
 
   // =services
 
-  @service abilities;
+  @service can;
   @service router;
 
   // =attributes

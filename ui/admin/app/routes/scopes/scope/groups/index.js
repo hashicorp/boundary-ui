@@ -11,7 +11,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
 
   // =attributes
 
@@ -77,7 +77,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
       let groups = [];
       let totalItems = 0;
       let doGroupsExist = false;
-      if (this.abilities.can('list model', scope, { collection: 'groups' })) {
+      if (this.can.can('list model', scope, { collection: 'groups' })) {
         groups = await this.store.query('group', {
           scope_id,
           query: { filters, search, sort },

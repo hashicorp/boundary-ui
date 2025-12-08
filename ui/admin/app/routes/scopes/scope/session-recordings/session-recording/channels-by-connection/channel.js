@@ -9,7 +9,7 @@ import { service } from '@ember/service';
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelRoute extends Route {
   // =services
   @service store;
-  @service abilities;
+  @service can;
   @service router;
   @service flashMessages;
   @service intl;

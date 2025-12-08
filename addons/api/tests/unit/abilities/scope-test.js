@@ -9,10 +9,10 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | Scope', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
   });
   test('it exists', function (assert) {
     const ability = this.owner.lookup('ability:scope');
@@ -23,9 +23,9 @@ module('Unit | Abilities | Scope', function (hooks) {
     const model = {
       authorized_actions: ['attach-storage-policy'],
     };
-    assert.true(abilitiesService.can('attachStoragePolicy scope', model));
+    assert.true(canService.can('attachStoragePolicy scope', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('attachStoragePolicy scope', model));
+    assert.false(canService.can('attachStoragePolicy scope', model));
   });
 
   test('it reflects when a given scope may remove a policy in org scope', function (assert) {
@@ -33,8 +33,8 @@ module('Unit | Abilities | Scope', function (hooks) {
       authorized_actions: ['detach-storage-policy'],
     };
 
-    assert.true(abilitiesService.can('detachStoragePolicy scope', model));
+    assert.true(canService.can('detachStoragePolicy scope', model));
     model.authorized_actions = [];
-    assert.false(abilitiesService.can('detachStoragePolicy scope', model));
+    assert.false(canService.can('detachStoragePolicy scope', model));
   });
 });

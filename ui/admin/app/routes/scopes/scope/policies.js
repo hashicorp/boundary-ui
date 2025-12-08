@@ -11,7 +11,7 @@ export default class ScopesScopePoliciesRoute extends Route {
 
   @service store;
   @service session;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods
@@ -32,7 +32,7 @@ export default class ScopesScopePoliciesRoute extends Route {
     const { id: scope_id } = scope;
 
     if (
-      this.abilities.can('list model', scope, {
+      this.can.can('list model', scope, {
         collection: 'policies',
       })
     ) {

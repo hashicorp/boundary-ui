@@ -24,7 +24,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service router;
   @service session;
   @service store;
-  @service abilities;
+  @service can;
   @service intl;
   @service rdp;
 
@@ -296,7 +296,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   async cancelSession(session) {
     let updatedSession = session;
     // fetch session from API to verify we have most up to date record
-    if (this.abilities.can('read session', session)) {
+    if (this.can.can('read session', session)) {
       updatedSession = await this.store.findRecord('session', session.id, {
         reload: true,
       });

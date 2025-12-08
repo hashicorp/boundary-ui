@@ -14,11 +14,11 @@ import {
 module('Unit | Abilities | Account', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
   });
 
@@ -26,9 +26,9 @@ module('Unit | Abilities | Account', function (hooks) {
     const account = store.createRecord('auth-method', {
       authorized_actions: ['set-password'],
     });
-    assert.true(abilitiesService.can('setPassword account', account));
+    assert.true(canService.can('setPassword account', account));
     account.authorized_actions = [];
-    assert.false(abilitiesService.can('setPassword account', account));
+    assert.false(canService.can('setPassword account', account));
   });
 
   test('can read known account types when authorized', function (assert) {
@@ -36,13 +36,13 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('read account', account));
+    assert.true(canService.can('read account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('read account', account));
+    assert.true(canService.can('read account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('read account', account));
+    assert.true(canService.can('read account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('read account', account));
+    assert.false(canService.can('read account', account));
   });
 
   test('cannot read accounts when unauthorized', function (assert) {
@@ -50,13 +50,13 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.false(abilitiesService.can('read account', account));
+    assert.false(canService.can('read account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.false(abilitiesService.can('read account', account));
+    assert.false(canService.can('read account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.false(abilitiesService.can('read account', account));
+    assert.false(canService.can('read account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('read account', account));
+    assert.false(canService.can('read account', account));
   });
 
   test('can delete known account types when authorized', function (assert) {
@@ -64,13 +64,13 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('delete account', account));
+    assert.false(canService.can('delete account', account));
   });
 
   test('cannot delete accounts when unauthorized', function (assert) {
@@ -78,13 +78,13 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('delete account', account));
+    assert.true(canService.can('delete account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('delete account', account));
+    assert.false(canService.can('delete account', account));
   });
 
   test('can update known account types when authorized', function (assert) {
@@ -92,13 +92,13 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: ['update'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('update account', account));
+    assert.true(canService.can('update account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('update account', account));
+    assert.true(canService.can('update account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('update account', account));
+    assert.true(canService.can('update account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('update account', account));
+    assert.false(canService.can('update account', account));
   });
 
   test('cannot update accounts when unauthorized', function (assert) {
@@ -106,12 +106,12 @@ module('Unit | Abilities | Account', function (hooks) {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.false(abilitiesService.can('update account', account));
+    assert.false(canService.can('update account', account));
     account.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.false(abilitiesService.can('update account', account));
+    assert.false(canService.can('update account', account));
     account.type = TYPE_AUTH_METHOD_LDAP;
-    assert.false(abilitiesService.can('update account', account));
+    assert.false(canService.can('update account', account));
     account.type = 'no-such-type';
-    assert.false(abilitiesService.can('update account', account));
+    assert.false(canService.can('update account', account));
   });
 });

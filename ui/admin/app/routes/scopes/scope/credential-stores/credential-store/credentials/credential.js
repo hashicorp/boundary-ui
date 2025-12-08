@@ -10,7 +10,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods

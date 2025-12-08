@@ -11,7 +11,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   /**

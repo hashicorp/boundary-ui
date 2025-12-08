@@ -13,7 +13,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopePoliciesIndexController extends Controller {
   // =services
 
-  @service abilities;
+  @service can;
   @service intl;
   @service router;
 
@@ -26,10 +26,10 @@ export default class ScopesScopePoliciesIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.abilities.can('list model', this.scope, {
+    const canList = this.can.can('list model', this.scope, {
       collection: 'policies',
     });
-    const canCreate = this.abilities.can('create model', this.scope, {
+    const canCreate = this.can.can('create model', this.scope, {
       collection: 'policies',
     });
     const resource = this.intl.t('resources.policy.title_plural');
@@ -67,7 +67,7 @@ export default class ScopesScopePoliciesIndexController extends Controller {
   @notifySuccess('notifications.save-success')
   async save(policy) {
     await policy.save();
-    if (this.abilities.can('read model', policy)) {
+    if (this.can.can('read model', policy)) {
       await this.router.transitionTo('scopes.scope.policies.policy', policy);
     } else {
       await this.router.transitionTo('scopes.scope.policies');

@@ -11,7 +11,7 @@ export default class ScopesScopeAliasesNewRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods
@@ -22,9 +22,7 @@ export default class ScopesScopeAliasesNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.abilities.cannot('create model', scopeModel, {
-        collection: 'aliases',
-      })
+      this.can.cannot('create model', scopeModel, { collection: 'aliases' })
     ) {
       this.router.replaceWith('scopes.scope.aliases');
     }
