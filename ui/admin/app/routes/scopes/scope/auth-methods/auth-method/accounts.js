@@ -10,7 +10,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
 
   // =methods
 
@@ -24,7 +24,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
     let accounts;
 
     if (
-      this.can.can('list model', authMethod, {
+      this.abilities.can('list model', authMethod, {
         collection: 'accounts',
       })
     ) {

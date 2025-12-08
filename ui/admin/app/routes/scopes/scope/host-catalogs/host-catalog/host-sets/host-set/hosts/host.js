@@ -10,7 +10,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsHostR
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods

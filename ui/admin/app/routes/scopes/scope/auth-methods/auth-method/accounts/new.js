@@ -10,7 +10,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods
@@ -21,7 +21,9 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
   beforeModel() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     if (
-      this.can.cannot('create model', authMethod, { collection: 'accounts' })
+      this.abilities.cannot('create model', authMethod, {
+        collection: 'accounts',
+      })
     ) {
       this.router.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
     }
