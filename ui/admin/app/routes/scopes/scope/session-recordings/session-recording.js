@@ -12,7 +12,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
   @service store;
   @service session;
   @service router;
-  @service can;
+  @service abilities;
 
   // =methods
 
