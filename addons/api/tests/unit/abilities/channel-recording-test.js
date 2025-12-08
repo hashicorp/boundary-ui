@@ -11,11 +11,11 @@ import { TYPE_SESSION_RECORDING_SSH } from 'api/models/session-recording';
 module('Unit | Ability | channel-recording', function (hooks) {
   setupTest(hooks);
 
-  let canService;
+  let abilitiesService;
   let store;
 
   hooks.beforeEach(function () {
-    canService = this.owner.lookup('service:can');
+    abilitiesService = this.owner.lookup('service:abilities');
     store = this.owner.lookup('service:store');
   });
 
@@ -41,7 +41,10 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('getAsciicast channel-recording', channelRecordingModel),
+      abilitiesService.can(
+        'getAsciicast channel-recording',
+        channelRecordingModel,
+      ),
     );
   });
 
@@ -62,7 +65,10 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.false(
-      canService.can('getAsciicast channel-recording', channelRecordingModel),
+      abilitiesService.can(
+        'getAsciicast channel-recording',
+        channelRecordingModel,
+      ),
     );
   });
 });
