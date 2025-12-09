@@ -46,7 +46,6 @@
     "overrides": {
       "nomnom>underscore": "^1.12.1",
       "@hashicorp/design-system-components>ember-stargate": "^0.6.0",
-      "@hashicorp/ember-asciinema-player>asciinema-player": "3.4.0",
       "micromatch": "^4.0.8",
       "css-select>nth-check": "^2.0.1",
       "node-gyp": "^10.0.0",

@@ -9,7 +9,7 @@
 
 @use 'rose';
 @use 'notify';
-@use '@hashicorp/ember-asciinema-player';
+@use 'asciinema-player/dist/bundle/asciinema-player.css';
 
 @use 'ember-basic-dropdown';
 @use 'ember-power-select';
