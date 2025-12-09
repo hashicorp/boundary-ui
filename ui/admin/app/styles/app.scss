@@ -1071,3 +1071,10 @@
 .grant-scope-selection-alert-list {
   list-style: disc;
 }
+
+.app-token-form {
+  .permissions-label,
+  .permissions-help-text {
+    margin-bottom: 0.25rem;
+  }
+}

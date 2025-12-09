@@ -1240,7 +1240,7 @@ app-token:
     new: New App Token
     grants: Grants
     active-scopes: Active scopes
-  actions:
+    edit-permission: Edit permission
     add-permission: Add permission
   form:
     approximate_last_access_time:

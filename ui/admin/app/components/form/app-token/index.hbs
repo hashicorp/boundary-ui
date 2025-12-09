@@ -2,6 +2,7 @@
   @onSubmit={{this.createAppToken}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
+  class='app-token-form'
   as |form|
 >
   <Hds::Form::TextInput::Field
@@ -88,22 +89,31 @@
     <Hds::Separator />
 
     <Hds::Form::Field @isRequired={{true}} as |F|>
-      <F.Label>{{t 'resources.app-token.form.permissions.label'}}</F.Label>
+      <F.Label class='permissions-label'>{{t
+          'resources.app-token.form.permissions.label'
+        }}</F.Label>
       {{#unless @model.permissions.addedPermissions.length}}
-        <F.HelperText>{{t
+        <F.HelperText class='permissions-help-text'>{{t
             'resources.app-token.form.permissions.help'
           }}</F.HelperText>
       {{/unless}}
-
       <F.Control>
         <Hds::Button
           id={{F.id}}
-          @text={{t 'resources.app-token.actions.add-permission'}}
+          @text={{t 'resources.app-token.titles.add-permission'}}
           @icon='plus'
           @color='secondary'
+          class='margin-top-s margin-bottom-l'
           {{on 'click' this.openPermissionFlyout}}
         />
       </F.Control>
+      {{#if @model.errors.permissions}}
+        <F.Error as |E|>
+          {{#each @model.errors.permissions as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
     </Hds::Form::Field>
 
     {{#if @model.permissions.addedPermissions.length}}
@@ -144,12 +154,14 @@
                   @icon='edit'
                   @color='secondary'
                   @isIconOnly={{true}}
+                  {{on 'click' (fn this.editPermission B.rowIndex)}}
                 />
                 <Hds::Button
                   @text={{t 'actions.delete'}}
                   @icon='trash'
                   @color='critical'
                   @isIconOnly={{true}}
+                  {{on 'click' (fn this.deletePermission B.rowIndex)}}
                 />
               </Hds::ButtonSet>
             </B.Td>
@@ -161,13 +173,24 @@
     {{#if this.showPermissionFlyout}}
       {{! TODO: Populate flyout with scope options.}}
       <Hds::Flyout @onClose={{this.closePermissionFlyout}} as |M|>
-        <M.Header>{{t 'resources.app-token.actions.add-permission'}}</M.Header>
+        <M.Header>{{if
+            this.editPermission
+            (t 'resources.app-token.titles.add-permission')
+            (t 'resources.app-token.titles.edit-permission')
+          }}</M.Header>
         <M.Footer>
           <Hds::ButtonSet>
-            <Hds::Button
-              @text={{t 'actions.add'}}
-              {{on 'click' this.addPermission}}
-            />
+            {{#if this.editingPermission}}
+              <Hds::Button
+                @text={{t 'actions.save'}}
+                {{on 'click' this.savePermission}}
+              />
+            {{else}}
+              <Hds::Button
+                @text={{t 'actions.add'}}
+                {{on 'click' this.addPermission}}
+              />
+            {{/if}}
             <Hds::Button
               @text={{t 'actions.cancel'}}
               @color='secondary'
