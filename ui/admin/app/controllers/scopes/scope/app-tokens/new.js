@@ -93,11 +93,11 @@ export default class ScopesScopeAppTokensNewController extends Controller {
   async retrieveScopeFilterOptions(search) {
     const config = this.filterConfig;
     const query = { search: { text: search, fields: config.searchFields } };
+    const selectedPermission =
+      this.model.appToken.permissions?.selectedPermission;
     if (
       this.model.appToken.scope.isGlobal &&
-      this.model.appToken.permissions?.newPermission?.grant_scope_id?.includes(
-        GRANT_SCOPE_CHILDREN,
-      )
+      selectedPermission?.grant_scope_id?.includes(GRANT_SCOPE_CHILDREN)
     ) {
       query.filters = { type: [{ equals: TYPE_SCOPE_PROJECT }] };
     }
