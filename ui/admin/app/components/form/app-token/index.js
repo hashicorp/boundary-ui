@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedObject } from 'tracked-built-ins';
 
-const MAX_TTL_SECONDS = 94670856;
+const MAX_TTL_SECONDS = 94608000;
 
 export default class FormAppTokenComponent extends Component {
   // =attributes
