@@ -177,56 +177,6 @@
           (t 'resources.app-token.titles.add-permission')
           (t 'resources.app-token.titles.edit-permission')
         }}</M.Header>
-      <M.Body>
-        <ScopeOptions
-          @name='grant_scope_id'
-          @model={{@model}}
-          @scopes={{@scopes}}
-          @field={{@model.permissions.selectedPermission}}
-          @totalItems={{@totalItems}}
-          @search={{@search}}
-          @filters={{@filters}}
-          @page={{@page}}
-          @pageSize={{@pageSize}}
-          @handleSearchInput={{@handleSearchInput}}
-          @showSelectedOnly={{@showSelectedOnly}}
-          @toggleShowSelectedOnly={{@toggleShowSelectedOnly}}
-        >
-          <:filter>
-            {{!-- {{#if @model.appToken.scope.isGlobal}}
-                <Dropdown
-                  name='parent-scopes'
-                  @toggleText={{t 'form.parent-scope.label'}}
-                  @itemOptions={{this.parentScopeFilters.options}}
-                  @checkedItems={{this.parentScopes}}
-                  @applyFilter={{fn this.applyFilter 'parentScopes'}}
-                  @isSearchable={{true}}
-                  @searchTerm={{this.parentScopeFilters.search}}
-                  @updateSearchTerm={{fn
-                    this.onFilterSearch.perform
-                    'parentScopeFilters'
-                  }}
-                  @isLoading={{or
-                    this.onFilterSearch.isRunning
-                    this.loadItems.isRunning
-                  }}
-                  as |FD selectItem itemOptions|
-                >
-                  {{#each itemOptions as |itemOption|}}
-                    <FD.Checkbox
-                      @value={{itemOption.id}}
-                      checked={{includes itemOption.id @parentScopes}}
-                      {{on 'change' selectItem}}
-                    >
-                      {{~or itemOption.name itemOption.id}}
-                    </FD.Checkbox>
-                  {{/each}}
-                </Dropdown>
-              {{/if}} --}}
-          </:filter>
-        </ScopeOptions>
-      </M.Body>
-
       <M.Footer>
         <Hds::ButtonSet>
           {{#if this.editingPermission}}
