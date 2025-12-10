@@ -6,13 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Controller | scopes/scope/app-tokens/new', function (hooks) {
+module('Unit | Route | scopes/scope/app-tokens/new/index', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    let controller = this.owner.lookup(
-      'controller:scopes/scope/app-tokens/new',
-    );
-    assert.ok(controller);
+    let route = this.owner.lookup('route:scopes/scope/app-tokens/new/index');
+    assert.ok(route);
   });
 });

@@ -3,19 +3,22 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
 import { GRANT_SCOPE_CHILDREN } from 'api/models/role';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
+
 class FilterOptions {
   @tracked search;
   @tracked options = [];
 }
 
-export default class ScopesScopeAppTokensNewController extends Controller {
+export default class ScopesScopeAppTokensNewIndexController extends Controller {
+  @controller('scopes/scope/app-tokens/index') appTokens;
+
   // =services
 
   @service db;
