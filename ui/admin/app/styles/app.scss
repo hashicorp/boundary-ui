@@ -1073,8 +1073,11 @@
 }
 
 .app-token-form {
-  .permissions-label,
-  .permissions-help-text {
-    margin-bottom: 0.25rem;
+  .permissions-label {
+    margin-bottom: sizing.rems(xxs);
+  }
+
+  .ttl-field {
+    margin-bottom: sizing.rems(l);
   }
 }

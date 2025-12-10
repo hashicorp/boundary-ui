@@ -18,4 +18,20 @@
       </PH.Description>
     </Hds::PageHeader>
   </page.header>
+
+  <page.body>
+    <Form::AppToken::New
+      @model={{@model.appToken}}
+      @scopes={{@model.scopes}}
+      @totalItems={{@model.totalItems}}
+      @filters={{this.filters}}
+      @page={{this.page}}
+      @pageSize={{this.pageSize}}
+      @handleSearchInput={{this.handleSearchInput}}
+      @showSelectedOnly={{this.showSelectedOnly}}
+      @toggleShowSelectedOnly={{this.toggleShowSelectedOnly}}
+      @submit={{fn this.appTokens.create @model.appToken}}
+      @cancel={{fn this.appTokens.cancel @model.appToken}}
+    />
+  </page.body>
 </Rose::Layout::Page>

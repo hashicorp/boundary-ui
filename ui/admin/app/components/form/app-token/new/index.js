@@ -5,7 +5,7 @@ import { TrackedObject } from 'tracked-built-ins';
 
 const MAX_TTL_SECONDS = 94608000;
 
-export default class FormAppTokenComponent extends Component {
+export default class FormAppTokenNewComponent extends Component {
   // =attributes
 
   @tracked showPermissionFlyout = false;
