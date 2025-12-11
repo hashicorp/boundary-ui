@@ -16,6 +16,7 @@ import {
 export default class ScopeOptionsIndexComponent extends Component {
   // =services
 
+  @service intl;
   @service router;
 
   // =attributes
@@ -32,9 +33,9 @@ export default class ScopeOptionsIndexComponent extends Component {
    */
   get scopeDisplayName() {
     if (this.args.model.scope.isGlobal) {
-      return 'Global';
+      return this.intl.t('titles.global');
     }
-    return this.args.model.scope.displayName;
+    return this.args.model.scopeModel.displayName;
   }
 
   /**

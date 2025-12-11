@@ -1238,6 +1238,10 @@ app-token:
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
     new: New App Token
+    grants: Grants
+    active-scopes: Active scopes
+    edit-permission: Edit permission
+    add-permission: Add permission
   form:
     approximate_last_access_time:
       label: Last used at
@@ -1245,6 +1249,18 @@ app-token:
       label: Expires in
     status:
       label: Status
+    root-scope:
+      label: Root Scope
+      help: The scope that the app token resides in and where permissions start. You can't change this.
+    ttl:
+      label: Time to live (TTL)
+      help: The time to live (TTL) of this app token. TTL auto defaults to 60 days. TTL cannot exceed 3 years.
+    tts:
+      label: Time to stale (TTS)
+      help: The app token must be used within this duration of time. Once the app token is used, the duration will be reset.
+    permissions:
+      label: Permissions
+      help: You haven't added in any permissions yet. You'll be sent to another page to add each permission.
   status:
     unknown: Unknown
     active: Active
@@ -1257,3 +1273,7 @@ app-token:
       global-scope: No app tokens have been created at the global scope level.
       org-scope: No app tokens have been created for {scopeName}.
       project-scope: No app tokens have been created for {scopeName}.
+    create:
+      description: App tokens are immutable after creation. Make sure all of this token's details are correct before finishing creation.
+    tooltips:
+      active-scopes: Active scopes are scopes that exist within Boundary.

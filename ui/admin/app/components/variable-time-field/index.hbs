@@ -2,9 +2,14 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-<Hds::Form::KeyValueInputs @isRequired={{@isRequired}} @data={{this.data}}>
+<Hds::Form::KeyValueInputs
+  @isRequired={{@isRequired}}
+  @data={{this.data}}
+  ...attributes
+>
   <:header as |H|>
     <H.Legend>{{@legend}}</H.Legend>
+    <H.HelperText>{{@helperText}}</H.HelperText>
   </:header>
   <:row as |R|>
     <R.Field as |F|>
