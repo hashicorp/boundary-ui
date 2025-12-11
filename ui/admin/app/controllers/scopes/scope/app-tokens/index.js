@@ -152,7 +152,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(() => 'notifications.create-success')
   async create(appToken) {
     await appToken.save();

@@ -852,7 +852,7 @@ function routes() {
         ? new Date(Date.now() + attrs.time_to_live_seconds * 1000).toISOString()
         : faker.date.future().toISOString(),
       created_by_user_id: userId,
-      // scope,
+      scope,
       permissions: (attrs.permissions || []).map((permission) => ({
         ...permission,
         deleted_scopes: permission.deleted_scopes || [],

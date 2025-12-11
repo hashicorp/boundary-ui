@@ -173,9 +173,9 @@
     {{! TODO: Populate flyout with scope options.}}
     <Hds::Flyout @onClose={{this.closePermissionFlyout}} as |M|>
       <M.Header>{{if
-          this.editPermission
-          (t 'resources.app-token.titles.add-permission')
+          this.editingPermission
           (t 'resources.app-token.titles.edit-permission')
+          (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
       <M.Footer>
         <Hds::ButtonSet>
