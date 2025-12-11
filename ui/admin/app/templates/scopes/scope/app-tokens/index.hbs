@@ -17,6 +17,14 @@
       <PH.Description>
         {{t 'resources.app-token.description'}}
       </PH.Description>
+      {{#if (can 'create model' @model.scope collection='app-tokens')}}
+        <PH.Actions>
+          <Hds::Button
+            @route='scopes.scope.app-tokens.new'
+            @text={{t 'resources.app-token.titles.new'}}
+          />
+        </PH.Actions>
+      {{/if}}
     </Hds::PageHeader>
   </page.header>
 

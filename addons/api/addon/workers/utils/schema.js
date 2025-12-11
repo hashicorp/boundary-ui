@@ -235,6 +235,7 @@ CREATE TABLE IF NOT EXISTS scope (
     name TEXT,
     description TEXT,
     scope_id TEXT NOT NULL,
+    scope_name TEXT,
     created_time TEXT NOT NULL,
     data TEXT NOT NULL
 );
@@ -246,21 +247,22 @@ CREATE VIRTUAL TABLE IF NOT EXISTS scope_fts USING fts5(
     name,
     description,
     scope_id,
+    scope_name,
     created_time,
     content='scope',
 );
 
 CREATE TRIGGER IF NOT EXISTS scope_ai AFTER INSERT ON scope BEGIN
     INSERT INTO scope_fts(
-        rowid, id, type, name, description, scope_id, created_time
+        rowid, id, type, name, description, scope_id, scope_name, created_time
     ) VALUES (
-        new.rowid, new.id, new.type, new.name, new.description, new.scope_id, new.created_time
+        new.rowid, new.id, new.type, new.name, new.description, new.scope_id, new.scope_name, new.created_time
     );
 END;
 
 CREATE TRIGGER IF NOT EXISTS scope_ad AFTER DELETE ON scope BEGIN
-    INSERT INTO scope_fts(scope_fts, rowid, id, type, name, description, scope_id, created_time)
-    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.created_time);
+    INSERT INTO scope_fts(scope_fts, rowid, id, type, name, description, scope_id, scope_name, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.scope_name, old.created_time);
 END;`;
 
 const createAuthMethodTables = `
