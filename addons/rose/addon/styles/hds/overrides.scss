@@ -45,13 +45,13 @@ form {
   .hds-table__th-sort button {
     color: var(--token-color-foreground-strong);
   }
+}
 
-  // TODO: This is a temporary hack to fix an issue causing weird whitespace
-  //   and scrollbars from an accessible class in HDS. We have to use !important
-  //   as they already forced it with !important and we can't override it otherwise
-  .sr-only {
-    position: unset !important;
-  }
+// TODO: This is a temporary hack to fix an issue causing weird whitespace
+//   and scrollbars from an accessible class in HDS. We have to use !important
+//   as they already forced it with !important and we can't override it otherwise
+.sr-only {
+  position: unset !important;
 }
 
 .hds-dropdown {
