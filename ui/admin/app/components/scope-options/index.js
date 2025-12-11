@@ -26,14 +26,6 @@ export default class ScopeOptionsIndexComponent extends Component {
     keyDescendants: GRANT_SCOPE_DESCENDANTS,
   };
 
-  constructor() {
-    super(...arguments);
-    const field = this.args.field || this.args.model;
-    if (!field[this.args.name]) {
-      field[this.args.name] = [];
-    }
-  }
-
   /**
    * Returns root scope displayName.
    * @type {string}
