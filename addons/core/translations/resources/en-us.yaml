@@ -1242,10 +1242,6 @@ app-token:
     permissions: Permissions
   about:
     title: About this token
-  ttl:
-    title: Time to live (TTL)
-  tts:
-    title: Time to stale (TTS)
   form:
     name:
       help: Name to identify this app token
@@ -1262,16 +1258,22 @@ app-token:
     scope:
       label: Scope
     ttl:
-      label: TTL
+      label:
+        0: Time to live (TTL)
+        1: TTL
     expiration_date:
       label: Expiration date
     created_time:
       label: Created at
     tts:
-      label: TTS
+      label:
+        0: Time to stale (TTS)
+        1: TTS
     last_used:
       label: Last used
       tooltip: This value is an approximate value, not an exact value.
+    permissions:
+      label: Permissions
   status:
     unknown: Unknown
     active: Active

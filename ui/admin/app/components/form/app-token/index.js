@@ -9,6 +9,14 @@ import { service } from '@ember/service';
 export default class FormAppTokenComponent extends Component {
   @service intl;
 
+  statusConfig = {
+    active: { color: 'success' },
+    expired: { color: 'critical' },
+    revoked: { color: 'critical' },
+    stale: { color: 'critical' },
+    unknown: { color: 'neutral' },
+  };
+
   /**
    * Returns status badge configuration for app tokens
    * @returns {object}
@@ -17,15 +25,7 @@ export default class FormAppTokenComponent extends Component {
     const status = this.args.model?.status;
     if (!status) return { text: '', color: 'neutral' };
 
-    const statusConfig = {
-      active: { color: 'success' },
-      expired: { color: 'critical' },
-      revoked: { color: 'critical' },
-      stale: { color: 'critical' },
-      unknown: { color: 'neutral' },
-    };
-
-    const config = statusConfig[status] || { color: 'neutral' };
+    const config = this.statusConfig[status] || { color: 'neutral' };
     return {
       text: this.intl.t(`resources.app-token.status.${status}`),
       color: config.color,
@@ -33,18 +33,16 @@ export default class FormAppTokenComponent extends Component {
   }
 
   /**
-   * Returns scope information (icon, text, route) based on scope type
+   * Returns scope information (icon, text) based on scope type
    * @returns {object}
    */
   get scopeInfo() {
-    const scope = this.args.model?.scope;
-    if (!scope) return { icon: 'globe', text: '', route: '#' };
+    const scope = this.args.model.scope;
 
     if (scope.isGlobal) {
       return {
         icon: 'globe',
         text: this.intl.t('resources.scope.types.global'),
-        route: '#', // TODO: Add proper route
       };
     }
 
@@ -52,14 +50,12 @@ export default class FormAppTokenComponent extends Component {
       return {
         icon: 'org',
         text: this.intl.t('resources.scope.types.org'),
-        route: '#', // TODO: Add proper route
       };
     }
 
     return {
       icon: 'grid',
       text: this.intl.t('resources.scope.types.project'),
-      route: '#', // TODO: Add proper route
     };
   }
 
