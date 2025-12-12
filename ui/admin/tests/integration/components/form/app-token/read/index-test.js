@@ -9,7 +9,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
-module('Integration | Component | form/app-token', function (hooks) {
+module('Integration | Component | form/app-token/read', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -33,7 +33,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it renders all form fields', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // HDS Form components render readonly inputs for accessibility
     assert.dom('input[readonly]').exists('Should have readonly text input');
@@ -45,7 +45,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it shows readonly fields correctly', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // HDS readonly fields - check for both input and textarea
     assert.dom('input[readonly]').exists('Should have readonly input');
@@ -53,7 +53,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it displays all DescriptionList sections', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // About section
     assert
@@ -81,7 +81,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge returns correct color and text for active status', async function (assert) {
     this.model.status = 'active';
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('.hds-badge').containsText('Active');
     assert.dom('.hds-badge--color-success').exists();
@@ -89,7 +89,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge returns correct color and text for expired status', async function (assert) {
     this.model.status = 'expired';
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('.hds-badge').containsText('Expired');
     assert.dom('.hds-badge--color-critical').exists();
@@ -97,7 +97,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge returns correct color and text for revoked status', async function (assert) {
     this.model.status = 'revoked';
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('.hds-badge').containsText('Revoked');
     assert.dom('.hds-badge--color-critical').exists();
@@ -105,7 +105,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge returns correct color and text for stale status', async function (assert) {
     this.model.status = 'stale';
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('.hds-badge').containsText('Stale');
     assert.dom('.hds-badge--color-critical').exists();
@@ -113,7 +113,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge returns correct color and text for unknown status', async function (assert) {
     this.model.status = 'unknown';
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('.hds-badge').containsText('Unknown');
     assert.dom('.hds-badge--color-neutral').exists();
@@ -121,7 +121,7 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('statusBadge handles null status', async function (assert) {
     this.model.status = null;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // Should render but with neutral color
     assert.dom('.hds-badge').exists();
@@ -129,14 +129,14 @@ module('Integration | Component | form/app-token', function (hooks) {
 
   test('scopeInfo returns correct icon and text for global scope', async function (assert) {
     this.model.scope.isGlobal = true;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('[data-test-icon="globe"]').exists();
   });
 
   test('scopeInfo returns correct icon and text for org scope', async function (assert) {
     this.model.scope.isOrg = true;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('[data-test-icon="org"]').exists();
   });
@@ -144,7 +144,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   test('scopeInfo returns correct icon and text for project scope', async function (assert) {
     this.model.scope.isGlobal = false;
     this.model.scope.isOrg = false;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('[data-test-icon="grid"]').exists();
   });
@@ -152,7 +152,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   test('ttlFormatted converts milliseconds to days correctly', async function (assert) {
     // 1 day = 86400000 milliseconds
     this.model.TTL = 86400000;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // The format-day-year helper should display "1 day"
     const text = this.element.textContent;
@@ -163,7 +163,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   test('ttsFormatted converts milliseconds to days correctly', async function (assert) {
     // 2 days = 172800000 milliseconds
     this.model.TTS = 172800000;
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // The format-day-year helper should display "2 days"
     const text = this.element.textContent;
@@ -172,7 +172,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it displays expiration date', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     const text = this.element.textContent;
     const hasExpiration = text.includes('Dec') && text.includes('2025');
@@ -180,7 +180,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it displays created time', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     const text = this.element.textContent;
     const hasCreatedTime = text.includes('Dec') && text.includes('2025');
@@ -188,7 +188,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it displays last used time', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // Should have tooltip icon for the label
     assert.dom('[data-test-icon="info"]').exists();
@@ -198,7 +198,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it renders created by user with link', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     assert.dom('[data-test-icon="user"]').exists();
     assert.dom('.hds-link-inline').exists();
@@ -206,7 +206,7 @@ module('Integration | Component | form/app-token', function (hooks) {
   });
 
   test('it renders scope with link and icon', async function (assert) {
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // Should have scope icon (grid for project)
     assert.dom('[data-test-icon="grid"]').exists();
@@ -220,7 +220,7 @@ module('Integration | Component | form/app-token', function (hooks) {
       scope: {},
     };
 
-    await render(hbs`<Form::AppToken @model={{this.model}} />`);
+    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
     // Check that the form renders without crashing
     assert.dom('.rose-form').exists();
