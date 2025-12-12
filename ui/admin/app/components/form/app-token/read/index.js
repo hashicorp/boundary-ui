@@ -6,7 +6,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 
-export default class FormAppTokenComponent extends Component {
+export default class FormAppTokenReadComponent extends Component {
   @service intl;
 
   statusConfig = {
