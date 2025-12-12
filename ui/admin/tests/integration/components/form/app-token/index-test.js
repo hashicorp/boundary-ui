@@ -35,21 +35,21 @@ module('Integration | Component | form/app-token', function (hooks) {
   test('it renders all form fields', async function (assert) {
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    // HDS Form components render disabled inputs - textarea might be disabled differently
-    assert.dom('input[disabled]').exists('Should have disabled text input');
-    assert.dom('textarea[disabled]').exists('Should have disabled textarea');
+    // HDS Form components render readonly inputs for accessibility
+    assert.dom('input[readonly]').exists('Should have readonly text input');
+    assert.dom('textarea[readonly]').exists('Should have readonly textarea');
 
     // Check for form field labels
     assert.dom('.rose-form').containsText('Name');
     assert.dom('.rose-form').containsText('Description');
   });
 
-  test('it shows disabled fields correctly', async function (assert) {
+  test('it shows readonly fields correctly', async function (assert) {
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    // HDS disabled fields - check for both input and textarea
-    assert.dom('input[disabled]').exists('Should have disabled input');
-    assert.dom('textarea[disabled]').exists('Should have disabled textarea');
+    // HDS readonly fields - check for both input and textarea
+    assert.dom('input[readonly]').exists('Should have readonly input');
+    assert.dom('textarea[readonly]').exists('Should have readonly textarea');
   });
 
   test('it displays all DescriptionList sections', async function (assert) {
@@ -83,7 +83,6 @@ module('Integration | Component | form/app-token', function (hooks) {
     this.model.status = 'active';
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    assert.dom('.hds-badge').exists();
     assert.dom('.hds-badge').containsText('Active');
     assert.dom('.hds-badge--color-success').exists();
   });
@@ -92,7 +91,6 @@ module('Integration | Component | form/app-token', function (hooks) {
     this.model.status = 'expired';
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    assert.dom('.hds-badge').exists();
     assert.dom('.hds-badge').containsText('Expired');
     assert.dom('.hds-badge--color-critical').exists();
   });
@@ -101,7 +99,6 @@ module('Integration | Component | form/app-token', function (hooks) {
     this.model.status = 'revoked';
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    assert.dom('.hds-badge').exists();
     assert.dom('.hds-badge').containsText('Revoked');
     assert.dom('.hds-badge--color-critical').exists();
   });
@@ -110,7 +107,6 @@ module('Integration | Component | form/app-token', function (hooks) {
     this.model.status = 'stale';
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    assert.dom('.hds-badge').exists();
     assert.dom('.hds-badge').containsText('Stale');
     assert.dom('.hds-badge--color-critical').exists();
   });
@@ -119,7 +115,6 @@ module('Integration | Component | form/app-token', function (hooks) {
     this.model.status = 'unknown';
     await render(hbs`<Form::AppToken @model={{this.model}} />`);
 
-    assert.dom('.hds-badge').exists();
     assert.dom('.hds-badge').containsText('Unknown');
     assert.dom('.hds-badge--color-neutral').exists();
   });

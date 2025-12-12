@@ -7,7 +7,7 @@
   <Hds::Form::TextInput::Field
     @value={{@model.name}}
     @type='text'
-    disabled={{true}}
+    readOnly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.name.label'}}</F.Label>
@@ -17,7 +17,7 @@
   <Hds::Form::Textarea::Field
     @value={{@model.description}}
     @isOptional={{true}}
-    disabled={{true}}
+    readOnly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -35,25 +35,29 @@
     </DL.Item>
     {{! TODO: Check where to navigate the user for global/org/proj levels }}
     <DL.Item @label={{t 'resources.app-token.form.created_by.label'}}>
-      <div class='hds-inline-flex hds-items-center hds-gap-8'>
-        <Hds::Icon @name='user' @isInline={{true}} />
-        <Hds::Link::Inline
-          @href='#'
-        >{{@model.created_by_user_id}}</Hds::Link::Inline>
-      </div>
+      <Hds::Link::Inline
+        @route='scopes.scope.users.user'
+        @models={{array @model.scope.id @model.created_by_user_id}}
+        @icon='user'
+        @iconPosition='leading'
+      >
+        {{@model.created_by_user_id}}
+      </Hds::Link::Inline>
     </DL.Item>
     <DL.Item @label={{t 'resources.app-token.form.scope.label'}}>
-      <div class='hds-inline-flex hds-items-center hds-gap-8'>
-        <Hds::Icon @name={{this.scopeInfo.icon}} @isInline={{true}} />
-        <Hds::Link::Inline @href={{this.scopeInfo.route}}>
-          {{this.scopeInfo.text}}
-        </Hds::Link::Inline>
-      </div>
+      <Hds::Link::Inline
+        @route='scopes.scope'
+        @model={{@model.scope.id}}
+        @icon={{this.scopeInfo.icon}}
+        @iconPosition='leading'
+      >
+        {{this.scopeInfo.text}}
+      </Hds::Link::Inline>
     </DL.Item>
   </DescriptionList>
 
-  <DescriptionList @title={{t 'resources.app-token.ttl.title'}} as |DL|>
-    <DL.Item @label={{t 'resources.app-token.form.ttl.label'}}>
+  <DescriptionList @title={{t 'resources.app-token.form.ttl.label.0'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.ttl.label.1'}}>
       {{#if this.ttlFormatted}}
         {{format-day-year this.ttlFormatted}}
       {{else}}
@@ -76,8 +80,8 @@
     </DL.Item>
   </DescriptionList>
 
-  <DescriptionList @title={{t 'resources.app-token.tts.title'}} as |DL|>
-    <DL.Item @label={{t 'resources.app-token.form.tts.label'}}>
+  <DescriptionList @title={{t 'resources.app-token.form.tts.label.0'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.tts.label.1'}}>
       {{#if this.ttsFormatted}}
         {{format-day-year this.ttsFormatted}}
       {{else}}

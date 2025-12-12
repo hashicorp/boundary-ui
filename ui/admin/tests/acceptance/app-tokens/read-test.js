@@ -162,8 +162,8 @@ module('Acceptance | app-tokens | read', function (hooks) {
     assert.dom('.rose-form').containsText('Time to live');
     assert.dom('.rose-form').containsText('Time to stale');
 
-    // Check for disabled inputs (HDS form fields render as disabled, not readonly)
-    assert.dom('input[disabled]').exists('Should have disabled fields');
+    // Check for readonly inputs for accessibility
+    assert.dom('input[readonly]').exists('Should have readonly fields');
 
     // Check for description lists (About, TTL, TTS sections)
     assert.dom('.description-list').exists({ count: 3 });

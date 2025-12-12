@@ -27,8 +27,6 @@ module('Integration | Component | description-list', function (hooks) {
       </DescriptionList>
     `);
 
-    assert.dom('.description-list').exists();
-    assert.dom('.description-list-title').exists();
     assert.dom('.description-list-title h3').hasText('Section Title');
   });
 
@@ -56,8 +54,6 @@ module('Integration | Component | description-list', function (hooks) {
       </DescriptionList>
     `);
 
-    assert.dom('.description-list').exists();
-    assert.dom('.description-list-item').exists();
     assert.dom('.description-list-item dt').hasText('Test Label');
     assert.dom('.description-list-item dd').hasText('Test Value');
   });
@@ -79,23 +75,15 @@ module('Integration | Component | description-list', function (hooks) {
       </DescriptionList>
     `);
 
-    assert.dom('.description-list').exists();
     assert.dom('.description-list-item').exists({ count: 3 });
-  });
 
-  test('it applies correct CSS classes', async function (assert) {
-    this.set('title', 'Test');
-    this.set('label', 'Label');
-    this.set('value', 'Value');
-
-    await render(hbs`
-      <DescriptionList @title={{this.title}} as |DL|>
-        <DL.Item @label={{this.label}}>{{this.value}}</DL.Item>
-      </DescriptionList>
-    `);
-
-    assert.dom('.description-list').exists();
-    assert.dom('.description-list').hasClass('description-list');
+    const items = this.element.querySelectorAll('.description-list-item');
+    assert.dom(items[0].querySelector('dt')).hasText('Item 1');
+    assert.dom(items[0].querySelector('dd')).hasText('Value 1');
+    assert.dom(items[1].querySelector('dt')).hasText('Item 2');
+    assert.dom(items[1].querySelector('dd')).hasText('Value 2');
+    assert.dom(items[2].querySelector('dt')).hasText('Item 3');
+    assert.dom(items[2].querySelector('dd')).hasText('Value 3');
   });
 
   test('it renders with complex content in items', async function (assert) {
@@ -114,7 +102,6 @@ module('Integration | Component | description-list', function (hooks) {
       </DescriptionList>
     `);
 
-    assert.dom('.description-list-item dd .test-content').exists();
     assert.dom('.description-list-item dd span').hasText('Complex');
     assert.dom('.description-list-item dd strong').hasText('Content');
   });

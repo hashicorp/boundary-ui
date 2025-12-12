@@ -11,7 +11,11 @@
 }}
 
 <div class='description-list-item'>
-  <dt>{{@label}}</dt>
+  <dt>
+    <Hds::Text::Body @tag='span' @weight='semibold'>
+      {{@label}}
+    </Hds::Text::Body>
+  </dt>
   <dd>
     {{yield}}
   </dd>
