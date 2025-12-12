@@ -32,6 +32,14 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @tracked sortDirection;
   @tracked statuses = [];
 
+  statusConfig = {
+    active: { color: 'success' },
+    expired: { color: 'critical' },
+    revoked: { color: 'critical' },
+    stale: { color: 'critical' },
+    unknown: { color: 'neutral' },
+  };
+
   /**
    * Status options for filtering
    */
@@ -49,15 +57,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   getStatusBadge(status) {
-    const statusConfig = {
-      active: { color: 'success' },
-      expired: { color: 'critical' },
-      revoked: { color: 'critical' },
-      stale: { color: 'critical' },
-      unknown: { color: 'neutral' },
-    };
-
-    const config = statusConfig[status] || { color: 'neutral' };
+    const config = this.statusConfig[status] || { color: 'neutral' };
     return {
       text: this.intl.t(`resources.app-token.status.${status}`),
       color: config.color,
