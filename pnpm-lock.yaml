@@ -987,6 +987,9 @@ importers:
       '@xterm/xterm':
         specifier: ^5.5.0
         version: 5.5.0
+      ember-inflector:
+        specifier: ^6.0.0
+        version: 6.0.0(@babel/core@7.27.1)
       ember-named-blocks-polyfill:
         specifier: ^0.2.5
         version: 0.2.5
