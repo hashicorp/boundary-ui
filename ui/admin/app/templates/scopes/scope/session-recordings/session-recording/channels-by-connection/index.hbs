@@ -255,16 +255,17 @@
               {{#if @model.sessionRecording.retain_until}}
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.retain_until'}}
-                  {{#if @model.sessionRecording.retainForever}}
-                    {{t 'resources.policy.titles.forever'}}
-                  {{else}}
-                    <Hds::Time
-                      data-test-retain-until
-                      @date={{@model.sessionRecording.retain_until}}
-                      @display='utc'
-                      @hasTooltip={{false}}
-                    />
-                  {{/if}}
+                  <div data-test-retain-until>
+                    {{#if @model.sessionRecording.retainForever}}
+                      {{t 'resources.policy.titles.forever'}}
+                    {{else}}
+                      <Hds::Time
+                        @date={{@model.sessionRecording.retain_until}}
+                        @display='utc'
+                        @hasTooltip={{false}}
+                      />
+                    {{/if}}
+                  </div>
                 </list.Item>
               {{/if}}
 
