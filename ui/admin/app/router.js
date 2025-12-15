@@ -188,7 +188,7 @@ Router.map(function () {
         this.route('policy', { path: ':policy_id' }, function () {});
       });
       this.route('app-tokens', function () {
-        this.route('new', function () {});
+        this.route('new');
       });
     });
   });
