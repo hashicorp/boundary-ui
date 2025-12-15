@@ -28,7 +28,7 @@ import {
   // See "Maximum Number Of Host Parameters In A Single SQL Statement" in
   // https://www.sqlite.org/limits.html
   const MAX_HOST_PARAMETERS = 32766;
-  const SCHEMA_VERSION = 2;
+  const SCHEMA_VERSION = 3;
 
   // Some browsers do not allow calling getDirectory in private browsing modes even
   // if we're in a secure context. This will cause the SQLite setup to fail so we should
