@@ -45,15 +45,17 @@ module.exports = {
   },
 
   treeForAddon() {
-    const includeMirage = this._includeMirageInBuild();
-
     // Exclude anything in the workers folder from being bundled in the final
     // build as we're manually bundling the files ourselves below.
+    const excludedModules = ['api/workers/**/*'];
+
+    if (!this._includeMirageInBuild()) {
+      excludedModules.push('api/mirage/**/*');
+    }
+
     const tree = this._super.treeForAddon.apply(this, arguments);
     return funnel(tree, {
-      exclude: ['api/workers/**/*', !includeMirage && 'api/mirage/**/*'].filter(
-        Boolean,
-      ),
+      exclude: excludedModules,
     });
   },
 
