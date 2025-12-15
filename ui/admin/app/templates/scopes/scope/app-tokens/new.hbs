@@ -1,0 +1,27 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'titles.new')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.app-token.titles.new'}}
+  @route='scopes.scope.app-tokens.new'
+/>
+
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.app-token.titles.new'}}
+        <DocLink @doc='app-tokens' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.app-token.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
+  </page.header>
+</Rose::Layout::Page>
