@@ -4,7 +4,7 @@
 }}
 
 <Rose::Form
-  @onSubmit={{this.createAppToken}}
+  @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   class='app-token-form'
@@ -95,7 +95,7 @@
     <F.Label class='permissions-label'>{{t
         'resources.app-token.form.permissions.label'
       }}</F.Label>
-    {{#unless @model.permissions.addedPermissions.length}}
+    {{#unless @model.permissions.length}}
       <F.HelperText>{{t
           'resources.app-token.form.permissions.help'
         }}</F.HelperText>
@@ -119,7 +119,7 @@
     {{/if}}
   </Hds::Form::Field>
 
-  {{#if @model.permissions.addedPermissions.length}}
+  {{#if @model.permissions.length}}
     <Hds::Table
       @columns={{array
         (hash label=(t 'titles.label'))
@@ -130,7 +130,7 @@
         )
         (hash label=(t 'titles.actions'))
       }}
-      @model={{@model.permissions.addedPermissions}}
+      @model={{@model.permissions}}
       @valign='middle'
       class='margin-top-s'
     >

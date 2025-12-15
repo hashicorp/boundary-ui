@@ -15,6 +15,7 @@ export default class FormAppTokenNewComponent extends Component {
 
   @tracked showPermissionFlyout = false;
   @tracked editingPermission = false;
+  @tracked selectedPermission;
   indexOfEditingPermission;
 
   /**
@@ -43,7 +44,7 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
-    this.args.model.permissions.selectedPermission = new TrackedObject({
+    this.selectedPermission = new TrackedObject({
       grant_scope_id: [],
     });
   }
@@ -55,7 +56,7 @@ export default class FormAppTokenNewComponent extends Component {
   closePermissionFlyout() {
     this.showPermissionFlyout = false;
     this.editingPermission = false;
-    delete this.args.model.permissions.selectedPermission;
+    this.selectedPermission = null;
   }
 
   /**
@@ -64,11 +65,11 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   addPermission() {
     this.showPermissionFlyout = false;
-    this.args.model.permissions.addedPermissions = [
-      ...this.args.model.permissions.addedPermissions,
-      this.args.model.permissions.selectedPermission,
+    this.args.model.permissions = [
+      ...this.args.model.permissions,
+      this.selectedPermission,
     ];
-    delete this.args.model.permissions.selectedPermission;
+    this.selectedPermission = null;
   }
 
   /**
@@ -78,15 +79,14 @@ export default class FormAppTokenNewComponent extends Component {
   savePermission() {
     this.showPermissionFlyout = false;
     this.editingPermission = false;
-    this.args.model.permissions.addedPermissions =
-      this.args.model.permissions.addedPermissions.filter(
-        (_, i) => i !== this.indexOfEditingPermission,
-      );
-    this.args.model.permissions.addedPermissions = [
-      ...this.args.model.permissions.addedPermissions,
-      this.args.model.permissions.selectedPermission,
+    this.args.model.permissions = this.args.model.permissions.filter(
+      (_, i) => i !== this.indexOfEditingPermission,
+    );
+    this.args.model.permissions = [
+      ...this.args.model.permissions,
+      this.selectedPermission,
     ];
-    delete this.args.model.permissions.selectedPermission;
+    this.selectedPermission = null;
   }
 
   /**
@@ -96,8 +96,8 @@ export default class FormAppTokenNewComponent extends Component {
    */
   @action
   editPermission(index) {
-    this.args.model.permissions.selectedPermission = new TrackedObject(
-      this.args.model.permissions.addedPermissions[index],
+    this.selectedPermission = new TrackedObject(
+      this.args.model.permissions[index],
     );
     this.showPermissionFlyout = true;
     this.editingPermission = true;
@@ -110,18 +110,8 @@ export default class FormAppTokenNewComponent extends Component {
    */
   @action
   deletePermission(index) {
-    this.args.model.permissions.addedPermissions =
-      this.args.model.permissions.addedPermissions.filter(
-        (_, i) => i !== index,
-      );
-  }
-
-  /**
-   * Sets the permissions field on an app-token model to expected value.
-   */
-  @action
-  createAppToken() {
-    this.args.model.permissions = this.args.model.permissions.addedPermissions;
-    this.args.submit();
+    this.args.model.permissions = this.args.model.permissions.filter(
+      (_, i) => i !== index,
+    );
   }
 }
