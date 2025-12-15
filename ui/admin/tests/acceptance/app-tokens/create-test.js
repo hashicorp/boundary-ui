@@ -4,14 +4,18 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { click, currentURL, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import { Response } from 'miragejs';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
-module('Acceptance | app tokens/create', function (hooks) {
+module('Acceptance | app-tokens | create', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
+
+  let getAppTokenCount;
 
   const instances = {
     scopes: {
@@ -53,6 +57,7 @@ module('Acceptance | app tokens/create', function (hooks) {
     urls.globalNewAppToken = `${urls.globalScope}/app-tokens/new`;
     urls.orgNewAppToken = `${urls.orgScope}/app-tokens/new`;
     urls.projectNewAppToken = `${urls.projectScope}/app-tokens/new`;
+    getAppTokenCount = () => this.server.schema.appTokens.all().models.length;
   });
 
   test.each(
@@ -89,6 +94,88 @@ module('Acceptance | app tokens/create', function (hooks) {
         ].includes('create'),
       );
       assert.strictEqual(currentURL(), urls[`${scope}AppTokens`]);
+    },
+  );
+
+  test.each(
+    'users can create a new app-token',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      const appTokenCount = getAppTokenCount();
+      await visit(urls[`${scope}AppTokens`]);
+
+      await click(commonSelectors.HREF(urls[`${scope}NewAppToken`]));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+
+      assert.dom(selectors.FIELD_TTL_DAYS).hasValue('60'); // Default value for TTL is 60 days;
+      assert.dom(selectors.FIELD_TTL_HOURS).hasValue('0');
+      assert.dom(selectors.FIELD_TTL_MINUTES).hasValue('0');
+
+      await click(commonSelectors.SAVE_BTN);
+      const appToken = this.server.schema.appTokens.findBy({
+        name: commonSelectors.FIELD_NAME_VALUE,
+      });
+
+      assert.strictEqual(appToken.name, commonSelectors.FIELD_NAME_VALUE);
+      assert.strictEqual(appToken.timeToLiveSeconds, 5184000);
+      assert.strictEqual(getAppTokenCount(), appTokenCount + 1);
+    },
+  );
+
+  test.each(
+    'users can cancel a new app-token creation',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      const appTokenCount = getAppTokenCount();
+      await visit(urls[`${scope}AppTokens`]);
+
+      await click(commonSelectors.HREF(urls[`${scope}NewAppToken`]));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.CANCEL_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}AppTokens`]);
+      assert.strictEqual(getAppTokenCount(), appTokenCount);
+    },
+  );
+
+  test.each(
+    'saving a new app-token with invalid fields displays errors',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      this.server.post('/app-tokens', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: 'The request was invalid.',
+            details: {
+              request_fields: [
+                {
+                  name: 'name',
+                  description: 'Name is required.',
+                },
+              ],
+            },
+          },
+        );
+      });
+      await visit(urls[`${scope}AppTokens`]);
+
+      await click(commonSelectors.HREF(urls[`${scope}NewAppToken`]));
+      await click(commonSelectors.SAVE_BTN);
+
+      assert
+        .dom(commonSelectors.ALERT_TOAST_BODY)
+        .hasText('The request was invalid.');
+      assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
     },
   );
 });

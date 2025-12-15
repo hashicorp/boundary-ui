@@ -24,4 +24,11 @@
       </PH.Description>
     </Hds::PageHeader>
   </page.header>
+  <page.body>
+    <Form::AppToken::New
+      @model={{@model}}
+      @submit={{fn this.appTokens.create @model}}
+      @cancel={{fn this.appTokens.cancel @model}}
+    />
+  </page.body>
 </Rose::Layout::Page>

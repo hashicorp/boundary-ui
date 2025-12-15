@@ -43,7 +43,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
       scope: orgScope,
     };
     model = {
-      appToken: { id: 'atp_123', scope: globalScope },
+      appToken: { id: 'atp_123', scope: globalScope, scopeModel: globalScope },
       scopes: [globalScope, orgScope, projectScope],
       permission: { grant_scope_id: [] },
       totalItems: 2,

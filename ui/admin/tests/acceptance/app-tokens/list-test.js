@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
-module('Acceptance | app tokens | list', function (hooks) {
+module('Acceptance | app-tokens | list', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
