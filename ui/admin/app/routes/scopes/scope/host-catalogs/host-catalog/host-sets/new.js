@@ -11,7 +11,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
 
   @service store;
   @service router;
-  @service abilities;
+  @service can;
 
   // =methods
 
@@ -23,9 +23,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
       'scopes.scope.host-catalogs.host-catalog',
     );
     if (
-      this.abilities.cannot('create model', hostCatalog, {
-        collection: 'host-sets',
-      })
+      this.can.cannot('create model', hostCatalog, { collection: 'host-sets' })
     ) {
       this.router.replaceWith(
         'scopes.scope.host-catalogs.host-catalog.host-sets',

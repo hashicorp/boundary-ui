@@ -14,11 +14,11 @@ import {
 module('Unit | Abilities | Auth Method', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
   });
 
@@ -27,13 +27,13 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
   });
 
   test('cannot read auth methods when unauthorized', function (assert) {
@@ -41,13 +41,13 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
   });
 
   test('can delete known auth method types when authorized', function (assert) {
@@ -55,13 +55,13 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('delete auth-method', authMethod));
+    assert.false(canService.can('delete auth-method', authMethod));
   });
 
   test('cannot delete auth methods when unauthorized', function (assert) {
@@ -69,13 +69,13 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('delete auth-method', authMethod));
+    assert.true(canService.can('delete auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('delete auth-method', authMethod));
+    assert.false(canService.can('delete auth-method', authMethod));
   });
 
   test('can update known auth method types when authorized', function (assert) {
@@ -83,13 +83,13 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: ['update'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('update auth-method', authMethod));
+    assert.true(canService.can('update auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('update auth-method', authMethod));
+    assert.true(canService.can('update auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.true(abilitiesService.can('update auth-method', authMethod));
+    assert.true(canService.can('update auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('update auth-method', authMethod));
+    assert.false(canService.can('update auth-method', authMethod));
   });
 
   test('cannot update auth methods when unauthorized', function (assert) {
@@ -97,12 +97,12 @@ module('Unit | Abilities | Auth Method', function (hooks) {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.false(abilitiesService.can('update auth-method', authMethod));
+    assert.false(canService.can('update auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.false(abilitiesService.can('update auth-method', authMethod));
+    assert.false(canService.can('update auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_LDAP;
-    assert.false(abilitiesService.can('update auth-method', authMethod));
+    assert.false(canService.can('update auth-method', authMethod));
     authMethod.type = 'no-such-type';
-    assert.false(abilitiesService.can('update auth-method', authMethod));
+    assert.false(canService.can('update auth-method', authMethod));
   });
 });

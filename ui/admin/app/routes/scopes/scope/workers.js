@@ -10,7 +10,7 @@ export default class ScopesScopeWorkersRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
   @service session;
   @service router;
 
@@ -30,7 +30,7 @@ export default class ScopesScopeWorkersRoute extends Route {
   model() {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    if (this.abilities.can('list worker', scope, { collection: 'workers' })) {
+    if (this.can.can('list worker', scope, { collection: 'workers' })) {
       return this.store.query('worker', { scope_id });
     }
   }

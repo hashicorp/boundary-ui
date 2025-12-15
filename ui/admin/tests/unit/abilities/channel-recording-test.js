@@ -11,7 +11,7 @@ import { MIME_TYPE_ASCIICAST } from 'api/models/channel-recording';
 module('Unit | Abilities | channel-recording', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
   let sessionRecording;
   let connectionRecording;
@@ -19,7 +19,7 @@ module('Unit | Abilities | channel-recording', function (hooks) {
   let noneAsciicastChannel;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
 
     sessionRecording = store.createRecord('session-recording', {
@@ -39,20 +39,18 @@ module('Unit | Abilities | channel-recording', function (hooks) {
   });
 
   test('returns true if session recording complete and channel mime type is asciicast', function (assert) {
-    assert.true(
-      abilitiesService.can('play channel-recording', asciicastChannel),
-    );
+    assert.true(canService.can('play channel-recording', asciicastChannel));
     assert.false(
-      abilitiesService.can('play channel-recording', noneAsciicastChannel),
+      canService.can('play channel-recording', noneAsciicastChannel),
     );
   });
 
   test('returns false if session recording complete and channel mime type is not asciicast', function (assert) {
     assert.true(
-      abilitiesService.can('viewOnly channel-recording', noneAsciicastChannel),
+      canService.can('viewOnly channel-recording', noneAsciicastChannel),
     );
     assert.false(
-      abilitiesService.can('viewOnly channel-recording', asciicastChannel),
+      canService.can('viewOnly channel-recording', asciicastChannel),
     );
   });
 });

@@ -14,7 +14,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeWorkersIndexController extends Controller {
   // =services
 
-  @service abilities;
+  @service can;
   @service intl;
   @service router;
 
@@ -79,16 +79,12 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.abilities.can('list worker', this.scope, {
+    const canList = this.can.can('list worker', this.scope, {
       collection: 'workers',
     });
-    const canCreate = this.abilities.can(
-      'create worker led worker',
-      this.scope,
-      {
-        collection: 'workers',
-      },
-    );
+    const canCreate = this.can.can('create worker led worker', this.scope, {
+      collection: 'workers',
+    });
     const resource = this.intl.t('titles.workers');
     let description = 'descriptions.neither-list-nor-create';
 
@@ -163,7 +159,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   )
   async save(worker) {
     await worker.save();
-    if (this.abilities.can('read model', worker)) {
+    if (this.can.can('read model', worker)) {
       await this.router.transitionTo('scopes.scope.workers.worker', worker);
     } else {
       this.router.transitionTo('scopes.scope.workers');

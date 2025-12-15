@@ -33,7 +33,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
 
   // =services
 
-  @service abilities;
+  @service can;
   @service store;
 
   // =methods

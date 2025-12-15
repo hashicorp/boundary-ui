@@ -14,7 +14,7 @@ import { TYPE_CREDENTIAL_STATIC } from 'api/models/storage-bucket';
 export default class ScopesScopeStorageBucketsIndexController extends Controller {
   // =services
 
-  @service abilities;
+  @service can;
   @service intl;
   @service router;
 
@@ -27,10 +27,10 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.abilities.can('list scope', this.scope, {
+    const canList = this.can.can('list scope', this.scope, {
       collection: 'storage-buckets',
     });
-    const canCreate = this.abilities.can('create scope', this.scope, {
+    const canCreate = this.can.can('create scope', this.scope, {
       collection: 'storage-buckets',
     });
     const resource = this.intl.t('resources.storage-bucket.title_plural');

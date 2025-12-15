@@ -15,11 +15,11 @@ import {
 module('Unit | Ability | session', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
   });
 
@@ -34,7 +34,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_ACTIVE,
     });
 
-    assert.true(abilitiesService.can('read session', session));
+    assert.true(canService.can('read session', session));
   });
 
   test('can read a session that is pending', function (assert) {
@@ -43,7 +43,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_PENDING,
     });
 
-    assert.true(abilitiesService.can('read session', session));
+    assert.true(canService.can('read session', session));
   });
 
   test('cannot read a session that is not authorized', function (assert) {
@@ -64,10 +64,10 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_TERMINATED,
     });
 
-    assert.false(abilitiesService.can('read session', activeSession));
-    assert.false(abilitiesService.can('read session', pendingSession));
-    assert.false(abilitiesService.can('read session', cancelingSession));
-    assert.false(abilitiesService.can('read session', terminatedSession));
+    assert.false(canService.can('read session', activeSession));
+    assert.false(canService.can('read session', pendingSession));
+    assert.false(canService.can('read session', cancelingSession));
+    assert.false(canService.can('read session', terminatedSession));
   });
 
   test('cannot read a session that is canceling', function (assert) {
@@ -76,7 +76,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_CANCELING,
     });
 
-    assert.false(abilitiesService.can('read session', session));
+    assert.false(canService.can('read session', session));
   });
 
   test('cannot read a session that is terminated', function (assert) {
@@ -85,7 +85,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_TERMINATED,
     });
 
-    assert.false(abilitiesService.can('read session', session));
+    assert.false(canService.can('read session', session));
   });
 
   test('can read a session that has read:self', function (assert) {
@@ -94,7 +94,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_ACTIVE,
     });
 
-    assert.true(abilitiesService.can('read session', session));
+    assert.true(canService.can('read session', session));
   });
 
   test('can cancel a session that is active', function (assert) {
@@ -103,7 +103,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_ACTIVE,
     });
 
-    assert.true(abilitiesService.can('cancel session', session));
+    assert.true(canService.can('cancel session', session));
   });
 
   test('can cancel a session that has cancel:self', function (assert) {
@@ -112,7 +112,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_ACTIVE,
     });
 
-    assert.true(abilitiesService.can('cancel session', session));
+    assert.true(canService.can('cancel session', session));
   });
 
   test('can cancel a session that is pending', function (assert) {
@@ -121,7 +121,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_PENDING,
     });
 
-    assert.true(abilitiesService.can('cancel session', session));
+    assert.true(canService.can('cancel session', session));
   });
 
   test('cannot cancel a session that is canceling', function (assert) {
@@ -130,7 +130,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_CANCELING,
     });
 
-    assert.false(abilitiesService.can('cancel session', session));
+    assert.false(canService.can('cancel session', session));
   });
 
   test('cannot cancel a session that is terminated', function (assert) {
@@ -139,7 +139,7 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_TERMINATED,
     });
 
-    assert.false(abilitiesService.can('cancel session', session));
+    assert.false(canService.can('cancel session', session));
   });
 
   test('cannot cancel a session that is not authorized', function (assert) {
@@ -160,9 +160,9 @@ module('Unit | Ability | session', function (hooks) {
       status: STATUS_SESSION_TERMINATED,
     });
 
-    assert.false(abilitiesService.can('cancel session', activeSession));
-    assert.false(abilitiesService.can('cancel session', pendingSession));
-    assert.false(abilitiesService.can('cancel session', cancelingSession));
-    assert.false(abilitiesService.can('cancel session', terminatedSession));
+    assert.false(canService.can('cancel session', activeSession));
+    assert.false(canService.can('cancel session', pendingSession));
+    assert.false(canService.can('cancel session', cancelingSession));
+    assert.false(canService.can('cancel session', terminatedSession));
   });
 });

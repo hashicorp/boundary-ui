@@ -14,12 +14,12 @@ import {
 module('Unit | Abilities | auth-method', function (hooks) {
   setupTest(hooks);
 
-  let abilitiesService;
+  let canService;
   let store;
   let features;
 
   hooks.beforeEach(function () {
-    abilitiesService = this.owner.lookup('service:abilities');
+    canService = this.owner.lookup('service:can');
     store = this.owner.lookup('service:store');
     features = this.owner.lookup('service:features');
   });
@@ -30,9 +30,9 @@ module('Unit | Abilities | auth-method', function (hooks) {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_LDAP,
     });
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
     authMethod.authorized_actions = [];
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
   });
 
   test('cannot read LDAP auth-method when authorized and feature flag disabled', function (assert) {
@@ -40,9 +40,9 @@ module('Unit | Abilities | auth-method', function (hooks) {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_LDAP,
     });
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
     authMethod.authorized_actions = [];
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
   });
 
   test('can read non-LDAP auth-method when authorized', function (assert) {
@@ -50,9 +50,9 @@ module('Unit | Abilities | auth-method', function (hooks) {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('read auth-method', authMethod));
+    assert.true(canService.can('read auth-method', authMethod));
   });
 
   test('cannot read non-LDAP auth-method when unauthorized', function (assert) {
@@ -60,16 +60,16 @@ module('Unit | Abilities | auth-method', function (hooks) {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.false(abilitiesService.can('read auth-method', authMethod));
+    assert.false(canService.can('read auth-method', authMethod));
   });
 
   test('cannot make LDAP auth-method primary when feature flag disabled', function (assert) {
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
-    assert.false(abilitiesService.can('makePrimary auth-method', authMethod));
+    assert.false(canService.can('makePrimary auth-method', authMethod));
   });
 
   test('can make LDAP auth-method primary when feature flag enabled', function (assert) {
@@ -77,15 +77,15 @@ module('Unit | Abilities | auth-method', function (hooks) {
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
-    assert.true(abilitiesService.can('makePrimary auth-method', authMethod));
+    assert.true(canService.can('makePrimary auth-method', authMethod));
   });
 
   test('can make non-LDAP auth-method primary', function (assert) {
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    assert.true(abilitiesService.can('makePrimary auth-method', authMethod));
+    assert.true(canService.can('makePrimary auth-method', authMethod));
     authMethod.type = TYPE_AUTH_METHOD_PASSWORD;
-    assert.true(abilitiesService.can('makePrimary auth-method', authMethod));
+    assert.true(canService.can('makePrimary auth-method', authMethod));
   });
 });

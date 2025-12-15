@@ -16,7 +16,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @service store;
   @service router;
   @service features;
-  @service abilities;
+  @service can;
 
   // =attributes
 
@@ -36,7 +36,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       'scopes.scope.credential-stores.credential-store',
     );
     if (
-      this.abilities.cannot('create model', credentialStore, {
+      this.can.cannot('create model', credentialStore, {
         collection: 'credential-libraries',
       })
     ) {

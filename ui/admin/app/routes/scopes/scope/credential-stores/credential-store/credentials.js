@@ -10,7 +10,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
   // =services
 
   @service store;
-  @service abilities;
+  @service can;
 
   // =methods
 
@@ -24,7 +24,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
     );
     const { id: credential_store_id } = credentialStore;
     if (
-      this.abilities.can('list model', credentialStore, {
+      this.can.can('list model', credentialStore, {
         collection: 'credentials',
       })
     ) {

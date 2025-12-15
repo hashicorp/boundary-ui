@@ -11,7 +11,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
 
   @service store;
   @service session;
-  @service abilities;
+  @service can;
   @service router;
 
   // =methods
@@ -31,7 +31,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     if (
-      this.abilities.can('list scope', scope, {
+      this.can.can('list scope', scope, {
         collection: 'storage-buckets',
       })
     ) {
