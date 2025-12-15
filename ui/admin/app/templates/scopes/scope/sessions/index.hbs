@@ -153,9 +153,11 @@
                   {{data.target.displayName}}
                 </B.Td>
                 <B.Td>
-                  <time datetime={{format-date-iso data.created_time}}>
-                    {{format-date-iso-human data.created_time}}
-                  </time>
+                  <Hds::Time
+                    @date={{data.created_time}}
+                    @hasTooltip={{false}}
+                    @display='friendly-local'
+                  />
                 </B.Td>
                 <B.Td>
                   <SessionStatus @model={{data}} />

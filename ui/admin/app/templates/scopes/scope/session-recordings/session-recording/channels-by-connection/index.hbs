@@ -216,13 +216,11 @@
               {{#if @model.sessionRecording.created_time}}
                 <list.Item @icon='calendar' @color='faint'>
                   {{t 'form.created.label'}}
-                  <time
-                    datetime={{format-date-iso
-                      @model.sessionRecording.created_time
-                    }}
-                  >
-                    {{format-date-iso @model.sessionRecording.created_time}}
-                  </time>
+                  <Hds::Time
+                    @date={{@model.sessionRecording.created_time}}
+                    @display='utc'
+                    @hasTooltip={{false}}
+                  />
                 </list.Item>
               {{/if}}
               {{! Duration }}
@@ -257,32 +255,28 @@
               {{#if @model.sessionRecording.retain_until}}
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.retain_until'}}
-                  <time
-                    data-test-retain-until
-                    datetime={{format-date-iso
-                      @model.sessionRecording.retain_until
-                    }}
-                  >
-                    {{#if @model.sessionRecording.retainForever}}
-                      {{t 'resources.policy.titles.forever'}}
-                    {{else}}
-                      {{format-date-iso @model.sessionRecording.retain_until}}
-                    {{/if}}
-                  </time>
+                  {{#if @model.sessionRecording.retainForever}}
+                    {{t 'resources.policy.titles.forever'}}
+                  {{else}}
+                    <Hds::Time
+                      data-test-retain-until
+                      @date={{@model.sessionRecording.retain_until}}
+                      @display='utc'
+                      @hasTooltip={{false}}
+                    />
+                  {{/if}}
                 </list.Item>
               {{/if}}
 
               {{#if @model.sessionRecording.delete_after}}
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.delete_after'}}
-                  <time
+                  <Hds::Time
                     data-test-delete-after
-                    datetime={{format-date-iso
-                      @model.sessionRecording.delete_after
-                    }}
-                  >
-                    {{format-date-iso @model.sessionRecording.delete_after}}
-                  </time>
+                    @date={{@model.sessionRecording.delete_after}}
+                    @display='utc'
+                    @hasTooltip={{false}}
+                  />
                 </list.Item>
               {{/if}}
             </Rose::MetadataList>
