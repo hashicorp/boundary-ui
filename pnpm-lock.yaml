@@ -7,7 +7,6 @@ settings:
 overrides:
   nomnom>underscore: ^1.12.1
   '@hashicorp/design-system-components>ember-stargate': ^0.6.0
-  '@hashicorp/ember-asciinema-player>asciinema-player': 3.4.0
   micromatch: ^4.0.8
   css-select>nth-check: ^2.0.1
   node-gyp: ^10.0.0
@@ -770,6 +769,9 @@ importers:
       '@babel/runtime':
         specifier: 7.27.6
         version: 7.27.6
+      asciinema-player:
+        specifier: 3.4.0
+        version: 3.4.0
       ember-named-blocks-polyfill:
         specifier: ^0.2.5
         version: 0.2.5
@@ -813,9 +815,6 @@ importers:
       '@glimmer/tracking':
         specifier: ^1.1.2
         version: 1.1.2
-      '@hashicorp/ember-asciinema-player':
-        specifier: https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a
-        version: https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9)))(webpack@5.99.8(esbuild@0.25.9))
       '@warp-drive/build-config':
         specifier: ^0.0.2
         version: 0.0.2(@glint/template@1.5.2)
@@ -2487,13 +2486,6 @@ packages:
 
   '@hashicorp/design-system-tokens@3.0.0':
     resolution: {integrity: sha512-ODOtuwDvOdAHQNnhVgqi43enCVWjXTnweYrxHDi3QkVUY1ysLkGrfAySnr4hVwd3UHmzT5HkQQbjN5zgr8l94w==}
-
-  '@hashicorp/ember-asciinema-player@https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a':
-    resolution: {tarball: https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a}
-    version: 0.0.0
-    engines: {node: 14.* || 16.* || >= 18}
-    peerDependencies:
-      ember-source: ^3.28.0 || ^4.0.0
 
   '@hashicorp/flight-icons@3.10.0':
     resolution: {integrity: sha512-wtufYZ5Ntihmy+vbR0dM+Q7X56xPX/dtpcfVs4nCRgvYZZic5ayqE8tefs2FGtxauH6zuzzVk48s5S6psv9g+g==}
@@ -11144,18 +11136,6 @@ snapshots:
   '@hashicorp/design-system-tokens@2.3.0': {}
 
   '@hashicorp/design-system-tokens@3.0.0': {}
-
-  '@hashicorp/ember-asciinema-player@https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9)))(webpack@5.99.8(esbuild@0.25.9))':
-    dependencies:
-      asciinema-player: 3.4.0
-      ember-auto-import: 2.10.0(@glint/template@1.5.2)(webpack@5.99.8(esbuild@0.25.9))
-      ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.3.0
-      ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9))
-    transitivePeerDependencies:
-      - '@glint/template'
-      - supports-color
-      - webpack
 
   '@hashicorp/flight-icons@3.10.0': {}
 
