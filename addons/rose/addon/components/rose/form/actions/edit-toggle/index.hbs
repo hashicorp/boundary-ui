@@ -8,6 +8,9 @@
     {{yield to='edit'}}
   {{else}}
     <Hds::Button
+      aria-description={{t
+        'resources.user.actions.edit-details.aria-description'
+      }}
       @text={{@enableEditText}}
       @color='secondary'
       {{on 'click' @enableEdit}}
