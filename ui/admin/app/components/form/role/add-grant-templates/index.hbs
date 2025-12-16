@@ -1,0 +1,84 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form
+  class='full-width search-filtering'
+  @onSubmit={{this.submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+  <Hds::SegmentedGroup as |S|>
+    <S.TextInput
+      @value={{@search}}
+      @type='search'
+      placeholder={{t 'actions.search'}}
+      aria-label={{t 'actions.search'}}
+      {{on 'input' @handleSearchInput}}
+    />
+  </Hds::SegmentedGroup>
+
+  {{#if this.paginatedTemplates}}
+    <Hds::Table
+      @model={{this.paginatedTemplates}}
+      @columns={{array
+        (hash label=(t 'form.name.label'))
+        (hash label=(t 'resources.role.grant-templates.titles.grant-strings'))
+      }}
+      @isSelectable={{true}}
+      @onSelectionChange={{this.onSelectionChange}}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr
+          @selectionKey={{B.data.id}}
+          @isSelected={{includes B.data.id this.selectedGrantTemplates}}
+          @selectionAriaLabelSuffix='row {{B.data.id}}'
+        >
+          <B.Td>
+            <Hds::Text::Body @tag='p' @weight='semibold'>
+              {{B.data.name}}
+            </Hds::Text::Body>
+            <Hds::Text::Body @tag='p'>
+              {{B.data.description}}
+            </Hds::Text::Body>
+          </B.Td>
+          <B.Td>
+            <ul>
+              {{#each B.data.grantStrings as |grantString|}}
+                <li>
+                  <Hds::Text::Code @tag='code'>{{grantString}}</Hds::Text::Code>
+                </li>
+              {{/each}}
+            </ul>
+          </B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
+    <Rose::Pagination
+      @totalItems={{this.filteredTemplates.length}}
+      @currentPage={{@page}}
+      @currentPageSize={{@pageSize}}
+    />
+    <form.actions
+      @submitText={{t
+        'resources.role.grant-templates.actions.add-grant-templates'
+      }}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{else}}
+    <Hds::ApplicationState data-test-no-grant-template-results as |A|>
+      <A.Header @title={{t 'titles.no-results-found'}} />
+      <A.Body
+        @text={{t
+          'descriptions.no-search-results'
+          query=@search
+          resource=(t 'resources.role.grant-templates.title_plural')
+        }}
+      />
+    </Hds::ApplicationState>
+  {{/if}}
+
+</Rose::Form>
