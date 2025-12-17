@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@babel/runtime": "7.27.6",
+    "asciinema-player": "3.4.0",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
     "uuid": "^11.0.3"
@@ -55,7 +56,6 @@
     "@faker-js/faker": "^8.0.2",
     "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
-    "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
     "@warp-drive/build-config": "^0.0.2",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",
@@ -81,7 +81,7 @@
     "ember-exam": "^8.0.0",
     "ember-inline-svg": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
-    "ember-modifier": "^4.2.0",
+    "ember-modifier": "^4.2.2",
     "ember-page-title": "^8.2.3",
     "ember-qunit": "^8.1.0",
     "ember-resolver": "^12.0.1",
