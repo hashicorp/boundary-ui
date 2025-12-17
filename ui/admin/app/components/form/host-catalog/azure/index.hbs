@@ -176,6 +176,34 @@
     </F.HelperText>
   </Hds::Form::TextInput::Field>
 
+  {{#if (feature-flag 'worker-filter')}}
+    <Hds::Form::Textarea::Field
+      name='worker_filter'
+      @value={{@model.worker_filter}}
+      @isOptional={{true}}
+      @isInvalid={{@model.errors.worker_filter}}
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.host-catalog.form.worker_filter.help'}}
+        <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+      {{#if @model.errors.worker_filter}}
+        <F.Error as |E|>
+          {{#each @model.errors.worker_filter as |error|}}
+            <E.Message>
+              {{error.message}}
+            </E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::Textarea::Field>
+  {{/if}}
+
   <Hds::Form::Checkbox::Field
     name='disable_credential_rotation'
     checked={{@model.disable_credential_rotation}}

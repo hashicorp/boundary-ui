@@ -368,7 +368,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
       .includesText('Optional');
   });
 
-  test('users should see required worker filter field in hcp edition when AWS host catalog is selected', async function (assert) {
+  test('users should see required worker filter field in hcp edition when AWS host catalog is selected and using assume role', async function (assert) {
     setRunOptions({
       rules: {
         'color-contrast': {
@@ -382,10 +382,34 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     featureEdition.setEdition('hcp');
     await visit(urls.newAWSDynamicHostCatalog);
 
+    await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
+
     assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
     assert
       .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
       .includesText('Required');
+  });
+
+  test('users should see optional worker filter field in hcp edition when AWS host catalog is selected and using access key', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('worker-filter');
+    featureEdition.setEdition('hcp');
+    await visit(urls.newAWSDynamicHostCatalog);
+
+    await click(selectors.FIELD_STATIC_CREDENTIAL);
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
+    assert
+      .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
+      .includesText('Optional');
   });
 
   test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {
