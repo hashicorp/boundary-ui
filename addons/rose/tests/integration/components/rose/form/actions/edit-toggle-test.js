@@ -36,7 +36,7 @@ module(
           <Rose::Form::Actions::EditToggle
             @enableEdit={{this.enableEdit}}
             @enableEditText='Edit'
-            @ariaDescriptionEdi='Resource'
+            @ariaDescriptionEdit='Resource'
           />
         `,
       );
