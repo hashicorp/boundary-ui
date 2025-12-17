@@ -20,10 +20,12 @@ module(
           <Rose::Form::Actions::EditToggle
             @enableEdit={{this.enableEdit}}
             @enableEditText='Edit'
+            @ariaDescriptionEdit='Resource'
           />
         `,
       );
       assert.ok(find('button'));
+      assert.dom('[aria-description]').exists();
     });
 
     test('it executes a function on button click', async function (assert) {
@@ -34,6 +36,7 @@ module(
           <Rose::Form::Actions::EditToggle
             @enableEdit={{this.enableEdit}}
             @enableEditText='Edit'
+            @ariaDescriptionEdi='Resource'
           />
         `,
       );
