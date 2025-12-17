@@ -15,12 +15,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
   setupTest(hooks);
 
   let features;
-  let canService;
+  let abilitiesService;
   let store;
 
   hooks.beforeEach(function () {
     features = this.owner.lookup('service:features');
-    canService = this.owner.lookup('service:can');
+    abilitiesService = this.owner.lookup('service:abilities');
     store = this.owner.lookup('service:store');
   });
 
@@ -43,10 +43,13 @@ module('Unit | Abilities | session-recording', function (hooks) {
     );
 
     assert.true(
-      canService.can('read session-recording', recordingWithAuthorizedAction),
+      abilitiesService.can(
+        'read session-recording',
+        recordingWithAuthorizedAction,
+      ),
     );
     assert.false(
-      canService.can(
+      abilitiesService.can(
         'read session-recording',
         recordingWithoutAuthorizedAction,
       ),
@@ -70,10 +73,13 @@ module('Unit | Abilities | session-recording', function (hooks) {
     );
 
     assert.false(
-      canService.can('read session-recording', recordingWithAuthorizedAction),
+      abilitiesService.can(
+        'read session-recording',
+        recordingWithAuthorizedAction,
+      ),
     );
     assert.false(
-      canService.can(
+      abilitiesService.can(
         'read session-recording',
         recordingWithoutAuthorizedAction,
       ),
@@ -95,12 +101,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('list scope', scopeModelWithAuthorizedAction, {
+      abilitiesService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
     assert.false(
-      canService.can('list scope', scopeModelWithoutAuthorizedAction, {
+      abilitiesService.can('list scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
@@ -121,12 +127,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('list scope', scopeModelWithAuthorizedAction, {
+      abilitiesService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
     assert.false(
-      canService.can('list scope', scopeModelWithoutAuthorizedAction, {
+      abilitiesService.can('list scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
@@ -147,14 +153,18 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('navigate scope', scopeModelWithAuthorizedAction, {
+      abilitiesService.can('navigate scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
     assert.false(
-      canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
-        collection: 'session-recordings',
-      }),
+      abilitiesService.can(
+        'navigate scope',
+        scopeModelWithoutAuthorizedAction,
+        {
+          collection: 'session-recordings',
+        },
+      ),
     );
   });
 
@@ -171,14 +181,18 @@ module('Unit | Abilities | session-recording', function (hooks) {
     });
 
     assert.false(
-      canService.can('navigate scope', scopeModelWithAuthorizedAction, {
+      abilitiesService.can('navigate scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
       }),
     );
     assert.false(
-      canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
-        collection: 'session-recordings',
-      }),
+      abilitiesService.can(
+        'navigate scope',
+        scopeModelWithoutAuthorizedAction,
+        {
+          collection: 'session-recordings',
+        },
+      ),
     );
   });
 
@@ -204,10 +218,13 @@ module('Unit | Abilities | session-recording', function (hooks) {
     );
 
     assert.true(
-      canService.can('delete session-recording', recordingWithAuthorizedAction),
+      abilitiesService.can(
+        'delete session-recording',
+        recordingWithAuthorizedAction,
+      ),
     );
     assert.false(
-      canService.can(
+      abilitiesService.can(
         'delete session-recording',
         recordingWithoutAuthorizedAction,
       ),
@@ -236,10 +253,13 @@ module('Unit | Abilities | session-recording', function (hooks) {
     );
 
     assert.false(
-      canService.can('delete session-recording', recordingWithAuthorizedAction),
+      abilitiesService.can(
+        'delete session-recording',
+        recordingWithAuthorizedAction,
+      ),
     );
     assert.false(
-      canService.can(
+      abilitiesService.can(
         'delete session-recording',
         recordingWithoutAuthorizedAction,
       ),
