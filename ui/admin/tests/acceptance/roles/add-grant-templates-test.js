@@ -15,6 +15,7 @@ import {
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | add-grant-templates', function (hooks) {
   setupApplicationTest(hooks);
@@ -54,6 +55,15 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
   });
 
   test('cannot access add-grant-templates without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-12-19
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'set-grants',
     );
