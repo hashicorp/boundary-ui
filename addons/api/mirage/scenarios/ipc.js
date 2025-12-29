@@ -225,6 +225,13 @@ export default function initializeMockIPC(server, config) {
     isClientAgentRunning() {
       return false;
     }
+    checkOS() {
+      return {
+        isLinux: false,
+        isMac: true,
+        isWindows: false,
+      };
+    }
     cacheDaemonStatus() {
       return { version: 'Boundary v1.0.0' };
     }
