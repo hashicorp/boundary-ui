@@ -33,29 +33,22 @@ export default class FormAppTokenReadComponent extends Component {
   }
 
   /**
-   * Returns scope information (icon, text) based on scope type
+   * Returns scope information (icon, displayName) based on scope type
    * @returns {object}
    */
   get scopeInfo() {
     const scope = this.args.model.scope;
+    let icon = 'grid';
 
     if (scope.isGlobal) {
-      return {
-        icon: 'globe',
-        text: this.intl.t('resources.scope.types.global'),
-      };
-    }
-
-    if (scope.isOrg) {
-      return {
-        icon: 'org',
-        text: this.intl.t('resources.scope.types.org'),
-      };
+      icon = 'globe';
+    } else if (scope.isOrg) {
+      icon = 'org';
     }
 
     return {
-      icon: 'grid',
-      text: this.intl.t('resources.scope.types.project'),
+      icon,
+      text: scope.displayName,
     };
   }
 
