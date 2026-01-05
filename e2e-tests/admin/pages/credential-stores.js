@@ -27,7 +27,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('group', { name: 'Type' })
       .getByLabel('Static')
       .click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -59,7 +59,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .click();
     await this.page.getByLabel('Address').fill(vaultAddr);
     await this.page.getByLabel('Token').fill(clientToken);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -100,7 +100,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Token').fill(clientToken);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -160,7 +160,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       encoding: 'utf-8',
     });
     await this.page.getByLabel('SSH Private Key').fill(keyData);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -219,7 +219,7 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page
       .getByLabel('Password Required', { exact: true })
       .fill(password);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -284,7 +284,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByLabel('Password Required', { exact: true })
       .fill(password);
     await this.page.getByLabel('Domain Required', { exact: true }).fill(domain);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -323,7 +323,7 @@ export class CredentialStoresPage extends BaseResourcePage {
         .selectOption(credentialType);
     }
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
 
     return credentialLibraryName;
@@ -364,7 +364,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('button', { name: 'Add' })
       .click();
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
 
     return credentialLibraryName;

@@ -21,7 +21,7 @@ export class GroupsPage extends BaseResourcePage {
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(groupName);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

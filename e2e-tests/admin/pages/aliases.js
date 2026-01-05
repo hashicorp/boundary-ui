@@ -36,7 +36,7 @@ export class AliasesPage extends BaseResourcePage {
     await this.page.getByLabel('Alias Value').fill(alias);
     await this.page.getByLabel('Target ID').fill(targetId);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
