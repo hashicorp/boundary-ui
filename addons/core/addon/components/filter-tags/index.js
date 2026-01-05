@@ -38,10 +38,18 @@ export default class FilterTagsIndexComponent extends Component {
    */
   @action
   removeFilter(tag) {
-    const queryParamValue = this.args.filters.selectedFilters[tag.type];
+    const filterValue = this.args.filters.selectedFilters[tag.type];
+
+    if (typeof this.args.removeFilter === 'function') {
+      this.args.removeFilter(
+        tag.type,
+        filterValue.filter((item) => item !== tag.id),
+      );
+      return;
+    }
 
     const queryParams = {
-      [tag.type]: queryParamValue.filter((item) => item !== tag.id),
+      [tag.type]: filterValue.filter((item) => item !== tag.id),
     };
 
     this.router.replaceWith({ queryParams });
@@ -52,6 +60,11 @@ export default class FilterTagsIndexComponent extends Component {
    */
   @action
   clearAllFilters() {
+    if (typeof this.args.removeFilter === 'function') {
+      this.args.clearAllFilters();
+      return;
+    }
+
     const queryParams = Object.keys(this.args.filters.allFilters).reduce(
       (params, key) => {
         params[key] = [];
