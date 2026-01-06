@@ -1261,6 +1261,9 @@ app-token:
     permissions:
       label: Permissions
       help: You haven't added in any permissions yet. You'll be sent to another page to add each permission.
+    permission:
+      label:
+        help: A brief explanation of what this permission does
   status:
     unknown: Unknown
     active: Active

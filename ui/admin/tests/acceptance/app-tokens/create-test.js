@@ -178,4 +178,20 @@ module('Acceptance | app-tokens | create', function (hooks) {
       assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
     },
   );
+
+  test.each(
+    'permission flyout opens with label field and helper text',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      assert.dom(selectors.PERMISSION_FLYOUT).exists();
+      assert.dom(selectors.PERMISSION_LABEL_FIELD).exists();
+      assert
+        .dom(selectors.PERMISSION_FLYOUT)
+        .includesText('A brief explanation of what this permission does');
+    },
+  );
 });

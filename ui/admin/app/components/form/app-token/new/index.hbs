@@ -107,6 +107,7 @@
         @icon='plus'
         @color='secondary'
         class='margin-top-s'
+        data-test-add-permission-button
         {{on 'click' this.openPermissionFlyout}}
       />
     </F.Control>
@@ -176,13 +177,30 @@
 
   {{#if this.showPermissionFlyout}}
     {{! TODO: Populate flyout with scope options.}}
-    <Hds::Flyout @size='large' @onClose={{this.closePermissionFlyout}} as |M|>
+    <Hds::Flyout
+      @size='large'
+      @onClose={{this.closePermissionFlyout}}
+      data-test-permission-flyout
+      as |M|
+    >
       <M.Header>{{if
           this.editingPermission
           (t 'resources.app-token.titles.edit-permission')
           (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
       <M.Body>
+        <Hds::Form::TextInput::Field
+          name='permission-label'
+          @value={{this.selectedPermission.label}}
+          {{on 'input' (set-from-event this.selectedPermission 'label')}}
+          as |F|
+        >
+          <F.Label>{{t 'titles.label'}}</F.Label>
+          <F.HelperText>{{t
+              'resources.app-token.form.permission.label.help'
+            }}</F.HelperText>
+        </Hds::Form::TextInput::Field>
+
         <ScopeOptions
           @model={{@model}}
           @field={{this.selectedPermission}}
