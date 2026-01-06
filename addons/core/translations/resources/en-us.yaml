@@ -1261,23 +1261,29 @@ app-token:
       label: Created by
     scope:
       label: Scope
-    ttl:
-      label:
-        0: Time to live (TTL)
-        1: TTL
     expiration_date:
       label: Expiration date
     created_time:
       label: Created at
+    last_used:
+      label: Last used
+      tooltip: This value is an approximate value, not an exact value.
+    root-scope:
+      label: Root Scope
+      help: The scope that the app token resides in and where permissions start. You can't change this.
+    ttl:
+      label:
+        0: Time to live (TTL)
+        1: TTL
+      help: The time to live (TTL) of this app token. TTL auto defaults to 60 days. TTL cannot exceed 3 years.
     tts:
       label:
         0: Time to stale (TTS)
         1: TTS
-    last_used:
-      label: Last used
-      tooltip: This value is an approximate value, not an exact value.
+      help: The app token must be used within this duration of time. Once the app token is used, the duration will be reset.
     permissions:
       label: Permissions
+      help: You haven't added in any permissions yet. You'll be sent to another page to add each permission.
   status:
     unknown: Unknown
     active: Active
