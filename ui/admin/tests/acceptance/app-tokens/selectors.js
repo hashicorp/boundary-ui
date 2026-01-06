@@ -9,6 +9,11 @@ export const FIELD_TTL_HOURS = '[name="time_to_live_seconds"] [name="hours"]';
 export const FIELD_TTL_MINUTES =
   '[name="time_to_live_seconds"] [name="minutes"]';
 export const FIELD_TTS = '[name=time_to_stale_seconds]';
+
+// Permission flyout selectors
+export const ADD_PERMISSION_BTN = '[data-test-add-permission-button]';
+export const PERMISSION_FLYOUT = '[data-test-permission-flyout]';
+export const PERMISSION_LABEL_FIELD = '[name="permission-label"]';
 export const FILED_CONFIRM_REVOKE = '[name=confirm-revoke]';
 
 export const CANCEL_MODAL_BTN = '.hds-modal .hds-button--color-secondary';
