@@ -218,8 +218,7 @@
                   {{t 'form.created.label'}}
                   <Hds::Time
                     @date={{@model.sessionRecording.created_time}}
-                    @display='utc'
-                    @hasTooltip={{false}}
+                    @display='friendly-local'
                   />
                 </list.Item>
               {{/if}}
@@ -261,8 +260,7 @@
                     {{else}}
                       <Hds::Time
                         @date={{@model.sessionRecording.retain_until}}
-                        @display='utc'
-                        @hasTooltip={{false}}
+                        @display='friendly-local'
                       />
                     {{/if}}
                   </div>
@@ -275,8 +273,7 @@
                   <Hds::Time
                     data-test-delete-after
                     @date={{@model.sessionRecording.delete_after}}
-                    @display='utc'
-                    @hasTooltip={{false}}
+                    @display='friendly-local'
                   />
                 </list.Item>
               {{/if}}

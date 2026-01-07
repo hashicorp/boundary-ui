@@ -55,8 +55,7 @@
               <list.Item @icon='calendar' @color='faint'>
                 {{t 'form.started.label'}}
                 <Hds::Time
-                  @display='utc'
-                  @hasTooltip={{false}}
+                  @display='friendly-local'
                   @date={{@model.channelRecording.start_time}}
                 />
               </list.Item>
