@@ -1127,3 +1127,19 @@
     }
   }
 }
+
+.app-token-read-form {
+  .app-token-modal-body {
+    strong {
+      font-weight: bold;
+    }
+
+    p:first-child {
+      margin-bottom: 0.25rem;
+    }
+
+    p:nth-child(2) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

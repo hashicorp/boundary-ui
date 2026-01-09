@@ -157,14 +157,13 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   async create(appToken) {
     await appToken.save();
     if (this.can.can('read model', appToken)) {
-      // TODO: Uncomment transition once details route has been created.
-      // await this.router.transitionTo(
-      //   'scopes.scope.app-tokens.app-token',
-      //   appToken,
-      // );
+      await this.router.transitionTo(
+        'scopes.scope.app-tokens.app-token',
+        appToken,
+        { queryParams: { showCreatedAppToken: true } },
+      );
     } else {
       this.router.transitionTo('scopes.scope.app-tokens');
     }
-    await this.router.refresh();
   }
 }

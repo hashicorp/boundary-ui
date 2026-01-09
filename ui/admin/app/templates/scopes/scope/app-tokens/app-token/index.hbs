@@ -3,4 +3,8 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Form::AppToken::Read @model={{@model}} />
+<Form::AppToken::Read
+  @model={{@model}}
+  @showCreatedAppToken={{this.showCreatedAppToken}}
+  @resetAppTokenModal={{this.resetAppTokenModal}}
+/>

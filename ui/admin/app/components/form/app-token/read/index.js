@@ -4,6 +4,7 @@
  */
 
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 export default class FormAppTokenReadComponent extends Component {
@@ -74,5 +75,23 @@ export default class FormAppTokenReadComponent extends Component {
 
     // Convert milliseconds to days for format-day-year helper
     return Math.floor(tts / (1000 * 60 * 60 * 24));
+  }
+
+  @action
+  downloadAppToken() {
+    const fileName = `app-token-${this.args.model.token}.txt`;
+    const blob = new Blob([this.args.model.token], { type: 'text/plain' });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = fileName;
+
+    const modalElement = document.getElementById('app-token-created-modal');
+    modalElement.appendChild(a);
+    a.click();
+    modalElement.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 }

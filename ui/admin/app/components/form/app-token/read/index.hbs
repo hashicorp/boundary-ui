@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Form>
+<Rose::Form class='app-token-read-form'>
   <Hds::Form::TextInput::Field
     @value={{@model.name}}
     @type='text'
@@ -110,4 +110,41 @@
       </dd>
     </div>
   </DescriptionList>
+
+  {{#if @showCreatedAppToken}}
+    <Hds::Modal @isDismissDisabled={{true}} id='app-token-created-modal' as |M|>
+      <M.Header>{{t
+          'resources.app-token.form.app-token-created.title'
+        }}</M.Header>
+      <M.Body class='app-token-modal-body'>
+        <Hds::Text::Body @tag='p'>
+          {{t 'resources.app-token.form.app-token-created.description.0'}}
+        </Hds::Text::Body>
+        <Hds::Text::Body @tag='p'>
+          {{t
+            'resources.app-token.form.app-token-created.description.1'
+            htmlSafe=true
+          }}
+        </Hds::Text::Body>
+        <Hds::Text::Body @tag='p' @weight='semibold'>
+          {{t 'resources.app-token.title'}}
+        </Hds::Text::Body>
+        <Hds::Layout::Flex @gap='16'>
+          <Hds::Copy::Snippet @textToCopy={{@model.token}} @color='secondary' />
+          <Hds::Button
+            @text={{t 'resources.app-token.actions.download-app-token'}}
+            @icon='download'
+            @color='secondary'
+            {{on 'click' this.downloadAppToken}}
+          />
+        </Hds::Layout::Flex>
+      </M.Body>
+      <M.Footer>
+        <Hds::Button
+          @text={{t 'resources.app-token.actions.saved-app-token'}}
+          {{on 'click' @resetAppTokenModal}}
+        />
+      </M.Footer>
+    </Hds::Modal>
+  {{/if}}
 </Rose::Form>
