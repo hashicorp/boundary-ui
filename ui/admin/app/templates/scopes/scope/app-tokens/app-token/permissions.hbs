@@ -2,7 +2,72 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
+{{page-title (t 'resources.app-token.tabs.permissions')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.app-token.tabs.permissions'}}
+  @route='scopes.scope.app-tokens.app-token.permissions'
+/>
+{{#if this.showNoActiveScopesWarning}}
+  <Hds::Alert
+    class='app-token-permissions-alert'
+    @type='inline'
+    @color='warning'
+    @onDismiss={{this.noop}}
+    as |A|
+  >
+    <A.Title>{{t
+        'resources.app-token.messages.no-active-scopes.title'
+        htmlSafe=true
+      }}
+    </A.Title>
+    <A.Description>
+      {{t
+        'resources.app-token.messages.no-active-scopes.description'
+        htmlSafe=true
+      }}
+    </A.Description>
+    <A.Button @color='secondary' @text='Clone this app token' />
+    <A.Button @color='tertiary' @text='Delete this app token' @icon='trash' />
+  </Hds::Alert>
+{{/if}}
 
-<Rose::Form>
-  {{! TODO: Add permissions content }}
-</Rose::Form>
+<Hds::Table
+  @model={{@model.permissions}}
+  @columns={{array
+    (hash label='Labels')
+    (hash label='Grants')
+    (hash
+      label='Active scopes'
+      tooltip='Active scopes are scopes that exist within Boundary'
+    )
+    (hash label='Deleted scopes')
+  }}
+  @valign='middle'
+>
+  <:body as |B|>
+    <B.Tr>
+      <B.Td>
+        {{#if B.data.label}}
+          {{B.data.label}}
+        {{else}}
+          —
+        {{/if}}
+      </B.Td>
+      <B.Td>{{B.data.grant.length}}</B.Td>
+      <B.Td>
+        {{#if B.data.grant_scopes}}
+          {{B.data.grant_scopes.length}}
+        {{else}}
+          —
+        {{/if}}
+      </B.Td>
+      <B.Td>
+        {{#if B.data.deleted_scopes}}
+          {{B.data.deleted_scopes.length}}
+        {{else}}
+          —
+        {{/if}}
+      </B.Td>
+    </B.Tr>
+  </:body>
+</Hds::Table>
