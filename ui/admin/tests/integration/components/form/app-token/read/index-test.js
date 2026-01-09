@@ -21,6 +21,7 @@ module('Integration | Component | form/app-token/read', function (hooks) {
       created_by_user_id: 'u_1234567890',
       scope: {
         id: 's_1234567890',
+        displayName: 'Test Project',
         isGlobal: false,
         isOrg: false,
       },
@@ -127,27 +128,41 @@ module('Integration | Component | form/app-token/read', function (hooks) {
     assert.dom('.hds-badge').exists();
   });
 
-  test('scopeInfo returns correct icon and text for global scope', async function (assert) {
-    this.model.scope.isGlobal = true;
-    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
+  test.each(
+    'scopeInfo displays correct icon and name for scope',
+    [
+      {
+        scopeType: 'global',
+        displayName: 'Global',
+        isGlobal: true,
+        isOrg: false,
+        icon: 'globe',
+      },
+      {
+        scopeType: 'org',
+        displayName: 'Test Org',
+        isGlobal: false,
+        isOrg: true,
+        icon: 'org',
+      },
+      {
+        scopeType: 'project',
+        displayName: 'Test Project',
+        isGlobal: false,
+        isOrg: false,
+        icon: 'grid',
+      },
+    ],
+    async function (assert, { displayName, isGlobal, isOrg, icon }) {
+      this.model.scope.displayName = displayName;
+      this.model.scope.isGlobal = isGlobal;
+      this.model.scope.isOrg = isOrg;
+      await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
-    assert.dom('[data-test-icon="globe"]').exists();
-  });
-
-  test('scopeInfo returns correct icon and text for org scope', async function (assert) {
-    this.model.scope.isOrg = true;
-    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
-
-    assert.dom('[data-test-icon="org"]').exists();
-  });
-
-  test('scopeInfo returns correct icon and text for project scope', async function (assert) {
-    this.model.scope.isGlobal = false;
-    this.model.scope.isOrg = false;
-    await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
-
-    assert.dom('[data-test-icon="grid"]').exists();
-  });
+      assert.dom(`[data-test-icon="${icon}"]`).exists();
+      assert.dom('.description-list').containsText(displayName);
+    },
+  );
 
   test('ttlFormatted converts milliseconds to days correctly', async function (assert) {
     // 1 day = 86400000 milliseconds

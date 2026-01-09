@@ -39,6 +39,7 @@
         @models={{array @model.scope.id @model.created_by_user_id}}
         @icon='user'
         @iconPosition='leading'
+        @color='secondary'
       >
         {{@model.created_by_user_id}}
       </Hds::Link::Inline>
@@ -49,6 +50,7 @@
         @model={{@model.scope.id}}
         @icon={{this.scopeInfo.icon}}
         @iconPosition='leading'
+        @color='secondary'
       >
         {{this.scopeInfo.text}}
       </Hds::Link::Inline>
