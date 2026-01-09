@@ -130,9 +130,7 @@ export default class ScopeOptionsIndexComponent extends Component {
   constructor() {
     super(...arguments);
     const field = this.args.field || this.args.model;
-    if (!field[this.args.name]) {
-      field[this.args.name] = [];
-    }
+    field[this.args.name] ??= [];
     this.retrieveData.perform();
     this.loadItems.perform();
   }
@@ -284,7 +282,7 @@ export default class ScopeOptionsIndexComponent extends Component {
    */
   @action
   async toggleShowSelectedOnly(event) {
-    const { checked } = event?.target || false;
+    const { checked } = event?.target ?? false;
     this.showSelectedOnly = checked;
     this.page = 1;
     await this.retrieveData.perform();
