@@ -130,9 +130,7 @@ export default class ScopeOptionsIndexComponent extends Component {
   constructor() {
     super(...arguments);
     const field = this.args.field || this.args.model;
-    if (!field[this.args.name]) {
-      field[this.args.name] = [];
-    }
+    field[this.args.name] ??= [];
     this.retrieveData.perform();
     this.loadItems.perform();
   }
