@@ -1234,6 +1234,7 @@ alias:
       label: Aliases
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
 app-token:
+  title: App Token
   title_plural: App Tokens
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
@@ -1242,6 +1243,10 @@ app-token:
     active-scopes: Active scopes
     edit-permission: Edit permission
     add-permission: Add permission
+  actions:
+    confirm-creation: Confirm creation
+    saved-app-token: Yes, I have saved the app token
+    download-app-token: Download the token
   tabs:
     permissions: Permissions
   about:
@@ -1284,6 +1289,14 @@ app-token:
     permissions:
       label: Permissions
       help: You haven't added in any permissions yet. You'll be sent to another page to add each permission.
+    confirm-create:
+      title: Create app token?
+      description: Once created, you cannot change this app token's details and grants. Are you sure you want to finish creating this app token?
+    app-token-created:
+      title: App token created
+      description:
+        0: You can either copy or download the app token as a .txt file.
+        1: <strong>This is your only chance to grab the app token</strong>. Make sure to save this token somewhere secure, as you will be unable to recover it after you close this pop-up.
   status:
     unknown: Unknown
     active: Active
