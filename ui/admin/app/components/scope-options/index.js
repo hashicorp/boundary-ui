@@ -282,7 +282,7 @@ export default class ScopeOptionsIndexComponent extends Component {
    */
   @action
   async toggleShowSelectedOnly(event) {
-    const { checked } = event?.target || false;
+    const { checked } = event?.target ?? false;
     this.showSelectedOnly = checked;
     this.page = 1;
     await this.retrieveData.perform();
