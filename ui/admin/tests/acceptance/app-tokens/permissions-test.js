@@ -7,17 +7,8 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-
-const BREADCRUMB_SELECTOR = '[data-test-breadcrumbs-container]';
-const ROW_LABEL_SELECTOR = (rowIndex) =>
-  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;
-const ROW_GRANTS_SELECTOR = (rowIndex) =>
-  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(2)`;
-const ROW_ACTIVE_SCOPES_SELECTOR = (rowIndex) =>
-  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(3)`;
-const ROW_DELETED_SCOPES_SELECTOR = (rowIndex) =>
-  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(4)`;
 
 module('Acceptance | app-tokens | permissions', function (hooks) {
   setupApplicationTest(hooks);
@@ -111,7 +102,7 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
   test('app token permissions page displays breadcrumbs', async function (assert) {
     await visit(urls.appTokenPermissions);
 
-    assert.dom(BREADCRUMB_SELECTOR).containsText('Permissions');
+    assert.dom(selectors.BREADCRUMB).containsText('Permissions');
   });
 
   test('app token permissions shows permission label and count for grants, scopes, and deleted scopes', async function (assert) {
@@ -119,15 +110,15 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
 
-    assert.dom(ROW_LABEL_SELECTOR(1)).containsText('—');
-    assert.dom(ROW_GRANTS_SELECTOR(1)).containsText('1');
-    assert.dom(ROW_ACTIVE_SCOPES_SELECTOR(1)).containsText('2');
-    assert.dom(ROW_DELETED_SCOPES_SELECTOR(1)).containsText('—');
+    assert.dom(selectors.ROW_LABEL(1)).containsText('—');
+    assert.dom(selectors.ROW_GRANTS(1)).containsText('1');
+    assert.dom(selectors.ROW_ACTIVE_SCOPES(1)).containsText('2');
+    assert.dom(selectors.ROW_DELETED_SCOPES(1)).containsText('—');
 
-    assert.dom(ROW_LABEL_SELECTOR(2)).containsText('Another Permission');
-    assert.dom(ROW_GRANTS_SELECTOR(2)).containsText('2');
-    assert.dom(ROW_ACTIVE_SCOPES_SELECTOR(2)).containsText('3');
-    assert.dom(ROW_DELETED_SCOPES_SELECTOR(2)).containsText('—');
+    assert.dom(selectors.ROW_LABEL(2)).containsText('Another Permission');
+    assert.dom(selectors.ROW_GRANTS(2)).containsText('2');
+    assert.dom(selectors.ROW_ACTIVE_SCOPES(2)).containsText('3');
+    assert.dom(selectors.ROW_DELETED_SCOPES(2)).containsText('—');
   });
 
   test.each(

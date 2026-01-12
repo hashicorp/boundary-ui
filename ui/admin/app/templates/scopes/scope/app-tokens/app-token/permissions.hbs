@@ -15,10 +15,7 @@
     @onDismiss={{this.noop}}
     as |A|
   >
-    <A.Title>{{t
-        'resources.app-token.messages.no-active-scopes.title'
-        htmlSafe=true
-      }}
+    <A.Title>{{t 'resources.app-token.messages.no-active-scopes.title'}}
     </A.Title>
     <A.Description>
       {{t
@@ -26,21 +23,28 @@
         htmlSafe=true
       }}
     </A.Description>
-    <A.Button @color='secondary' @text='Clone this app token' />
-    <A.Button @color='tertiary' @text='Delete this app token' @icon='trash' />
+    <A.Button
+      @color='secondary'
+      @text={{t 'resources.app-token.actions.clone'}}
+    />
+    <A.Button
+      @color='tertiary'
+      @text={{t 'resources.app-token.actions.delete'}}
+      @icon='trash'
+    />
   </Hds::Alert>
 {{/if}}
 
 <Hds::Table
   @model={{@model.permissions}}
   @columns={{array
-    (hash label='Labels')
-    (hash label='Grants')
+    (hash label=(t 'resources.app-token.titles.labels'))
+    (hash label=(t 'resources.app-token.titles.grants'))
     (hash
-      label='Active scopes'
-      tooltip='Active scopes are scopes that exist within Boundary'
+      label=(t 'resources.app-token.titles.active-scopes')
+      tooltip=(t 'resources.app-token.tooltips.active-scopes')
     )
-    (hash label='Deleted scopes')
+    (hash label=(t 'resources.app-token.titles.deleted-scopes'))
   }}
   @valign='middle'
 >
