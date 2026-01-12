@@ -21,6 +21,9 @@ module('Integration | Component | form/app-token/read', function (hooks) {
       created_by_user_id: 'u_1234567890',
       scope: {
         id: 's_1234567890',
+      },
+      scopeModel: {
+        id: 's_1234567890',
         displayName: 'Test Project',
         isGlobal: false,
         isOrg: false,
@@ -154,9 +157,9 @@ module('Integration | Component | form/app-token/read', function (hooks) {
       },
     ],
     async function (assert, { displayName, isGlobal, isOrg, icon }) {
-      this.model.scope.displayName = displayName;
-      this.model.scope.isGlobal = isGlobal;
-      this.model.scope.isOrg = isOrg;
+      this.model.scopeModel.displayName = displayName;
+      this.model.scopeModel.isGlobal = isGlobal;
+      this.model.scopeModel.isOrg = isOrg;
       await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
 
       assert.dom(`[data-test-icon="${icon}"]`).exists();
@@ -233,6 +236,7 @@ module('Integration | Component | form/app-token/read', function (hooks) {
       name: 'Minimal Token',
       status: 'active',
       scope: {},
+      scopeModel: {},
     };
 
     await render(hbs`<Form::AppToken::Read @model={{this.model}} />`);
