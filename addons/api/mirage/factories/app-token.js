@@ -53,14 +53,24 @@ export default factory.extend({
   permissions: () => [
     {
       grant: ['ids=*;actions=*'],
-      grant_scope_id: [GRANT_SCOPE_THIS],
+      grant_scopes: [GRANT_SCOPE_THIS],
       deleted_scopes: [
         { scope_id: generateId('p_'), deleted_at: faker.date.past() },
       ],
     },
     {
+      label: 'User Read/List',
       grant: ['ids=*;actions=*', 'type=user;actions=read,list'],
-      grant_scope_id: [GRANT_SCOPE_THIS, generateId('o_')],
+      grant_scopes: [GRANT_SCOPE_THIS, generateId('o_')],
     },
+    // Uncomment to show "no active warning"
+    // {
+    //   label: 'Host Catalog List',
+    //   grant: ['type=host-catalog;actions=list'],
+    //   grant_scopes: [],
+    //   deleted_scopes: [
+    //     { scope_id: generateId('p_'), deleted_at: faker.date.past() },
+    //   ],
+    // },
   ],
 });
