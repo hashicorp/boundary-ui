@@ -73,7 +73,7 @@
 
   <VariableTimeField
     name='time_to_live_seconds'
-    @legend={{t 'resources.app-token.form.ttl.label'}}
+    @legend={{t 'resources.app-token.form.ttl.label.0'}}
     @helperText={{t 'resources.app-token.form.ttl.help'}}
     @isRequired={{true}}
     @time={{@model.time_to_live_seconds}}
@@ -84,7 +84,7 @@
 
   <VariableTimeField
     name='time_to_stale_seconds'
-    @legend={{t 'resources.app-token.form.tts.label'}}
+    @legend={{t 'resources.app-token.form.tts.label.0'}}
     @helperText={{t 'resources.app-token.form.tts.help'}}
     @updateTime={{fn this.updateTime 'time_to_stale_seconds'}}
   />

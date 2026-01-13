@@ -1,0 +1,29 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+
+  A reusable component for displaying a bordered container with a title
+  and a list of label-value pairs.
+
+  Usage example in templates:
+  <DescriptionList @title="Section Title" as |DL|>
+    <DL.Item @label="Label 1">Value 1</DL.Item>
+    <DL.Item @label="Label 2">Value 2</DL.Item>
+  </DescriptionList>
+
+  Arguments:
+  @title (string, optional) - Section title displayed at the top
+}}
+
+<dl class='description-list'>
+  {{! Optional title spanning full width }}
+  {{#if @title}}
+    <div class='description-list-title'>
+      <Hds::Text::Display @tag='h3' @size='300' @weight='semibold'>
+        {{@title}}
+      </Hds::Text::Display>
+    </div>
+  {{/if}}
+  {{! Yield DL.Item component for each label-value pair }}
+  {{yield (hash Item=(component 'description-list/item'))}}
+</dl>
