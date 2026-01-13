@@ -1109,3 +1109,21 @@
 .grant-scope-selection-alert-list {
   list-style: disc;
 }
+
+.app-token-form {
+  .permissions-label {
+    margin-bottom: sizing.rems(xxs);
+  }
+
+  .ttl-field {
+    margin-bottom: sizing.rems(l);
+  }
+}
+
+.scope-options {
+  &__show_selected_toggle {
+    .hds-form-field--layout-flag {
+      margin-bottom: 0;
+    }
+  }
+}

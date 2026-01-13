@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeAppTokensNewRoute extends Route {
   // =services
@@ -36,8 +37,8 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
 
     const record = this.store.createRecord('app-token');
     record.time_to_live_seconds = 5184000; // Set default TTL
+    record.permissions = new TrackedArray([]);
     record.scopeModel = scopeModel;
-
     return record;
   }
 }
