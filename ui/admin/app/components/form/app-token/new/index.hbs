@@ -201,11 +201,17 @@
             }}</F.HelperText>
         </Hds::Form::TextInput::Field>
 
-        <ScopeOptions
-          @model={{@model}}
-          @field={{this.selectedPermission}}
-          @name='grant_scopes'
-        />
+        <Hds::Form::Fieldset @isRequired={{true}} as |F|>
+          <F.Legend>{{t 'form.scope-options.label'}}</F.Legend>
+          <F.HelperText>{{t 'form.scope-options.help'}}</F.HelperText>
+          <F.Control>
+            <ScopeOptions
+              @model={{@model}}
+              @field={{this.selectedPermission}}
+              @name='grant_scope_id'
+            />
+          </F.Control>
+        </Hds::Form::Fieldset>
       </M.Body>
       <M.Footer>
         <Hds::ButtonSet>
