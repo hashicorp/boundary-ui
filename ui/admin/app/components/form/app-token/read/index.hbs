@@ -1,0 +1,113 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form>
+  <Hds::Form::TextInput::Field
+    @value={{@model.name}}
+    @type='text'
+    readOnly={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.app-token.form.name.help'}}</F.HelperText>
+  </Hds::Form::TextInput::Field>
+
+  <Hds::Form::Textarea::Field
+    @value={{@model.description}}
+    readOnly={{true}}
+    as |F|
+  >
+    <F.Label>{{t 'form.description.label'}}</F.Label>
+    <F.HelperText>{{t
+        'resources.app-token.form.description.help'
+      }}</F.HelperText>
+  </Hds::Form::Textarea::Field>
+
+  <DescriptionList @title={{t 'resources.app-token.about.title'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.status.label'}}>
+      <Hds::Badge
+        @text={{this.statusBadge.text}}
+        @color={{this.statusBadge.color}}
+      />
+    </DL.Item>
+    {{! TODO: Check where to navigate the user for global/org/proj levels }}
+    <DL.Item @label={{t 'resources.app-token.form.created_by.label'}}>
+      <Hds::Link::Inline
+        @route='scopes.scope.users.user'
+        @models={{array @model.scope.id @model.created_by_user_id}}
+        @icon='user'
+        @iconPosition='leading'
+        @color='secondary'
+      >
+        {{@model.created_by_user_id}}
+      </Hds::Link::Inline>
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.scope.label'}}>
+      <Hds::Link::Inline
+        @route='scopes.scope'
+        @model={{@model.scope.id}}
+        @icon={{this.scopeInfo.icon}}
+        @iconPosition='leading'
+        @color='secondary'
+      >
+        {{this.scopeInfo.text}}
+      </Hds::Link::Inline>
+    </DL.Item>
+  </DescriptionList>
+
+  <DescriptionList @title={{t 'resources.app-token.form.ttl.label.0'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.ttl.label.1'}}>
+      {{#if this.ttlFormatted}}
+        {{format-day-year this.ttlFormatted}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.expiration_date.label'}}>
+      {{#if @model.expire_time}}
+        <Hds::Time @date={{@model.expire_time}} />
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <DL.Item @label={{t 'resources.app-token.form.created_time.label'}}>
+      {{#if @model.created_time}}
+        <Hds::Time @date={{@model.created_time}} />
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+  </DescriptionList>
+
+  <DescriptionList @title={{t 'resources.app-token.form.tts.label.0'}} as |DL|>
+    <DL.Item @label={{t 'resources.app-token.form.tts.label.1'}}>
+      {{#if this.ttsFormatted}}
+        {{format-day-year this.ttsFormatted}}
+      {{else}}
+        {{t 'labels.none'}}
+      {{/if}}
+    </DL.Item>
+    <div class='description-list-item'>
+      <dt class='label-with-tooltip'>
+        {{t 'resources.app-token.form.last_used.label'}}
+        <Hds::Icon
+          @name='info'
+          @isInline={{true}}
+          {{hds-tooltip (t 'resources.app-token.form.last_used.tooltip')}}
+        />
+      </dt>
+      <dd>
+        {{#if @model.approximate_last_access_time}}
+          <Hds::Time
+            @date={{@model.approximate_last_access_time}}
+            @format='relative'
+          />
+        {{else}}
+          {{t 'labels.none'}}
+        {{/if}}
+      </dd>
+    </div>
+  </DescriptionList>
+</Rose::Form>
