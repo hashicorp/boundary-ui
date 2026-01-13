@@ -8,7 +8,13 @@
   @route='scopes.scope.app-tokens.app-token.permissions'
 />
 {{#if @model.hasPermissionWithEmptyActiveScopes}}
-  <Hds::Alert class='margin-bottom-m' @type='inline' @color='warning' as |A|>
+  <Hds::Alert
+    class='margin-bottom-m'
+    @type='inline'
+    @color='warning'
+    data-test-permissions-alert
+    as |A|
+  >
     <A.Title>{{t 'resources.app-token.messages.no-active-scopes.title'}}
     </A.Title>
     <A.Description>

@@ -142,11 +142,11 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
 
       if (isShown) {
         assert
-          .dom('.app-token-permissions-alert')
+          .dom('[data-test-permissions-alert]')
           .isVisible('Displays warning for permissions with no active scopes');
       } else {
         assert
-          .dom('.app-token-permissions-alert')
+          .dom('[data-test-permissions-alert]')
           .doesNotExist(
             'No warning displayed when all permissions have active scopes',
           );
