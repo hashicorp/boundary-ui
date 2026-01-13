@@ -65,4 +65,38 @@ module('Unit | Model | app token', function (hooks) {
     assert.strictEqual(modelWithTTS.TTS, 120000);
     assert.strictEqual(modelWithoutTTS.TTS, null);
   });
+
+  test('it has an `expiresIn` computed property that returns expected values', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const now = new Date();
+    const inFiveDays = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000); // 5 days later
+
+    const modelWithExpiration = store.createRecord('app-token', {
+      expire_time: inFiveDays,
+    });
+    const modelWithoutExpiration = store.createRecord('app-token', {
+      expire_time: null,
+    });
+
+    assert.strictEqual(typeof modelWithExpiration.expiresIn, 'number');
+    assert.strictEqual(modelWithExpiration.expiresIn, 5);
+    assert.strictEqual(modelWithoutExpiration.expiresIn, null);
+  });
+
+  test('it has a `hasPermissionWithEmptyActiveScopes` computed property that returns expected values', async function (assert) {
+    const store = this.owner.lookup('service:store');
+
+    const modelWithEmptyScopes = store.createRecord('app-token', {
+      permissions: [{ grant_scopes: ['scope-1'] }, { grant_scopes: [] }],
+    });
+    const modelWithoutEmptyScopes = store.createRecord('app-token', {
+      permissions: [
+        { grant_scopes: ['scope-1'] },
+        { grant_scopes: ['scope-2'] },
+      ],
+    });
+
+    assert.true(modelWithEmptyScopes.hasPermissionWithEmptyActiveScopes);
+    assert.false(modelWithoutEmptyScopes.hasPermissionWithEmptyActiveScopes);
+  });
 });

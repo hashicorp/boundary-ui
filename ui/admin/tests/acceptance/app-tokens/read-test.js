@@ -214,19 +214,4 @@ module('Acceptance | app-tokens | read', function (hooks) {
       assert.dom('.hds-badge').containsText(expectedText);
     },
   );
-
-  test('Permissions tab renders placeholder', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appTokenPermissions);
-
-    // Permissions tab should have a form (even if empty for now)
-    assert.dom('.rose-form').exists();
-  });
 });
