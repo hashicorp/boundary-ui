@@ -21,7 +21,7 @@ jobs:
       ENOS_VAR_e2e_debug_no_run: true
       SETUP_CLI: true
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
 
@@ -31,7 +31,7 @@ jobs:
           run_install: false
 
       - name: Set up Node
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: 20
           cache: "pnpm"
@@ -43,7 +43,7 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
 
       - name: Set up Enos
-        uses: hashicorp/action-setup-enos@39a8f388434bea5eeba6649b99aa9949a55a1150
+        uses: hashicorp/action-setup-enos@80a17fa25605989a7a53199137dae1244e32353f
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -53,7 +53,7 @@ jobs:
           unzip /tmp/vault.zip -d /usr/local/bin
 
       - name: Checkout boundary-enterprise
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           repository: hashicorp/boundary-enterprise
           #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload Playwright report
         if: ${{ failure() }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: playwright-report
           path: e2e-tests/playwright-report

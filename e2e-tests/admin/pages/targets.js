@@ -64,7 +64,7 @@ export class TargetsPage extends BaseResourcePage {
       await this.page.getByRole('button', { name: 'Add' }).click();
     }
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -147,7 +147,7 @@ export class TargetsPage extends BaseResourcePage {
 
     await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 
@@ -176,7 +176,7 @@ export class TargetsPage extends BaseResourcePage {
 
     await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 
@@ -298,7 +298,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page
       .getByLabel('Storage buckets')
       .selectOption({ label: storageBucketName });
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(storageBucketName),
@@ -313,7 +313,7 @@ export class TargetsPage extends BaseResourcePage {
       .getByRole('link', { name: 'Session Recording settings' })
       .click();
     await this.page.getByLabel('Record sessions for this target').uncheck();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 }

@@ -224,7 +224,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
       region: 'spain',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
-      worker_filter: 'workerfilter',
       // these are Azure fields and should be excluded
       tenant_id: 'a1b2c3',
       client_id: 'a1b2c3',
@@ -233,6 +232,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       secret_value: 'a1b2c3',
       project_id: 'project',
       zone: 'zone',
+      worker_filter: 'workerfilter',
     });
     const expectedResult = {
       name: 'Azure',
@@ -248,6 +248,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
         secret_id: 'a1b2c3',
         secret_value: 'a1b2c3',
       },
+      worker_filter: 'workerfilter',
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
@@ -313,6 +314,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       type: 'plugin',
       name: 'azure',
       description: 'test description',
+      worker_filter: null,
       attributes: {
         disable_credential_rotation: false,
         tenant_id: 'a1b2c3',

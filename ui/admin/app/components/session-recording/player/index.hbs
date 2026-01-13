@@ -17,7 +17,10 @@
     {{yield}}
   {{else}}
     <div class='session-recording-player-theme'>
-      <Heap::Player @data={{@asciicast}} @poster='npt:1:30' />
+      <SessionRecording::Player::AsciinemaPlayer
+        @data={{@asciicast}}
+        @poster='npt:1:30'
+      />
     </div>
   {{/if}}
 </div>

@@ -25,7 +25,7 @@ export class WorkersPage extends BaseResourcePage {
     await this.page.getByLabel('Key').fill(key);
     await this.page.getByLabel('Value').fill(value);
     await this.page.getByRole('button', { name: 'Add' }).click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
 
     await this.dismissSuccessAlert();
   }
@@ -46,7 +46,7 @@ export class WorkersPage extends BaseResourcePage {
 
     await this.page.getByLabel('Key').fill(newKey);
     await this.page.getByLabel('Value').fill(newValue);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
 
     await this.dismissSuccessAlert();
   }

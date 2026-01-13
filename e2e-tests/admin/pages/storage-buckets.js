@@ -49,7 +49,7 @@ export class StorageBucketsPage extends BaseResourcePage {
       .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -103,7 +103,7 @@ export class StorageBucketsPage extends BaseResourcePage {
       .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

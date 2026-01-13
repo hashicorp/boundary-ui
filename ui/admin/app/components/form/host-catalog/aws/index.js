@@ -34,9 +34,12 @@ export default class FormHostCatalogAwsComponent extends Component {
   }
 
   /**
-   * Returns true if current edition is HCP.
+   * Returns true if current edition is HCP and dynamic credential type is specified.
    */
   get isWorkerFilterRequired() {
-    return this.featureEdition.edition === 'hcp';
+    return (
+      this.featureEdition.edition === 'hcp' &&
+      this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC
+    );
   }
 }

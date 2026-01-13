@@ -22,7 +22,7 @@ export class OrgsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New Org' }).click();
     await this.page.getByLabel('Name').fill(orgName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -45,7 +45,7 @@ export class OrgsPage extends BaseResourcePage {
     await this.page
       .getByLabel('Storage Policy')
       .selectOption({ label: policyName });
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(policyName),

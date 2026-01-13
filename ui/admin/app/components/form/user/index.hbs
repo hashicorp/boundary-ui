@@ -53,6 +53,7 @@
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
+      @ariaDescriptionEdit={{t 'resources.user.title'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
     />

@@ -41,7 +41,7 @@ export class StoragePoliciesPage extends BaseResourcePage {
     await this.page
       .getByLabel('Retention Policy')
       .selectOption({ label: 'Forever' });
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
