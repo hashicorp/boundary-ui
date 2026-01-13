@@ -79,7 +79,7 @@ export default class FormAppTokenReadComponent extends Component {
 
   @action
   downloadAppToken() {
-    const fileName = `app-token-${this.args.model.token}.txt`;
+    const fileName = 'app-token.txt';
     const blob = new Blob([this.args.model.token], { type: 'text/plain' });
 
     const url = URL.createObjectURL(blob);
