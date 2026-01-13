@@ -53,4 +53,14 @@ export default class AppTokenModel extends GeneratedAppTokenModel {
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
     return diffDays > 0 ? diffDays : 0;
   }
+
+  /**
+   * Check if any permission has empty active scopes
+   * @returns {boolean}
+   */
+  get hasPermissionWithEmptyActiveScopes() {
+    return this.permissions?.some(
+      (permission) => permission.grant_scopes.length === 0,
+    );
+  }
 }

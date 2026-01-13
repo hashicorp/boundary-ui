@@ -7,14 +7,8 @@
   @text={{t 'resources.app-token.tabs.permissions'}}
   @route='scopes.scope.app-tokens.app-token.permissions'
 />
-{{#if this.showNoActiveScopesWarning}}
-  <Hds::Alert
-    class='app-token-permissions-alert'
-    @type='inline'
-    @color='warning'
-    @onDismiss={{this.noop}}
-    as |A|
-  >
+{{#if @model.hasPermissionWithEmptyActiveScopes}}
+  <Hds::Alert class='margin-bottom-m' @type='inline' @color='warning' as |A|>
     <A.Title>{{t 'resources.app-token.messages.no-active-scopes.title'}}
     </A.Title>
     <A.Description>
