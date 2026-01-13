@@ -21,6 +21,19 @@
   </Hds::SegmentedGroup>
 
   {{#if this.paginatedTemplates}}
+
+    <div class='selected-items-text'>
+      {{#if this.selectedGrantTemplates}}
+        <Hds::Text::Body @tag='p' @color='faint'>
+          {{t
+            'states.selected-items'
+            items=this.selectedGrantTemplates.length
+            total=this.totalCount
+          }}
+        </Hds::Text::Body>
+      {{/if}}
+    </div>
+
     <Hds::Table
       @model={{this.paginatedTemplates}}
       @columns={{array

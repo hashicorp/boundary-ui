@@ -671,7 +671,6 @@ role:
       parent_scope: Parent scope
       resource_type: Resource type
       projects_selected: Projects selected
-      selected: '{items} selected out of {total}'
     messages:
       none:
         title: No scopes added

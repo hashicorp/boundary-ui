@@ -158,6 +158,10 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
       this.args.page * this.args.pageSize,
     );
   }
+
+  get totalCount() {
+    return this.grantTemplateDefinitions.length;
+  }
   // =actions
 
   @action
