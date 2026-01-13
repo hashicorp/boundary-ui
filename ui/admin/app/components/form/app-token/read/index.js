@@ -77,6 +77,9 @@ export default class FormAppTokenReadComponent extends Component {
     return Math.floor(tts / (1000 * 60 * 60 * 24));
   }
 
+  /**
+   * Triggers download of app token in a txt file.
+   */
   @action
   downloadAppToken() {
     const fileName = 'app-token.txt';
