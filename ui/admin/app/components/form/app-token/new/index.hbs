@@ -176,12 +176,19 @@
 
   {{#if this.showPermissionFlyout}}
     {{! TODO: Populate flyout with scope options.}}
-    <Hds::Flyout @onClose={{this.closePermissionFlyout}} as |M|>
+    <Hds::Flyout @size='large' @onClose={{this.closePermissionFlyout}} as |M|>
       <M.Header>{{if
           this.editingPermission
           (t 'resources.app-token.titles.edit-permission')
           (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
+      <M.Body>
+        <ScopeOptions
+          @model={{@model}}
+          @field={{this.selectedPermission}}
+          @name='grant_scope_id'
+        />
+      </M.Body>
       <M.Footer>
         <Hds::ButtonSet>
           {{#if this.editingPermission}}
