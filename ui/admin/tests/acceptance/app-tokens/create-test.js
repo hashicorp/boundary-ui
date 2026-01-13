@@ -187,11 +187,25 @@ module('Acceptance | app-tokens | create', function (hooks) {
 
       await click(selectors.ADD_PERMISSION_BTN);
 
-      assert.dom(selectors.PERMISSION_FLYOUT).exists();
-      assert.dom(selectors.PERMISSION_LABEL_FIELD).exists();
       assert
         .dom(selectors.PERMISSION_FLYOUT)
         .includesText('A brief explanation of what this permission does');
+    },
+  );
+
+  test.each(
+    'permission flyout displays scope options',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      assert.dom(selectors.PERMISSION_FLYOUT).includesText('Scope options');
+      assert
+        .dom(selectors.PERMISSION_FLYOUT)
+        .includesText('Select which scopes the permission is applied to');
+      assert.dom(selectors.PERMISSION_FLYOUT).includesText('Add this scope');
     },
   );
 });
