@@ -1242,6 +1242,8 @@ app-token:
     active-scopes: Active scopes
     edit-permission: Edit permission
     add-permission: Add permission
+    labels: Labels
+    deleted-scopes: Deleted scopes
   tabs:
     permissions: Permissions
   about:
@@ -1290,6 +1292,9 @@ app-token:
     revoked: Revoked
     expired: Expired
     stale: Stale
+  actions:
+    clone: Clone this app token
+    delete: Delete this app token
   messages:
     none:
       title: No App Tokens Available
@@ -1300,3 +1305,6 @@ app-token:
       description: App tokens are immutable after creation. Make sure all of this token's details are correct before finishing creation.
     tooltips:
       active-scopes: Active scopes are scopes that exist within Boundary.
+    no-active-scopes:
+      title: Permissions with no active scopes
+      description: There are some permissions where all of the scopes have been deleted. You may run into an <strong>unauthorized</strong> error if you try to use this app token.
