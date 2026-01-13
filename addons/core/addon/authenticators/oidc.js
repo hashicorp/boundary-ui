@@ -64,8 +64,10 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
    */
   authenticate() {
     return super.authenticate(...arguments).then((data) => {
-      const token = data?.attributes?.token;
-      this.addTokenToAuthorization(token);
+      if (data.type !== 'cookie') {
+        const token = data?.attributes?.token;
+        this.addTokenToAuthorization(token);
+      }
       return data;
     });
   }
@@ -78,8 +80,10 @@ export default class OIDCAuthenticator extends BaseOIDCAuthenticator {
    * @return {object}
    */
   restore(data) {
-    const token = data?.attributes?.token;
-    this.addTokenToAuthorization(token);
+    if (data.type !== 'cookie') {
+      const token = data?.attributes?.token;
+      this.addTokenToAuthorization(token);
+    }
     return super.restore(data);
   }
 

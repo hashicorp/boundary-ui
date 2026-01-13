@@ -6,6 +6,7 @@
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
 import { waitForPromise } from '@ember/test-waiters';
+import { service } from '@ember/service';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -19,6 +20,8 @@ import { waitForPromise } from '@ember/test-waiters';
  * All other responses should resolve the session restoration successfully.
  */
 export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
+  @service('browser/window') window;
+
   // =unimplemented methods
 
   /**
@@ -88,6 +91,15 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async restore(data) {
     if (!data) return reject();
+
+    // TODO: What is the proper validation to do here to ensure that the token
+    // on the cookie is still valid? Is there an API call that can made that
+    // returns successful without specifying the token, if the request succeeds
+    // then assume the token is valid? For now just resolve with the current
+    // data
+    if (data.type !== 'cookie') {
+      return resolve(this.normalizeData(data));
+    }
     return this.validateToken(data.attributes.token, data.attributes.id).then(
       () => this.normalizeData(data),
     );
@@ -123,14 +135,21 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   async invalidate(options) {
     const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
+
     await waitForPromise(
       fetch(deauthEndpointURL, {
         method: 'delete',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       }).catch(() => {
         /* no op */
       }),
     );
+
+    // if the session was authorized using cookies, this clears out the js half of the split cookie
+    // otherwise it's a noop if the cookie doesn't exist.
+    const jsCookie = 'wt-js-token-cookie';
+    await this.window.cookieStore.delete(jsCookie);
+
     return super.invalidate(...arguments);
   }
 }

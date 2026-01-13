@@ -37,7 +37,7 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
   async authenticate(authMethod, creds) {
     const scope = authMethod.scope;
     const authenticatorName = `authenticator:${authMethod.type}`;
-    const requestCookies = false;
+    const requestCookies = true;
     switch (authMethod.type) {
       case TYPE_AUTH_METHOD_PASSWORD:
       case TYPE_AUTH_METHOD_LDAP:

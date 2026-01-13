@@ -90,6 +90,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     const url = this.buildAuthEndpointURL(options);
     const body = JSON.stringify({
       command: 'token',
+      type: 'cookie',
       attributes: {
         //state: this.session.get('data.pending.oidc.attributes.state'),
         token_id: this.session.get('data.pending.oidc.attributes.token_id'),
