@@ -5,7 +5,7 @@
 
 {{! TODO Consolidate overlapping translations once roles manage scopes gets refactored. }}
 
-<div class='search-filtering'>
+<div class='scope-options search-filtering'>
   <Hds::Form::Toggle::Field
     @value={{this.keywords.keyThis}}
     name={{this.keywords.keyThis}}
@@ -120,100 +120,142 @@
           >
             <Hds::SegmentedGroup as |S|>
               <S.TextInput
-                @value={{@search}}
+                @value={{this.search}}
                 @type='search'
                 placeholder={{t 'actions.search'}}
                 aria-label={{t 'actions.search'}}
-                {{on 'input' @handleSearchInput}}
+                {{on 'input' this.handleSearchInput}}
               />
-              {{#if (has-block 'filter')}}
-                <S.Generic>
-                  {{yield S to='filter'}}
-                </S.Generic>
+              {{#if @model.scope.isGlobal}}
+                <Dropdown
+                  name='parent-scopes'
+                  @toggleText={{t 'form.parent-scope.label'}}
+                  @itemOptions={{this.parentScopeFilters.options}}
+                  @checkedItems={{this.parentScopes}}
+                  @applyFilter={{fn this.applyFilter 'parentScopes'}}
+                  @isSearchable={{true}}
+                  @searchTerm={{this.parentScopeFilters.search}}
+                  @updateSearchTerm={{fn
+                    this.onFilterSearch.perform
+                    'parentScopeFilters'
+                  }}
+                  @isLoading={{or
+                    this.onFilterSearch.isRunning
+                    this.loadItems.isRunning
+                  }}
+                  as |FD selectItem itemOptions|
+                >
+                  {{#each itemOptions as |itemOption|}}
+                    <FD.Checkbox
+                      @value={{itemOption.id}}
+                      checked={{includes itemOption.id @parentScopes}}
+                      {{on 'change' selectItem}}
+                    >
+                      {{~or itemOption.name itemOption.id}}
+                    </FD.Checkbox>
+                  {{/each}}
+                </Dropdown>
               {{/if}}
             </Hds::SegmentedGroup>
 
             {{#if this.customScopesSelectionTotal}}
-              <Hds::Form::Toggle::Field
-                checked={{@showSelectedOnly}}
-                {{on 'change' @toggleShowSelectedOnly}}
-                as |F|
-              >
-                <F.Label>
-                  {{t
-                    'form.selected-only-toggle.label'
-                    itemCount=this.customScopesSelectionTotal
-                  }}
-                </F.Label>
-              </Hds::Form::Toggle::Field>
+              <div class='scope-options__show_selected_toggle'>
+                <Hds::Form::Toggle::Field
+                  checked={{this.showSelectedOnly}}
+                  {{on 'change' this.toggleShowSelectedOnly}}
+                  as |F|
+                >
+                  <F.Label>
+                    {{t
+                      'form.selected-only-toggle.label'
+                      itemCount=this.customScopesSelectionTotal
+                    }}
+                  </F.Label>
+                </Hds::Form::Toggle::Field>
+              </div>
             {{/if}}
           </Hds::Layout::Flex>
 
-          <FilterTags @filters={{@filters}} class='margin-bottom-m' />
+          <FilterTags
+            @filters={{this.filters}}
+            @removeFilter={{this.removeFilter}}
+            @clearAllFilters={{this.clearAllFilters}}
+            class='margin-bottom-m'
+          />
 
-          {{#if @scopes}}
-            <Hds::Table
-              @columns={{array
-                (hash label=(t 'resources.role.scope.title'))
-                (hash label=(t 'form.id.label'))
-                (hash label=(t 'form.parent-scope.label'))
-              }}
-              @model={{@scopes}}
-              @isSelectable={{true}}
-              @onSelectionChange={{this.selectionChange}}
-              @valign='middle'
-              class='margin-bottom-m'
-            >
-              <:body as |B|>
-                <B.Tr
-                  @selectionKey={{B.data.id}}
-                  @isSelected={{includes B.data.id this.grantScopeIds}}
-                  @selectionAriaLabelSuffix='row {{B.data.id}}'
-                >
-                  <B.Td>
-                    <Hds::Text::Body @tag='p'>
-                      {{B.data.displayName}}
-                    </Hds::Text::Body>
-                  </B.Td>
-                  <B.Td>
-                    <Hds::Copy::Snippet
-                      @textToCopy={{B.data.id}}
-                      @color='secondary'
-                    />
-                  </B.Td>
-                  <B.Td>
-                    <Hds::Text::Body @tag='p'>
-                      {{if
-                        B.data.scope.isGlobal
-                        'Global'
-                        (or B.data.scope.name B.data.scope.id)
-                      }}
-                    </Hds::Text::Body>
-                  </B.Td>
-                </B.Tr>
-              </:body>
-            </Hds::Table>
-
-            <Rose::Pagination
-              @totalItems={{@totalItems}}
-              @currentPage={{@page}}
-              @currentPageSize={{@pageSize}}
-            />
-          {{else}}
-            <Hds::ApplicationState data-test-no-scope-results as |A|>
-              <A.Header @title={{t 'titles.no-results-found'}} />
-              <A.Body
-                @text={{t
-                  (if
-                    @search
-                    'descriptions.no-search-results'
-                    'descriptions.no-filter-results'
-                  )
-                  query=@search
-                  resource=(t 'resources.app-token.title_plural')
-                }}
-              />
+          {{#if this.retrieveData.isRunning}}
+            <Hds::ApplicationState class='loading-indicator' as |A|>
+              <A.Header @title={{t 'states.loading.title'}} @icon='loading' />
+              <A.Body @text={{t 'states.loading.generic-description'}} />
             </Hds::ApplicationState>
+          {{else}}
+            {{#if this.scopes.length}}
+              <Hds::Table
+                @columns={{array
+                  (hash label=(t 'resources.role.scope.title'))
+                  (hash label=(t 'form.id.label'))
+                  (hash label=(t 'form.parent-scope.label'))
+                }}
+                @model={{this.scopes}}
+                @isSelectable={{true}}
+                @onSelectionChange={{this.selectionChange}}
+                @valign='middle'
+                class='margin-bottom-m'
+              >
+                <:body as |B|>
+                  <B.Tr
+                    @selectionKey={{B.data.id}}
+                    @isSelected={{includes B.data.id this.grantScopeIds}}
+                    @selectionAriaLabelSuffix='row {{B.data.id}}'
+                  >
+                    <B.Td>
+                      <Hds::Text::Body @tag='p'>
+                        {{B.data.displayName}}
+                      </Hds::Text::Body>
+                    </B.Td>
+                    <B.Td>
+                      <Hds::Copy::Snippet
+                        @textToCopy={{B.data.id}}
+                        @color='secondary'
+                      />
+                    </B.Td>
+                    <B.Td>
+                      <Hds::Text::Body @tag='p'>
+                        {{if
+                          B.data.scope.isGlobal
+                          'Global'
+                          (or B.data.scope.name B.data.scope.id)
+                        }}
+                      </Hds::Text::Body>
+                    </B.Td>
+                  </B.Tr>
+                </:body>
+              </Hds::Table>
+
+              <Hds::Pagination::Numbered
+                data-test-pagination
+                @totalItems={{this.totalItems}}
+                @currentPage={{this.page}}
+                @currentPageSize={{this.pageSize}}
+                @onPageChange={{this.handlePageChange}}
+                @onPageSizeChange={{this.handlePageSizeChange}}
+              />
+            {{else}}
+              <Hds::ApplicationState data-test-no-scope-results as |A|>
+                <A.Header @title={{t 'titles.no-results-found'}} />
+                <A.Body
+                  @text={{t
+                    (if
+                      this.search
+                      'descriptions.no-search-results'
+                      'descriptions.no-filter-results'
+                    )
+                    query=this.search
+                    resource=(t 'resources.scope.title_plural')
+                  }}
+                />
+              </Hds::ApplicationState>
+            {{/if}}
           {{/if}}
         </:content>
       </A.Item>
