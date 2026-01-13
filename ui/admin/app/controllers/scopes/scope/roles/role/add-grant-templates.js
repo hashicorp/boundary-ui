@@ -17,7 +17,7 @@ export default class ScopesScopeRolesRoleAddGrantTemplatesController extends Con
 
   // =attributes
 
-  queryParams = ['page', 'pageSize'];
+  queryParams = ['search', 'page', 'pageSize'];
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;

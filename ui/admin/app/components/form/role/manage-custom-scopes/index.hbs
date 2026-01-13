@@ -39,7 +39,7 @@
           {{#if @model.role.grantScopeOrgIDs.length}}
             <Hds::Text::Body @tag='p' @color='faint'>
               {{t
-                'resources.role.scope.titles.selected'
+                'states.selected-items'
                 items=@model.role.grantScopeOrgIDs.length
                 total=@model.totalItemsCount
               }}
@@ -103,7 +103,7 @@
           {{#if @model.role.grantScopeProjectIDs.length}}
             <Hds::Text::Body @tag='p' @color='faint'>
               {{t
-                'resources.role.scope.titles.selected'
+                'states.selected-items'
                 items=@model.role.grantScopeProjectIDs.length
                 total=@model.totalItemsCount
               }}
