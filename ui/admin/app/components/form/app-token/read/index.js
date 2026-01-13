@@ -37,7 +37,7 @@ export default class FormAppTokenReadComponent extends Component {
    * @returns {object}
    */
   get scopeInfo() {
-    const scope = this.args.model.scope;
+    const scope = this.args.model.scopeModel;
     let icon = 'grid';
 
     if (scope.isGlobal) {
