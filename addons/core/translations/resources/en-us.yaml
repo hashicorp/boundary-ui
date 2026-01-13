@@ -1244,8 +1244,6 @@ app-token:
     add-permission: Add permission
     labels: Labels
     deleted-scopes: Deleted scopes
-  tooltips:
-    active-scopes: Active scopes are scopes that exist within Boundary
   tabs:
     permissions: Permissions
   about:
