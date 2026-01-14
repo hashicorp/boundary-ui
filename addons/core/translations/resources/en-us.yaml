@@ -1249,6 +1249,8 @@ app-token:
     confirm-creation: Confirm creation
     saved-app-token: Yes, I have saved the app token
     download-app-token: Download the token
+    clone: Clone this app token
+    delete: Delete this app token
   tabs:
     permissions: Permissions
   about:
@@ -1305,9 +1307,6 @@ app-token:
     revoked: Revoked
     expired: Expired
     stale: Stale
-  actions:
-    clone: Clone this app token
-    delete: Delete this app token
   messages:
     none:
       title: No App Tokens Available
