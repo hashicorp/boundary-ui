@@ -17,3 +17,12 @@ export const CONFIRM_APP_TOKEN_BTN = '.hds-modal .hds-button--color-primary';
 
 export const TOKEN_COPY_SNIPPET =
   '.app-token-modal-body .hds-copy-snippet__text';
+export const BREADCRUMB = '[data-test-breadcrumbs-container]';
+export const ROW_LABEL = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;
+export const ROW_GRANTS = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(2)`;
+export const ROW_ACTIVE_SCOPES = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(3)`;
+export const ROW_DELETED_SCOPES = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(4)`;
