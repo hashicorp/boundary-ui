@@ -98,7 +98,7 @@ module('Acceptance | app-tokens | create', function (hooks) {
   );
 
   test.each(
-    'users can create a new app-token',
+    'users can create a new app-token and view token',
     ['global', 'org', 'project'],
     async function (assert, scope) {
       const appTokenCount = getAppTokenCount();
@@ -114,10 +114,16 @@ module('Acceptance | app-tokens | create', function (hooks) {
       assert.dom(selectors.FIELD_TTL_HOURS).hasValue('0');
       assert.dom(selectors.FIELD_TTL_MINUTES).hasValue('0');
 
-      await click(commonSelectors.SAVE_BTN);
+      await click(selectors.CREATE_BTN);
+      await click(commonSelectors.SAVE_BTN, 'Confirm creation');
+
       const appToken = this.server.schema.appTokens.findBy({
         name: commonSelectors.FIELD_NAME_VALUE,
       });
+
+      assert.dom(selectors.TOKEN_COPY_SNIPPET).hasText(appToken.token);
+
+      await click(selectors.CONFIRM_APP_TOKEN_BTN, 'Confirm token saved');
 
       assert.strictEqual(appToken.name, commonSelectors.FIELD_NAME_VALUE);
       assert.strictEqual(appToken.timeToLiveSeconds, 5184000);
@@ -137,7 +143,15 @@ module('Acceptance | app-tokens | create', function (hooks) {
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
-      await click(commonSelectors.CANCEL_BTN);
+      await click(selectors.CREATE_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}NewAppToken`]);
+
+      await click(selectors.CANCEL_MODAL_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}NewAppToken`]);
+
+      await click(selectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls[`${scope}AppTokens`]);
       assert.strictEqual(getAppTokenCount(), appTokenCount);
@@ -170,7 +184,8 @@ module('Acceptance | app-tokens | create', function (hooks) {
       await visit(urls[`${scope}AppTokens`]);
 
       await click(commonSelectors.HREF(urls[`${scope}NewAppToken`]));
-      await click(commonSelectors.SAVE_BTN);
+      await click(selectors.CREATE_BTN);
+      await click(commonSelectors.SAVE_BTN, 'Confirm creation');
 
       assert
         .dom(commonSelectors.ALERT_TOAST_BODY)

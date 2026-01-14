@@ -16,6 +16,8 @@ export default class FormAppTokenNewComponent extends Component {
   @tracked showPermissionFlyout = false;
   @tracked editingPermission = false;
   @tracked selectedPermission;
+  @tracked showConfirmCreateModal = false;
+
   indexOfEditingPermission;
 
   /**
@@ -113,5 +115,13 @@ export default class FormAppTokenNewComponent extends Component {
     this.args.model.permissions = this.args.model.permissions.filter(
       (_, i) => i !== index,
     );
+  }
+
+  /**
+   * Toggles `showConfirmCreateModal` to true or false.
+   */
+  @action
+  toggleConfirmCreate() {
+    this.showConfirmCreateModal = !this.showConfirmCreateModal;
   }
 }
