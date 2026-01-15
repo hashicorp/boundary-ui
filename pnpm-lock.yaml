@@ -804,8 +804,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2)
       '@embroider/macros':
-        specifier: ^1.18.0
-        version: 1.18.0(@glint/template@1.5.2)
+        specifier: ^1.18.1
+        version: 1.19.3(@glint/template@1.5.2)
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
@@ -862,7 +862,7 @@ importers:
         version: 3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))
       ember-cli-flash:
         specifier: ^6.0.0
-        version: 6.0.0(@ember/string@4.0.1)(@embroider/macros@1.18.0(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1))
+        version: 6.0.0(@ember/string@4.0.1)(@embroider/macros@1.19.3(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1))
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
@@ -1012,8 +1012,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2)
       '@embroider/macros':
-        specifier: ^1.18.0
-        version: 1.18.0(@glint/template@1.5.2)
+        specifier: ^1.18.1
+        version: 1.19.3(@glint/template@1.5.2)
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
@@ -1064,7 +1064,7 @@ importers:
         version: 3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))
       ember-cli-flash:
         specifier: ^6.0.0
-        version: 6.0.0(@ember/string@4.0.1)(@embroider/macros@1.18.0(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1))
+        version: 6.0.0(@ember/string@4.0.1)(@embroider/macros@1.19.3(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1))
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
@@ -10087,7 +10087,7 @@ snapshots:
       find-up: 5.0.0
       fs-extra: 10.1.0
       log-symbols: 4.1.0
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -10256,7 +10256,7 @@ snapshots:
 
   '@electron/notarize@2.5.0':
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       fs-extra: 9.1.0
       promise-retry: 2.0.1
     transitivePeerDependencies:
@@ -10265,7 +10265,7 @@ snapshots:
   '@electron/osx-sign@1.3.3':
     dependencies:
       compare-version: 0.1.2
-      debug: 4.4.1
+      debug: 4.4.3
       fs-extra: 10.1.0
       isbinaryfile: 4.0.10
       minimist: 1.2.8
@@ -10292,7 +10292,7 @@ snapshots:
       plist: 3.1.0
       resedit: 2.0.3
       resolve: 1.22.10
-      semver: 7.7.2
+      semver: 7.7.3
       yargs-parser: 21.1.1
     transitivePeerDependencies:
       - supports-color
@@ -10310,7 +10310,7 @@ snapshots:
       node-api-version: 0.2.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 6.2.1
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -10321,7 +10321,7 @@ snapshots:
     dependencies:
       '@electron/asar': 3.4.1
       '@malept/cross-spawn-promise': 2.0.0
-      debug: 4.4.1
+      debug: 4.4.3
       dir-compare: 4.2.0
       fs-extra: 11.3.2
       minimatch: 9.0.5
@@ -10332,7 +10332,7 @@ snapshots:
   '@electron/windows-sign@1.2.2':
     dependencies:
       cross-dirname: 0.1.0
-      debug: 4.4.1
+      debug: 4.4.3
       fs-extra: 11.3.2
       minimist: 1.2.8
       postject: 1.0.0-alpha.6
@@ -10513,7 +10513,7 @@ snapshots:
 
   '@ember/render-modifiers@2.1.0(@babel/core@7.27.1)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9)))':
     dependencies:
-      '@embroider/macros': 1.18.0(@glint/template@1.5.2)
+      '@embroider/macros': 1.19.3(@glint/template@1.5.2)
       ember-cli-babel: 7.26.11
       ember-modifier-manager-polyfill: 1.2.0(@babel/core@7.27.1)
       ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9))
@@ -10597,7 +10597,7 @@ snapshots:
       find-up: 5.0.0
       lodash: 4.17.23
       resolve: 1.22.10
-      semver: 7.7.2
+      semver: 7.7.3
     optionalDependencies:
       '@glint/template': 1.5.2
     transitivePeerDependencies:
@@ -10641,7 +10641,7 @@ snapshots:
   '@embroider/shared-internals@3.0.1':
     dependencies:
       babel-import-util: 3.0.1
-      debug: 4.4.1
+      debug: 4.4.3
       ember-rfc176-data: 0.3.18
       fs-extra: 9.1.0
       is-subdir: 1.2.0
@@ -10651,7 +10651,7 @@ snapshots:
       pkg-entry-points: 1.1.1
       resolve-package-path: 4.0.3
       resolve.exports: 2.0.3
-      semver: 7.7.2
+      semver: 7.7.3
       typescript-memoize: 1.1.1
     transitivePeerDependencies:
       - supports-color
@@ -11734,7 +11734,7 @@ snapshots:
   '@warp-drive/build-config@0.0.2(@glint/template@1.5.2)':
     dependencies:
       '@embroider/addon-shim': 1.10.0
-      '@embroider/macros': 1.18.0(@glint/template@1.5.2)
+      '@embroider/macros': 1.19.3(@glint/template@1.5.2)
       babel-import-util: 2.1.1
       broccoli-funnel: 3.0.8
       semver: 7.7.2
@@ -13686,11 +13686,11 @@ snapshots:
       resolve: 1.22.10
       semver: 5.7.2
 
-  ember-cli-flash@6.0.0(@ember/string@4.0.1)(@embroider/macros@1.18.0(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1)):
+  ember-cli-flash@6.0.0(@ember/string@4.0.1)(@embroider/macros@1.19.3(@glint/template@1.5.2))(ember-modifier@4.2.2(@babel/core@7.27.1)):
     dependencies:
       '@ember/string': 4.0.1
       '@embroider/addon-shim': 1.10.0
-      '@embroider/macros': 1.18.0(@glint/template@1.5.2)
+      '@embroider/macros': 1.19.3(@glint/template@1.5.2)
       ember-modifier: 4.2.2(@babel/core@7.27.1)
     transitivePeerDependencies:
       - supports-color
@@ -14840,7 +14840,7 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
-      semver: 7.7.2
+      semver: 7.7.3
 
   eslint-config-prettier@9.1.0(eslint@8.57.1):
     dependencies:
@@ -15105,7 +15105,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -15336,7 +15336,7 @@ snapshots:
 
   flora-colossus@2.0.0:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       fs-extra: 10.1.0
     transitivePeerDependencies:
       - supports-color
@@ -15494,7 +15494,7 @@ snapshots:
 
   galactus@1.0.0:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       flora-colossus: 2.0.0
       fs-extra: 10.1.0
     transitivePeerDependencies:
@@ -15638,7 +15638,7 @@ snapshots:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.7.2
+      semver: 7.7.3
       serialize-error: 7.0.1
     optional: true
 
@@ -16646,7 +16646,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   make-fetch-happen@10.2.1:
     dependencies:
@@ -17084,14 +17084,14 @@ snapshots:
 
   node-abi@3.77.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   node-addon-api@7.1.1:
     optional: true
 
   node-api-version@0.2.1:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   node-dir@0.1.17:
     dependencies:
@@ -17109,7 +17109,7 @@ snapshots:
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
-      semver: 7.7.2
+      semver: 7.7.3
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
@@ -17147,7 +17147,7 @@ snapshots:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.16.1
-      semver: 7.7.2
+      semver: 7.7.3
       validate-npm-package-license: 3.0.4
 
   normalize-path@2.1.1:
@@ -17384,7 +17384,7 @@ snapshots:
       ky: 1.8.1
       registry-auth-token: 5.1.0
       registry-url: 6.0.1
-      semver: 7.7.2
+      semver: 7.7.3
 
   parent-module@1.0.1:
     dependencies:
@@ -19217,7 +19217,7 @@ snapshots:
   validate-peer-dependencies@1.2.0:
     dependencies:
       resolve-package-path: 3.1.0
-      semver: 7.7.2
+      semver: 7.7.3
 
   validate-peer-dependencies@2.2.0:
     dependencies:
