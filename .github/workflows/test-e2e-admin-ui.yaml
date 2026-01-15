@@ -168,7 +168,7 @@ jobs:
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
-          enos scenario launch --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
+          enos scenario launch --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local protocol:http
 
       - name: Move boundary binary
         run: |
