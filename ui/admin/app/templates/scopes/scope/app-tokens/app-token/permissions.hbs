@@ -7,71 +7,104 @@
   @text={{t 'resources.app-token.tabs.permissions'}}
   @route='scopes.scope.app-tokens.app-token.permissions'
 />
-{{#if @model.hasPermissionWithEmptyActiveScopes}}
-  <Hds::Alert
-    class='margin-bottom-m'
-    @type='inline'
-    @color='warning'
-    data-test-permissions-alert
-    as |A|
-  >
-    <A.Title>{{t 'resources.app-token.messages.no-active-scopes.title'}}
-    </A.Title>
-    <A.Description>
-      {{t
-        'resources.app-token.messages.no-active-scopes.description'
-        htmlSafe=true
-      }}
-    </A.Description>
-    <A.Button
-      @color='secondary'
-      @text={{t 'resources.app-token.actions.clone'}}
-    />
-    <A.Button
-      @color='tertiary'
-      @text={{t 'resources.app-token.actions.delete'}}
-      @icon='trash'
-    />
-  </Hds::Alert>
-{{/if}}
 
-<Hds::Table
-  @model={{@model.permissions}}
-  @columns={{array
-    (hash label=(t 'resources.app-token.titles.labels'))
-    (hash label=(t 'resources.app-token.titles.grants'))
-    (hash
-      label=(t 'resources.app-token.titles.active-scopes')
-      tooltip=(t 'resources.app-token.messages.tooltips.active-scopes')
-    )
-    (hash label=(t 'resources.app-token.titles.deleted-scopes'))
-  }}
-  @valign='middle'
->
-  <:body as |B|>
-    <B.Tr>
-      <B.Td>
-        {{#if B.data.label}}
-          {{B.data.label}}
-        {{else}}
-          —
-        {{/if}}
-      </B.Td>
-      <B.Td>{{B.data.grant.length}}</B.Td>
-      <B.Td>
-        {{#if B.data.grant_scopes}}
-          {{B.data.grant_scopes.length}}
-        {{else}}
-          —
-        {{/if}}
-      </B.Td>
-      <B.Td>
-        {{#if B.data.deleted_scopes}}
-          {{B.data.deleted_scopes.length}}
-        {{else}}
-          —
-        {{/if}}
-      </B.Td>
-    </B.Tr>
-  </:body>
-</Hds::Table>
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.app-token.title_plural'}}
+        <DocLink @doc='app-tokens' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.app-token.description'}}
+      </PH.Description>
+      <PH.Actions>
+        <AppTokens::AppToken::Actions
+          @model={{@model}}
+          @revoke={{fn this.appTokens.revoke @model}}
+        />
+      </PH.Actions>
+      <PH.Generic>
+        <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+      </PH.Generic>
+    </Hds::PageHeader>
+  </page.header>
+
+  <page.navigation>
+    <AppTokens::AppToken::Nav />
+  </page.navigation>
+
+  <page.body>
+    {{#if @model.hasPermissionWithEmptyActiveScopes}}
+      <Hds::Alert
+        class='margin-bottom-m'
+        @type='inline'
+        @color='warning'
+        data-test-permissions-alert
+        as |A|
+      >
+        <A.Title>{{t 'resources.app-token.messages.no-active-scopes.title'}}
+        </A.Title>
+        <A.Description>
+          {{t
+            'resources.app-token.messages.no-active-scopes.description'
+            htmlSafe=true
+          }}
+        </A.Description>
+        <A.Button
+          @color='secondary'
+          @text={{t 'resources.app-token.actions.clone'}}
+        />
+        <A.Button
+          @color='tertiary'
+          @text={{t 'resources.app-token.actions.delete'}}
+          @icon='trash'
+        />
+      </Hds::Alert>
+    {{/if}}
+
+    <Hds::Table
+      @model={{@model.permissions}}
+      @columns={{array
+        (hash label=(t 'resources.app-token.titles.labels'))
+        (hash label=(t 'resources.app-token.titles.grants'))
+        (hash
+          label=(t 'resources.app-token.titles.active-scopes')
+          tooltip=(t 'resources.app-token.messages.tooltips.active-scopes')
+        )
+        (hash label=(t 'resources.app-token.titles.deleted-scopes'))
+      }}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td>
+            {{#if B.data.label}}
+              {{B.data.label}}
+            {{else}}
+              —
+            {{/if}}
+          </B.Td>
+          <B.Td>{{B.data.grant.length}}</B.Td>
+          <B.Td>
+            {{#if B.data.grant_scopes}}
+              {{B.data.grant_scopes.length}}
+            {{else}}
+              —
+            {{/if}}
+          </B.Td>
+          <B.Td>
+            {{#if B.data.deleted_scopes}}
+              {{B.data.deleted_scopes.length}}
+            {{else}}
+              —
+            {{/if}}
+          </B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
+  </page.body>
+</Rose::Layout::Page>

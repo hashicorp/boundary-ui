@@ -4,11 +4,12 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | app-tokens | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -214,4 +215,74 @@ module('Acceptance | app-tokens | read', function (hooks) {
       assert.dom('.hds-badge').containsText(expectedText);
     },
   );
+
+  test('users can revoke an app-token with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
+          enabled: false,
+        },
+      },
+    });
+
+    assert.true(instances.appToken.authorized_actions.includes('revoke'));
+    await visit(urls.appToken);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_REVOKE);
+    await fillIn(selectors.FILED_CONFIRM_REVOKE, 'REVOKE');
+    await click(selectors.CONFIRM_REVOKE_BTN);
+
+    assert.dom(selectors.STATUS_BADGE_TEXT).hasText('Revoked');
+    assert.strictEqual(instances.appToken.status, 'revoked');
+    assert.strictEqual(currentURL(), urls.appToken);
+  });
+
+  test('users can cancel revoke action on an app-token with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
+          enabled: false,
+        },
+      },
+    });
+    const appTokenStatus = instances.appToken.status;
+
+    assert.true(instances.appToken.authorized_actions.includes('revoke'));
+    await visit(urls.appToken);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_REVOKE);
+    await click(selectors.CANCEL_MODAL_BTN);
+
+    assert.strictEqual(instances.appToken.status, appTokenStatus);
+    assert.strictEqual(currentURL(), urls.appToken);
+  });
+
+  test('users cannot revoke an app-token when unauthorized', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
+          enabled: false,
+        },
+      },
+    });
+    instances.appToken.authorized_actions =
+      instances.appToken.authorized_actions.filter(
+        (item) => item !== 'revoke' && item !== 'revoke:self',
+      );
+
+    await visit(urls.appToken);
+
+    assert.false(instances.appToken.authorized_actions.includes('revoke'));
+    assert.false(instances.appToken.authorized_actions.includes('revoke:self'));
+
+    await click(selectors.MANAGE_DROPDOWN);
+
+    assert.dom(selectors.MANAGE_DROPDOWN_REVOKE).doesNotExist();
+    assert.strictEqual(currentURL(), urls.appToken);
+  });
 });

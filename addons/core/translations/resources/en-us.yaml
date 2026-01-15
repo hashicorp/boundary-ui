@@ -1249,7 +1249,7 @@ app-token:
     labels: Labels
     deleted-scopes: Deleted scopes
   actions:
-    confirm-creation: Confirm creation
+    confirm-create: Confirm creation
     saved-app-token: Yes, I have saved the app token
     download-app-token: Download the token
     clone: Clone this app token
@@ -1304,6 +1304,14 @@ app-token:
       description:
         0: You can either copy or download the app token as a .txt file.
         1: <strong>This is your only chance to grab the app token</strong>. Make sure to save this token somewhere secure, as you will be unable to recover it after you close this pop-up.
+    revoke:
+      title: Revoke App Token?
+      description:
+        0: By revoking <strong>{appToken}</strong>, this token will no longer be usable. Any request using this app token will return an unauthorized error.
+        1: Are you sure you want to revoke this app token? You cannot undo this.
+      confirm-revoke:
+        label: Confirm revoking
+        help: Enter "revoke" (using all capital letters) to confirm.
   status:
     unknown: Unknown
     active: Active
@@ -1318,6 +1326,8 @@ app-token:
       project-scope: No app tokens have been created for {scopeName}.
     create:
       description: App tokens are immutable after creation. Make sure all of this token's details are correct before finishing creation.
+    revoke:
+      description: App token has been revoked.
     tooltips:
       active-scopes: Active scopes are scopes that exist within Boundary.
     no-active-scopes:

@@ -8,6 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 
@@ -152,6 +153,10 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
    */
   @action
   @loading
+  @confirm('resources.app-token.form.confirm-create.description', {
+    title: 'resources.app-token.form.confirm-create.title',
+    confirm: 'resources.app-token.actions.confirm-create',
+  })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(() => 'notifications.create-success')
   async create(appToken) {
@@ -165,5 +170,18 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     } else {
       this.router.transitionTo('scopes.scope.app-tokens');
     }
+  }
+
+  /**
+   * Revoke an app-token in current scope.
+   * @param {AppTokenModel} appToken
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess(() => 'resources.app-token.messages.revoke.description')
+  async revoke(appToken) {
+    await appToken.revoke();
+    await this.router.refresh('scopes.scope.app-tokens.app-token');
   }
 }
