@@ -1242,8 +1242,10 @@ app-token:
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
     new: New App Token
+    grant: Grant
     grants: Grants
     active-scopes: Active scopes
+    deleted-at: Deleted at
     edit-permission: Edit permission
     add-permission: Add permission
     labels: Labels
@@ -1323,3 +1325,6 @@ app-token:
     no-active-scopes:
       title: Permissions with no active scopes
       description: There are some permissions where all of the scopes have been deleted. You may run into an <strong>unauthorized</strong> error if you try to use this app token.
+    deleted-scopes:
+      description-with-label: Scopes deleted within the last 30 days that were previously attached to {label}
+      description-no-label: Scopes deleted within the last 30 days that were previously attached to this permission
