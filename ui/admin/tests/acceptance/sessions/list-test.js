@@ -18,7 +18,7 @@ import {
 } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { formatDateUserFriendly } from 'admin/tests/helpers/time-format';
+import { formatDateUserFriendly } from 'admin/tests/helpers/format-date-user-friendly';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | sessions | list', function (hooks) {

@@ -11,7 +11,7 @@ import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { faker } from '@faker-js/faker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
-import { formatDateUserFriendly } from 'admin/tests/helpers/time-format';
+import { formatDateUserFriendly } from 'admin/tests/helpers/format-date-user-friendly';
 import {
   STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_AVAILABLE,
