@@ -14,6 +14,9 @@ export const FIELD_TTS = '[name=time_to_stale_seconds]';
 export const ADD_PERMISSION_BTN = '[data-test-add-permission-button]';
 export const PERMISSION_FLYOUT = '[data-test-permission-flyout]';
 export const PERMISSION_LABEL_FIELD = '[name="permission-label"]';
+export const GRANT_FIELD = '[data-test-grant-field]';
+export const ADD_GRANT_BTN = '[data-test-add-grant-button]';
+export const GRANT_REMOVE_BTN = '[data-test-grant-remove-button]';
 export const FILED_CONFIRM_REVOKE = '[name=confirm-revoke]';
 
 export const CANCEL_MODAL_BTN = '.hds-modal .hds-button--color-secondary';

@@ -16,7 +16,7 @@ export default class FormAppTokenNewComponent extends Component {
   @tracked showPermissionFlyout = false;
   @tracked editingPermission = false;
   @tracked selectedPermission;
-
+  @tracked newGrantString = '';
   indexOfEditingPermission;
 
   /**
@@ -46,7 +46,8 @@ export default class FormAppTokenNewComponent extends Component {
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
     this.selectedPermission = new TrackedObject({
-      grant_scopes: [],
+      grant_scope_id: [],
+      grant: [{ value: '' }],
     });
   }
 
@@ -58,6 +59,7 @@ export default class FormAppTokenNewComponent extends Component {
     this.showPermissionFlyout = false;
     this.editingPermission = false;
     this.selectedPermission = null;
+    this.newGrantString = '';
   }
 
   /**
@@ -112,6 +114,28 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   deletePermission(index) {
     this.args.model.permissions = this.args.model.permissions.filter(
+      (_, i) => i !== index,
+    );
+  }
+
+  /**
+   * Adds a grant field to the selected permission.
+   */
+  @action
+  addGrant() {
+    this.selectedPermission.grant = [
+      ...this.selectedPermission.grant,
+      { value: '' },
+    ];
+  }
+
+  /**
+   * Removes a grant string from the selected permission.
+   * @param {number} index
+   */
+  @action
+  removeGrant(index) {
+    this.selectedPermission.grant = this.selectedPermission.grant.filter(
       (_, i) => i !== index,
     );
   }

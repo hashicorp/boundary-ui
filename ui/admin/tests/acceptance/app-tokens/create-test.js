@@ -226,4 +226,69 @@ module('Acceptance | app-tokens | create', function (hooks) {
       assert.dom(selectors.PERMISSION_FLYOUT).includesText('Add this scope');
     },
   );
+
+  test.each(
+    'permission flyout displays grants section with default empty grant field',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      assert.dom(selectors.PERMISSION_FLYOUT).includesText('Grants');
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 1 });
+      assert.dom(selectors.GRANT_FIELD).hasValue('');
+    },
+  );
+
+  test.each(
+    'users can add multiple grant fields',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 1 });
+
+      await click(selectors.ADD_GRANT_BTN);
+
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 2 });
+
+      await click(selectors.ADD_GRANT_BTN);
+
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 3 });
+    },
+  );
+
+  test.each(
+    'users can enter text in grant fields',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.GRANT_FIELD, 'id=*;type=*;actions=*');
+
+      assert.dom(selectors.GRANT_FIELD).hasValue('id=*;type=*;actions=*');
+    },
+  );
+
+  test.each(
+    'users can remove grant fields',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+      await click(selectors.ADD_GRANT_BTN);
+      await click(selectors.ADD_GRANT_BTN);
+
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 3 });
+
+      await click(`${selectors.GRANT_REMOVE_BTN}:first-of-type`);
+
+      assert.dom(selectors.GRANT_FIELD).exists({ count: 2 });
+    },
+  );
 });
