@@ -63,4 +63,22 @@ export default class AppTokenModel extends GeneratedAppTokenModel {
       (permission) => permission.grant_scopes.length === 0,
     );
   }
+
+  /**
+   * Revoke app-token via the `revoke` method.
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  revoke(options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = { method: 'revoke' };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
 }

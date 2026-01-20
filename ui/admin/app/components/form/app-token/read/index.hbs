@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Form class='app-token-read-form'>
+<Rose::Form>
   <Hds::Form::TextInput::Field
     @value={{@model.name}}
     @type='text'
@@ -30,6 +30,7 @@
       <Hds::Badge
         @text={{this.statusBadge.text}}
         @color={{this.statusBadge.color}}
+        data-test-app-token-status-badge
       />
     </DL.Item>
     {{! TODO: Check where to navigate the user for global/org/proj levels }}

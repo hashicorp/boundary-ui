@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { GRANT_SCOPE_KEYWORDS } from 'api/models/role';
 
 export default class ScopesScopeAppTokensAppTokenPermissionsController extends Controller {
+  @controller('scopes/scope/app-tokens/index') appTokens;
+
   @service store;
 
   @tracked showGrantsFlyout = false;

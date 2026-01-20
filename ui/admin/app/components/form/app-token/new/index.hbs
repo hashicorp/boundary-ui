@@ -5,6 +5,7 @@
 
 <Rose::Form
   @onSubmit={{@submit}}
+  @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   class='app-token-form'
   as |form|
@@ -213,21 +214,10 @@
 
   {{#if (can 'save model' @model)}}
     <Hds::Layout::Flex @gap='16' class='margin-top-l'>
-      <form.actions>
-        <:actions>
-          <Hds::Button
-            @text={{t 'actions.create'}}
-            disabled={{form.disabled}}
-            {{on 'click' this.toggleConfirmCreate}}
-          />
-          <Hds::Button
-            @text={{t 'actions.cancel'}}
-            @color='secondary'
-            disabled={{form.disabled}}
-            {{on 'click' @cancel}}
-          />
-        </:actions>
-      </form.actions>
+      <form.actions
+        @submitText={{t 'actions.create'}}
+        @cancelText={{t 'actions.cancel'}}
+      />
       <Hds::Alert
         @type='compact'
         @icon='alert-triangle-fill'
@@ -239,29 +229,5 @@
           }}</A.Description>
       </Hds::Alert>
     </Hds::Layout::Flex>
-  {{/if}}
-
-  {{#if this.showConfirmCreateModal}}
-    <Hds::Modal @color='warning' @onClose={{this.toggleConfirmCreate}} as |M|>
-      <M.Header>{{t 'resources.app-token.form.confirm-create.title'}}</M.Header>
-      <M.Body>{{t
-          'resources.app-token.form.confirm-create.description'
-        }}</M.Body>
-      <M.Footer>
-        <Hds::ButtonSet>
-          <Hds::Button
-            type='submit'
-            disabled={{form.disabled}}
-            @text={{t 'resources.app-token.actions.confirm-creation'}}
-          />
-          <Hds::Button
-            @text={{t 'actions.cancel'}}
-            @color='secondary'
-            disabled={{form.disabled}}
-            {{on 'click' this.toggleConfirmCreate}}
-          />
-        </Hds::ButtonSet>
-      </M.Footer>
-    </Hds::Modal>
   {{/if}}
 </Rose::Form>

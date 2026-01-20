@@ -1128,18 +1128,16 @@
   }
 }
 
-.app-token-read-form {
-  .app-token-modal-body {
-    strong {
-      font-weight: bold;
-    }
+.app-token-modal-body {
+  strong {
+    font-weight: bold;
+  }
 
-    p:first-child {
-      margin-bottom: 0.25rem;
-    }
+  p:first-child {
+    margin-bottom: sizing.rems(xs);
+  }
 
-    p:nth-child(2) {
-      margin-bottom: 0.5rem;
-    }
+  p:nth-child(2) {
+    margin-bottom: sizing.rems(m);
   }
 }

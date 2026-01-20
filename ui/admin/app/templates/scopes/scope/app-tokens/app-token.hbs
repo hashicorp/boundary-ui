@@ -10,37 +10,4 @@
   @model={{@model}}
 />
 
-<Rose::Layout::Page as |page|>
-  <page.header>
-    <Hds::PageHeader as |PH|>
-      <PH.Breadcrumb>
-        <Breadcrumbs::Container />
-      </PH.Breadcrumb>
-      <PH.Title>
-        {{t 'resources.app-token.title_plural'}}
-        <DocLink @doc='app-tokens' />
-      </PH.Title>
-      <PH.Description>
-        {{t 'resources.app-token.description'}}
-      </PH.Description>
-      <PH.Generic>
-        <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
-      </PH.Generic>
-    </Hds::PageHeader>
-  </page.header>
-
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.app-tokens.app-token.index'>
-        {{t 'titles.details'}}
-      </nav.link>
-      <nav.link @route='scopes.scope.app-tokens.app-token.permissions'>
-        {{t 'resources.app-token.tabs.permissions'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
-
-  <page.body>
-    {{outlet}}
-  </page.body>
-</Rose::Layout::Page>
+{{outlet}}

@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'admin/tests/helpers';
+import { setupTest } from 'ember-qunit';
 
 module(
   'Unit | Controller | scopes/scope/app-tokens/app-token/permissions',
