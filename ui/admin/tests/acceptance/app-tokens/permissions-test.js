@@ -32,21 +32,24 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
     appTokenWithMixedScopes: null,
   };
 
+  const hostCatalogGrant = 'type=host-catalog;actions=list';
+  const userGrant = 'type=user;actions=read';
+
   const permissionWithActiveScopes = {
-    grant: ['type=host-catalog;actions=list'],
+    grant: [hostCatalogGrant],
     grant_scopes: ['this', 'p_123456'],
     deleted_scopes: [],
   };
 
   const anotherPermission = {
     label: 'Another Permission',
-    grant: ['type=host-catalog;actions=list', 'type=user;actions=read'],
+    grant: [hostCatalogGrant, userGrant],
     grant_scopes: ['this', 'children', 'p_654321'],
     deleted_scopes: [],
   };
 
   const permissionWithNoActiveScopes = {
-    grant: ['type=host-catalog;actions=list'],
+    grant: [hostCatalogGrant],
     grant_scopes: [],
     deleted_scopes: [
       {
@@ -151,6 +154,119 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
             'No warning displayed when all permissions have active scopes',
           );
       }
+    },
+  );
+
+  test('clicking grants count opens grants flyout', async function (assert) {
+    await visit(urls.appTokenPermissions);
+
+    assert.dom(selectors.GRANTS_FLYOUT).doesNotExist();
+
+    await click(selectors.GRANTS_BTN(1));
+
+    assert.dom(selectors.GRANTS_FLYOUT).isVisible();
+    assert.dom(selectors.FLYOUT_HEADER).containsText('Grants');
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 1 });
+  });
+
+  test('grants flyout displays multiple grants', async function (assert) {
+    await visit(urls.appTokenPermissions);
+
+    await click(selectors.GRANTS_BTN(2));
+
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 2 });
+    assert.dom(selectors.GRANTS_FLYOUT).containsText(hostCatalogGrant);
+    assert.dom(selectors.GRANTS_FLYOUT).containsText(userGrant);
+  });
+
+  test('clicking active scopes count opens active scopes flyout', async function (assert) {
+    await visit(urls.appTokenPermissions);
+
+    assert.dom(selectors.ACTIVE_SCOPES_FLYOUT).doesNotExist();
+
+    await click(selectors.ACTIVE_SCOPES_BTN(1));
+
+    assert.dom(selectors.ACTIVE_SCOPES_FLYOUT).isVisible();
+    assert.dom(selectors.FLYOUT_HEADER).containsText('Active scopes');
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 2 });
+  });
+
+  test('active scopes flyout displays keyword scopes correctly', async function (assert) {
+    await visit(urls.appTokenPermissions);
+
+    await click(selectors.ACTIVE_SCOPES_BTN(2));
+
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 3 });
+    // 'this' keyword should display the current scope name (org name)
+    assert
+      .dom(selectors.FLYOUT_TABLE_SCOPE_NAME(1))
+      .containsText(instances.scopes.org.name);
+    // 'children' keyword should display as em dash
+    assert.dom(selectors.FLYOUT_TABLE_SCOPE_NAME(2)).containsText('—');
+  });
+
+  test('active scopes flyout shows link for "this" keyword scope', async function (assert) {
+    await visit(urls.appTokenPermissions);
+
+    await click(selectors.ACTIVE_SCOPES_BTN(1));
+
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 2 });
+    // 'this' keyword should have a link to the current scope
+    assert
+      .dom(selectors.FLYOUT_TABLE_SCOPE_LINK(1))
+      .hasAttribute('href', urls.orgScope);
+  });
+
+  test('clicking deleted scopes count opens deleted scopes flyout', async function (assert) {
+    await visit(urls.appTokenWithNoActiveScopes);
+
+    assert.dom(selectors.DELETED_SCOPES_FLYOUT).doesNotExist();
+
+    await click(selectors.DELETED_SCOPES_BTN(1));
+
+    assert.dom(selectors.DELETED_SCOPES_FLYOUT).isVisible();
+    assert.dom(selectors.FLYOUT_HEADER).containsText('Deleted scopes');
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 1 });
+  });
+
+  test('deleted scopes flyout displays scope ID and deleted time', async function (assert) {
+    await visit(urls.appTokenWithNoActiveScopes);
+
+    await click(selectors.DELETED_SCOPES_BTN(1));
+
+    assert.dom(selectors.FLYOUT_TABLE_ROWS).exists({ count: 1 });
+    assert.dom(selectors.DELETED_SCOPES_FLYOUT).containsText('p_123456');
+    assert.dom('.hds-flyout .hds-time').isVisible();
+  });
+
+  test.each(
+    'closing flyout hides it',
+    {
+      grants: {
+        url: 'appTokenPermissions',
+        openBtn: selectors.GRANTS_BTN(1),
+        flyout: selectors.GRANTS_FLYOUT,
+      },
+      activeScopes: {
+        url: 'appTokenPermissions',
+        openBtn: selectors.ACTIVE_SCOPES_BTN(1),
+        flyout: selectors.ACTIVE_SCOPES_FLYOUT,
+      },
+      deletedScopes: {
+        url: 'appTokenWithNoActiveScopes',
+        openBtn: selectors.DELETED_SCOPES_BTN(1),
+        flyout: selectors.DELETED_SCOPES_FLYOUT,
+      },
+    },
+    async function (assert, { url, openBtn, flyout }) {
+      await visit(urls[url]);
+      await click(openBtn);
+
+      assert.dom(flyout).isVisible();
+
+      await click(selectors.FLYOUT_CLOSE_BTN);
+
+      assert.dom(flyout).doesNotExist();
     },
   );
 });

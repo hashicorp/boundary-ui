@@ -46,7 +46,7 @@ export default class FormAppTokenNewComponent extends Component {
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
     this.selectedPermission = new TrackedObject({
-      grant_scope_id: [],
+      grant_scopes: [],
     });
   }
 

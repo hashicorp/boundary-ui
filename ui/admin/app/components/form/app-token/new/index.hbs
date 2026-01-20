@@ -148,7 +148,7 @@
           </B.Td>
           <B.Td>
             <Hds::Text::Body @tag='p'>
-              {{~or B.data.grant_scope_id.length '—'}}
+              {{~or B.data.grant_scopes.length '—'}}
             </Hds::Text::Body>
           </B.Td>
           <B.Td>
@@ -186,7 +186,7 @@
         <ScopeOptions
           @model={{@model}}
           @field={{this.selectedPermission}}
-          @name='grant_scope_id'
+          @name='grant_scopes'
         />
       </M.Body>
       <M.Footer>

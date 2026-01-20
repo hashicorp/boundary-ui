@@ -32,3 +32,21 @@ export const ROW_DELETED_SCOPES = (rowIndex) =>
 
 export const MANAGE_DROPDOWN = '[data-test-manage-app-token] button';
 export const MANAGE_DROPDOWN_REVOKE = '[data-test-manage-app-token-revoke]';
+
+// Flyout selectors
+export const GRANTS_FLYOUT = '[data-test-grants-flyout]';
+export const ACTIVE_SCOPES_FLYOUT = '[data-test-active-scopes-flyout]';
+export const DELETED_SCOPES_FLYOUT = '[data-test-deleted-scopes-flyout]';
+export const FLYOUT_CLOSE_BTN = '.hds-flyout .hds-button--color-secondary';
+export const FLYOUT_HEADER = '.hds-flyout__header';
+export const FLYOUT_TABLE_ROWS = '.hds-flyout tbody tr';
+export const GRANTS_BTN = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(2) button`;
+export const ACTIVE_SCOPES_BTN = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(3) button`;
+export const DELETED_SCOPES_BTN = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(4) button`;
+export const FLYOUT_TABLE_SCOPE_NAME = (rowIndex) =>
+  `[data-test-active-scopes-flyout] tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;
+export const FLYOUT_TABLE_SCOPE_LINK = (rowIndex) =>
+  `[data-test-active-scopes-flyout] tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1) a`;
