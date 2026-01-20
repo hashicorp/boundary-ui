@@ -8,7 +8,11 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 
 export default class FormAppTokenReadComponent extends Component {
+  // =services
+
   @service intl;
+
+  // =attributes
 
   statusConfig = {
     active: { color: 'success' },
