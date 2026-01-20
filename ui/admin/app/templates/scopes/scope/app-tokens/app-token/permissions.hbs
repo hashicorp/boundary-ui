@@ -57,17 +57,41 @@
           —
         {{/if}}
       </B.Td>
-      <B.Td>{{B.data.grant.length}}</B.Td>
       <B.Td>
-        {{#if B.data.grant_scopes}}
-          {{B.data.grant_scopes.length}}
+        {{#if B.data.grant.length}}
+          <Hds::Button
+            @text={{B.data.grant.length}}
+            @color='tertiary'
+            @icon='code'
+            @size='small'
+            {{on 'click' (fn this.openGrantsFlyout B.data)}}
+          />
         {{else}}
           —
         {{/if}}
       </B.Td>
       <B.Td>
-        {{#if B.data.deleted_scopes}}
-          {{B.data.deleted_scopes.length}}
+        {{#if B.data.grant_scopes}}
+          <Hds::Button
+            @text={{B.data.grant_scopes.length}}
+            @color='tertiary'
+            @icon='list'
+            @size='small'
+            {{on 'click' (fn this.openActiveScopesFlyout B.data)}}
+          />
+        {{else}}
+          —
+        {{/if}}
+      </B.Td>
+      <B.Td>
+        {{#if B.data.deleted_scopes.length}}
+          <Hds::Button
+            @text={{B.data.deleted_scopes.length}}
+            @color='tertiary'
+            @icon='list'
+            @size='small'
+            {{on 'click' (fn this.openDeletedScopesFlyout B.data)}}
+          />
         {{else}}
           —
         {{/if}}
@@ -75,3 +99,145 @@
     </B.Tr>
   </:body>
 </Hds::Table>
+
+{{#if this.showGrantsFlyout}}
+  <Hds::Flyout
+    data-test-grants-flyout
+    @size='medium'
+    @onClose={{this.closeGrantsFlyout}}
+    as |F|
+  >
+    <F.Header>{{t 'resources.app-token.titles.grants'}}</F.Header>
+    <F.Body>
+      <Hds::Table
+        @model={{this.selectedPermission.grant}}
+        @columns={{array (hash label=(t 'resources.app-token.titles.grant'))}}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Text::Code @tag='span'>{{B.data}}</Hds::Text::Code>
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    </F.Body>
+    <F.Footer>
+      <Hds::Button
+        @text={{t 'actions.close'}}
+        @color='secondary'
+        {{on 'click' this.closeGrantsFlyout}}
+      />
+    </F.Footer>
+  </Hds::Flyout>
+{{/if}}
+
+{{#if this.showActiveScopesFlyout}}
+  <Hds::Flyout
+    data-test-active-scopes-flyout
+    @size='medium'
+    @onClose={{this.closeActiveScopesFlyout}}
+    as |F|
+  >
+    <F.Header>{{t 'resources.app-token.titles.active-scopes'}}</F.Header>
+    <F.Body>
+      <Hds::Table
+        @model={{this.activeScopesList}}
+        @columns={{array
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'form.id.label'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (eq B.data.id 'this')}}
+                <LinkTo @route='scopes.scope' @model={{B.data.scopeId}}>
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else if (can 'read model' B.data)}}
+                <LinkTo @route='scopes.scope' @model={{B.data.id}}>
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else if B.data.isKeyword}}
+                {{B.data.displayName}}
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    </F.Body>
+    <F.Footer>
+      <Hds::Button
+        @text={{t 'actions.close'}}
+        @color='secondary'
+        {{on 'click' this.closeActiveScopesFlyout}}
+      />
+    </F.Footer>
+  </Hds::Flyout>
+{{/if}}
+
+{{#if this.showDeletedScopesFlyout}}
+  <Hds::Flyout
+    data-test-deleted-scopes-flyout
+    @size='medium'
+    @onClose={{this.closeDeletedScopesFlyout}}
+    as |F|
+  >
+    <F.Header>{{t 'resources.app-token.titles.deleted-scopes'}}</F.Header>
+    <F.Body>
+      <Hds::Text::Body @tag='p'>
+        {{#if this.selectedPermission.label}}
+          {{t
+            'resources.app-token.messages.deleted-scopes.description-with-label'
+            label=this.selectedPermission.label
+          }}
+        {{else}}
+          {{t
+            'resources.app-token.messages.deleted-scopes.description-no-label'
+          }}
+        {{/if}}
+      </Hds::Text::Body>
+      <Hds::Table
+        class='margin-top-m'
+        @model={{this.deletedScopesList}}
+        @columns={{array
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'resources.app-token.titles.deleted-at'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.scope_id}}
+                @color='secondary'
+              />
+            </B.Td>
+            <B.Td>
+              <Hds::Time @date={{B.data.deleted_at}} @display='relative' />
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    </F.Body>
+    <F.Footer>
+      <Hds::Button
+        @text={{t 'actions.close'}}
+        @color='secondary'
+        {{on 'click' this.closeDeletedScopesFlyout}}
+      />
+    </F.Footer>
+  </Hds::Flyout>
+{{/if}}
