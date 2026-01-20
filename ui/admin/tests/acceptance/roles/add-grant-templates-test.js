@@ -110,8 +110,8 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     assert.strictEqual(currentURL(), urls.grants);
 
     assert.strictEqual(initialGrantCount, 0);
-    // There's an initial row for adding new grants
-    assert.dom('.rose-list-key-value li').isVisible({ count: 2 });
+    assert.dom(selectors.FIELD_GRANT).isVisible({ count: 1 });
+    assert.dom(selectors.FIELD_GRANT).hasValue('ids=*;type=*;actions=*');
   });
 
   test('cancel navigates back to grants without changes', async function (assert) {
@@ -122,7 +122,6 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(initialGrantCount, 0);
-    // There's an initial row for adding new grants
-    assert.dom('.rose-list-key-value li').isVisible({ count: 1 });
+    assert.dom(selectors.FIELD_GRANT).isVisible({ count: 0 });
   });
 });
