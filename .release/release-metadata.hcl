@@ -1,4 +1,4 @@
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2021, 2025
 # SPDX-License-Identifier: BUSL-1.1
 
 url_license = "https://github.com/hashicorp/boundary-ui/blob/main/LICENSE"

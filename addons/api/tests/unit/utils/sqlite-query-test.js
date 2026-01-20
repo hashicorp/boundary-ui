@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2025
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -70,7 +70,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           { field: 'name', alias: 'resource_name' },
           { field: 'type', alias: 'resource_type' },
         ],
-        expectedSelect: '"target".name as resource_name, "target".type as resource_type',
+        expectedSelect:
+          '"target".name as resource_name, "target".type as resource_type',
       },
       'count with alias': {
         select: [{ field: 'id', isCount: true, alias: 'total_count' }],
@@ -118,7 +119,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           { field: 'type', isDistinct: true, isCount: true },
           { field: 'status', isDistinct: true, isCount: true },
         ],
-        expectedSelect: 'count(DISTINCT "target".type), count(DISTINCT "target".status)',
+        expectedSelect:
+          'count(DISTINCT "target".type), count(DISTINCT "target".status)',
       },
       'distinct with alias': {
         select: [{ field: 'type', isDistinct: true, alias: 'unique_type' }],
@@ -129,7 +131,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           { field: 'type', isDistinct: true, alias: 'unique_type' },
           { field: 'status', isDistinct: true, alias: 'unique_status' },
         ],
-        expectedSelect: 'DISTINCT "target".type as unique_type, "target".status as unique_status',
+        expectedSelect:
+          'DISTINCT "target".type as unique_type, "target".status as unique_status',
       },
       'count distinct multiple fields': {
         select: [
