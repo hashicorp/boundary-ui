@@ -5,10 +5,9 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
-import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import sinon from 'sinon';
 
 module(
   'Unit | Controller | scopes/scope/roles/role/add-grant-templates',
@@ -19,6 +18,8 @@ module(
 
     let store;
     let controller;
+    let router;
+    let routerStub;
 
     const instances = {
       scopes: {
@@ -28,25 +29,19 @@ module(
       role: null,
     };
 
-    const urls = {
-      addGrantTemplates: null,
-    };
-
     hooks.beforeEach(async function () {
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/roles/role/add-grant-templates',
       );
+      router = this.owner.lookup('service:router');
+      routerStub = sinon.stub(router, 'replaceWith');
 
       instances.scopes.global = this.server.create(
         'scope',
         { id: 'global' },
         'withGlobalAuth',
       );
-      await authenticateSession({
-        isGlobal: true,
-        account_id: this.server.schema.accounts.first().id,
-      });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -55,16 +50,13 @@ module(
         scope: instances.scopes.org,
         grant_strings: ['ids=*;type=user;actions=read'],
       });
-
-      urls.addGrantTemplates = `/scopes/${instances.scopes.org.id}/roles/${instances.role.id}/add-grant-templates`;
     });
 
     test('it exists', function (assert) {
       assert.ok(controller);
     });
 
-    test('addGrantTemplates action adds grant templates to role and navigates', async function (assert) {
-      await visit(urls.addGrantTemplates);
+    test('addGrantTemplates action adds grant templates to role', async function (assert) {
       const role = await store.findRecord('role', instances.role.id);
 
       const newGrantTemplates = [
@@ -74,6 +66,7 @@ module(
 
       await controller.addGrantTemplates(role, newGrantTemplates);
 
+      assert.ok(routerStub.calledOnceWith('scopes.scope.roles.role.grants'));
       assert.deepEqual(role.grant_strings, [
         'ids=*;type=user;actions=read',
         'ids=*;type=*;actions=*',

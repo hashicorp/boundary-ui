@@ -166,7 +166,6 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
 
   @action
   onSelectionChange({ selectionKey, selectedRowsKeys }) {
-    // TODO: HDS Table not properly showing all options when filtered down by search?
     const oldKeys = new Set(this.selectedGrantTemplates);
     if (selectionKey === 'all') {
       const newKeys = new Set(selectedRowsKeys);
