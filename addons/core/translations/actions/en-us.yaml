@@ -73,3 +73,5 @@ download: Download
 show-more: Show more
 create: Create
 revoke: Revoke
+revoke-app-token: Revoke App Token
+clone-app-token: Clone App Token

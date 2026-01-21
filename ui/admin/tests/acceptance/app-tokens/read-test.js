@@ -26,6 +26,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
   const urls = {
     globalScope: null,
     appTokens: null,
+    newAppToken: null,
     appToken: null,
     appTokenPermissions: null,
     unknownAppToken: null,
@@ -46,6 +47,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.appTokens = `${urls.orgScope}/app-tokens`;
+    urls.newAppToken = `${urls.appTokens}/new`;
     urls.appToken = `${urls.appTokens}/${instances.appToken.id}`;
     urls.appTokenPermissions = `${urls.appToken}/permissions`;
     urls.unknownAppToken = `${urls.appTokens}/at_unknown123`;
@@ -283,6 +285,59 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN);
 
     assert.dom(selectors.MANAGE_DROPDOWN_REVOKE).doesNotExist();
+    assert.strictEqual(currentURL(), urls.appToken);
+  });
+
+  test('users can clone an app-token with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-20
+          enabled: false,
+        },
+      },
+    });
+
+    assert.true(instances.appToken.authorized_actions.includes('read'));
+    await visit(urls.appToken);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_CLONE);
+
+    assert.strictEqual(currentURL(), urls.newAppToken);
+  });
+
+  test('users cannot clone an app-token without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
+          enabled: false,
+        },
+      },
+    });
+    instances.scopes.org.authorized_collection_actions['app-tokens'] =
+      instances.scopes.org.authorized_collection_actions['app-tokens'].filter(
+        (item) => item !== 'create',
+      );
+    instances.appToken.authorized_actions =
+      instances.appToken.authorized_actions.filter(
+        (item) => item !== 'read' && item !== 'read:self',
+      );
+
+    assert.false(
+      instances.scopes.org.authorized_collection_actions['app-tokens'].includes(
+        'create',
+      ),
+    );
+    assert.false(instances.appToken.authorized_actions.includes('read'));
+    assert.false(instances.appToken.authorized_actions.includes('read:self'));
+
+    await visit(urls.appToken);
+
+    await click(selectors.MANAGE_DROPDOWN);
+
+    assert.dom(selectors.MANAGE_DROPDOWN_CLONE).doesNotExist();
     assert.strictEqual(currentURL(), urls.appToken);
   });
 });
