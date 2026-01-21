@@ -65,72 +65,6 @@ module('Integration | Component | form/app-token/new', function (hooks) {
       assert.dom('[data-test-permission-flyout]').doesNotExist();
     });
 
-    module('Scope validation', function () {
-      test('shows error when no scope is selected', async function (assert) {
-        await render(
-          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
-        );
-
-        await click('[data-test-add-permission-button]');
-        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
-        await click('[data-test-add-button]');
-
-        assert.dom('[data-test-permission-error-alert]').exists();
-        assert
-          .dom('[data-test-scope-error]')
-          .hasText('You must select at least one scope');
-      });
-
-      test('clears error when scope is selected', async function (assert) {
-        await render(
-          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
-        );
-
-        await click('[data-test-add-permission-button]');
-        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
-        await click('[data-test-add-button]');
-
-        assert.dom('[data-test-scope-error]').exists();
-
-        await click('[data-test-scope-this]');
-
-        assert.dom('[data-test-scope-error]').doesNotExist();
-      });
-    });
-
-    module('Grant validation', function () {
-      test('shows error when grant is empty', async function (assert) {
-        await render(
-          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
-        );
-
-        await click('[data-test-add-permission-button]');
-        await click('[data-test-scope-this]');
-        await click('[data-test-add-button]');
-
-        assert.dom('[data-test-permission-error-alert]').exists();
-        assert
-          .dom('[data-test-grant-error]')
-          .hasText('You must input at least one grant');
-      });
-
-      test('clears error when user types in grant field', async function (assert) {
-        await render(
-          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
-        );
-
-        await click('[data-test-add-permission-button]');
-        await click('[data-test-scope-this]');
-        await click('[data-test-add-button]');
-
-        assert.dom('[data-test-grant-error]').exists();
-
-        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
-
-        assert.dom('[data-test-grant-error]').doesNotExist();
-      });
-    });
-
     module('Grant management', function () {
       test('adds new grant field when "Add" button is clicked', async function (assert) {
         await render(
@@ -177,18 +111,6 @@ module('Integration | Component | form/app-token/new', function (hooks) {
 
         assert.strictEqual(this.model.permissions.length, 1);
         assert.dom('[data-test-permission-flyout]').doesNotExist();
-      });
-
-      test('does not add permission when validation fails', async function (assert) {
-        await render(
-          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
-        );
-
-        await click('[data-test-add-permission-button]');
-        await click('[data-test-add-button]');
-
-        assert.strictEqual(this.model.permissions.length, 0);
-        assert.dom('[data-test-permission-flyout]').exists();
       });
     });
   });

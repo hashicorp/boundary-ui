@@ -220,52 +220,6 @@
           (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
       <M.Body>
-        {{#if this.hasPermissionErrors}}
-          <Hds::Alert
-            @type='inline'
-            @color='critical'
-            class='margin-bottom-l'
-            data-test-permission-error-alert
-            as |A|
-          >
-            <A.Title>{{t
-                'resources.app-token.permission.errors.title'
-              }}</A.Title>
-            <A.Description>{{t
-                'resources.app-token.permission.errors.description'
-              }}</A.Description>
-            <A.Description>
-              <ul class='permission-error-list'>
-                {{#if this.hasScopeError}}
-                  <li>
-                    <Hds::Link::Inline
-                      @href='#scope-options-fieldset'
-                      {{on
-                        'click'
-                        (fn this.scrollToSection 'scope-options-fieldset')
-                      }}
-                    >
-                      {{t
-                        'resources.app-token.permission.errors.scope-options'
-                      }}
-                    </Hds::Link::Inline>
-                  </li>
-                {{/if}}
-                {{#if this.hasGrantError}}
-                  <li>
-                    <Hds::Link::Inline
-                      @href='#grants-fieldset'
-                      {{on 'click' (fn this.scrollToSection 'grants-fieldset')}}
-                    >
-                      {{t 'resources.app-token.permission.errors.grants'}}
-                    </Hds::Link::Inline>
-                  </li>
-                {{/if}}
-              </ul>
-            </A.Description>
-          </Hds::Alert>
-        {{/if}}
-
         <Hds::Form::TextInput::Field
           name='permission-label'
           @value={{this.selectedPermission.label}}
@@ -294,16 +248,8 @@
               @model={{@model}}
               @field={{this.selectedPermission}}
               @name='grant_scope_id'
-              @onChange={{this.clearScopeErrors}}
             />
           </F.Control>
-          {{#if this.hasScopeError}}
-            <F.Error as |E|>
-              {{#each this.permissionErrors.scope as |error|}}
-                <E.Message data-test-scope-error>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
         </Hds::Form::Fieldset>
 
         <Hds::Separator />
@@ -318,13 +264,11 @@
                     <B.Td>
                       <Hds::Form::TextInput::Field
                         {{on 'input' (set-from-event grant 'value')}}
-                        {{on 'input' this.clearGrantErrors}}
                         name={{concat 'grant-' index}}
                         title={{t 'form.grant.help'}}
                         @id={{concat 'grant-' index}}
                         @type='text'
                         @value={{grant.value}}
-                        @isInvalid={{this.isGrantInvalid index}}
                         data-test-grant-input
                       />
                     </B.Td>
@@ -355,13 +299,6 @@
               />
             </div>
           </F.Control>
-          {{#if this.hasGrantError}}
-            <F.Error as |E|>
-              {{#each this.permissionErrors.grants as |error|}}
-                <E.Message data-test-grant-error>{{error.message}}</E.Message>
-              {{/each}}
-            </F.Error>
-          {{/if}}
         </Hds::Form::Fieldset>
 
       </M.Body>
