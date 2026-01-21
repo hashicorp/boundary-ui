@@ -16,8 +16,8 @@
       <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
       {{#if perms.canClone}}
         <dd.Interactive
-          @route='scopes.scope.app-tokens.new'
           data-test-manage-app-token-clone
+          @route='scopes.scope.app-tokens.new'
         >
           {{t 'actions.clone-app-token'}}
         </dd.Interactive>
