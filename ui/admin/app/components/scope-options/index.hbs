@@ -6,37 +6,41 @@
 {{! TODO Consolidate overlapping translations once roles manage scopes gets refactored. }}
 
 <div class='scope-options search-filtering'>
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyThis}}
-    name={{this.keywords.keyThis}}
-    checked={{includes this.keywords.keyThis this.grantScopeIds}}
-    disabled={{@disabled}}
-    {{on 'change' this.toggleField}}
-    data-test-scope-this
-    as |F|
-  >
-    <F.Label>{{t 'form.this.label'}}</F.Label>
-    <F.HelperText>{{t
-        'form.this.help'
-        scope=this.scopeDisplayName
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
+  {{#unless @model.scope.isProject}}
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyThis}}
+      name={{this.keywords.keyThis}}
+      checked={{includes this.keywords.keyThis this.grantScopeIds}}
+      disabled={{@disabled}}
+      {{on 'change' this.toggleField}}
+      data-test-scope-this
+      as |F|
+    >
+      <F.Label>{{t 'form.this.label'}}</F.Label>
+      <F.HelperText>{{t
+          'form.this.help'
+          scope=this.scopeDisplayName
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+  {{/unless}}
 
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyChildren}}
-    name={{this.keywords.keyChildren}}
-    checked={{includes this.keywords.keyChildren this.grantScopeIds}}
-    disabled={{@disabled}}
-    {{on 'change' this.toggleField}}
-    data-test-scope-children
-    as |F|
-  >
-    <F.Label>{{t 'form.children.label'}}</F.Label>
-    <F.HelperText>{{t
-        'form.children.help'
-        scopes=(if @model.scope.isGlobal 'orgs' 'projects')
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
+  {{#unless @model.scope.isProject}}
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyChildren}}
+      name={{this.keywords.keyChildren}}
+      checked={{includes this.keywords.keyChildren this.grantScopeIds}}
+      disabled={{@disabled}}
+      {{on 'change' this.toggleField}}
+      data-test-scope-children
+      as |F|
+    >
+      <F.Label>{{t 'form.children.label'}}</F.Label>
+      <F.HelperText>{{t
+          'form.children.help'
+          scopes=(if @model.scope.isGlobal 'orgs' 'projects')
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+  {{/unless}}
 
   {{#if @model.scope.isGlobal}}
     <Hds::Form::Toggle::Field
@@ -51,6 +55,22 @@
       <F.Label>{{t 'form.descendants.label'}}</F.Label>
       <F.HelperText>{{t 'form.descendants.help'}}</F.HelperText>
     </Hds::Form::Toggle::Field>
+  {{/if}}
+
+  {{#if @model.scope.isProject}}
+    <div>
+      <Hds::Layout::Flex @gap='8' @align='center'>
+        <Hds::Icon @name='grid' @isInline={{true}} />
+        <Hds::Text::Body @tag='p' @weight='semibold'>
+          {{@model.scopeModel.displayName}}
+        </Hds::Text::Body>
+      </Hds::Layout::Flex>
+      <Hds::Badge
+        @text='Project'
+        @color='neutral'
+        class='margin-left-l margin-top-xxs'
+      />
+    </div>
   {{/if}}
 
   {{#if

@@ -149,8 +149,10 @@ export default class FormAppTokenNewComponent extends Component {
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
     this.permissionErrors = null;
+    // For project scopes, automatically set grant_scope_id to ['this'] as it's the only option
+    const defaultGrantScopeId = this.args.model.scope.isProject ? ['this'] : [];
     this.selectedPermission = new TrackedObject({
-      grant_scope_id: [],
+      grant_scope_id: defaultGrantScopeId,
       grant: [{ value: '' }],
     });
   }
