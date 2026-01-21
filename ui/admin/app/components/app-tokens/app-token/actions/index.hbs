@@ -14,12 +14,20 @@
   {{#if (or perms.canClone perms.canRevoke perms.canDelete)}}
     <Hds::Dropdown data-test-manage-app-token as |dd|>
       <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canClone}}
+        <dd.Interactive
+          @route='scopes.scope.app-tokens.new'
+          data-test-manage-app-token-clone
+        >
+          {{t 'actions.clone-app-token'}}
+        </dd.Interactive>
+      {{/if}}
       {{#if perms.canRevoke}}
         <dd.Interactive
           data-test-manage-app-token-revoke
           {{on 'click' this.toggleRevokeAppTokenModal}}
         >
-          {{t 'actions.revoke'}}
+          {{t 'actions.revoke-app-token'}}
         </dd.Interactive>
       {{/if}}
     </Hds::Dropdown>
