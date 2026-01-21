@@ -32,6 +32,7 @@ export const ROW_DELETED_SCOPES = (rowIndex) =>
 
 export const MANAGE_DROPDOWN = '[data-test-manage-app-token] button';
 export const MANAGE_DROPDOWN_REVOKE = '[data-test-manage-app-token-revoke]';
+export const MANAGE_DROPDOWN_CLONE = '[data-test-manage-app-token-clone]';
 
 // Flyout selectors
 export const GRANTS_FLYOUT = '[data-test-grants-flyout]';
