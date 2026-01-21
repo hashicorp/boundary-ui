@@ -1280,3 +1280,11 @@ app-token:
       description: App tokens are immutable after creation. Make sure all of this token's details are correct before finishing creation.
     tooltips:
       active-scopes: Active scopes are scopes that exist within Boundary.
+  permission:
+    errors:
+      title: Error submitting form
+      description: Please correct the following errors and resubmit the form.
+      scope-options: Scope options
+      grants: Grants
+      scope-required: You must select at least one scope
+      grant-required: You must input at least one grant

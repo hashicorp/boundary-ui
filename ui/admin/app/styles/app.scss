@@ -1082,6 +1082,12 @@
   }
 }
 
+.permission-error-list {
+  list-style: disc;
+  padding-left: sizing.rems(l);
+  margin: sizing.rems(xs) 0 0 0;
+}
+
 .scope_options {
   &__show_selected_toggle {
     .hds-form-field--layout-flag {
