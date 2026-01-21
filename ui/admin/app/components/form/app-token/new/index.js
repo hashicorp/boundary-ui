@@ -300,6 +300,28 @@ export default class FormAppTokenNewComponent extends Component {
   }
 
   /**
+   * Opens the permission flyout for a specific permission and scrolls to a section.
+   * @param {number} index - Index of the permission in the array
+   * @param {string} sectionId - ID of the section to scroll to
+   * @param {Event} event - Click event to prevent default behavior
+   */
+  @action
+  openPermissionFlyoutAndScrollTo(index, sectionId, event) {
+    event?.preventDefault();
+
+    // Open flyout with the selected permission
+    this.editPermission(index);
+
+    // Wait for flyout to render, then scroll to the specified section
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  }
+
+  /**
    * Scrolls to a section within the flyout by element ID.
    * @param {string} elementId
    * @param {Event} event
