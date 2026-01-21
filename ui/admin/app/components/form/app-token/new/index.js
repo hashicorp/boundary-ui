@@ -21,7 +21,6 @@ export default class FormAppTokenNewComponent extends Component {
   @tracked showPermissionFlyout = false;
   @tracked editingPermission = false;
   @tracked selectedPermission;
-  @tracked permissionErrors = null;
   indexOfEditingPermission;
 
   /**
@@ -30,104 +29,6 @@ export default class FormAppTokenNewComponent extends Component {
    */
   get maxTTL() {
     return MAX_TTL_SECONDS;
-  }
-
-  /**
-   * Returns true if the permission has scope-related errors.
-   * @type {boolean}
-   */
-  get hasScopeError() {
-    return this.permissionErrors?.scope?.length > 0;
-  }
-
-  /**
-   * Returns true if the permission has grant-related errors.
-   * @type {boolean}
-   */
-  get hasGrantError() {
-    return this.permissionErrors?.grants?.length > 0;
-  }
-
-  /**
-   * Returns true if the permission has any errors.
-   * @type {boolean}
-   */
-  get hasPermissionErrors() {
-    return this.hasScopeError || this.hasGrantError;
-  }
-
-  // =methods
-
-  /**
-   * Validates the permission form for required fields.
-   * @returns {object|null}
-   */
-  validatePermission() {
-    const errors = {
-      scope: [],
-      grants: [],
-    };
-
-    const scopeIds = this.selectedPermission?.grant_scope_id || [];
-    const grants = this.selectedPermission?.grant || [];
-
-    // Validate scope selection
-    if (scopeIds.length === 0) {
-      errors.scope.push({
-        message: this.intl.t(
-          'resources.app-token.permission.errors.scope-required',
-        ),
-      });
-    }
-
-    // Validate grants - check for empty fields
-    const emptyIndices = [];
-    grants.forEach((grant, index) => {
-      if (!grant.value?.trim()) {
-        emptyIndices.push(index);
-      }
-    });
-
-    // At least one non-empty grant required
-    if (emptyIndices.length > 0) {
-      errors.grants.push({
-        message: this.intl.t(
-          'resources.app-token.permission.errors.grant-required',
-        ),
-        indices: emptyIndices,
-      });
-    }
-
-    // Return null if no errors
-    return errors.scope.length > 0 || errors.grants.length > 0 ? errors : null;
-  }
-
-  /**
-   * Checks if a specific grant index is invalid.
-   * @param {number} index
-   * @returns {boolean}
-   */
-  @action
-  isGrantInvalid(index) {
-    if (!this.permissionErrors?.grants) return false;
-    return this.permissionErrors.grants.some((error) =>
-      error.indices?.includes(index),
-    );
-  }
-
-  /**
-   * Scrolls to the first error element in the flyout.
-   */
-  scrollToFirstError() {
-    // Wait for DOM update
-    setTimeout(() => {
-      const errorElement = document.querySelector(
-        '[data-test-permission-flyout] [data-test-permission-error-alert], [data-test-permission-flyout] .hds-form-error',
-      );
-      if (errorElement) {
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 0);
   }
 
   // =actions
@@ -148,7 +49,6 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
-    this.permissionErrors = null;
     // For project scopes, automatically set grant_scope_id to ['this'] as it's the only option
     const defaultGrantScopeId = this.args.model.scope.isProject ? ['this'] : [];
     this.selectedPermission = new TrackedObject({
@@ -165,23 +65,13 @@ export default class FormAppTokenNewComponent extends Component {
     this.showPermissionFlyout = false;
     this.editingPermission = false;
     this.selectedPermission = null;
-    this.permissionErrors = null;
   }
 
   /**
-   * Adds a new permission after validation.
+   * Adds a new permission.
    */
   @action
   addPermission() {
-    // Validate permission
-    const errors = this.validatePermission();
-    if (errors) {
-      this.permissionErrors = errors;
-      this.scrollToFirstError();
-      return;
-    }
-
-    this.permissionErrors = null;
     this.showPermissionFlyout = false;
     this.args.model.permissions = [
       ...this.args.model.permissions,
@@ -191,19 +81,10 @@ export default class FormAppTokenNewComponent extends Component {
   }
 
   /**
-   * Saves changes to an existing permission after validation.
+   * Saves changes to an existing permission.
    */
   @action
   savePermission() {
-    // Validate permission
-    const errors = this.validatePermission();
-    if (errors) {
-      this.permissionErrors = errors;
-      this.scrollToFirstError();
-      return;
-    }
-
-    this.permissionErrors = null;
     this.showPermissionFlyout = false;
     this.editingPermission = false;
     this.args.model.permissions = this.args.model.permissions.filter(
@@ -223,7 +104,6 @@ export default class FormAppTokenNewComponent extends Component {
    */
   @action
   editPermission(index) {
-    this.permissionErrors = null;
     this.selectedPermission = new TrackedObject(
       this.args.model.permissions[index],
     );
@@ -263,40 +143,6 @@ export default class FormAppTokenNewComponent extends Component {
     this.selectedPermission.grant = this.selectedPermission.grant.filter(
       (_, i) => i !== index,
     );
-  }
-
-  /**
-   * Clears scope errors when user interacts with scope fields.
-   */
-  @action
-  clearScopeErrors() {
-    if (!this.permissionErrors?.scope) return;
-
-    if (this.permissionErrors.grants?.length > 0) {
-      this.permissionErrors = {
-        ...this.permissionErrors,
-        scope: [],
-      };
-    } else {
-      this.permissionErrors = null;
-    }
-  }
-
-  /**
-   * Clears grant errors when user interacts with grant fields.
-   */
-  @action
-  clearGrantErrors() {
-    if (!this.permissionErrors?.grants) return;
-
-    if (this.permissionErrors.scope?.length > 0) {
-      this.permissionErrors = {
-        ...this.permissionErrors,
-        grants: [],
-      };
-    } else {
-      this.permissionErrors = null;
-    }
   }
 
   /**
