@@ -192,4 +192,77 @@ module('Integration | Component | form/app-token/new', function (hooks) {
       });
     });
   });
+
+  module('Permissions table', function () {
+    test('clicking grants count opens flyout', async function (assert) {
+      // Add a permission to the model
+      this.model.permissions = [
+        {
+          label: 'Test Permission',
+          grant_scope_id: ['this', 'children'],
+          grant: [
+            { value: 'ids=*;actions=read' },
+            { value: 'type=*;actions=list' },
+          ],
+        },
+      ];
+
+      await render(
+        hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+      );
+
+      // Verify grants count link is displayed
+      assert.dom('[data-test-grants-count="0"]').hasText('2');
+
+      // Flyout should be closed initially
+      assert.dom('[data-test-permission-flyout]').doesNotExist();
+
+      // Click the grants count link
+      await click('[data-test-grants-count="0"]');
+
+      // Flyout should open
+      assert.dom('[data-test-permission-flyout]').exists();
+
+      // Verify the grants fieldset is visible
+      assert.dom('#grants-fieldset').exists();
+
+      // Verify correct permission data is loaded
+      assert.dom('[data-test-grant-input]').exists({ count: 2 });
+    });
+
+    test('clicking active scopes count opens flyout', async function (assert) {
+      // Add a permission to the model
+      this.model.permissions = [
+        {
+          label: 'Test Permission',
+          grant_scope_id: ['this', 'children', 'descendants'],
+          grant: [{ value: 'ids=*;actions=read' }],
+        },
+      ];
+
+      await render(
+        hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+      );
+
+      // Verify active scopes count link is displayed
+      assert.dom('[data-test-active-scopes-count="0"]').hasText('3');
+
+      // Flyout should be closed initially
+      assert.dom('[data-test-permission-flyout]').doesNotExist();
+
+      // Click the active scopes count link
+      await click('[data-test-active-scopes-count="0"]');
+
+      // Flyout should open
+      assert.dom('[data-test-permission-flyout]').exists();
+
+      // Verify the scope options fieldset is visible
+      assert.dom('#scope-options-fieldset').exists();
+
+      // Verify correct permission data is loaded
+      assert.dom('[data-test-scope-this]').isChecked();
+      assert.dom('[data-test-scope-children]').isChecked();
+      assert.dom('[data-test-scope-descendants]').isChecked();
+    });
+  });
 });

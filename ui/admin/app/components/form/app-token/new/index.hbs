@@ -143,14 +143,46 @@
             </Hds::Text::Body>
           </B.Td>
           <B.Td>
-            <Hds::Text::Body @tag='p'>
-              {{~or B.data.grant.length '—'}}
-            </Hds::Text::Body>
+            {{#if B.data.grant.length}}
+              <Hds::Link::Inline
+                @color='secondary'
+                @href='#grants-fieldset'
+                {{on
+                  'click'
+                  (fn
+                    this.openPermissionFlyoutAndScrollTo
+                    B.rowIndex
+                    'grants-fieldset'
+                  )
+                }}
+                data-test-grants-count={{B.rowIndex}}
+              >
+                {{B.data.grant.length}}
+              </Hds::Link::Inline>
+            {{else}}
+              <Hds::Text::Body @tag='p'>—</Hds::Text::Body>
+            {{/if}}
           </B.Td>
           <B.Td>
-            <Hds::Text::Body @tag='p'>
-              {{~or B.data.grant_scopes.length '—'}}
-            </Hds::Text::Body>
+            {{#if B.data.grant_scope_id.length}}
+              <Hds::Link::Inline
+                @href='#scope-options-fieldset'
+                @color='secondary'
+                {{on
+                  'click'
+                  (fn
+                    this.openPermissionFlyoutAndScrollTo
+                    B.rowIndex
+                    'scope-options-fieldset'
+                  )
+                }}
+                data-test-active-scopes-count={{B.rowIndex}}
+              >
+                {{B.data.grant_scope_id.length}}
+              </Hds::Link::Inline>
+            {{else}}
+              <Hds::Text::Body @tag='p'>—</Hds::Text::Body>
+            {{/if}}
           </B.Td>
           <B.Td>
             <Hds::ButtonSet>
