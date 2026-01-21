@@ -249,6 +249,8 @@ export default class ScopeOptionsIndexComponent extends Component {
         await this.toggleShowSelectedOnly();
       }
     }
+    // Call onChange callback if provided
+    this.args.onChange?.();
   }
 
   /**
@@ -272,6 +274,8 @@ export default class ScopeOptionsIndexComponent extends Component {
     if (!selectedRowsKeys.length && this.showSelectedOnly) {
       await this.toggleShowSelectedOnly();
     }
+    // Call onChange callback if provided
+    this.args.onChange?.();
   }
 
   /**

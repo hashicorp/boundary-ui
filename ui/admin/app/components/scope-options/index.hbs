@@ -12,6 +12,7 @@
     checked={{includes this.keywords.keyThis this.grantScopeIds}}
     disabled={{@disabled}}
     {{on 'change' this.toggleField}}
+    data-test-scope-this
     as |F|
   >
     <F.Label>{{t 'form.this.label'}}</F.Label>
@@ -27,6 +28,7 @@
     checked={{includes this.keywords.keyChildren this.grantScopeIds}}
     disabled={{@disabled}}
     {{on 'change' this.toggleField}}
+    data-test-scope-children
     as |F|
   >
     <F.Label>{{t 'form.children.label'}}</F.Label>
@@ -43,6 +45,7 @@
       checked={{includes this.keywords.keyDescendants this.grantScopeIds}}
       disabled={{@disabled}}
       {{on 'change' this.toggleField}}
+      data-test-scope-descendants
       as |F|
     >
       <F.Label>{{t 'form.descendants.label'}}</F.Label>

@@ -176,7 +176,6 @@
   {{/if}}
 
   {{#if this.showPermissionFlyout}}
-    {{! TODO: Populate flyout with scope options.}}
     <Hds::Flyout
       @size='large'
       @onClose={{this.closePermissionFlyout}}
@@ -189,6 +188,52 @@
           (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
       <M.Body>
+        {{#if this.hasPermissionErrors}}
+          <Hds::Alert
+            @type='inline'
+            @color='critical'
+            class='margin-bottom-l'
+            data-test-permission-error-alert
+            as |A|
+          >
+            <A.Title>{{t
+                'resources.app-token.permission.errors.title'
+              }}</A.Title>
+            <A.Description>{{t
+                'resources.app-token.permission.errors.description'
+              }}</A.Description>
+            <A.Description>
+              <ul class='permission-error-list'>
+                {{#if this.hasScopeError}}
+                  <li>
+                    <Hds::Link::Inline
+                      @href='#scope-options-fieldset'
+                      {{on
+                        'click'
+                        (fn this.scrollToSection 'scope-options-fieldset')
+                      }}
+                    >
+                      {{t
+                        'resources.app-token.permission.errors.scope-options'
+                      }}
+                    </Hds::Link::Inline>
+                  </li>
+                {{/if}}
+                {{#if this.hasGrantError}}
+                  <li>
+                    <Hds::Link::Inline
+                      @href='#grants-fieldset'
+                      {{on 'click' (fn this.scrollToSection 'grants-fieldset')}}
+                    >
+                      {{t 'resources.app-token.permission.errors.grants'}}
+                    </Hds::Link::Inline>
+                  </li>
+                {{/if}}
+              </ul>
+            </A.Description>
+          </Hds::Alert>
+        {{/if}}
+
         <Hds::Form::TextInput::Field
           name='permission-label'
           @value={{this.selectedPermission.label}}
@@ -201,7 +246,11 @@
             }}</F.HelperText>
         </Hds::Form::TextInput::Field>
 
-        <Hds::Form::Fieldset @isRequired={{true}} as |F|>
+        <Hds::Form::Fieldset
+          @isRequired={{true}}
+          id='scope-options-fieldset'
+          as |F|
+        >
           <F.Legend>{{t 'form.scope-options.label'}}</F.Legend>
           <F.HelperText>{{t 'form.scope-options.help'}}</F.HelperText>
           <F.Control>
@@ -209,11 +258,19 @@
               @model={{@model}}
               @field={{this.selectedPermission}}
               @name='grant_scope_id'
+              @onChange={{this.clearScopeErrors}}
             />
           </F.Control>
+          {{#if this.hasScopeError}}
+            <F.Error as |E|>
+              {{#each this.permissionErrors.scope as |error|}}
+                <E.Message data-test-scope-error>{{error.message}}</E.Message>
+              {{/each}}
+            </F.Error>
+          {{/if}}
         </Hds::Form::Fieldset>
 
-        <Hds::Form::Fieldset @isRequired={{true}} as |F|>
+        <Hds::Form::Fieldset @isRequired={{true}} id='grants-fieldset' as |F|>
           <F.Legend>{{t 'resources.role.grant.title_plural'}}</F.Legend>
           <F.Control>
             <Hds::Table class='list-wrapper-field grant-list' name='grants'>
@@ -223,12 +280,14 @@
                     <B.Td>
                       <Hds::Form::TextInput::Field
                         {{on 'input' (set-from-event grant 'value')}}
+                        {{on 'input' this.clearGrantErrors}}
                         name={{concat 'grant-' index}}
                         title={{t 'form.grant.help'}}
                         @id={{concat 'grant-' index}}
                         @type='text'
                         @value={{grant.value}}
-                        data-test-grant-field
+                        @isInvalid={{this.isGrantInvalid index}}
+                        data-test-grant-input
                       />
                     </B.Td>
                     <B.Td>
@@ -239,7 +298,7 @@
                         @icon='trash'
                         @isIconOnly={{true}}
                         @text={{t 'actions.remove'}}
-                        data-test-grant-remove-button
+                        data-test-delete-grant-button
                       />
                     </B.Td>
                   </B.Tr>
@@ -258,6 +317,13 @@
               />
             </div>
           </F.Control>
+          {{#if this.hasGrantError}}
+            <F.Error as |E|>
+              {{#each this.permissionErrors.grants as |error|}}
+                <E.Message data-test-grant-error>{{error.message}}</E.Message>
+              {{/each}}
+            </F.Error>
+          {{/if}}
         </Hds::Form::Fieldset>
 
       </M.Body>
@@ -267,17 +333,20 @@
             <Hds::Button
               @text={{t 'actions.save'}}
               {{on 'click' this.savePermission}}
+              data-test-add-button
             />
           {{else}}
             <Hds::Button
               @text={{t 'actions.add'}}
               {{on 'click' this.addPermission}}
+              data-test-add-button
             />
           {{/if}}
           <Hds::Button
             @text={{t 'actions.cancel'}}
             @color='secondary'
             {{on 'click' this.closePermissionFlyout}}
+            data-test-cancel-button
           />
         </Hds::ButtonSet>
       </M.Footer>
