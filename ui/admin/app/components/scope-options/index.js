@@ -81,9 +81,14 @@ export default class ScopeOptionsIndexComponent extends Component {
   /**
    * Returns true if global role does not have "descendants" toggled on
    * or if org role does not have "children" toggled on.
+   * Returns false for project scopes as they cannot customize scope selection.
    * @type {boolean}
    */
   get allowCustomScopesSelection() {
+    // Project scopes cannot customize scope selection
+    if (this.args.model.scope.isProject) {
+      return false;
+    }
     return (
       (this.args.model.scope.isGlobal &&
         !this.grantScopeIds?.includes(GRANT_SCOPE_DESCENDANTS)) ||

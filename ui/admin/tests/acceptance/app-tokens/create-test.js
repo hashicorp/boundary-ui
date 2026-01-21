@@ -220,10 +220,19 @@ module('Acceptance | app-tokens | create', function (hooks) {
       await click(selectors.ADD_PERMISSION_BTN);
 
       assert.dom(selectors.PERMISSION_FLYOUT).includesText('Scope options');
-      assert
-        .dom(selectors.PERMISSION_FLYOUT)
-        .includesText('Select which scopes the permission is applied to');
-      assert.dom(selectors.PERMISSION_FLYOUT).includesText('Add this scope');
+
+      if (scope === 'project') {
+        // Project scopes show read-only help text
+        assert
+          .dom(selectors.PERMISSION_FLYOUT)
+          .includesText('The scope where permissions are applied to');
+      } else {
+        // Global and org scopes show selection help text and toggles
+        assert
+          .dom(selectors.PERMISSION_FLYOUT)
+          .includesText('Select which scopes the permission is applied to');
+        assert.dom(selectors.PERMISSION_FLYOUT).includesText('Add this scope');
+      }
     },
   );
 });
