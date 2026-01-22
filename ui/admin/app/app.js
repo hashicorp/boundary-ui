@@ -24,6 +24,6 @@ export default class App extends Application {
 loadInitializers(App, config.modulePrefix);
 
 if (macroCondition(getOwnConfig().startMirageWithApp && !isTesting())) {
-  const startServer = importSync('api/mirage/config').default;
+  const startServer = importSync('admin/mirage/config').default;
   startServer({});
 }
