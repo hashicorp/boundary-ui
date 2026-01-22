@@ -5,7 +5,7 @@
 
 {{#if @model.totalItemsCount}}
   <Rose::Form
-    class='full-width role-manage-custom-scopes-form'
+    class='full-width search-filtering'
     @onSubmit={{@submit}}
     @cancel={{@cancel}}
     @disabled={{@model.role.isSaving}}
@@ -35,7 +35,7 @@
 
     {{#if @model.scopes}}
       {{#if @model.canSelectOrgs}}
-        <div class='table-selected-items-text'>
+        <div class='selected-items-text'>
           {{#if @model.role.grantScopeOrgIDs.length}}
             <Hds::Text::Body @tag='p' @color='faint'>
               {{t
