@@ -9,7 +9,7 @@ import {
   setupTest as upstreamSetupTest,
 } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from './mirage';
 
 // This file exists to provide wrappers around ember-qunit's
 // test setup functions. This way, you can easily extend the setup that is
