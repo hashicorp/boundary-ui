@@ -8,36 +8,86 @@ const { ipcRenderer, contextBridge } = require('electron');
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
 
+const ALLOWED_METHODS = {
+  // Cluster management
+  'getClusterUrl': true,
+  'setClusterUrl': true,
+  'resetClusterUrl': true,
+  
+  // Session management
+  'connect': true,
+  'stop': true,
+  'stopAll': true,
+  'hasRunningSessions': true,
+  
+  // Terminal management
+  'createTerminal': true,
+  'resizeTerminal': true,
+  'removeTerminal': true,
+  'writeToTerminal': true,
+  
+  // Window management
+  'hasMacOSChrome': true,
+  'showWindowActions': true,
+  'minimizeWindow': true,
+  'toggleFullscreenWindow': true,
+  'closeWindow': true,
+  'focusWindow': true,
+  
+  // System checks
+  'cliExists': true,
+  'checkCommand': true,
+  'checkOS': true,
+  
+  // Daemon management
+  'addTokenToDaemons': true,
+  'searchCacheDaemon': true,
+  'isCacheDaemonRunning': true,
+  'cacheDaemonStatus': true,
+  'getClientAgentSessions': true,
+  'isClientAgentRunning': true,
+  'clientAgentStatus': true,
+  'pauseClientAgent': true,
+  'resumeClientAgent': true,
+  
+  // Version info
+  'getCliVersion': true,
+  'getDesktopVersion': true,
+  
+  // Settings
+  'getLogLevel': true,
+  'setLogLevel': true,
+  'getLogPath': true,
+  
+  // RDP client
+  'getRdpClients': true,
+  'getPreferredRdpClient': true,
+  'setPreferredRdpClient': true,
+  'launchRdpClient': true,
+  
+  // External links
+  'openExternal': true,
+};
+
+
+
 /**
  * Exposing terminal creation to an isolated context (Ember)
  * More information about contextBridge https://www.electronjs.org/docs/latest/api/context-bridge
  * usage example: window.terminal.send(data);
  */
 contextBridge.exposeInMainWorld('terminal', {
-  // We could've sent data through our established postMessage pattern
-  // but we don't need a response back so we can make it include it here
-  // to make it simpler. This keeps sending and receiving handlers symmetrical.
-  send: (data, id) => {
-    ipcRenderer.send(`terminalKeystroke-${id}`, data);
-  },
-  receive: (callback, id) => {
-    const incomingDataChannel = `terminalIncomingData-${id}`;
-    const listenerCallback = (_event, value) => callback(value);
-    ipcRenderer.on(incomingDataChannel, listenerCallback);
+receive: (callback, id) => {
+  const incomingDataChannel = `terminalIncomingData-${id}`;
+  const listenerCallback = (_event, value) => {
+    callback(value);
+  };
+  ipcRenderer.on(incomingDataChannel, listenerCallback);
 
     // Return a function for the caller to handle cleaning up the listener
     return () => {
       return ipcRenderer.removeListener(incomingDataChannel, listenerCallback);
     };
-  },
-  create: (vars) => {
-    ipcRenderer.send('createTerminal', vars);
-  },
-  remove: (id) => {
-    ipcRenderer.send(`removeTerminal-${id}`);
-  },
-  resize: (size, id) => {
-    ipcRenderer.send(`resize-${id}`, size);
   },
 });
 
@@ -56,10 +106,14 @@ process.once('loaded', () => {
   window.addEventListener('message', async function (event) {
     if (event.origin !== emberAppOrigin) return;
     const { method, payload } = event?.data ?? {};
-    if (method) {
-      const response = await ipcRenderer.invoke(method, payload);
-      event.ports[0].postMessage(response);
-    }
+    if (!method) return;
+
+    // add validation for all method to avoid arbitrary ipc calls?
+    if(method && !ALLOWED_METHODS[method]) return;
+
+    const response = await ipcRenderer.invoke(method, payload);
+    event.ports[0].postMessage(response);
+
   });
 });
 

@@ -37,6 +37,7 @@ const isLocalhost = require('./utils/isLocalhost');
 const config = require('../config/config.js');
 const { version } = require('./cli/index.js');
 const isDev = require('electron-is-dev');
+const terminalManager = require('./services/terminal-manager.js');
 
 // Register the custom file protocol
 // This will render as the default cluster URL: serve://boundary
@@ -304,6 +305,8 @@ app.on('quit', () => {
   cacheDaemonManager.stop();
   // we should stop any active RDP client processes
   rdpClientManager.stopAll();
+  // stop all terminal sessions
+  terminalManager.stopAll();
 });
 
 // Handle an unhandled error in the main thread

@@ -95,10 +95,11 @@ export default class SessionTerminalTabsComponent extends Component {
     // 3. Only connect if the user has an SSH client available in their path
     if (target?.isSSH && started_desktop_client && isSSHCommandAvailable) {
       // Send an SSH command immediately
-      window.terminal.send(
-        `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`,
-        this.id,
-      );
+      await this.ipc.invoke('writeToTerminal', {
+        id: this.id,
+        // move this to main process
+        data: `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`
+      });
     }
   }
 
@@ -109,15 +110,19 @@ export default class SessionTerminalTabsComponent extends Component {
     if (this.terminal) {
       this.terminal.dispose();
     }
-    window.terminal?.remove(this.id);
+    this.ipc.invoke('removeTerminal', { id: this.id });
     window.onresize = null;
     this.removeTerminalListener?.();
   }
 
   #setupTerminal(fitAddon, xterm, termContainer) {
     // Terminal is exposed by contextBridge within the preload script
-    window.terminal.create({ id: this.id, cols: xterm.cols, rows: xterm.rows });
-    xterm.onData((data) => window.terminal.send(data, this.id));
+    this.ipc.invoke('createTerminal', {
+      id: this.id,
+      cols: xterm.cols,
+      rows: xterm.rows
+    });
+    xterm.onData((data) =>  this.ipc.invoke('writeToTerminal', { id: this.id, data }));
 
     // Save the handler to cleanup the listener on the renderer process later
     this.removeTerminalListener = window.terminal.receive((value) => {
@@ -134,7 +139,11 @@ export default class SessionTerminalTabsComponent extends Component {
       debouncedFit();
     };
     xterm.onResize((size) => {
-      window.terminal.resize(size, this.id);
+      this.ipc.invoke('resizeTerminal', {
+      id: this.id,
+      cols: size.cols,
+      rows: size.rows
+      });
     });
   }
 }

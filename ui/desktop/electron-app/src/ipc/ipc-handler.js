@@ -5,6 +5,7 @@
 
 const { ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
+const senderMap = new Map();
 
 const log = (method, request = '', response = '', type = 'log') => {
   const requestString =
@@ -24,6 +25,10 @@ module.exports = function handle(command, handler) {
     const requestPayload = request;
     let result;
     try {
+      // Store sender for this request if it has an id
+      if(request?.id && event?.sender) {
+        senderMap.set(request.id, event.sender);
+      }
       result = await handler(requestPayload);
       log(command, requestPayload, result);
     } catch (e) {
@@ -37,3 +42,6 @@ module.exports = function handle(command, handler) {
     return result;
   });
 };
+
+module.exports.getSender = (id) => senderMap.get(id);
+module.exports.removeSender = (id) => senderMap.delete(id);
