@@ -265,18 +265,21 @@
     --token-color-palette-neutral-600
   );
   --token-app-side-nav-color-surface-primary: var(
-    --token-color-palette-neutral-50
+    --token-color-palette-neutral-0
   );
   --token-app-side-nav-wrapper-border-color: var(
     --token-color-palette-neutral-200
+  );
+  --token-app-side-nav-color-foreground-strong: var(
+    --token-color-palette-neutral-600
   );
   --token-app-side-nav-color-foreground-faint: var(
     --token-color-palette-neutral-500
   );
   --token-app-side-nav-color-surface-interactive-hover: var(
-    --token-color-palette-neutral-100
+    --token-color-palette-neutral-50
   );
   --token-app-side-nav-color-surface-interactive-active: var(
-    --token-color-palette-neutral-300
+    --token-color-palette-neutral-100
   );
 }

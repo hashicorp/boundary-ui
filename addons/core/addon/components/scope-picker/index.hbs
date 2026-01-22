@@ -12,7 +12,11 @@
   as |D|
 >
   {{#let this.currentScope as |scope|}}
-    <D.ToggleButton @text={{scope.name}} @icon={{scope.icon}} />
+    <D.ToggleButton
+      @text={{scope.name}}
+      @icon={{scope.icon}}
+      class='dropdown_toggle_color_override'
+    />
   {{/let}}
 
   <D.Checkmark
