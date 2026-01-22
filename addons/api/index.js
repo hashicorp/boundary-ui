@@ -24,34 +24,20 @@ module.exports = {
     },
   },
 
-  included() {
-    this._super.included.apply(this, arguments);
-    const includeMirage = this._includeMirageInBuild();
-
-    // these are dependencies used our mirage code within the
-    // api addon and should not be included in production builds,
-    // after this addon has been migrated to a v2 addon this can
-    // be removed as the addon's dependencies will be statically
-    // analyzable
-    if (!includeMirage) {
-      // exclude mirage and dependencies from this addon that are used by mirage
-      this.options.autoImport.exclude.push(
-        'miragejs',
-        'sinon',
-        '@faker-js/faker',
-        'js-bexpr',
-      );
+  treeForApp(appTree) {
+    if (!this._includeMirageInBuild()) {
+      return funnel(appTree, {
+        exclude: ['mirage/**/*'],
+      });
     }
+
+    return appTree;
   },
 
   treeForAddon() {
     // Exclude anything in the workers folder from being bundled in the final
     // build as we're manually bundling the files ourselves below.
     const excludedModules = ['api/workers/**/*'];
-
-    if (!this._includeMirageInBuild()) {
-      excludedModules.push('api/mirage/**/*');
-    }
 
     const tree = this._super.treeForAddon.apply(this, arguments);
     return funnel(tree, {
