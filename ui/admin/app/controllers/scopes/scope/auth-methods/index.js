@@ -150,7 +150,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     // Filter out empty account claim maps before saving (only check key)
     if (authMethod.account_claim_maps) {
       authMethod.account_claim_maps = authMethod.account_claim_maps.filter(
-        (item) => item.key != null && item.key.trim() !== '',
+        (item) => item.key?.trim(),
       );
     }
     await authMethod.save();

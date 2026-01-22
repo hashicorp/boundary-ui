@@ -77,9 +77,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     // Filter out empty critical_options before saving (only check key)
     if (credentialLibrary.critical_options) {
       credentialLibrary.critical_options =
-        credentialLibrary.critical_options.filter(
-          (item) => item.key != null && item.key.trim() !== '',
-        );
+        credentialLibrary.critical_options.filter((item) => item.key?.trim());
     }
     await credentialLibrary.save();
     if (this.can.can('read model', credentialLibrary)) {
