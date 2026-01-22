@@ -44,7 +44,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@hashicorp/design-system-components": "6.0.0-rc-20260121230544",
+      "@hashicorp/design-system-components": "6.0.0-rc-20260122180106",
       "nomnom>underscore": "^1.12.1",
       "@hashicorp/design-system-components>ember-stargate": "^0.6.0",
       "micromatch": "^4.0.8",
