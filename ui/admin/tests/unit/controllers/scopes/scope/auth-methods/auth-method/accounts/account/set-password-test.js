@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';

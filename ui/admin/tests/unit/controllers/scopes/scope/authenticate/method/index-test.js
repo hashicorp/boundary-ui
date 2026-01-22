@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit, currentURL, settled } from '@ember/test-helpers';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
