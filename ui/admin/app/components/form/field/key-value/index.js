@@ -15,7 +15,7 @@ export default class FormFieldKeyValueComponent extends Component {
 
     // If there is no data, do not show the delete button
     // NOTE: The UI always includes at least one placeholder row.
-    // The placeholder row [{key: '', value: ''}] is filtered out in the controller before sending data to the API, as the API requires an empty array when no data is present.
+    // The placeholder row such as [{key: '', value: ''}] or [{key: ''}] is filtered out in the controller before sending data to the API, as the API requires an empty array when no data is present.
     if (rows.length === 0) {
       return false;
     }
