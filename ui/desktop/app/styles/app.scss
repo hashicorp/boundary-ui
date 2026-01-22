@@ -321,7 +321,6 @@
     padding-left: sizing.rems(l) * 4;
   }
 
-  /* stylelint-disable-next-line selector-class-pattern */
   &__logo,
   &__global-actions,
   &__utility-actions,
@@ -329,7 +328,6 @@
     -webkit-app-region: no-drag;
   }
 
-  /* stylelint-disable-next-line selector-class-pattern */
   .hds-app-header__utility-actions {
     .button-window-minimize,
     .button-window-fullscreen,
