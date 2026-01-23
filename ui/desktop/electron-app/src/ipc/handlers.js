@@ -298,6 +298,26 @@ handle('launchRdpClient', async (sessionId) =>
   rdpClientManager.launchRdpClient(sessionId, sessionManager),
 );
 
+handle('handleSSHTargetInput', async ({ id, sessionID, isSSHTarget }) => {
+  if (!isSSHTarget) {
+    throw new Error('Not an SSH target');
+  }
+  if (!terminalManager.hasTerminal(id)) {
+    throw new Error('Terminal not found');
+  }
+  const session = sessionManager.getSessionById(sessionID);
+  if (!session) {
+    throw new Error('Session not found');
+  }
+  const {
+    proxyDetails: { address, port },
+  } = session;
+
+  const sshCommand = `ssh ${address} -p ${port} -o NoHostAuthenticationForLocalhost=yes\r`;
+  return terminalManager.writeToTerminal(id, sshCommand, {
+    isSSHCommand: true,
+  });
+});
 
 // Terminal handlers
 
@@ -305,23 +325,26 @@ handle('createTerminal', (data) => {
   const { id, cols, rows } = data;
   // Get the sender associated with the terminal ID
   const sender = getSender(id);
-  
+
   return terminalManager.createTerminal(id, cols, rows, sender);
 });
 
 handle('writeToTerminal', ({ id, data }) => {
   if (!terminalManager.hasTerminal(id)) {
     throw new Error('Terminal not found');
-  }  
+  }
   return terminalManager.writeToTerminal(id, data);
 });
 
+handle('setActiveTerminal', ({ id }) => {
+  return terminalManager.setActiveTerminal(id);
+});
 
-handle('resizeTerminal', ({ id, cols, rows }) => {  
+handle('resizeTerminal', ({ id, cols, rows }) => {
   if (!terminalManager.hasTerminal(id)) {
     throw new Error('Terminal not found');
   }
-  
+
   return terminalManager.resizeTerminal(id, cols, rows);
 });
 

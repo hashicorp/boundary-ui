@@ -77,16 +77,34 @@ export default class SessionTerminalTabsComponent extends Component {
     xterm.loadAddon(new CanvasAddon());
     xterm.open(termContainer);
     fitAddon.fit();
-    xterm.focus();
 
     // Generate a UUID to have the terminal handlers be unique
     this.id = uuidv4();
     this.#setupTerminal(fitAddon, xterm, termContainer);
 
+    // Handle focus/blur to track active terminal
+    termContainer.addEventListener(
+      'focus',
+      () => {
+        this.ipc.invoke('setActiveTerminal', { id: this.id });
+      },
+      true,
+    );
+
+    termContainer.addEventListener(
+      'blur',
+      () => {
+        this.ipc.invoke('setActiveTerminal', { id: null });
+      },
+      true,
+    );
+
+    xterm.focus();
+
     const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
     const { model } = this.args;
 
-    const { proxy_address, proxy_port, started_desktop_client, target } = model;
+    const { started_desktop_client, target } = model;
 
     // Only send the command in certain scenarios:
     // 1. Only for SSH targets
@@ -95,10 +113,10 @@ export default class SessionTerminalTabsComponent extends Component {
     // 3. Only connect if the user has an SSH client available in their path
     if (target?.isSSH && started_desktop_client && isSSHCommandAvailable) {
       // Send an SSH command immediately
-      await this.ipc.invoke('writeToTerminal', {
+      await this.ipc.invoke('handleSSHTargetInput', {
         id: this.id,
-        // move this to main process
-        data: `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`
+        sessionID: model.id,
+        isSSHTarget: target?.isSSH,
       });
     }
   }
@@ -120,9 +138,8 @@ export default class SessionTerminalTabsComponent extends Component {
     this.ipc.invoke('createTerminal', {
       id: this.id,
       cols: xterm.cols,
-      rows: xterm.rows
+      rows: xterm.rows,
     });
-    xterm.onData((data) =>  this.ipc.invoke('writeToTerminal', { id: this.id, data }));
 
     // Save the handler to cleanup the listener on the renderer process later
     this.removeTerminalListener = window.terminal.receive((value) => {
@@ -140,9 +157,9 @@ export default class SessionTerminalTabsComponent extends Component {
     };
     xterm.onResize((size) => {
       this.ipc.invoke('resizeTerminal', {
-      id: this.id,
-      cols: size.cols,
-      rows: size.rows
+        id: this.id,
+        cols: size.cols,
+        rows: size.rows,
       });
     });
   }

@@ -155,6 +155,16 @@ const createWindow = async (partition, closeWindowCB) => {
     );
   });
 
+  browserWindow.webContents.on('before-input-event', (event, input) => {
+    const activeTerminalId = terminalManager.getActiveTerminalId();
+
+    if (activeTerminalId !== null && input.type === 'keyDown') {
+      event.preventDefault();
+
+      terminalManager.writeToTerminal(activeTerminalId, input);
+    }
+  });
+
   // Prevent navigation outside of serve://boundary per
   // Electronegativity LIMIT_NAVIGATION_GLOBAL_CHECK
   browserWindow.webContents.on('will-navigate', (event, url) => {

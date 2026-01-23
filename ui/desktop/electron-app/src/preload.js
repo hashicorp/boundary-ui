@@ -10,66 +10,66 @@ const emberAppOrigin = window.location.origin;
 
 const ALLOWED_METHODS = {
   // Cluster management
-  'getClusterUrl': true,
-  'setClusterUrl': true,
-  'resetClusterUrl': true,
-  
+  getClusterUrl: true,
+  setClusterUrl: true,
+  resetClusterUrl: true,
+
   // Session management
-  'connect': true,
-  'stop': true,
-  'stopAll': true,
-  'hasRunningSessions': true,
-  
+  connect: true,
+  stop: true,
+  stopAll: true,
+  hasRunningSessions: true,
+
   // Terminal management
-  'createTerminal': true,
-  'resizeTerminal': true,
-  'removeTerminal': true,
-  'writeToTerminal': true,
-  
+  createTerminal: true,
+  resizeTerminal: true,
+  removeTerminal: true,
+
   // Window management
-  'hasMacOSChrome': true,
-  'showWindowActions': true,
-  'minimizeWindow': true,
-  'toggleFullscreenWindow': true,
-  'closeWindow': true,
-  'focusWindow': true,
-  
+  hasMacOSChrome: true,
+  showWindowActions: true,
+  minimizeWindow: true,
+  toggleFullscreenWindow: true,
+  closeWindow: true,
+  focusWindow: true,
+
   // System checks
-  'cliExists': true,
-  'checkCommand': true,
-  'checkOS': true,
-  
+  cliExists: true,
+  checkCommand: true,
+  checkOS: true,
+
   // Daemon management
-  'addTokenToDaemons': true,
-  'searchCacheDaemon': true,
-  'isCacheDaemonRunning': true,
-  'cacheDaemonStatus': true,
-  'getClientAgentSessions': true,
-  'isClientAgentRunning': true,
-  'clientAgentStatus': true,
-  'pauseClientAgent': true,
-  'resumeClientAgent': true,
-  
+  addTokenToDaemons: true,
+  searchCacheDaemon: true,
+  isCacheDaemonRunning: true,
+  cacheDaemonStatus: true,
+  getClientAgentSessions: true,
+  isClientAgentRunning: true,
+  clientAgentStatus: true,
+  pauseClientAgent: true,
+  resumeClientAgent: true,
+
   // Version info
-  'getCliVersion': true,
-  'getDesktopVersion': true,
-  
+  getCliVersion: true,
+  getDesktopVersion: true,
+
   // Settings
-  'getLogLevel': true,
-  'setLogLevel': true,
-  'getLogPath': true,
-  
+  getLogLevel: true,
+  setLogLevel: true,
+  getLogPath: true,
+
   // RDP client
-  'getRdpClients': true,
-  'getPreferredRdpClient': true,
-  'setPreferredRdpClient': true,
-  'launchRdpClient': true,
-  
+  getRdpClients: true,
+  getPreferredRdpClient: true,
+  setPreferredRdpClient: true,
+  launchRdpClient: true,
+
   // External links
-  'openExternal': true,
+  openExternal: true,
+
+  setActiveTerminal: true,
+  handleSSHTargetInput: true,
 };
-
-
 
 /**
  * Exposing terminal creation to an isolated context (Ember)
@@ -77,12 +77,12 @@ const ALLOWED_METHODS = {
  * usage example: window.terminal.send(data);
  */
 contextBridge.exposeInMainWorld('terminal', {
-receive: (callback, id) => {
-  const incomingDataChannel = `terminalIncomingData-${id}`;
-  const listenerCallback = (_event, value) => {
-    callback(value);
-  };
-  ipcRenderer.on(incomingDataChannel, listenerCallback);
+  receive: (callback, id) => {
+    const incomingDataChannel = `terminalIncomingData-${id}`;
+    const listenerCallback = (_event, value) => {
+      callback(value);
+    };
+    ipcRenderer.on(incomingDataChannel, listenerCallback);
 
     // Return a function for the caller to handle cleaning up the listener
     return () => {
@@ -109,11 +109,10 @@ process.once('loaded', () => {
     if (!method) return;
 
     // add validation for all method to avoid arbitrary ipc calls?
-    if(method && !ALLOWED_METHODS[method]) return;
+    if (method && !ALLOWED_METHODS[method]) return;
 
     const response = await ipcRenderer.invoke(method, payload);
     event.ports[0].postMessage(response);
-
   });
 });
 
