@@ -10,7 +10,7 @@ import {
   TYPE_TARGET_SSH,
   TYPE_TARGET_RDP,
 } from 'api/models/target';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 
 module('Unit | Model | target', function (hooks) {
   setupTest(hooks);
