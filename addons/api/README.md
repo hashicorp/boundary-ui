@@ -21,7 +21,7 @@ This addon contains the API data access layer for Boundary.
 ## Add API to an App
 
 Add this addon to an Ember application's `devDependencies` as:
-`"api": "workspace:*"`, for applications included in this monorepo.
+`"api": "workspace:*"`, for applications included in this monorepo. 
 
 This addon also includes Mirage mocks. To include the `miragejs` dependency and this addon's mirage handlers configure the consuming app's `config/environment.js`
 
@@ -30,6 +30,9 @@ mirage: {
   enabled: true
 }
 ```
+
+Include `miragejs` and any api addon `peerDependencies` used by the mirage as dev dependencies in the consuming app,
+eg: `@faker-js/faker`, otherwise mirage handler code might fail with an error.
 
 To have mirage start and intercept requests when the application starts:
 1. Add the `@embroider/macros` dependency to your application
@@ -58,7 +61,7 @@ module.exports = async function (defaults) {
 import { macroCondition, importSync, getOwnConfig, isTesting } from '@embroider/macros';
 
 if (macroCondition(getOwnConfig().startMirageWithApp && !isTesting())) {
-  const startServer = importSync('api/mirage/config').default;
+  const startServer = importSync('[name of host app]/mirage/config').default;
   startServer({});
 }
 ```
