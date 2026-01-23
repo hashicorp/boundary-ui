@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
