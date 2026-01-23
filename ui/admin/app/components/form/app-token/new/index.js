@@ -7,6 +7,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedObject } from 'tracked-built-ins';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 const MAX_TTL_SECONDS = 94608000;
 
@@ -16,7 +17,6 @@ export default class FormAppTokenNewComponent extends Component {
   @tracked showPermissionFlyout = false;
   @tracked editingPermission = false;
   @tracked selectedPermission;
-
   indexOfEditingPermission;
 
   /**
@@ -45,8 +45,13 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
+    // For project scopes, automatically set grant_scopes to ['this'] as it's the only option
+    const defaultGrantScopes = this.args.model.scope.isProject
+      ? [GRANT_SCOPE_THIS]
+      : [];
     this.selectedPermission = new TrackedObject({
-      grant_scopes: [],
+      grant_scopes: defaultGrantScopes,
+      grant: [{ value: '' }],
     });
   }
 
@@ -114,5 +119,64 @@ export default class FormAppTokenNewComponent extends Component {
     this.args.model.permissions = this.args.model.permissions.filter(
       (_, i) => i !== index,
     );
+  }
+
+  /**
+   * Adds a grant field to the selected permission.
+   */
+  @action
+  addGrant() {
+    this.selectedPermission.grant = [
+      ...this.selectedPermission.grant,
+      { value: '' },
+    ];
+  }
+
+  /**
+   * Removes a grant string from the selected permission.
+   * @param {object} rowData - Data for the row being deleted
+   * @param {number} rowIndex - Index of the row being deleted
+   */
+  @action
+  removeGrant(rowData, rowIndex) {
+    this.selectedPermission.grant = this.selectedPermission.grant.filter(
+      (_, i) => i !== rowIndex,
+    );
+  }
+
+  /**
+   * Opens the permission flyout for a specific permission and scrolls to a section.
+   * @param {number} index - Index of the permission in the array
+   * @param {string} sectionId - ID of the section to scroll to
+   * @param {Event} event - Click event to prevent default behavior
+   */
+  @action
+  openPermissionFlyoutAndScrollTo(index, sectionId, event) {
+    event?.preventDefault();
+
+    // Open flyout with the selected permission
+    this.editPermission(index);
+
+    // Wait for flyout to render, then scroll to the specified section
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  }
+
+  /**
+   * Scrolls to a section within the flyout by element ID.
+   * @param {string} elementId
+   * @param {Event} event
+   */
+  @action
+  scrollToSection(elementId, event) {
+    event?.preventDefault();
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

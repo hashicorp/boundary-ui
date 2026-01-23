@@ -838,6 +838,70 @@ function routes() {
     // Create new app token or handle clone
     const attrs = this.normalizedRequestAttrs();
 
+    // Validate required fields
+    const errors = [];
+
+    // Validate name is present
+    if (!attrs.name || !attrs.name.trim()) {
+      errors.push({
+        name: 'name',
+        description: 'Name is required.',
+      });
+    }
+
+    // Validate permissions if provided
+    if (attrs.permissions && attrs.permissions.length > 0) {
+      // Validate each permission
+      attrs.permissions.forEach((permission, index) => {
+        // Validate scope selection
+        if (
+          !permission.grant_scope_id ||
+          permission.grant_scope_id.length === 0
+        ) {
+          errors.push({
+            name: `permissions[${index}].grant_scope_id`,
+            description: 'Scope selection is required for each permission.',
+          });
+        }
+
+        // Validate grants - check for empty or missing grants
+        if (!permission.grant || permission.grant.length === 0) {
+          errors.push({
+            name: `permissions[${index}].grant`,
+            description: 'At least one grant is required for each permission.',
+          });
+        } else {
+          // Check that at least one grant has a non-empty value
+          const hasValidGrant = permission.grant.some(
+            (grant) => grant.value && grant.value.trim(),
+          );
+          if (!hasValidGrant) {
+            errors.push({
+              name: `permissions[${index}].grant`,
+              description:
+                'At least one non-empty grant is required for each permission.',
+            });
+          }
+        }
+      });
+    }
+
+    // If there are validation errors, return 400
+    if (errors.length > 0) {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: errors,
+          },
+        },
+      );
+    }
+
     // Find the scope for the app token. Scope can be global, org or proj level.
     const scope = scopes.find(attrs.scopeId) || scopes.find('global');
     let scopeUser = users.where({ scopeId: scope.id }).models[0];
