@@ -315,7 +315,7 @@
 
 .app-header {
   -webkit-app-region: drag;
-  // user-select: none;
+  user-select: none;
 
   &.header-cushion {
     padding-left: sizing.rems(l) * 4;
