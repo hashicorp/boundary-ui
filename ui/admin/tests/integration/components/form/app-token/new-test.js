@@ -60,7 +60,7 @@ module('Integration | Component | form/app-token/new', function (hooks) {
       await click('[data-test-add-permission-button]');
       assert.dom('[data-test-permission-flyout]').exists();
 
-      await click('[data-test-cancel-button]');
+      await click('[data-test-cancel-permission-button]');
 
       assert.dom('[data-test-permission-flyout]').doesNotExist();
     });
@@ -94,6 +94,138 @@ module('Integration | Component | form/app-token/new', function (hooks) {
 
         assert.dom('[data-test-grant-input]').exists({ count: 1 });
       });
+
+      test('grant input preserves value when typing', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
+
+        assert.dom('[data-test-grant-input]').hasValue('ids=*;actions=read');
+      });
+
+      test('multiple grants can have different values', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+
+        // Fill first grant
+        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
+
+        // Add second grant
+        await click('[data-test-add-grant-button]');
+
+        // Fill second grant
+        const grantInputs = document.querySelectorAll(
+          '[data-test-grant-input]',
+        );
+        assert.strictEqual(grantInputs.length, 2, 'Two grant inputs exist');
+
+        await fillIn(grantInputs[1], 'type=target;actions=list');
+
+        assert.dom(grantInputs[0]).hasValue('ids=*;actions=read');
+        assert.dom(grantInputs[1]).hasValue('type=target;actions=list');
+      });
+
+      test('deleting first grant preserves second grant value', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+
+        // Fill first grant
+        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
+
+        // Add and fill second grant
+        await click('[data-test-add-grant-button]');
+        const grantInputs = document.querySelectorAll(
+          '[data-test-grant-input]',
+        );
+        await fillIn(grantInputs[1], 'type=target;actions=list');
+
+        // Delete first grant
+        const deleteButtons = document.querySelectorAll(
+          '[data-test-delete-grant-button]',
+        );
+        await click(deleteButtons[0]);
+
+        // Verify only one grant remains with second grant's value
+        assert.dom('[data-test-grant-input]').exists({ count: 1 });
+        assert
+          .dom('[data-test-grant-input]')
+          .hasValue('type=target;actions=list');
+      });
+
+      test('grants are saved with the permission', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+
+        // Add scope and grants
+        await click('[data-test-scope-this]');
+        await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
+        await click('[data-test-add-grant-button]');
+
+        const grantInputs = document.querySelectorAll(
+          '[data-test-grant-input]',
+        );
+        await fillIn(grantInputs[1], 'type=target;actions=list');
+
+        // Save permission
+        await click('[data-test-add-permission-flyout-button]');
+
+        // Verify grants are saved
+        assert.strictEqual(this.model.permissions.length, 1);
+        assert.strictEqual(this.model.permissions[0].grant.length, 2);
+        assert.strictEqual(
+          this.model.permissions[0].grant[0].value,
+          'ids=*;actions=read',
+        );
+        assert.strictEqual(
+          this.model.permissions[0].grant[1].value,
+          'type=target;actions=list',
+        );
+      });
+
+      test('grants label shows required indicator', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+
+        // The KeyValueInputs Field label should have required indicator
+        assert
+          .dom('.hds-form-key-value-inputs .hds-form-indicator')
+          .exists('Required indicator is displayed on grants label');
+      });
+
+      test('can add multiple grants', async function (assert) {
+        await render(
+          hbs`<Form::AppToken::New @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+        );
+
+        await click('[data-test-add-permission-button]');
+
+        // Start with 1 grant
+        assert.dom('[data-test-grant-input]').exists({ count: 1 });
+
+        // Add 4 more grants
+        await click('[data-test-add-grant-button]');
+        await click('[data-test-add-grant-button]');
+        await click('[data-test-add-grant-button]');
+        await click('[data-test-add-grant-button]');
+
+        assert.dom('[data-test-grant-input]').exists({ count: 5 });
+        assert.dom('[data-test-delete-grant-button]').exists({ count: 5 });
+      });
     });
 
     module('Permission management', function () {
@@ -107,7 +239,7 @@ module('Integration | Component | form/app-token/new', function (hooks) {
         await click('[data-test-add-permission-button]');
         await click('[data-test-scope-this]');
         await fillIn('[data-test-grant-input]', 'ids=*;actions=read');
-        await click('[data-test-add-button]');
+        await click('[data-test-add-permission-flyout-button]');
 
         assert.strictEqual(this.model.permissions.length, 1);
         assert.dom('[data-test-permission-flyout]').doesNotExist();
@@ -121,7 +253,7 @@ module('Integration | Component | form/app-token/new', function (hooks) {
       this.model.permissions = [
         {
           label: 'Test Permission',
-          grant_scope_id: ['this', 'children'],
+          grant_scopes: ['this', 'children'],
           grant: [
             { value: 'ids=*;actions=read' },
             { value: 'type=*;actions=list' },
@@ -157,7 +289,7 @@ module('Integration | Component | form/app-token/new', function (hooks) {
       this.model.permissions = [
         {
           label: 'Test Permission',
-          grant_scope_id: ['this', 'children', 'descendants'],
+          grant_scopes: ['this', 'children', 'descendants'],
           grant: [{ value: 'ids=*;actions=read' }],
         },
       ];

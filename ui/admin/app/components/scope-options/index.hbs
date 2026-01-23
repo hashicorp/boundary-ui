@@ -58,19 +58,15 @@
   {{/if}}
 
   {{#if @model.scope.isProject}}
-    <div>
+    <Hds::Layout::Flex @direction='column' @gap='4' @align='start'>
       <Hds::Layout::Flex @gap='8' @align='center'>
         <Hds::Icon @name='grid' @isInline={{true}} />
         <Hds::Text::Body @tag='p' @weight='semibold'>
           {{@model.scopeModel.displayName}}
         </Hds::Text::Body>
       </Hds::Layout::Flex>
-      <Hds::Badge
-        @text='Project'
-        @color='neutral'
-        class='margin-left-l margin-top-xxs'
-      />
-    </div>
+      <Hds::Badge @text='Project' @color='neutral' class='margin-left-l' />
+    </Hds::Layout::Flex>
   {{/if}}
 
   {{#if

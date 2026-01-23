@@ -4,18 +4,14 @@
  */
 
 import Component from '@glimmer/component';
-import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedObject } from 'tracked-built-ins';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 const MAX_TTL_SECONDS = 94608000;
 
 export default class FormAppTokenNewComponent extends Component {
-  // =services
-
-  @service intl;
-
   // =attributes
 
   @tracked showPermissionFlyout = false;
@@ -49,10 +45,12 @@ export default class FormAppTokenNewComponent extends Component {
   @action
   openPermissionFlyout() {
     this.showPermissionFlyout = true;
-    // For project scopes, automatically set grant_scope_id to ['this'] as it's the only option
-    const defaultGrantScopeId = this.args.model.scope.isProject ? ['this'] : [];
+    // For project scopes, automatically set grant_scopes to ['this'] as it's the only option
+    const defaultGrantScopes = this.args.model.scope.isProject
+      ? [GRANT_SCOPE_THIS]
+      : [];
     this.selectedPermission = new TrackedObject({
-      grant_scope_id: defaultGrantScopeId,
+      grant_scopes: defaultGrantScopes,
       grant: [{ value: '' }],
     });
   }
@@ -136,12 +134,13 @@ export default class FormAppTokenNewComponent extends Component {
 
   /**
    * Removes a grant string from the selected permission.
-   * @param {number} index
+   * @param {object} rowData - Data for the row being deleted
+   * @param {number} rowIndex - Index of the row being deleted
    */
   @action
-  removeGrant(index) {
+  removeGrant(rowData, rowIndex) {
     this.selectedPermission.grant = this.selectedPermission.grant.filter(
-      (_, i) => i !== index,
+      (_, i) => i !== rowIndex,
     );
   }
 

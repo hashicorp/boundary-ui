@@ -58,7 +58,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
     this.set('permission', {});
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id' @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes' @model={{this.model}} @field={{this.permission}} />`,
     );
 
     await click(ACCORDION_BTN);
@@ -72,7 +72,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
     this.set('permission', {});
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id' @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes' @model={{this.model}} @field={{this.permission}} />`,
     );
 
     await click(ACCORDION_BTN);
@@ -85,7 +85,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
     this.set('permission', {});
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id', @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes', @model={{this.model}} @field={{this.permission}} />`,
     );
 
     assert.dom(THIS_TOGGLE).isVisible();
@@ -99,7 +99,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
     this.set('permission', {});
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id', @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes', @model={{this.model}} @field={{this.permission}} />`,
     );
 
     assert.dom(THIS_TOGGLE).isVisible();
@@ -109,10 +109,10 @@ module('Integration | Component | scope-options/index', function (hooks) {
 
   test('it renders single alert when children is selected in global scope level', async function (assert) {
     this.set('model', model);
-    this.set('permission', { grant_scope_id: ['children'] });
+    this.set('permission', { grant_scopes: ['children'] });
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id', @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes', @model={{this.model}} @field={{this.permission}} />`,
     );
 
     assert.dom(CHILDREN_TOGGLE).isChecked();
@@ -122,10 +122,10 @@ module('Integration | Component | scope-options/index', function (hooks) {
 
   test('it renders multiple alerts when descendants is selected in global scope level', async function (assert) {
     this.set('model', model);
-    this.set('permission', { grant_scope_id: ['descendants'] });
+    this.set('permission', { grant_scopes: ['descendants'] });
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id', @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes', @model={{this.model}} @field={{this.permission}} />`,
     );
 
     assert.dom(DESCENDANTS_TOGGLE).isChecked();
@@ -136,10 +136,10 @@ module('Integration | Component | scope-options/index', function (hooks) {
   test('it renders no alerts when children is selected in org scope level', async function (assert) {
     model.scopeModel = orgScope;
     this.set('model', model);
-    this.set('permission', { grant_scope_id: ['children'] });
+    this.set('permission', { grant_scopes: ['children'] });
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id' @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes' @model={{this.model}} @field={{this.permission}} />`,
     );
 
     assert.dom(CHILDREN_TOGGLE).isChecked();
@@ -154,7 +154,7 @@ module('Integration | Component | scope-options/index', function (hooks) {
     this.set('permission', {});
 
     await render(
-      hbs`<ScopeOptions @name='grant_scope_id' @model={{this.model}} @field={{this.permission}} />`,
+      hbs`<ScopeOptions @name='grant_scopes' @model={{this.model}} @field={{this.permission}} />`,
     );
 
     // Should NOT show any toggles

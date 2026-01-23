@@ -1335,17 +1335,3 @@ app-token:
       description: App token has been revoked.
     tooltips:
       active-scopes: Active scopes are scopes that exist within Boundary.
-  permission:
-    errors:
-      title: Error submitting form
-      description: Please correct the following errors and resubmit the form.
-      scope-options: Scope options
-      grants: Grants
-      scope-required: You must select at least one scope
-      grant-required: You must input at least one grant
-    no-active-scopes:
-      title: Permissions with no active scopes
-      description: There are some permissions where all of the scopes have been deleted. You may run into an <strong>unauthorized</strong> error if you try to use this app token.
-    deleted-scopes:
-      description-with-label: Scopes deleted within the last 30 days that were previously attached to {label}
-      description-no-label: Scopes deleted within the last 30 days that were previously attached to this permission

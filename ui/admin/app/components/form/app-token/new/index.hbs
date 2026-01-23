@@ -164,7 +164,7 @@
             {{/if}}
           </B.Td>
           <B.Td>
-            {{#if B.data.grant_scope_id.length}}
+            {{#if B.data.grant_scopes.length}}
               <Hds::Link::Inline
                 @href='#scope-options-fieldset'
                 @color='secondary'
@@ -178,7 +178,7 @@
                 }}
                 data-test-active-scopes-count={{B.rowIndex}}
               >
-                {{B.data.grant_scope_id.length}}
+                {{B.data.grant_scopes.length}}
               </Hds::Link::Inline>
             {{else}}
               <Hds::Text::Body @tag='p'>—</Hds::Text::Body>
@@ -233,11 +233,15 @@
         </Hds::Form::TextInput::Field>
 
         <Hds::Form::Fieldset
-          @isRequired={{true}}
+          @isRequired={{not @model.scope.isProject}}
           id='scope-options-fieldset'
           as |F|
         >
-          <F.Legend>{{t 'form.scope-options.label'}}</F.Legend>
+          <F.Legend>{{if
+              @model.scope.isProject
+              (t 'resources.app-token.form.scope.label')
+              (t 'form.scope-options.label')
+            }}</F.Legend>
           {{#if @model.scope.isProject}}
             <F.HelperText>{{t 'form.project-scope.help'}}</F.HelperText>
           {{else}}
@@ -247,7 +251,7 @@
             <ScopeOptions
               @model={{@model}}
               @field={{this.selectedPermission}}
-              @name='grant_scope_id'
+              @name='grant_scopes'
             />
           </F.Control>
         </Hds::Form::Fieldset>
@@ -255,49 +259,38 @@
         <Hds::Separator />
 
         <Hds::Form::Fieldset @isRequired={{true}} id='grants-fieldset' as |F|>
-          <F.Legend>{{t 'resources.role.grant.title_plural'}}</F.Legend>
           <F.Control>
-            <Hds::Table class='list-wrapper-field grant-list' name='grants'>
-              <:body as |B|>
-                {{#each this.selectedPermission.grant as |grant index|}}
-                  <B.Tr>
-                    <B.Td>
-                      <Hds::Form::TextInput::Field
-                        {{on 'input' (set-from-event grant 'value')}}
-                        name={{concat 'grant-' index}}
-                        title={{t 'form.grant.help'}}
-                        @id={{concat 'grant-' index}}
-                        @type='text'
-                        @value={{grant.value}}
-                        data-test-grant-input
-                      />
-                    </B.Td>
-                    <B.Td>
-                      <Hds::Button
-                        {{on 'click' (fn this.removeGrant index)}}
-                        type='button'
-                        @color='secondary'
-                        @icon='trash'
-                        @isIconOnly={{true}}
-                        @text={{t 'actions.remove'}}
-                        data-test-delete-grant-button
-                      />
-                    </B.Td>
-                  </B.Tr>
-                {{/each}}
-              </:body>
-            </Hds::Table>
-
-            <div class='hds-button-set'>
-              <Hds::Button
-                type='button'
-                @color='secondary'
-                @icon='plus'
-                @text={{t 'actions.add'}}
-                {{on 'click' this.addGrant}}
-                data-test-add-grant-button
-              />
-            </div>
+            <Hds::Form::KeyValueInputs
+              @data={{this.selectedPermission.grant}}
+              class='grant-list'
+            >
+              <:row as |R|>
+                <R.Field as |Field|>
+                  <Field.Label @isRequired={{true}}>{{t
+                      'resources.role.grant.title_plural'
+                    }}</Field.Label>
+                  <Field.TextInput
+                    name={{concat 'grant-' R.rowIndex}}
+                    title={{t 'form.grant.help'}}
+                    @value={{R.rowData.value}}
+                    {{on 'input' (set-from-event R.rowData 'value')}}
+                    data-test-grant-input
+                  />
+                </R.Field>
+                <R.DeleteRowButton
+                  @text={{t 'actions.remove'}}
+                  @onClick={{this.removeGrant}}
+                  data-test-delete-grant-button
+                />
+              </:row>
+              <:footer as |F|>
+                <F.AddRowButton
+                  @text={{t 'actions.add'}}
+                  @onClick={{this.addGrant}}
+                  data-test-add-grant-button
+                />
+              </:footer>
+            </Hds::Form::KeyValueInputs>
           </F.Control>
         </Hds::Form::Fieldset>
 
@@ -308,20 +301,20 @@
             <Hds::Button
               @text={{t 'actions.save'}}
               {{on 'click' this.savePermission}}
-              data-test-add-button
+              data-test-save-permission-button
             />
           {{else}}
             <Hds::Button
               @text={{t 'actions.add'}}
               {{on 'click' this.addPermission}}
-              data-test-add-button
+              data-test-add-permission-flyout-button
             />
           {{/if}}
           <Hds::Button
             @text={{t 'actions.cancel'}}
             @color='secondary'
             {{on 'click' this.closePermissionFlyout}}
-            data-test-cancel-button
+            data-test-cancel-permission-button
           />
         </Hds::ButtonSet>
       </M.Footer>
