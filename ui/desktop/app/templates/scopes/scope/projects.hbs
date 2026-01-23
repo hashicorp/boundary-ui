@@ -3,7 +3,11 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::AppSideNav::Portal @ariaLabel='Primary' as |Nav|>
+<Hds::AppSideNav::Portal
+  @ariaLabel='Primary'
+  class='side-nav-dark-mode-overrides'
+  as |Nav|
+>
   <Nav.Link
     @icon='crosshair'
     @text={{t 'resources.target.title_plural'}}

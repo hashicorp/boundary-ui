@@ -8,7 +8,9 @@
 <Hds::AppFrame @hasHeader={{true}} @hasSidebar={{this.showSideNav}} as |Frame|>
   <Frame.Header>
     <Hds::AppHeader
-      class='app-header {{if this.hasMacOSChrome " header-cushion"}}'
+      class='app-header
+        {{if this.hasMacOSChrome " header-cushion"}}
+        app-header-dark-mode-overrides'
       @a11yRefocusRouteChangeValidator={{this.customRouteChangeValidator}}
     >
       <:logo>
@@ -17,7 +19,7 @@
           @color='var(--token-color-boundary-brand)'
           @text={{(app-name)}}
           @route='index'
-          class='app-header__logo'
+          class='app-header__logo home-link-color-override'
         />
       </:logo>
 
@@ -33,6 +35,7 @@
             <dd.ToggleButton
               @icon='user-circle'
               @text={{this.session.username}}
+              class='dropdown_toggle_color_override'
             />
             <dd.Interactive
               data-test-nav-signout-btn
@@ -41,9 +44,13 @@
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
           </Hds::Dropdown>
-        {{else}}
+        {{else if this.session.isAuthenticated}}
           <Hds::Dropdown as |dd|>
-            <dd.ToggleIcon @icon='user-circle' @text={{t 'titles.user-menu'}} />
+            <dd.ToggleIcon
+              @icon='user-circle'
+              @text={{t 'titles.user-menu'}}
+              class='dropdown_toggle_color_override'
+            />
             <dd.Interactive
               data-test-nav-signout-btn
               {{on 'click' this.showModalOrLogout}}
