@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'desktop/tests/helpers/mirage';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { waitUntil, visit } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
