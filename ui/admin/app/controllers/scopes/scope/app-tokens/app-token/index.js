@@ -22,8 +22,6 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
 
   @tracked showCreatedAppToken = false;
 
-  // =getters
-
   /**
    * Returns the appropriate translation key based on the app token status.
    * @type {string}
