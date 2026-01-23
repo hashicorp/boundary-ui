@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'desktop/tests/helpers/mirage';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 module('Integration | Component | hidden-secret', function (hooks) {
