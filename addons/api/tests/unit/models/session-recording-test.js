@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { TYPE_SESSION_RECORDING_SSH } from 'api/models/session-recording';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 import {
   STATE_SESSION_RECORDING_AVAILABLE,
   STATE_SESSION_RECORDING_STARTED,
