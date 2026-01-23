@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import RESTAdapter from '@ember-data/adapter/rest';
 import { InvalidError } from '@ember-data/adapter/error';
-import { setupMirage } from 'api/test-support/helpers/mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 import { Response } from 'miragejs';
 
 module('Unit | Adapter | application', function (hooks) {
