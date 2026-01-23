@@ -20,6 +20,9 @@ export const TOKEN_COPY_SNIPPET =
 export const BREADCRUMB = '[data-test-breadcrumbs-container]';
 export const STATUS_BADGE_TEXT =
   '[data-test-app-token-status-badge] .hds-badge__text';
+export const INACTIVE_ALERT = '[data-test-permissions-alert]';
+export const INACTIVE_ALERT_TITLE =
+  '[data-test-permissions-alert] .hds-alert__title';
 
 export const ROW_LABEL = (rowIndex) =>
   `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;

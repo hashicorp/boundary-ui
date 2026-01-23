@@ -14,12 +14,38 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   // =services
 
   @service router;
+  @service intl;
 
   // =attributes
 
   queryParams = ['showCreatedAppToken'];
 
   @tracked showCreatedAppToken = false;
+
+  // =getters
+
+  /**
+   * Returns the appropriate translation key based on the app token status.
+   * @type {string}
+   */
+  get statusTranslation() {
+    const status = this.model?.status;
+    switch (status) {
+      case 'stale':
+        return this.intl.t(
+          'resources.app-token.messages.inactive-alert.title.1',
+        );
+      case 'revoked':
+        return this.intl.t(
+          'resources.app-token.messages.inactive-alert.title.2',
+        );
+      case 'expired':
+      default:
+        return this.intl.t(
+          'resources.app-token.messages.inactive-alert.title.0',
+        );
+    }
+  }
 
   // =actions
 
