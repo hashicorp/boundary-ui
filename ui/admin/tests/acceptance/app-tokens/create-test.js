@@ -196,4 +196,69 @@ module('Acceptance | app-tokens | create', function (hooks) {
       assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
     },
   );
+
+  test.each(
+    'users can clone an existing active app-token and view token',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken = this.server.create('app-token', {
+        scope:
+          scope === 'global'
+            ? instances.scopes.global
+            : scope === 'org'
+              ? instances.scopes.org
+              : instances.scopes.project,
+        status: 'active',
+      });
+      const appTokenCount = getAppTokenCount();
+      await visit(urls[`${scope}AppTokens`]);
+
+      await click(
+        commonSelectors.HREF(
+          urls[`${scope}AppTokens`] + `/${instances.appToken.id}`,
+        ),
+      );
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_CLONE);
+
+      assert.strictEqual(
+        currentURL(),
+        urls[`${scope}NewAppToken`] + `?cloneAppToken=${instances.appToken.id}`,
+      );
+      assert
+        .dom(commonSelectors.FIELD_NAME)
+        .hasValue(`Clone_${instances.appToken.name}`);
+
+      await click(commonSelectors.SAVE_BTN);
+      await click(selectors.CONFIRM_APP_TOKEN_BTN, 'Confirm creation');
+
+      const clonedAppToken = this.server.schema.appTokens.findBy({
+        name: `Clone_${instances.appToken.name}`,
+      });
+
+      console.log('cloned app token ', clonedAppToken);
+      console.log('original app token ', instances.appToken);
+
+      assert.dom(selectors.TOKEN_COPY_SNIPPET).hasText(clonedAppToken.token);
+      await click(selectors.CONFIRM_APP_TOKEN_BTN, 'Confirm token saved');
+
+      assert.strictEqual(
+        clonedAppToken.name,
+        `Clone_${instances.appToken.name}`,
+      );
+      assert.strictEqual(
+        clonedAppToken.timeToLiveSeconds,
+        instances.appToken.time_to_live_seconds,
+      );
+      assert.strictEqual(
+        clonedAppToken.timeToStaleSeconds,
+        instances.appToken.time_to_stale_seconds,
+      );
+      assert.strictEqual(
+        clonedAppToken.permissions.length,
+        instances.appToken.permissions.length,
+      );
+      assert.strictEqual(getAppTokenCount(), appTokenCount + 1);
+    },
+  );
 });
