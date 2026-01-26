@@ -236,9 +236,6 @@ module('Acceptance | app-tokens | create', function (hooks) {
         name: `Clone_${instances.appToken.name}`,
       });
 
-      console.log('cloned app token ', clonedAppToken);
-      console.log('original app token ', instances.appToken);
-
       assert.dom(selectors.TOKEN_COPY_SNIPPET).hasText(clonedAppToken.token);
       await click(selectors.CONFIRM_APP_TOKEN_BTN, 'Confirm token saved');
 
