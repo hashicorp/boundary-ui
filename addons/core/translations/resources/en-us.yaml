@@ -1339,3 +1339,9 @@ app-token:
     deleted-scopes:
       description-with-label: Scopes deleted within the last 30 days that were previously attached to {label}
       description-no-label: Scopes deleted within the last 30 days that were previously attached to this permission
+    inactive-alert:
+      title:
+        0: This app token has expired
+        1: This app token has staled
+        2: This app token has been revoked
+      description: Any request using this app token will return an <code>unauthorized</code> error. If you want to save the information, you can clone this app token.
