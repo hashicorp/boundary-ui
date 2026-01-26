@@ -16,7 +16,11 @@
         <Breadcrumbs::Container />
       </PH.Breadcrumb>
       <PH.Title>
-        {{t 'resources.app-token.titles.new'}}
+        {{#if this.cloneAppToken}}
+          {{t 'resources.app-token.titles.clone'}}
+        {{else}}
+          {{t 'resources.app-token.titles.new'}}
+        {{/if}}
         <DocLink @doc='app-tokens' />
       </PH.Title>
       <PH.Description>

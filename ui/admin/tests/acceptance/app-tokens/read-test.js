@@ -336,7 +336,10 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_CLONE);
 
-    assert.strictEqual(currentURL(), urls.newAppToken);
+    assert.strictEqual(
+      currentURL(),
+      urls.newAppToken + `?cloneAppToken=${instances.appToken.id}`,
+    );
   });
 
   test('users cannot clone an app-token without proper authorization', async function (assert) {
