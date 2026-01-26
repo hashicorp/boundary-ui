@@ -18,6 +18,7 @@
         <dd.Interactive
           data-test-manage-app-token-clone
           @route='scopes.scope.app-tokens.new'
+          @query={{hash cloneAppToken=@model.id}}
         >
           {{t 'actions.clone-app-token'}}
         </dd.Interactive>
