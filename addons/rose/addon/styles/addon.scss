@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@use '@hashicorp/design-system-components';
+@use 'products/css/themed-tokens/with-css-selectors--migration/tokens.css';
+@use 'styles/@hashicorp/design-system-components-common.scss';
+@use 'styles/@hashicorp/design-system-plex-fonts.css';
 @use 'hds/themes/dark-mode';
 @use 'hds/overrides';

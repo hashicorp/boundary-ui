@@ -41,11 +41,11 @@ module.exports = {
   includeHDSStyles(app) {
     const tokensPath = path.resolve(
       __dirname,
-      'node_modules/@hashicorp/design-system-tokens/dist/products/css',
+      'node_modules/@hashicorp/design-system-tokens/dist',
     );
     const hdsPath = path.resolve(
       __dirname,
-      'node_modules/@hashicorp/design-system-components/dist/styles',
+      'node_modules/@hashicorp/design-system-components/dist',
     );
 
     // Setup default sassOptions on the running application
