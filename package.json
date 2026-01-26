@@ -63,7 +63,9 @@
       "esbuild",
       "tesseract.js",
       "@nestjs/core",
-      "@openapitools/openapi-generator-cli"
+      "@openapitools/openapi-generator-cli",
+      "@ibm/plex-mono",
+      "@ibm/plex-sans"
     ],
     "onlyBuiltDependencies": [],
     "patchedDependencies": {
