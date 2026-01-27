@@ -1242,6 +1242,7 @@ app-token:
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
     new: New App Token
+    clone: Clone App Token
     grant: Grant
     grants: Grants
     active-scopes: Active scopes
