@@ -125,6 +125,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     const { critical_options, extensions } = credentialLibrary;
     credentialLibrary.critical_options = structuredClone(critical_options);
     credentialLibrary.extensions = structuredClone(extensions);
+
+    // Ensure at least one empty row exists for editing
+    if (credentialLibrary.critical_options?.length === 0) {
+      credentialLibrary.critical_options = [{ key: '', value: '' }];
+    }
   }
 
   /**
