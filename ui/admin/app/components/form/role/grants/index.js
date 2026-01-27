@@ -92,7 +92,6 @@ function myCustomLinter(view) {
   const diagnostics = [];
   const doc = view.state.doc.toString();
   const lines = doc.split('\n');
-  console.log('view', doc);
 
   let currentPos = 0;
 
@@ -107,12 +106,14 @@ function myCustomLinter(view) {
 
     const lineStart = currentPos;
     const lineEnd = currentPos + line.length;
+    const trimStart = line.indexOf(trimmedLine);
 
     // Check for trailing semicolon
     if (trimmedLine.endsWith(';')) {
+      const semicolonPos = lineStart + line.lastIndexOf(';');
       diagnostics.push({
-        from: lineEnd - 1,
-        to: lineEnd,
+        from: semicolonPos,
+        to: semicolonPos + 1,
         severity: 'error',
         message: 'Grant should not end with a trailing semicolon',
       });
@@ -123,31 +124,37 @@ function myCustomLinter(view) {
     const parsedFields = {};
     const fieldPositions = {};
 
+    let pairOffset = trimStart; // Start from where trimmed content begins
+
     for (const pair of pairs) {
+      const pairInLine = line.indexOf(pair, pairOffset - trimStart);
       const [key, ...valueParts] = pair.split('=');
       const value = valueParts.join('='); // Handle cases where value contains '='
 
       if (!key || value === undefined) {
         // Invalid format - not a key=value pair
-        const pairStart = lineStart + line.indexOf(pair);
+        const pairStart = lineStart + pairInLine;
         diagnostics.push({
           from: pairStart,
           to: pairStart + pair.length,
           severity: 'error',
           message: 'Invalid format: expected key=value',
         });
-        currentPos += line.length + 1;
-        return;
+        continue;
       }
 
       const trimmedKey = key.trim();
+      const keyStartInPair = pair.indexOf(trimmedKey);
+      const valueStartInPair = pair.indexOf('=') + 1;
 
       parsedFields[trimmedKey] = value.trim();
       fieldPositions[trimmedKey] = {
-        keyStart: lineStart + line.indexOf(pair),
-        valueStart: lineStart + line.indexOf(pair) + key.length + 1,
-        valueEnd: lineStart + line.indexOf(pair) + pair.length,
+        keyStart: lineStart + pairInLine + keyStartInPair,
+        valueStart: lineStart + pairInLine + valueStartInPair,
+        valueEnd: lineStart + pairInLine + pair.length,
       };
+
+      pairOffset = pairInLine + pair.length + 1; // +1 for semicolon
     }
 
     // Check for required fields
