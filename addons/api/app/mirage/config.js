@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import {
-  discoverEmberDataModels,
-  applyEmberDataSerializers,
-} from 'ember-cli-mirage';
 import { createServer, Response } from 'miragejs';
-import environmentConfig from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
@@ -17,19 +12,177 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
+import environmentConfig from 'ember-get-config';
+
+// mirage models (alphabetical)
+import accountModel from './models/account';
+import aliasModel from './models/alias';
+import authMethodModel from './models/auth-method';
+import baseModel from './models/base';
+import channelRecordingModel from './models/channel-recording';
+import connectionRecordingModel from './models/connection-recording';
+import credentialLibraryModel from './models/credential-library';
+import credentialStoreModel from './models/credential-store';
+import credentialModel from './models/credential';
+import groupModel from './models/group';
+import hostCatalogModel from './models/host-catalog';
+import hostSetModel from './models/host-set';
+import hostModel from './models/host';
+import managedGroupModel from './models/managed-group';
+import policyModel from './models/policy';
+import roleModel from './models/role';
+import scopeModel from './models/scope';
+import sessionRecordingModel from './models/session-recording';
+import sessionModel from './models/session';
+import storageBucketModel from './models/storage-bucket';
+import targetModel from './models/target';
+import userModel from './models/user';
+import workerModel from './models/worker';
+
+// mirage serializers (alphabetical)
+import accountSerializer from './serializers/account';
+import aliasSerializer from './serializers/alias';
+import applicationSerializer from './serializers/application';
+import authMethodSerializer from './serializers/auth-method';
+import channelRecordingSerializer from './serializers/channel-recording';
+import connectionRecordingSerializer from './serializers/connection-recording';
+import credentialLibrarySerializer from './serializers/credential-library';
+import credentialStoreSerializer from './serializers/credential-store';
+import credentialSerializer from './serializers/credential';
+import groupSerializer from './serializers/group';
+import hostCatalogSerializer from './serializers/host-catalog';
+import hostSetSerializer from './serializers/host-set';
+import hostSerializer from './serializers/host';
+import managedGroupSerializer from './serializers/managed-group';
+import policySerializer from './serializers/policy';
+import roleSerializer from './serializers/role';
+import scopeSerializer from './serializers/scope';
+import sessionRecordingSerializer from './serializers/session-recording';
+import sessionSerializer from './serializers/session';
+import storageBucketSerializer from './serializers/storage-bucket';
+import targetSerializer from './serializers/target';
+import userSerializer from './serializers/user';
+import workerSerializer from './serializers/worker';
+
+// mirage scenarios (alphabetical)
+import defaultScenario from './scenarios/default';
+import ipcScenario from './scenarios/ipc';
+
+// mirage factories (alphabetical)
+import accountFactory from './factories/account';
+import aliasFactory from './factories/alias';
+import authMethodFactory from './factories/auth-method';
+import channelRecordingFactory from './factories/channel-recording';
+import connectionRecordingFactory from './factories/connection-recording';
+import credentialLibraryFactory from './factories/credential-library';
+import credentialStoreFactory from './factories/credential-store';
+import credentialFactory from './factories/credential';
+import groupFactory from './factories/group';
+import hostCatalogFactory from './factories/host-catalog';
+import hostSetFactory from './factories/host-set';
+import hostFactory from './factories/host';
+import managedGroupFactory from './factories/managed-group';
+import policyFactory from './factories/policy';
+import roleFactory from './factories/role';
+import scopeFactory from './factories/scope';
+import sessionRecordingFactory from './factories/session-recording';
+import storageBucketFactory from './factories/storage-bucket';
+import sessionFactory from './factories/session';
+import targetFactory from './factories/target';
+import userFactory from './factories/user';
+import workerFactory from './factories/worker';
 
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
-// More info about server configuration https://www.ember-cli-mirage.com/docs/advanced/server-configuration
+// More info about server configuration:
+// https://github.com/miragejs/miragejs/blob/7ff4f3f6fe56bf0cb1648f5af3f5210fcb07e20b/types/index.d.ts#L375-L404
 export default function (mirageConfig) {
   let finalConfig = {
     ...mirageConfig,
-    models: {
-      ...discoverEmberDataModels(mirageConfig.store),
-      ...mirageConfig.models,
+
+    scenarios: {
+      default: defaultScenario,
+      ipcScenario: ipcScenario,
     },
-    serializers: applyEmberDataSerializers(mirageConfig.serializers),
+
+    factories: {
+      account: accountFactory,
+      alias: aliasFactory,
+      authMethod: authMethodFactory,
+      channelRecording: channelRecordingFactory,
+      connectionRecording: connectionRecordingFactory,
+      credentialLibrary: credentialLibraryFactory,
+      credentialStore: credentialStoreFactory,
+      credential: credentialFactory,
+      group: groupFactory,
+      hostCatalog: hostCatalogFactory,
+      hostSet: hostSetFactory,
+      host: hostFactory,
+      managedGroup: managedGroupFactory,
+      policy: policyFactory,
+      role: roleFactory,
+      scope: scopeFactory,
+      sessionRecording: sessionRecordingFactory,
+      session: sessionFactory,
+      storageBucket: storageBucketFactory,
+      target: targetFactory,
+      user: userFactory,
+      worker: workerFactory,
+    },
+
+    models: {
+      account: accountModel,
+      alias: aliasModel,
+      authMethod: authMethodModel,
+      base: baseModel,
+      channelRecording: channelRecordingModel,
+      connectionRecording: connectionRecordingModel,
+      credentialLibrary: credentialLibraryModel,
+      credentialStore: credentialStoreModel,
+      credential: credentialModel,
+      group: groupModel,
+      hostCatalog: hostCatalogModel,
+      hostSet: hostSetModel,
+      host: hostModel,
+      managedGroup: managedGroupModel,
+      policy: policyModel,
+      role: roleModel,
+      scope: scopeModel,
+      sessionRecording: sessionRecordingModel,
+      session: sessionModel,
+      storageBucket: storageBucketModel,
+      target: targetModel,
+      user: userModel,
+      worker: workerModel,
+    },
+
+    serializers: {
+      account: accountSerializer,
+      alias: aliasSerializer,
+      application: applicationSerializer,
+      authMethod: authMethodSerializer,
+      channelRecording: channelRecordingSerializer,
+      connectionRecording: connectionRecordingSerializer,
+      credentialLibrary: credentialLibrarySerializer,
+      credentialStore: credentialStoreSerializer,
+      credential: credentialSerializer,
+      group: groupSerializer,
+      hostCatalog: hostCatalogSerializer,
+      hostSet: hostSetSerializer,
+      host: hostSerializer,
+      managedGroup: managedGroupSerializer,
+      policy: policySerializer,
+      role: roleSerializer,
+      scope: scopeSerializer,
+      sessionRecording: sessionRecordingSerializer,
+      session: sessionSerializer,
+      storageBucket: storageBucketSerializer,
+      target: targetSerializer,
+      user: userSerializer,
+      worker: workerSerializer,
+    },
+
     routes,
   };
   return createServer(finalConfig);
@@ -58,7 +211,7 @@ function routes() {
   });
 
   // make this `/api`, for example, if your API is namespaced
-  this.namespace = environmentConfig.api.namespace;
+  this.namespace = environmentConfig.api?.namespace;
   // delay for each request, automatically set to 0 during testing
   this.timing = 1;
 

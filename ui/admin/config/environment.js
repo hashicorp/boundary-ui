@@ -139,10 +139,6 @@ module.exports = function (environment) {
       },
     },
 
-    'ember-cli-mirage': {
-      directory: '../../addons/api/mirage',
-    },
-
     flashMessageDefaults: {
       timeout: 4000,
     },
@@ -157,9 +153,11 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
-      ? JSON.parse(process.env.ENABLE_MIRAGE)
-      : true;
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
 
     // Default edition in development
     ENV.features.defaultEdition = 'enterprise';
@@ -197,6 +195,12 @@ module.exports = function (environment) {
 
     ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
     ENV.COLOR_THEME = COLOR_THEME;
+
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
   }
 
   if (environment === 'production') {
