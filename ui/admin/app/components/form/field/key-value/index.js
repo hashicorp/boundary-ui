@@ -13,20 +13,18 @@ export default class FormFieldKeyValueComponent extends Component {
   get canDelete() {
     const rows = this.args.data || [];
 
-    // If there is no data, do not show the delete button
-    // NOTE: The UI always includes at least one placeholder row.
-    // The placeholder row such as [{key: '', value: ''}] or [{key: ''}] is filtered out in the controller before sending data to the API, as the API requires an empty array when no data is present.
-    if (rows.length === 0) {
-      return false;
-    }
-
-    // If there are multiple rows, always show the delete button
+    // Always show delete for multiple rows
     if (rows.length > 1) {
       return true;
     }
 
-    // In case of a single row, show the delete button only if it has data
-    return Object.values(rows[0]).some((value) => value);
+    // For a single row, only show if it has any non-empty values
+    if (rows.length === 1) {
+      return Object.values(rows[0]).some((value) => value);
+    }
+
+    // Return false if there are no rows
+    return false;
   }
 
   // =actions

@@ -17,12 +17,6 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
   keyTypes = options.key_type;
 
   /**
-   * Default empty row for critical options
-   * Kept as a field to avoid creating a new object on every re-render
-   */
-  defaultCriticalOptions = [{ key: '', value: '' }];
-
-  /**
    * Boolean to determine if the key bits field should be displayed on the form
    * @returns {boolean}
    */
@@ -32,20 +26,12 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
   }
 
   /**
-   * Returns critical_options data, defaulting to an empty row if not present
-   */
-  get criticalOptionsData() {
-    const data = this.args.model.critical_options;
-    return data ?? this.defaultCriticalOptions;
-  }
-
-  /**
    * Adds a new empty row to critical options
    */
   @action
   addCriticalOption() {
     this.args.model.critical_options = [
-      ...this.criticalOptionsData,
+      ...this.args.model.critical_options,
       { key: '', value: '' },
     ];
   }
@@ -56,7 +42,7 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
   @action
   updateCriticalOptions(rowData, property, value) {
     rowData[property] = value;
-    this.args.model.critical_options = [...this.criticalOptionsData];
+    this.args.model.critical_options = [...this.args.model.critical_options];
   }
 
   /**
@@ -65,11 +51,14 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
    */
   @action
   removeCriticalOption(rowData) {
-    let newData = this.criticalOptionsData.filter((item) => item !== rowData);
-    // Ensure at least one empty row remains in the UI
-    if (newData.length === 0) {
-      newData = [{ key: '', value: '' }];
+    const rows = this.args.model.critical_options.filter(
+      (item) => item !== rowData,
+    );
+    this.args.model.critical_options = rows;
+
+    // Ensure at least one empty row exists for editing
+    if (rows.length === 0) {
+      this.args.model.critical_options = [{ key: '', value: '' }];
     }
-    this.args.model.critical_options = newData;
   }
 }

@@ -12,12 +12,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   // =attributes
 
   /**
-   * Default empty row for account claim maps
-   * Kept as a field to avoid creating a new object on every re-render
-   */
-  defaultAccountClaimMaps = [{ key: '', value: '' }];
-
-  /**
    * @type {object}
    */
   signingAlgorithms = options.oidc.signing_algorithms;
@@ -46,14 +40,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   @tracked skipPromptsList = this.isToggleChecked();
 
   /**
-   * Returns account_claims data, defaulting to an empty row if not present
-   */
-  get accountClaimMapsData() {
-    const data = this.args.model.account_claim_maps;
-    return data ?? this.defaultAccountClaimMaps;
-  }
-
-  /**
    * @returns {string}
    */
   parsePromptsArray() {
@@ -75,7 +61,7 @@ export default class FormAuthMethodOidcComponent extends Component {
   @action
   addAccountClaimMap() {
     this.args.model.account_claim_maps = [
-      ...this.accountClaimMapsData,
+      ...this.args.model.account_claim_maps,
       { key: '', value: '' },
     ];
   }
@@ -86,12 +72,15 @@ export default class FormAuthMethodOidcComponent extends Component {
    */
   @action
   removeAccountClaimMap(rowData) {
-    let newData = this.accountClaimMapsData.filter((item) => item !== rowData);
-    // Ensure at least one empty row remains in the UI
-    if (newData.length === 0) {
-      newData = [{ key: '', value: '' }];
+    const rows = this.args.model.account_claim_maps.filter(
+      (item) => item !== rowData,
+    );
+    this.args.model.account_claim_maps = rows;
+
+    // Ensure at least one empty row exists for editing
+    if (rows.length === 0) {
+      this.args.model.account_claim_maps = [{ key: '', value: '' }];
     }
-    this.args.model.account_claim_maps = newData;
   }
 
   /**
@@ -100,7 +89,9 @@ export default class FormAuthMethodOidcComponent extends Component {
   @action
   updateAccountClaimMap(rowData, property, value) {
     rowData[property] = value;
-    this.args.model.account_claim_maps = [...this.accountClaimMapsData];
+    this.args.model.account_claim_maps = [
+      ...this.args.model.account_claim_maps,
+    ];
   }
 
   /**

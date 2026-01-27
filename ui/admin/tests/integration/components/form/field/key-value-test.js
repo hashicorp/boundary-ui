@@ -201,7 +201,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
   });
 
   test('it handles different field types', async function (assert) {
-    this.set('data', [{ key: 'k', value: 'v' }]);
+    this.set('data', [{ key: 'k', value: 'v', id: 1 }]);
 
     // Test TextInput and Select fields
     await render(hbs`
@@ -215,6 +215,9 @@ module('Integration | Component | form/field/key-value', function (hooks) {
             <option value={{R.rowData.value}} selected />
             </F.Select>
           </R.Field>
+          <R.Field as |F|>
+            <F.TextInput name="test-id" data-test-id-input @value={{R.rowData.id}} />
+          </R.Field>
           {{#if R.canDelete}}
             <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
           {{/if}}
@@ -227,6 +230,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
 
     assert.dom('[data-test-key-input]').hasValue('k');
     assert.dom('[data-test-value-input]').hasValue('v');
+    assert.dom('[data-test-id-input]').hasValue('1');
 
     // Test Textarea field
     await render(hbs`
