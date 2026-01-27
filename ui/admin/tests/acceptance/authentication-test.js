@@ -384,10 +384,7 @@ module('Acceptance | authentication', function (hooks) {
     // toggle system default
     await click(commonSelectors.TOGGLE_THEME_DEFAULT);
 
-    assert.strictEqual(
-      currentSession().get('data.theme'),
-      'system-default-theme',
-    );
+    assert.strictEqual(currentSession().get('data.theme'), 'system');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
 
@@ -401,10 +398,7 @@ module('Acceptance | authentication', function (hooks) {
     // toggle system default
     await click(commonSelectors.TOGGLE_THEME_DEFAULT);
 
-    assert.strictEqual(
-      currentSession().get('data.theme'),
-      'system-default-theme',
-    );
+    assert.strictEqual(currentSession().get('data.theme'), 'system');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
