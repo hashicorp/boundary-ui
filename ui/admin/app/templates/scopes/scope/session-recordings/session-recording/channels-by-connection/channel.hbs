@@ -54,13 +54,10 @@
             {{#if @model.channelRecording.start_time}}
               <list.Item @icon='calendar' @color='faint'>
                 {{t 'form.started.label'}}
-                <time
-                  datetime={{format-date-iso
-                    @model.channelRecording.start_time
-                  }}
-                >
-                  {{format-date-iso @model.channelRecording.start_time}}
-                </time>
+                <Hds::Time
+                  @display='friendly-local'
+                  @date={{@model.channelRecording.start_time}}
+                />
               </list.Item>
             {{/if}}
             {{! Duration }}
