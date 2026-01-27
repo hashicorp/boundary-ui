@@ -243,7 +243,9 @@
               (t 'form.scope-options.label')
             }}</F.Legend>
           {{#if @model.scope.isProject}}
-            <F.HelperText>{{t 'form.project-scope.help'}}</F.HelperText>
+            <F.HelperText>{{t
+                'resources.app-token.form.scope.project-scope.help'
+              }}</F.HelperText>
           {{else}}
             <F.HelperText>{{t 'form.scope-options.help'}}</F.HelperText>
           {{/if}}

@@ -205,8 +205,6 @@ children:
 descendants:
   label: Add all descendants
   help: Add all of the orgs and the projects in the orgs that are underneath the root.
-project-scope:
-  help: The scope where permissions are applied to. You can't change this.
 descendants-selected:
   title: Multiple alerts about your scope selection
   description: You can't customize scopes if you've selected <strong>add all descendants</strong>.

@@ -381,9 +381,9 @@ module('Acceptance | app-tokens | create', function (hooks) {
 
     await click(selectors.ADD_PERMISSION_BTN);
 
-    assert.dom(selectors.SCOPE_THIS_TOGGLE).exists();
-    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).exists();
-    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).exists();
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).isVisible();
 
     await click(selectors.SCOPE_THIS_TOGGLE);
     assert.dom(selectors.SCOPE_THIS_TOGGLE).isChecked();
@@ -400,8 +400,8 @@ module('Acceptance | app-tokens | create', function (hooks) {
 
     await click(selectors.ADD_PERMISSION_BTN);
 
-    assert.dom(selectors.SCOPE_THIS_TOGGLE).exists();
-    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).exists();
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isVisible();
     assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).doesNotExist();
 
     await click(selectors.SCOPE_THIS_TOGGLE);
