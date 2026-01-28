@@ -17,6 +17,8 @@ export default class AppTokensAppTokenActions extends Component {
 
   @tracked showRevokeAppTokenModal = false;
   @tracked revokeConfirmation = null;
+  @tracked showDeleteAppTokenModal = false;
+  @tracked deleteConfirmation = null;
 
   /**
    * Checks if user entered REVOKE to enable the revoke button.
@@ -25,6 +27,16 @@ export default class AppTokensAppTokenActions extends Component {
   get isRevokeConfirmed() {
     return (
       this.revokeConfirmation === this.intl.t('actions.revoke').toUpperCase()
+    );
+  }
+
+  /**
+   * Checks if user entered DELETE to enable the delete button.
+   * @type {boolean}
+   */
+  get isDeleteConfirmed() {
+    return (
+      this.deleteConfirmation === this.intl.t('actions.delete').toUpperCase()
     );
   }
 
@@ -47,5 +59,24 @@ export default class AppTokensAppTokenActions extends Component {
     this.showRevokeAppTokenModal = false;
     this.revokeConfirmation = null;
     this.args.revoke();
+  }
+
+  /**
+   * Toggle `showDeleteAppTokenModal` to true or false.
+   */
+  @action
+  toggleDeleteAppTokenModal() {
+    this.showDeleteAppTokenModal = !this.showDeleteAppTokenModal;
+    this.deleteConfirmation = null;
+  }
+
+  /**
+   * Reset modal values and delete app token.
+   */
+  @action
+  handleDelete() {
+    this.showDeleteAppTokenModal = false;
+    this.deleteConfirmation = null;
+    this.args.delete();
   }
 }

@@ -184,4 +184,18 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     await appToken.revoke();
     await this.router.refresh('scopes.scope.app-tokens.app-token');
   }
+
+  /**
+   * Delete an app-token in current scope.
+   * @param {AppTokenModel} appToken
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess(() => 'notifications.delete-success')
+  async delete(appToken) {
+    await appToken.destroyRecord();
+    this.router.transitionTo('scopes.scope.app-tokens');
+    await this.router.refresh();
+  }
 }
