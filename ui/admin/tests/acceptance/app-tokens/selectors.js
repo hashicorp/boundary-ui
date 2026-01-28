@@ -10,10 +10,12 @@ export const FIELD_TTL_MINUTES =
   '[name="time_to_live_seconds"] [name="minutes"]';
 export const FIELD_TTS = '[name=time_to_stale_seconds]';
 export const FILED_CONFIRM_REVOKE = '[name=confirm-revoke]';
+export const FILED_CONFIRM_DELETE = '[name=confirm-delete]';
 
 export const CANCEL_MODAL_BTN = '.hds-modal .hds-button--color-secondary';
 export const CONFIRM_APP_TOKEN_BTN = '.hds-modal .hds-button--color-primary';
 export const CONFIRM_REVOKE_BTN = '.hds-modal .hds-button--color-critical';
+export const CONFIRM_DELETE_BTN = '.hds-modal .hds-button--color-critical';
 
 export const TOKEN_COPY_SNIPPET =
   '.app-token-modal-body .hds-copy-snippet__text';
@@ -36,6 +38,7 @@ export const ROW_DELETED_SCOPES = (rowIndex) =>
 export const MANAGE_DROPDOWN = '[data-test-manage-app-token] button';
 export const MANAGE_DROPDOWN_REVOKE = '[data-test-manage-app-token-revoke]';
 export const MANAGE_DROPDOWN_CLONE = '[data-test-manage-app-token-clone]';
+export const MANAGE_DROPDOWN_DELETE = '[data-test-manage-app-token-delete]';
 
 // Flyout selectors
 export const GRANTS_FLYOUT = '[data-test-grants-flyout]';

@@ -20,6 +20,7 @@
         <AppTokens::AppToken::Actions
           @model={{@model}}
           @revoke={{fn this.appTokens.revoke @model}}
+          @delete={{fn this.appTokens.delete @model}}
         />
       </PH.Actions>
       <PH.Generic>
