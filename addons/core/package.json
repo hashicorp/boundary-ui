@@ -46,7 +46,7 @@
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^4.0.3",
     "filesize": "^10.0.7",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "sass": "^1.69.5"
   },
   "devDependencies": {

@@ -41,7 +41,7 @@
     "@babel/runtime": "7.27.6",
     "asciinema-player": "3.4.0",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
