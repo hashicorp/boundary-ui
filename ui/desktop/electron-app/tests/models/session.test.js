@@ -1,10 +1,8 @@
-import it, { afterEach, before, beforeEach, describe, mock } from 'node:test';
+import { createRequire } from 'node:module';
+import it, { afterEach, beforeEach, describe, mock } from 'node:test';
 import assert from 'node:assert';
-import EventEmitter from 'node:events';
-import {
-  spawn as originalSpawn,
-  spawnSync as originalSpawnSync,
-} from 'child_process';
+import { MockChildProcess } from '../helpers/mock-child-process.js';
+const require = createRequire(import.meta.url);
 
 const testData = Object.freeze({
   addr: 'http://mock-cluster-url:9200',
@@ -15,61 +13,21 @@ const testData = Object.freeze({
   sessionId: 's_sessionid',
 });
 
-class MockSpawn {
-  spawnCalls = [];
-  spawnSyncCalls = [];
-
-  mockChildProcess = class MockChildProcess extends EventEmitter {
-    killed = false;
-    stdout = new EventEmitter();
-    stderr = new EventEmitter();
-    removeAllListeners() {}
-    kill = () => {
-      this.killed = true;
-    };
-  };
-
-  spawn = (...args) => {
-    // mock process
-    const mockProcess = new this.mockChildProcess();
-    this.spawnCalls.push({ call: args, process: mockProcess });
-    return mockProcess;
-  };
-
-  spawnSync = (...args) => {
-    const mockProcess = new this.mockChildProcess();
-    this.spawnSyncCalls.push({ call: args, process: mockProcess });
-
-    // spawnSync does not return until the process is killed
-    mockProcess.kill();
-    return mockProcess;
-  };
-}
-
 describe('Session', () => {
   let Session;
-  let mockSpawn;
+  let mockChildProcess;
 
   // module mocks
-  before(() => {
+  beforeEach(() => {
     mock.module('electron-is-dev', {
       defaultExport: false,
     });
 
+    mockChildProcess = new MockChildProcess();
     mock.module('child_process', {
-      cache: false,
       namedExports: {
-        spawn: (...args) =>
-          // if mockSpawn is set up, use that, otherwise use original
-          mockSpawn
-            ? mockSpawn.spawn.call(null, ...args)
-            : originalSpawn.call(null, ...args),
-
-        spawnSync: (...args) =>
-          // if mockSpawn is set up, use that, otherwise use original
-          mockSpawn
-            ? mockSpawn.spawnSync.call(null, ...args)
-            : originalSpawnSync.call(null, ...args),
+        spawn: mockChildProcess.spawn,
+        spawnSync: mockChildProcess.spawnSync,
       },
     });
 
@@ -79,17 +37,15 @@ describe('Session', () => {
   });
 
   // module imports
-  before(async () => {
-    Session = (await import('../../src/models/session.js')).default;
-  });
-
-  beforeEach(async () => {
-    mockSpawn = new MockSpawn();
+  beforeEach(() => {
+    Session = require('../../src/models/session.js');
   });
 
   afterEach(() => {
     mock.reset();
-    mockSpawn = undefined;
+    Object.keys(require.cache).forEach(function (key) {
+      delete require.cache[key];
+    });
   });
 
   it('can start a session', async () => {
@@ -110,7 +66,7 @@ describe('Session', () => {
 
     const startPromise = session.start();
 
-    const connectSpawn = mockSpawn.spawnCalls.find(
+    const connectSpawn = mockChildProcess.spawnCalls.find(
       ({ call: [process, args] }) =>
         process === 'boundary' && args[0] === 'connect',
     );
@@ -156,7 +112,7 @@ describe('Session', () => {
 
     session.start();
 
-    const connectSpawn = mockSpawn.spawnCalls.find(
+    const connectSpawn = mockChildProcess.spawnCalls.find(
       ({ call: [process, args] }) =>
         process === 'boundary' && args[0] === 'connect',
     );
@@ -188,7 +144,7 @@ describe('Session', () => {
       port: '54321',
     };
 
-    const connectSpawn = mockSpawn.spawnCalls.find(
+    const connectSpawn = mockChildProcess.spawnCalls.find(
       ({ call: [process, args] }) =>
         process === 'boundary' && args[0] === 'connect',
     );
@@ -210,7 +166,7 @@ describe('Session', () => {
     assert.strictEqual(connectSpawn.process.killed, true);
     assert.strictEqual(session.isRunning, false);
 
-    const cancelSpawn = mockSpawn.spawnSyncCalls.find(
+    const cancelSpawn = mockChildProcess.spawnSyncCalls.find(
       ({ call: [process, [arg0, arg1]] }) =>
         process === 'boundary' && arg0 === 'sessions' && arg1 == 'cancel',
     );
