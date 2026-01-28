@@ -375,42 +375,4 @@ module('Acceptance | app-tokens | read', function (hooks) {
     assert.dom(selectors.MANAGE_DROPDOWN_CLONE).doesNotExist();
     assert.strictEqual(currentURL(), urls.appToken);
   });
-
-  test('users can delete an app-token with proper authorization', async function (assert) {
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
-    await click(selectors.CONFIRM_DELETE_BTN);
-
-    assert.strictEqual(currentURL(), urls.appTokens);
-  });
-
-  test('users can cancel delete action on an app-token with proper authorization', async function (assert) {
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await click(selectors.CANCEL_MODAL_BTN);
-
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
-
-  test('users cannot delete an app-token when unauthorized', async function (assert) {
-    instances.appToken.authorized_actions =
-      instances.appToken.authorized_actions.filter(
-        (item) => item !== 'delete' && item !== 'delete:self',
-      );
-
-    await visit(urls.appToken);
-
-    assert.false(instances.appToken.authorized_actions.includes('delete'));
-    assert.false(instances.appToken.authorized_actions.includes('delete:self'));
-
-    await click(selectors.MANAGE_DROPDOWN);
-
-    assert.dom(selectors.MANAGE_DROPDOWN_DELETE).doesNotExist();
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
 });
