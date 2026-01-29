@@ -18,9 +18,7 @@ export class LoginPage extends BaseResourcePage {
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Sign In' }).click();
     await expect(
-      this.page.getByRole('navigation', {
-        name: 'Application local navigation',
-      }),
+      this.page.getByRole('navigation', { name: 'Primary' }),
     ).toBeVisible();
     await expect(this.page.getByText(loginName)).toBeEnabled();
   }
