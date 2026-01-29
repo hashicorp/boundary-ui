@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsNewRoute extends Route {
   // =services
@@ -47,6 +48,12 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
       type: params.type,
     });
     record.scopeModel = scopeModel;
+
+    // if the auth method type is OIDC, initialize account_claim_maps with an empty row
+    if (params.type === TYPE_AUTH_METHOD_OIDC) {
+      record.account_claim_maps = [{ key: '', value: '' }];
+    }
+
     return record;
   }
 }

@@ -225,45 +225,43 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='critical_options'
+    @data={{@model.critical_options}}
+    @onAdd={{this.addCriticalOption}}
+    @onRemove={{this.removeCriticalOption}}
+    @onUpdate={{this.updateCriticalOptions}}
+    @legend={{t 'resources.credential-library.form.critical_options.label'}}
+    @helperText={{t 'resources.credential-library.form.critical_options.help'}}
+    @errors={{@model.errors.critical_options}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'resources.credential-library.form.critical_options.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'resources.credential-library.form.critical_options.help'}}
-      </F.HelperText>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Label>{{t 'form.key.label'}}</F.Label>
+        <F.TextInput
+          data-test-key-input
+          @value={{R.rowData.key}}
+          {{on 'input' (fn R.updateRow 'key')}}
+        />
+      </R.Field>
 
-      {{#if @model.errors.critical_options}}
-        <F.Error as |E|>
-          {{#each @model.errors.critical_options as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
+      <R.Field as |F|>
+        <F.Label>{{t 'form.value.label'}}</F.Label>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
+    </:row>
 
-    <:field as |F|>
-      <F.KeyValue
-        @name='critical_options'
-        @options={{@model.critical_options}}
-        @model={{@model}}
-        @disabled={{form.disabled}}
-      >
-        <:key as |K|>
-          <K.text />
-        </:key>
-        <:value as |K|>
-          <K.text />
-        </:value>
-      </F.KeyValue>
-    </:field>
-
-  </Form::Field::ListWrapper>
+  </Form::Field::KeyValue>
 
   <Form::Field::ListWrapper
     @layout='horizontal'

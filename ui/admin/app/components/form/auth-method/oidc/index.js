@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormAuthMethodOidcComponent extends Component {
   // =attributes
+
   /**
    * @type {object}
    */
@@ -53,6 +54,45 @@ export default class FormAuthMethodOidcComponent extends Component {
   }
 
   //actions
+
+  /**
+   * Adds a new empty row to account claim maps
+   */
+  @action
+  addAccountClaimMap() {
+    this.args.model.account_claim_maps = [
+      ...this.args.model.account_claim_maps,
+      { key: '', value: '' },
+    ];
+  }
+
+  /**
+   * Removes a row from account claim maps
+   * @param {Object} rowData - The row to remove
+   */
+  @action
+  removeAccountClaimMap(rowData) {
+    let rows = this.args.model.account_claim_maps.filter(
+      (item) => item !== rowData,
+    );
+
+    // Ensure at least one empty row exists for editing
+    if (rows.length === 0) {
+      rows = [{ key: '', value: '' }];
+    }
+    this.args.model.account_claim_maps = rows;
+  }
+
+  /**
+   * Updates the account claim maps in the model
+   */
+  @action
+  updateAccountClaimMap(rowData, property, { target: { value } }) {
+    rowData[property] = value;
+    this.args.model.account_claim_maps = [
+      ...this.args.model.account_claim_maps,
+    ];
+  }
 
   /**
    * @param {string} value
