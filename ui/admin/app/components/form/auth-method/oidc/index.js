@@ -72,22 +72,22 @@ export default class FormAuthMethodOidcComponent extends Component {
    */
   @action
   removeAccountClaimMap(rowData) {
-    const rows = this.args.model.account_claim_maps.filter(
+    let rows = this.args.model.account_claim_maps.filter(
       (item) => item !== rowData,
     );
-    this.args.model.account_claim_maps = rows;
 
     // Ensure at least one empty row exists for editing
     if (rows.length === 0) {
-      this.args.model.account_claim_maps = [{ key: '', value: '' }];
+      rows = [{ key: '', value: '' }];
     }
+    this.args.model.account_claim_maps = rows;
   }
 
   /**
    * Updates the account claim maps in the model
    */
   @action
-  updateAccountClaimMap(rowData, property, value) {
+  updateAccountClaimMap(rowData, property, { target: { value } }) {
     rowData[property] = value;
     this.args.model.account_claim_maps = [
       ...this.args.model.account_claim_maps,
