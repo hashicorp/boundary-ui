@@ -49,7 +49,7 @@ class Session {
    * @return {boolean}
    */
   get isRunning() {
-    return this.#process && !(this.#process.exitCode === null);
+    return this.#process && this.#process.exitCode === null;
   }
 
   /**
