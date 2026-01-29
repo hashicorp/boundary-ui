@@ -31,7 +31,9 @@
   {{#if this.scope.orgsList}}
     <D.Separator />
 
-    <D.Title @text={{t 'resources.org.title_plural'}} />
+    {{#unless @hideOrgsTitle}}
+      <D.Title @text={{t 'resources.org.title_plural'}} />
+    {{/unless}}
   {{/if}}
 
   {{#each this.truncatedOrgsList as |org|}}

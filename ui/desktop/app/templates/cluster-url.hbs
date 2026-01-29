@@ -3,41 +3,39 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<main>
-  <BrandedCard
-    @title={{t 'titles.welcome-to-boundary'}}
-    @description={{t 'descriptions.cluster-url-initialization'}}
+<BrandedCard
+  @title={{t 'titles.welcome-to-boundary'}}
+  @description={{t 'descriptions.cluster-url-initialization'}}
+>
+  <Rose::Form
+    class='full-width'
+    @onSubmit={{fn this.setClusterUrl this.clusterUrl}}
+    @cancel={{false}}
+    @disabled={{(is-loading)}}
+    as |form|
   >
-    <Rose::Form
-      class='full-width'
-      @onSubmit={{fn this.setClusterUrl this.clusterUrl}}
-      @cancel={{false}}
-      @disabled={{(is-loading)}}
-      as |form|
+
+    {{! template-lint-disable no-autofocus-attribute  }}
+    <Hds::Form::TextInput::Field
+      name='host'
+      @value={{this.clusterUrl}}
+      autofocus
+      {{on 'input' (set-from-event this 'clusterUrl')}}
+      as |F|
     >
+      <F.Label>{{t 'form.cluster-url.label'}}</F.Label>
+      <F.HelperText>{{t 'form.cluster-url.description'}}</F.HelperText>
+    </Hds::Form::TextInput::Field>
 
-      {{! template-lint-disable no-autofocus-attribute  }}
-      <Hds::Form::TextInput::Field
-        name='host'
-        @value={{this.clusterUrl}}
-        autofocus
-        {{on 'input' (set-from-event this 'clusterUrl')}}
-        as |F|
-      >
-        <F.Label>{{t 'form.cluster-url.label'}}</F.Label>
-        <F.HelperText>{{t 'form.cluster-url.description'}}</F.HelperText>
-      </Hds::Form::TextInput::Field>
-
-      <form.actions>
-        <:actions>
-          <Hds::Button
-            @text={{t 'actions.submit'}}
-            @isFullWidth={{true}}
-            disabled={{form.disabled}}
-            type='submit'
-          />
-        </:actions>
-      </form.actions>
-    </Rose::Form>
-  </BrandedCard>
-</main>
+    <form.actions>
+      <:actions>
+        <Hds::Button
+          @text={{t 'actions.submit'}}
+          @isFullWidth={{true}}
+          disabled={{form.disabled}}
+          type='submit'
+        />
+      </:actions>
+    </form.actions>
+  </Rose::Form>
+</BrandedCard>

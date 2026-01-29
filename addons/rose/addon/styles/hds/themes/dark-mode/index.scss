@@ -133,11 +133,10 @@
 }
 
 @mixin dark-mode-button-override {
-  /* stylelint-disable-next-line selector-class-pattern */
+  /* stylelint-disable selector-class-pattern */
   .hds-app-frame:has(
     .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
   ) {
-    /* stylelint-disable-next-line selector-class-pattern */
     .hds-button,
     .hds-dropdown-toggle-button,
     .hds-dropdown-toggle-icon,
@@ -147,6 +146,7 @@
       border-color: var(--token-color-palette-neutral-100);
     }
   }
+  /* stylelint-enable selector-class-pattern */
 }
 
 @mixin dark-mode-app-header-override {
@@ -191,10 +191,7 @@
     }
 
     .hds-app-side-nav__list-item-link.active {
-      .hds-app-side-nav__list-item-icon-leading,
-      .hds-app-side-nav__list-item-text {
-        color: var(--token-color-palette-blue-400);
-      }
+      background: none;
     }
     /* stylelint-enable selector-class-pattern */
   }

@@ -25,7 +25,10 @@
 
       <:globalActions>
         {{#if this.session.isAuthenticated}}
-          <ScopePicker class='app-header__global-actions' />
+          <ScopePicker
+            @hideOrgsTitle={{true}}
+            class='app-header__global-actions'
+          />
         {{/if}}
       </:globalActions>
 
