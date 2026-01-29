@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -16,7 +16,7 @@ export class AuthMethodsPage extends BaseResourcePage {
   async createPasswordAuthMethod() {
     const authMethodName = 'Auth Method ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
     await this.page.getByRole('button', { name: 'New' }).click();
@@ -43,7 +43,7 @@ export class AuthMethodsPage extends BaseResourcePage {
   async createOidcAuthMethod(issuer, clientId, clientSecret, boundaryAddr) {
     const authMethodName = 'Auth Method ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
     await this.page.getByRole('button', { name: 'New' }).click();
@@ -130,7 +130,7 @@ export class AuthMethodsPage extends BaseResourcePage {
    */
   async makeAuthMethodPrimary() {
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
     await this.page.getByLabel('Manage').click();

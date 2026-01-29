@@ -33,7 +33,11 @@
   />
 {{/if}}
 
-<Hds::SideNav::Portal as |Nav|>
+<Hds::AppSideNav::Portal
+  @ariaLabel='Primary'
+  class='side-nav-dark-mode-overrides'
+  as |Nav|
+>
   {{#if @model.isGlobal}}
     <Nav.Title>{{t 'titles.scope-level' scope=(t 'titles.global')}}</Nav.Title>
 
@@ -243,6 +247,5 @@
       @route='scopes.scope.edit'
     />
   {{/if}}
-</Hds::SideNav::Portal>
-
+</Hds::AppSideNav::Portal>
 {{outlet}}

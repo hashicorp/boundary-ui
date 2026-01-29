@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -10,12 +10,6 @@
 @use 'rose';
 @use 'notify';
 @use 'asciinema-player/dist/bundle/asciinema-player.css';
-
-.rose-layout-global {
-  .rose-layout-global-body {
-    justify-content: center;
-  }
-}
 
 .rose-layout-centered {
   > .rose-layout-page {
@@ -87,14 +81,6 @@
       }
     }
   }
-}
-
-[class*='session-status-'] {
-  color: var(--ui-gray-subtler-2);
-}
-
-.session-status-active {
-  color: var(--success);
 }
 
 .nowrap {
@@ -1002,18 +988,6 @@
 .worker-filter-generator-form-layout {
   .hds-form-field--layout-flag {
     margin-bottom: 0;
-  }
-}
-
-// scope picker
-.scope-picker {
-  &__toggle-button {
-    width: 100%;
-  }
-
-  li:has(.indentation),
-  li.indentation {
-    margin-left: 1.5rem;
   }
 }
 

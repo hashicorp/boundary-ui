@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -67,7 +67,7 @@ module('Acceptance | Application', function (hooks) {
     stubs.ipcService.withArgs('hasMacOSChrome').returns(true);
     await visit(urls.clusterUrl);
     assert.ok(
-      find('.rose-header.header-cushion'),
+      find('.app-header.header-cushion'),
       'Adds header padding around native window actions',
     );
   });
@@ -77,7 +77,7 @@ module('Acceptance | Application', function (hooks) {
     stubs.ipcService.withArgs('hasMacOSChrome').returns(false);
     await visit(urls.clusterUrl);
     assert.notOk(
-      find('.rose-header.header-cushion'),
+      find('.app-header.header-cushion'),
       'Does not add header padding around native window actions',
     );
   });

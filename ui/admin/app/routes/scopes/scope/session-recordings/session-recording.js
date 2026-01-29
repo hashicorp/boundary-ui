@@ -1,11 +1,11 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { paramValueFinder } from 'admin/utils/param-value-finder';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends Route {
   // =services

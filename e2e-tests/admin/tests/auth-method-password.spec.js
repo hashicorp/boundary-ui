@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -75,7 +75,7 @@ test(
 
       // Set a new password on the account
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Orgs' })
         .click();
       await page.getByRole('link', { name: orgName }).click();
@@ -85,7 +85,7 @@ test(
           .getByText(orgName),
       ).toBeVisible();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await page.getByRole('link', { name: authMethodName }).click();

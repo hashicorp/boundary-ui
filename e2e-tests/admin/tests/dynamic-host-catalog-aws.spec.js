@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -49,7 +49,7 @@ test.describe('AWS', () => {
         // Create host catalog
         const hostCatalogName = 'Host Catalog ' + nanoid();
         await page
-          .getByRole('navigation', { name: 'Application local navigation' })
+          .getByRole('navigation', { name: 'Primary' })
           .getByRole('link', { name: 'Host Catalogs' })
           .click();
         await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -166,7 +166,7 @@ test.describe('AWS', () => {
         await hostCatalogsPage.createHostCatalog();
         const newHostSetName = await hostCatalogsPage.createHostSet();
         await page
-          .getByRole('navigation', { name: 'Application local navigation' })
+          .getByRole('navigation', { name: 'Primary' })
           .getByRole('link', { name: 'Targets' })
           .click();
         await page.getByRole('link', { name: targetName }).click();

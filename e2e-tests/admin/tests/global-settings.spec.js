@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -42,7 +42,7 @@ test(
 
       // Navigate to orgs page when done
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Orgs' })
         .click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();

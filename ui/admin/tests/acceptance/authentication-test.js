@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -379,7 +379,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
 
     // open dropdown
-    await click(commonSelectors.SIDEBAR_USER_DROPDOWN);
+    await click(commonSelectors.HEADER_USER_DROPDOWN);
 
     // toggle system default
     await click(commonSelectors.TOGGLE_THEME_DEFAULT);

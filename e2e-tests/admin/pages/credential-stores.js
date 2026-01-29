@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -17,7 +17,7 @@ export class CredentialStoresPage extends BaseResourcePage {
   async createStaticCredentialStore() {
     const credentialStoreName = 'Credential Store ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Credential Stores' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -47,7 +47,7 @@ export class CredentialStoresPage extends BaseResourcePage {
   async createVaultCredentialStore(vaultAddr, clientToken) {
     const credentialStoreName = 'Credential Store ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Credential Stores' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -84,7 +84,7 @@ export class CredentialStoresPage extends BaseResourcePage {
   ) {
     const credentialStoreName = 'Credential Store ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Credential Stores' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();

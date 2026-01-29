@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -52,7 +52,7 @@ test(
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await expect(
@@ -194,7 +194,7 @@ test(
       // View the LDAP account and verify account attributes
       await page.getByRole('link', { name: orgName }).click();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await page.getByRole('link', { name: ldapAuthMethodName }).click();
@@ -283,7 +283,7 @@ test(
 
       // View the User account and verify attributes
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Users' })
         .click();
       await page.getByRole('link', { name: userName }).click();

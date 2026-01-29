@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -57,22 +57,5 @@ form {
 .hds-dropdown {
   .hds-dropdown-toggle-icon {
     color: inherit;
-  }
-}
-
-// TODO: This is a temporary fix that ensures changing the color theme won't alter the dropdown colors.
-.app-frame-sidebar-style-overrides .side-nav-style-overrides {
-  .hds-dropdown-toggle-button,
-  .hds-dropdown-toggle-icon {
-    background: var(--token-side-nav-color-surface-primary);
-
-    &:hover {
-      background: var(--token-side-nav-color-surface-interactive-hover);
-    }
-
-    &:active,
-    &:focus {
-      background: var(--token-side-nav-color-surface-primary);
-    }
   }
 }

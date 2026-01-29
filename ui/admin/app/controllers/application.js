@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -9,7 +9,7 @@ import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { defaultValidator } from 'ember-a11y-refocus';
-import { paramValueFinder } from 'admin/utils/param-value-finder';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 const THEMES = [
   {

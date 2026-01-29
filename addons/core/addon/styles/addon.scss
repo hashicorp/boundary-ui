@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2021, 2025
+ * Copyright IBM Corp. 2024, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -104,5 +104,13 @@ $margin-directions: (
         #{$properties}: #{sizing.rems($size-name)};
       }
     }
+  }
+}
+
+// scope picker
+.scope-picker {
+  li:has(.indentation),
+  li.indentation {
+    margin-left: 1.5rem;
   }
 }
