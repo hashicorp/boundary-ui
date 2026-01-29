@@ -22,7 +22,7 @@
         DeleteRowButton=R.DeleteRowButton
         rowData=R.rowData
         removeRow=(fn @onRemove R.rowData)
-        updateRow=(fn this.updateRow R.rowData)
+        updateRow=(fn @onUpdate R.rowData)
         canDelete=this.canDelete
       )
       to='row'

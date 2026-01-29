@@ -4,7 +4,6 @@
  */
 
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 
 export default class FormFieldKeyValueComponent extends Component {
   /**
@@ -25,11 +24,5 @@ export default class FormFieldKeyValueComponent extends Component {
 
     // Return false if there are no rows
     return false;
-  }
-
-  // =actions
-  @action
-  updateRow(rowData, property, { target: { value } }) {
-    this.args.onUpdate?.(rowData, property, value);
   }
 }

@@ -93,7 +93,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       this.data.push({ key: '', value: '' });
       this.set('data', [...this.data]);
     });
-    this.set('onUpdate', (rowData, property, value) => {
+    this.set('onUpdate', (rowData, property, { target: { value } }) => {
       rowData[property] = value;
     });
 
@@ -334,7 +334,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
 
   test('it updates both key and value fields', async function (assert) {
     this.set('data', [{ key: '', value: '' }]);
-    this.set('onUpdate', (rowData, property, value) => {
+    this.set('onUpdate', (rowData, property, { target: { value } }) => {
       rowData[property] = value;
     });
 

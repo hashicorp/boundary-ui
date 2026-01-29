@@ -40,7 +40,7 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
    * Updates critical options data
    */
   @action
-  updateCriticalOptions(rowData, property, value) {
+  updateCriticalOptions(rowData, property, { target: { value } }) {
     rowData[property] = value;
     this.args.model.critical_options = [...this.args.model.critical_options];
   }
@@ -51,14 +51,14 @@ export default class FormCredentialLibraryVaultSshCertComponent extends Componen
    */
   @action
   removeCriticalOption(rowData) {
-    const rows = this.args.model.critical_options.filter(
+    let rows = this.args.model.critical_options.filter(
       (item) => item !== rowData,
     );
-    this.args.model.critical_options = rows;
 
     // Ensure at least one empty row exists for editing
     if (rows.length === 0) {
-      this.args.model.critical_options = [{ key: '', value: '' }];
+      rows = [{ key: '', value: '' }];
     }
+    this.args.model.critical_options = rows;
   }
 }
