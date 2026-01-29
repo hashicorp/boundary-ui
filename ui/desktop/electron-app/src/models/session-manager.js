@@ -38,12 +38,19 @@ class SessionManager {
   }
 
   /**
-   * Stop a session using identifier.
+   * Stop a session using identifier
+   * and remove it from tracking.
    * @param {string} session_id
    */
   stopById(session_id) {
-    const session = this.#sessions.find((session) => session.id === session_id);
-    return session?.stop?.();
+    const sessionIndex = this.#sessions.findIndex(
+      (session) => session.id === session_id,
+    );
+    if (sessionIndex !== -1) {
+      const session = this.#sessions[sessionIndex];
+      this.#sessions.splice(sessionIndex, 1);
+      return session?.stop?.();
+    }
   }
 
   /**
@@ -59,9 +66,14 @@ class SessionManager {
    * Stop all active and pending target sessions
    * Returning Promise.all() ensures all sessions in the list have been
    * stopped before calling the next fn
+   * along with clearing the sessions list.
    */
   stopAll() {
-    return Promise.all(this.#sessions.map((session) => session.stop()));
+    const stopPromises = Promise.all(
+      this.#sessions.map((session) => session.stop()),
+    );
+    this.#sessions = [];
+    return stopPromises;
   }
 }
 
