@@ -33,10 +33,9 @@ export const TYPE_VAULT_LDAP = '[value="vault-ldap"]';
 export const TYPE_VAULT_GENERIC = '[value="vault-generic"]';
 
 export const FIELD_CRIT_OPTS_KEY =
-  '[name="critical_options"] tbody td:nth-of-type(1) input';
+  '[name="critical_options"] [data-test-key-input]';
 export const FIELD_CRIT_OPTS_VALUE =
-  '[name="critical_options"] tbody td:nth-of-type(2) input';
-export const FIELD_CRIT_OPTS_BTN = '[name="critical_options"] button';
+  '[name="critical_options"] [data-test-value-input]';
 
 export const FIELD_EXT_KEY =
   '[name="extensions"] tbody td:nth-of-type(1) input';
