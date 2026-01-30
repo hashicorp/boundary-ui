@@ -48,8 +48,9 @@ class SessionManager {
     );
     if (sessionIndex !== -1) {
       const session = this.#sessions[sessionIndex];
-      this.#sessions.splice(sessionIndex, 1);
-      return session?.stop?.();
+      return Promise.resolve(session?.stop?.()).then(() => {
+        this.#sessions.splice(sessionIndex, 1);
+      });
     }
   }
 
@@ -69,11 +70,11 @@ class SessionManager {
    * along with clearing the sessions list.
    */
   stopAll() {
-    const stopPromises = Promise.all(
-      this.#sessions.map((session) => session.stop()),
+    return Promise.all(this.#sessions.map((session) => session.stop())).then(
+      () => {
+        this.#sessions = [];
+      },
     );
-    this.#sessions = [];
-    return stopPromises;
   }
 }
 
