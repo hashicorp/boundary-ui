@@ -24,12 +24,24 @@ module.exports = {
     },
   },
 
+  treeForApp(appTree) {
+    if (!this._includeMirageInBuild()) {
+      return funnel(appTree, {
+        exclude: ['mirage/**/*'],
+      });
+    }
+
+    return appTree;
+  },
+
   treeForAddon() {
     // Exclude anything in the workers folder from being bundled in the final
     // build as we're manually bundling the files ourselves below.
+    const excludedModules = ['api/workers/**/*'];
+
     const tree = this._super.treeForAddon.apply(this, arguments);
     return funnel(tree, {
-      exclude: ['api/workers/**/*'],
+      exclude: excludedModules,
     });
   },
 
@@ -69,5 +81,11 @@ module.exports = {
     }
 
     return merge(trees);
+  },
+
+  _includeMirageInBuild() {
+    const env = this.parent.app?.env ?? 'production';
+    const config = this.project.config(env);
+    return Boolean(config.mirage?.enabled);
   },
 };

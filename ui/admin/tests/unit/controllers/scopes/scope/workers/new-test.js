@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | scopes/scope/workers/new', function (hooks) {
