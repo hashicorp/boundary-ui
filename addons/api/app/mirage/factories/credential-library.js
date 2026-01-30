@@ -45,6 +45,9 @@ export default factory.extend({
           username: faker.internet.userName(),
           key_bits: faker.number.int(999),
           path: faker.system.directoryPath(),
+          critical_options: {
+            [faker.word.noun()]: faker.word.words(2),
+          },
         };
       case TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP:
         return {

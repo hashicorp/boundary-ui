@@ -124,11 +124,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE,
     );
+
     await select(
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
     );
-    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_ADD_BTN);
 
     await fillIn(selectors.FIELD_IDP_CERTS, selectors.FIELD_IDP_CERTS_VALUE);
     await click(selectors.FIELD_IDP_CERTS_ADD_BTN);
