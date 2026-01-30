@@ -29,6 +29,14 @@
     margin-top: 3rem;
   }
 
+  .selected-items-text {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
   > div,
   table {
     margin-bottom: 1rem;
@@ -37,6 +45,11 @@
   .hds-segmented-group {
     .hds-dropdown-toggle-button__text {
       white-space: nowrap;
+    }
+
+    // Remove margin if the segmented group is followed by the selected items text
+    &:has(+ .selected-items-text) {
+      margin-bottom: 0;
     }
   }
 

@@ -1,0 +1,44 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.role.grant-templates.actions.add-grant-templates')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.grant-templates.actions.add-grant-templates'}}
+  @route='scopes.scope.roles.role.add-grant-templates'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t
+          'resources.role.grant-templates.messages.add-grant-templates.title'
+        }}
+      </PH.Title>
+      <PH.Description>
+        {{t
+          'resources.role.grant-templates.messages.add-grant-templates.description'
+        }}
+      </PH.Description>
+    </Hds::PageHeader>
+  </page.header>
+
+  <page.body>
+    <Form::Role::AddGrantTemplates
+      @model={{@model}}
+      @submit={{fn this.addGrantTemplates @model}}
+      @cancel={{this.cancel}}
+      @search={{this.search}}
+      @handleSearchInput={{this.handleSearchInput}}
+      @page={{this.page}}
+      @pageSize={{this.pageSize}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
