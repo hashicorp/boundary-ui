@@ -71,11 +71,17 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       resolvedType = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
     }
 
-    return this.store.createRecord('credential-library', {
+    const attrs = {
       type: resolvedType,
       credential_store_id,
       name,
       description,
-    });
+    };
+    // if the type is vault-ssh-certificate, initialize critical_options with an empty row
+    if (resolvedType === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE) {
+      attrs.critical_options = [{ key: '', value: '' }];
+    }
+
+    return this.store.createRecord('credential-library', attrs);
   }
 }
