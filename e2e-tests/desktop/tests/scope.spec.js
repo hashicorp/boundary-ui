@@ -50,7 +50,7 @@ test.describe('Scope tests', () => {
   test('Shows the filtered targets based on selected scope', async ({
     authedPage,
   }) => {
-    const headerNavLocator = authedPage.getByLabel('header-nav');
+    const headerNavLocator = authedPage.locator('header .scope-picker');
     await expect(headerNavLocator).toBeVisible();
     await expect(
       headerNavLocator.locator('.hds-dropdown-toggle-button'),
@@ -64,7 +64,7 @@ test.describe('Scope tests', () => {
     ).toBeVisible();
 
     await headerNavLocator.click();
-    const orgAHeaderNavLink = authedPage.getByRole('link', {
+    const orgAHeaderNavLink = authedPage.getByRole('option', {
       name: orgA.name,
     });
     await orgAHeaderNavLink.click();
@@ -79,7 +79,7 @@ test.describe('Scope tests', () => {
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeHidden();
 
-    const orgBHeaderNavLink = authedPage.getByRole('link', {
+    const orgBHeaderNavLink = authedPage.getByRole('option', {
       name: orgB.name,
     });
     await expect(orgBHeaderNavLink).toBeVisible();

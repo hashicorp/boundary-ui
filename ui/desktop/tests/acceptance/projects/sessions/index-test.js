@@ -542,8 +542,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       .isVisible();
 
     // change scope in app header
-    await click('.rose-header-nav .hds-dropdown-toggle-button');
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(4) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org2}"]`,
+    );
     // navigate to back sessions
     await click(`[href="${urls.sessions2}"]`);
 

@@ -5,18 +5,14 @@
 
 {{page-title (t 'errors.generic.title')}}
 
-<main>
+<Rose::Layout::Centered>
+  <Error::Message @docLink={{doc-url 'support-page'}} />
+</Rose::Layout::Centered>
 
-  <Rose::Layout::Centered>
-    <Error::Message @docLink={{doc-url 'support-page'}} />
-  </Rose::Layout::Centered>
-
-  <Rose::Layout::Centered>
-    <Hds::Button
-      @color='primary'
-      @text={{t 'actions.disconnect'}}
-      {{on 'click' this.appUtilities.disconnect}}
-    />
-  </Rose::Layout::Centered>
-
-</main>
+<Rose::Layout::Centered>
+  <Hds::Button
+    @color='primary'
+    @text={{t 'actions.disconnect'}}
+    {{on 'click' this.appUtilities.disconnect}}
+  />
+</Rose::Layout::Centered>

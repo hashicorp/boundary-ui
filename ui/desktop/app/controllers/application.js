@@ -8,6 +8,8 @@ import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { defaultValidator } from 'ember-a11y-refocus';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 export default class ApplicationController extends Controller {
   // =services
@@ -17,6 +19,7 @@ export default class ApplicationController extends Controller {
   @service ipc;
   @service session;
   @service('browser/window') window;
+  @service router;
 
   // =attributes
 
@@ -32,6 +35,18 @@ export default class ApplicationController extends Controller {
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
+  }
+
+  /**
+   * Shows side navigation only for routes nested under a scope
+   * and if user has been authenticated.
+   * @type {boolean}
+   */
+  get showSideNav() {
+    return (
+      this.router.currentRouteName.startsWith('scopes.scope') &&
+      this.session.isAuthenticated
+    );
   }
 
   // =actions
@@ -127,5 +142,30 @@ export default class ApplicationController extends Controller {
   willDestroy() {
     super.willDestroy(...arguments);
     this.removeOnAppQuitListener?.();
+  }
+
+  /**
+   * Add custom route change validation to prevent refocus when
+   * user is attempting to search, filter, or sort.
+   * @param {object} transition
+   * @returns {boolean}
+   */
+  customRouteChangeValidator(transition) {
+    if (!transition.to || !transition.from) {
+      return true;
+    }
+    if (transition.to.name === transition.from.name) {
+      const toParams = paramValueFinder(
+        transition.to.localName,
+        transition.to.parent,
+      );
+      const fromParams = paramValueFinder(
+        transition.from.localName,
+        transition.from.parent,
+      );
+      // Return false to prevent refocus when routes have equivalent dynamic segments (params).
+      return JSON.stringify(toParams) !== JSON.stringify(fromParams);
+    }
+    return defaultValidator(transition);
   }
 }

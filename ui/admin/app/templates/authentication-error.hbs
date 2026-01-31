@@ -5,14 +5,12 @@
 
 {{page-title (t 'auth.titles.flow-error')}}
 
-<main>
-  <Rose::Layout::Centered>
-    <Hds::Alert @type='page' @color='critical' as |A|>
-      <A.Title>{{t 'auth.titles.flow-error'}}</A.Title>
-      <A.Description>
-        {{t 'auth.descriptions.flow-error'}}
-        <Hds::Copy::Snippet @textToCopy={{@model}} @color='secondary' />
-      </A.Description>
-    </Hds::Alert>
-  </Rose::Layout::Centered>
-</main>
+<Rose::Layout::Centered>
+  <Hds::Alert @type='page' @color='critical' as |A|>
+    <A.Title>{{t 'auth.titles.flow-error'}}</A.Title>
+    <A.Description>
+      {{t 'auth.descriptions.flow-error'}}
+      <Hds::Copy::Snippet @textToCopy={{@model}} @color='secondary' />
+    </A.Description>
+  </Hds::Alert>
+</Rose::Layout::Centered>
