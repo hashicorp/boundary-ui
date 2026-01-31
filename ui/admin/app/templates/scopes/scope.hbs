@@ -88,14 +88,6 @@
       />
     {{/if}}
 
-    {{#if (can 'navigate model' @model collection='app-tokens')}}
-      <Nav.Link
-        @icon='token'
-        @text={{t 'resources.app-token.title_plural'}}
-        @route='scopes.scope.app-tokens'
-      />
-    {{/if}}
-
     <Nav.Title>{{t 'titles.scope-iam' scope=(t 'titles.global')}}</Nav.Title>
   {{/if}}
 
@@ -124,14 +116,6 @@
         @icon='hourglass'
         @text={{t 'resources.policy.title_plural'}}
         @route='scopes.scope.policies'
-      />
-    {{/if}}
-
-    {{#if (can 'navigate model' @model collection='app-tokens')}}
-      <Nav.Link
-        @icon='token'
-        @text={{t 'resources.app-token.title_plural'}}
-        @route='scopes.scope.app-tokens'
       />
     {{/if}}
 
@@ -182,14 +166,6 @@
       />
     {{/if}}
 
-    {{#if (can 'navigate model' @model collection='app-tokens')}}
-      <Nav.Link
-        @icon='token'
-        @text={{t 'resources.app-token.title_plural'}}
-        @route='scopes.scope.app-tokens'
-      />
-    {{/if}}
-
     <Nav.Title>{{t
         'titles.scope-iam'
         scope=(t 'resources.project.title')
@@ -233,6 +209,17 @@
       />
     {{/if}}
   {{/unless}}
+
+  {{! App tokens are available for all scopes }}
+  {{#if (can 'navigate model' @model collection='app-tokens')}}
+    <Nav.Link
+      @icon='token'
+      @text={{t 'resources.app-token.title_plural'}}
+      @route='scopes.scope.app-tokens'
+    />
+  {{/if}}
+
+  {{! Settings link }}
 
   {{#if (and @model.isGlobal (feature-flag 'ssh-session-recording'))}}
     {{#if this.session.data.authenticated.isGlobal}}
