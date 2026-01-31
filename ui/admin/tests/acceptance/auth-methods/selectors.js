@@ -9,34 +9,41 @@ export const FIELD_CLIENT_ID = '[name=client_id]';
 export const FIELD_CLIENT_ID_VALUE = 'Client id value';
 export const FIELD_CLIENT_SECRET = '[name=client_secret]';
 export const FIELD_CLIENT_SECRET_VALUE = 'Client secret value';
-export const FIELD_SIGNING_ALGORITHMS = '[name=signing_algorithms] select';
+export const FIELD_SIGNING_ALGORITHMS =
+  '[name=signing_algorithms] [data-test-value-input]';
 export const FIELD_SIGNING_ALGORITHMS_VALUE = 'RS384';
-export const FIELD_SIGNING_ALGORITHMS_ADD_BTN = '[data-test-add-option-button]';
+export const FIELD_SIGNING_ALGORITHMS_ADD_BTN =
+  '[name=signing_algorithms] [data-test-add-button]';
 export const FIELD_SIGNING_ALGORITHMS_DELETE_BTN =
-  '[name=signing_algorithms] tbody td:last-child button[aria-label=Remove]';
-export const FIELD_ALLOWED_AUDIENCES = '[name=allowed_audiences] input';
+  '[name=signing_algorithms] [data-test-delete-button]';
+export const FIELD_ALLOWED_AUDIENCES =
+  '[name=allowed_audiences] [data-test-value-input]';
 export const FIELD_ALLOWED_AUDIENCES_VALUE = 'Allowed audiences';
 export const FIELD_ALLOWED_AUDIENCES_ADD_BTN =
-  '[name=allowed_audiences] button';
+  '[name=allowed_audiences] [data-test-add-button]';
 export const FIELD_ALLOWED_AUDIENCES_DELETE_BTN =
-  '[name=allowed_audiences] tbody td:last-child button[aria-label=Remove]';
-export const FIELD_CLAIMS_SCOPES = '[name=claims_scopes] input';
+  '[name=allowed_audiences] [data-test-delete-button]';
+export const FIELD_CLAIMS_SCOPES =
+  '[name=claims_scopes] [data-test-value-input]';
 export const FIELD_CLAIMS_SCOPES_VALUE = 'Claim scopes';
-export const FIELD_CLAIMS_SCOPES_ADD_BTN = '[name=claims_scopes] button';
+export const FIELD_CLAIMS_SCOPES_ADD_BTN =
+  '[name=claims_scopes] [data-test-add-button]';
 export const FIELD_CLAIMS_SCOPES_DELETE_BTN =
-  '[name=claims_scopes] tbody td:last-child button[aria-label=Remove]';
+  '[name=claims_scopes] [data-test-delete-button]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM =
   '[name=account_claim_maps] [data-test-key-input]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE = 'from_claim';
 export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM =
   '[name=account_claim_maps] [data-test-value-input]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE = 'email';
-export const FIELD_ACCOUNT_CLAIM_MAPS_DELETE_BTN = '[data-test-delete-button]';
-export const FIELD_IDP_CERTS = '[name=idp_ca_certs] textarea';
+export const FIELD_ACCOUNT_CLAIM_MAPS_DELETE_BTN =
+  '[name=account_claim_maps] [data-test-delete-button]';
+export const FIELD_IDP_CERTS = '[name=idp_ca_certs] [data-test-value-input]';
 export const FIELD_IDP_CERTS_VALUE = 'IDP certificates';
-export const FIELD_IDP_CERTS_ADD_BTN = '[name=idp_ca_certs] button';
+export const FIELD_IDP_CERTS_ADD_BTN =
+  '[name=idp_ca_certs] [data-test-add-button]';
 export const FIELD_IDP_CERTS_DELETE_BTN =
-  '[name=idp_ca_certs] tbody td:last-child button[aria-label=Remove]';
+  '[name=idp_ca_certs] [data-test-delete-button]';
 export const FIELD_MAX_AGE = '[name=max_age]';
 export const FIELD_MAX_AGE_VALUE = '5';
 export const FIELD_API_URL_PREFIX = '[name=api_url_prefix]';

@@ -132,7 +132,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_SIGNING_ALGORITHMS,
       selectors.FIELD_SIGNING_ALGORITHMS_VALUE,
     );
-    await click(selectors.FIELD_SIGNING_ALGORITHMS_ADD_BTN);
 
     // Remove all allowed audiences
     const allowedAudiencesList = findAll(
@@ -147,7 +146,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_ALLOWED_AUDIENCES,
       selectors.FIELD_ALLOWED_AUDIENCES_VALUE,
     );
-    await click(selectors.FIELD_ALLOWED_AUDIENCES_ADD_BTN);
 
     // Remove all claims scopes
     const claimsScopeList = await Promise.all(
@@ -162,7 +160,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_CLAIMS_SCOPES,
       selectors.FIELD_CLAIMS_SCOPES_VALUE,
     );
-    await click(selectors.FIELD_CLAIMS_SCOPES_ADD_BTN);
 
     // Remove all claim maps
     const claimMaps = await Promise.all(
