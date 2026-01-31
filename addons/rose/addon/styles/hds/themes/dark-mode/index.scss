@@ -191,7 +191,14 @@
     }
 
     .hds-app-side-nav__list-item-link.active {
-      background: none;
+      &::after {
+        background-color: var(--token-color-palette-blue-400);
+      }
+
+      .hds-app-side-nav__list-item-icon-leading,
+      .hds-app-side-nav__list-item-text {
+        color: var(--token-color-palette-blue-400);
+      }
     }
     /* stylelint-enable selector-class-pattern */
   }
