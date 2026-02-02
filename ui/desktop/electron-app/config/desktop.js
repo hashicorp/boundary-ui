@@ -21,7 +21,7 @@ const createConfig = () => {
   const config = {
     name: 'boundary',
     productName: 'Boundary',
-    copyright: `Copyright © ${new Date().getFullYear()} HashiCorp, Inc.`,
+    copyright: `Copyright © ${new Date().getFullYear()} IBM Corp.`,
     releaseVersion: process.env.RELEASE_VERSION,
     releaseCommit: process.env.RELEASE_COMMIT,
     executableName: 'Boundary',
