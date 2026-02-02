@@ -364,6 +364,9 @@ module('Acceptance | app-tokens | create', function (hooks) {
 
       await click(selectors.ADD_PERMISSION_BTN);
 
+      // Fill first grant to enable Add button and show Delete button
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;actions=read');
+
       // Add second grant
       await click(selectors.ADD_GRANT_BTN);
       assert.dom(selectors.GRANT_INPUT).exists({ count: 2 });

@@ -228,7 +228,7 @@
         >
           <F.Label>{{t 'titles.label'}}</F.Label>
           <F.HelperText>{{t
-              'resources.app-token.form.permission.label.help'
+              'resources.app-token.form.permission.help'
             }}</F.HelperText>
         </Hds::Form::TextInput::Field>
 
@@ -261,6 +261,7 @@
         <Hds::Separator />
 
         <Hds::Form::Fieldset @isRequired={{true}} id='grants-fieldset' as |F|>
+          <F.Legend>{{t 'resources.role.grant.title_plural'}}</F.Legend>
           <F.Control>
             <Hds::Form::KeyValueInputs
               @data={{this.selectedPermission.grant}}
@@ -268,27 +269,27 @@
             >
               <:row as |R|>
                 <R.Field as |Field|>
-                  <Field.Label @isRequired={{true}}>{{t
-                      'resources.role.grant.title_plural'
-                    }}</Field.Label>
                   <Field.TextInput
                     name={{concat 'grant-' R.rowIndex}}
                     title={{t 'form.grant.help'}}
                     @value={{R.rowData.value}}
-                    {{on 'input' (set-from-event R.rowData 'value')}}
+                    {{on 'input' (fn this.updateGrant R.rowData)}}
                     data-test-grant-input
                   />
                 </R.Field>
-                <R.DeleteRowButton
-                  @text={{t 'actions.remove'}}
-                  @onClick={{this.removeGrant}}
-                  data-test-delete-grant-button
-                />
+                {{#if this.canDeleteGrant}}
+                  <R.DeleteRowButton
+                    @text={{t 'actions.remove'}}
+                    @onClick={{fn this.removeGrant R.rowData}}
+                    data-test-delete-grant-button
+                  />
+                {{/if}}
               </:row>
-              <:footer as |F|>
-                <F.AddRowButton
+              <:footer as |Footer|>
+                <Footer.AddRowButton
                   @text={{t 'actions.add'}}
                   @onClick={{this.addGrant}}
+                  disabled={{unless this.canAddGrant true}}
                   data-test-add-grant-button
                 />
               </:footer>

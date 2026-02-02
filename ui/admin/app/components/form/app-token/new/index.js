@@ -27,6 +27,36 @@ export default class FormAppTokenNewComponent extends Component {
     return MAX_TTL_SECONDS;
   }
 
+  /**
+   * Determines if the delete button should be shown for grant rows.
+   * Always show delete for multiple rows.
+   * For a single row, only show if it has a non-empty value.
+   * @type {boolean}
+   */
+  get canDeleteGrant() {
+    const rows = this.selectedPermission?.grant || [];
+
+    if (rows.length > 1) {
+      return true;
+    }
+
+    if (rows.length === 1) {
+      return Boolean(rows[0].value?.trim());
+    }
+
+    return false;
+  }
+
+  /**
+   * Determines if the add button should be enabled.
+   * Disabled when any grant input is empty to prevent multiple empty rows.
+   * @type {boolean}
+   */
+  get canAddGrant() {
+    const rows = this.selectedPermission?.grant || [];
+    return !rows.some((row) => !row.value?.trim());
+  }
+
   // =actions
 
   /**
@@ -102,9 +132,11 @@ export default class FormAppTokenNewComponent extends Component {
    */
   @action
   editPermission(index) {
-    this.selectedPermission = new TrackedObject(
-      this.args.model.permissions[index],
-    );
+    const permission = this.args.model.permissions[index];
+    this.selectedPermission = new TrackedObject({
+      ...permission,
+      grant: permission.grant.map((g) => ({ ...g })),
+    });
     this.showPermissionFlyout = true;
     this.editingPermission = true;
     this.indexOfEditingPermission = index;
@@ -122,7 +154,7 @@ export default class FormAppTokenNewComponent extends Component {
   }
 
   /**
-   * Adds a grant field to the selected permission.
+   * Adds a new empty row to grants.
    */
   @action
   addGrant() {
@@ -133,15 +165,30 @@ export default class FormAppTokenNewComponent extends Component {
   }
 
   /**
-   * Removes a grant string from the selected permission.
-   * @param {object} rowData - Data for the row being deleted
-   * @param {number} rowIndex - Index of the row being deleted
+   * Updates a grant value from an input event.
+   * @param {object} rowData - Data for the row being updated
+   * @param {Event} event - Input event
    */
   @action
-  removeGrant(rowData, rowIndex) {
-    this.selectedPermission.grant = this.selectedPermission.grant.filter(
-      (_, i) => i !== rowIndex,
-    );
+  updateGrant(rowData, { target: { value } }) {
+    rowData.value = value;
+    this.selectedPermission.grant = [...this.selectedPermission.grant];
+  }
+
+  /**
+   * Removes a grant row from the selected permission.
+   * @param {object} rowData - Data for the row being deleted
+   */
+  @action
+  removeGrant(rowData) {
+    let rows = this.selectedPermission.grant.filter((item) => item !== rowData);
+
+    // Ensure at least one empty row exists for editing
+    if (rows.length === 0) {
+      rows = [{ value: '' }];
+    }
+
+    this.selectedPermission.grant = rows;
   }
 
   /**

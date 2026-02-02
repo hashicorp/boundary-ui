@@ -76,6 +76,8 @@ module('Integration | Component | form/app-token/new', function (hooks) {
 
         assert.dom(selectors.GRANT_INPUT).exists({ count: 1 });
 
+        // Fill in the first grant to enable the Add button
+        await fillIn(selectors.GRANT_INPUT, 'ids=*;actions=read');
         await click(selectors.ADD_GRANT_BTN);
 
         assert.dom(selectors.GRANT_INPUT).exists({ count: 2 });
@@ -87,6 +89,9 @@ module('Integration | Component | form/app-token/new', function (hooks) {
         );
 
         await click(selectors.ADD_PERMISSION_BTN);
+
+        // Fill in the first grant to enable Add button and show Delete button
+        await fillIn(selectors.GRANT_INPUT, 'ids=*;actions=read');
         await click(selectors.ADD_GRANT_BTN);
 
         assert.dom(selectors.GRANT_INPUT).exists({ count: 2 });
@@ -194,10 +199,10 @@ module('Integration | Component | form/app-token/new', function (hooks) {
 
         await click(selectors.ADD_PERMISSION_BTN);
 
-        // The KeyValueInputs Field label should have required indicator
+        // The Fieldset legend should have required indicator
         assert
-          .dom('.hds-form-key-value-inputs .hds-form-indicator')
-          .exists('Required indicator is displayed on grants label');
+          .dom('#grants-fieldset .hds-form-indicator')
+          .exists('Required indicator is displayed on grants legend');
       });
 
       test('can add multiple grants', async function (assert) {
@@ -210,10 +215,21 @@ module('Integration | Component | form/app-token/new', function (hooks) {
         // Start with 1 grant
         assert.dom(selectors.GRANT_INPUT).exists({ count: 1 });
 
-        // Add 4 more grants
+        // Fill each grant before adding the next (Add button is disabled when any input is empty)
+        let grantInputs = document.querySelectorAll(selectors.GRANT_INPUT);
+        await fillIn(grantInputs[0], 'grant-1');
         await click(selectors.ADD_GRANT_BTN);
+
+        grantInputs = document.querySelectorAll(selectors.GRANT_INPUT);
+        await fillIn(grantInputs[1], 'grant-2');
         await click(selectors.ADD_GRANT_BTN);
+
+        grantInputs = document.querySelectorAll(selectors.GRANT_INPUT);
+        await fillIn(grantInputs[2], 'grant-3');
         await click(selectors.ADD_GRANT_BTN);
+
+        grantInputs = document.querySelectorAll(selectors.GRANT_INPUT);
+        await fillIn(grantInputs[3], 'grant-4');
         await click(selectors.ADD_GRANT_BTN);
 
         assert.dom(selectors.GRANT_INPUT).exists({ count: 5 });

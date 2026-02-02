@@ -1301,8 +1301,7 @@ app-token:
       label: Permissions
       help: You haven't added in any permissions yet. You'll be sent to another page to add each permission.
     permission:
-      label:
-        help: A brief explanation of what this permission does
+      help: A brief explanation of what this permission does
     confirm-create:
       title: Create app token?
       description: Once created, you cannot change this app token's details and grants. Are you sure you want to finish creating this app token?

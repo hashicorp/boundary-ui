@@ -65,7 +65,11 @@
           {{@model.scopeModel.displayName}}
         </Hds::Text::Body>
       </Hds::Layout::Flex>
-      <Hds::Badge @text='Project' @color='neutral' class='margin-left-l' />
+      <Hds::Badge
+        @text={{t 'resources.project.title'}}
+        @color='neutral'
+        class='margin-left-l'
+      />
     </Hds::Layout::Flex>
   {{/if}}
 
