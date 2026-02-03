@@ -1,5 +1,5 @@
 {{!
-  Copyright IBM Corp. 2021, 2025
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -183,9 +183,10 @@
                 <B.Td>
                   {{#if data.created_time}}
                     <Hds::Text::Body @color='faint'>
-                      <time datetime={{format-date-iso data.created_time}}>
-                        {{format-date-iso data.created_time}}
-                      </time>
+                      <Hds::Time
+                        @date={{data.created_time}}
+                        @display='friendly-local'
+                      />
                     </Hds::Text::Body>
                   {{/if}}
                 </B.Td>

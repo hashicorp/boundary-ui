@@ -1,5 +1,5 @@
 {{!
-  Copyright IBM Corp. 2021, 2025
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -253,9 +253,10 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <time datetime={{format-date-iso B.data.created_time}}>
-                {{format-date-iso-human B.data.created_time}}
-              </time>
+              <Hds::Time
+                @date={{B.data.created_time}}
+                @display='friendly-local'
+              />
             </B.Td>
             <B.Td>
               <div class='link-copy-button-container'>

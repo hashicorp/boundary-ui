@@ -32,7 +32,7 @@ module('Integration | Helper | format-day-year', function (hooks) {
   });
   test('it renders when null', async function (assert) {
     this.set('inputValue', null);
-    await render(hbs`{{format-date-iso this.inputValue}}`);
+    await render(hbs`{{format-day-year this.inputValue}}`);
     assert.strictEqual(this.element.textContent.trim(), '');
   });
 });
