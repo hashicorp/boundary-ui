@@ -11,6 +11,7 @@ import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { faker } from '@faker-js/faker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { formatDateUserFriendly } from 'admin/tests/helpers/format-date-user-friendly';
 import {
   STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_AVAILABLE,
@@ -30,6 +31,10 @@ module('Acceptance | session-recordings | list', function (hooks) {
     '2020-01-01T00:00:10.000Z',
     '2020-01-01T00:01:00.000Z',
   ];
+
+  const CREATED_TIME_VALUES_FORMATTED = CREATED_TIME_VALUES_ARRAY.map(
+    formatDateUserFriendly,
+  );
 
   let featuresService;
   let createdTimeValues;
@@ -325,6 +330,8 @@ module('Acceptance | session-recordings | list', function (hooks) {
 
     this.server.schema.sessionRecordings.all().destroy();
     const expectedDescendingSort = CREATED_TIME_VALUES_ARRAY.toReversed();
+    const expectedDescendingFormattedSort =
+      CREATED_TIME_VALUES_FORMATTED.toReversed();
     faker.helpers.shuffle(expectedDescendingSort).forEach((value) => {
       this.server.create('session-recording', {
         created_time: value,
@@ -337,7 +344,7 @@ module('Acceptance | session-recordings | list', function (hooks) {
     assert
       .dom(commonSelectors.TABLE_ROWS)
       .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
-    expectedDescendingSort.forEach((expected, index) => {
+    expectedDescendingFormattedSort.forEach((expected, index) => {
       // nth-child index starts at 1
       assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
     });
@@ -351,7 +358,7 @@ module('Acceptance | session-recordings | list', function (hooks) {
           key: 'created_time',
           values: CREATED_TIME_VALUES_ARRAY,
         },
-        expectedAscendingSort: CREATED_TIME_VALUES_ARRAY,
+        expectedAscendingSort: CREATED_TIME_VALUES_FORMATTED,
         column: 1,
       },
       'on state': {

@@ -18,6 +18,7 @@ import {
 } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { formatDateUserFriendly } from 'admin/tests/helpers/format-date-user-friendly';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | sessions | list', function (hooks) {
@@ -31,14 +32,9 @@ module('Acceptance | sessions | list', function (hooks) {
     '2020-01-01T01:00:10.000Z',
     '2020-01-01T10:00:00.000Z',
   ];
-
-  const CREATED_TIME_ISO_VALUES_ARRAY = [
-    '2020-01-01 00:00:01',
-    '2020-01-01 00:00:10',
-    '2020-01-01 00:10:01',
-    '2020-01-01 01:00:10',
-    '2020-01-01 10:00:00',
-  ];
+  const CREATED_TIME_VALUES_FORMATTED = CREATED_TIME_VALUES_ARRAY.map(
+    formatDateUserFriendly,
+  );
   const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
 
   const instances = {
@@ -485,7 +481,7 @@ module('Acceptance | sessions | list', function (hooks) {
     });
 
     this.server.schema.sessions.all().destroy();
-    const expectedDescendingSort = CREATED_TIME_ISO_VALUES_ARRAY.toReversed();
+    const expectedDescendingSort = CREATED_TIME_VALUES_FORMATTED.toReversed();
     faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
       this.server.create('session', {
         created_time: value,
@@ -520,7 +516,7 @@ module('Acceptance | sessions | list', function (hooks) {
           key: 'created_time',
           values: CREATED_TIME_VALUES_ARRAY,
         },
-        expectedAscendingSort: CREATED_TIME_ISO_VALUES_ARRAY,
+        expectedAscendingSort: CREATED_TIME_VALUES_FORMATTED,
         column: 4,
       },
       'on status': {
