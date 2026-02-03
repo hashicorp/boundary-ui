@@ -1,3 +1,6 @@
+# Copyright IBM Corp. 2021, 2026
+# SPDX-License-Identifier: BUSL-1.1
+
 contact_links:
   - name: Ask a question
     url: https://discuss.hashicorp.com/c/boundary
