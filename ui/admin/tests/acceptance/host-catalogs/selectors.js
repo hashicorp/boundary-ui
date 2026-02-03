@@ -29,8 +29,7 @@ export const MANAGE_DROPDOWN_HOST_CATALOG_DELETE =
 export const FIELD_ROLE_ARN = '[name="role_arn"]';
 export const FIELD_ROLE_ARN_VALUE = 'arn:aws:iam';
 
-export const FIELD_CREDENTIAL_TYPE =
-  '.credential-selection input:checked';
+export const FIELD_CREDENTIAL_TYPE = '.credential-selection input:checked';
 export const FIELD_DYNAMIC_CREDENTIAL = '[name="dynamic-credential"]';
 export const FIELD_DYNAMIC_CREDENTIAL_VALUE = 'dynamic-credentials';
 export const FIELD_STATIC_CREDENTIAL = '[name="static-credential"]';
