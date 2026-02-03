@@ -260,42 +260,41 @@
 
         <Hds::Separator />
 
-        <Hds::Form::Fieldset @isRequired={{true}} id='grants-fieldset' as |F|>
-          <F.Legend>{{t 'resources.role.grant.title_plural'}}</F.Legend>
-          <F.Control>
-            <Hds::Form::KeyValueInputs
-              @data={{this.selectedPermission.grant}}
-              class='grant-list'
-            >
-              <:row as |R|>
-                <R.Field as |Field|>
-                  <Field.TextInput
-                    name={{concat 'grant-' R.rowIndex}}
-                    title={{t 'form.grant.help'}}
-                    @value={{R.rowData.value}}
-                    {{on 'input' (fn this.updateGrant R.rowData)}}
-                    data-test-grant-input
-                  />
-                </R.Field>
-                {{#if this.canDeleteGrant}}
-                  <R.DeleteRowButton
-                    @text={{t 'actions.remove'}}
-                    @onClick={{fn this.removeGrant R.rowData}}
-                    data-test-delete-grant-button
-                  />
-                {{/if}}
-              </:row>
-              <:footer as |Footer|>
-                <Footer.AddRowButton
-                  @text={{t 'actions.add'}}
-                  @onClick={{this.addGrant}}
-                  disabled={{unless this.canAddGrant true}}
-                  data-test-add-grant-button
-                />
-              </:footer>
-            </Hds::Form::KeyValueInputs>
-          </F.Control>
-        </Hds::Form::Fieldset>
+        <Hds::Form::KeyValueInputs
+          @isRequired={{true}}
+          @data={{this.selectedPermission.grant}}
+          id='grants-fieldset'
+          class='grant-list'
+        >
+          <:header as |H|>
+            <H.Legend>{{t 'resources.role.grant.title_plural'}}</H.Legend>
+          </:header>
+          <:row as |R|>
+            <R.Field as |Field|>
+              <Field.TextInput
+                name={{concat 'grant-' R.rowIndex}}
+                title={{t 'form.grant.help'}}
+                @value={{R.rowData.value}}
+                {{on 'input' (fn this.updateGrant R.rowData)}}
+                data-test-grant-input
+              />
+            </R.Field>
+            {{#if this.canDeleteGrant}}
+              <R.DeleteRowButton
+                @text={{t 'actions.remove'}}
+                @onClick={{fn this.removeGrant R.rowData}}
+                data-test-delete-grant-button
+              />
+            {{/if}}
+          </:row>
+          <:footer as |Footer|>
+            <Footer.AddRowButton
+              @text={{t 'actions.add'}}
+              @onClick={{this.addGrant}}
+              data-test-add-grant-button
+            />
+          </:footer>
+        </Hds::Form::KeyValueInputs>
 
       </M.Body>
       <M.Footer>

@@ -215,7 +215,7 @@ module('Integration | Component | form/app-token/new', function (hooks) {
         // Start with 1 grant
         assert.dom(selectors.GRANT_INPUT).exists({ count: 1 });
 
-        // Fill each grant before adding the next (Add button is disabled when any input is empty)
+        // Add multiple grants
         let grantInputs = document.querySelectorAll(selectors.GRANT_INPUT);
         await fillIn(grantInputs[0], 'grant-1');
         await click(selectors.ADD_GRANT_BTN);

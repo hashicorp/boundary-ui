@@ -47,16 +47,6 @@ export default class FormAppTokenNewComponent extends Component {
     return false;
   }
 
-  /**
-   * Determines if the add button should be enabled.
-   * Disabled when any grant input is empty to prevent multiple empty rows.
-   * @type {boolean}
-   */
-  get canAddGrant() {
-    const rows = this.selectedPermission?.grant || [];
-    return !rows.some((row) => !row.value?.trim());
-  }
-
   // =actions
 
   /**
