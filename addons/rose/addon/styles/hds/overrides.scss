@@ -72,16 +72,16 @@ form {
       .ember-basic-dropdown-content *,
       .hds-dialog-primitive__wrapper *
     ) {
-    background: var(--token-side-nav-color-surface-primary);
+    background: var(--token-color-palette-neutral-700);
     border-color: var(--token-app-side-nav-color-foreground-faint);
 
     &:hover {
-      background: var(--token-side-nav-color-surface-interactive-hover);
+      background: var(--token-color-palette-neutral-600);
     }
 
     &:active,
     &:focus {
-      background: var(--token-side-nav-color-surface-primary);
+      background: var(--token-color-palette-neutral-700);
     }
   }
 }
