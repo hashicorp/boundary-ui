@@ -1,8 +1,3 @@
-/**
- * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
- */
-
 import Component from '@glimmer/component';
 import * as AsciinemaPlayer from 'asciinema-player';
 import { modifier } from 'ember-modifier';
