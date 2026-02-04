@@ -41,6 +41,15 @@ contextBridge.exposeInMainWorld('terminal', {
   },
 });
 
+// Adding explicit IPC handlers instead of dynamic IPC method invocations
+contextBridge.exposeInMainWorld('boundary', {
+  cluster: {
+    getUrl: () => ipcRenderer.invoke('getClusterUrl'),
+    setUrl: (url) => ipcRenderer.invoke('setClusterUrl', url),
+    resetUrl: () => ipcRenderer.invoke('resetClusterUrl'),
+  },
+});
+
 process.once('loaded', () => {
   /**
    * Ember-land has no access to the renderer or node modules, and thus

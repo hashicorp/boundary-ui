@@ -42,7 +42,8 @@ export default class ClusterUrlService extends Service {
    * @type {Promise{?string}}
    */
   get mainClusterUrl() {
-    return this.ipc.invoke('getClusterUrl');
+    // Boundary is exposed by contextBridge within the preload script
+    return window.boundary.cluster.getUrl();
   }
 
   // =methods
@@ -76,7 +77,8 @@ export default class ClusterUrlService extends Service {
       this.adapter.host = clusterUrl;
       this.rendererClusterUrl = clusterUrl;
       if (clusterUrl !== (await this.mainClusterUrl)) {
-        await this.ipc.invoke('setClusterUrl', clusterUrl);
+        // Boundary is exposed by contextBridge within the preload script
+        await window.boundary.cluster.setUrl(clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;
@@ -94,6 +96,7 @@ export default class ClusterUrlService extends Service {
   })
   async resetClusterUrl() {
     this.rendererClusterUrl = null;
-    await this.ipc.invoke('resetClusterUrl');
+    // Boundary is exposed by contextBridge within the preload script
+    await window.boundary.cluster.resetUrl();
   }
 }
