@@ -167,11 +167,11 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
       authMethod.signing_algorithms = authMethod.signing_algorithms.filter(
         (item) => item.value?.trim(),
       );
-      if (authMethod.idp_ca_certs) {
-        authMethod.idp_ca_certs = authMethod.idp_ca_certs.filter((item) =>
-          item.value?.trim(),
-        );
-      }
+    }
+    if (authMethod.idp_ca_certs) {
+      authMethod.idp_ca_certs = authMethod.idp_ca_certs.filter((item) =>
+        item.value?.trim(),
+      );
     }
     await authMethod.save();
     if (this.can.can('read model', authMethod)) {
