@@ -1242,6 +1242,7 @@ app-token:
   description: App tokens are long-lived, fine grained access tokens for authorization/authentication.
   titles:
     new: New App Token
+    clone: Clone App Token
     grant: Grant
     grants: Grants
     active-scopes: Active scopes
@@ -1318,6 +1319,14 @@ app-token:
       confirm-revoke:
         label: Confirm revoking
         help: Enter "revoke" (using all capital letters) to confirm.
+    delete:
+      title: Delete App Token?
+      description:
+        0: Once you delete <strong>{appToken}</strong>, you will be unable to recover it and its information.
+        1: Are you sure you want to delete this app token?
+      confirm-delete:
+        label: Confirm deletion
+        help: Enter "DELETE" (using all capital letters) to confirm.
   status:
     unknown: Unknown
     active: Active
@@ -1334,6 +1343,8 @@ app-token:
       description: App tokens are immutable after creation. Make sure all of this token's details are correct before finishing creation.
     revoke:
       description: App token has been revoked.
+    delete:
+      description: App token has been deleted.
     tooltips:
       active-scopes: Active scopes are scopes that exist within Boundary.
     no-active-scopes:
@@ -1342,3 +1353,9 @@ app-token:
     deleted-scopes:
       description-with-label: Scopes deleted within the last 30 days that were previously attached to {label}
       description-no-label: Scopes deleted within the last 30 days that were previously attached to this permission
+    inactive-alert:
+      title:
+        0: This app token has expired
+        1: This app token has staled
+        2: This app token has been revoked
+      description: Any request using this app token will return an <code>unauthorized</code> error. If you want to save the information, you can clone this app token.

@@ -218,6 +218,38 @@ module('Acceptance | app-tokens | read', function (hooks) {
     },
   );
 
+  test('inactive alert is not visible for active app tokens', async function (assert) {
+    await visit(urls.appToken);
+
+    assert.dom(selectors.INACTIVE_ALERT).doesNotExist();
+  });
+
+  test.each(
+    'inactive alert displays correct title based on app token status',
+    {
+      expired: {
+        status: 'expired',
+        expectedTitle: 'This app token has expired',
+      },
+      stale: {
+        status: 'stale',
+        expectedTitle: 'This app token has staled',
+      },
+      revoked: {
+        status: 'revoked',
+        expectedTitle: 'This app token has been revoked',
+      },
+    },
+    async function (assert, { status, expectedTitle }) {
+      instances.appToken.update({ status });
+
+      await visit(urls.appToken);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INACTIVE_ALERT_TITLE).hasText(expectedTitle);
+    },
+  );
+
   test('users can revoke an app-token with proper authorization', async function (assert) {
     setRunOptions({
       rules: {
@@ -304,7 +336,10 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_CLONE);
 
-    assert.strictEqual(currentURL(), urls.newAppToken);
+    assert.strictEqual(
+      currentURL(),
+      urls.newAppToken + `?cloneAppToken=${instances.appToken.id}`,
+    );
   });
 
   test('users cannot clone an app-token without proper authorization', async function (assert) {

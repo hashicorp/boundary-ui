@@ -34,16 +34,21 @@ export const SCOPE_CHILDREN_TOGGLE = '[data-test-scope-children]';
 export const SCOPE_DESCENDANTS_TOGGLE = '[data-test-scope-descendants]';
 
 export const FILED_CONFIRM_REVOKE = '[name=confirm-revoke]';
+export const FILED_CONFIRM_DELETE = '[name=confirm-delete]';
 
 export const CANCEL_MODAL_BTN = '.hds-modal .hds-button--color-secondary';
 export const CONFIRM_APP_TOKEN_BTN = '.hds-modal .hds-button--color-primary';
 export const CONFIRM_REVOKE_BTN = '.hds-modal .hds-button--color-critical';
+export const CONFIRM_DELETE_BTN = '.hds-modal .hds-button--color-critical';
 
 export const TOKEN_COPY_SNIPPET =
   '.app-token-modal-body .hds-copy-snippet__text';
 export const BREADCRUMB = '[data-test-breadcrumbs-container]';
 export const STATUS_BADGE_TEXT =
   '[data-test-app-token-status-badge] .hds-badge__text';
+export const INACTIVE_ALERT = '[data-test-permissions-alert]';
+export const INACTIVE_ALERT_TITLE =
+  '[data-test-permissions-alert] .hds-alert__title';
 
 export const ROW_LABEL = (rowIndex) =>
   `table tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;
@@ -57,6 +62,7 @@ export const ROW_DELETED_SCOPES = (rowIndex) =>
 export const MANAGE_DROPDOWN = '[data-test-manage-app-token] button';
 export const MANAGE_DROPDOWN_REVOKE = '[data-test-manage-app-token-revoke]';
 export const MANAGE_DROPDOWN_CLONE = '[data-test-manage-app-token-clone]';
+export const MANAGE_DROPDOWN_DELETE = '[data-test-manage-app-token-delete]';
 
 // Flyout selectors
 export const GRANTS_FLYOUT = '[data-test-grants-flyout]';

@@ -20,6 +20,7 @@
         <AppTokens::AppToken::Actions
           @model={{@model}}
           @revoke={{fn this.appTokens.revoke @model}}
+          @delete={{fn this.appTokens.delete @model}}
         />
       </PH.Actions>
       <PH.Generic>
@@ -33,6 +34,32 @@
   </page.navigation>
 
   <page.body>
+    {{#unless @model.isActive}}
+      <Hds::Alert
+        class='margin-bottom-m'
+        @type='inline'
+        @color='warning'
+        data-test-permissions-alert
+        as |A|
+      >
+        <A.Title>{{this.statusTranslation}}</A.Title>
+        <A.Description>
+          {{t
+            'resources.app-token.messages.inactive-alert.description'
+            htmlSafe=true
+          }}
+        </A.Description>
+        <A.Button
+          @color='secondary'
+          @text={{t 'resources.app-token.actions.clone'}}
+        />
+        <A.Button
+          @color='tertiary'
+          @text={{t 'resources.app-token.actions.delete'}}
+          @icon='trash'
+        />
+      </Hds::Alert>
+    {{/unless}}
     <Form::AppToken::Read
       @model={{@model}}
       @showCreatedAppToken={{this.showCreatedAppToken}}
