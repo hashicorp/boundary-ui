@@ -9,6 +9,30 @@ export const FIELD_TTL_HOURS = '[name="time_to_live_seconds"] [name="hours"]';
 export const FIELD_TTL_MINUTES =
   '[name="time_to_live_seconds"] [name="minutes"]';
 export const FIELD_TTS = '[name=time_to_stale_seconds]';
+
+// Permission flyout selectors
+export const ADD_PERMISSION_BTN = '[data-test-add-permission-button]';
+export const PERMISSION_FLYOUT = '[data-test-permission-flyout]';
+export const PERMISSION_LABEL_FIELD = '[name="permission-label"]';
+export const GRANT_FIELD = '[data-test-grant-field]';
+export const ADD_GRANT_BTN = '[data-test-add-grant-button]';
+export const GRANT_REMOVE_BTN = '[data-test-grant-remove-button]';
+export const GRANT_INPUT = '[data-test-grant-input]';
+export const DELETE_GRANT_BTN = '[data-test-delete-grant-button]';
+export const FLYOUT_ADD_BTN = '[data-test-add-permission-flyout-button]';
+export const FLYOUT_SAVE_BTN = '[data-test-save-permission-button]';
+export const FLYOUT_CANCEL_BTN = '[data-test-cancel-permission-button]';
+export const PERMISSION_TABLE_ROWS = '.app-token-form table tbody tr';
+export const PERMISSION_EDIT_BTN = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:last-of-type button:first-of-type`;
+export const PERMISSION_DELETE_BTN = (rowIndex) =>
+  `table tbody tr:nth-of-type(${rowIndex}) td:last-of-type button:last-of-type`;
+
+// Scope options selectors
+export const SCOPE_THIS_TOGGLE = '[data-test-scope-this]';
+export const SCOPE_CHILDREN_TOGGLE = '[data-test-scope-children]';
+export const SCOPE_DESCENDANTS_TOGGLE = '[data-test-scope-descendants]';
+
 export const FILED_CONFIRM_REVOKE = '[name=confirm-revoke]';
 export const FILED_CONFIRM_DELETE = '[name=confirm-delete]';
 

@@ -198,6 +198,276 @@ module('Acceptance | app-tokens | create', function (hooks) {
   );
 
   test.each(
+    'permission flyout opens with label field and helper text',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      assert
+        .dom(selectors.PERMISSION_FLYOUT)
+        .includesText('A brief explanation of what this permission does');
+    },
+  );
+
+  test.each(
+    'permission flyout displays scope options',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      if (scope === 'project') {
+        // Project scopes show "Scope" legend and read-only help text
+        assert.dom(selectors.PERMISSION_FLYOUT).includesText('Scope');
+        assert
+          .dom(selectors.PERMISSION_FLYOUT)
+          .includesText('The scope where permissions are applied to');
+      } else {
+        // Global and org scopes show "Scope options" legend and selection help text
+        assert.dom(selectors.PERMISSION_FLYOUT).includesText('Scope options');
+        assert
+          .dom(selectors.PERMISSION_FLYOUT)
+          .includesText('Select which scopes the permission is applied to');
+        assert.dom(selectors.PERMISSION_FLYOUT).includesText('Add this scope');
+      }
+    },
+  );
+
+  // Permission CRUD tests
+  test.each(
+    'users can add a permission with a grant',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Test Permission');
+
+      // Select scope based on scope type
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      assert.dom(selectors.PERMISSION_FLYOUT).doesNotExist();
+      assert.dom(selectors.PERMISSION_TABLE_ROWS).exists({ count: 1 });
+    },
+  );
+
+  test.each(
+    'users can add multiple permissions',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      // Add first permission
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'First Permission');
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      // Add second permission
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Second Permission');
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=target;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      assert.dom(selectors.PERMISSION_TABLE_ROWS).exists({ count: 2 });
+    },
+  );
+
+  test.each(
+    'users can edit an existing permission',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      // Add permission
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Original Label');
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      // Edit permission
+      await click(selectors.PERMISSION_EDIT_BTN(1));
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Updated Label');
+      await click(selectors.FLYOUT_SAVE_BTN);
+
+      assert.dom(selectors.ROW_LABEL(1)).hasText('Updated Label');
+    },
+  );
+
+  test.each(
+    'users can delete a permission',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      // Add permission
+      await click(selectors.ADD_PERMISSION_BTN);
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      assert.dom(selectors.PERMISSION_TABLE_ROWS).exists({ count: 1 });
+
+      // Delete permission
+      await click(selectors.PERMISSION_DELETE_BTN(1));
+
+      assert.dom(selectors.PERMISSION_TABLE_ROWS).doesNotExist();
+    },
+  );
+
+  // Grant management tests
+  test.each(
+    'users can add multiple grants to a permission',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+
+      // Fill first grant
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+
+      // Add second grant
+      await click(selectors.ADD_GRANT_BTN);
+
+      assert.dom(selectors.GRANT_INPUT).exists({ count: 2 });
+    },
+  );
+
+  test.each(
+    'users can remove a grant from a permission',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+
+      // Fill first grant to enable Add button and show Delete button
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;actions=read');
+
+      // Add second grant
+      await click(selectors.ADD_GRANT_BTN);
+      assert.dom(selectors.GRANT_INPUT).exists({ count: 2 });
+
+      // Remove first grant
+      await click(selectors.DELETE_GRANT_BTN);
+
+      assert.dom(selectors.GRANT_INPUT).exists({ count: 1 });
+    },
+  );
+
+  // Scope options tests
+  test('global scope - can toggle this, children, and descendants', async function (assert) {
+    await visit(urls.globalNewAppToken);
+
+    await click(selectors.ADD_PERMISSION_BTN);
+
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).isVisible();
+
+    await click(selectors.SCOPE_THIS_TOGGLE);
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isChecked();
+
+    await click(selectors.SCOPE_CHILDREN_TOGGLE);
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isChecked();
+
+    await click(selectors.SCOPE_DESCENDANTS_TOGGLE);
+    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).isChecked();
+  });
+
+  test('org scope - can toggle this and children, descendants not visible', async function (assert) {
+    await visit(urls.orgNewAppToken);
+
+    await click(selectors.ADD_PERMISSION_BTN);
+
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isVisible();
+    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).doesNotExist();
+
+    await click(selectors.SCOPE_THIS_TOGGLE);
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).isChecked();
+
+    await click(selectors.SCOPE_CHILDREN_TOGGLE);
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).isChecked();
+  });
+
+  test('project scope - scope is set with no toggles', async function (assert) {
+    await visit(urls.projectNewAppToken);
+
+    await click(selectors.ADD_PERMISSION_BTN);
+
+    assert.dom(selectors.SCOPE_THIS_TOGGLE).doesNotExist();
+    assert.dom(selectors.SCOPE_CHILDREN_TOGGLE).doesNotExist();
+    assert.dom(selectors.SCOPE_DESCENDANTS_TOGGLE).doesNotExist();
+    assert.dom(selectors.PERMISSION_FLYOUT).includesText('Project');
+  });
+
+  // Cancel operations tests
+  test.each(
+    'canceling permission addition does not add to list',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Test Permission');
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+
+      await click(selectors.FLYOUT_CANCEL_BTN);
+
+      assert.dom(selectors.PERMISSION_FLYOUT).doesNotExist();
+      assert.dom(selectors.PERMISSION_TABLE_ROWS).doesNotExist();
+    },
+  );
+  
+  test.each(
+    'canceling permission after edit will discard changes',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      await visit(urls[`${scope}NewAppToken`]);
+
+      // Add permission
+      await click(selectors.ADD_PERMISSION_BTN);
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Original Label');
+      if (scope !== 'project') {
+        await click(selectors.SCOPE_THIS_TOGGLE);
+      }
+      await fillIn(selectors.GRANT_INPUT, 'ids=*;type=host;actions=read');
+      await click(selectors.FLYOUT_ADD_BTN);
+
+      // Edit and cancel
+      await click(selectors.PERMISSION_EDIT_BTN(1));
+      await fillIn(selectors.PERMISSION_LABEL_FIELD, 'Changed Label');
+      await click(selectors.FLYOUT_CANCEL_BTN);
+
+      assert.dom(selectors.ROW_LABEL(1)).hasText('Original Label');
+    },
+  );
+  
+  test.each(
     'users can clone an existing active app-token and view token',
     ['global', 'org', 'project'],
     async function (assert, scope) {

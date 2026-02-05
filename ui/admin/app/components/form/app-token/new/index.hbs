@@ -108,6 +108,7 @@
         @icon='plus'
         @color='secondary'
         class='margin-top-s'
+        data-test-add-permission-button
         {{on 'click' this.openPermissionFlyout}}
       />
     </F.Control>
@@ -143,14 +144,46 @@
             </Hds::Text::Body>
           </B.Td>
           <B.Td>
-            <Hds::Text::Body @tag='p'>
-              {{~or B.data.grant.length '—'}}
-            </Hds::Text::Body>
+            {{#if B.data.grant.length}}
+              <Hds::Link::Inline
+                @color='secondary'
+                @href='#grants-fieldset'
+                {{on
+                  'click'
+                  (fn
+                    this.openPermissionFlyoutAndScrollTo
+                    B.rowIndex
+                    'grants-fieldset'
+                  )
+                }}
+                data-test-grants-count={{B.rowIndex}}
+              >
+                {{B.data.grant.length}}
+              </Hds::Link::Inline>
+            {{else}}
+              <Hds::Text::Body @tag='p'>—</Hds::Text::Body>
+            {{/if}}
           </B.Td>
           <B.Td>
-            <Hds::Text::Body @tag='p'>
-              {{~or B.data.grant_scopes.length '—'}}
-            </Hds::Text::Body>
+            {{#if B.data.grant_scopes.length}}
+              <Hds::Link::Inline
+                @href='#scope-options-fieldset'
+                @color='secondary'
+                {{on
+                  'click'
+                  (fn
+                    this.openPermissionFlyoutAndScrollTo
+                    B.rowIndex
+                    'scope-options-fieldset'
+                  )
+                }}
+                data-test-active-scopes-count={{B.rowIndex}}
+              >
+                {{B.data.grant_scopes.length}}
+              </Hds::Link::Inline>
+            {{else}}
+              <Hds::Text::Body @tag='p'>—</Hds::Text::Body>
+            {{/if}}
           </B.Td>
           <B.Td>
             <Hds::ButtonSet>
@@ -176,19 +209,94 @@
   {{/if}}
 
   {{#if this.showPermissionFlyout}}
-    {{! TODO: Populate flyout with scope options.}}
-    <Hds::Flyout @size='large' @onClose={{this.closePermissionFlyout}} as |M|>
+    <Hds::Flyout
+      @size='large'
+      @onClose={{this.closePermissionFlyout}}
+      data-test-permission-flyout
+      as |M|
+    >
       <M.Header>{{if
           this.editingPermission
           (t 'resources.app-token.titles.edit-permission')
           (t 'resources.app-token.titles.add-permission')
         }}</M.Header>
       <M.Body>
-        <ScopeOptions
-          @model={{@model}}
-          @field={{this.selectedPermission}}
-          @name='grant_scopes'
-        />
+        <Hds::Form::TextInput::Field
+          name='permission-label'
+          @value={{this.selectedPermission.label}}
+          {{on 'input' (set-from-event this.selectedPermission 'label')}}
+          as |F|
+        >
+          <F.Label>{{t 'titles.label'}}</F.Label>
+          <F.HelperText>{{t
+              'resources.app-token.form.permission.help'
+            }}</F.HelperText>
+        </Hds::Form::TextInput::Field>
+
+        <Hds::Form::Fieldset
+          @isRequired={{not @model.scope.isProject}}
+          id='scope-options-fieldset'
+          as |F|
+        >
+          <F.Legend>{{if
+              @model.scope.isProject
+              (t 'resources.app-token.form.scope.label')
+              (t 'form.scope-options.label')
+            }}</F.Legend>
+          {{#if @model.scope.isProject}}
+            <F.HelperText>{{t
+                'resources.app-token.form.scope.project-scope.help'
+              }}</F.HelperText>
+          {{else}}
+            <F.HelperText>{{t 'form.scope-options.help'}}</F.HelperText>
+          {{/if}}
+          <F.Control>
+            <ScopeOptions
+              @model={{@model}}
+              @field={{this.selectedPermission}}
+              @name='grant_scopes'
+            />
+          </F.Control>
+        </Hds::Form::Fieldset>
+
+        <Hds::Separator />
+
+        <Hds::Form::KeyValueInputs
+          @isRequired={{true}}
+          @data={{this.selectedPermission.grant}}
+          id='grants-fieldset'
+          class='grant-list'
+        >
+          <:header as |H|>
+            <H.Legend>{{t 'resources.role.grant.title_plural'}}</H.Legend>
+          </:header>
+          <:row as |R|>
+            <R.Field as |Field|>
+              <Field.TextInput
+                name={{concat 'grant-' R.rowIndex}}
+                title={{t 'form.grant.help'}}
+                @value={{R.rowData.value}}
+                {{on 'input' (fn this.updateGrant R.rowData)}}
+                data-test-grant-input
+              />
+            </R.Field>
+            {{#if this.canDeleteGrant}}
+              <R.DeleteRowButton
+                @text={{t 'actions.remove'}}
+                @onClick={{fn this.removeGrant R.rowData}}
+                data-test-delete-grant-button
+              />
+            {{/if}}
+          </:row>
+          <:footer as |Footer|>
+            <Footer.AddRowButton
+              @text={{t 'actions.add'}}
+              @onClick={{this.addGrant}}
+              data-test-add-grant-button
+            />
+          </:footer>
+        </Hds::Form::KeyValueInputs>
+
       </M.Body>
       <M.Footer>
         <Hds::ButtonSet>
@@ -196,17 +304,20 @@
             <Hds::Button
               @text={{t 'actions.save'}}
               {{on 'click' this.savePermission}}
+              data-test-save-permission-button
             />
           {{else}}
             <Hds::Button
               @text={{t 'actions.add'}}
               {{on 'click' this.addPermission}}
+              data-test-add-permission-flyout-button
             />
           {{/if}}
           <Hds::Button
             @text={{t 'actions.cancel'}}
             @color='secondary'
             {{on 'click' this.closePermissionFlyout}}
+            data-test-cancel-permission-button
           />
         </Hds::ButtonSet>
       </M.Footer>
