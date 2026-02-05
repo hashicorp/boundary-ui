@@ -7,8 +7,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAppTokensAppTokenIndexController extends Controller {
   @controller('scopes/scope/app-tokens/index') appTokens;
@@ -121,9 +119,6 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
    * Handle the delete action based on the target.
    */
   @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess(() => 'notifications.delete-success')
   async handleDelete() {
     this.showDeleteModal = false;
     this.deleteConfirmation = null;
