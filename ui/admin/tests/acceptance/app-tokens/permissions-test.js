@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import * as selectors from './selectors';
@@ -269,4 +269,57 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
       assert.dom(flyout).doesNotExist();
     },
   );
+
+  // Clone and delete button tests for no-active-scopes alert
+  test('no-active-scopes alert displays clone and delete buttons', async function (assert) {
+    await visit(urls.appTokenWithNoActiveScopes);
+
+    assert.dom(selectors.INACTIVE_ALERT).isVisible();
+    assert.dom(selectors.INLINE_CLONE_BTN).isVisible();
+    assert.dom(selectors.INLINE_DELETE_BTN).isVisible();
+  });
+
+  test('clicking clone button in no-active-scopes alert navigates to new app token page', async function (assert) {
+    await visit(urls.appTokenWithNoActiveScopes);
+    await click(selectors.INLINE_CLONE_BTN);
+
+    assert.strictEqual(
+      currentURL(),
+      `${urls.appTokens}/new?cloneAppToken=${instances.appTokenWithNoActiveScopes.id}`,
+    );
+  });
+
+  test('clicking delete button in no-active-scopes alert opens delete modal', async function (assert) {
+    await visit(urls.appTokenWithNoActiveScopes);
+    await click(selectors.INLINE_DELETE_BTN);
+
+    assert.dom('.hds-modal').isVisible();
+    assert.dom('.hds-modal__header').containsText('Delete');
+  });
+
+  test('users can delete app token via inline delete button on permissions page', async function (assert) {
+    const count = this.server.schema.appTokens.all().models.length;
+
+    await visit(urls.appTokenWithNoActiveScopes);
+    await click(selectors.INLINE_DELETE_BTN);
+    await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
+    await click(selectors.CONFIRM_DELETE_BTN);
+
+    assert.strictEqual(currentURL(), urls.appTokens);
+    assert.strictEqual(
+      this.server.schema.appTokens.all().models.length,
+      count - 1,
+    );
+  });
+
+  test('users can cancel delete action from inline delete button on permissions page', async function (assert) {
+    const count = this.server.schema.appTokens.all().models.length;
+
+    await visit(urls.appTokenWithNoActiveScopes);
+    await click(selectors.INLINE_DELETE_BTN);
+    await click(selectors.CANCEL_MODAL_BTN);
+
+    assert.strictEqual(currentURL(), urls.appTokenWithNoActiveScopes);
+    assert.strictEqual(this.server.schema.appTokens.all().models.length, count);
+  });
 });
