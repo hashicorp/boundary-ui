@@ -36,7 +36,6 @@ export default class AppTokenAbility extends ModelAbility {
         collection: 'app-tokens',
       },
     );
-    console.log('canCreateAppToken', canCreateAppToken);
     return this.canRead && canCreateAppToken;
   }
 
