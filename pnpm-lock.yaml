@@ -919,6 +919,9 @@ importers:
       ember-exam:
         specifier: ^8.0.0
         version: 8.0.0(@glint/template@1.5.2)(ember-qunit@8.1.1(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))(qunit@2.24.1))(qunit@2.24.1)(webpack@5.105.4(esbuild@0.25.9))
+      ember-get-config:
+        specifier: ^2.1.1
+        version: 2.1.1(@glint/template@1.5.2)
       ember-inline-svg:
         specifier: ^1.0.1
         version: 1.0.1
@@ -7886,6 +7889,7 @@ packages:
   raw-body@1.1.7:
     resolution: {integrity: sha512-WmJJU2e9Y6M5UzTOkHaM7xJGAPQD8PNzx3bAd2+uhZAim6wDk6dAZxPVYLF67XhbR4hmKGh33Lpmh4XWrCH5Mg==}
     engines: {node: '>= 0.8.0'}
+    deprecated: No longer maintained. Please upgrade to a stable version.
 
   raw-body@2.5.3:
     resolution: {integrity: sha512-s4VSOf6yN0rvbRZGxs8Om5CWj6seneMwK3oDb4lWDH0UPhWcxwOWw5+qk24bxq87szX1ydrwylIOp2uG1ojUpA==}
