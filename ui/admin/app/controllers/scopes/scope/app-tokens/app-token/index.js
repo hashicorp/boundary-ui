@@ -7,6 +7,11 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import {
+  STATUS_APP_TOKEN_STALE,
+  STATUS_APP_TOKEN_REVOKED,
+  STATUS_APP_TOKEN_EXPIRED,
+} from 'api/models/app-token';
 
 export default class ScopesScopeAppTokensAppTokenIndexController extends Controller {
   @controller('scopes/scope/app-tokens/index') appTokens;
@@ -35,15 +40,15 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   get statusTranslation() {
     const status = this.model?.status;
     switch (status) {
-      case 'stale':
+      case STATUS_APP_TOKEN_STALE:
         return this.intl.t(
           'resources.app-token.messages.inactive-alert.title.1',
         );
-      case 'revoked':
+      case STATUS_APP_TOKEN_REVOKED:
         return this.intl.t(
           'resources.app-token.messages.inactive-alert.title.2',
         );
-      case 'expired':
+      case STATUS_APP_TOKEN_EXPIRED:
       default:
         return this.intl.t(
           'resources.app-token.messages.inactive-alert.title.0',
@@ -77,15 +82,15 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
    */
   get originalTokenStatusText() {
     switch (this.clonedFromStatus) {
-      case 'stale':
+      case STATUS_APP_TOKEN_STALE:
         return this.intl.t(
           'resources.app-token.messages.delete-original.status.stale',
         );
-      case 'revoked':
+      case STATUS_APP_TOKEN_REVOKED:
         return this.intl.t(
           'resources.app-token.messages.delete-original.status.revoked',
         );
-      case 'expired':
+      case STATUS_APP_TOKEN_EXPIRED:
       default:
         return this.intl.t(
           'resources.app-token.messages.delete-original.status.expired',
