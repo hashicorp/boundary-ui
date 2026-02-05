@@ -1359,3 +1359,10 @@ app-token:
         1: This app token has staled
         2: This app token has been revoked
       description: Any request using this app token will return an <code>unauthorized</code> error. If you want to save the information, you can clone this app token.
+    delete-original:
+      title: Delete the original app token?
+      description: The original app token ({originalTokenId}) {statusText}. Any request using the original will return an unauthorized error.
+      status:
+        expired: has expired
+        stale: has staled
+        revoked: has been revoked
