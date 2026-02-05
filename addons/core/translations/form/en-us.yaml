@@ -194,6 +194,8 @@ variable-time-field:
 scope-options:
   label: Scope options
   help: Select which scopes the permission is applied to. These will apply to all grant strings.
+scope:
+  label: Scope
 this:
   label: Add this scope
   help: Adds the root ({scope}).
