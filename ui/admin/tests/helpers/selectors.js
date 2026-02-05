@@ -87,7 +87,10 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
-
+export const BREADCRUMB =
+  '[data-test-breadcrumbs-container] [data-test-breadcrumbs-item] .hds-breadcrumb__current';
+export const PAGE_HEADER_COPY_SNIPPET =
+  '.hds-page-header__main .hds-copy-snippet__text';
 // Sorting selectors
 export const TABLE_SORT_BTN = (column) =>
   `thead tr th:nth-child(${column}) button`;

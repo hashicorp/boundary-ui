@@ -12,7 +12,7 @@ import { service } from '@ember/service';
 export default class AppTokenAbility extends ModelAbility {
   // =services
 
-  @service abilities;
+  @service can;
 
   // =permissions
 
@@ -29,10 +29,14 @@ export default class AppTokenAbility extends ModelAbility {
    * @type {boolean}
    */
   get canClone() {
-    const canCreateAppToken = this.abilities.abilityFor(
-      'model',
+    const canCreateAppToken = this.can.can(
+      'create model',
       this.model.scopeModel,
+      {
+        collection: 'app-tokens',
+      },
     );
+    console.log('canCreateAppToken', canCreateAppToken);
     return this.canRead && canCreateAppToken;
   }
 
