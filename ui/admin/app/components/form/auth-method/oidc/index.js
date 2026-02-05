@@ -59,46 +59,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   }
 
   //actions
-
-  /**
-   * Adds a new empty row to account claim maps
-   */
-  @action
-  addAccountClaimMap() {
-    this.args.model.account_claim_maps = [
-      ...this.args.model.account_claim_maps,
-      { key: '', value: '' },
-    ];
-  }
-
-  /**
-   * Removes a row from account claim maps
-   * @param {Object} rowData - The row to remove
-   */
-  @action
-  removeAccountClaimMap(rowData) {
-    let rows = this.args.model.account_claim_maps.filter(
-      (item) => item !== rowData,
-    );
-
-    // Ensure at least one empty row exists for editing
-    if (rows.length === 0) {
-      rows = [{ key: '', value: '' }];
-    }
-    this.args.model.account_claim_maps = rows;
-  }
-
-  /**
-   * Updates the account claim maps in the model
-   */
-  @action
-  updateAccountClaimMap(rowData, property, { target: { value } }) {
-    rowData[property] = value;
-    this.args.model.account_claim_maps = [
-      ...this.args.model.account_claim_maps,
-    ];
-  }
-
   /**
    * @param {string} value
    */
@@ -132,35 +92,5 @@ export default class FormAuthMethodOidcComponent extends Component {
 
       this.args.model.prompts = [...removeSelection];
     }
-  }
-
-  /**
-   * Adds a new empty row to account claim maps
-   */
-  @action
-  addRow(field, emptyRow) {
-    this.args.model[field] = [...this.args.model[field], emptyRow()];
-  }
-
-  /**
-   * Removes a row from account claim maps
-   */
-  @action
-  removeRow(field, emptyRow, rowData) {
-    let rows = this.args.model[field].filter((item) => item !== rowData);
-    // Ensure at least one empty row exists for editing
-    if (rows.length === 0) {
-      rows = [emptyRow()];
-    }
-    this.args.model[field] = rows;
-  }
-
-  /**
-   * Updates the account claim maps in the model
-   */
-  @action
-  updateRow(field, rowData, property, { target: { value } }) {
-    rowData[property] = value;
-    this.args.model[field] = [...this.args.model[field]];
   }
 }

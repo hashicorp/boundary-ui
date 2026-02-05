@@ -173,6 +173,15 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
         item.value?.trim(),
       );
     }
+    if (authMethod.certificates) {
+      authMethod.certificates = authMethod.certificates.filter((item) =>
+        item.value?.trim(),
+      );
+    }
+    if (authMethod.account_attribute_maps) {
+      authMethod.account_attribute_maps =
+        authMethod.account_attribute_maps.filter((item) => item.key?.trim());
+    }
     await authMethod.save();
     if (this.can.can('read model', authMethod)) {
       await this.router.transitionTo(
@@ -354,11 +363,18 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     }
     if (authMethod.certificates) {
       authMethod.certificates = structuredClone(authMethod.certificates);
+      if (authMethod.certificates.length === 0) {
+        authMethod.certificates = [{ value: '' }];
+      }
     }
     if (authMethod.account_attribute_maps) {
       authMethod.account_attribute_maps = structuredClone(
         authMethod.account_attribute_maps,
       );
+      // Ensure at least one empty row exists for editing
+      if (authMethod.account_attribute_maps.length === 0) {
+        authMethod.account_attribute_maps = [{ key: '', value: '' }];
+      }
     }
   }
 

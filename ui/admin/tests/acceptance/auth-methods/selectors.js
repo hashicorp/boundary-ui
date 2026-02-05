@@ -54,11 +54,12 @@ export const FIELD_PROMPTS_SELECT_ACCOUNT = '[id=select_account]';
 export const NEW_DROPDOWN = '[data-test-new-dropdown] button';
 export const FIELD_URLS = '[name=urls]';
 export const FIELD_URLS_VALUE = 'url1,url2';
-export const FIELD_CERTIFICATES = '[name=certificates] textarea';
+export const FIELD_CERTIFICATES = '[name=certificates] [data-test-value-input]';
 export const FIELD_CERTIFICATES_VALUE = 'certificate';
-export const FIELD_CERTIFICATES_ADD_BTN = '[name=certificates] button';
+export const FIELD_CERTIFICATES_ADD_BTN =
+  '[name=certificates] [data-test-add-button]';
 export const FIELD_CERTIFICATES_DELETE_BTN =
-  '[name="certificates"] button[aria-label=Remove]';
+  '[name="certificates"] [data-test-delete-button]';
 export const FIELD_CLIENT_CERTIFICATE = '[name=client_certificate]';
 export const FIELD_CLIENT_CERTIFICATE_VALUE = 'Client certificate value';
 export const FIELD_CLIENT_CERTIFICATE_KEY = '[name=client_certificate_key]';
@@ -81,15 +82,15 @@ export const FIELD_USER_ATTR_VALUE = 'User attribute value';
 export const FIELD_USER_FILTER = '[name=user_filter]';
 export const FIELD_USER_FILTER_VALUE = 'User filter value';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_FROM =
-  '[name=account_attribute_maps] input';
+  '[name=account_attribute_maps] [data-test-key-input]';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_FROM_VALUE = 'attribute';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO =
-  '[name=account_attribute_maps] select';
+  '[name=account_attribute_maps] [data-test-value-input]';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO_VALUE = 'email';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_ADD_BTN =
-  '[name=account_attribute_maps] button';
+  '[name=account_attribute_maps] [data-test-add-button]';
 export const FIELD_ACCOUNT_ATTRIBUTE_MAPS_DELETE_BTN =
-  '[name=account_attribute_maps] button[aria-label=Remove]';
+  '[name=account_attribute_maps] [data-test-delete-button]';
 export const FIELD_GROUP_DN = '[name=group_dn]';
 export const FIELD_GROUP_DN_VALUE = 'Group dn value';
 export const FIELD_GROUP_ATTR = '[name=group_attr]';

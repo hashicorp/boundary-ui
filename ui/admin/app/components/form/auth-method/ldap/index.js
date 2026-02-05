@@ -10,6 +10,9 @@ import { options } from 'api/models/auth-method';
 import { set } from '@ember/object';
 
 export default class FormAuthMethodLdapComponent extends Component {
+  createEmptyCertificates = () => ({ value: '' });
+  createEmptyAttributeMaps = () => ({ key: '', value: '' });
+
   // =attributes
   /**
    * @type {object}
