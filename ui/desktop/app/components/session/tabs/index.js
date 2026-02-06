@@ -126,16 +126,36 @@ export default class SessionTerminalTabsComponent extends Component {
   }
 
   #setupTerminal(fitAddon, xterm, termContainer, options = {}) {
+    const getXtermPosition = () => {
+      const { x, y, width, height } = xterm.element.getBoundingClientRect();
+      return { x, y, width, height };
+    };
+
+    const position = getXtermPosition();
+
     const payload = {
       id: this.id,
       cols: xterm.cols,
       rows: xterm.rows,
       sessionId: options.sessionId,
+      ...position,
     };
     // add SSH options
     if (options?.autoSSH) {
       payload.autoSSH = true;
     }
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.terminal.position(this.id, getXtermPosition());
+    });
+
+    document
+      .querySelector('.rose-layout-sidebar-body')
+      .addEventListener('scroll', () => {
+        window.terminal.position(this.id, getXtermPosition());
+      });
+
+    resizeObserver.observe(xterm.element);
     window.terminal.create(payload);
 
     // Save the handler to cleanup the listener on the renderer process later

@@ -309,3 +309,7 @@ handle('setActiveTerminal', (terminalId) =>
 ipcMain.on('createTerminal', (event, payload) => {
   terminalManager.createTerminal(ipcMain, event, payload);
 });
+
+ipcMain.on('positionTerminal', (_, id, position) => {
+  terminalManager.positionTerminal(id, position);
+});

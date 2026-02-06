@@ -1,11 +1,18 @@
+const { WebContentsView } = require('electron');
 const { isWindows } = require('../helpers/platform.js');
 const pty = require('node-pty');
 const sessionManager = require('../services/session-manager.js');
 
 class TerminalManager {
+  #window;
+
   constructor() {
     this.terminals = new Map();
     this.activeTerminalId = null;
+  }
+
+  registerMainWindow(window) {
+    this.#window = window;
   }
 
   getActiveTerminalId() {
@@ -23,8 +30,13 @@ class TerminalManager {
     this.activeTerminalId = id;
   }
 
-  registerTerminal(id, ptyProcess) {
-    this.terminals.set(id, ptyProcess);
+  registerTerminal(id, ptyProcess, view) {
+    this.terminals.set(id, { ptyProcess, view });
+  }
+
+  positionTerminal(id, position) {
+    const { view } = this.terminals.get(id);
+    /** @type {WebContentsView} */ (view).setBounds(position);
   }
 
   validatePayload(payload) {
@@ -67,16 +79,31 @@ class TerminalManager {
     const session = sessionManager.getSessionById(sessionId);
 
     // validate session before creating terminal
-    if (!session) {
-      throw new Error(`No session found with id: ${sessionId}`);
-    }
+    // if (!session) {
+    //   throw new Error(`No session found with id: ${sessionId}`);
+    // }
     const { sender } = event;
 
     const terminalShell = this.getTerminalShell();
     const options = this.getTerminalOptions(validatedPayload);
     const ptyProcess = pty.spawn(terminalShell, [], options);
+    const terminalView = new WebContentsView({
+      /*
+      webPreferences: {
+        preload:
+      }*/
+    });
 
-    this.registerTerminal(id, ptyProcess);
+    this.#window.contentView.addChildView(terminalView);
+    terminalView.webContents.loadURL('https://electronjs.org');
+    terminalView.setBounds({
+      x: payload.x,
+      y: payload.y,
+      width: payload.width,
+      height: payload.height,
+    });
+
+    this.registerTerminal(id, ptyProcess, terminalView);
 
     const incomingDataChannel = `terminalIncomingData-${id}`;
     const resizeChannel = `resize-${id}`;

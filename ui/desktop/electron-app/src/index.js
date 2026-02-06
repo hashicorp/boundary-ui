@@ -18,6 +18,7 @@ const {
   Menu,
   MenuItem,
   shell,
+  WebContentsView,
 } = require('electron');
 require('./ipc/handlers.js');
 const log = require('electron-log/main');
@@ -198,14 +199,16 @@ const createWindow = async (partition, closeWindowCB) => {
     closeWindowCB();
   });
 
-  browserWindow.webContents.on('before-input-event', (event, input) => {
-    const activeTerminalId = terminalManager.getActiveTerminalId();
+  // browserWindow.webContents.on('before-input-event', (event, input) => {
+  //   const activeTerminalId = terminalManager.getActiveTerminalId();
 
-    if (activeTerminalId !== null && input.type === 'keyDown') {
-      terminalManager.handleInputForActiveTerminal(input, activeTerminalId);
-      event.preventDefault();
-    }
-  });
+  //   if (activeTerminalId !== null && input.type === 'keyDown') {
+  //     // terminalManager.handleInputForActiveTerminal(input, activeTerminalId);
+  //     // event.preventDefault();
+  //   }
+  // });
+
+  terminalManager.registerMainWindow(browserWindow);
 
   return browserWindow;
 };

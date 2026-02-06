@@ -88,6 +88,9 @@ contextBridge.exposeInMainWorld('terminal', {
   create: (vars) => {
     ipcRenderer.send('createTerminal', vars);
   },
+  position(id, position) {
+    ipcRenderer.send('positionTerminal', id, position);
+  },
   remove: (id) => {
     ipcRenderer.send(`removeTerminal-${id}`);
   },
