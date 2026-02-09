@@ -375,4 +375,188 @@ module('Acceptance | app-tokens | read', function (hooks) {
     assert.dom(selectors.MANAGE_DROPDOWN_CLONE).doesNotExist();
     assert.strictEqual(currentURL(), urls.appToken);
   });
+
+  // Inline clone/delete button tests for inactive app tokens
+  test.each(
+    'inactive alert displays clone and delete buttons',
+    {
+      expired: { status: 'expired' },
+      stale: { status: 'stale' },
+      revoked: { status: 'revoked' },
+    },
+    async function (assert, { status }) {
+      instances.appToken.update({ status });
+
+      await visit(urls.appToken);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INLINE_CLONE_BTN).isVisible();
+      assert.dom(selectors.INLINE_DELETE_BTN).isVisible();
+    },
+  );
+
+  test('clicking clone button in inactive alert navigates to new app token page', async function (assert) {
+    instances.appToken.update({ status: 'expired' });
+
+    await visit(urls.appToken);
+    await click(selectors.INLINE_CLONE_BTN);
+
+    assert.strictEqual(
+      currentURL(),
+      `${urls.newAppToken}?cloneAppToken=${instances.appToken.id}`,
+    );
+  });
+
+  test('clicking delete button in inactive alert opens delete modal', async function (assert) {
+    instances.appToken.update({ status: 'expired' });
+
+    await visit(urls.appToken);
+    await click(selectors.INLINE_DELETE_BTN);
+
+    assert.dom('.hds-modal').isVisible();
+    assert.dom('.hds-modal__header').containsText('Delete');
+  });
+
+  test('users can delete an inactive app token via inline delete button', async function (assert) {
+    const count = this.server.schema.appTokens.all().models.length;
+    instances.appToken.update({ status: 'expired' });
+
+    await visit(urls.appToken);
+    await click(selectors.INLINE_DELETE_BTN);
+    await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
+    await click(selectors.CONFIRM_DELETE_BTN);
+
+    assert.strictEqual(currentURL(), urls.appTokens);
+    assert.strictEqual(
+      this.server.schema.appTokens.all().models.length,
+      count - 1,
+    );
+  });
+
+  test('users can cancel delete action from inline delete button', async function (assert) {
+    const count = this.server.schema.appTokens.all().models.length;
+    instances.appToken.update({ status: 'expired' });
+
+    await visit(urls.appToken);
+    await click(selectors.INLINE_DELETE_BTN);
+    await click(selectors.CANCEL_MODAL_BTN);
+
+    assert.strictEqual(currentURL(), urls.appToken);
+    assert.strictEqual(this.server.schema.appTokens.all().models.length, count);
+  });
+
+  // Delete original banner tests
+  test('delete original banner is displayed when clonedFromId queryParam is present', async function (assert) {
+    const originalToken = this.server.create('app-token', {
+      scope: instances.scopes.org,
+      name: 'Original Token',
+      status: 'expired',
+    });
+
+    await visit(
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+    assert
+      .dom(selectors.DELETE_ORIGINAL_BANNER)
+      .containsText(originalToken.name);
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).containsText('has expired');
+  });
+
+  test.each(
+    'delete original banner displays correct status text',
+    {
+      expired: {
+        status: 'expired',
+        expectedText: 'has expired',
+      },
+      stale: {
+        status: 'stale',
+        expectedText: 'has staled',
+      },
+      revoked: {
+        status: 'revoked',
+        expectedText: 'has been revoked',
+      },
+    },
+    async function (assert, { status, expectedText }) {
+      const originalToken = this.server.create('app-token', {
+        scope: instances.scopes.org,
+        name: 'Original Token',
+        status,
+      });
+
+      await visit(
+        `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=${status}`,
+      );
+
+      assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+      assert.dom(selectors.DELETE_ORIGINAL_BANNER).containsText(expectedText);
+    },
+  );
+
+  test('clicking delete button in delete original banner opens delete modal', async function (assert) {
+    const originalToken = this.server.create('app-token', {
+      scope: instances.scopes.org,
+      name: 'Original Token',
+      status: 'expired',
+    });
+
+    await visit(
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
+    );
+    await click(selectors.DELETE_ORIGINAL_BTN);
+
+    assert.dom('.hds-modal').isVisible();
+    assert.dom('.hds-modal__header').containsText('Delete');
+  });
+
+  test('users can delete the original app token via delete original banner', async function (assert) {
+    const originalToken = this.server.create('app-token', {
+      scope: instances.scopes.org,
+      name: 'Original Token',
+      status: 'expired',
+    });
+    const count = this.server.schema.appTokens.all().models.length;
+
+    await visit(
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
+    );
+    await click(selectors.DELETE_ORIGINAL_BTN);
+    await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
+    await click(selectors.CONFIRM_DELETE_BTN);
+
+    assert.strictEqual(
+      this.server.schema.appTokens.all().models.length,
+      count - 1,
+    );
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+  });
+
+  test('users can dismiss the delete original banner', async function (assert) {
+    const originalToken = this.server.create('app-token', {
+      scope: instances.scopes.org,
+      name: 'Original Token',
+      status: 'expired',
+    });
+
+    await visit(
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+
+    // Click the dismiss button
+    await click('[data-test-delete-original-banner] .hds-dismiss-button');
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+    assert.false(currentURL().includes('clonedFromId'));
+  });
+
+  test('delete original banner is not displayed when clonedFromId queryParam is absent', async function (assert) {
+    await visit(urls.appToken);
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+  });
 });

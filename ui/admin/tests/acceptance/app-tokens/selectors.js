@@ -81,3 +81,11 @@ export const FLYOUT_TABLE_SCOPE_NAME = (rowIndex) =>
   `[data-test-active-scopes-flyout] tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1)`;
 export const FLYOUT_TABLE_SCOPE_LINK = (rowIndex) =>
   `[data-test-active-scopes-flyout] tbody tr:nth-of-type(${rowIndex}) td:nth-of-type(1) a`;
+
+// Inline clone/delete buttons in alerts
+export const INLINE_CLONE_BTN = '[data-test-inline-clone-btn]';
+export const INLINE_DELETE_BTN = '[data-test-inline-delete-btn]';
+
+// Delete original banner
+export const DELETE_ORIGINAL_BANNER = '[data-test-delete-original-banner]';
+export const DELETE_ORIGINAL_BTN = '[data-test-delete-original-btn]';

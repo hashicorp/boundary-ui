@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -18,6 +18,10 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @service can;
   @service intl;
   @service router;
+
+  // =controllers
+
+  @controller('scopes/scope/app-tokens/new') newAppTokenController;
 
   // =attributes
 
@@ -160,12 +164,28 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(() => 'notifications.create-success')
   async create(appToken) {
+    // Get original token info from the new controller
+    const originalTokenId = this.newAppTokenController.originalTokenId;
+    const originalTokenName = this.newAppTokenController.originalTokenName;
+    const originalTokenWasInactive =
+      this.newAppTokenController.originalTokenWasInactive;
+    const originalTokenStatus = this.newAppTokenController.originalTokenStatus;
+
     await appToken.save();
     if (this.can.can('read model', appToken)) {
+      const queryParams = { showCreatedAppToken: true };
+
+      // If the original token was inactive, include clonedFromName to show delete banner
+      if (originalTokenWasInactive && originalTokenId) {
+        queryParams.clonedFromId = originalTokenId;
+        queryParams.clonedFromName = originalTokenName;
+        queryParams.clonedFromStatus = originalTokenStatus;
+      }
+
       await this.router.transitionTo(
         'scopes.scope.app-tokens.app-token',
         appToken,
-        { queryParams: { showCreatedAppToken: true } },
+        { queryParams },
       );
     } else {
       this.router.transitionTo('scopes.scope.app-tokens');

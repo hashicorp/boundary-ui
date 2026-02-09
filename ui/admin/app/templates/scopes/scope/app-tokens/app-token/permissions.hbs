@@ -54,15 +54,24 @@
             htmlSafe=true
           }}
         </A.Description>
-        <A.Button
-          @color='secondary'
-          @text={{t 'resources.app-token.actions.clone'}}
-        />
-        <A.Button
-          @color='tertiary'
-          @text={{t 'resources.app-token.actions.delete'}}
-          @icon='trash'
-        />
+        {{#if (can 'clone app-token' @model)}}
+          <A.Button
+            @color='secondary'
+            @text={{t 'resources.app-token.actions.clone'}}
+            @route='scopes.scope.app-tokens.new'
+            @query={{hash cloneAppToken=@model.id}}
+            data-test-inline-clone-btn
+          />
+        {{/if}}
+        {{#if (can 'delete app-token' @model)}}
+          <A.Button
+            @color='tertiary'
+            @text={{t 'resources.app-token.actions.delete'}}
+            @icon='trash'
+            data-test-inline-delete-btn
+            {{on 'click' this.toggleDeleteModal}}
+          />
+        {{/if}}
       </Hds::Alert>
     {{/if}}
 
@@ -276,3 +285,54 @@
     {{/if}}
   </page.body>
 </Rose::Layout::Page>
+
+{{! Delete Modal - triggered from no active scopes alert }}
+{{#if this.showDeleteModal}}
+  <Hds::Modal @color='critical' @onClose={{this.toggleDeleteModal}} as |M|>
+    <M.Header @icon='alert-diamond'>{{t
+        'resources.app-token.form.delete.title'
+      }}</M.Header>
+    <M.Body class='app-token-modal-body'>
+      <Hds::Text::Body @tag='p'>
+        {{t
+          'resources.app-token.form.delete.description.0'
+          appToken=@model.displayName
+          htmlSafe=true
+        }}
+      </Hds::Text::Body>
+      <Hds::Text::Body @tag='p'>
+        {{t 'resources.app-token.form.delete.description.1'}}
+      </Hds::Text::Body>
+      <Hds::Form::TextInput::Field
+        name='confirm-delete'
+        @value={{this.deleteConfirmation}}
+        @isRequired={{true}}
+        disabled={{@model.isSaving}}
+        {{on 'input' (set-from-event this 'deleteConfirmation')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.app-token.form.delete.confirm-delete.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.app-token.form.delete.confirm-delete.help'
+          }}</F.HelperText>
+      </Hds::Form::TextInput::Field>
+    </M.Body>
+    <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{t 'actions.confirm'}}
+          @color='critical'
+          disabled={{not this.isDeleteConfirmed}}
+          {{on 'click' this.handleDelete}}
+        />
+        <Hds::Button
+          @text={{t 'actions.cancel'}}
+          @color='secondary'
+          {{on 'click' F.close}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}

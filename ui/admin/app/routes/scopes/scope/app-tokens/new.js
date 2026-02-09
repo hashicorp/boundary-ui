@@ -47,6 +47,9 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
       record.time_to_live_seconds = originalAppToken.time_to_live_seconds;
       record.time_to_stale_seconds = originalAppToken.time_to_stale_seconds;
       record.permissions = new TrackedArray(originalAppToken.permissions);
+
+      // Store original token info temporarily on the record for setupController
+      record._originalAppToken = originalAppToken;
     } else {
       record.time_to_live_seconds = 5184000; // Set default TTL
       record.permissions = new TrackedArray([]);
@@ -55,9 +58,26 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
     return record;
   }
 
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const originalAppToken = model._originalAppToken;
+    if (originalAppToken) {
+      controller.originalTokenId = originalAppToken.id;
+      controller.originalTokenName = originalAppToken.name;
+      controller.originalTokenWasInactive = !originalAppToken.isActive;
+      controller.originalTokenStatus = originalAppToken.status;
+      // Clean up the temporary property
+      delete model._originalAppToken;
+    }
+  }
+
   resetController(controller, isExiting) {
     if (isExiting) {
       controller.set('cloneAppToken', null);
+      controller.set('originalTokenWasInactive', false);
+      controller.set('originalTokenId', null);
+      controller.set('originalTokenName', null);
+      controller.set('originalTokenStatus', null);
     }
   }
 }
