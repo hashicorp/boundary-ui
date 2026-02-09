@@ -27,6 +27,12 @@ export default class ScopesScopeAppTokensNewController extends Controller {
   @tracked originalTokenId = null;
 
   /**
+   * Stores the name of the original app token being cloned.
+   * @type {string|null}
+   */
+  @tracked originalTokenName = null;
+
+  /**
    * Stores the status of the original app token being cloned.
    * @type {string|null}
    */

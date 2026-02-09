@@ -454,11 +454,13 @@ module('Acceptance | app-tokens | read', function (hooks) {
     });
 
     await visit(
-      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromStatus=expired`,
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
     );
 
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
-    assert.dom(selectors.DELETE_ORIGINAL_BANNER).containsText(originalToken.id);
+    assert
+      .dom(selectors.DELETE_ORIGINAL_BANNER)
+      .containsText(originalToken.name);
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).containsText('has expired');
   });
 
@@ -486,7 +488,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
       });
 
       await visit(
-        `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromStatus=${status}`,
+        `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=${status}`,
       );
 
       assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
@@ -502,7 +504,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     });
 
     await visit(
-      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromStatus=expired`,
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
     );
     await click(selectors.DELETE_ORIGINAL_BTN);
 
@@ -519,7 +521,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     const count = this.server.schema.appTokens.all().models.length;
 
     await visit(
-      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromStatus=expired`,
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
     );
     await click(selectors.DELETE_ORIGINAL_BTN);
     await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
@@ -540,7 +542,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     });
 
     await visit(
-      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromStatus=expired`,
+      `${urls.appToken}?clonedFromId=${originalToken.id}&clonedFromName=${originalToken.name}&clonedFromStatus=expired`,
     );
 
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();

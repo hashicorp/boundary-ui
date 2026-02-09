@@ -24,10 +24,16 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
 
   // =attributes
 
-  queryParams = ['showCreatedAppToken', 'clonedFromId', 'clonedFromStatus'];
+  queryParams = [
+    'showCreatedAppToken',
+    'clonedFromId',
+    'clonedFromName',
+    'clonedFromStatus',
+  ];
 
   @tracked showCreatedAppToken = false;
   @tracked clonedFromId = null;
+  @tracked clonedFromName = null;
   @tracked clonedFromStatus = null;
   @tracked showDeleteModal = false;
   @tracked deleteConfirmation = null;
@@ -72,7 +78,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
    */
   get deleteTokenDisplayName() {
     return this.deleteTarget === 'original'
-      ? this.clonedFromId
+      ? this.clonedFromName
       : this.model?.displayName;
   }
 
@@ -136,7 +142,11 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
       await originalToken.destroyRecord();
       this.deleteTarget = null;
       this.router.replaceWith({
-        queryParams: { clonedFromId: null, clonedFromStatus: null },
+        queryParams: {
+          clonedFromId: null,
+          clonedFromName: null,
+          clonedFromStatus: null,
+        },
       });
     } else {
       this.deleteTarget = null;
@@ -161,17 +171,11 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   @action
   dismissClonedFromBanner() {
     this.router.replaceWith({
-      queryParams: { clonedFromId: null, clonedFromStatus: null },
-    });
-  }
-
-  /**
-   * Navigate to clone the current app token.
-   */
-  @action
-  navigateToClone() {
-    this.router.transitionTo('scopes.scope.app-tokens.new', {
-      queryParams: { cloneAppToken: this.model.id },
+      queryParams: {
+        clonedFromId: null,
+        clonedFromName: null,
+        clonedFromStatus: null,
+      },
     });
   }
 }
