@@ -63,6 +63,7 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
     const originalAppToken = model._originalAppToken;
     if (originalAppToken) {
       controller.originalTokenId = originalAppToken.id;
+      controller.originalTokenName = originalAppToken.name;
       controller.originalTokenWasInactive = !originalAppToken.isActive;
       controller.originalTokenStatus = originalAppToken.status;
       // Clean up the temporary property
@@ -75,6 +76,7 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
       controller.set('cloneAppToken', null);
       controller.set('originalTokenWasInactive', false);
       controller.set('originalTokenId', null);
+      controller.set('originalTokenName', null);
       controller.set('originalTokenStatus', null);
     }
   }

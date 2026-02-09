@@ -13,7 +13,6 @@ export default class ScopesScopeAppTokensAppTokenPermissionsController extends C
   @controller('scopes/scope/app-tokens/index') appTokens;
 
   @service intl;
-  @service router;
   @service store;
 
   @tracked showGrantsFlyout = false;
@@ -149,15 +148,5 @@ export default class ScopesScopeAppTokensAppTokenPermissionsController extends C
     this.showDeleteModal = false;
     this.deleteConfirmation = null;
     await this.appTokens.delete(this.model);
-  }
-
-  /**
-   * Navigate to clone the current app token.
-   */
-  @action
-  navigateToClone() {
-    this.router.transitionTo('scopes.scope.app-tokens.new', {
-      queryParams: { cloneAppToken: this.model.id },
-    });
   }
 }

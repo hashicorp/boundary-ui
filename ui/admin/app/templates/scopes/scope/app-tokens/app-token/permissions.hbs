@@ -58,8 +58,9 @@
           <A.Button
             @color='secondary'
             @text={{t 'resources.app-token.actions.clone'}}
+            @route='scopes.scope.app-tokens.new'
+            @query={{hash cloneAppToken=@model.id}}
             data-test-inline-clone-btn
-            {{on 'click' this.navigateToClone}}
           />
         {{/if}}
         {{#if (can 'delete app-token' @model)}}

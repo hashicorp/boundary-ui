@@ -166,6 +166,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   async create(appToken) {
     // Get original token info from the new controller
     const originalTokenId = this.newAppTokenController.originalTokenId;
+    const originalTokenName = this.newAppTokenController.originalTokenName;
     const originalTokenWasInactive =
       this.newAppTokenController.originalTokenWasInactive;
     const originalTokenStatus = this.newAppTokenController.originalTokenStatus;
@@ -174,9 +175,10 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     if (this.can.can('read model', appToken)) {
       const queryParams = { showCreatedAppToken: true };
 
-      // If the original token was inactive, include clonedFromId and status to show delete banner
+      // If the original token was inactive, include clonedFromName to show delete banner
       if (originalTokenWasInactive && originalTokenId) {
         queryParams.clonedFromId = originalTokenId;
+        queryParams.clonedFromName = originalTokenName;
         queryParams.clonedFromStatus = originalTokenStatus;
       }
 
