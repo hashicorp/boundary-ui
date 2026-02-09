@@ -722,6 +722,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Open` button for RDP target with preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({
       type: TYPE_TARGET_RDP,
@@ -734,6 +743,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Connect` button for RDP target with no preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({
       type: TYPE_TARGET_RDP,
@@ -746,6 +764,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows `Connect` button for non-RDP target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
@@ -753,6 +780,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('clicking `Open` button for RDP target calls launchRdpClient IPC', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
 
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
@@ -777,6 +813,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
 
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
@@ -800,6 +845,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 

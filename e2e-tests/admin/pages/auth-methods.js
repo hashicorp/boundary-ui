@@ -19,7 +19,7 @@ export class AuthMethodsPage extends BaseResourcePage {
       .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
-    await this.page.getByRole('button', { name: 'New' }).click();
+    await this.page.getByRole('button', { name: 'New', exact: true }).click();
     await this.page.getByText('Password', { exact: true }).click();
     await this.page.getByLabel('Name').fill(authMethodName);
     await this.page.getByRole('button', { name: 'Save', exact: true }).click();
@@ -46,7 +46,7 @@ export class AuthMethodsPage extends BaseResourcePage {
       .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
-    await this.page.getByRole('button', { name: 'New' }).click();
+    await this.page.getByRole('button', { name: 'New', exact: true }).click();
     await this.page.getByRole('link', { name: 'OIDC' }).click();
     await this.page.getByLabel('Name').fill(authMethodName);
     await this.page.getByLabel('Description').fill('OIDC Auth Method');
