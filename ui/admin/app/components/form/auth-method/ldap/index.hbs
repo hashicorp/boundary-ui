@@ -85,8 +85,8 @@
   <Form::Field::KeyValue
     @name='certificates'
     @data={{@model.certificates}}
-    @onAdd={{fn @addRow 'certificates' this.createEmptyCertificates}}
-    @onRemove={{fn @removeRow 'certificates' this.createEmptyCertificates}}
+    @onAdd={{fn @addRow 'certificates' this.createEmptyValue}}
+    @onRemove={{fn @removeRow 'certificates' this.createEmptyValue}}
     @onUpdate={{fn @updateRow 'certificates'}}
     @legend={{t 'resources.auth-method.form.certificates.label'}}
     @helperText={{t 'resources.auth-method.form.certificates.help'}}
@@ -403,11 +403,11 @@
   <Form::field::KeyValue
     @name='account_attribute_maps'
     @data={{@model.account_attribute_maps}}
-    @onAdd={{fn @addRow 'account_attribute_maps' this.createEmptyAttributeMaps}}
+    @onAdd={{fn @addRow 'account_attribute_maps' this.createEmptyKeyValue}}
     @onRemove={{fn
       @removeRow
       'account_attribute_maps'
-      this.createEmptyAttributeMaps
+      this.createEmptyKeyValue
     }}
     @onUpdate={{fn @updateRow 'account_attribute_maps'}}
     @legend={{t 'resources.auth-method.form.account_attribute_maps.label'}}
@@ -431,7 +431,7 @@
           data-test-value-select
           {{on 'change' (fn R.updateRow 'value')}}
         >
-          <option disabled hidden selected=''>
+          <option disabled hidden selected value=''>
             {{t 'titles.choose-an-option'}}
           </option>
           {{#each this.toAttributes as |attr|}}
