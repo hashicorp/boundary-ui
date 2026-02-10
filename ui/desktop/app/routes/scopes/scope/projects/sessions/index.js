@@ -18,7 +18,6 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
 
   @service session;
   @service store;
-  @service ipc;
   @service router;
 
   // =attributes
@@ -120,7 +119,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       associatedTargets,
       totalItems,
-      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
+      isCacheDaemonRunning: await window.boundary.isCacheDaemonRunning(),
     };
   }
 

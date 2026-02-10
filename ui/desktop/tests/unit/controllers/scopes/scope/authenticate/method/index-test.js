@@ -8,7 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'desktop/tests/helpers/mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../../../../../../helpers/boundary-api-mock';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
@@ -16,6 +16,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks, 'en-us');
+    setupBoundaryApiMock(hooks);
 
     let controller;
     let store;
@@ -57,7 +58,6 @@ module(
 
       urls.targets = '/scopes/global/projects/targets';
 
-      this.owner.register('service:browser/window', WindowMockIPC);
       setDefaultClusterUrl(this);
     });
 

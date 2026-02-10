@@ -5,21 +5,17 @@
 
 import { faker } from '@faker-js/faker';
 
-export default function initializeMockIPC(server, config) {
+export default function initializeMockBoundaryAPI(server, config) {
   const isTesting = config.environment === 'test';
 
   /**
    * We strive to make this application runnable in a regular web browser, since
-   * it is a convenient environment for development and testing.  But only an
-   * Electron environment has true IPC.  Outside of Electron or with mirage,
-   * we mock the handling of the message-based IPC requests originating from the
-   * renderer (the Ember app).
+   * it is a convenient environment for development and testing. But only an
+   * Electron environment has the true boundaryAPI exposed via contextBridge.
+   * Outside of Electron or with mirage, we mock the boundary API object to
+   * simulate the Electron preload script's exposed API.
    */
-  class MockIPC {
-    async invoke(method, payload) {
-      return await this[method](payload);
-    }
-
+  class MockBoundaryAPI {
     clusterUrl = null;
 
     checkOS() {
@@ -56,7 +52,7 @@ export default function initializeMockIPC(server, config) {
      * @param connect_details
      * @param
      */
-    connect({ target_id }) {
+    connectSession({ target_id }) {
       const target = server.schema.targets.find(target_id);
       const { scope, type } = target;
       const newSession = server.schema.sessions.create({
@@ -221,7 +217,7 @@ export default function initializeMockIPC(server, config) {
     minimizeWindow() {}
     closeWindow() {}
     toggleFullscreenWindow() {}
-    stop() {}
+    stopSession() {}
     checkCommand() {
       return faker.system.filePath();
     }
@@ -255,7 +251,7 @@ export default function initializeMockIPC(server, config) {
     pauseClientAgent() {}
     resumeClientAgent() {}
     hasRunningSessions() {}
-    stopAll() {}
+    stopAllSessions() {}
     getRdpClients() {
       return ['windows-app', 'none', 'mstsc'];
     }
@@ -273,24 +269,15 @@ export default function initializeMockIPC(server, config) {
   }
 
   /**
-   * Establishes a mock IPC handler, which mimics the behavior of the Electron
-   * main process, and routes messages to it in a way similar to our
-   * preload.js script.
-   *
-   * Initializes mock IPC only in a non-testing context and when mirage is turned on.
-   * We mock certain functions even in electron (e.g. hasMacOSChrome) when running
-   * locally which will force a certain appearance regardless of platform
+   * Initializes mock only in a non-testing environment and when mirage is enabled.
+   * In browser mode, creates the API. In Electron mode, the API already exists
+   * from contextBridge and we can't override it
    */
   if (config.mirage?.enabled && !isTesting) {
-    const mockIPC = new MockIPC();
-
-    window.addEventListener('message', async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event?.data ?? {};
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    });
+    const boundaryAPIMock = new MockBoundaryAPI();
+    // Only in browser mode, we create the boundary API object not in Electron mode because they already exist from contextBridge
+    if (!window.boundary) {
+      window.boundary = boundaryAPIMock;
+    }
   }
 }

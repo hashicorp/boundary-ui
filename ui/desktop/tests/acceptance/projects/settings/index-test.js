@@ -16,7 +16,7 @@ import {
   authenticateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../../../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import {
@@ -25,9 +25,11 @@ import {
   RDP_CLIENT_NONE,
   RDP_CLIENT_WINDOWS_APP,
 } from 'desktop/services/rdp';
+import sinon from 'sinon';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
+  setupBoundaryApiMock(hooks);
   setupStubs(hooks);
 
   const instances = {
@@ -95,25 +97,12 @@ module('Acceptance | projects | settings | index', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.settings = `${urls.projects}/settings`;
 
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub
-      .withArgs('getDesktopVersion')
-      .returns({ desktopVersion: '0.1.0' });
-    this.ipcStub
-      .withArgs('getCliVersion')
-      .returns({ versionNumber: 'Boundary CLI v0.1.0' });
-    this.ipcStub
-      .withArgs('cacheDaemonStatus')
-      .returns({ version: 'Boundary CLI v0.1.0' });
-
     // mock RDP client data
-    this.ipcStub
-      .withArgs('getRdpClients')
-      .returns([RDP_CLIENT_MSTSC, RDP_CLIENT_NONE]);
-    this.ipcStub.withArgs('getPreferredRdpClient').returns(RDP_CLIENT_MSTSC);
-    this.ipcStub.withArgs('checkOS').returns({ isWindows: true, isMac: false });
+    window.boundary.getRdpClients = () => [RDP_CLIENT_MSTSC, RDP_CLIENT_NONE];
+    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_MSTSC;
+    window.boundary.checkOS = () => ({ isWindows: true, isMac: false });
   });
 
   test('can navigate to the settings page', async function (assert) {
@@ -223,8 +212,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+    const stopAllSessions = sinon.stub(window.boundary, 'stopAllSessions');
+    window.boundary.hasRunningSessions = () => true;
 
     await authenticateSession({ account_id: instances.account.id });
     assert.ok(currentSession().isAuthenticated);
@@ -278,14 +267,13 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    // update IPC stub fo mac
-    this.ipcStub.withArgs('checkOS').returns({ isWindows: false, isMac: true });
-    this.ipcStub
-      .withArgs('getRdpClients')
-      .returns([RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE]);
-    this.ipcStub
-      .withArgs('getPreferredRdpClient')
-      .returns(RDP_CLIENT_WINDOWS_APP);
+    // update window bounday mock fo mac
+    window.boundary.checkOS = () => ({ isWindows: false, isMac: true });
+    window.boundary.getRdpClients = () => [
+      RDP_CLIENT_WINDOWS_APP,
+      RDP_CLIENT_NONE,
+    ];
+    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_WINDOWS_APP;
     await visit(urls.settings);
 
     assert
@@ -309,9 +297,9 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    // update IPC stub for no RDP clients
-    this.ipcStub.withArgs('getRdpClients').returns([RDP_CLIENT_NONE]);
-    this.ipcStub.withArgs('getPreferredRdpClient').returns(RDP_CLIENT_NONE);
+    // update window boundary mock for no RDP clients
+    window.boundary.getRdpClients = () => [RDP_CLIENT_NONE];
+    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_NONE;
     await visit(urls.settings);
 
     assert.dom(RDP_RECOMMENDED_CLIENT).isVisible();
@@ -337,14 +325,15 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     const rdpService = this.owner.lookup('service:rdp');
-    this.ipcStub.withArgs('setPreferredRdpClient').resolves();
+    const setPreferredRdpClientStub = sinon
+      .stub(window.boundary, 'setPreferredRdpClient')
+      .resolves();
+    await visit(urls.settings);
     await visit(urls.settings);
 
     await select(RDP_PREFERRED_CLIENT, RDP_CLIENT_NONE);
 
-    assert.ok(
-      this.ipcStub.calledWith('setPreferredRdpClient', RDP_CLIENT_NONE),
-    );
+    assert.ok(setPreferredRdpClientStub.calledWith(RDP_CLIENT_NONE));
     assert.strictEqual(rdpService.preferredRdpClient, RDP_CLIENT_NONE);
   });
 });

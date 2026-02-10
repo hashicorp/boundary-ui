@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import WindowMockIPC from '../../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
 
 module('Unit | Controller | cluster-url', function (hooks) {
   setupTest(hooks);
@@ -15,18 +15,13 @@ module('Unit | Controller | cluster-url', function (hooks) {
 
   let controller;
   let clusterUrl;
-  let mockIPC;
 
-  const setupMockIpc = (test) => {
-    test.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
-  };
+  setupBoundaryApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
     controller = this.owner.lookup('controller:cluster-url');
     clusterUrl = this.owner.lookup('service:cluster-url');
-    setupMockIpc(this);
   });
 
   test('it exists', function (assert) {
@@ -36,11 +31,11 @@ module('Unit | Controller | cluster-url', function (hooks) {
   test('setClusterUrl action de-authenticates a user and resets cluster url', async function (assert) {
     const newClusterUrl = 'http://localhost:9200';
     assert.notEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
-    assert.notEqual(mockIPC.clusterUrl, newClusterUrl);
+    assert.notEqual(window.boundary.clusterUrl, newClusterUrl);
 
     await controller.setClusterUrl(newClusterUrl);
 
     assert.strictEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
-    assert.strictEqual(mockIPC.clusterUrl, newClusterUrl);
+    assert.strictEqual(window.boundary.clusterUrl, newClusterUrl);
   });
 });

@@ -5,7 +5,6 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { CanvasAddon } from '@xterm/addon-canvas';
@@ -31,10 +30,6 @@ const calculateTerminalContainerHeight = (termContainer) => {
 };
 
 export default class SessionTerminalTabsComponent extends Component {
-  // =services
-
-  @service ipc;
-
   // =attributes
 
   id;
@@ -50,7 +45,7 @@ export default class SessionTerminalTabsComponent extends Component {
       return;
     }
 
-    const { isWindows } = await this.ipc.invoke('checkOS');
+    const { isWindows } = await window.boundary.checkOS();
     const xterm = new Terminal(terminalOptions);
     this.terminal = xterm;
     const fitAddon = new FitAddon();
@@ -83,7 +78,7 @@ export default class SessionTerminalTabsComponent extends Component {
     this.id = uuidv4();
     this.#setupTerminal(fitAddon, xterm, termContainer);
 
-    const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
+    const isSSHCommandAvailable = await window.boundary.checkCommand('ssh');
     const { model } = this.args;
 
     const { proxy_address, proxy_port, started_desktop_client, target } = model;

@@ -6,24 +6,18 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
+  setupBoundaryApiMock(hooks);
 
   let controller;
   let clusterUrl;
-  let mockIPC;
   let session;
-
-  const setupMockIpc = (test) => {
-    test.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
-  };
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
-    setupMockIpc(this);
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
@@ -52,12 +46,12 @@ module('Unit | Controller | application', function (hooks) {
 
     assert.true(session.isAuthenticated);
     assert.strictEqual(clusterUrl.rendererClusterUrl, url);
-    assert.strictEqual(mockIPC.clusterUrl, url);
+    assert.strictEqual(window.boundary.getClusterUrl(), url);
 
     await controller.disconnect();
 
     assert.false(session.isAuthenticated);
     assert.notOk(clusterUrl.rendererClusterUrl);
-    assert.notOk(mockIPC.clusterUrl);
+    assert.notOk(window.boundary.getClusterUrl());
   });
 });

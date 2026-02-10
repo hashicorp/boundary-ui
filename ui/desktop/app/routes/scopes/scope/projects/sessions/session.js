@@ -12,7 +12,6 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
 
   @service store;
-  @service ipc;
   @service clientAgentSessions;
   @service flashMessages;
   @service intl;
@@ -57,7 +56,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     // was initiated through the client agent.
     if (
       !session.credentials.length &&
-      (await this.ipc.invoke('isClientAgentRunning'))
+      (await window.boundary.isClientAgentRunning())
     ) {
       try {
         const clientAgentSession =

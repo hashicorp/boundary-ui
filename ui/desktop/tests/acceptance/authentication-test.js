@@ -18,13 +18,14 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
+  setupBoundaryApiMock(hooks);
 
   const instances = {
     scopes: {
@@ -81,9 +82,6 @@ module('Acceptance | authentication', function (hooks) {
   hooks.beforeEach(async function () {
     await invalidateSession();
 
-    const ipcService = this.owner.lookup('service:ipc');
-    this.ipcStub = sinon.stub(ipcService, 'invoke');
-
     // create scopes
     instances.scopes.global = this.server.schema.scopes.find('global');
     stubs.global = { id: 'global', type: 'global' };
@@ -134,8 +132,6 @@ module('Acceptance | authentication', function (hooks) {
     urls.targets = `${urls.projects}/targets`;
     urls.sessions = `${urls.projects}/sessions`;
 
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
   });
 
@@ -275,7 +271,7 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+    window.boundary.hasRunningSessions = () => true;
 
     await visit(urls.authenticate.methods.global);
 
@@ -306,8 +302,8 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+    window.boundary.hasRunningSessions = () => true;
+    const stopAllSessions = (window.boundary.stopAllSessions = sinon.stub());
 
     await visit(urls.authenticate.methods.global);
 
@@ -354,10 +350,9 @@ module('Acceptance | authentication', function (hooks) {
     };
 
     this.owner.register('service:browser/window', mockElectronEvent);
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    const quitApp = this.ipcStub.withArgs('closeWindow');
-
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+    const stopAllSessions = (window.boundary.stopAllSessions = sinon.stub());
+    const quitApp = (window.boundary.closeWindow = sinon.stub());
+    window.boundary.hasRunningSessions = () => true;
 
     await visit(urls.authenticate.methods.global);
 

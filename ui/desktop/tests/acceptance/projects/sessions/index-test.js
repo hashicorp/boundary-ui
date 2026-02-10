@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import WindowMockIPC from '../../../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
 import {
   currentSession,
   invalidateSession,
@@ -24,6 +24,7 @@ import sinon from 'sinon';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
+  setupBoundaryApiMock(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE =
@@ -142,11 +143,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     urls.sessions2 = `${urls.projects2}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    window.boundary.isCacheDaemonRunning = () => true;
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
 
     // mock RDP service calls
@@ -436,7 +435,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('stop');
+    window.boundary.stopSession();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -457,7 +456,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('stop');
+    window.boundary.stopSession();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -497,7 +496,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('stop').throws();
+    sinon.stub(window.boundary, 'stopSession').throws();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -565,7 +564,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+    window.boundary.isCacheDaemonRunning = () => false;
     this.stubCacheDaemonSearch();
     const sessionsCount = this.server.schema.sessions.all().models.length;
 

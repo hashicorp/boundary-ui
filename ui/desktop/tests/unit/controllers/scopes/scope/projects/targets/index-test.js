@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'desktop/tests/helpers/mirage';
+import { setupBoundaryApiMock } from 'desktop/tests/helpers/boundary-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { waitUntil, visit } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -26,6 +27,7 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
+    setupBoundaryApiMock(hooks);
     setupStubs(hooks);
     setupIntl(hooks, 'en-us');
 
@@ -79,7 +81,7 @@ module(
       urls.projectScope = `/scopes/${instances.scopes.org.id}/projects`;
       urls.targets = `${urls.projectScope}/targets`;
 
-      this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+      window.boundary.isCacheDaemonRunning = () => true;
       this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await authenticateSession({ account_id: instances.account.id });
     });
@@ -237,8 +239,8 @@ module(
         address: 'a_123',
         port: 'p_123',
       };
-      this.ipcStub.withArgs('cliExists').returns(true);
-      this.ipcStub.withArgs('connect').returns(attrs);
+      window.boundary.cliExists = () => true;
+      window.boundary.connectSession = () => attrs;
       await visit(urls.targets);
       const target = await store.findRecord('target', instances.target.id);
       const session = await store.findRecord('session', instances.session.id);

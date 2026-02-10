@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
+import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
 
 module('Acceptance | Application', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,9 +20,7 @@ module('Acceptance | Application', function (hooks) {
     '[data-test-toast-notification] button';
   const TOAST_DISMISS_BUTTON = '[aria-label="Dismiss"]';
 
-  const stubs = {
-    ipcService: null,
-  };
+  setupBoundaryApiMock(hooks);
 
   const urls = {
     clusterUrl: null,
@@ -31,9 +30,6 @@ module('Acceptance | Application', function (hooks) {
     await invalidateSession();
 
     urls.clusterUrl = '/cluster-url';
-
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
 
     // mock RDP service calls
     let rdpService = this.owner.lookup('service:rdp');
@@ -46,7 +42,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with chrome disabled hides custom window actions', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('showWindowActions').returns(false);
+    window.boundary.showWindowActions = () => false;
     await visit(urls.clusterUrl);
     assert.notOk(find('.button-window-close'), 'Window close button');
     assert.notOk(find('.button-window-minimize'), 'Window minimize button');
@@ -55,7 +51,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with chrome enabled shows custom window actions', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('showWindowActions').returns(true);
+    window.boundary.showWindowActions = () => true;
     await visit(urls.clusterUrl);
     assert.ok(find('.button-window-close'), 'Window close button');
     assert.ok(find('.button-window-minimize'), 'Window minimize button');
@@ -64,7 +60,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with MacOS chrome enabled', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('hasMacOSChrome').returns(true);
+    window.boundary.hasMacOSChrome = () => true;
     await visit(urls.clusterUrl);
     assert.ok(
       find('.rose-header.header-cushion'),
@@ -74,7 +70,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with MacOS chrome disabled', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('hasMacOSChrome').returns(false);
+    window.boundary.hasMacOSChrome = () => false;
     await visit(urls.clusterUrl);
     assert.notOk(
       find('.rose-header.header-cushion'),

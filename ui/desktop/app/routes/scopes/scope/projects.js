@@ -33,7 +33,6 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service router;
   @service store;
   @service intl;
-  @service ipc;
   @service clientAgentSessions;
   @service flashMessages;
 
@@ -51,7 +50,7 @@ export default class ScopesScopeProjectsRoute extends Route {
    * @return {Promise<ScopeModel>}
    */
   async model() {
-    const isClientAgentRunning = await this.ipc.invoke('isClientAgentRunning');
+    const isClientAgentRunning = await window.boundary.isClientAgentRunning();
     if (isClientAgentRunning) {
       this.poller.perform();
       // start polling task
@@ -96,7 +95,7 @@ export default class ScopesScopeProjectsRoute extends Route {
           const token = sessionData?.token;
 
           try {
-            await this.ipc.invoke('addTokenToDaemons', {
+            await window.boundary.addTokenToDaemons({
               tokenId: auth_token_id,
               token,
             });
@@ -157,7 +156,7 @@ export default class ScopesScopeProjectsRoute extends Route {
           }
 
           window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
-          await this.ipc.invoke('focusWindow');
+          await window.boundary.focusWindow();
         };
       });
       await timeout(POLL_TIMEOUT_SECONDS * 1000);
