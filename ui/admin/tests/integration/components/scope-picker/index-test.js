@@ -12,7 +12,7 @@ import { setupMirage } from 'admin/tests/helpers/mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 
-module('Integration | Component | scope-picker/index', function (hooks) {
+module('Integration | Component | scope-picker', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks, 'en-us');

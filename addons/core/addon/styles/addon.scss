@@ -108,11 +108,3 @@ $margin-directions: (
     }
   }
 }
-
-// scope picker
-.scope-picker {
-  li:has(.indentation),
-  li.indentation {
-    margin-left: 1.5rem;
-  }
-}

@@ -20,6 +20,8 @@ export default class ApplicationController extends Controller {
   @service session;
   @service('browser/window') window;
   @service router;
+  @service scope;
+  @service intl;
 
   // =attributes
 
@@ -35,6 +37,18 @@ export default class ApplicationController extends Controller {
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
+  }
+
+  /**
+   * Returns display name and icon for current scope.
+   * @type {object}
+   */
+  get currentScope() {
+    if (this.scope.org.isOrg) {
+      return { name: this.scope.org.displayName, icon: 'org' };
+    } else {
+      return { name: this.intl.t('titles.global'), icon: 'globe' };
+    }
   }
 
   /**

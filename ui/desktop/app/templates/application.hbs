@@ -25,10 +25,45 @@
 
       <:globalActions>
         {{#if this.session.isAuthenticated}}
-          <ScopePicker
-            @hideOrgsTitle={{true}}
+          <Hds::Dropdown
             class='app-header__global-actions'
-          />
+            @enableCollisionDetection={{true}}
+            @listPosition='bottom-left'
+            data-test-header-scope-dropdown
+            as |D|
+          >
+            {{#let this.currentScope as |scope|}}
+              <D.ToggleButton
+                @text={{scope.name}}
+                @icon={{scope.icon}}
+                class='dropdown-toggle-color-override'
+              />
+            {{/let}}
+
+            <D.Checkmark
+              @icon='globe'
+              @route='scopes.scope'
+              @model='global'
+              @selected={{this.scope.org.isGlobal}}
+            >
+              {{t 'titles.global'}}
+            </D.Checkmark>
+
+            {{#if this.scope.orgsList}}
+              <D.Separator />
+            {{/if}}
+
+            {{#each this.scope.orgsList as |org|}}
+              <D.Checkmark
+                @icon='org'
+                @route='scopes.scope'
+                @model={{org.id}}
+                @selected={{eq this.scope.org.id org.id}}
+              >
+                {{org.displayName}}
+              </D.Checkmark>
+            {{/each}}
+          </Hds::Dropdown>
         {{/if}}
       </:globalActions>
 
@@ -38,7 +73,7 @@
             <dd.ToggleButton
               @icon='user-circle'
               @text={{this.session.username}}
-              class='dropdown_toggle_color_override'
+              class='dropdown-toggle-color-override'
             />
             <dd.Interactive
               data-test-nav-signout-btn
@@ -52,7 +87,7 @@
             <dd.ToggleIcon
               @icon='user-circle'
               @text={{t 'titles.user-menu'}}
-              class='dropdown_toggle_color_override'
+              class='dropdown-toggle-color-override'
             />
             <dd.Interactive
               data-test-nav-signout-btn

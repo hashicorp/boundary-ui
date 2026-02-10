@@ -15,7 +15,7 @@
     <D.ToggleButton
       @text={{scope.name}}
       @icon={{scope.icon}}
-      class='dropdown_toggle_color_override'
+      class='dropdown-toggle-color-override'
     />
   {{/let}}
 
@@ -31,9 +31,7 @@
   {{#if this.scope.orgsList}}
     <D.Separator />
 
-    {{#unless @hideOrgsTitle}}
-      <D.Title @text={{t 'resources.org.title_plural'}} />
-    {{/unless}}
+    <D.Title @text={{t 'resources.org.title_plural'}} />
   {{/if}}
 
   {{#each this.truncatedOrgsList as |org|}}

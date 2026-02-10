@@ -50,7 +50,9 @@ test.describe('Scope tests', () => {
   test('Shows the filtered targets based on selected scope', async ({
     authedPage,
   }) => {
-    const headerNavLocator = authedPage.locator('header .scope-picker');
+    const headerNavLocator = authedPage.locator(
+      'header .app-header__global-actions',
+    );
     await expect(headerNavLocator).toBeVisible();
     await expect(
       headerNavLocator.locator('.hds-dropdown-toggle-button'),

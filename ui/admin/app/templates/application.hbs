@@ -38,7 +38,7 @@
                 'titles.feature-edition'
                 edition=this.featureEdition.edition
               }}
-              class='dropdown_toggle_color_override'
+              class='dropdown-toggle-color-override'
               data-test-dev-edition-toggle
             />
             <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
@@ -90,7 +90,7 @@
               @icon='user'
               @text={{this.session.username}}
               {{hds-tooltip this.session.username}}
-              class='user-menu-dropdown__toggle-button dropdown_toggle_color_override'
+              class='user-menu-dropdown__toggle-button dropdown-toggle-color-override'
             />
             <dd.Title @text={{t 'titles.authenticated'}} />
             <dd.Description @text={{this.session.username}} />
@@ -126,7 +126,7 @@
             <dd.ToggleIcon
               @icon='user'
               @text={{t 'titles.user-menu'}}
-              class='dropdown_toggle_color_override'
+              class='dropdown-toggle-color-override'
             />
             <dd.Interactive @route='account.change-password'>{{t
                 'actions.change-password'
