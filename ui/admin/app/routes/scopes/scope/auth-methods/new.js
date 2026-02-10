@@ -49,9 +49,13 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
     });
     record.scopeModel = scopeModel;
 
-    // if the auth method type is OIDC, initialize account_claim_maps with an empty row
+    // If the auth-method is of type OIDC, initialize the keyValue fields with an empty object.
     if (params.type === TYPE_AUTH_METHOD_OIDC) {
       record.account_claim_maps = [{ key: '', value: '' }];
+      record.claims_scopes = [{ value: '' }];
+      record.allowed_audiences = [{ value: '' }];
+      record.signing_algorithms = [{ value: '' }];
+      record.idp_ca_certs = [{ value: '' }];
     }
 
     return record;
