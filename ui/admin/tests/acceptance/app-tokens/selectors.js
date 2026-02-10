@@ -43,7 +43,6 @@ export const CONFIRM_DELETE_BTN = '.hds-modal .hds-button--color-critical';
 
 export const TOKEN_COPY_SNIPPET =
   '.app-token-modal-body .hds-copy-snippet__text';
-export const BREADCRUMB = '[data-test-breadcrumbs-container]';
 export const STATUS_BADGE_TEXT =
   '[data-test-app-token-status-badge] .hds-badge__text';
 export const INACTIVE_ALERT = '[data-test-permissions-alert]';

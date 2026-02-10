@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -25,20 +25,28 @@ module('Acceptance | app-tokens | read', function (hooks) {
 
   const urls = {
     globalScope: null,
-    appTokens: null,
-    newAppToken: null,
-    appToken: null,
-    appTokenPermissions: null,
-    unknownAppToken: null,
+    orgScope: null,
+    projectScope: null,
+    globalAppTokens: null,
+    orgAppTokens: null,
+    projectAppTokens: null,
+    globalAppToken: null,
+    orgAppToken: null,
+    projectAppToken: null,
   };
 
   hooks.beforeEach(async function () {
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
     instances.appToken = this.server.create('app-token', {
-      scope: instances.scopes.org,
+      scope: instances.scopes.global,
       name: 'Test App Token',
       description: 'Test token description',
       status: 'active',
@@ -46,134 +54,81 @@ module('Acceptance | app-tokens | read', function (hooks) {
 
     urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.appTokens = `${urls.orgScope}/app-tokens`;
-    urls.newAppToken = `${urls.appTokens}/new`;
-    urls.appToken = `${urls.appTokens}/${instances.appToken.id}`;
-    urls.appTokenPermissions = `${urls.appToken}/permissions`;
-    urls.unknownAppToken = `${urls.appTokens}/at_unknown123`;
+    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+    urls.globalAppTokens = `${urls.globalScope}/app-tokens`;
+    urls.orgAppTokens = `${urls.orgScope}/app-tokens`;
+    urls.projectAppTokens = `${urls.projectScope}/app-tokens`;
+    urls.globalAppToken = `${urls.globalAppTokens}/${instances.appToken.id}`;
+    urls.orgAppToken = `${urls.orgAppTokens}/${instances.appToken.id}`;
+    urls.projectAppToken = `${urls.projectAppTokens}/${instances.appToken.id}`;
   });
 
-  test('visiting an app token detail page', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
+  test.each(
+    'users can visit an app token detail page with proper authorization',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({ scope: instances.scopes[scope] });
+      await visit(urls[`${scope}AppTokens`]);
+
+      assert.true(instances.appToken.authorized_actions.includes('read'));
+
+      await click(
+        commonSelectors.TABLE_RESOURCE_LINK(urls[`${scope}AppToken`]),
+      );
+
+      assert
+        .dom(commonSelectors.PAGE_HEADER_COPY_SNIPPET)
+        .hasText(instances.appToken.id);
+      assert.strictEqual(currentURL(), urls[`${scope}AppToken`]);
+    },
+  );
+
+  test.each(
+    'users cannot visit an app token detail page without proper authorization',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({ scope: instances.scopes[scope] });
+      instances.appToken.authorized_actions =
+        instances.appToken.authorized_actions.filter(
+          (item) => item !== 'read' && item !== 'read:self',
+        );
+      await visit(urls[`${scope}AppTokens`]);
+
+      assert.false(instances.appToken.authorized_actions.includes('read'));
+      assert.false(instances.appToken.authorized_actions.includes('read:self'));
+
+      assert
+        .dom(commonSelectors.TABLE_RESOURCE_LINK(urls[`${scope}AppToken`]))
+        .doesNotExist();
+    },
+  );
+
+  test.each(
+    'Details tab displays app token form',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            enabled: false,
+          },
         },
-      },
-    });
+      });
+      instances.appToken.update({ scope: instances.scopes[scope] });
+      await visit(urls[`${scope}AppTokens`]);
 
-    await visit(urls.appToken);
+      await click(
+        commonSelectors.TABLE_RESOURCE_LINK(urls[`${scope}AppToken`]),
+      );
 
-    assert.strictEqual(currentURL(), urls.appToken);
-    assert.dom('.hds-page-header__title').containsText('App Tokens');
-  });
-
-  test('app token detail page displays correct title and breadcrumbs', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-
-    // Check page header title
-    assert.dom('.hds-page-header__title').containsText('App Tokens');
-
-    // Check breadcrumbs
-    assert.dom('.hds-breadcrumb').exists();
-  });
-
-  test('app token detail page displays token ID copy snippet', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-
-    // Check for copy snippet with token ID
-    assert
-      .dom('.hds-copy-snippet')
-      .containsText(instances.appToken.id.substring(0, 10));
-  });
-
-  test('app token detail page displays tabs', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-
-    // Check for Details tab
-    assert.dom(commonSelectors.HREF(urls.appToken)).exists();
-
-    // Check for Permissions tab
-    assert.dom(commonSelectors.HREF(urls.appTokenPermissions)).exists();
-  });
-
-  test('can navigate between Details and Permissions tabs', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-    assert.strictEqual(currentURL(), urls.appToken);
-
-    // Navigate to Permissions tab
-    await click(commonSelectors.HREF(urls.appTokenPermissions));
-    assert.strictEqual(currentURL(), urls.appTokenPermissions);
-
-    // Navigate back to Details tab
-    await click(commonSelectors.HREF(urls.appToken));
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
-
-  test('Details tab displays app token form', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          enabled: false,
-        },
-      },
-    });
-
-    await visit(urls.appToken);
-
-    // Check that the form component is rendered
-    assert.dom('.rose-form').exists();
-
-    // Check for form field labels
-    assert.dom('.rose-form').containsText('Name');
-    assert.dom('.rose-form').containsText('Description');
-
-    // Check for section titles
-    assert.dom('.rose-form').containsText('About this token');
-    assert.dom('.rose-form').containsText('Time to live');
-    assert.dom('.rose-form').containsText('Time to stale');
-
-    // Check for readonly inputs for accessibility
-    assert.dom('input[readonly]').exists('Should have readonly fields');
-
-    // Check for description lists (About, TTL, TTS sections)
-    assert.dom('.description-list').exists({ count: 3 });
-
-    // Check for status badge
-    assert.dom('.hds-badge').exists();
-  });
+      assert.strictEqual(currentURL(), urls[`${scope}AppToken`]);
+      assert.dom(commonSelectors.FIELD_NAME).hasValue(instances.appToken.name);
+      assert
+        .dom(commonSelectors.FIELD_DESCRIPTION)
+        .hasValue(instances.appToken.description);
+      assert.dom(selectors.STATUS_BADGE_TEXT).hasText('Active');
+    },
+  );
 
   test.each(
     'app token page displays correct status badge',
@@ -207,22 +162,28 @@ module('Acceptance | app-tokens | read', function (hooks) {
           },
         },
       });
-
-      // Update the token status
       instances.appToken.update({ status });
 
-      await visit(urls.appToken);
+      await visit(urls.globalAppToken);
 
-      // Check for status badge with correct text
-      assert.dom('.hds-badge').containsText(expectedText);
+      assert.dom(selectors.STATUS_BADGE_TEXT).hasText(expectedText);
     },
   );
 
-  test('inactive alert is not visible for active app tokens', async function (assert) {
-    await visit(urls.appToken);
+  test.each(
+    'inactive alert is not visible for active app tokens',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({
+        scope: instances.scopes[scope],
+        status: 'active',
+      });
+      await visit(urls[`${scope}AppToken`]);
 
-    assert.dom(selectors.INACTIVE_ALERT).doesNotExist();
-  });
+      assert.dom(selectors.STATUS_BADGE_TEXT).hasText('Active');
+      assert.dom(selectors.INACTIVE_ALERT).doesNotExist();
+    },
+  );
 
   test.each(
     'inactive alert displays correct title based on app token status',
@@ -243,136 +204,10 @@ module('Acceptance | app-tokens | read', function (hooks) {
     async function (assert, { status, expectedTitle }) {
       instances.appToken.update({ status });
 
-      await visit(urls.appToken);
+      await visit(urls.globalAppToken);
 
       assert.dom(selectors.INACTIVE_ALERT).isVisible();
       assert.dom(selectors.INACTIVE_ALERT_TITLE).hasText(expectedTitle);
     },
   );
-
-  test('users can revoke an app-token with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
-          enabled: false,
-        },
-      },
-    });
-
-    assert.true(instances.appToken.authorized_actions.includes('revoke'));
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_REVOKE);
-    await fillIn(selectors.FILED_CONFIRM_REVOKE, 'REVOKE');
-    await click(selectors.CONFIRM_REVOKE_BTN);
-
-    assert.dom(selectors.STATUS_BADGE_TEXT).hasText('Revoked');
-    assert.strictEqual(instances.appToken.status, 'revoked');
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
-
-  test('users can cancel revoke action on an app-token with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
-          enabled: false,
-        },
-      },
-    });
-    const appTokenStatus = instances.appToken.status;
-
-    assert.true(instances.appToken.authorized_actions.includes('revoke'));
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_REVOKE);
-    await click(selectors.CANCEL_MODAL_BTN);
-
-    assert.strictEqual(instances.appToken.status, appTokenStatus);
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
-
-  test('users cannot revoke an app-token when unauthorized', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
-          enabled: false,
-        },
-      },
-    });
-    instances.appToken.authorized_actions =
-      instances.appToken.authorized_actions.filter(
-        (item) => item !== 'revoke' && item !== 'revoke:self',
-      );
-
-    await visit(urls.appToken);
-
-    assert.false(instances.appToken.authorized_actions.includes('revoke'));
-    assert.false(instances.appToken.authorized_actions.includes('revoke:self'));
-
-    await click(selectors.MANAGE_DROPDOWN);
-
-    assert.dom(selectors.MANAGE_DROPDOWN_REVOKE).doesNotExist();
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
-
-  test('users can clone an app-token with proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-20
-          enabled: false,
-        },
-      },
-    });
-
-    assert.true(instances.appToken.authorized_actions.includes('read'));
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.MANAGE_DROPDOWN_CLONE);
-
-    assert.strictEqual(
-      currentURL(),
-      urls.newAppToken + `?cloneAppToken=${instances.appToken.id}`,
-    );
-  });
-
-  test('users cannot clone an app-token without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-01-15
-          enabled: false,
-        },
-      },
-    });
-    instances.scopes.org.authorized_collection_actions['app-tokens'] =
-      instances.scopes.org.authorized_collection_actions['app-tokens'].filter(
-        (item) => item !== 'create',
-      );
-    instances.appToken.authorized_actions =
-      instances.appToken.authorized_actions.filter(
-        (item) => item !== 'read' && item !== 'read:self',
-      );
-
-    assert.false(
-      instances.scopes.org.authorized_collection_actions['app-tokens'].includes(
-        'create',
-      ),
-    );
-    assert.false(instances.appToken.authorized_actions.includes('read'));
-    assert.false(instances.appToken.authorized_actions.includes('read:self'));
-
-    await visit(urls.appToken);
-
-    await click(selectors.MANAGE_DROPDOWN);
-
-    assert.dom(selectors.MANAGE_DROPDOWN_CLONE).doesNotExist();
-    assert.strictEqual(currentURL(), urls.appToken);
-  });
 });

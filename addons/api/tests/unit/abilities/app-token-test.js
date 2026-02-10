@@ -56,29 +56,29 @@ module('Unit | Ability | app-token', function (hooks) {
   );
 
   test('can clone app-token when authorized', function (assert) {
-    const scope = store.createRecord('scope', {
+    const scopeModel = store.createRecord('scope', {
       type: 'global',
       id: 'global',
-      authorized_collection_actions: { 'app-token': ['create'] },
+      authorized_collection_actions: { 'app-tokens': ['create'] },
     });
     const appToken = store.createRecord('app-token', {
-      scope,
       authorized_actions: ['read'],
     });
+    appToken.scopeModel = scopeModel;
 
     assert.true(canService.can('clone app-token', appToken));
   });
 
   test('cannot clone app-token when unauthorized', function (assert) {
-    const scope = store.createRecord('scope', {
+    const scopeModel = store.createRecord('scope', {
       type: 'global',
       id: 'global',
-      authorized_collection_actions: { 'app-token': ['create'] },
+      authorized_collection_actions: { 'app-tokens': ['create'] },
     });
     const appToken = store.createRecord('app-token', {
-      scope,
       authorized_actions: [],
     });
+    appToken.scopeModel = scopeModel;
 
     assert.false(canService.can('clone app-token', appToken));
   });
