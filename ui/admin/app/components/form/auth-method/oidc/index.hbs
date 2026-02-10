@@ -150,8 +150,8 @@
   <Form::Field::KeyValue
     @name='signing_algorithms'
     @data={{@model.signing_algorithms}}
-    @onAdd={{fn @addRow 'signing_algorithms' this.createEmptyValue}}
-    @onRemove={{fn @removeRow 'signing_algorithms' this.createEmptyValue}}
+    @onAdd={{fn @addRow 'signing_algorithms' @createEmptyValue}}
+    @onRemove={{fn @removeRow 'signing_algorithms' @createEmptyValue}}
     @onUpdate={{fn @updateRow 'signing_algorithms'}}
     @legend={{t 'form.signing_algorithms.label'}}
     @helperText={{t 'form.signing_algorithms.help'}}
@@ -188,8 +188,8 @@
   <Form::Field::KeyValue
     @name='allowed_audiences'
     @data={{@model.allowed_audiences}}
-    @onAdd={{fn @addRow 'allowed_audiences' this.createEmptyValue}}
-    @onRemove={{fn @removeRow 'allowed_audiences' this.createEmptyValue}}
+    @onAdd={{fn @addRow 'allowed_audiences' @createEmptyValue}}
+    @onRemove={{fn @removeRow 'allowed_audiences' @createEmptyValue}}
     @onUpdate={{fn @updateRow 'allowed_audiences'}}
     @legend={{t 'form.allowed_audiences.label'}}
     @helperText={{t 'form.allowed_audiences.help'}}
@@ -215,8 +215,8 @@
   <Form::Field::KeyValue
     @name='claims_scopes'
     @data={{@model.claims_scopes}}
-    @onAdd={{fn @addRow 'claims_scopes' this.createEmptyValue}}
-    @onRemove={{fn @removeRow 'claims_scopes' this.createEmptyValue}}
+    @onAdd={{fn @addRow 'claims_scopes' @createEmptyValue}}
+    @onRemove={{fn @removeRow 'claims_scopes' @createEmptyValue}}
     @onUpdate={{fn @updateRow 'claims_scopes'}}
     @legend={{t 'form.claims_scopes.label'}}
     @helperText={{t 'form.claims_scopes.help'}}
@@ -242,8 +242,8 @@
   <Form::Field::KeyValue
     @name='account_claim_maps'
     @data={{@model.account_claim_maps}}
-    @onAdd={{fn @addRow 'account_claim_maps' this.createEmptyKeyValue}}
-    @onRemove={{fn @removeRow 'account_claim_maps' this.createEmptyKeyValue}}
+    @onAdd={{fn @addRow 'account_claim_maps' @createEmptyKeyValue}}
+    @onRemove={{fn @removeRow 'account_claim_maps' @createEmptyKeyValue}}
     @onUpdate={{fn @updateRow 'account_claim_maps'}}
     @legend={{t 'form.account_claim_maps.label'}}
     @helperText={{t 'form.account_claim_maps.help'}}
@@ -288,8 +288,8 @@
   <Form::Field::KeyValue
     @name='idp_ca_certs'
     @data={{@model.idp_ca_certs}}
-    @onAdd={{fn @addRow 'idp_ca_certs' this.createEmptyValue}}
-    @onRemove={{fn @removeRow 'idp_ca_certs' this.createEmptyValue}}
+    @onAdd={{fn @addRow 'idp_ca_certs' @createEmptyValue}}
+    @onRemove={{fn @removeRow 'idp_ca_certs' @createEmptyValue}}
     @onUpdate={{fn @updateRow 'idp_ca_certs'}}
     @legend={{t 'form.idp_ca_certs.label'}}
     @helperText={{t 'form.idp_ca_certs.help'}}
