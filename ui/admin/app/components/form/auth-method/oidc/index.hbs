@@ -146,113 +146,109 @@
     </Hds::Form::TextInput::Field>
   {{/unless}}
 
-  {{! Signing Algorithms }}
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  {{! Signing algorithms }}
+  <Form::Field::KeyValue
+    @name='signing_algorithms'
+    @data={{@model.signing_algorithms}}
+    @onAdd={{fn this.addRow 'signing_algorithms' this.createEmptyValue}}
+    @onRemove={{fn this.removeRow 'signing_algorithms' this.createEmptyValue}}
+    @onUpdate={{fn this.updateRow 'signing_algorithms'}}
+    @legend={{t 'form.signing_algorithms.label'}}
+    @helperText={{t 'form.signing_algorithms.help'}}
+    @errors={{@model.errors.signing_algorithms}}
     @disabled={{form.disabled}}
-  >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'form.signing_algorithms.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'form.signing_algorithms.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.signing_algorithms}}
-        <F.Error as |E|>
-          {{#each @model.errors.signing_algorithms as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </:fieldset>
-
-    <:field as |F|>
-      <F.Select
-        @name='signing_algorithms'
-        @model={{@model}}
-        @selectOptions={{this.signingAlgorithms}}
-        @width='100%'
-      />
-    </:field>
-  </Form::Field::ListWrapper>
-
-  {{! Allowed Audiences }}
-  <Form::Field::ListWrapper
-    @layout='horizontal'
     @isOptional={{true}}
-    @disabled={{form.disabled}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'form.allowed_audiences.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'form.allowed_audiences.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.allowed_audiences}}
-        <F.Error as |E|>
-          {{#each @model.errors.allowed_audiences as |error|}}
-            <E.Message>{{error.message}}</E.Message>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Select
+          data-test-value-input
+          {{on 'change' (fn R.updateRow 'value')}}
+        >
+          <option disabled hidden selected value=''>
+            {{t 'titles.choose-an-option'}}
+          </option>
+          {{#each this.signingAlgorithms as |algorithm|}}
+            <option
+              value={{algorithm}}
+              selected={{eq R.rowData.value algorithm}}
+            >
+              {{algorithm}}
+            </option>
           {{/each}}
-        </F.Error>
+        </F.Select>
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
+    </:row>
+  </Form::Field::KeyValue>
 
-    <:field as |F|>
-      <F.TextInput
-        @name='allowed_audiences'
-        @options={{@model.allowed_audiences}}
-        @model={{@model}}
-      />
-    </:field>
-
-  </Form::Field::ListWrapper>
+  {{! Allowed audiences }}
+  <Form::Field::KeyValue
+    @name='allowed_audiences'
+    @data={{@model.allowed_audiences}}
+    @onAdd={{fn this.addRow 'allowed_audiences' this.createEmptyValue}}
+    @onRemove={{fn this.removeRow 'allowed_audiences' this.createEmptyValue}}
+    @onUpdate={{fn this.updateRow 'allowed_audiences'}}
+    @legend={{t 'form.allowed_audiences.label'}}
+    @helperText={{t 'form.allowed_audiences.help'}}
+    @errors={{@model.errors.allowed_audiences}}
+    @disabled={{form.disabled}}
+    @isOptional={{true}}
+  >
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+      {{/if}}
+    </:row>
+  </Form::Field::KeyValue>
 
   {{! Claims Scopes }}
-
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='claims_scopes'
+    @data={{@model.claims_scopes}}
+    @onAdd={{fn this.addRow 'claims_scopes' this.createEmptyValue}}
+    @onRemove={{fn this.removeRow 'claims_scopes' this.createEmptyValue}}
+    @onUpdate={{fn this.updateRow 'claims_scopes'}}
+    @legend={{t 'form.claims_scopes.label'}}
+    @helperText={{t 'form.claims_scopes.help'}}
+    @errors={{@model.errors.claims_scopes}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'form.claims_scopes.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'form.claims_scopes.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.claims_scopes}}
-        <F.Error as |E|>
-          {{#each @model.errors.claims_scopes as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
-
-    <:field as |F|>
-      <F.TextInput
-        @name='claims_scopes'
-        @options={{@model.claims_scopes}}
-        @model={{@model}}
-      />
-    </:field>
-
-  </Form::Field::ListWrapper>
+    </:row>
+  </Form::Field::KeyValue>
 
   {{! Account Claim Maps }}
   <Form::Field::KeyValue
     @name='account_claim_maps'
     @data={{@model.account_claim_maps}}
-    @onAdd={{this.addAccountClaimMap}}
-    @onRemove={{this.removeAccountClaimMap}}
-    @onUpdate={{this.updateAccountClaimMap}}
+    @onAdd={{fn this.addRow 'account_claim_maps' this.createEmptyKeyValue}}
+    @onRemove={{fn
+      this.removeRow
+      'account_claim_maps'
+      this.createEmptyKeyValue
+    }}
+    @onUpdate={{fn this.updateRow 'account_claim_maps'}}
     @legend={{t 'form.account_claim_maps.label'}}
     @helperText={{t 'form.account_claim_maps.help'}}
     @errors={{@model.errors.account_claim_maps}}
@@ -293,37 +289,31 @@
   </Form::Field::KeyValue>
 
   {{! Certificates }}
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='idp_ca_certs'
+    @data={{@model.idp_ca_certs}}
+    @onAdd={{fn this.addRow 'idp_ca_certs' this.createEmptyValue}}
+    @onRemove={{fn this.removeRow 'idp_ca_certs' this.createEmptyValue}}
+    @onUpdate={{fn this.updateRow 'idp_ca_certs'}}
+    @legend={{t 'form.idp_ca_certs.label'}}
+    @helperText={{t 'form.idp_ca_certs.help'}}
+    @errors={{@model.errors.idp_ca_certs}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'form.idp_ca_certs.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'form.idp_ca_certs.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.idp_ca_certs}}
-        <F.Error as |E|>
-          {{#each @model.errors.idp_ca_certs as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Textarea
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
-
-    <:field as |F|>
-      <F.Textarea
-        @name='idp_ca_certs'
-        @options={{@model.idp_ca_certs}}
-        @model={{@model}}
-      />
-    </:field>
-
-  </Form::Field::ListWrapper>
+    </:row>
+  </Form::Field::KeyValue>
 
   <Hds::Form::TextInput::Field
     name='max_age'
