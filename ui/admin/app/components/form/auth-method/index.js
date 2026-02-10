@@ -17,6 +17,11 @@ const modelTypeToComponent = {
 };
 
 export default class FormAuthMethodIndex extends Component {
+  // For fields with just a value property
+  createEmptyValue = () => ({ value: '' });
+
+  // For fields with key and value properties
+  createEmptyKeyValue = () => ({ key: '', value: '' });
   get authMethodFormComponent() {
     const component = modelTypeToComponent[this.args.model.type];
     assert(

@@ -9,11 +9,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class FormAuthMethodOidcComponent extends Component {
-  // For fields with just a value property
-  createEmptyValue = () => ({ value: '' });
-
-  // For fields with key and value properties
-  createEmptyKeyValue = () => ({ key: '', value: '' });
   // =attributes
 
   /**
