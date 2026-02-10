@@ -92,14 +92,18 @@
             {{#each @model.appTokens as |token|}}
               <B.Tr>
                 <B.Td>
-                  <LinkTo
-                    @route='scopes.scope.app-tokens.app-token'
-                    @models={{array @model.scope.id token.id}}
-                  >
+                  {{#if (can 'read app-token' token)}}
+                    <LinkTo
+                      @route='scopes.scope.app-tokens.app-token'
+                      @models={{array @model.scope.id token.id}}
+                    >
+                      {{token.name}}
+                    </LinkTo>
+                  {{else}}
                     {{token.name}}
-                  </LinkTo>
+                  {{/if}}
                   {{#if token.description}}
-                    <Hds::Text::Body @tag='p' class='p'>
+                    <Hds::Text::Body @tag='p'>
                       {{token.description}}
                     </Hds::Text::Body>
                   {{/if}}

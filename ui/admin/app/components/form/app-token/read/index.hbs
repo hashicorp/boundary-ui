@@ -5,8 +5,8 @@
 
 <Rose::Form>
   <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @type='text'
     readOnly={{true}}
     as |F|
   >
@@ -15,6 +15,7 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
+    name='description'
     @value={{@model.description}}
     readOnly={{true}}
     as |F|
