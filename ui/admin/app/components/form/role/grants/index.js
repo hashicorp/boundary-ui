@@ -6,7 +6,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { computed, action } from '@ember/object';
-import { linter } from '@hashicorp/design-system-components/codemirror';
+import { linter, autocompletion, completionKeymap, keymap } from '@hashicorp/design-system-components/codemirror';
 
 // Valid Boundary resource types from https://developer.hashicorp.com/boundary/docs/rbac/resource-table
 const VALID_RESOURCE_TYPES = [
@@ -88,7 +88,7 @@ const RESOURCE_SPECIFIC_ACTIONS = {
   '*': ['*', ...STANDARD_ACTIONS], // wildcard type can use wildcard or standard actions
 };
 
-function myCustomLinter(view) {
+function customLinter(view) {
   const diagnostics = [];
   const doc = view.state.doc.toString();
   const lines = doc.split('\n');
@@ -303,10 +303,165 @@ function myCustomLinter(view) {
   return diagnostics;
 }
 
+function customCompletions(context) {
+  const line = context.state.doc.lineAt(context.pos);
+  const lineText = line.text;
+  const posInLine = context.pos - line.from;
+
+  // Find what we're completing
+  const beforeCursor = lineText.slice(0, posInLine);
+
+  // Check if we're completing a field name
+  const fieldNameMatch = beforeCursor.match(/(?:^|;)\s*([a-z_]*)$/);
+  if (fieldNameMatch) {
+    const partial = fieldNameMatch[1];
+    const fields = ['ids=', 'type=', 'actions=', 'output_fields='];
+
+    // Parse existing fields to avoid duplicates
+    const existingFields = lineText
+      .split(';')
+      .map((pair) => {
+        const eqIndex = pair.indexOf('=');
+        return eqIndex > -1 ? pair.slice(0, eqIndex).trim() : '';
+      })
+      .filter(Boolean);
+
+    const availableFields = fields.filter(
+      (field) => !existingFields.includes(field.replace('=', '')),
+    );
+
+    return {
+      from: context.pos - partial.length,
+      options: availableFields.map((field) => ({
+        label: field,
+        type: 'keyword',
+      })),
+    };
+  }
+
+  // Check if we're completing a type value
+  const typeValueMatch = beforeCursor.match(/type=([a-z-*]*)$/);
+  if (typeValueMatch) {
+    const partial = typeValueMatch[1];
+
+    // Check if ids field exists and is wildcard
+    const idsMatch = lineText.match(/ids=([^;]*)/);
+    const idsValue = idsMatch ? idsMatch[1].trim() : null;
+
+    // Filter types based on ids value
+    let availableTypes = VALID_RESOURCE_TYPES;
+    if (idsValue !== '*') {
+      // If ids is not wildcard, exclude wildcard type
+      availableTypes = VALID_RESOURCE_TYPES.filter((t) => t !== '*');
+    }
+
+    return {
+      from: context.pos - partial.length,
+      options: availableTypes.map((type) => ({
+        label: type,
+        type: 'type',
+      })),
+    };
+  }
+
+  // Check if we're completing an ids value
+  const idsValueMatch = beforeCursor.match(/ids=([a-z0-9_*-]*)$/);
+  if (idsValueMatch) {
+    const partial = idsValueMatch[1];
+
+    return {
+      from: context.pos - partial.length,
+      options: [
+        {
+          label: '*',
+          type: 'constant',
+          info: 'Wildcard - matches all IDs',
+        },
+      ],
+    };
+  }
+
+  // Check if we're completing actions
+  const actionsValueMatch = beforeCursor.match(/actions=([a-z0-9_:,*-]*)$/);
+  if (actionsValueMatch) {
+    const actionsStr = actionsValueMatch[1];
+    const lastComma = actionsStr.lastIndexOf(',');
+    const partial =
+      lastComma > -1 ? actionsStr.slice(lastComma + 1) : actionsStr;
+
+    // Parse the type from the line to get valid actions
+    const typeMatch = lineText.match(/type=([^;]*)/);
+    const typeValue = typeMatch ? typeMatch[1].trim() : null;
+
+    // Get valid actions based on type (include wildcard for completion suggestions)
+    let validActions = ['*', ...STANDARD_ACTIONS];
+    if (typeValue) {
+      const idsMatch = lineText.match(/ids=([^;]*)/);
+      const idsValue = idsMatch ? idsMatch[1].trim() : null;
+      const bothWildcard = typeValue === '*' && idsValue === '*';
+
+      if (bothWildcard) {
+        // Collect all possible actions
+        const allActions = new Set(['*']); // Include wildcard in completions
+        Object.values(RESOURCE_SPECIFIC_ACTIONS).forEach((actions) => {
+          actions.forEach((action) => allActions.add(action));
+        });
+        validActions = Array.from(allActions);
+      } else if (RESOURCE_SPECIFIC_ACTIONS[typeValue]) {
+        validActions = ['*', ...RESOURCE_SPECIFIC_ACTIONS[typeValue]];
+      }
+    }
+
+    // Filter out already selected actions
+    const selectedActions = actionsStr
+      .split(',')
+      .map((a) => a.trim())
+      .filter(Boolean);
+    const availableActions = validActions.filter(
+      (action) =>
+        !selectedActions.includes(action) || action === partial.trim(),
+    );
+
+    return {
+      from: context.pos - partial.length,
+      options: availableActions.map((action) => ({
+        label: action,
+        type: 'function',
+      })),
+    };
+  }
+
+  // Check if we're completing output_fields
+  const outputFieldsMatch = beforeCursor.match(
+    /output_fields=([a-z0-9_,*-]*)$/,
+  );
+  if (outputFieldsMatch) {
+    const fieldsStr = outputFieldsMatch[1];
+    const lastComma = fieldsStr.lastIndexOf(',');
+    const partial = lastComma > -1 ? fieldsStr.slice(lastComma + 1) : fieldsStr;
+
+    return {
+      from: context.pos - partial.length,
+      options: [
+        { label: '*', type: 'constant', apply: '*', info: 'All fields' },
+      ],
+    };
+  }
+
+  return null;
+}
+
 export default class FormRoleGrantsComponent extends Component {
   // =attributes
 
-  customExtensions = [linter(myCustomLinter)];
+  customExtensions = [
+    linter(customLinter),
+    autocompletion({
+      override: [customCompletions],
+      closeOnBlur: true,
+    }),
+    keymap.of(completionKeymap)
+  ];
 
   /**
    * @type {string}
