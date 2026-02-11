@@ -89,3 +89,8 @@ export const INLINE_DELETE_BTN = '[data-test-inline-delete-btn]';
 // Delete original banner
 export const DELETE_ORIGINAL_BANNER = '[data-test-delete-original-banner]';
 export const DELETE_ORIGINAL_BTN = '[data-test-delete-original-btn]';
+export const DELETE_ORIGINAL_DISMISS_BTN =
+  '[data-test-delete-original-banner] .hds-dismiss-button';
+
+// Delete modal
+export const DELETE_MODAL = '[data-test-delete-modal]';

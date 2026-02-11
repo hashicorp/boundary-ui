@@ -413,8 +413,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     await visit(urls.appToken);
     await click(selectors.INLINE_DELETE_BTN);
 
-    assert.dom('.hds-modal').isVisible();
-    assert.dom('.hds-modal__header').containsText('Delete');
+    assert.dom(selectors.DELETE_MODAL).isVisible();
   });
 
   test('users can delete an inactive app token via inline delete button', async function (assert) {
@@ -508,8 +507,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     );
     await click(selectors.DELETE_ORIGINAL_BTN);
 
-    assert.dom('.hds-modal').isVisible();
-    assert.dom('.hds-modal__header').containsText('Delete');
+    assert.dom(selectors.DELETE_MODAL).isVisible();
   });
 
   test('users can delete the original app token via delete original banner', async function (assert) {
@@ -548,7 +546,7 @@ module('Acceptance | app-tokens | read', function (hooks) {
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
 
     // Click the dismiss button
-    await click('[data-test-delete-original-banner] .hds-dismiss-button');
+    await click(selectors.DELETE_ORIGINAL_DISMISS_BTN);
 
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
     assert.false(currentURL().includes('clonedFromId'));

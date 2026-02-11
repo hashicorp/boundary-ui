@@ -293,8 +293,7 @@ module('Acceptance | app-tokens | permissions', function (hooks) {
     await visit(urls.appTokenWithNoActiveScopes);
     await click(selectors.INLINE_DELETE_BTN);
 
-    assert.dom('.hds-modal').isVisible();
-    assert.dom('.hds-modal__header').containsText('Delete');
+    assert.dom(selectors.DELETE_MODAL).isVisible();
   });
 
   test('users can delete app token via inline delete button on permissions page', async function (assert) {

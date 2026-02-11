@@ -288,7 +288,12 @@
 
 {{! Delete Modal - triggered from no active scopes alert }}
 {{#if this.showDeleteModal}}
-  <Hds::Modal @color='critical' @onClose={{this.toggleDeleteModal}} as |M|>
+  <Hds::Modal
+    @color='critical'
+    @onClose={{this.toggleDeleteModal}}
+    data-test-delete-modal
+    as |M|
+  >
     <M.Header @icon='alert-diamond'>{{t
         'resources.app-token.form.delete.title'
       }}</M.Header>
