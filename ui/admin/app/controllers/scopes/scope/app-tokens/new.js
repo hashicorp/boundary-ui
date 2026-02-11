@@ -14,27 +14,9 @@ export default class ScopesScopeAppTokensNewController extends Controller {
   queryParams = ['cloneAppToken'];
 
   /**
-   * Tracks if the original app token was inactive (stale, expired, revoked)
-   * when cloning was initiated.
-   * @type {boolean}
+   * Stores the original app token model being cloned.
+   * Used to access id, name, status, and isActive properties.
+   * @type {AppTokenModel|null}
    */
-  @tracked originalTokenWasInactive = false;
-
-  /**
-   * Stores the ID of the original app token being cloned.
-   * @type {string|null}
-   */
-  @tracked originalTokenId = null;
-
-  /**
-   * Stores the name of the original app token being cloned.
-   * @type {string|null}
-   */
-  @tracked originalTokenName = null;
-
-  /**
-   * Stores the status of the original app token being cloned.
-   * @type {string|null}
-   */
-  @tracked originalTokenStatus = null;
+  @tracked originalToken = null;
 }

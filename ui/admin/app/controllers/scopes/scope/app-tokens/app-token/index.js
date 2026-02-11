@@ -21,6 +21,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   @service router;
   @service intl;
   @service store;
+  @service flashMessages;
 
   // =attributes
 
@@ -141,6 +142,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
       );
       await originalToken.destroyRecord();
       this.deleteTarget = null;
+      this.flashMessages.success(this.intl.t('notifications.delete-success'));
       this.router.replaceWith({
         queryParams: {
           clonedFromId: null,
