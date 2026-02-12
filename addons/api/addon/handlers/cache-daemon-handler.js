@@ -101,6 +101,11 @@ export default class CacheDaemonHandler {
         const token = sessionData?.token;
         const resourceName = resourceNames[type];
 
+        if (remainingQuery.query?.sort) {
+          remainingQuery.sort_by = remainingQuery.query.sort.attribute;
+          remainingQuery.sort_direction = remainingQuery.query.sort.direction;
+        }
+
         remainingQuery = {
           ...remainingQuery,
           query: searchQuery,
@@ -108,6 +113,11 @@ export default class CacheDaemonHandler {
           token,
           resource: resourceName,
         };
+
+        console.log(
+          `Searching cache daemon for ${resourceName} with query:`,
+          remainingQuery,
+        );
 
         let cacheDaemonResults = {};
         try {

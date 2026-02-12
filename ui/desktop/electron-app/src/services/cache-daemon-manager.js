@@ -132,7 +132,15 @@ class CacheDaemonManager {
     }
 
     delete requestData.token;
+    console.log(
+      'Making search request to cache daemon with data:',
+      requestData,
+    );
     const queryString = new URLSearchParams(requestData);
+    console.log(
+      'Constructed query string for cache daemon request:',
+      queryString.toString(),
+    );
 
     const request = {
       method: 'GET',
@@ -159,7 +167,11 @@ const searchCliCommand = (requestData) => {
     searchCommand.push(`-query=${requestData.query}`);
   }
   if (requestData.filter) {
-    searchCommand.push(`-filter=${requestData.filter}`);
+    searchCommand.push(`-filter=${requestData.filter}`); //is this even needed?
+  }
+  if (requestData.sort_by && requestData.sort_direction) {
+    searchCommand.push(`-sort-by=${requestData.sort_by}`);
+    searchCommand.push(`-sort-direction=${requestData.sort_direction}`);
   }
   if (requestData.force_refresh) {
     searchCommand.push(`-force-refresh=true`);
