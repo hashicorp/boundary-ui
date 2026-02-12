@@ -114,11 +114,6 @@ export default class CacheDaemonHandler {
           resource: resourceName,
         };
 
-        console.log(
-          `Searching cache daemon for ${resourceName} with query:`,
-          remainingQuery,
-        );
-
         let cacheDaemonResults = {};
         try {
           cacheDaemonResults = await this.ipc.invoke(
