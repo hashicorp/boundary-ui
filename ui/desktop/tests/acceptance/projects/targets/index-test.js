@@ -903,7 +903,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await click(`[href="${urls.targets}"]`);
     await click(TABLE_SORT_BTN);
 
-    console.log(currentURL());
     assert.true(currentURL().includes('sortAttribute=name'));
     assert.true(currentURL().includes('sortDirection=asc'));
     assert.dom(TABLE_SORT_BTN_ARROW_UP).isVisible();
