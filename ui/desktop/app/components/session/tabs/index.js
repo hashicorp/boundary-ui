@@ -77,29 +77,40 @@ export default class SessionTerminalTabsComponent extends Component {
     xterm.loadAddon(new CanvasAddon());
     xterm.open(termContainer);
     fitAddon.fit();
-    xterm.focus();
-
-    // Generate a UUID to have the terminal handlers be unique
-    this.id = uuidv4();
-    this.#setupTerminal(fitAddon, xterm, termContainer);
 
     const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
     const { model } = this.args;
 
-    const { proxy_address, proxy_port, started_desktop_client, target } = model;
+    const { started_desktop_client, target } = model;
 
-    // Only send the command in certain scenarios:
-    // 1. Only for SSH targets
-    // 2. Don't connect if the session wasn't initiated in the desktop client
-    //    which means we won't have proxy information
-    // 3. Only connect if the user has an SSH client available in their path
-    if (target?.isSSH && started_desktop_client && isSSHCommandAvailable) {
-      // Send an SSH command immediately
-      window.terminal.send(
-        `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`,
-        this.id,
-      );
-    }
+    const autoSSH = Boolean(
+      target?.isSSH && started_desktop_client && isSSHCommandAvailable,
+    );
+
+    // Generate a UUID to have the terminal handlers be unique
+    this.id = uuidv4();
+    this.#setupTerminal(fitAddon, xterm, termContainer, {
+      autoSSH,
+      sessionId: model?.id,
+    });
+
+    termContainer.addEventListener(
+      'focus',
+      () => {
+        this.ipc.invoke('setActiveTerminal', this.id);
+      },
+      true,
+    );
+
+    termContainer.addEventListener(
+      'blur',
+      () => {
+        this.ipc.invoke('setActiveTerminal', null);
+      },
+      true,
+    );
+
+    xterm.focus();
   }
 
   willDestroy() {
@@ -114,10 +125,18 @@ export default class SessionTerminalTabsComponent extends Component {
     this.removeTerminalListener?.();
   }
 
-  #setupTerminal(fitAddon, xterm, termContainer) {
-    // Terminal is exposed by contextBridge within the preload script
-    window.terminal.create({ id: this.id, cols: xterm.cols, rows: xterm.rows });
-    xterm.onData((data) => window.terminal.send(data, this.id));
+  #setupTerminal(fitAddon, xterm, termContainer, options = {}) {
+    const payload = {
+      id: this.id,
+      cols: xterm.cols,
+      rows: xterm.rows,
+      sessionId: options.sessionId,
+    };
+    // add SSH options
+    if (options?.autoSSH) {
+      payload.autoSSH = true;
+    }
+    window.terminal.create(payload);
 
     // Save the handler to cleanup the listener on the renderer process later
     this.removeTerminalListener = window.terminal.receive((value) => {

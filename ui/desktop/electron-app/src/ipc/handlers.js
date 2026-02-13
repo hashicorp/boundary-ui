@@ -13,14 +13,13 @@ const sanitizer = require('../utils/sanitizer.js');
 const isLocalhost = require('../utils/isLocalhost');
 const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
-const pty = require('node-pty');
 const which = require('which');
 const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 const { releaseVersion } = require('../../config/config.js');
 const store = require('../services/electron-store-manager');
 const rdpClientManager = require('../services/rdp-client-manager');
-
+const terminalManager = require('../services/terminal-manager.js');
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
  * rewrite the CSP to allow requests.
@@ -297,53 +296,16 @@ handle('launchRdpClient', async (sessionId) =>
 );
 
 /**
+ * Sets the active terminal ID in the terminal manager to capture user input
+ */
+handle('setActiveTerminal', (terminalId) =>
+  terminalManager.setActiveTerminalId(terminalId),
+);
+
+/**
  * Handler to help create terminal windows. We don't use the helper `handle` method
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
 ipcMain.on('createTerminal', (event, payload) => {
-  const { id, cols, rows } = payload;
-  const { sender } = event;
-  const terminalShell = isWindows()
-    ? 'powershell.exe'
-    : process.env.SHELL || '/bin/bash';
-  const ptyProcess = pty.spawn(terminalShell, [], {
-    name: 'xterm-color',
-    cols,
-    rows,
-    cwd: process.env.HOME,
-    env: process.env,
-  });
-  const incomingDataChannel = `terminalIncomingData-${id}`;
-  const keystrokeChannel = `terminalKeystroke-${id}`;
-  const resizeChannel = `resize-${id}`;
-  const removeChannel = `removeTerminal-${id}`;
-
-  // This sends to the renderer and xterm whatever the ptyProcess (host terminal) outputs.
-  ptyProcess.on('data', function (data) {
-    sender.send(incomingDataChannel, data);
-  });
-
-  // This writes into ptyProcess (host terminal) whatever we write through xterm.
-  ipcMain.on(keystrokeChannel, (event, value) => {
-    ptyProcess.write(value);
-  });
-
-  // Resize the number of columns and rows received from xterm.
-  ipcMain.on(resizeChannel, (event, { cols, rows }) => {
-    ptyProcess.resize(cols, rows);
-  });
-
-  // We use `ipcMain.once` as we want this listener cleaned up
-  // after killing the ptyProcess as well.
-  ipcMain.once(removeChannel, () => {
-    // Just let the error bubble up since we can't do anything
-    try {
-      //  TODO: Should we be killing entire process tree in windows with its pid?
-      ptyProcess.kill();
-    } finally {
-      // Remove listeners
-      ipcMain.removeAllListeners(keystrokeChannel);
-      ipcMain.removeAllListeners(resizeChannel);
-    }
-  });
+  terminalManager.createTerminal(ipcMain, event, payload);
 });
