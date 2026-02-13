@@ -10,10 +10,11 @@ import {
   currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
+  setupBoundaryApiMock(hooks);
 
   const instances = {
     scopes: {
@@ -86,8 +87,6 @@ module('Acceptance | projects', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
 
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
   });
 

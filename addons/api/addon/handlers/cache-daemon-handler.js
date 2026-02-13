@@ -59,7 +59,6 @@ const fetchControllerData = async (context, next) => {
  */
 export default class CacheDaemonHandler {
   @service session;
-  @service ipc;
 
   constructor(context) {
     setOwner(this, getOwner(context));
@@ -70,9 +69,8 @@ export default class CacheDaemonHandler {
       case 'query': {
         const { store, data } = context.request;
         const { type, query, options: { pushToStore = true } = {} } = data;
-        const isCacheDaemonRunning = await this.ipc.invoke(
-          'isCacheDaemonRunning',
-        );
+        const isCacheDaemonRunning =
+          await window.boundary.isCacheDaemonRunning();
 
         // eslint-disable-next-line no-unused-vars
         let { recursive, scope_id, page, pageSize, ...remainingQuery } = query;
@@ -111,23 +109,19 @@ export default class CacheDaemonHandler {
 
         let cacheDaemonResults = {};
         try {
-          cacheDaemonResults = await this.ipc.invoke(
-            'searchCacheDaemon',
-            remainingQuery,
-          );
+          cacheDaemonResults =
+            await window.boundary.searchCacheDaemon(remainingQuery);
         } catch (e) {
           // If we got a 403, most likely the cache daemon was restarted and our token is no longer valid
           // I'm not sure if we can get a 401 since we always send a token but we'll handle it in the same way
           if (e.statusCode === 403 || e.statusCode === 401) {
             try {
-              await this.ipc.invoke('addTokenToDaemons', {
+              await window.boundary.addTokenToDaemons({
                 tokenId: auth_token_id,
                 token,
               });
-              cacheDaemonResults = await this.ipc.invoke(
-                'searchCacheDaemon',
-                remainingQuery,
-              );
+              cacheDaemonResults =
+                await window.boundary.searchCacheDaemon(remainingQuery);
             } catch (err) {
               // If it fails again just fall back to fetching controller data
               __electronLog?.error(

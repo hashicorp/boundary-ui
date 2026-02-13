@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
-import WindowMockIPC from '../helpers/window-mock-ipc';
+import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
 import config from '../../config/environment';
 
 module('Acceptance | clusterUrl', function (hooks) {
@@ -17,7 +17,6 @@ module('Acceptance | clusterUrl', function (hooks) {
   setupBrowserFakes(hooks, { window: true });
 
   const currentOrigin = window.location.origin;
-  let mockIPC;
 
   const instances = {
     scopes: {
@@ -36,7 +35,6 @@ module('Acceptance | clusterUrl', function (hooks) {
   const stubs = {
     global: null,
     org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -55,10 +53,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     projects: null,
     targets: null,
   };
-  const setupMockIpc = (test) => {
-    test.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
-  };
+  setupBoundaryApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await invalidateSession();
@@ -113,41 +108,37 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
-    setupMockIpc(this);
     await visit(urls.index);
 
-    assert.notOk(mockIPC.clusterUrl);
+    assert.notOk(window.boundary.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('can set clusterUrl', async function (assert) {
     assert.expect(3);
-    setupMockIpc(this);
-    assert.notOk(mockIPC.clusterUrl);
+    assert.notOk(window.boundary.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(mockIPC.clusterUrl, currentOrigin);
+    assert.strictEqual(window.boundary.clusterUrl, currentOrigin);
   });
 
   test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(4);
-    setupMockIpc(this);
-    assert.notOk(mockIPC.clusterUrl);
+    assert.notOk(window.boundary.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(mockIPC.clusterUrl, currentOrigin);
+    assert.strictEqual(window.boundary.clusterUrl, currentOrigin);
     await click('.change-origin a');
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
-    setupMockIpc(this);
-    assert.notOk(mockIPC.clusterUrl);
+    assert.notOk(window.boundary.clusterUrl);
     sinon
       .stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl')
       .throws();

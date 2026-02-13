@@ -11,7 +11,6 @@ import { notifyError } from 'core/decorators/notify';
 export default class ClusterUrlService extends Service {
   // =services
 
-  @service ipc;
   @service store;
   @service storage;
 
@@ -42,7 +41,7 @@ export default class ClusterUrlService extends Service {
    * @type {Promise{?string}}
    */
   get mainClusterUrl() {
-    return this.ipc.invoke('getClusterUrl');
+    return window.boundary.getClusterUrl();
   }
 
   // =methods
@@ -76,7 +75,7 @@ export default class ClusterUrlService extends Service {
       this.adapter.host = clusterUrl;
       this.rendererClusterUrl = clusterUrl;
       if (clusterUrl !== (await this.mainClusterUrl)) {
-        await this.ipc.invoke('setClusterUrl', clusterUrl);
+        await window.boundary.setClusterUrl(clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;
@@ -94,6 +93,6 @@ export default class ClusterUrlService extends Service {
   })
   async resetClusterUrl() {
     this.rendererClusterUrl = null;
-    await this.ipc.invoke('resetClusterUrl');
+    await window.boundary.resetClusterUrl();
   }
 }

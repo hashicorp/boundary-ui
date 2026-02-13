@@ -11,7 +11,7 @@ import { underscore } from '@ember/string';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
- * Must be called after setupMirage.
+ * Must be called after setupBoundaryApiMock in desktop tests and setupMirage in admin tests.
  *
  * ```js
  * import setupStubs from 'api/test-support/handlers/cache-daemon-search';
@@ -19,14 +19,15 @@ import { underscore } from '@ember/string';
  * module('Acceptance | my test', function(hooks) {
  *  setupApplicationTest(hooks);
  *  setupMirage(hooks);
+ *  setupBoundaryApiMock(hooks);
  *  setupStubs(hooks);
  *
  *   // add your actual tests here
  * });
  * ```
  *
- * This will setup a stub for the IPC service and include helper methods to
- * help setup what the cache daemon search command returns.
+ * This will setup a stub for window.boundary.searchCacheDaemon and include
+ * helper methods to help setup what the cache daemon search command returns.
  *
  * @module Test Helpers
  * @public
@@ -35,8 +36,10 @@ export default function setupStubs(hooks) {
   let stubTypes = [];
 
   hooks.beforeEach(function () {
-    const ipcService = this.owner.lookup('service:ipc');
-    this.ipcStub = sinon.stub(ipcService, 'invoke');
+    this.searchCacheDaemonStub = sinon.stub(
+      window.boundary,
+      'searchCacheDaemon',
+    );
 
     /**
      * We aim to still use mirage data when stubbing out the cache daemon
@@ -56,34 +59,32 @@ export default function setupStubs(hooks) {
       stubTypes = types;
 
       types.forEach((type, i) => {
-        this.ipcStub
-          .withArgs('searchCacheDaemon')
-          .onCall(i)
-          .callsFake(() => {
-            let models;
-            let resourceName;
-            if (typeOf(type) === 'object') {
-              models = type.func();
-              resourceName = type.resource;
-            } else {
-              models = this.server.schema[type].all().models;
-              resourceName = type;
-            }
+        this.searchCacheDaemonStub.onCall(i).callsFake(() => {
+          let models;
+          let resourceName;
+          if (typeOf(type) === 'object') {
+            models = type.func();
+            resourceName = type.resource;
+          } else {
+            models = this.server.schema[type].all().models;
+            resourceName = type;
+          }
 
-            return {
-              [underscore(resourceNames[singularize(resourceName)])]:
-                models.map((model) => {
-                  // Use internal serializer to serialize the model correctly
-                  // according to our mirage serializers
-                  const modelData =
-                    this.server.serializerOrRegistry.serialize(model);
+          return {
+            [underscore(resourceNames[singularize(resourceName)])]: models.map(
+              (model) => {
+                // Use internal serializer to serialize the model correctly
+                // according to our mirage serializers
+                const modelData =
+                  this.server.serializerOrRegistry.serialize(model);
 
-                  // Serialize the data properly to standard JSON as that is what
-                  // we're expecting from the cache daemon response
-                  return JSON.parse(JSON.stringify(modelData));
-                }),
-            };
-          });
+                // Serialize the data properly to standard JSON as that is what
+                // we're expecting from the cache daemon response
+                return JSON.parse(JSON.stringify(modelData));
+              },
+            ),
+          };
+        });
       });
     };
   });
@@ -91,22 +92,19 @@ export default function setupStubs(hooks) {
   hooks.afterEach(function () {
     // Verify the number of mocks we set up match with how
     // many times the cache daemon was called with
-    sinon.assert.callCount(
-      this.ipcStub.withArgs('searchCacheDaemon'),
-      stubTypes.length,
-    );
+    sinon.assert.callCount(this.searchCacheDaemonStub, stubTypes.length);
 
     stubTypes.forEach((type, i) => {
       // Assert that the stub was called with the resource we're trying to mock
       // so we don't mistakenly mock the wrong resource
-      const ipcCall = this.ipcStub.withArgs('searchCacheDaemon').getCall(i);
+      const call = this.searchCacheDaemonStub.getCall(i);
       let resource = type;
       if (typeOf(type) === 'object') {
         resource = type.resource;
       }
 
       const mappedResourceName = resourceNames[singularize(resource)];
-      sinon.assert.match(ipcCall.args[1], { resource: mappedResourceName });
+      sinon.assert.match(call.args[0], { resource: mappedResourceName });
     });
 
     sinon.restore();
