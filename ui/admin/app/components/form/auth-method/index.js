@@ -17,11 +17,6 @@ const modelTypeToComponent = {
 };
 
 export default class FormAuthMethodIndex extends Component {
-  // For fields with just a value property
-  createEmptyValue = () => ({ value: '' });
-
-  // For fields with key and value properties
-  createEmptyKeyValue = () => ({ key: '', value: '' });
   get authMethodFormComponent() {
     const component = modelTypeToComponent[this.args.model.type];
     assert(
@@ -34,26 +29,30 @@ export default class FormAuthMethodIndex extends Component {
   /**
    * Adds a new empty row to the specified field
    * @param {string} field - The field name to add a row to
-   * @param {function} emptyRow - Function that returns an empty row object
+   * @param {Array<string>} properties - Array of property names for the empty row (e.g., ['value'] or ['key', 'value'])
    */
   @action
-  addRow(field, emptyRow) {
-    this.args.model[field] = [...this.args.model[field], emptyRow()];
+  addRow(field, properties) {
+    const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+    this.args.model[field] = [...this.args.model[field], emptyRow];
   }
 
   /**
    * Removes a row from the specified field
    * @param {string} field - The field name to remove a row from
-   * @param {function} emptyRow - Function that returns an empty row object (to ensure at least one row exists)
    * @param {object} rowData - The row data to remove
    */
   @action
-  removeRow(field, emptyRow, rowData) {
+  removeRow(field, rowData) {
     let rows = this.args.model[field].filter((item) => item !== rowData);
     // Ensure at least one empty row exists for editing
     if (rows.length === 0) {
-      rows = [emptyRow()];
+      const emptyRow = Object.fromEntries(
+        Object.keys(rowData).map((key) => [key, '']),
+      );
+      rows = [emptyRow];
     }
+
     this.args.model[field] = rows;
   }
 
