@@ -29,3 +29,4 @@ incomplete-loading:
   refreshing:
     description: Updating cache...
     tooltip: Some items may not appear until the cache is finished updating
+selected-items: '{items} selected out of {total}'
