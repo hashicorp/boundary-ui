@@ -85,8 +85,8 @@
   <Form::Field::KeyValue
     @name='certificates'
     @data={{@model.certificates}}
-    @onAdd={{fn @addRow 'certificates' @createEmptyValue}}
-    @onRemove={{fn @removeRow 'certificates' @createEmptyValue}}
+    @onAdd={{fn @addRow 'certificates' (array 'value')}}
+    @onRemove={{fn @removeRow 'certificates'}}
     @onUpdate={{fn @updateRow 'certificates'}}
     @legend={{t 'resources.auth-method.form.certificates.label'}}
     @helperText={{t 'resources.auth-method.form.certificates.help'}}
@@ -403,8 +403,8 @@
   <Form::field::KeyValue
     @name='account_attribute_maps'
     @data={{@model.account_attribute_maps}}
-    @onAdd={{fn @addRow 'account_attribute_maps' @createEmptyKeyValue}}
-    @onRemove={{fn @removeRow 'account_attribute_maps' @createEmptyKeyValue}}
+    @onAdd={{fn @addRow 'account_attribute_maps' (array 'key' 'value')}}
+    @onRemove={{fn @removeRow 'account_attribute_maps'}}
     @onUpdate={{fn @updateRow 'account_attribute_maps'}}
     @legend={{t 'resources.auth-method.form.account_attribute_maps.label'}}
     @helperText={{t 'resources.auth-method.form.account_attribute_maps.help'}}
