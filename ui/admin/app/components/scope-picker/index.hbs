@@ -4,18 +4,18 @@
 }}
 
 <Hds::Dropdown
+  class='scope-picker'
   @enableCollisionDetection={{true}}
-  @matchToggleWidth={{true}}
-  {{! HDS provided class to automatically fade in/out }}
-  class='hds-side-nav-hide-when-minimized scope-picker'
-  data-test-side-nav-scope-dropdown
+  @listPosition='bottom-left'
+  data-test-header-scope-dropdown
+  ...attributes
   as |D|
 >
   {{#let this.currentScope as |scope|}}
     <D.ToggleButton
       @text={{scope.name}}
       @icon={{scope.icon}}
-      class='scope-picker__toggle-button'
+      class='dropdown-toggle-color-override'
     />
   {{/let}}
 

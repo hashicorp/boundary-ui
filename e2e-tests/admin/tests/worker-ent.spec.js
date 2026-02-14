@@ -14,7 +14,7 @@ test(
 
     await page.goto('/');
     await page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Workers' })
       .click();
     await page.getByRole('link', { name: 'New', exact: true }).click();

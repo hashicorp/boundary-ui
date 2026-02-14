@@ -3,28 +3,26 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Sidebar as |sidebarLayout|>
-  <sidebarLayout.sidebar>
-    <Rose::Nav::Sidebar as |nav|>
-      <nav.link @route='scopes.scope.projects.targets'>
-        <Hds::Icon @name='crosshair' @isInline={{true}} />
-        {{t 'resources.target.title_plural'}}
-      </nav.link>
+<Hds::AppSideNav::Portal
+  @ariaLabel='Primary'
+  class='side-nav-dark-mode-overrides'
+  as |Nav|
+>
+  <Nav.Link
+    @icon='crosshair'
+    @text={{t 'resources.target.title_plural'}}
+    @route='scopes.scope.projects.targets'
+  />
+  <Nav.Link
+    @icon='entry-point'
+    @text={{t 'resources.session.title_plural'}}
+    @route='scopes.scope.projects.sessions'
+  />
+  <Nav.Link
+    @icon='settings'
+    @text={{t 'titles.settings'}}
+    @route='scopes.scope.projects.settings'
+  />
+</Hds::AppSideNav::Portal>
 
-      <nav.link @route='scopes.scope.projects.sessions'>
-        <Hds::Icon @name='entry-point' @isInline={{true}} />
-        {{t 'resources.session.title_plural'}}
-      </nav.link>
-      <nav.link @route='scopes.scope.projects.settings'>
-        <Hds::Icon @name='settings' @isInline={{true}} />
-        {{t 'titles.settings'}}
-      </nav.link>
-    </Rose::Nav::Sidebar>
-  </sidebarLayout.sidebar>
-
-  <sidebarLayout.body>
-    <main>
-      {{outlet}}
-    </main>
-  </sidebarLayout.body>
-</Rose::Layout::Sidebar>
+{{outlet}}

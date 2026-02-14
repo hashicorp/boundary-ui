@@ -987,6 +987,9 @@ importers:
       '@xterm/xterm':
         specifier: ^5.5.0
         version: 5.5.0
+      ember-a11y-refocus:
+        specifier: ^5.0.0
+        version: 5.0.0(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8(esbuild@0.25.9)))
       ember-named-blocks-polyfill:
         specifier: ^0.2.5
         version: 0.2.5

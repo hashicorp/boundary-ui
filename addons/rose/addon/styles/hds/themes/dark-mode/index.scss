@@ -132,11 +132,86 @@
   }
 }
 
+@mixin dark-mode-button-override {
+  /* stylelint-disable selector-class-pattern */
+  .hds-app-frame:has(
+    .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
+  ) {
+    .hds-button,
+    .hds-dropdown-toggle-button,
+    .hds-dropdown-toggle-icon,
+    .hds-app-header__home-link {
+      color: var(--token-color-palette-neutral-200);
+      background-color: var(--token-color-palette-neutral-50);
+      border-color: var(--token-color-palette-neutral-100);
+    }
+  }
+  /* stylelint-enable selector-class-pattern */
+}
+
+@mixin dark-mode-app-header-override {
+  .app-header-dark-mode-overrides {
+    color: var(--token-color-palette-neutral-700);
+    background: var(--token-color-palette-neutral-0);
+    border-bottom-color: var(--token-color-palette-neutral-100);
+
+    /* stylelint-disable selector-class-pattern */
+    .home-link-color-override,
+    .hds-app-header__actions {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+
+    .dropdown-toggle-color-override,
+    .hds-app-header__menu-button {
+      background: var(--token-color-palette-neutral-0);
+      border-color: var(--token-color-palette-neutral-100);
+
+      &:hover {
+        background: var(--token-color-palette-neutral-50);
+      }
+
+      &:active,
+      &:focus {
+        background: var(--token-color-palette-neutral-0);
+      }
+    }
+    /* stylelint-enable selector-class-pattern */
+  }
+}
+
+@mixin dark-mode-app-side-nav-override {
+  .side-nav-dark-mode-overrides {
+    /* stylelint-disable selector-class-pattern */
+    .hds-app-side-nav__overlay {
+      background-color: var(--token-color-palette-neutral-50);
+    }
+
+    .hds-app-side-nav__list-title {
+      color: var(--token-color-palette-neutral-300);
+    }
+
+    .hds-app-side-nav__list-item-link.active {
+      &::after {
+        background-color: var(--token-color-palette-blue-400);
+      }
+
+      .hds-app-side-nav__list-item-icon-leading,
+      .hds-app-side-nav__list-item-text {
+        color: var(--token-color-palette-blue-400);
+      }
+    }
+    /* stylelint-enable selector-class-pattern */
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
     @include dark-mode-ember-dropdown-override;
+    @include dark-mode-app-header-override;
+    @include dark-mode-app-side-nav-override;
+    @include dark-mode-button-override;
   }
 }
 
@@ -144,4 +219,7 @@
   @include dark-mode;
   @include dark-mode-modal-override;
   @include dark-mode-ember-dropdown-override;
+  @include dark-mode-app-header-override;
+  @include dark-mode-app-side-nav-override;
+  @include dark-mode-button-override;
 }

@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'admin/tests/helpers';
+import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { click } from '@ember/test-helpers';
@@ -12,7 +12,7 @@ import { setupMirage } from 'admin/tests/helpers/mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 
-module('Integration | Component | scope-picker/index', function (hooks) {
+module('Integration | Component | scope-picker', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupIntl(hooks, 'en-us');
@@ -27,7 +27,8 @@ module('Integration | Component | scope-picker/index', function (hooks) {
   const PROJECT_ADD_MORE_TEXT =
     '[data-test-scope-picker-project-and-more-text]';
   const PROJECT_LIST_COUNT = '[data-test-scope-picker-project-count]';
-  const SELECTED_SCOPE_CHECK = (id) => `[href="/scopes/${id}"] .hds-icon-check`;
+  const SELECTED_SCOPE_CHECK =
+    '.hds-dropdown-list-item--variant-checkmark-selected .hds-text';
 
   let global;
   let scopeService;
@@ -195,7 +196,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText('Global');
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-globe');
-    assert.dom(SELECTED_SCOPE_CHECK('global')).isVisible();
+    assert.dom(SELECTED_SCOPE_CHECK).hasText('Global');
   });
 
   test('it renders correct dropdown button text and icon when selected scope is org type', async function (assert) {
@@ -215,7 +216,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText(scopeService.org.displayName);
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-org');
-    assert.dom(SELECTED_SCOPE_CHECK(scopeService.org.id)).isVisible();
+    assert.dom(SELECTED_SCOPE_CHECK).hasText(scopeService.org.displayName);
   });
 
   test('it renders correct dropdown button text and icon when selected scope is project type', async function (assert) {
@@ -229,7 +230,6 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     });
     query.filters.scope_id = [{ equals: org.id }];
     const projects = await store.query('scope', { scope_id: org.id, query });
-    scopeService.org = global;
     scopeService.project = projects[0];
     query.filters.scope_id = [{ equals: 'global' }];
     scopeService.orgsList = await store.query('scope', {
@@ -243,6 +243,6 @@ module('Integration | Component | scope-picker/index', function (hooks) {
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText(scopeService.project.displayName);
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-grid');
-    assert.dom(SELECTED_SCOPE_CHECK(scopeService.project.id)).isVisible();
+    assert.dom(SELECTED_SCOPE_CHECK).hasText(scopeService.project.displayName);
   });
 });

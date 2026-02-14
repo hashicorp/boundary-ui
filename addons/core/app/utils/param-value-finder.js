@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export { default } from 'rose/components/rose/header/utilities';
+export { default } from 'core/utils/param-value-finder';

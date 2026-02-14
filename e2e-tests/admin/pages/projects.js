@@ -16,7 +16,7 @@ export class ProjectsPage extends BaseResourcePage {
   async createProject() {
     const projectName = 'Project ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Projects' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
