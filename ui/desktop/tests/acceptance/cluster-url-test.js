@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
-import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
 import config from '../../config/environment';
 
 module('Acceptance | clusterUrl', function (hooks) {
@@ -53,7 +53,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     projects: null,
     targets: null,
   };
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await invalidateSession();

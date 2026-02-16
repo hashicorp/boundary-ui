@@ -6,11 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   let controller;
   let clusterUrl;

@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
 
 module('Unit | Controller | cluster-url', function (hooks) {
   setupTest(hooks);
@@ -16,7 +16,7 @@ module('Unit | Controller | cluster-url', function (hooks) {
   let controller;
   let clusterUrl;
 
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await authenticateSession({});

@@ -5,7 +5,7 @@
 
 import { faker } from '@faker-js/faker';
 
-export default function initializeMockBoundaryAPI(server, config) {
+export default function initializeMockBoundaryContextBridgeAPI(server, config) {
   const isTesting = config.environment === 'test';
 
   /**
@@ -15,7 +15,7 @@ export default function initializeMockBoundaryAPI(server, config) {
    * Outside of Electron or with mirage, we mock the boundary API object to
    * simulate the Electron preload script's exposed API.
    */
-  class MockBoundaryAPI {
+  class MockBoundaryContextBridgeAPI {
     clusterUrl = null;
 
     checkOS() {
@@ -274,10 +274,10 @@ export default function initializeMockBoundaryAPI(server, config) {
    * from contextBridge and we can't override it
    */
   if (config.mirage?.enabled && !isTesting) {
-    const boundaryAPIMock = new MockBoundaryAPI();
+    const boundaryContextBridgeAPIMock = new MockBoundaryContextBridgeAPI();
     // Only in browser mode, we create the boundary API object not in Electron mode because they already exist from contextBridge
     if (!window.boundary) {
-      window.boundary = boundaryAPIMock;
+      window.boundary = boundaryContextBridgeAPIMock;
     }
   }
 }

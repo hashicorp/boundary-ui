@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
-import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
 
 module('Acceptance | Application', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,7 +20,7 @@ module('Acceptance | Application', function (hooks) {
     '[data-test-toast-notification] button';
   const TOAST_DISMISS_BUTTON = '[aria-label="Dismiss"]';
 
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   const urls = {
     clusterUrl: null,

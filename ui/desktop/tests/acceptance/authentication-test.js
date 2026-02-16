@@ -18,14 +18,14 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   const instances = {
     scopes: {

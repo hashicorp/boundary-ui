@@ -14,7 +14,7 @@ import {
   waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
-import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import { TYPE_TARGET_RDP } from 'api/models/target';
@@ -23,7 +23,7 @@ import { RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;

@@ -11,7 +11,7 @@ import {
   click,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
-import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
 import {
   invalidateSession,
   currentSession,
@@ -28,7 +28,7 @@ import { RDP_CLIENT_NONE, RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   let getTargetCount;

@@ -16,7 +16,7 @@ import {
   authenticateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import {
@@ -28,7 +28,7 @@ import {
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const instances = {

@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
 import {
   currentSession,
   invalidateSession,
@@ -24,7 +24,7 @@ import sinon from 'sinon';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE =

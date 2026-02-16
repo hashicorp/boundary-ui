@@ -8,7 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'desktop/tests/helpers/mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupBoundaryApiMock } from '../../../../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../../../../helpers/boundary-context-bridge-api-mock';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
@@ -16,7 +16,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks, 'en-us');
-    setupBoundaryApiMock(hooks);
+    setupBoundaryContextBridgeApiMock(hooks);
 
     let controller;
     let store;

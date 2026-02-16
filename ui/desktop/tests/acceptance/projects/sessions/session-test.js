@@ -9,7 +9,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import { setupBoundaryApiMock } from '../../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -19,7 +19,7 @@ import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';

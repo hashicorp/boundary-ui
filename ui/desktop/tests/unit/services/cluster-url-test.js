@@ -5,11 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
 
 module('Unit | Service | clusterUrl', function (hooks) {
   setupTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   let service;
 

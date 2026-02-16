@@ -13,11 +13,11 @@ import {
   RDP_CLIENT_WINDOWS_APP_LINK,
   RDP_CLIENT_MSTSC_LINK,
 } from 'desktop/services/rdp';
-import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
 
 module('Unit | Service | rdp', function (hooks) {
   setupTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   let service;
 

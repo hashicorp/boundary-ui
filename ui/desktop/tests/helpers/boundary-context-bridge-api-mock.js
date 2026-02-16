@@ -6,9 +6,9 @@ import sinon from 'sinon';
 
 /**
  * Helper to mock the `window.boundary` API in tests.
- * Use `setupBoundaryAPIMock(hooks)` in tests and access via `window.boundary`.
+ * Use `setupBoundaryContextBridgeApiMock(hooks)` in tests and access via `window.boundary`.
  */
-export class BoundaryAPIMock {
+export class BoundaryContextBridgeAPIMock {
   clusterUrl = null;
 
   // cluster
@@ -77,9 +77,9 @@ export class BoundaryAPIMock {
   launchRdpClient = sinon.stub().resolves(true);
 }
 
-export function setupBoundaryApiMock(hooks) {
+export function setupBoundaryContextBridgeApiMock(hooks) {
   hooks.beforeEach(function () {
-    const mockBoundary = new BoundaryAPIMock();
+    const mockBoundary = new BoundaryContextBridgeAPIMock();
     window.boundary = mockBoundary;
     this.searchCacheDaemonStub = window.boundary.searchCacheDaemon;
   });

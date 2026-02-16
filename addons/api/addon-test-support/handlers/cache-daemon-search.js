@@ -11,7 +11,7 @@ import { underscore } from '@ember/string';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
- * Must be called after setupMirage and setupBoundaryApiMock in tests.
+ * Must be called after setupMirage and setupBoundaryContextBridgeApiMock in tests.
  *
  * ```js
  * import setupStubs from 'api/test-support/handlers/cache-daemon-search';
@@ -19,7 +19,7 @@ import { underscore } from '@ember/string';
  * module('Acceptance | my test', function(hooks) {
  *  setupApplicationTest(hooks);
  *  setupMirage(hooks);
- *  setupBoundaryApiMock(hooks);
+ *  setupBoundaryContextBridgeApiMock(hooks);
  *  setupStubs(hooks);
  *
  *   // add your actual tests here

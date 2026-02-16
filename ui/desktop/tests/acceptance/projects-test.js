@@ -10,11 +10,11 @@ import {
   currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryApiMock } from '../helpers/boundary-api-mock';
+import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
 
 module('Acceptance | projects', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryApiMock(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
   const instances = {
     scopes: {
