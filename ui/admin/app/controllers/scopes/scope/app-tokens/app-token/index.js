@@ -21,7 +21,6 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   @service router;
   @service intl;
   @service store;
-  @service flashMessages;
 
   // =attributes
 
@@ -135,25 +134,13 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
     this.showDeleteModal = false;
     this.deleteConfirmation = null;
 
-    if (this.deleteTarget === 'original') {
-      const originalToken = await this.store.findRecord(
-        'app-token',
-        this.clonedFromId,
-      );
-      await originalToken.destroyRecord();
-      this.deleteTarget = null;
-      this.flashMessages.success(this.intl.t('notifications.delete-success'));
-      this.router.replaceWith({
-        queryParams: {
-          clonedFromId: null,
-          clonedFromName: null,
-          clonedFromStatus: null,
-        },
-      });
-    } else {
-      this.deleteTarget = null;
-      await this.appTokens.delete(this.model);
-    }
+    const tokenToDelete =
+      this.deleteTarget === 'original'
+        ? await this.store.findRecord('app-token', this.clonedFromId)
+        : this.model;
+
+    this.deleteTarget = null;
+    await this.appTokens.delete(tokenToDelete);
   }
 
   /**

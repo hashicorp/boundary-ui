@@ -31,7 +31,7 @@
   <page.body>
     <Form::AppToken::New
       @model={{@model}}
-      @submit={{fn this.appTokens.create @model}}
+      @submit={{fn this.appTokens.create @model this.cloneAppToken}}
       @cancel={{fn this.appTokens.cancel @model}}
     />
   </page.body>

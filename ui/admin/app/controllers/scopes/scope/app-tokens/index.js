@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller, { inject as controller } from '@ember/controller';
+import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
@@ -18,10 +18,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @service can;
   @service intl;
   @service router;
-
-  // =controllers
-
-  @controller('scopes/scope/app-tokens/new') newAppTokenController;
+  @service store;
 
   // =attributes
 
@@ -163,11 +160,13 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(() => 'notifications.create-success')
-  async create(appToken) {
-    // Get original token from the new controller
-    const originalToken = this.newAppTokenController.originalToken;
-
+  async create(appToken, cloneAppTokenId) {
     await appToken.save();
+
+    // If cloning, fetch the original token to check if it was inactive
+    const originalToken = cloneAppTokenId
+      ? await this.store.findRecord('app-token', cloneAppTokenId)
+      : null;
     if (this.can.can('read model', appToken)) {
       const queryParams = { showCreatedAppToken: true };
 
