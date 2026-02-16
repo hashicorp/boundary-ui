@@ -71,7 +71,7 @@ class TerminalManager {
     ipcMain.once(removeChannel, cleanup);
   }
 
-  createTerminalView({ position, id, autoSSH }) {
+  createTerminalView({ position, id = null, autoSSH = false }) {
     this.#sessionId = id;
     this.#autoSSH = autoSSH;
     this.#terminalView = new WebContentsView({
@@ -106,6 +106,7 @@ class TerminalManager {
     this.mainWindow.contentView.removeChildView(this.#terminalView);
     this.#terminalView = null;
     this.#sessionId = null;
+    this.#autoSSH = false;
   }
 }
 

@@ -9,6 +9,18 @@ import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+const calculateTerminalContainerHeight = (termContainer) => {
+  const rect = termContainer.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const height = viewportHeight - termContainer.offsetTop - 24;
+  return {
+    x: rect.left,
+    y: rect.top,
+    width: rect.width,
+    height: height,
+  };
+};
+
 export default class ApplicationController extends Controller {
   // =services
 
@@ -31,6 +43,7 @@ export default class ApplicationController extends Controller {
     // Setup removeOnAppQuitListener to destroy the listener afterwards
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
+      this.removeTerminalView();
     });
   }
 
@@ -62,6 +75,7 @@ export default class ApplicationController extends Controller {
     const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
     if (hasRunningSessions) {
       this.isLoggingOut = true;
+      this.removeTerminalView();
     } else {
       this.session.invalidate();
     }
@@ -122,10 +136,23 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
+    this.createTerminalView();
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
     this.removeOnAppQuitListener?.();
+  }
+
+  removeTerminalView() {
+    window.webContentView.destroyTerminalView();
+  }
+
+  createTerminalView() {
+    const termContainer = document.getElementById('terminal-container');
+    const payload = {
+      position: calculateTerminalContainerHeight(termContainer),
+    };
+    window.webContentView.createTerminalView(payload);
   }
 }
