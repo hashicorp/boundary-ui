@@ -26,7 +26,9 @@
 // Search & Filtering
 .search-filtering {
   .hds-application-state {
-    margin-top: 3rem;
+    &.hds-application-state--is-auto-centered {
+      margin-top: 3rem;
+    }
   }
 
   > div,
