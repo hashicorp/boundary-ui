@@ -24,20 +24,23 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
 
   // =attributes
 
-  queryParams = [
-    'showCreatedAppToken',
-    'clonedFromId',
-    'clonedFromName',
-    'clonedFromStatus',
-  ];
+  queryParams = ['showCreatedAppToken', 'clonedFromId'];
 
   @tracked showCreatedAppToken = false;
   @tracked clonedFromId = null;
-  @tracked clonedFromName = null;
-  @tracked clonedFromStatus = null;
   @tracked showDeleteModal = false;
   @tracked deleteConfirmation = null;
   @tracked deleteTarget = null; // 'current' or 'original'
+
+  /**
+   * Returns the original app token record from the store cache.
+   * @type {AppTokenModel|null}
+   */
+  get originalToken() {
+    return this.clonedFromId
+      ? this.store.peekRecord('app-token', this.clonedFromId)
+      : null;
+  }
 
   /**
    * Returns the appropriate translation key based on the app token status.
@@ -78,7 +81,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
    */
   get deleteTokenDisplayName() {
     return this.deleteTarget === 'original'
-      ? this.clonedFromName
+      ? this.originalToken?.displayName
       : this.model?.displayName;
   }
 
@@ -87,7 +90,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
    * @type {string}
    */
   get originalTokenStatusText() {
-    switch (this.clonedFromStatus) {
+    switch (this.originalToken?.status) {
       case STATUS_APP_TOKEN_STALE:
         return this.intl.t(
           'resources.app-token.messages.delete-original.status.stale',
@@ -135,9 +138,7 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
     this.deleteConfirmation = null;
 
     const tokenToDelete =
-      this.deleteTarget === 'original'
-        ? await this.store.findRecord('app-token', this.clonedFromId)
-        : this.model;
+      this.deleteTarget === 'original' ? this.originalToken : this.model;
 
     this.deleteTarget = null;
     await this.appTokens.delete(tokenToDelete);
@@ -162,8 +163,6 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
     this.router.replaceWith({
       queryParams: {
         clonedFromId: null,
-        clonedFromName: null,
-        clonedFromStatus: null,
       },
     });
   }

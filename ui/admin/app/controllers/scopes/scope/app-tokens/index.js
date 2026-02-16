@@ -170,11 +170,9 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     if (this.can.can('read model', appToken)) {
       const queryParams = { showCreatedAppToken: true };
 
-      // If the original token was inactive, include clonedFrom info to show delete banner
+      // If the original token was inactive, include clonedFromId to show delete banner
       if (originalToken && !originalToken.isActive) {
         queryParams.clonedFromId = originalToken.id;
-        queryParams.clonedFromName = originalToken.displayName;
-        queryParams.clonedFromStatus = originalToken.status;
       }
 
       await this.router.transitionTo(
