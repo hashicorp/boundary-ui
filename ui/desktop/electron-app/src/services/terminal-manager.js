@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 const { isWindows } = require('../helpers/platform.js');
 const pty = require('node-pty');
 const sessionManager = require('../services/session-manager.js');
