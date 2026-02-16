@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -29,7 +29,6 @@ function setupApplicationTest(hooks, options) {
   // from other addons:
   //
   // setupIntl(hooks, 'en-us'); // ember-intl
-  // setupMirage(hooks); // ember-cli-mirage
 }
 
 function setupRenderingTest(hooks, options) {

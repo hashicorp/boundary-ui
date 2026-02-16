@@ -1,12 +1,12 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit, currentURL, waitUntil } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 

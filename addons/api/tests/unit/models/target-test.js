@@ -1,16 +1,16 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import {
   TYPE_TARGET_TCP,
   TYPE_TARGET_SSH,
   TYPE_TARGET_RDP,
 } from 'api/models/target';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 
 module('Unit | Model | target', function (hooks) {
   setupTest(hooks);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import RESTAdapter from '@ember-data/adapter/rest';
 import { InvalidError } from '@ember-data/adapter/error';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 import { Response } from 'miragejs';
 
 module('Unit | Adapter | application', function (hooks) {

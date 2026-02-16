@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -237,6 +237,9 @@ test(
         .locator('.CodeMirror')
         .getByRole('textbox')
         .click({ force: true });
+      await expect(
+        page.locator('.CodeMirror').getByRole('textbox'),
+      ).toBeFocused();
       const selectAllShortcut =
         process.platform === 'darwin' ? 'Meta+A' : 'Control+A';
       await page.keyboard.press(selectAllShortcut);

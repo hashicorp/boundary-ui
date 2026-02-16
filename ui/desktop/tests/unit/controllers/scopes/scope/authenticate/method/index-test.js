@@ -1,11 +1,11 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'desktop/tests/helpers/mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';

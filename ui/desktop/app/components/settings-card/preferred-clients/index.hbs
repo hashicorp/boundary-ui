@@ -1,5 +1,5 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -48,6 +48,8 @@
               </Hds::Text::Body>
             {{else}}
               <Hds::Form::Select::Field
+                name='preferred-rdp-client'
+                aria-label={{t 'settings.preferred-clients.title'}}
                 @width='100%'
                 {{on 'change' B.data.updateClient}}
                 data-test-select-preferred-rdp-client

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -49,7 +49,11 @@ class Session {
    * @return {boolean}
    */
   get isRunning() {
-    return this.#process && !this.#process.killed;
+    return (
+      this.#process &&
+      this.#process.exitCode === null &&
+      this.#process.signalCode === null
+    );
   }
 
   /**
