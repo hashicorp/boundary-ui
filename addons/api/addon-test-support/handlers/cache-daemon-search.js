@@ -11,7 +11,7 @@ import { underscore } from '@ember/string';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
- * Must be called after setupBoundaryApiMock in desktop tests and setupMirage in admin tests.
+ * Must be called after setupMirage and setupBoundaryApiMock in tests.
  *
  * ```js
  * import setupStubs from 'api/test-support/handlers/cache-daemon-search';
@@ -36,11 +36,6 @@ export default function setupStubs(hooks) {
   let stubTypes = [];
 
   hooks.beforeEach(function () {
-    this.searchCacheDaemonStub = sinon.stub(
-      window.boundary,
-      'searchCacheDaemon',
-    );
-
     /**
      * We aim to still use mirage data when stubbing out the cache daemon
      * search. However, the handler expects the search data to be raw JSON from

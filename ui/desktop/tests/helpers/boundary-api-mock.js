@@ -2,6 +2,7 @@
  * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
+import sinon from 'sinon';
 
 /**
  * Helper to mock the `window.boundary` API in tests.
@@ -11,104 +12,80 @@ export class BoundaryAPIMock {
   clusterUrl = null;
 
   // cluster
-  getClusterUrl() {
-    return this.clusterUrl;
-  }
-  setClusterUrl(clusterUrl) {
+  getClusterUrl = sinon.stub().callsFake(function () {
+    return Promise.resolve(this.clusterUrl);
+  });
+  setClusterUrl = sinon.stub().callsFake(function (clusterUrl) {
     this.clusterUrl = clusterUrl;
     return this.clusterUrl;
-  }
-  resetClusterUrl() {
+  });
+  resetClusterUrl = sinon.stub().callsFake(function () {
     this.clusterUrl = null;
-  }
+  });
 
-  openExternal() {}
-  cliExists() {
-    return false;
-  }
-  checkCommand() {
-    return false;
-  }
-  checkOS() {
-    return { isMac: true };
-  }
-  getCliVersion() {
-    return { versionNumber: 'Boundary CLI v0.1.0' };
-  }
-  getDesktopVersion() {
-    return { desktopVersion: '1.0.0' };
-  }
+  openExternal = sinon.stub().resolves();
+  cliExists = sinon.stub().resolves(false);
+  checkCommand = sinon.stub().resolves(false);
+  checkOS = sinon.stub().resolves({ isMac: true });
+  getCliVersion = sinon
+    .stub()
+    .resolves({ versionNumber: 'Boundary CLI v0.1.0' });
+  getDesktopVersion = sinon.stub().resolves({ desktopVersion: '1.0.0' });
 
   // window
-  hasMacOSChrome() {}
-  showWindowActions() {}
-  minimizeWindow() {}
-  toggleFullscreenWindow() {}
-  closeWindow() {}
-  focusWindow() {}
+  hasMacOSChrome = sinon.stub().resolves(false);
+  showWindowActions = sinon.stub().resolves(false);
+  minimizeWindow = sinon.stub().resolves();
+  toggleFullscreenWindow = sinon.stub().resolves();
+  closeWindow = sinon.stub().resolves();
+  focusWindow = sinon.stub().resolves();
 
   // daemon
-  addTokenToDaemons() {}
-  searchCacheDaemon() {}
-  isCacheDaemonRunning() {
-    return false;
-  }
-  cacheDaemonStatus() {
-    return { version: 'Boundary CLI v1.0.0' };
-  }
+  addTokenToDaemons = sinon.stub().resolves();
+  searchCacheDaemon = sinon.stub().resolves({});
+  isCacheDaemonRunning = sinon.stub().resolves(false);
+  cacheDaemonStatus = sinon.stub().resolves({ version: 'Boundary CLI v1.0.0' });
 
   // client agent
-  getClientAgentSessions() {
-    return [];
-  }
-  isClientAgentRunning() {
-    return false;
-  }
-  clientAgentStatus() {
-    return { version: '0.0.1-dev', status: 'running' };
-  }
-  pauseClientAgent() {}
-  resumeClientAgent() {}
+  getClientAgentSessions = sinon.stub().resolves([]);
+  isClientAgentRunning = sinon.stub().resolves(false);
+  clientAgentStatus = sinon
+    .stub()
+    .resolves({ version: '0.0.1-dev', status: 'running' });
+  pauseClientAgent = sinon.stub().resolves();
+  resumeClientAgent = sinon.stub().resolves();
 
   // logging
-  getLogLevel() {
-    return 'info';
-  }
-  setLogLevel() {}
-  getLogPath() {
-    return '~/.config/Boundary/logs/desktop-client.log';
-  }
+  getLogLevel = sinon.stub().resolves('info');
+  setLogLevel = sinon.stub().resolves();
+  getLogPath = sinon
+    .stub()
+    .resolves('~/.config/Boundary/logs/desktop-client.log');
 
   // session
-  connectSession() {}
-  stopSession() {}
-  stopAllSessions() {}
-  hasRunningSessions() {
-    return false;
-  }
+  connectSession = sinon.stub();
+  stopSession = sinon.stub().resolves();
+  stopAllSessions = sinon.stub().resolves();
+  hasRunningSessions = sinon.stub().resolves(false);
 
   // rdp
-  getRdpClients() {
-    return [];
-  }
-  getPreferredRdpClient() {
-    return null;
-  }
-  setPreferredRdpClient(client) {
-    return client;
-  }
-  launchRdpClient() {
-    return true;
-  }
+  getRdpClients = sinon.stub().resolves([]);
+  getPreferredRdpClient = sinon.stub().resolves(null);
+  setPreferredRdpClient = sinon.stub().callsFake(function (client) {
+    return Promise.resolve(client);
+  });
+  launchRdpClient = sinon.stub().resolves(true);
 }
 
 export function setupBoundaryApiMock(hooks) {
   hooks.beforeEach(function () {
     const mockBoundary = new BoundaryAPIMock();
     window.boundary = mockBoundary;
+    this.searchCacheDaemonStub = window.boundary.searchCacheDaemon;
   });
 
   hooks.afterEach(function () {
+    sinon.restore();
     delete window.boundary;
   });
 }
