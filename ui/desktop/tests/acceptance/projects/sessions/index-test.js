@@ -145,7 +145,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    window.boundary.isCacheDaemonRunning = () => true;
+    window.boundary.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
 
     // mock RDP service calls
@@ -435,7 +435,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    window.boundary.stopSession();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -456,7 +455,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    window.boundary.stopSession();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -496,7 +494,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    sinon.stub(window.boundary, 'stopSession').throws();
+    window.boundary.stopSession.throws();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -564,7 +562,8 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    window.boundary.isCacheDaemonRunning = () => false;
+    window.boundary.isCacheDaemonRunning.resolves(false);
+
     this.stubCacheDaemonSearch();
     const sessionsCount = this.server.schema.sessions.all().models.length;
 

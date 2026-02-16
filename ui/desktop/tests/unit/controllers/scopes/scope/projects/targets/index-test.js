@@ -81,7 +81,7 @@ module(
       urls.projectScope = `/scopes/${instances.scopes.org.id}/projects`;
       urls.targets = `${urls.projectScope}/targets`;
 
-      window.boundary.isCacheDaemonRunning = () => true;
+      window.boundary.isCacheDaemonRunning.resolves(true);
       this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await authenticateSession({ account_id: instances.account.id });
     });
@@ -239,8 +239,7 @@ module(
         address: 'a_123',
         port: 'p_123',
       };
-      window.boundary.cliExists = () => true;
-      window.boundary.connectSession = () => attrs;
+      window.boundary.connectSession.resolves(attrs);
       await visit(urls.targets);
       const target = await store.findRecord('target', instances.target.id);
       const session = await store.findRecord('session', instances.session.id);

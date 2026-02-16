@@ -141,8 +141,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    window.boundary.isCacheDaemonRunning = () => false;
-
     // mock RDP service calls
     this.rdpService = this.owner.lookup('service:rdp');
     sinon.stub(this.rdpService, 'initialize').resolves();
@@ -181,8 +179,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(4);
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -210,8 +207,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -283,8 +279,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -341,8 +336,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -378,8 +372,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     // First RDP Session visit should show the toast notification
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       protocol: 'rdp',
     });
@@ -426,8 +419,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -459,8 +451,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     };
 
     this.server.get('/sessions/:id', () => new Response(403));
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -585,7 +576,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(1);
-    sinon.stub(window.boundary, 'stopSession').throws();
+    window.boundary.stopSession.throws();
 
     await visit(urls.session);
 
@@ -606,21 +597,16 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    const launchRdpClientStub = sinon
-      .stub(window.boundary, 'launchRdpClient')
-      .resolves();
 
     await visit(urls.rdpTarget);
     await click(TARGET_CONNECT_BUTTON);
@@ -630,7 +616,9 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     await click(RDP_OPEN_BUTTON);
 
-    assert.ok(launchRdpClientStub.calledWith(instances.rdpSession.id));
+    assert.ok(
+      window.boundary.launchRdpClient.calledWith(instances.rdpSession.id),
+    );
   });
 
   test('visiting an RDP session should not display "open" button when preferred client is set to none', async function (assert) {
@@ -643,12 +631,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -673,19 +659,17 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    sinon.stub(window.boundary, 'launchRdpClient').rejects();
+    window.boundary.launchRdpClient.rejects();
 
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -711,12 +695,11 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
     instances.rdpSession.update({ authorized_actions: [] });
 
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',

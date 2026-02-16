@@ -42,7 +42,6 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with chrome disabled hides custom window actions', async function (assert) {
     assert.expect(3);
-    window.boundary.showWindowActions = () => false;
     await visit(urls.clusterUrl);
     assert.notOk(find('.button-window-close'), 'Window close button');
     assert.notOk(find('.button-window-minimize'), 'Window minimize button');
@@ -51,7 +50,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with chrome enabled shows custom window actions', async function (assert) {
     assert.expect(3);
-    window.boundary.showWindowActions = () => true;
+    window.boundary.showWindowActions.resolves(true);
     await visit(urls.clusterUrl);
     assert.ok(find('.button-window-close'), 'Window close button');
     assert.ok(find('.button-window-minimize'), 'Window minimize button');
@@ -60,7 +59,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with MacOS chrome enabled', async function (assert) {
     assert.expect(1);
-    window.boundary.hasMacOSChrome = () => true;
+    window.boundary.hasMacOSChrome.resolves(true);
     await visit(urls.clusterUrl);
     assert.ok(
       find('.rose-header.header-cushion'),
@@ -70,7 +69,7 @@ module('Acceptance | Application', function (hooks) {
 
   test('visiting index with MacOS chrome disabled', async function (assert) {
     assert.expect(1);
-    window.boundary.hasMacOSChrome = () => false;
+    window.boundary.hasMacOSChrome.resolves(false);
     await visit(urls.clusterUrl);
     assert.notOk(
       find('.rose-header.header-cushion'),

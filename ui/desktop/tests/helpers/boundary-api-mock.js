@@ -24,7 +24,7 @@ export class BoundaryAPIMock {
   });
 
   openExternal = sinon.stub().resolves();
-  cliExists = sinon.stub().resolves(false);
+  cliExists = sinon.stub().resolves(true);
   checkCommand = sinon.stub().resolves(false);
   checkOS = sinon.stub().resolves({ isMac: true });
   getCliVersion = sinon
@@ -64,13 +64,13 @@ export class BoundaryAPIMock {
 
   // session
   connectSession = sinon.stub();
-  stopSession = sinon.stub().resolves();
+  stopSession = sinon.stub().resolves(true);
   stopAllSessions = sinon.stub().resolves();
-  hasRunningSessions = sinon.stub().resolves(false);
+  hasRunningSessions = sinon.stub().resolves(true);
 
   // rdp
   getRdpClients = sinon.stub().resolves([]);
-  getPreferredRdpClient = sinon.stub().resolves(null);
+  getPreferredRdpClient = sinon.stub().resolves('none');
   setPreferredRdpClient = sinon.stub().callsFake(function (client) {
     return Promise.resolve(client);
   });

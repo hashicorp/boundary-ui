@@ -30,8 +30,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getRdpClients sets to fallback value on error', async function (assert) {
-    sinon.stub(window.boundary, 'getRdpClients').rejects();
-    sinon.stub(window.boundary, 'checkOS').resolves({ isMac: true });
+    window.boundary.getRdpClients.rejects();
     await service.getRdpClients();
 
     assert.deepEqual(
@@ -42,7 +41,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getPreferredRdpClient sets to fallback value on error', async function (assert) {
-    sinon.stub(window.boundary, 'getPreferredRdpClient').rejects();
+    window.boundary.getPreferredRdpClient.rejects();
     await service.getPreferredRdpClient();
 
     assert.strictEqual(
@@ -53,7 +52,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('setPreferredRdpClient sets to fallback value on error', async function (assert) {
-    sinon.stub(window.boundary, 'setPreferredRdpClient').rejects();
+    window.boundary.setPreferredRdpClient.rejects();
     await service.setPreferredRdpClient(RDP_CLIENT_MSTSC);
 
     assert.strictEqual(
@@ -64,9 +63,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('sets recommendedRdpClient correctly based on OS', async function (assert) {
-    const checkOSStub = sinon
-      .stub(window.boundary, 'checkOS')
-      .resolves({ isWindows: true });
+    window.boundary.checkOS.resolves({ isWindows: true });
     await service.getRecommendedRdpClient();
 
     assert.deepEqual(
@@ -78,7 +75,7 @@ module('Unit | Service | rdp', function (hooks) {
       'recommendedRdpClient is set correctly for windows',
     );
 
-    checkOSStub.resolves({ isMac: true });
+    window.boundary.checkOS.resolves({ isMac: true });
     service.recommendedRdpClient = null;
     await service.getRecommendedRdpClient();
 

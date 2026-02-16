@@ -137,7 +137,7 @@ module('Acceptance | scopes', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    sinon.stub(window.boundary, 'isCacheDaemonRunning').returns(true);
+    window.boundary.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     // mock RDP service calls
@@ -313,7 +313,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - windows build', async function (assert) {
-    window.boundary('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -336,7 +336,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - mac build', async function (assert) {
-    sinon.stub(window.boundary, 'checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: false,
       isMac: true,
       isLinux: false,
@@ -359,7 +359,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - linux build', async function (assert) {
-    sinon.stub(window.boundary, 'checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: false,
       isMac: false,
       isLinux: true,
@@ -382,7 +382,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - failed to fetch metaData', async function (assert) {
-    sinon.stub(window.boundary, 'checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -407,7 +407,7 @@ module('Acceptance | scopes', function (hooks) {
   test('pagination is not supported - navigate to cluster url page', async function (assert) {
     await invalidateSession();
     this.stubCacheDaemonSearch();
-    sinon.stub(window.boundary, 'checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,

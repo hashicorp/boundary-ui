@@ -193,6 +193,7 @@ module('Acceptance | authentication', function (hooks) {
         },
       },
     });
+    window.boundary.hasRunningSessions.resolves(false);
 
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
@@ -271,8 +272,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    window.boundary.hasRunningSessions = () => true;
-
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -302,9 +301,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    window.boundary.hasRunningSessions = () => true;
-    const stopAllSessions = (window.boundary.stopAllSessions = sinon.stub());
-
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -321,7 +317,7 @@ module('Acceptance | authentication', function (hooks) {
     await click(MODAL_CONFIRM_BTN);
 
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
-    assert.ok(stopAllSessions.calledOnce);
+    assert.ok(window.boundary.stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -350,10 +346,6 @@ module('Acceptance | authentication', function (hooks) {
     };
 
     this.owner.register('service:browser/window', mockElectronEvent);
-    const stopAllSessions = (window.boundary.stopAllSessions = sinon.stub());
-    const quitApp = (window.boundary.closeWindow = sinon.stub());
-    window.boundary.hasRunningSessions = () => true;
-
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -374,7 +366,7 @@ module('Acceptance | authentication', function (hooks) {
       .includesText('Close sessions before quitting?');
 
     await click(MODAL_CONFIRM_BTN);
-    assert.ok(stopAllSessions.calledOnce);
-    assert.ok(quitApp.calledOnce);
+    assert.ok(window.boundary.stopAllSessions.calledOnce);
+    assert.ok(window.boundary.closeWindow.calledOnce);
   });
 });

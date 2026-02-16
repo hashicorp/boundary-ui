@@ -25,7 +25,6 @@ import {
   RDP_CLIENT_NONE,
   RDP_CLIENT_WINDOWS_APP,
 } from 'desktop/services/rdp';
-import sinon from 'sinon';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -100,9 +99,9 @@ module('Acceptance | projects | settings | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     // mock RDP client data
-    window.boundary.getRdpClients = () => [RDP_CLIENT_MSTSC, RDP_CLIENT_NONE];
-    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_MSTSC;
-    window.boundary.checkOS = () => ({ isWindows: true, isMac: false });
+    window.boundary.getRdpClients.resolves([RDP_CLIENT_MSTSC, RDP_CLIENT_NONE]);
+    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_MSTSC);
+    window.boundary.checkOS.resolves({ isWindows: true, isMac: false });
   });
 
   test('can navigate to the settings page', async function (assert) {
@@ -184,6 +183,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
+    window.boundary.hasRunningSessions.resolves(false);
+
     await authenticateSession({ account_id: instances.account.id });
     assert.expect(2);
 
@@ -212,9 +213,6 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    const stopAllSessions = sinon.stub(window.boundary, 'stopAllSessions');
-    window.boundary.hasRunningSessions = () => true;
-
     await authenticateSession({ account_id: instances.account.id });
     assert.ok(currentSession().isAuthenticated);
 
@@ -228,7 +226,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     await click(MODAL_CONFIRM_BTN);
 
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
-    assert.ok(stopAllSessions.calledOnce);
+    assert.ok(window.boundary.stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -268,12 +266,12 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     // update window bounday mock fo mac
-    window.boundary.checkOS = () => ({ isWindows: false, isMac: true });
-    window.boundary.getRdpClients = () => [
+    window.boundary.checkOS.resolves({ isWindows: false, isMac: true });
+    window.boundary.getRdpClients.resolves([
       RDP_CLIENT_WINDOWS_APP,
       RDP_CLIENT_NONE,
-    ];
-    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_WINDOWS_APP;
+    ]);
+    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_WINDOWS_APP);
     await visit(urls.settings);
 
     assert
@@ -298,8 +296,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     // update window boundary mock for no RDP clients
-    window.boundary.getRdpClients = () => [RDP_CLIENT_NONE];
-    window.boundary.getPreferredRdpClient = () => RDP_CLIENT_NONE;
+    window.boundary.getRdpClients.resolves([RDP_CLIENT_NONE]);
+    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_NONE);
     await visit(urls.settings);
 
     assert.dom(RDP_RECOMMENDED_CLIENT).isVisible();
@@ -325,15 +323,14 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     const rdpService = this.owner.lookup('service:rdp');
-    const setPreferredRdpClientStub = sinon
-      .stub(window.boundary, 'setPreferredRdpClient')
-      .resolves();
     await visit(urls.settings);
     await visit(urls.settings);
 
     await select(RDP_PREFERRED_CLIENT, RDP_CLIENT_NONE);
 
-    assert.ok(setPreferredRdpClientStub.calledWith(RDP_CLIENT_NONE));
+    assert.ok(
+      window.boundary.setPreferredRdpClient.calledWith(RDP_CLIENT_NONE),
+    );
     assert.strictEqual(rdpService.preferredRdpClient, RDP_CLIENT_NONE);
   });
 });

@@ -46,12 +46,12 @@ module('Unit | Controller | application', function (hooks) {
 
     assert.true(session.isAuthenticated);
     assert.strictEqual(clusterUrl.rendererClusterUrl, url);
-    assert.strictEqual(window.boundary.getClusterUrl(), url);
+    assert.strictEqual(await window.boundary.getClusterUrl(), url);
 
     await controller.disconnect();
 
     assert.false(session.isAuthenticated);
     assert.notOk(clusterUrl.rendererClusterUrl);
-    assert.notOk(window.boundary.getClusterUrl());
+    assert.notOk(await window.boundary.getClusterUrl());
   });
 });

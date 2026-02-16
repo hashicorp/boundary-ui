@@ -161,7 +161,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    window.boundary.isCacheDaemonRunning = () => true;
+    window.boundary.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     // mock RDP service calls
@@ -314,8 +314,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-    sinon.stub(window.boundary, 'connectSession').rejects();
+    window.boundary.connectSession.rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -341,8 +340,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
-    window.boundary.cliExists = () => true;
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -373,8 +371,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    window.boundary.cliExists = () => true;
-    sinon.stub(window.boundary, 'connectSession').rejects();
+    window.boundary.connectSession.rejects();
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -616,7 +613,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       },
     });
 
-    window.boundary.isCacheDaemonRunning = () => false;
+    window.boundary.isCacheDaemonRunning.resolves(false);
     this.stubCacheDaemonSearch();
     const targetsCount = getTargetCount();
 
@@ -786,20 +783,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    const launchRdpClientStub = sinon
-      .stub(window.boundary, 'launchRdpClient')
-      .resolves();
 
     // visit targets page
     await visit(urls.targets);
@@ -808,7 +800,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await click(TARGET_OPEN_BUTTON(instances.target.id));
 
-    assert.ok(launchRdpClientStub.calledWith(instances.session.id));
+    assert.ok(window.boundary.launchRdpClient.calledWith(instances.session.id));
   });
 
   test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
@@ -821,19 +813,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
       },
     });
 
-    window.boundary.cliExists = () => true;
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    const connectSessionStub = sinon
-      .stub(window.boundary, 'connectSession')
-      .returns({
-        session_id: instances.session.id,
-        address: 'a_123',
-        port: 'p_123',
-        protocol: 'rdp',
-      });
+    const connectSessionStub = window.boundary.connectSession.resolves({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
 
     // visit targets page
     await visit(urls.targets);
@@ -858,15 +846,14 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.cliExists = () => true;
     // target quick connection is a success but launching RDP client fails
-    window.boundary.connectSession = () => ({
+    window.boundary.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    sinon.stub(window.boundary, 'launchRdpClient').rejects();
+    window.boundary.launchRdpClient.rejects();
 
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;

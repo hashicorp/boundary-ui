@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import sinon from 'sinon';
 import { setupBoundaryApiMock } from '../../helpers/boundary-api-mock';
 
 module('Unit | Service | clusterUrl', function (hooks) {
@@ -20,14 +19,12 @@ module('Unit | Service | clusterUrl', function (hooks) {
 
   test('resets clusterUrl on error', async function (assert) {
     assert.expect(4);
-    const setCluseterUrlStub = sinon
-      .stub(window.boundary, 'setClusterUrl')
-      .resolves();
+
     await service.setClusterUrl(window.location.origin);
 
     assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    setCluseterUrlStub.rejects();
+    window.boundary.setClusterUrl.rejects();
     service.setClusterUrl('invalid-origin').catch(() => {
       assert.notOk(service.rendererClusterUrl);
       assert.strictEqual(service.adapter.host, window.location.origin);

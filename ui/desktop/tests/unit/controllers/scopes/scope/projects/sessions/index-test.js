@@ -77,7 +77,7 @@ module(
       urls.projectScope = `/scopes/${instances.scopes.org.id}/projects`;
       urls.sessions = `${urls.projectScope}/sessions`;
 
-      window.boundary.isCacheDaemonRunning = () => true;
+      window.boundary.isCacheDaemonRunning.resolves(true);
       this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
       await authenticateSession({ account_id: instances.account.id });
     });
