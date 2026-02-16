@@ -10,7 +10,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
 
-  @service can;
+  @service abilities;
   @service store;
 
   // =attributes
@@ -134,7 +134,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
 
       // Preload the associated targets and users into the cache
       let refreshUsersPromise, refreshTargetsPromise;
-      const canListTargets = this.can.can('list model', scope, {
+      const canListTargets = this.abilities.can('list model', scope, {
         collection: 'targets',
       });
       if (canListTargets) {
@@ -152,8 +152,10 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       const orgScope = await this.store.findRecord('scope', scope.scope.id);
       const globalScope = await this.store.findRecord('scope', 'global');
       const canListUsers =
-        this.can.can('list model', globalScope, { collection: 'users' }) ||
-        this.can.can('list model', orgScope, { collection: 'users' });
+        this.abilities.can('list model', globalScope, {
+          collection: 'users',
+        }) ||
+        this.abilities.can('list model', orgScope, { collection: 'users' });
 
       if (canListUsers) {
         refreshUsersPromise = this.store.query(

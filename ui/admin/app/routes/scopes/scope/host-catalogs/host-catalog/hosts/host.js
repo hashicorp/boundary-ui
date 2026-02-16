@@ -10,7 +10,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods
