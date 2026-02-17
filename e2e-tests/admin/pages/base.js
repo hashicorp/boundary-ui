@@ -14,6 +14,11 @@ export class BasePage {
     await expect(
       this.page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    const dismissButtons = await this.page
+      .getByRole('button', { name: 'Dismiss' })
+      .all();
+    for (const button of dismissButtons) {
+      await button.click();
+    }
   }
 }
