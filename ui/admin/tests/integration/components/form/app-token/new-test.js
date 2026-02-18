@@ -8,7 +8,7 @@ import { setupRenderingTest } from 'admin/tests/helpers';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as selectors from 'admin/tests/acceptance/app-tokens/selectors';
 

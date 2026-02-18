@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
