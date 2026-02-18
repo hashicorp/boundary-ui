@@ -28,6 +28,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   const APP_STATE_TITLE =
     '[data-test-no-sessions] .hds-application-state__title';
+  const TABLE_SORT_BTN = 'thead tr th:nth-child(1) button';
+  const TABLE_SORT_BTN_ARROW_UP =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-up';
+  const TABLE_SORT_BTN_ARROW_DOWN =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-down';
 
   const instances = {
     scopes: {
@@ -574,5 +579,33 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     assert.dom('.hds-segmented-group').doesNotExist();
     assert.strictEqual(currentURL(), urls.globalSessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });
+  });
+
+  test('sorting by session created time updates url', async function (assert) {
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+    );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.sessions}"]`);
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=created_time'));
+    assert.true(currentURL().includes('sortDirection=asc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_UP).isVisible();
+
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=created_time'));
+    assert.true(currentURL().includes('sortDirection=desc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_DOWN).isVisible();
   });
 });
