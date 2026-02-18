@@ -102,8 +102,11 @@ export default class CacheDaemonHandler {
         const resourceName = resourceNames[type];
 
         if (remainingQuery.query?.sort) {
-          remainingQuery.sort_by = remainingQuery.query.sort.attribute;
-          remainingQuery.sort_direction = remainingQuery.query.sort.direction;
+          const { attribute, direction } = remainingQuery.query.sort;
+          if (attribute && direction) {
+            remainingQuery.sort_by = attribute;
+            remainingQuery.sort_direction = direction;
+          }
         }
 
         remainingQuery = {
