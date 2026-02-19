@@ -97,7 +97,7 @@ jobs:
           enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:local
       - name: Check boundary binary
         run: |
-          mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+          mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
           boundary version
       - name: Install dependencies
         run: |
