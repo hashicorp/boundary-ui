@@ -9,6 +9,8 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = async function (defaults) {
   const { setConfig } = await import('@warp-drive/build-config');
+  const { EMBER_ENV } = process.env;
+  const config = require('./config/environment')(EMBER_ENV);
 
   const app = new EmberApp(defaults, {
     hinting: false,
@@ -30,6 +32,11 @@ module.exports = async function (defaults) {
     },
     api: {
       enableSqlite: true,
+    },
+    '@embroider/macros': {
+      setOwnConfig: {
+        startMirageWithApp: config.mirage?.enabled ?? false,
+      },
     },
   });
 

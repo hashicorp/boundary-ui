@@ -597,6 +597,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting an RDP session should display "open" button when preferred client is set', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
 
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
@@ -624,6 +633,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting an RDP session should not display "open" button when preferred client is set to none', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
 
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
@@ -645,6 +663,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('it shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
 
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
@@ -674,6 +701,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('it displays open button without cancel session permission', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });

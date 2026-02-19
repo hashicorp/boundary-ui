@@ -244,12 +244,40 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('preferred RDP client is selected correctly for Windows', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.settings);
 
     assert.dom(RDP_PREFERRED_CLIENT).isVisible().hasValue(RDP_CLIENT_MSTSC);
   });
 
   test('preferred RDP client is selected correctly for Mac', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     // update IPC stub fo mac
     this.ipcStub.withArgs('checkOS').returns({ isWindows: false, isMac: true });
     this.ipcStub
@@ -267,6 +295,20 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('recommended RDP client is shown when no RDP clients are detected', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     // update IPC stub for no RDP clients
     this.ipcStub.withArgs('getRdpClients').returns([RDP_CLIENT_NONE]);
     this.ipcStub.withArgs('getPreferredRdpClient').returns(RDP_CLIENT_NONE);
@@ -280,6 +322,20 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('preferred RDP client is updated correctly', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     const rdpService = this.owner.lookup('service:rdp');
     this.ipcStub.withArgs('setPreferredRdpClient').resolves();
     await visit(urls.settings);

@@ -1,5 +1,5 @@
 {{!
-  Copyright IBM Corp. 2021, 2025
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -216,13 +216,10 @@
               {{#if @model.sessionRecording.created_time}}
                 <list.Item @icon='calendar' @color='faint'>
                   {{t 'form.created.label'}}
-                  <time
-                    datetime={{format-date-iso
-                      @model.sessionRecording.created_time
-                    }}
-                  >
-                    {{format-date-iso @model.sessionRecording.created_time}}
-                  </time>
+                  <Hds::Time
+                    @date={{@model.sessionRecording.created_time}}
+                    @display='friendly-local'
+                  />
                 </list.Item>
               {{/if}}
               {{! Duration }}
@@ -257,32 +254,27 @@
               {{#if @model.sessionRecording.retain_until}}
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.retain_until'}}
-                  <time
-                    data-test-retain-until
-                    datetime={{format-date-iso
-                      @model.sessionRecording.retain_until
-                    }}
-                  >
+                  <div data-test-retain-until>
                     {{#if @model.sessionRecording.retainForever}}
                       {{t 'resources.policy.titles.forever'}}
                     {{else}}
-                      {{format-date-iso @model.sessionRecording.retain_until}}
+                      <Hds::Time
+                        @date={{@model.sessionRecording.retain_until}}
+                        @display='friendly-local'
+                      />
                     {{/if}}
-                  </time>
+                  </div>
                 </list.Item>
               {{/if}}
 
               {{#if @model.sessionRecording.delete_after}}
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.delete_after'}}
-                  <time
+                  <Hds::Time
                     data-test-delete-after
-                    datetime={{format-date-iso
-                      @model.sessionRecording.delete_after
-                    }}
-                  >
-                    {{format-date-iso @model.sessionRecording.delete_after}}
-                  </time>
+                    @date={{@model.sessionRecording.delete_after}}
+                    @display='friendly-local'
+                  />
                 </list.Item>
               {{/if}}
             </Rose::MetadataList>

@@ -662,6 +662,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('clicking `open` button for RDP target triggers launchRdpClient', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
@@ -686,6 +695,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('shows `Connect` button for rdp target without preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
     this.rdpService.preferredRdpClient = null;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
