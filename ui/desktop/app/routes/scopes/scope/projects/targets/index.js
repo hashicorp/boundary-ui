@@ -50,6 +50,14 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -97,6 +105,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       types,
       page,
       pageSize,
+      sortAttribute,
+      sortDirection,
       useDebounce,
     }) => {
       if (useDebounce) {
@@ -122,11 +132,11 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
       const sessions = await this.getSessions(orgScope, scopes, orgFilter);
       this.addActiveSessionFilters(filters, availableSessions, sessions);
-
+      const sort = { attribute: sortAttribute, direction: sortDirection };
       const query = {
         recursive: true,
         scope_id: orgScope.id,
-        query: { search, filters },
+        query: { search, filters, sort },
         page,
         pageSize,
         force_refresh: true,

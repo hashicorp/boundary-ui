@@ -256,5 +256,17 @@ module(
 
       assert.strictEqual(session.status, STATUS_SESSION_CANCELING);
     });
+
+    test('onSort action sets expected values correctly', async function (assert) {
+      this.stubCacheDaemonSearch();
+      assert.notOk(controller.sortAttribute);
+      assert.notOk(controller.sortDirection);
+
+      controller.onSort('name', 'desc');
+
+      assert.strictEqual(controller.page, 1);
+      assert.strictEqual(controller.sortAttribute, 'name');
+      assert.strictEqual(controller.sortDirection, 'desc');
+    });
   },
 );
