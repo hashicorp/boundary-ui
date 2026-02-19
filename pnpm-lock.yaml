@@ -1018,7 +1018,7 @@ importers:
         version: 7.27.1
       '@babel/eslint-parser':
         specifier: ^7.25.1
-        version: 7.27.1(@babel/core@7.27.1)(eslint@8.57.1)
+        version: 7.27.1(@babel/core@7.27.1)(eslint@9.39.2(jiti@2.4.2))
       '@babel/plugin-proposal-decorators':
         specifier: ^7.24.7
         version: 7.27.1(@babel/core@7.27.1)
@@ -1034,6 +1034,9 @@ importers:
       '@embroider/macros':
         specifier: ^1.18.1
         version: 1.19.3(@glint/template@1.5.2)
+      '@eslint/js':
+        specifier: ^9.18.0
+        version: 9.39.2
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
@@ -1140,20 +1143,23 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0
       eslint:
-        specifier: ^8.57.1
-        version: 8.57.1
+        specifier: ^9.18.0
+        version: 9.39.2(jiti@2.4.2)
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@8.57.1)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
-        specifier: ^12.2.1
-        version: 12.5.0(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
+        specifier: ^12.7.5
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-n:
-        specifier: ^16.6.2
-        version: 16.6.2(eslint@8.57.1)
+        specifier: ^17.24.0
+        version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-qunit:
-        specifier: ^8.1.2
-        version: 8.1.2(eslint@8.57.1)
+        specifier: ^8.2.6
+        version: 8.2.6(eslint@9.39.2(jiti@2.4.2))
+      globals:
+        specifier: ^17.3.0
+        version: 17.3.0
       js-bexpr:
         specifier: hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1
         version: https://codeload.github.com/hashicorp/js-bexpr/tar.gz/9b4a4b54d85eba67fdfc0990133d1518d890b1e1
