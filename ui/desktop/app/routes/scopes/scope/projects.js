@@ -83,7 +83,6 @@ export default class ScopesScopeProjectsRoute extends Route {
     let sessions;
 
     // We use a while loop to poll for new sessions from the client agent.
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       try {
         sessions =
@@ -152,7 +151,7 @@ export default class ScopesScopeProjectsRoute extends Route {
               alias.destination_id,
             );
             orgScope = target.scope.parent_scope_id;
-          } catch (e) {
+          } catch {
             // Do nothing and default scope to global if an error occurs
           }
 

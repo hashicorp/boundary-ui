@@ -3,16 +3,20 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+// TODO: Is this file still needed?
+
 const {
   default: installExtension,
   EMBER_INSPECTOR,
 } = require('electron-devtools-installer');
 const path = require('path');
 const { app } = require('electron');
+// eslint-disable-next-line n/no-missing-require
 const handleFileUrls = require('../src/handle-file-urls');
 const {
   setupTestem,
   openTestWindow,
+  // eslint-disable-next-line n/no-extraneous-require
 } = require('ember-electron/lib/test-support');
 
 const emberAppDir = path.resolve(__dirname, '..', 'ember-test');

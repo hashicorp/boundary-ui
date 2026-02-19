@@ -173,7 +173,7 @@ module.exports = {
      */
     if (!boundaryCli.isBuiltInCli) return;
 
-    const latestVersion = await findLatestVersion(releasesUrl);
+    let latestVersion = await findLatestVersion(releasesUrl);
 
     // Ensure version is in proper format
     if (!semver.valid(latestVersion)) {
