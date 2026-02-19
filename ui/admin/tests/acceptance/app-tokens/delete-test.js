@@ -256,6 +256,7 @@ module('Acceptance | app-tokens | delete', function (hooks) {
 
     assert.strictEqual(getAppTokenCount(), count - 1);
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+    assert.strictEqual(currentURL(), urls.globalAppToken);
   });
 
   test('users can cancel delete original action', async function (assert) {

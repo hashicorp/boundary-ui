@@ -35,7 +35,7 @@
 
   <page.body>
     {{! Delete Original App Token Banner - shown after cloning an inactive token }}
-    {{#if this.clonedFromId}}
+    {{#if (and this.clonedFromId this.originalToken)}}
       <Hds::Alert
         class='margin-bottom-m'
         @type='inline'
