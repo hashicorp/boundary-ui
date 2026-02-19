@@ -21,7 +21,6 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
   @service router;
   @service intl;
   @service store;
-  @service flashMessages;
 
   // =attributes
 
@@ -145,15 +144,11 @@ export default class ScopesScopeAppTokensAppTokenIndexController extends Control
     this.deleteTarget = null;
 
     if (isDeletingOriginal) {
-      // For original token: delete without redirect, then clear query param
-      await tokenToDelete.destroyRecord();
-      this.flashMessages.success(this.intl.t('notifications.delete-success'));
       this.router.replaceWith({
         queryParams: { clonedFromId: null },
       });
-    } else {
-      await this.appTokens.delete(tokenToDelete);
     }
+    await this.appTokens.delete(tokenToDelete);
   }
 
   /**
