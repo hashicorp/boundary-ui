@@ -82,7 +82,9 @@ jobs:
       #   run: |
       #     docker pull hashicorp/boundary-enterprise:latest
       #     docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
-
+      - name: Set git config
+        run: |
+          git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
       - name: Set up test infra
         id: infra
         run: |
