@@ -88,7 +88,7 @@ jobs:
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
-          export ENOS_VAR_ui_build_override="oss" && \
+          export ENOS_VAR_boundary_edition="ent" && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
