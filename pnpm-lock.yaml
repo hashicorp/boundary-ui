@@ -119,7 +119,7 @@ importers:
     devDependencies:
       '@babel/eslint-parser':
         specifier: ^7.25.1
-        version: 7.27.1(@babel/core@7.27.1)(eslint@8.57.1)
+        version: 7.27.1(@babel/core@7.27.1)(eslint@9.39.2(jiti@2.4.2))
       '@babel/plugin-proposal-decorators':
         specifier: ^7.24.7
         version: 7.27.1(@babel/core@7.27.1)
@@ -135,6 +135,9 @@ importers:
       '@embroider/test-setup':
         specifier: ^4.0.0
         version: 4.0.0
+      '@eslint/js':
+        specifier: ^9.18.0
+        version: 9.39.2
       '@glimmer/component':
         specifier: ^2.0.0
         version: 2.0.0
@@ -196,20 +199,23 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0(encoding@0.1.13)
       eslint:
-        specifier: ^8.57.1
-        version: 8.57.1
+        specifier: ^9.18.0
+        version: 9.39.2(jiti@2.4.2)
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@8.57.1)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
-        specifier: ^12.2.1
-        version: 12.5.0(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
+        specifier: ^12.7.5
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-n:
-        specifier: ^16.6.2
-        version: 16.6.2(eslint@8.57.1)
+        specifier: ^17.24.0
+        version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-qunit:
-        specifier: ^8.1.2
-        version: 8.1.2(eslint@8.57.1)
+        specifier: ^8.2.6
+        version: 8.2.6(eslint@9.39.2(jiti@2.4.2))
+      globals:
+        specifier: ^15.14.0
+        version: 15.15.0
       loader.js:
         specifier: ^4.7.0
         version: 4.7.0
@@ -10286,7 +10292,7 @@ snapshots:
       find-up: 5.0.0
       fs-extra: 10.1.0
       log-symbols: 4.1.0
-      semver: 7.7.3
+      semver: 7.7.4
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -10491,7 +10497,7 @@ snapshots:
       plist: 3.1.0
       resedit: 2.0.3
       resolve: 1.22.10
-      semver: 7.7.3
+      semver: 7.7.4
       yargs-parser: 21.1.1
     transitivePeerDependencies:
       - supports-color
@@ -10509,7 +10515,7 @@ snapshots:
       node-api-version: 0.2.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
-      semver: 7.7.3
+      semver: 7.7.4
       tar: 7.5.9
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -15160,12 +15166,12 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
-      semver: 7.7.3
+      semver: 7.7.4
 
   eslint-compat-utils@0.5.1(eslint@9.39.2(jiti@2.4.2)):
     dependencies:
       eslint: 9.39.2(jiti@2.4.2)
-      semver: 7.7.3
+      semver: 7.7.4
 
   eslint-config-prettier@10.1.8(eslint@9.39.2(jiti@2.4.2)):
     dependencies:
@@ -15244,7 +15250,7 @@ snapshots:
 
   eslint-plugin-n@17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
-      '@eslint-community/eslint-utils': 4.7.0(eslint@9.39.2(jiti@2.4.2))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.4.2))
       enhanced-resolve: 5.19.0
       eslint: 9.39.2(jiti@2.4.2)
       eslint-plugin-es-x: 7.8.0(eslint@9.39.2(jiti@2.4.2))
@@ -15271,7 +15277,7 @@ snapshots:
 
   eslint-plugin-qunit@8.2.6(eslint@9.39.2(jiti@2.4.2)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.7.0(eslint@9.39.2(jiti@2.4.2))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.4.2))
       eslint: 9.39.2(jiti@2.4.2)
       requireindex: 1.2.0
 
@@ -16078,7 +16084,7 @@ snapshots:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.7.3
+      semver: 7.7.4
       serialize-error: 7.0.1
     optional: true
 
@@ -17090,7 +17096,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   make-fetch-happen@10.2.1:
     dependencies:
@@ -19671,7 +19677,7 @@ snapshots:
   validate-peer-dependencies@1.2.0:
     dependencies:
       resolve-package-path: 3.1.0
-      semver: 7.7.3
+      semver: 7.7.4
 
   validate-peer-dependencies@2.2.0:
     dependencies:
