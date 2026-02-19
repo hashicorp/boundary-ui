@@ -190,6 +190,7 @@ jobs:
 
       - name: Clean up test infra
         if: ${{ always() }}
+        continue-on-error: true
         run: |
           export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
