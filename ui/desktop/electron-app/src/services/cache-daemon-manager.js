@@ -161,6 +161,10 @@ const searchCliCommand = (requestData) => {
   if (requestData.filter) {
     searchCommand.push(`-filter=${requestData.filter}`);
   }
+  if (requestData.sort_by && requestData.sort_direction) {
+    searchCommand.push(`-sort-by=${requestData.sort_by}`);
+    searchCommand.push(`-sort-direction=${requestData.sort_direction}`);
+  }
   if (requestData.force_refresh) {
     searchCommand.push(`-force-refresh=true`);
   }
