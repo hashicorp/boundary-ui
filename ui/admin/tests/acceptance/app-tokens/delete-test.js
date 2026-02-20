@@ -13,6 +13,24 @@ module('Acceptance | app-tokens | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
+  /**
+   * Seeds the store with the original token to mimic the real clone flow
+   * where the original token is already cached.
+   */
+  const seedStoreWithToken = (owner, token) => {
+    const store = owner.lookup('service:store');
+    store.push({
+      data: {
+        id: token.id,
+        type: 'app-token',
+        attributes: {
+          name: token.name,
+          status: token.status,
+        },
+      },
+    });
+  };
+
   let getAppTokenCount;
 
   const instances = {
@@ -22,6 +40,7 @@ module('Acceptance | app-tokens | delete', function (hooks) {
       project: null,
     },
     appToken: null,
+    originalAppToken: null,
   };
 
   const urls = {
@@ -128,4 +147,179 @@ module('Acceptance | app-tokens | delete', function (hooks) {
       assert.strictEqual(currentURL(), urls[`${scope}AppToken`]);
     },
   );
+
+  // Inline delete button tests (from inactive alert)
+  test.each(
+    'users can delete an inactive app-token using inline delete button',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({
+        scope: instances.scopes[scope],
+        status: 'expired',
+      });
+      const count = getAppTokenCount();
+      await visit(urls[`${scope}AppToken`]);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INLINE_DELETE_BTN).isVisible();
+
+      await click(selectors.INLINE_DELETE_BTN);
+      await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
+      await click(selectors.CONFIRM_DELETE_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}AppTokens`]);
+      assert.strictEqual(getAppTokenCount(), count - 1);
+    },
+  );
+
+  test.each(
+    'users can cancel inline delete action on an inactive app-token',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({
+        scope: instances.scopes[scope],
+        status: 'expired',
+      });
+      const count = getAppTokenCount();
+      await visit(urls[`${scope}AppToken`]);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      await click(selectors.INLINE_DELETE_BTN);
+      await click(selectors.CANCEL_MODAL_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}AppToken`]);
+      assert.strictEqual(getAppTokenCount(), count);
+    },
+  );
+
+  test.each(
+    'inline delete button is not visible when user lacks delete authorization',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      instances.appToken.update({
+        scope: instances.scopes[scope],
+        status: 'expired',
+      });
+      instances.appToken.authorized_actions =
+        instances.appToken.authorized_actions.filter(
+          (item) => item !== 'delete' && item !== 'delete:self',
+        );
+
+      await visit(urls[`${scope}AppToken`]);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INLINE_DELETE_BTN).doesNotExist();
+    },
+  );
+
+  // Delete original banner tests
+  test('delete original banner is visible when clonedFromId query param is present', async function (assert) {
+    instances.originalAppToken = this.server.create('app-token', {
+      scope: instances.scopes.global,
+      name: 'Original Token',
+      status: 'expired',
+    });
+    seedStoreWithToken(this.owner, instances.originalAppToken);
+
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+    assert.dom(selectors.DELETE_ORIGINAL_BTN).isVisible();
+  });
+
+  test('delete original banner is not visible without clonedFromId query param', async function (assert) {
+    await visit(urls.globalAppToken);
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+  });
+
+  test('users can delete the original app-token from the banner', async function (assert) {
+    instances.originalAppToken = this.server.create('app-token', {
+      scope: instances.scopes.global,
+      name: 'Original Token',
+      status: 'expired',
+    });
+    seedStoreWithToken(this.owner, instances.originalAppToken);
+    const count = getAppTokenCount();
+
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+
+    await click(selectors.DELETE_ORIGINAL_BTN);
+    await fillIn(selectors.FILED_CONFIRM_DELETE, 'DELETE');
+    await click(selectors.CONFIRM_DELETE_BTN);
+
+    assert.strictEqual(getAppTokenCount(), count - 1);
+    assert.strictEqual(currentURL(), urls.globalAppTokens);
+
+    // Navigate back to the cloned token and verify banner is not visible
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+  });
+
+  test('users can cancel delete original action', async function (assert) {
+    instances.originalAppToken = this.server.create('app-token', {
+      scope: instances.scopes.global,
+      name: 'Original Token',
+      status: 'expired',
+    });
+    seedStoreWithToken(this.owner, instances.originalAppToken);
+    const count = getAppTokenCount();
+
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+
+    await click(selectors.DELETE_ORIGINAL_BTN);
+    await click(selectors.CANCEL_MODAL_BTN);
+
+    assert.strictEqual(getAppTokenCount(), count);
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+  });
+
+  test('users can dismiss the delete original banner', async function (assert) {
+    instances.originalAppToken = this.server.create('app-token', {
+      scope: instances.scopes.global,
+      name: 'Original Token',
+      status: 'expired',
+    });
+    seedStoreWithToken(this.owner, instances.originalAppToken);
+    const count = getAppTokenCount();
+
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+
+    await click(selectors.DELETE_ORIGINAL_DISMISS_BTN);
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+    assert.strictEqual(getAppTokenCount(), count);
+  });
+
+  test('delete original banner displays original token name', async function (assert) {
+    instances.originalAppToken = this.server.create('app-token', {
+      scope: instances.scopes.global,
+      name: 'My Original Token',
+      status: 'stale',
+    });
+    seedStoreWithToken(this.owner, instances.originalAppToken);
+
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).isVisible();
+    assert
+      .dom(selectors.DELETE_ORIGINAL_BANNER)
+      .containsText('My Original Token');
+  });
 });

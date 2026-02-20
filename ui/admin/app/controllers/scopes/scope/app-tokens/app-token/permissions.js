@@ -12,12 +12,15 @@ import { GRANT_SCOPE_KEYWORDS } from 'api/models/role';
 export default class ScopesScopeAppTokensAppTokenPermissionsController extends Controller {
   @controller('scopes/scope/app-tokens/index') appTokens;
 
+  @service intl;
   @service store;
 
   @tracked showGrantsFlyout = false;
   @tracked showActiveScopesFlyout = false;
   @tracked showDeletedScopesFlyout = false;
   @tracked selectedPermission = null;
+  @tracked showDeleteModal = false;
+  @tracked deleteConfirmation = null;
 
   /**
    * Returns an array of scope objects (either fetched models or keyword objects)
@@ -116,5 +119,34 @@ export default class ScopesScopeAppTokensAppTokenPermissionsController extends C
   closeDeletedScopesFlyout() {
     this.showDeletedScopesFlyout = false;
     this.selectedPermission = null;
+  }
+
+  /**
+   * Checks if user entered DELETE to enable the delete button.
+   * @type {boolean}
+   */
+  get isDeleteConfirmed() {
+    return (
+      this.deleteConfirmation === this.intl.t('actions.delete').toUpperCase()
+    );
+  }
+
+  /**
+   * Toggle the delete modal.
+   */
+  @action
+  toggleDeleteModal() {
+    this.showDeleteModal = !this.showDeleteModal;
+    this.deleteConfirmation = null;
+  }
+
+  /**
+   * Handle the delete action.
+   */
+  @action
+  async handleDelete() {
+    this.showDeleteModal = false;
+    this.deleteConfirmation = null;
+    await this.appTokens.delete(this.model);
   }
 }

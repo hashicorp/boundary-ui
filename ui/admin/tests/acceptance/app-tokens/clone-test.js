@@ -193,4 +193,30 @@ module('Acceptance | app-tokens | clone', function (hooks) {
       assert.strictEqual(getAppTokenCount(), appTokenCount + 1);
     },
   );
+
+  test.each(
+    'clicking clone button in inactive alert navigates to clone page',
+    ['global', 'org', 'project'],
+    async function (assert, scope) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            enabled: false,
+          },
+        },
+      });
+      instances.appToken.update({
+        scope: instances.scopes[scope],
+        status: 'expired',
+      });
+      await visit(urls[`${scope}AppToken`]);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INLINE_CLONE_BTN).isVisible();
+
+      await click(selectors.INLINE_CLONE_BTN);
+
+      assert.strictEqual(currentURL(), urls[`${scope}CloneAppToken`]);
+    },
+  );
 });
