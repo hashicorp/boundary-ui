@@ -56,7 +56,7 @@ jobs:
       - name: Install Vault CLI
         run: |
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
-          unzip /tmp/vault.zip -d "$HOME/bin"
+          unzip /tmp/vault.zip -d /usr/local/bin
 
       - name: Checkout boundary-enterprise
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
