@@ -25,7 +25,6 @@ export default factory.extend({
       'remove-principals',
       'set-grant-scopes',
     ],
-  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [
     'ids=*;action=*',
     'ids=*;type=host-catalog;actions=create,read',
