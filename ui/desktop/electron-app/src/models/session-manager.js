@@ -6,14 +6,16 @@
 const Session = require('./session.js');
 
 class SessionManager {
-  #sessions = [];
+  #sessions = new Map();
 
   /**
    * Checks for running sessions
    * @returns {boolean}
    */
   get hasRunningSessions() {
-    return Boolean(this.#sessions.find((session) => session.isRunning));
+    return Boolean(
+      this.#sessions.values().find((session) => session.isRunning),
+    );
   }
 
   /**
@@ -32,9 +34,15 @@ class SessionManager {
       token,
       host_id,
       session_max_seconds,
+      (sessionId) => this.#sessions.delete(sessionId),
     );
-    this.#sessions.push(session);
-    return session.start();
+    return session.start().then((proxyDetails) => {
+      // Store session by id for tracking and stopping later
+      // Needs to be done after session.start() resolves
+      // since session id is generated in start()
+      this.#sessions.set(session.id, session);
+      return proxyDetails;
+    });
   }
 
   /**
@@ -43,15 +51,8 @@ class SessionManager {
    * @param {string} session_id
    */
   stopById(session_id) {
-    const sessionIndex = this.#sessions.findIndex(
-      (session) => session.id === session_id,
-    );
-    if (sessionIndex !== -1) {
-      const session = this.#sessions[sessionIndex];
-      return Promise.resolve(session?.stop?.()).then(() => {
-        this.#sessions.splice(sessionIndex, 1);
-      });
-    }
+    const session = this.#sessions.get(session_id);
+    return session?.stop();
   }
 
   /**
@@ -60,7 +61,7 @@ class SessionManager {
    * @returns {Session} The session object
    */
   getSessionById(sessionId) {
-    return this.#sessions.find((session) => session.id === sessionId);
+    return this.#sessions.get(sessionId);
   }
 
   /**
@@ -70,10 +71,8 @@ class SessionManager {
    * along with clearing the sessions list.
    */
   stopAll() {
-    return Promise.all(this.#sessions.map((session) => session.stop())).then(
-      () => {
-        this.#sessions = [];
-      },
+    return Promise.all(
+      this.#sessions.values().map((session) => session.stop()),
     );
   }
 }
