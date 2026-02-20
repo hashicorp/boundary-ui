@@ -101,6 +101,14 @@ export default class CacheDaemonHandler {
         const token = sessionData?.token;
         const resourceName = resourceNames[type];
 
+        if (remainingQuery.query?.sort) {
+          const { attribute, direction } = remainingQuery.query.sort;
+          if (attribute && direction) {
+            remainingQuery.sort_by = attribute;
+            remainingQuery.sort_direction = direction;
+          }
+        }
+
         remainingQuery = {
           ...remainingQuery,
           query: searchQuery,
