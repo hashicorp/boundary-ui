@@ -267,8 +267,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_CERTIFICATES,
       selectors.FIELD_CERTIFICATES_VALUE,
     );
-    await click(selectors.FIELD_CERTIFICATES_ADD_BTN);
-
     await click(selectors.FIELD_START_TLS);
     await click(selectors.FIELD_INSECURE_TLS);
     await fillIn(selectors.FIELD_BIND_DN, selectors.FIELD_BIND_DN_VALUE);
