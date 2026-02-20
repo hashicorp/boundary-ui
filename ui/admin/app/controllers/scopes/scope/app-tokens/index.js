@@ -18,6 +18,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   @service can;
   @service intl;
   @service router;
+  @service store;
 
   // =attributes
 
@@ -159,13 +160,25 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
   })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(() => 'notifications.create-success')
-  async create(appToken) {
+  async create(appToken, cloneAppTokenId) {
     await appToken.save();
+
+    // If cloning, fetch the original token to check if it was inactive
+    const originalToken = cloneAppTokenId
+      ? await this.store.findRecord('app-token', cloneAppTokenId)
+      : null;
     if (this.can.can('read model', appToken)) {
+      const queryParams = { showCreatedAppToken: true };
+
+      // If the original token was inactive, include clonedFromId to show delete banner
+      if (originalToken && !originalToken.isActive) {
+        queryParams.clonedFromId = originalToken.id;
+      }
+
       await this.router.transitionTo(
         'scopes.scope.app-tokens.app-token',
         appToken,
-        { queryParams: { showCreatedAppToken: true } },
+        { queryParams },
       );
     } else {
       this.router.transitionTo('scopes.scope.app-tokens');

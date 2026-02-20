@@ -210,4 +210,23 @@ module('Acceptance | app-tokens | read', function (hooks) {
       assert.dom(selectors.INACTIVE_ALERT_TITLE).hasText(expectedTitle);
     },
   );
+
+  // Note: This test is here and not in clone-test.js or delete-test.js because it verifies the visibility/display
+  test.each(
+    'inactive alert displays clone and delete buttons for non-active tokens',
+    {
+      expired: { status: 'expired' },
+      stale: { status: 'stale' },
+      revoked: { status: 'revoked' },
+    },
+    async function (assert, { status }) {
+      instances.appToken.update({ status });
+
+      await visit(urls.globalAppToken);
+
+      assert.dom(selectors.INACTIVE_ALERT).isVisible();
+      assert.dom(selectors.INLINE_CLONE_BTN).isVisible();
+      assert.dom(selectors.INLINE_DELETE_BTN).isVisible();
+    },
+  );
 });
