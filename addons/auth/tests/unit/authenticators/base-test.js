@@ -68,7 +68,7 @@ module('Unit | Authenticator | base', function (hooks) {
     });
     try {
       await authenticator.restore(mockData);
-    } catch (e) {
+    } catch {
       assert.ok(true, 'restoration failed');
     }
   });
@@ -84,7 +84,7 @@ module('Unit | Authenticator | base', function (hooks) {
     });
     try {
       await authenticator.restore(mockData);
-    } catch (e) {
+    } catch {
       assert.ok(true, 'restoration failed');
     }
   });
