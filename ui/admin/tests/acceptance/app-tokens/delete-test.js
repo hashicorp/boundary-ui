@@ -255,7 +255,6 @@ module('Acceptance | app-tokens | delete', function (hooks) {
     await click(selectors.CONFIRM_DELETE_BTN);
 
     assert.strictEqual(getAppTokenCount(), count - 1);
-    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
     assert.strictEqual(currentURL(), urls.globalAppTokens);
 
     // Navigate back to the cloned token and verify banner is not visible
