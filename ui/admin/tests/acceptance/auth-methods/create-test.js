@@ -214,7 +214,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_CERTIFICATES,
       selectors.FIELD_CERTIFICATES_VALUE,
     );
-    await click(selectors.FIELD_CERTIFICATES_ADD_BTN);
+
     await fillIn(
       selectors.FIELD_CLIENT_CERTIFICATE,
       selectors.FIELD_CLIENT_CERTIFICATE_VALUE,
@@ -247,7 +247,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO,
       selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO_VALUE,
     );
-    await click(selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_ADD_BTN);
+
     await fillIn(selectors.FIELD_GROUP_DN, selectors.FIELD_GROUP_DN_VALUE);
     await fillIn(selectors.FIELD_GROUP_ATTR, selectors.FIELD_GROUP_ATTR_VALUE);
     await fillIn(

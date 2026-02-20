@@ -82,37 +82,31 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='certificates'
+    @data={{@model.certificates}}
+    @onAdd={{fn @addRow 'certificates' (array 'value')}}
+    @onRemove={{fn @removeRow 'certificates'}}
+    @onUpdate={{fn @updateRow 'certificates'}}
+    @legend={{t 'resources.auth-method.form.certificates.label'}}
+    @helperText={{t 'resources.auth-method.form.certificates.help'}}
+    @errors={{@model.errors.certificates}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'resources.auth-method.form.certificates.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'resources.auth-method.form.certificates.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.certificates}}
-        <F.Error as |E|>
-          {{#each @model.errors.certificates as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Textarea
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
-
-    <:field as |F|>
-      <F.Textarea
-        @name='certificates'
-        @options={{@model.certificates}}
-        @model={{@model}}
-      />
-    </:field>
-
-  </Form::Field::ListWrapper>
+    </:row>
+  </Form::Field::KeyValue>
 
   {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
@@ -406,45 +400,48 @@
       }}</F.HelperText>
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::field::KeyValue
+    @name='account_attribute_maps'
+    @data={{@model.account_attribute_maps}}
+    @onAdd={{fn @addRow 'account_attribute_maps' (array 'key' 'value')}}
+    @onRemove={{fn @removeRow 'account_attribute_maps'}}
+    @onUpdate={{fn @updateRow 'account_attribute_maps'}}
+    @legend={{t 'resources.auth-method.form.account_attribute_maps.label'}}
+    @helperText={{t 'resources.auth-method.form.account_attribute_maps.help'}}
+    @errors={{@model.errors.account_attribute_maps}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'resources.auth-method.form.account_attribute_maps.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'resources.auth-method.form.account_attribute_maps.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.account_attribute_maps}}
-        <F.Error as |E|>
-          {{#each @model.errors.account_attribute_maps as |error|}}
-            <E.Message>{{error.message}}</E.Message>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.Label>{{t 'resources.auth-method.titles.from-attr'}}</F.Label>
+        <F.TextInput
+          data-test-key-input
+          @value={{R.rowData.key}}
+          {{on 'input' (fn R.updateRow 'key')}}
+        />
+      </R.Field>
+      <R.Field as |F|>
+        <F.Label>{{t 'resources.auth-method.titles.to-attr'}}</F.Label>
+        <F.Select
+          data-test-value-select
+          {{on 'change' (fn R.updateRow 'value')}}
+        >
+          <option disabled hidden selected value=''>
+            {{t 'titles.choose-an-option'}}
+          </option>
+          {{#each this.toAttributes as |attr|}}
+            <option value={{attr}} selected={{eq R.rowData.value attr}}>
+              {{attr}}
+            </option>
           {{/each}}
-        </F.Error>
+        </F.Select>
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
-    <:field as |F|>
-      <F.KeyValue
-        @name='account_attribute_maps'
-        @options={{@model.account_attribute_maps}}
-        @model={{@model}}
-        @keyLabel={{t 'resources.auth-method.titles.from-attr'}}
-        @valueLabel={{t 'resources.auth-method.titles.to-attr'}}
-        @width='100%'
-      >
-        <:key as |K|>
-          <K.text />
-        </:key>
-        <:value as |V|>
-          <V.select @selectOptions={{this.toAttributes}} />
-        </:value>
-      </F.KeyValue>
-    </:field>
-  </Form::Field::ListWrapper>
+    </:row>
+  </Form::field::KeyValue>
 
   <div class='ldap-section'>
     <Hds::Text::Display
