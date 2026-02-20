@@ -5,7 +5,10 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_OIDC,
+  TYPE_AUTH_METHOD_LDAP,
+} from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsNewRoute extends Route {
   // =services
@@ -56,6 +59,11 @@ export default class ScopesScopeAuthMethodsNewRoute extends Route {
       record.allowed_audiences = [{ value: '' }];
       record.signing_algorithms = [{ value: '' }];
       record.idp_ca_certs = [{ value: '' }];
+    }
+    // If the auth-method is of type LDAP, initialize the certificates field with an empty object.
+    if (params.type === TYPE_AUTH_METHOD_LDAP) {
+      record.certificates = [{ value: '' }];
+      record.account_attribute_maps = [{ key: '', value: '' }];
     }
 
     return record;
