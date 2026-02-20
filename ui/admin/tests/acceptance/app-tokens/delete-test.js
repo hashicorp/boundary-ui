@@ -256,6 +256,13 @@ module('Acceptance | app-tokens | delete', function (hooks) {
 
     assert.strictEqual(getAppTokenCount(), count - 1);
     assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
+    assert.strictEqual(currentURL(), urls.globalAppTokens);
+
+    // Navigate back to the cloned token and verify banner is not visible
+    await visit(
+      `${urls.globalAppToken}?clonedFromId=${instances.originalAppToken.id}`,
+    );
+    assert.dom(selectors.DELETE_ORIGINAL_BANNER).doesNotExist();
   });
 
   test('users can cancel delete original action', async function (assert) {
