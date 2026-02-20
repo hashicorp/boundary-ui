@@ -251,11 +251,11 @@ importers:
         version: 6.3.0
       ember-simple-auth:
         specifier: ^6.1.0
-        version: 6.1.0(@babel/core@7.27.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))(eslint@8.57.1)
+        version: 6.1.0(@babel/core@7.27.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))(eslint@9.39.2(jiti@2.4.2))
     devDependencies:
       '@babel/eslint-parser':
         specifier: ^7.25.1
-        version: 7.27.1(@babel/core@7.27.1)(eslint@8.57.1)
+        version: 7.27.1(@babel/core@7.27.1)(eslint@9.39.2(jiti@2.4.2))
       '@babel/plugin-proposal-decorators':
         specifier: ^7.24.7
         version: 7.27.1(@babel/core@7.27.1)
@@ -268,6 +268,9 @@ importers:
       '@embroider/test-setup':
         specifier: ^4.0.0
         version: 4.0.0
+      '@eslint/js':
+        specifier: ^9.18.0
+        version: 9.39.2
       '@glimmer/component':
         specifier: ^2.0.0
         version: 2.0.0
@@ -329,20 +332,23 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0(encoding@0.1.13)
       eslint:
-        specifier: ^8.57.1
-        version: 8.57.1
+        specifier: ^9.18.0
+        version: 9.39.2(jiti@2.4.2)
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@8.57.1)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
-        specifier: ^12.2.1
-        version: 12.5.0(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
+        specifier: ^12.7.5
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-n:
-        specifier: ^16.6.2
-        version: 16.6.2(eslint@8.57.1)
+        specifier: ^17.24.0
+        version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-qunit:
-        specifier: ^8.1.2
-        version: 8.1.2(eslint@8.57.1)
+        specifier: ^8.2.6
+        version: 8.2.6(eslint@9.39.2(jiti@2.4.2))
+      globals:
+        specifier: ^15.14.0
+        version: 15.15.0
       loader.js:
         specifier: ^4.7.0
         version: 4.7.0
@@ -14741,9 +14747,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-simple-auth@6.1.0(@babel/core@7.27.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))(eslint@8.57.1):
+  ember-simple-auth@6.1.0(@babel/core@7.27.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))(eslint@9.39.2(jiti@2.4.2)):
     dependencies:
-      '@babel/eslint-parser': 7.27.1(@babel/core@7.27.1)(eslint@8.57.1)
+      '@babel/eslint-parser': 7.27.1(@babel/core@7.27.1)(eslint@9.39.2(jiti@2.4.2))
       '@ember/test-waiters': 3.1.0
       '@embroider/addon-shim': 1.10.0
       '@embroider/macros': 1.18.0(@glint/template@1.5.2)
