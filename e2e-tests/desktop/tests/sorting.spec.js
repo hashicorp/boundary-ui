@@ -48,8 +48,13 @@ test.afterEach(async ({ request }) => {
 });
 
 test('Sorts targets table by name correctly', async ({ authedPage }) => {
-  await authedPage.getByLabel('header-nav').click();
+  const headerNavLocator = authedPage.getByLabel('header-nav');
+  await expect(headerNavLocator).toBeVisible();
+  await headerNavLocator.click();
   await authedPage.getByRole('link', { name: org.name }).click();
+  await expect(
+    headerNavLocator.locator('.hds-dropdown-toggle-button'),
+  ).toHaveText(org.name);
 
   await expect(
     authedPage.getByRole('heading', { name: 'Targets' }),
