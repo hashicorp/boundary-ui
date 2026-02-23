@@ -67,6 +67,21 @@ module.exports = defineConfig([
     extends: [nPlugin.configs['flat/recommended-script']],
   },
 
+  // These files reference config/config.js which is generated at build time
+  // and listed in .gitignore, so it won't exist when linting in CI unless we build first.
+  {
+    files: [
+      'electron-app/config/forge.config.js',
+      'electron-app/src/index.js',
+      'electron-app/src/config/menu.js',
+      'electron-app/src/ipc/handlers.js',
+      'electron-app/src/helpers/app-updater.js',
+    ],
+    rules: {
+      'n/no-missing-require': 'off',
+    },
+  },
+
   // Test files configuration
   {
     files: ['tests/**/*-test.{js,ts}'],
