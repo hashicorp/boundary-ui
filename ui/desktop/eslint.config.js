@@ -61,6 +61,7 @@ module.exports = defineConfig([
       'testem-electron.js',
       'playwright.config.js',
       'config/**/*.js',
+      'server/**/*.js',
       'electron-app/**/*.js',
     ],
     plugins: { n: nPlugin },

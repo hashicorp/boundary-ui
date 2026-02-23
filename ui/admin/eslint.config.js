@@ -59,6 +59,7 @@ module.exports = defineConfig([
       'ember-cli-build.js',
       'testem.js',
       'config/**/*.js',
+      'server/**/*.js',
     ],
     plugins: { n: nPlugin },
     extends: [nPlugin.configs['flat/recommended-script']],
