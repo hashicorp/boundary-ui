@@ -11,6 +11,12 @@ on:
       - 'e2e-tests/desktop/**'
       - '.github/workflows/test-e2e-desktop.yaml'
   workflow_dispatch:
+    inputs:
+      boundary-enterprise-branch:
+        description: 'Branch of boundary-enterprise to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
 
 jobs:
   test:
@@ -56,7 +62,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: hashicorp/boundary-enterprise
-          #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
+          ref: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
           path: support/src/boundary-enterprise
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
@@ -71,22 +77,20 @@ jobs:
           echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
           echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
 
-      # TODO: Build image ourselves in case we don't want to use latest?
-      - name: Get Boundary docker image
+      - name: Set git config
         run: |
-          docker pull hashicorp/boundary-enterprise:latest
-          docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
+          git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
       - name: Set up test infra
         id: infra
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
+          export ENOS_VAR_boundary_edition="ent" && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
-          export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
-          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
+          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:local
 
       - name: Install dependencies
         run: |
