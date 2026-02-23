@@ -92,6 +92,11 @@ jobs:
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
           enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:local
 
+      - name: Move boundary binary
+        run: |
+          mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
+          boundary version
+      
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
