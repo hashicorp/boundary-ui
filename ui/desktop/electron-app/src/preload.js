@@ -8,36 +8,15 @@ const { ipcRenderer, contextBridge } = require('electron');
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
 
-/**
- * Exposing terminal creation to an isolated context (Ember)
- * More information about contextBridge https://www.electronjs.org/docs/latest/api/context-bridge
- * usage example: window.terminal.send(data);
- */
-contextBridge.exposeInMainWorld('terminal', {
-  // We could've sent data through our established postMessage pattern
-  // but we don't need a response back so we can make it include it here
-  // to make it simpler. This keeps sending and receiving handlers symmetrical.
-  send: (data, id) => {
-    ipcRenderer.send(`terminalKeystroke-${id}`, data);
+contextBridge.exposeInMainWorld('webContentView', {
+  createTerminalView: (params) => {
+    ipcRenderer.send('createTerminalView', params);
   },
-  receive: (callback, id) => {
-    const incomingDataChannel = `terminalIncomingData-${id}`;
-    const listenerCallback = (_event, value) => callback(value);
-    ipcRenderer.on(incomingDataChannel, listenerCallback);
-
-    // Return a function for the caller to handle cleaning up the listener
-    return () => {
-      return ipcRenderer.removeListener(incomingDataChannel, listenerCallback);
-    };
+  positionTerminalView: (position) => {
+    ipcRenderer.send('positionTerminalView', position);
   },
-  create: (vars) => {
-    ipcRenderer.send('createTerminal', vars);
-  },
-  remove: (id) => {
-    ipcRenderer.send(`removeTerminal-${id}`);
-  },
-  resize: (size, id) => {
-    ipcRenderer.send(`resize-${id}`, size);
+  destroyTerminalView: () => {
+    ipcRenderer.send('destroyTerminalView');
   },
 });
 

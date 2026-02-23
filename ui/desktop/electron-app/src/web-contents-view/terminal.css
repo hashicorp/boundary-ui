@@ -1,0 +1,16 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+#terminal {
+  width: 100%;
+  height: 100%;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

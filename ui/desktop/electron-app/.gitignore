@@ -89,6 +89,7 @@ config/config.js
 # Ember build
 ember-dist/
 ember-test/
+web-contents-view-dist/
 
 # CLI
 /cli/
