@@ -10,7 +10,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute exten
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =methods
@@ -21,7 +21,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute exten
   beforeModel() {
     const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
     if (
-      this.can.cannot('create model', authMethod, {
+      this.abilities.cannot('create model', authMethod, {
         collection: 'managed-groups',
       })
     ) {

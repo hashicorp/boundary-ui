@@ -17,7 +17,7 @@ const { __electronLog } = globalThis;
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
 
-  @service can;
+  @service abilities;
   @service clusterUrl;
   @service resourceFilterStore;
   @service router;
@@ -48,6 +48,14 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     },
     pageSize: {
       refreshModel: true,
+    },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
     },
   };
 
@@ -96,6 +104,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       types,
       page,
       pageSize,
+      sortAttribute,
+      sortDirection,
       useDebounce,
     }) => {
       if (useDebounce) {
@@ -121,11 +131,11 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
       const sessions = await this.getSessions(orgScope, scopes, orgFilter);
       this.addActiveSessionFilters(filters, availableSessions, sessions);
-
+      const sort = { attribute: sortAttribute, direction: sortDirection };
       const query = {
         recursive: true,
         scope_id: orgScope.id,
-        query: { search, filters },
+        query: { search, filters, sort },
         page,
         pageSize,
         force_refresh: true,
@@ -137,7 +147,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
       // Filter out targets to which users do not have the connect ability
       targets = targets.filter((target) =>
-        this.can.can('connect target', target),
+        this.abilities.can('connect target', target),
       );
 
       const aliasPromise = this.store.query('alias', {

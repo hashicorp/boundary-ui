@@ -10,7 +10,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountRoute extend
   // =services
 
   @service store;
-  @service can;
   @service router;
 
   // =methods

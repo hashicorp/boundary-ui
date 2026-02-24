@@ -23,7 +23,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service router;
   @service session;
   @service store;
-  @service can;
+  @service abilities;
   @service intl;
   @service rdp;
 
@@ -36,6 +36,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     { types: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked search;
@@ -44,6 +46,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked types = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
   @tracked selectedTarget;
 
   // =methods
@@ -295,7 +299,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   async cancelSession(session) {
     let updatedSession = session;
     // fetch session from API to verify we have most up to date record
-    if (this.can.can('read session', session)) {
+    if (this.abilities.can('read session', session)) {
       updatedSession = await this.store.findRecord('session', session.id, {
         reload: true,
       });
@@ -331,5 +335,17 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
         // Retry
         .then(() => this.quickConnectAndLaunchRdp(target));
     }
+  }
+
+  /**
+   * Sets sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
