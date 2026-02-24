@@ -9,83 +9,92 @@ import sinon from 'sinon';
  * Use `setupBoundaryContextBridgeApiMock(hooks)` in tests and access via `window.boundary`.
  */
 export class BoundaryContextBridgeAPIMock {
-  clusterUrl = null;
-
-  // cluster
-  getClusterUrl = sinon.stub().callsFake(function () {
-    return Promise.resolve(this.clusterUrl);
-  });
-  setClusterUrl = sinon.stub().callsFake(function (clusterUrl) {
-    this.clusterUrl = clusterUrl;
-    return this.clusterUrl;
-  });
-  resetClusterUrl = sinon.stub().callsFake(function () {
+  constructor() {
+    this.sandbox = sinon.createSandbox();
     this.clusterUrl = null;
-  });
 
-  openExternal = sinon.stub().resolves();
-  cliExists = sinon.stub().resolves(true);
-  checkCommand = sinon.stub().resolves(false);
-  checkOS = sinon.stub().resolves({ isMac: true });
-  getCliVersion = sinon
-    .stub()
-    .resolves({ versionNumber: 'Boundary CLI v0.1.0' });
-  getDesktopVersion = sinon.stub().resolves({ desktopVersion: '1.0.0' });
+    // cluster
+    this.getClusterUrl = this.sandbox.stub().callsFake(() => {
+      return Promise.resolve(this.clusterUrl);
+    });
+    this.setClusterUrl = this.sandbox.stub().callsFake((clusterUrl) => {
+      this.clusterUrl = clusterUrl;
+      return this.clusterUrl;
+    });
+    this.resetClusterUrl = this.sandbox.stub().callsFake(() => {
+      this.clusterUrl = null;
+    });
 
-  // window
-  hasMacOSChrome = sinon.stub().resolves(false);
-  showWindowActions = sinon.stub().resolves(false);
-  minimizeWindow = sinon.stub().resolves();
-  toggleFullscreenWindow = sinon.stub().resolves();
-  closeWindow = sinon.stub().resolves();
-  focusWindow = sinon.stub().resolves();
+    this.openExternal = this.sandbox.stub().resolves();
+    this.cliExists = this.sandbox.stub().resolves(true);
+    this.checkCommand = this.sandbox.stub().resolves(false);
+    this.checkOS = this.sandbox.stub().resolves({ isMac: true });
+    this.getCliVersion = this.sandbox
+      .stub()
+      .resolves({ versionNumber: 'Boundary CLI v0.1.0' });
+    this.getDesktopVersion = this.sandbox
+      .stub()
+      .resolves({ desktopVersion: '1.0.0' });
 
-  // daemon
-  addTokenToDaemons = sinon.stub().resolves();
-  searchCacheDaemon = sinon.stub().resolves({});
-  isCacheDaemonRunning = sinon.stub().resolves(false);
-  cacheDaemonStatus = sinon.stub().resolves({ version: 'Boundary CLI v1.0.0' });
+    // window
+    this.hasMacOSChrome = this.sandbox.stub().resolves(false);
+    this.showWindowActions = this.sandbox.stub().resolves(false);
+    this.minimizeWindow = this.sandbox.stub().resolves();
+    this.toggleFullscreenWindow = this.sandbox.stub().resolves();
+    this.closeWindow = this.sandbox.stub().resolves();
+    this.focusWindow = this.sandbox.stub().resolves();
 
-  // client agent
-  getClientAgentSessions = sinon.stub().resolves([]);
-  isClientAgentRunning = sinon.stub().resolves(false);
-  clientAgentStatus = sinon
-    .stub()
-    .resolves({ version: '0.0.1-dev', status: 'running' });
-  pauseClientAgent = sinon.stub().resolves();
-  resumeClientAgent = sinon.stub().resolves();
+    // daemon
+    this.addTokenToDaemons = this.sandbox.stub().resolves();
+    this.searchCacheDaemon = this.sandbox.stub().resolves({});
+    this.isCacheDaemonRunning = this.sandbox.stub().resolves(false);
+    this.cacheDaemonStatus = this.sandbox
+      .stub()
+      .resolves({ version: 'Boundary CLI v1.0.0' });
 
-  // logging
-  getLogLevel = sinon.stub().resolves('info');
-  setLogLevel = sinon.stub().resolves();
-  getLogPath = sinon
-    .stub()
-    .resolves('~/.config/Boundary/logs/desktop-client.log');
+    // client agent
+    this.getClientAgentSessions = this.sandbox.stub().resolves([]);
+    this.isClientAgentRunning = this.sandbox.stub().resolves(false);
+    this.clientAgentStatus = this.sandbox
+      .stub()
+      .resolves({ version: '0.0.1-dev', status: 'running' });
+    this.pauseClientAgent = this.sandbox.stub().resolves();
+    this.resumeClientAgent = this.sandbox.stub().resolves();
 
-  // session
-  connectSession = sinon.stub();
-  stopSession = sinon.stub().resolves(true);
-  stopAllSessions = sinon.stub().resolves();
-  hasRunningSessions = sinon.stub().resolves(true);
+    // logging
+    this.getLogLevel = this.sandbox.stub().resolves('info');
+    this.setLogLevel = this.sandbox.stub().resolves();
+    this.getLogPath = this.sandbox
+      .stub()
+      .resolves('~/.config/Boundary/logs/desktop-client.log');
 
-  // rdp
-  getRdpClients = sinon.stub().resolves([]);
-  getPreferredRdpClient = sinon.stub().resolves('none');
-  setPreferredRdpClient = sinon.stub().callsFake(function (client) {
-    return Promise.resolve(client);
-  });
-  launchRdpClient = sinon.stub().resolves(true);
+    // session
+    this.connectSession = this.sandbox.stub();
+    this.stopSession = this.sandbox.stub().resolves(true);
+    this.stopAllSessions = this.sandbox.stub().resolves();
+    this.hasRunningSessions = this.sandbox.stub().resolves(true);
+
+    // rdp
+    this.getRdpClients = this.sandbox.stub().resolves([]);
+    this.getPreferredRdpClient = this.sandbox.stub().resolves('none');
+    this.setPreferredRdpClient = this.sandbox.stub().callsFake((client) => {
+      return Promise.resolve(client);
+    });
+    this.launchRdpClient = this.sandbox.stub().resolves(true);
+  }
 }
 
 export function setupBoundaryContextBridgeApiMock(hooks) {
+  let mockBoundary;
+
   hooks.beforeEach(function () {
-    const mockBoundary = new BoundaryContextBridgeAPIMock();
+    mockBoundary = new BoundaryContextBridgeAPIMock();
     window.boundary = mockBoundary;
     this.searchCacheDaemonStub = window.boundary.searchCacheDaemon;
   });
 
   hooks.afterEach(function () {
-    sinon.restore();
+    mockBoundary.sandbox.restore();
     delete window.boundary;
   });
 }
