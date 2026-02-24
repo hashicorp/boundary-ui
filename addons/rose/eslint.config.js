@@ -5,6 +5,7 @@
 
 'use strict';
 
+/* eslint-disable n/no-unpublished-require */
 const { defineConfig, globalIgnores } = require('eslint/config');
 const babelParser = require('@babel/eslint-parser');
 const js = require('@eslint/js');
@@ -72,11 +73,10 @@ module.exports = defineConfig([
   // Test files configuration
   {
     files: ['tests/**/*-test.{js,ts}'],
-    plugins: {
-      qunit: qunitPlugin,
-    },
+    extends: [
+      { ...qunitPlugin.configs.recommended, plugins: { qunit: qunitPlugin } },
+    ],
     rules: {
-      ...qunitPlugin.configs.recommended.rules,
       'qunit/require-expect': [2, 'except-simple'],
     },
   },

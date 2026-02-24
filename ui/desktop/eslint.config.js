@@ -86,11 +86,10 @@ module.exports = defineConfig([
   // Test files configuration
   {
     files: ['tests/**/*-test.{js,ts}'],
-    plugins: {
-      qunit: qunitPlugin,
-    },
+    extends: [
+      { ...qunitPlugin.configs.recommended, plugins: { qunit: qunitPlugin } },
+    ],
     rules: {
-      ...qunitPlugin.configs.recommended.rules,
       'qunit/require-expect': [2, 'except-simple'],
     },
   },

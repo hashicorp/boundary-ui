@@ -1,7 +1,6 @@
 {
   "name": "rose",
   "version": "0.0.0",
-  "private": true,
   "description": "Styles and components for Boundary.",
   "license": "BUSL-1.1",
   "author": "HashiCorp",
