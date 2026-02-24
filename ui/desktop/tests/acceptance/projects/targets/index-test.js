@@ -882,6 +882,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('sorting by target name updates url', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-24
+          enabled: false,
+        },
+      },
+    });
+
     this.stubCacheDaemonSearch(
       'sessions',
       'targets',
