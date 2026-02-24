@@ -11,7 +11,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
 
   // =attributes
 
@@ -69,7 +69,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
       let totalItems = 0;
 
       if (
-        this.can.can('list model', scope, {
+        this.abilities.can('list model', scope, {
           collection: 'aliases',
         })
       ) {

@@ -10,7 +10,7 @@ import { service } from '@ember/service';
 
 export default class FormUserAddAccountsComponent extends Component {
   // =properties
-  @service can;
+  @service abilities;
   /**
    * Array of selected account IDs.
    * @type {EmberArray}
@@ -36,7 +36,7 @@ export default class FormUserAddAccountsComponent extends Component {
     const notAddedAccounts = this.args.accounts.filter(
       (account) =>
         !alreadyAddedAccountIDs.includes(account.id) &&
-        this.can.can('addAccount user', this.args.model, { account }),
+        this.abilities.can('addAccount user', this.args.model, { account }),
     );
     return notAddedAccounts;
   }

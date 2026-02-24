@@ -16,7 +16,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =services
   @service store;
   @service router;
-  @service can;
+  @service abilities;
   @service intl;
 
   // =attributes
@@ -124,7 +124,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
           : { attributes: [sortAttribute], direction: sortDirection };
 
       if (
-        this.can.can('list scope', scope, {
+        this.abilities.can('list scope', scope, {
           collection: 'session-recordings',
         })
       ) {
