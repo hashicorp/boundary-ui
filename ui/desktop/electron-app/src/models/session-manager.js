@@ -27,7 +27,7 @@ class SessionManager {
    * @param {string} host_id
    * @param {number} session_max_seconds
    */
-  start(addr, target_id, token, host_id, session_max_seconds) {
+  async start(addr, target_id, token, host_id, session_max_seconds) {
     const session = new Session(
       addr,
       target_id,
@@ -36,13 +36,12 @@ class SessionManager {
       session_max_seconds,
       (sessionId) => this.#sessions.delete(sessionId),
     );
-    return session.start().then((proxyDetails) => {
-      // Store session by id for tracking and stopping later
-      // Needs to be done after session.start() resolves
-      // since session id is generated in start()
-      this.#sessions.set(session.id, session);
-      return proxyDetails;
-    });
+    const sessionDetails = await session.start();
+    // Store session by id for tracking and stopping later
+    // Needs to be done after session.start() resolves
+    // since session id is generated in start()
+    this.#sessions.set(session.id, session);
+    return sessionDetails;
   }
 
   /**

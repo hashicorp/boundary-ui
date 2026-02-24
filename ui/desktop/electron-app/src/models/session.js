@@ -94,7 +94,7 @@ class Session {
    * Using cli, initialize a session to a target.
    * Tracks local proxy details if successful.
    */
-  start() {
+  async start() {
     const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
     const options = {
       env: {
@@ -105,28 +105,29 @@ class Session {
         ? this.#sessionMaxSeconds * 1000
         : undefined,
     };
-    return spawn(this.connectCommand, options).then(
-      ({ childProcess, stdout, stderr }) => {
-        if (stdout) {
-          const response = jsonify(stdout);
-          this.#process = childProcess;
-          this.#proxyDetails = response;
-          this.#id = response.session_id;
-
-          this.#process.on('close', () => {
-            this.#onClose(this.#id);
-          });
-
-          return response;
-        } else if (stderr) {
-          const errorResponse = jsonify(stderr);
-          const error = errorResponse.api_error || errorResponse.error;
-          throw new Error(
-            error?.message ?? 'Unknown error occurred while starting session',
-          );
-        }
-      },
+    const { childProcess, stdout, stderr } = await spawn(
+      this.connectCommand,
+      options,
     );
+
+    if (stderr) {
+      const errorResponse = jsonify(stderr);
+      const error = errorResponse.api_error || errorResponse.error;
+      throw new Error(
+        error?.message ?? 'Unknown error occurred while starting session',
+      );
+    }
+
+    const response = jsonify(stdout);
+    this.#process = childProcess;
+    this.#proxyDetails = response;
+    this.#id = response.session_id;
+
+    this.#process.on('close', () => {
+      this.#onClose(this.#id);
+    });
+
+    return response;
   }
 
   /**
