@@ -8,7 +8,6 @@ import { service } from '@ember/service';
 
 export default class ScopesScopePoliciesPolicyRoute extends Route {
   @service store;
-  @service can;
 
   // =methods
 

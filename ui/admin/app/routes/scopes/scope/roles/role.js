@@ -11,7 +11,6 @@ export default class ScopesScopeRolesRoleRoute extends Route {
   // =services
 
   @service store;
-  @service can;
   @service router;
 
   // =methods

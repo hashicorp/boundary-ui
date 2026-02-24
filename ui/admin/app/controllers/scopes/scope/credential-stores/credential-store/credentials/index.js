@@ -15,7 +15,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
 
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -28,10 +28,10 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.credentialStore, {
+    const canList = this.abilities.can('list model', this.credentialStore, {
       collection: 'credentials',
     });
-    const canCreate = this.can.can('create model', this.credentialStore, {
+    const canCreate = this.abilities.can('create model', this.credentialStore, {
       collection: 'credentials',
     });
     const resource = this.intl.t('resources.credential.title_plural');
@@ -75,7 +75,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
   )
   async save(credential) {
     await credential.save();
-    if (this.can.can('read credential', credential)) {
+    if (this.abilities.can('read credential', credential)) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credentials.credential',
         credential,

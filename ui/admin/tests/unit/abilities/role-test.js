@@ -9,11 +9,11 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Abilities | role', function (hooks) {
   setupTest(hooks);
 
-  let canService;
+  let abilitiesService;
   let store;
 
   hooks.beforeEach(function () {
-    canService = this.owner.lookup('service:can');
+    abilitiesService = this.owner.lookup('service:abilities');
     store = this.owner.lookup('service:store');
   });
 
@@ -23,9 +23,9 @@ module('Unit | Abilities | role', function (hooks) {
       authorized_actions: ['set-grant-scopes'],
       scope: globalScope,
     });
-    assert.true(canService.can('setGrantScopes role', role));
+    assert.true(abilitiesService.can('setGrantScopes role', role));
     role.authorized_actions = [];
-    assert.false(canService.can('setGrantScopes role', role));
+    assert.false(abilitiesService.can('setGrantScopes role', role));
   });
 
   test('can setGrantScopes on role when authorized and scope is org type', function (assert) {
@@ -38,9 +38,9 @@ module('Unit | Abilities | role', function (hooks) {
       authorized_actions: ['set-grant-scopes'],
       scope: orgScope,
     });
-    assert.true(canService.can('setGrantScopes role', role));
+    assert.true(abilitiesService.can('setGrantScopes role', role));
     role.authorized_actions = [];
-    assert.false(canService.can('setGrantScopes role', role));
+    assert.false(abilitiesService.can('setGrantScopes role', role));
   });
 
   test('cannot setGrantScopes on role when authorized and scope is project type', function (assert) {
@@ -57,8 +57,8 @@ module('Unit | Abilities | role', function (hooks) {
       authorized_actions: ['set-grant-scopes'],
       scope: projectScope,
     });
-    assert.false(canService.can('setGrantScopes role', role));
+    assert.false(abilitiesService.can('setGrantScopes role', role));
     role.authorized_actions = [];
-    assert.false(canService.can('setGrantScopes role', role));
+    assert.false(abilitiesService.can('setGrantScopes role', role));
   });
 });

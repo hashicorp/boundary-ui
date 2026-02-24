@@ -10,7 +10,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
 
   // =methods
 
@@ -26,7 +26,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
     let hostSets;
 
     if (
-      this.can.can('list model', hostCatalog, {
+      this.abilities.can('list model', hostCatalog, {
         collection: 'host-sets',
       })
     ) {

@@ -15,7 +15,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsIndexController exte
 
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -28,10 +28,10 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsIndexController exte
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.hostCatalog, {
+    const canList = this.abilities.can('list model', this.hostCatalog, {
       collection: 'hosts',
     });
-    const canCreate = this.can.can('create model', this.hostCatalog, {
+    const canCreate = this.abilities.can('create model', this.hostCatalog, {
       collection: 'hosts',
     });
     const resource = this.intl.t('resources.host.title_plural');
@@ -74,7 +74,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsIndexController exte
   )
   async save(host) {
     await host.save();
-    if (this.can.can('read model', host)) {
+    if (this.abilities.can('read model', host)) {
       await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts.host',
         host,

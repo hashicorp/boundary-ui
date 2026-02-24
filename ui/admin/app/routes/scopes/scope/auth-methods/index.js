@@ -11,7 +11,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
   @service router;
 
   // =attributes
@@ -101,7 +101,9 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
       let authMethods;
       let totalItems = 0;
       let doAuthMethodsExist = false;
-      if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
+      if (
+        this.abilities.can('list model', scope, { collection: 'auth-methods' })
+      ) {
         // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
         const options = { storeToken: false };
         authMethods = await this.store.query(

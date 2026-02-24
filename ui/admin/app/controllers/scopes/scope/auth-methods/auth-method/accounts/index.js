@@ -15,7 +15,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsIndexController ext
 
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -28,10 +28,10 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsIndexController ext
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.authMethod, {
+    const canList = this.abilities.can('list model', this.authMethod, {
       collection: 'accounts',
     });
-    const canCreate = this.can.can('create model', this.authMethod, {
+    const canCreate = this.abilities.can('create model', this.authMethod, {
       collection: 'accounts',
     });
     const resource = this.intl.t('resources.account.title_plural');
@@ -80,7 +80,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsIndexController ext
       adapterOptions.password = password;
     }
     await account.save({ adapterOptions });
-    if (this.can.can('read model', account)) {
+    if (this.abilities.can('read model', account)) {
       await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.accounts.account',
         account,

@@ -14,7 +14,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeUsersIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
   @tracked sortAttribute;
@@ -41,10 +41,10 @@ export default class ScopesScopeUsersIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scope, {
+    const canList = this.abilities.can('list model', this.scope, {
       collection: 'users',
     });
-    const canCreate = this.can.can('create model', this.scope, {
+    const canCreate = this.abilities.can('create model', this.scope, {
       collection: 'users',
     });
     const resource = this.intl.t('resources.user.title_plural');
@@ -98,7 +98,7 @@ export default class ScopesScopeUsersIndexController extends Controller {
   )
   async save(user) {
     await user.save();
-    if (this.can.can('read model', user)) {
+    if (this.abilities.can('read model', user)) {
       await this.router.transitionTo('scopes.scope.users.user', user);
     } else {
       this.router.transitionTo('scopes.scope.users');

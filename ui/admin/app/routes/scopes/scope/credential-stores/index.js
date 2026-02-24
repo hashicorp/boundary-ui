@@ -11,7 +11,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
   // =services
 
   @service store;
-  @service can;
+  @service abilities;
 
   // =attributes
 
@@ -90,7 +90,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
       let totalItems = 0;
       let doCredentialStoresExist = false;
       if (
-        this.can.can('list model', scope, {
+        this.abilities.can('list model', scope, {
           collection: 'credential-stores',
         })
       ) {

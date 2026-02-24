@@ -15,7 +15,7 @@ import { TYPES_CREDENTIAL_STORE } from 'api/models/credential-store';
 export default class ScopesScopeCredentialStoresIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service router;
   @service intl;
 
@@ -58,10 +58,10 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scope, {
+    const canList = this.abilities.can('list model', this.scope, {
       collection: 'credential-stores',
     });
-    const canCreate = this.can.can('create model', this.scope, {
+    const canCreate = this.abilities.can('create model', this.scope, {
       collection: 'credential-stores',
     });
     const resource = this.intl.t('resources.credential-store.title_plural');
@@ -88,7 +88,7 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
   @notifySuccess('notifications.save-success')
   async save(credentialStore) {
     await credentialStore.save();
-    if (this.can.can('read model', credentialStore)) {
+    if (this.abilities.can('read model', credentialStore)) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store',
         credentialStore,

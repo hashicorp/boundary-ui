@@ -16,7 +16,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   // =services
 
   @service router;
-  @service can;
+  @service abilities;
   @service intl;
   @service store;
 
@@ -82,10 +82,10 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scopeModel, {
+    const canList = this.abilities.can('list model', this.scopeModel, {
       collection: 'auth-methods',
     });
-    const canCreate = this.can.can('create model', this.scopeModel, {
+    const canCreate = this.abilities.can('create model', this.scopeModel, {
       collection: 'auth-methods',
     });
     const resource = this.intl.t('resources.auth-method.title_plural');
@@ -148,7 +148,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   )
   async save(authMethod) {
     await authMethod.save();
-    if (this.can.can('read model', authMethod)) {
+    if (this.abilities.can('read model', authMethod)) {
       await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method',
         authMethod,
