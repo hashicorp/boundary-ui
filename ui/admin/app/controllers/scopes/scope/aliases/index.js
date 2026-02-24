@@ -14,7 +14,7 @@ import { confirm } from 'core/decorators/confirm';
 export default class ScopesScopeAliasesIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
 
@@ -41,10 +41,10 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    const canList = this.can.can('list model', this.scope, {
+    const canList = this.abilities.can('list model', this.scope, {
       collection: 'aliases',
     });
-    const canCreate = this.can.can('create model', this.scope, {
+    const canCreate = this.abilities.can('create model', this.scope, {
       collection: 'aliases',
     });
     const resource = this.intl.t('resources.alias.title_plural');
@@ -84,7 +84,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   )
   async save(alias) {
     await alias.save();
-    if (this.can.can('read model', alias)) {
+    if (this.abilities.can('read model', alias)) {
       await this.router.transitionTo('scopes.scope.aliases.alias', alias);
     } else {
       this.router.transitionTo('scopes.scope.aliases');
