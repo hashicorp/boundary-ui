@@ -10,7 +10,6 @@ export default class ScopesScopeTargetsTargetRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
   @service router;
 
   // =methods

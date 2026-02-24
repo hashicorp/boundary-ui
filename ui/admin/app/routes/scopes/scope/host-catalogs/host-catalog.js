@@ -11,7 +11,6 @@ export default class ScopesScopeHostCatalogsHostCatalogRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
   @service router;
 
   // =methods
