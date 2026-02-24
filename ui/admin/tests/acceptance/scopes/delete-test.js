@@ -1,29 +1,26 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let getScopeCount;
   let confirmService;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -38,7 +35,6 @@ module('Acceptance | scopes | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -55,10 +51,18 @@ module('Acceptance | scopes | delete', function (hooks) {
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
     confirmService = this.owner.lookup('service:confirm');
-    await authenticateSession({ isGlobal: true });
   });
 
   test('can delete scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
@@ -84,6 +88,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can accept delete scope via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
@@ -98,6 +111,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can cancel delete scope via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
@@ -112,6 +134,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('deleting a scope which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
     this.server.del('/scopes/:id', () => {
       return new Response(

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -19,10 +19,10 @@ export class AuthMethodsPage extends BaseResourcePage {
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
-    await this.page.getByRole('button', { name: 'New' }).click();
+    await this.page.getByRole('button', { name: 'New', exact: true }).click();
     await this.page.getByText('Password', { exact: true }).click();
     await this.page.getByLabel('Name').fill(authMethodName);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -46,7 +46,7 @@ export class AuthMethodsPage extends BaseResourcePage {
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
-    await this.page.getByRole('button', { name: 'New' }).click();
+    await this.page.getByRole('button', { name: 'New', exact: true }).click();
     await this.page.getByRole('link', { name: 'OIDC' }).click();
     await this.page.getByLabel('Name').fill(authMethodName);
     await this.page.getByLabel('Description').fill('OIDC Auth Method');
@@ -113,7 +113,7 @@ export class AuthMethodsPage extends BaseResourcePage {
     await this.page.getByLabel('Maximum Age').fill('20');
     await this.page.getByLabel('API URL Prefix').fill(boundaryAddr);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -166,7 +166,7 @@ export class AuthMethodsPage extends BaseResourcePage {
     await this.page.getByLabel('Name (Optional)').fill(accountName);
     await this.page.getByLabel('Login Name').fill(login);
     await this.page.getByLabel('Password', { exact: true }).fill(password);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -184,7 +184,7 @@ export class AuthMethodsPage extends BaseResourcePage {
   async setPasswordToAccount(password) {
     await this.page.getByRole('link', { name: 'Set Password' }).click();
     await this.page.getByLabel(new RegExp('Password*')).fill(password);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 }

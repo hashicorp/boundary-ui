@@ -1,27 +1,24 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let getUsersCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     user: null,
@@ -35,7 +32,6 @@ module('Acceptance | users | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -50,10 +46,18 @@ module('Acceptance | users | create', function (hooks) {
     getUsersCount = () => {
       return this.server.schema.users.all().models.length;
     };
-    await authenticateSession({});
   });
 
   test('can create new users', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     await visit(urls.users);
 
@@ -65,6 +69,15 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users can navigate to new users route with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.users));
@@ -78,6 +91,15 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users cannot navigate to new users route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'create',
@@ -96,6 +118,15 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('can cancel creation of a new user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     await visit(urls.users);
 
@@ -108,6 +139,15 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     const errorMessage =
       'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
@@ -136,6 +176,15 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'create',

@@ -1,4 +1,4 @@
-# Copyright (c) HashiCorp, Inc.
+# Copyright IBM Corp. 2021, 2026
 # SPDX-License-Identifier: BUSL-1.1
 
 add: Add
@@ -55,6 +55,9 @@ do-this-later: Do this later
 toggle-color-theme: Toggle Color Theme
 toggle-feature-edition: Toggle Feature Edition
 toggle-licensed-features: Toggle Licensed Features
+manage-db: Manage SQLite
+download-db: Download SQLite DB
+clear-db: Clear SQLite DB
 more: ', +{remainingItems} more'
 search: Search
 yes: Yes
@@ -65,3 +68,4 @@ show-errors: Show Errors
 hide-errors: Hide Errors
 edit-worker-filter: Edit Worker Filter
 add-worker-filter: Add Worker Filter
+open: Open

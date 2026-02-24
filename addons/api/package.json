@@ -27,15 +27,23 @@
   "dependencies": {
     "@babel/core": "^7.26.10",
     "@ember/string": "^4.0.0",
-    "dexie": "^3.2.4",
+    "@sqlite.org/sqlite-wasm": "^3.49.1-build4",
+    "broccoli-funnel": "^3.0.8",
+    "broccoli-merge-trees": "^4.2.0",
+    "broccoli-plugin": "^4.0.7",
+    "broccoli-source": "^3.0.1",
     "ember-auto-import": "^2.10.0",
     "ember-can": "^4.2.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
-    "ember-cli-mirage": "^3.0.3",
     "ember-data": "~5.3.12",
-    "miragejs": "^0.1.48",
-    "tracked-built-ins": "^3.1.1"
+    "ember-get-config": "^2.1.1",
+    "ember-inflector": "^6.0.0",
+    "esbuild": "^0.25.4",
+    "promise-worker-bi": "^5.0.1",
+    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
+    "tracked-built-ins": "^4.0.0",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
@@ -44,8 +52,7 @@
     "@ember/test-helpers": "^5.2.1",
     "@ember/test-waiters": "^4.1.0",
     "@embroider/test-setup": "^4.0.0",
-    "@faker-js/faker": "^8.0.2",
-    "@glimmer/component": "^1.1.2",
+    "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",
@@ -70,16 +77,16 @@
     "eslint-plugin-ember": "^12.2.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-qunit": "^8.1.2",
-    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
     "prettier": "^3.3.3",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
-    "sinon": "^19.0.2",
-    "webpack": "^5.95.0"
+    "webpack": "^5.104.1"
   },
   "peerDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "ember-source": ">= 4.0.0",
+    "miragejs": "^0.1.48",
     "sinon": "^19.0.2"
   },
   "engines": {

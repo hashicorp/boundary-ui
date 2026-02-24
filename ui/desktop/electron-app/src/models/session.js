@@ -1,12 +1,14 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const treeKill = require('tree-kill');
 const sanitizer = require('../utils/sanitizer.js');
-const { isWindows } = require('../helpers/platform.js');
-const { spawnAsyncJSONPromise } = require('../helpers/spawn-promise.js');
+const {
+  spawnAsyncJSONPromise,
+  spawnSync,
+} = require('../helpers/spawn-promise.js');
+const log = require('electron-log/main');
 
 class Session {
   #id;
@@ -16,6 +18,7 @@ class Session {
   #process;
   #targetId;
   #proxyDetails;
+  #sessionMaxSeconds;
 
   /**
    * Initialize a session to a controller address
@@ -24,12 +27,14 @@ class Session {
    * @param {string} targetId
    * @param {string} token
    * @param {string} hostId
+   * @param {number} sessionMaxSeconds
    */
-  constructor(addr, targetId, token, hostId) {
+  constructor(addr, targetId, token, hostId, sessionMaxSeconds) {
     this.#addr = addr;
     this.#targetId = targetId;
     this.#token = token;
     this.#hostId = hostId;
+    this.#sessionMaxSeconds = sessionMaxSeconds;
   }
 
   /**
@@ -44,55 +49,26 @@ class Session {
    * @return {boolean}
    */
   get isRunning() {
-    return this.#process && !this.#process.killed;
-  }
-
-  /**
-   * Using cli, initialize a session to a target.
-   * Tracks local proxy details if successful.
-   */
-  start() {
-    const command = this.cliCommand();
-    const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-    return spawnAsyncJSONPromise(command, sanitizedToken).then(
-      (spawnedSession) => {
-        this.#process = spawnedSession.childProcess;
-        this.#proxyDetails = spawnedSession.response;
-        this.#process = spawnedSession.childProcess;
-        this.#id = this.#proxyDetails.session_id;
-        return this.#proxyDetails;
-      },
+    return (
+      this.#process &&
+      this.#process.exitCode === null &&
+      this.#process.signalCode === null
     );
   }
 
   /**
-   * Stop proxy process used by session.
+   * Get proxy details for the session
+   * @return {Object}
    */
-  stop() {
-    return new Promise((resolve, reject) => {
-      if (this.isRunning) {
-        this.#process.on('close', () => resolve());
-        this.#process.on('error', (e) => reject(e));
-        /**
-         * On Windows OS, a spawned process uses cmd.exe to initiate a session.
-         * Hence, captured process.pid corresponds to cmd.exe instead of session.
-         * To avoid orphaned session processes and due to lack of node support
-         * to handle killing processes cleanly in this scenario,
-         * kill entire dependent process tree on Windows.
-         */
-        isWindows() ? treeKill(this.#process.pid) : this.#process.kill();
-      } else {
-        // Do nothing when process isn't running
-        resolve();
-      }
-    });
+  get proxyDetails() {
+    return this.#proxyDetails;
   }
 
   /**
    * Generate cli command for session.
-   * @returns {[]}
+   * @returns {string[]}
    */
-  cliCommand() {
+  get connectCommand() {
     const sanitized = {
       target_id: sanitizer.base62EscapeAndValidate(this.#targetId),
       addr: sanitizer.urlValidate(this.#addr),
@@ -111,6 +87,58 @@ class Session {
       command.push(`-host-id=${sanitized.host_id}`);
     }
     return command;
+  }
+
+  /**
+   * Using cli, initialize a session to a target.
+   * Tracks local proxy details if successful.
+   */
+  start() {
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+    return spawnAsyncJSONPromise(
+      this.connectCommand,
+      sanitizedToken,
+      this.#sessionMaxSeconds,
+    ).then((spawnedSession) => {
+      this.#process = spawnedSession.childProcess;
+      this.#proxyDetails = spawnedSession.response;
+      this.#id = this.#proxyDetails.session_id;
+      return this.#proxyDetails;
+    });
+  }
+
+  /**
+   * Stop proxy process used by session.
+   */
+  stop() {
+    return new Promise((resolve, reject) => {
+      if (this.isRunning) {
+        this.#process.on('close', () => resolve());
+        this.#process.on('error', (e) => {
+          log.error('Process error in session stop method: ', e);
+          return reject(e);
+        });
+
+        // Cancel session before killing process
+        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+        const sanitizedAddr = sanitizer.urlValidate(this.#addr);
+        const cancelSessionCommand = [
+          'sessions',
+          'cancel',
+          `-id=${this.id}`,
+          `-addr=${sanitizedAddr}`,
+          '-token=env://BOUNDARY_TOKEN',
+        ];
+        spawnSync(cancelSessionCommand, {
+          BOUNDARY_TOKEN: sanitizedToken,
+        });
+
+        this.#process.kill();
+      } else {
+        // Do nothing when process isn't running
+        resolve();
+      }
+    });
   }
 }
 

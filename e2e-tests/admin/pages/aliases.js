@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -15,19 +15,8 @@ export class AliasesPage extends BaseResourcePage {
    * @param {string} targetId ID of the target
    * @returns Name of the alias
    */
-  async createAliasForTarget(alias, targetId, orgName) {
+  async createAliasForTarget(alias, targetId) {
     const aliasName = 'Alias ' + nanoid();
-
-    await this.page
-      .getByRole('link', { name: `Back to ${orgName}`, exact: true })
-      .click();
-    await this.page.getByRole('link', { name: 'Orgs' }).click();
-    await this.page.getByRole('link', { name: 'Aliases' }).click();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText('Aliases'),
-    ).toBeVisible();
 
     const newButtonIsVisible = await this.page
       .getByRole('link', { name: 'Create a new alias', exact: true })
@@ -47,7 +36,7 @@ export class AliasesPage extends BaseResourcePage {
     await this.page.getByLabel('Alias Value').fill(alias);
     await this.page.getByLabel('Target ID').fill(targetId);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

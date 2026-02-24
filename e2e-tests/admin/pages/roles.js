@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -26,7 +26,7 @@ export class RolesPage extends BaseResourcePage {
       .click();
     await this.page.getByRole('link', { name: 'New Role' }).click();
     await this.page.getByLabel('Name').fill(roleName);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

@@ -1,24 +1,25 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let featuresService;
@@ -33,6 +34,7 @@ module('Acceptance | targets | read', function (hooks) {
     sshTarget: null,
     tcpTarget: null,
     alias: null,
+    rdpTarget: null,
   };
   const urls = {
     globalScope: null,
@@ -43,12 +45,13 @@ module('Acceptance | targets | read', function (hooks) {
     tcpTarget: null,
     alias: null,
     aliases: null,
+    rdpTarget: null,
   };
 
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -63,6 +66,10 @@ module('Acceptance | targets | read', function (hooks) {
     });
     instances.tcpTarget = this.server.create('target', {
       type: TYPE_TARGET_TCP,
+      scope: instances.scopes.project,
+    });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
       scope: instances.scopes.project,
     });
 
@@ -83,38 +90,61 @@ module('Acceptance | targets | read', function (hooks) {
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.aliases = `${urls.globalScope}/aliases`;
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
-
-    await authenticateSession({ username: 'admin' });
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
   });
 
   test('visiting ssh target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targets);
 
     await click(commonSelectors.HREF(urls.sshTarget));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sshTarget);
   });
 
   test('visiting tcp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
     assert.strictEqual(currentURL(), urls.targets);
 
     await click(commonSelectors.HREF(urls.tcpTarget));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tcpTarget);
   });
 
   test('cannot navigate to an ssh target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     instances.sshTarget.authorized_actions =
       instances.sshTarget.authorized_actions.filter((item) => item !== 'read');
@@ -128,6 +158,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     instances.tcpTarget.authorized_actions =
       instances.tcpTarget.authorized_actions.filter((item) => item !== 'read');
@@ -141,8 +180,16 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownTarget);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
@@ -150,6 +197,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('users can link to docs page for target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -173,6 +229,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('can view aliases on the right sidebar', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.tcpTarget.update({
       aliases: [{ id: aliasResource.id, value: aliasResource.value }],
     });
@@ -186,6 +251,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot view aliases list on the right sidebar if there is no alias associated with the target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     aliasResource.authorized_collection_actions = ['create'];
     await visit(urls.targets);
 
@@ -199,6 +273,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('user should not see add a new alias button without proper auth ', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.global.authorized_collection_actions['aliases'] =
       instances.scopes.global.authorized_collection_actions['aliases'].filter(
         (item) => item !== 'create',
@@ -213,6 +296,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('can click `view more aliases` to see the remaining associated aliases if there are more than 3', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.tcpTarget.update({
       aliases: [
         { id: aliasResource.id, value: 'alias 1' },
@@ -231,5 +323,49 @@ module('Acceptance | targets | read', function (hooks) {
     await click(selectors.ALIASES_VIEW_MORE_BTN);
 
     assert.dom(selectors.ALIASES_FLYOUT).isVisible();
+  });
+
+  test('cannot navigate to a rdp target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    instances.rdpTarget.authorized_actions =
+      instances.rdpTarget.authorized_actions.filter((item) => item !== 'read');
+
+    await visit(urls.projectScope);
+
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.rdpTarget))
+      .doesNotExist();
+  });
+
+  test('visiting rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.targets));
+
+    assert.strictEqual(currentURL(), urls.targets);
+
+    await click(commonSelectors.HREF(urls.rdpTarget));
+
+    assert.strictEqual(currentURL(), urls.rdpTarget);
   });
 });

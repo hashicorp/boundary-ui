@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -156,7 +156,9 @@ test.describe('AWS', () => {
 
         // Create a target and add DHC host set as a host source
         const targetsPage = new TargetsPage(page);
-        const targetName = await targetsPage.createTarget(targetPort);
+        const targetName = await targetsPage.createTarget({
+          port: targetPort,
+        });
         await targetsPage.addHostSourceToTarget(hostSetName);
 
         // Add another host source
@@ -172,9 +174,8 @@ test.describe('AWS', () => {
 
         // Remove the host source from the target
         await page
-          .getByRole('link', { name: newHostSetName })
-          .locator('..')
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('link', { name: newHostSetName }) })
           .getByRole('button', { name: 'Manage' })
           .click();
         await page.getByRole('button', { name: 'Remove' }).click();

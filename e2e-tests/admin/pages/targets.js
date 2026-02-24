@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -10,68 +10,32 @@ import { BaseResourcePage } from './base-resource.js';
 
 export class TargetsPage extends BaseResourcePage {
   /**
-   * Creates a new target. Assumes you have selected the desired project.
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createTarget(port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new target with address. Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createTargetWithAddress(address, port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
    * Creates a new target with address and alias. Assumes you have selected the desired project.
+   * @param {string} targetType Type of target (ssh, rdp, tcp)
    * @param {string} address Address of the target
    * @param {string} port Port of the target
    * @param {string} alias alias used for the target
    * @returns Name of the target
    */
-  async createTargetWithAddressAndAlias(address, port, alias) {
+  async createTarget({ targetType, port, address, alias }) {
     const targetName = 'Target ' + nanoid();
+    let targetTypeLabel;
+
+    switch (targetType) {
+      case 'ssh': {
+        targetTypeLabel = 'SSH';
+        break;
+      }
+      case 'rdp': {
+        targetTypeLabel = 'RDP';
+        break;
+      }
+      case 'tcp': {
+        targetTypeLabel = 'Generic TCP';
+        break;
+      }
+    }
+
     await this.page
       .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
@@ -79,153 +43,28 @@ export class TargetsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(targetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page
-      .getByRole('group', { name: 'Aliases' })
-      .getByLabel('value')
-      .last()
-      .fill(alias);
-    await this.page.getByRole('button', { name: 'Add' }).click();
+    if (targetType) {
+      if (targetTypeLabel) {
+        await this.page
+          .getByRole('group', { name: 'Type' })
+          .getByLabel(targetTypeLabel)
+          .click();
+      } else {
+        throw new Error(`Unsupported target type: ${targetType}`);
+      }
+    }
+    if (address) await this.page.getByLabel('Target Address').fill(address);
+    if (port) await this.page.getByLabel('Default Port').fill(port);
+    if (alias) {
+      await this.page
+        .getByRole('group', { name: 'Aliases' })
+        .getByLabel('value')
+        .last()
+        .fill(alias);
+      await this.page.getByRole('button', { name: 'Add' }).click();
+    }
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new TCP target with address in boundary-enterprise
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createTcpTargetWithAddressEnt(address, port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('TCP')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new SSH target. Assumes you have selected the desired project.
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createSshTargetEnt(port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
-      .click();
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new SSH target with address in boundary-enterprise
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @returns Name of the target
-   */
-  async createSshTargetWithAddressEnt(address, port) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.dismissSuccessAlert();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(targetName),
-    ).toBeVisible();
-
-    return targetName;
-  }
-
-  /**
-   * Creates a new SSH target with address and alias.
-   * Assumes you have selected the desired project.
-   * @param {string} address Address of the target
-   * @param {string} port Port of the target
-   * @param {string} alias alias used for the target
-   * @returns Name of the target
-   */
-  async createSshTargetWithAddressAndAlias(address, port, alias) {
-    const targetName = 'Target ' + nanoid();
-    await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
-      .getByRole('link', { name: 'Targets' })
-      .click();
-    await this.page.getByRole('link', { name: 'New', exact: true }).click();
-    await this.page.getByLabel('Name').fill(targetName);
-    await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('SSH')
-      .click();
-    await this.page.getByLabel('Target Address').fill(address);
-    await this.page.getByLabel('Default Port').fill(port);
-    await this.page
-      .getByRole('group', { name: 'Aliases' })
-      .getByLabel('value')
-      .last()
-      .fill(alias);
-    await this.page.getByRole('button', { name: 'Add' }).click();
-
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -261,8 +100,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: hostSourceName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: hostSourceName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page.getByRole('button', { name: 'Add Host Sources' }).click();
@@ -274,9 +113,8 @@ export class TargetsPage extends BaseResourcePage {
 
   async removeHostSourceFromTarget(hostSourceName) {
     await this.page
-      .getByRole('link', { name: hostSourceName })
-      .locator('..')
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('link', { name: hostSourceName }) })
       .getByRole('button', { name: 'Manage' })
       .click();
     await this.page.getByRole('button', { name: 'Remove' }).click();
@@ -307,9 +145,9 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Ingress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('textarea').fill(filter);
+    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 
@@ -336,9 +174,9 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Egress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('textarea').fill(filter);
+    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 
@@ -377,8 +215,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: credentialName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: credentialName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page
@@ -434,8 +272,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: credentialName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: credentialName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page
@@ -460,7 +298,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page
       .getByLabel('Storage buckets')
       .selectOption({ label: storageBucketName });
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(storageBucketName),
@@ -475,7 +313,7 @@ export class TargetsPage extends BaseResourcePage {
       .getByRole('link', { name: 'Session Recording settings' })
       .click();
     await this.page.getByLabel('Record sessions for this target').uncheck();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
   }
 }

@@ -1,27 +1,23 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | groups | members', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     group: null,
@@ -36,8 +32,6 @@ module('Acceptance | groups | members', function (hooks) {
   let membersCount;
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -57,14 +51,31 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('visiting group members', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.members);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.members);
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
   });
 
   test('can remove a member', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.members);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
@@ -76,6 +87,15 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('cannot remove a member without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.group.authorized_actions.filter(
       (item) => item !== 'remove-members',
     );
@@ -88,6 +108,15 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('shows error message on member remove', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMsg = 'The request was invalid.';
     this.server.post('/groups/:idMethod', () => {
       return new Response(
@@ -111,18 +140,45 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('visiting member selection', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.addMembers);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.addMembers);
   });
 
   test('can navigate to add members with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.group);
     await click(selectors.MANAGE_DROPDOWN);
     assert.dom(selectors.MANAGE_DROPDOWN_ADD_MEMBER).isVisible();
   });
 
   test('cannot navigate to add members without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.group.authorized_actions.filter(
       (item) => item !== 'add-members',
     );
@@ -135,6 +191,15 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('select and save members to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
 
@@ -154,6 +219,15 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('select and cancel members to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.members);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
@@ -177,6 +251,15 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('shows error message on member add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMsg = 'The request was invalid.';
     this.server.post('/groups/:idMethod', () => {
       return new Response(

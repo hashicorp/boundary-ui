@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -103,7 +103,7 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
    * @returns {Promise<[ScopeModel]>}
    */
   async getAllGrantScopes(id) {
-    const options = { pushToStore: false, peekIndexedDb: true };
+    const options = { pushToStore: false, peekDb: true };
     return this.store.query(
       'scope',
       { scope_id: 'global', query: { filters: { id } } },

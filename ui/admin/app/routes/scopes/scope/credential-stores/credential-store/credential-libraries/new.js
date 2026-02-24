@@ -1,11 +1,14 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+} from 'api/models/credential-library';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrariesNewRoute extends Route {
   // =services
@@ -58,14 +61,18 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       this.currentModel.rollbackAttributes();
     }
 
-    // Set the type to generic vault if feature flag isn't enabled in cases where
+    // Set the type to generic vault if feature flag isn't enabled or type is not set in cases where
     // user sets the query parameter manually
-    type = this.features.isEnabled('ssh-target')
-      ? type
-      : TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
+    let resolvedType = type;
+    if (
+      !this.features.isEnabled('ssh-target') &&
+      resolvedType === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE
+    ) {
+      resolvedType = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
+    }
 
     return this.store.createRecord('credential-library', {
-      type,
+      type: resolvedType,
       credential_store_id,
       name,
       description,

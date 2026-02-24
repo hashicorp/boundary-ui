@@ -1,14 +1,12 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, waitFor, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { faker } from '@faker-js/faker';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
@@ -16,15 +14,14 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     passwordAuthMethod: null,
@@ -40,7 +37,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
       {
@@ -62,8 +58,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
     urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
-
-    await authenticateSession({});
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {
@@ -104,6 +98,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can search for a specifc auth-method by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -118,6 +121,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can search for auth-methods and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -135,6 +147,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can filter for auth-methods by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -152,6 +173,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can filter for auth-methods by primary', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -176,6 +206,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('auth-methods table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.authMethods.all().destroy();
     const years = ['2006', '2005', '2004', '2003'];
     faker.helpers.shuffle(years).map((year) => {
@@ -228,6 +267,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.authMethods.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('auth-method', {

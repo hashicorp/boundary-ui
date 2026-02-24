@@ -1,23 +1,21 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -38,7 +36,6 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -63,22 +60,37 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     urls.hosts = `${urls.hostCatalog}/hosts`;
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting hosts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hosts);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hosts);
 
     await click(commonSelectors.HREF(urls.host));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.host);
   });
 
   test('cannot navigate to a host form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostCatalog);
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'read');
@@ -89,8 +101,16 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownHost);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
@@ -98,6 +118,15 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('users can link to docs page for hosts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hosts);
 
     await click(commonSelectors.HREF(urls.host));

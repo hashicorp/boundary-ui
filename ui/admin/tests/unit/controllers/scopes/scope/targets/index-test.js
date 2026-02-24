@@ -1,21 +1,25 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { waitUntil, visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { visit, waitUntil } from '@ember/test-helpers';
+import { setupMirage } from 'admin/tests/helpers/mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 
 module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let intl;
@@ -23,6 +27,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   let controller;
   let getTargetCount;
   let getAliasCount;
+  let features;
 
   const instances = {
     scopes: {
@@ -45,12 +50,20 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/targets/index');
+    features = this.owner.lookup('service:features');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
+    });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -95,10 +108,13 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   });
 
   test('targetTypeOptions returns expected object', function (assert) {
+    features.enable('rdp-target');
+    features.enable('ssh-target');
     let controller = this.owner.lookup('controller:scopes/scope/targets/index');
     assert.deepEqual(controller.targetTypeOptions, [
       { id: TYPE_TARGET_TCP, name: 'Generic TCP' },
       { id: TYPE_TARGET_SSH, name: 'SSH' },
+      { id: TYPE_TARGET_RDP, name: 'RDP' },
     ]);
   });
 

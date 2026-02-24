@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -9,7 +9,8 @@ import { action } from '@ember/object';
 export default class ScopesScopeProjectsSettingsIndexController extends Controller {
   @controller('application') application;
 
-  //actions
+  // =actions
+
   /**
    * Calls the Application controller's toggleTheme method
    * @param {string} theme - "light", "dark", or nullish (system default)

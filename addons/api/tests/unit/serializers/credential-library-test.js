@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
 
 module('Unit | Serializer | credential library', function (hooks) {
@@ -24,9 +25,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       http_method: 'GET',
       version: 1,
       credential_type: 'ssh_private_key',
-      credential_mapping_overrides: [
-        { key: 'username_attribute', value: 'user' },
-      ],
+      credential_mapping_overrides: { username_attribute: 'user' },
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -63,9 +62,7 @@ module('Unit | Serializer | credential library', function (hooks) {
           http_method: 'GET',
           version: 1,
           credential_type: 'ssh_private_key',
-          credential_mapping_overrides: [
-            { key: 'private_key_attribute', value: 'test' },
-          ],
+          credential_mapping_overrides: { private_key_attribute: 'test' },
         },
       },
     });
@@ -109,6 +106,7 @@ module('Unit | Serializer | credential library', function (hooks) {
     let serializedVaultGenericRecord = vaultGenericRecord.serialize();
     let serializedVaultSSHCertificateRecord =
       vaultSSHCertificateRecord.serialize();
+
     assert.deepEqual(serializedVaultGenericRecord, {
       attributes: {
         path: null,
@@ -277,6 +275,63 @@ module('Unit | Serializer | credential library', function (hooks) {
         critical_options: { key: 'value' },
       },
       version: 1,
+    });
+  });
+
+  test('it serializes vault-ldap correctly on create', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential-library');
+    const record = store.createRecord('credential-library', {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      name: 'Name',
+      description: 'Description',
+      path: '/vault/path',
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      credential_store_id: null,
+      name: 'Name',
+      description: 'Description',
+      version: 1,
+      attributes: {
+        path: '/vault/path',
+      },
+    });
+  });
+
+  test('it serializes vault-ldap correctly on update', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential-library');
+    store.push({
+      data: {
+        id: '1',
+        type: 'credential-library',
+        attributes: {
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+          name: 'Test',
+          description: 'Description',
+          path: '/vault/path',
+          version: 1,
+        },
+      },
+    });
+    const record = store.peekRecord('credential-library', '1');
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      credential_store_id: null,
+      name: 'Test',
+      description: 'Description',
+      version: 1,
+      attributes: {
+        path: '/vault/path',
+      },
     });
   });
 });

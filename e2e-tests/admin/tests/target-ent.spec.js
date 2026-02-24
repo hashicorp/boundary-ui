@@ -1,11 +1,11 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
@@ -41,10 +41,11 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTcpTargetWithAddressEnt(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'tcp',
+        port: targetPort,
+        address: targetAddress,
+      });
 
       await boundaryCli.authenticateBoundary(
         controllerAddr,
@@ -69,8 +70,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -108,10 +109,11 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+        address: targetAddress,
+      });
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
       const credentialName =
@@ -143,8 +145,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -194,15 +196,17 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetEnt(targetPort);
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+      });
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
       await targetsPage.addHostSourceToTarget(hostSetName2);
       await page
-        .getByRole('link', { name: hostSetName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: hostSetName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();
@@ -245,8 +249,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -256,6 +260,54 @@ test(
       // End `boundary connect` process
       if (connect) {
         connect.kill('SIGTERM');
+      }
+    }
+  },
+);
+
+test(
+  'Verify RDP target creation',
+  { tag: ['@ent', '@aws', '@docker'] },
+  async ({ request, page, sshUser, targetAddress, targetPort }) => {
+    await page.goto('/');
+    let org;
+    try {
+      org = await boundaryHttp.createOrg(request);
+      const project = await boundaryHttp.createProject(request, org.id);
+
+      // go to the credential store page
+
+      await page.goto(`/scopes/${project.id}/credential-stores`);
+
+      // Create UPD credential
+      const credentialStore = new CredentialStoresPage(page);
+      await credentialStore.createStaticCredentialStore();
+      const credentialName =
+        await credentialStore.createStaticCredentialUsernamePasswordDomain(
+          sshUser,
+          'testPassword',
+          'testDomain',
+        );
+
+      const targetsPage = new TargetsPage(page);
+      const rdpTarget = await targetsPage.createTarget({
+        targetType: 'rdp',
+        port: targetPort,
+        address: targetAddress,
+      });
+      await targetsPage.addBrokeredCredentialsToTarget(
+        rdpTarget,
+        credentialName,
+      );
+      await targetsPage.addInjectedCredentialsToTarget(
+        rdpTarget,
+        credentialName,
+      );
+
+      // TODO: Connection will be tested later when we have the Proxy in place.
+    } finally {
+      if (org) {
+        await boundaryHttp.deleteOrg(request, org.id);
       }
     }
   },

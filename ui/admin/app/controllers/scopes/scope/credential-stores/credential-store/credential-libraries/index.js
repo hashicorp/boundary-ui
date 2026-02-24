@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -56,10 +56,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   async cancel(credentialLibrary) {
     const { isNew } = credentialLibrary;
     credentialLibrary.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credential-libraries',
       );
+    }
   }
 
   /**

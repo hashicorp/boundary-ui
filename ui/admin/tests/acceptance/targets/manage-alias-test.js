@@ -1,21 +1,20 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | manage-alias', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   let aliasResourceTwo, aliasResourceOne, getAliasCount;
 
@@ -41,7 +40,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -80,8 +79,6 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     urls.tcpAlias = `${urls.tcpTarget}/${aliasResourceOne.id}`;
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
-
-    await authenticateSession({ username: 'admin' });
   });
 
   test('clicking on manage should take you to manage page', async function (assert) {
@@ -93,10 +90,18 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await click(selectors.LINK_LIST_ITEM);
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
-    await a11yAudit();
   });
 
   test('clicking on `clear alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     aliasResourceOne.update({
       destination_id: instances.tcpTarget.id,
     });
@@ -121,6 +126,15 @@ module('Acceptance | targets | manage-alias', function (hooks) {
   });
 
   test('clicking on `delete alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar and deleted from aliases list', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const aliasCount = getAliasCount();
     aliasResourceOne.update({
       destination_id: instances.tcpTarget.id,

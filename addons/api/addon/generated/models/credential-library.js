@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -81,9 +81,10 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   })
   credential_type;
 
-  @attr('object-as-array', {
+  @attr('object', {
     for: 'vault-generic',
     description: 'It indicates the credential mapping overrides.',
+    emptyObjectIfMissing: true,
   })
   credential_mapping_overrides;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -72,8 +72,6 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
       fetch(authEndpointURL, { method: 'post', body }),
     );
     const json = await response.json();
-    return response.status < 400
-      ? resolve(this.normalizeData(json, login_name))
-      : reject();
+    return response.status < 400 ? resolve(this.normalizeData(json)) : reject();
   }
 }

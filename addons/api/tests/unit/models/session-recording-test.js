@@ -1,12 +1,12 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { TYPE_SESSION_RECORDING_SSH } from 'api/models/session-recording';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'dummy/tests/helpers/mirage';
 import {
   STATE_SESSION_RECORDING_AVAILABLE,
   STATE_SESSION_RECORDING_STARTED,

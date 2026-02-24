@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -20,6 +20,7 @@ module.exports = {
     es2021: true,
   },
   rules: {
+    curly: ['error', 'multi-line', 'consistent'],
     'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
   },
   overrides: [

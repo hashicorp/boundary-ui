@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -51,8 +51,8 @@ class RuntimeSettings {
   /**
    * Sets the clusterUrl to null.
    */
-  resetClusterUrl() {
-    this.clusterUrl = null;
+  async resetClusterUrl() {
+    await this.setClusterUrl(null);
   }
 
   // Quick and dirty event handler pattern to enable the application to respond

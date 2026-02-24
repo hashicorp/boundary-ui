@@ -1,10 +1,11 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 export const FIELD_CRED_TYPE = '[name=credential_type]';
-export const FIELD_CRED_TYPE_VALUE = 'ssh_private_key';
+export const FIELD_CRED_TYPE_SSH_VALUE = 'ssh_private_key';
+export const FIELD_CRED_TYPE_UPD_VALUE = 'username_password_domain';
 
 export const FIELD_VAULT_PATH = '[name=vault_path]';
 export const FIELD_VAULT_PATH_VALUE = 'path';
@@ -25,15 +26,11 @@ export const FIELD_TTL_VALUE = 'ttl';
 export const FIELD_KEY_ID = '[name=key_id]';
 export const FIELD_KEY_ID_VALUE = 'key_id';
 
-export const FIELD_CRED_MAP_OVERRIDES_SELECT =
-  '[name="credential_mapping_overrides"] select';
-export const FIELD_CRED_MAP_OVERRIDES_SELECT_VALUE = 'private_key_attribute';
-export const FIELD_CRED_MAP_OVERRIDES_INPUT =
-  '[name="credential_mapping_overrides"] input';
-export const FIELD_CRED_MAP_OVERRIDES_BTN =
-  '[name="credential_mapping_overrides"] button';
+export const FIELD_CRED_MAP_OVERRIDES = (field) => `[name=${field}]`;
 
 export const TYPE_VAULT_SSH_CERT = '[value="vault-ssh-certificate"]';
+export const TYPE_VAULT_LDAP = '[value="vault-ldap"]';
+export const TYPE_VAULT_GENERIC = '[value="vault-generic"]';
 
 export const FIELD_CRIT_OPTS_KEY =
   '[name="critical_options"] tbody td:nth-of-type(1) input';

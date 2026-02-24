@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -55,7 +55,10 @@ test(
         .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
-      await page.getByRole('button', { name: 'New' }).click();
+      await expect(
+        page.getByRole('heading', { name: 'Auth Methods' }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'New', exact: true }).click();
       await page.getByRole('link', { name: 'LDAP' }).click();
 
       const ldapAuthMethodName = 'LDAP ' + nanoid();
@@ -223,15 +226,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(ldapUserName);
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(ldapUserName + '@mail.com');
@@ -265,15 +268,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(ldapUserName);
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(ldapUserName + '@mail.com');

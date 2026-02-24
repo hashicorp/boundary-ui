@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -19,8 +19,7 @@ export class LoginPage extends BaseResourcePage {
     await this.page.getByRole('button', { name: 'Sign In' }).click();
     await expect(
       this.page.getByRole('navigation', {
-        // TODO: Uncomment line below once both UIs have been refactored to use HDS side nav.
-        // name: 'Application local navigation',
+        name: 'Application local navigation',
       }),
     ).toBeVisible();
     await expect(this.page.getByText(loginName)).toBeEnabled();

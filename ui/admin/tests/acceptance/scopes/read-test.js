@@ -1,29 +1,25 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let features;
   let featureEdition;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
   };
@@ -36,7 +32,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -48,15 +43,21 @@ module('Acceptance | scopes | read', function (hooks) {
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
-    await authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting org scope edit', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.orgScopeEdit));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.dom(commonSelectors.FORM).isVisible();
@@ -64,18 +65,10 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     features.enable('ssh-session-recording');
     await visit(urls.globalScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.globalScopeEdit));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
     assert.dom(commonSelectors.FORM).isVisible();
@@ -110,6 +103,15 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
         (item) => item !== 'read',

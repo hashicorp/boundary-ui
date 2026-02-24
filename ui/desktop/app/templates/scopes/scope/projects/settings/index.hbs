@@ -1,10 +1,11 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<SettingsCard::User />
+<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />
 <SettingsCard::Server @model={{@model}} />
 <SettingsCard::Application @model={{@model}} @toggle={{this.toggleTheme}} />
 <SettingsCard::ClientAgent @model={{@model}} />
 <SettingsCard::Logs @model={{@model}} />
+<SettingsCard::PreferredClients />

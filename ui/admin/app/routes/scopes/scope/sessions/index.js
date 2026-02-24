@@ -1,11 +1,10 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
@@ -54,7 +53,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   /**
    * Loads all sessions under the current scope and encapsulates them into
    * an array of objects containing their associated users and targets.
-   * @return {Promise<{sessions: SessionModel[], allSessions: SessionModel[], associatedUsers: UserModel[], associatedTargets: TargetModel[], totalItems: number>}>}
+   * @param {Object} params
+   * @returns {Promise<{sessions: SessionModel[], doSessionsExist: boolean, associatedUsers: UserModel[], associatedTargets: TargetModel[], totalItems: number}>}
    */
   async model(params) {
     const useDebounce =
@@ -98,124 +98,161 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       });
 
       const sort = {
-        attribute: sortAttribute,
+        attributes: [sortAttribute],
         direction: sortDirection,
+      };
+
+      const searchOptions = {
+        text: search,
+        relatedSearches: [
+          {
+            resource: 'target',
+            fields: ['name'],
+            join: {
+              joinFrom: 'target_id',
+              joinOn: 'id',
+            },
+          },
+          {
+            resource: 'user',
+            fields: ['name'],
+            join: {
+              joinFrom: 'user_id',
+              joinOn: 'id',
+            },
+          },
+        ],
       };
 
       const queryOptions = {
         scope_id,
         include_terminated: true,
-        query: { search, filters, sort },
+        query: { search: searchOptions, filters, sort },
         page,
         pageSize,
       };
 
+      // Preload the associated targets and users into the cache
+      let refreshUsersPromise, refreshTargetsPromise;
+      const canListTargets = this.can.can('list model', scope, {
+        collection: 'targets',
+      });
+      if (canListTargets) {
+        refreshTargetsPromise = this.store.query(
+          'target',
+          {
+            scope_id: scope.id,
+            page: 1,
+            pageSize: 1,
+          },
+          { pushToStore: false },
+        );
+      }
+
+      const orgScope = await this.store.findRecord('scope', scope.scope.id);
+      const globalScope = await this.store.findRecord('scope', 'global');
+      const canListUsers =
+        this.can.can('list model', globalScope, { collection: 'users' }) ||
+        this.can.can('list model', orgScope, { collection: 'users' });
+
+      if (canListUsers) {
+        refreshUsersPromise = this.store.query(
+          'user',
+          {
+            scope_id: 'global',
+            recursive: true,
+            page: 1,
+            pageSize: 1,
+          },
+          { pushToStore: false },
+        );
+      }
+
       const sessions = await this.store.query('session', queryOptions);
       const totalItems = sessions.meta?.totalItems;
 
-      const allSessions = await this.getAllSessions(scope_id);
-      const [associatedUsers, associatedTargets] = await Promise.all([
-        this.getAssociatedUsers(scope, allSessions),
-        this.getAssociatedTargets(scope, allSessions),
+      const doSessionsExist = await this.getDoSessionsExist(
+        scope_id,
+        totalItems,
+      );
+
+      const associatedTargetsPromise = this.store.query(
+        'target',
+        {
+          query: {
+            filters: {
+              id: sessions.map((session) => ({
+                equals: session.target_id,
+              })),
+            },
+          },
+        },
+        { peekDb: true },
+      );
+      const associatedUsersPromise = this.store.query(
+        'user',
+        {
+          query: {
+            filters: {
+              id: sessions.map((user) => ({
+                equals: user.user_id,
+              })),
+            },
+          },
+        },
+        { peekDb: true },
+      );
+
+      await Promise.all([
+        refreshTargetsPromise,
+        refreshUsersPromise,
+        associatedTargetsPromise,
+        associatedUsersPromise,
       ]);
 
       return {
         sessions,
-        allSessions,
-        associatedUsers,
-        associatedTargets,
+        doSessionsExist,
+        canListUsers,
+        canListTargets,
         totalItems,
       };
     },
   );
 
   /**
-   * Get all the sessions for a scope id
-   * @param scope_id
-   * @returns {Promise<SessionModel[]>}
+   * Sets doSessionsExist to true if there are any sessions.
+   * @param {string} scope_id
+   * @param {number} totalItems
+   * @returns {Promise<boolean>}
    */
-  async getAllSessions(scope_id) {
-    const allSessionsQuery = {
-      scope_id,
-      include_terminated: true,
-      query: { filters: { scope_id: [{ equals: scope_id }] } },
-    };
-
-    return this.store.query('session', allSessionsQuery, {
-      pushToStore: false,
-    });
-  }
-
-  /**
-   * Get all the users for a given scope and array of scope's sessions.
-   * @param scope
-   * @returns {Promise<UserModel[]>}
-   */
-  async getAssociatedUsers(scope, allSessions) {
-    const orgScope = await this.store.findRecord('scope', scope.scope.id);
-    const globalScope = await this.store.findRecord('scope', 'global');
-
-    if (
-      this.can.can('list model', globalScope, { collection: 'users' }) &&
-      this.can.can('list model', orgScope, { collection: 'users' })
-    ) {
-      const uniqueSessionUserIds = new Set(
-        allSessions
-          .filter((session) => session.user_id)
-          .map((session) => session.user_id),
-      );
-      const filters = {
-        id: { values: [] },
-      };
-      uniqueSessionUserIds.forEach((userId) => {
-        filters.id.values.push({ equals: userId });
-      });
-      const associatedUsersQuery = {
-        scope_id: 'global',
-        recursive: true,
-        query: { filters },
-      };
-
-      return this.store.query('user', associatedUsersQuery);
+  async getDoSessionsExist(scope_id, totalItems) {
+    if (totalItems > 0) {
+      return true;
     }
-
-    return [];
-  }
-
-  /**
-   * Get all the targets for a given scope and array of scope's sessions.
-   * @param scope
-   * @returns {Promise<TargetModel[]>}
-   */
-  async getAssociatedTargets(scope, allSessions) {
-    if (this.can.can('list model', scope, { collection: 'targets' })) {
-      const uniqueSessionTargetIds = new Set(
-        allSessions
-          .filter((session) => session.target_id)
-          .map((session) => session.target_id),
-      );
-      const filters = { id: { values: [] } };
-      uniqueSessionTargetIds.forEach((targetId) => {
-        filters.id.values.push({ equals: targetId });
-      });
-      const associatedTargetsQuery = {
-        scope_id: scope.id,
-        query: { filters },
-      };
-
-      return this.store.query('target', associatedTargetsQuery);
-    }
-
-    return [];
+    const options = { pushToStore: false, peekDb: true };
+    const sessions = await this.store.query(
+      'session',
+      {
+        scope_id,
+        include_terminated: true,
+        query: { filters: { scope_id: [{ equals: scope_id }] } },
+        page: 1,
+        pageSize: 1,
+      },
+      options,
+    );
+    return sessions.length > 0;
   }
 
   // =actions
 
   /**
-   * refreshes all session route data.
+   * Loads initial filter options in controller so it happens outside of model hook
+   * @param controller
    */
-  @action
-  async refreshAll() {
-    return super.refresh(...arguments);
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.loadItems.perform();
   }
 }

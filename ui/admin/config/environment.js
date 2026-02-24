@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -14,6 +14,8 @@ const {
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const API_HOST = process.env.API_HOST || '';
+const ENABLE_A11Y_AUDIT = process.env.ENABLE_A11Y_AUDIT || false;
+const COLOR_THEME = process.env.COLOR_THEME ?? 'light';
 
 const clone = (obj) => v8.deserialize(v8.serialize(obj));
 
@@ -131,12 +133,10 @@ module.exports = function (environment) {
         'storage-policy.update':
           '/docs/configuration/session-recording/update-storage-policy',
         alias: '/docs/concepts/aliases',
+        'alias.single-word-aliases':
+          '/docs/targets/configuration#single-word-aliases-and-transparent-sessions',
         'support-page': 'https://support.hashicorp.com/hc/en-us',
       },
-    },
-
-    'ember-cli-mirage': {
-      directory: '../../addons/api/mirage',
     },
 
     flashMessageDefaults: {
@@ -153,18 +153,10 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
-      ? JSON.parse(process.env.ENABLE_MIRAGE)
-      : true;
-
-    ENV['ember-a11y-testing'] = {
-      componentOptions: {
-        axeOptions: {
-          checks: {
-            'color-contrast': { options: { noScroll: true } },
-          },
-        },
-      },
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
     };
 
     // Default edition in development
@@ -178,6 +170,9 @@ module.exports = function (environment) {
       ENV.features.featureEditions.enterprise[feature] = true;
       ENV.features.featureEditions.hcp[feature] = true;
     });
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'test') {
@@ -197,6 +192,15 @@ module.exports = function (environment) {
     ENV.oidcPollingTimeoutSeconds = 0;
 
     ENV.enableConfirmService = false;
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
+
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
   }
 
   if (environment === 'production') {

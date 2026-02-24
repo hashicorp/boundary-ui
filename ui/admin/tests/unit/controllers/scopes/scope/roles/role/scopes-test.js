@@ -1,13 +1,13 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit, waitUntil } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupMirage } from 'admin/tests/helpers/mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
@@ -20,7 +20,7 @@ import { TYPE_SCOPE_ORG, TYPE_SCOPE_PROJECT } from 'api/models/scope';
 module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let controller;
@@ -37,10 +37,17 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     controller = this.owner.lookup('controller:scopes/scope/roles/role/scopes');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
+    });
     instances.role = this.server.create('role', {
       scopeId: 'global',
     });

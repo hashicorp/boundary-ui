@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -85,10 +85,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddress(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        port: targetPort,
+        address: targetAddress,
+      });
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createVaultCredentialStore(
         vaultAddr,
@@ -99,11 +99,9 @@ test(
       await page.getByRole('link', { name: 'Credential Libraries' }).click();
       await page.getByRole('link', { name: 'New', exact: true }).click();
       await page
-        .getByLabel('Name (Optional)', { exact: true })
+        .getByLabel('Name', { exact: true })
         .fill(credentialLibraryName);
-      await page
-        .getByLabel('Description (Optional)')
-        .fill('This is an automated test');
+      await page.getByLabel('Description').fill('This is an automated test');
       await page
         .getByLabel('Vault Path')
         .fill(`${secretsPath}/data/${secretName}`);

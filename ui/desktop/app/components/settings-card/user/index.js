@@ -1,11 +1,10 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class SettingsUserInfoComponent extends Component {
   // =services
@@ -14,18 +13,6 @@ export default class SettingsUserInfoComponent extends Component {
   @service intl;
 
   // =attributes
-  /**
-   * Returns the username of the current user
-   * @type {string}
-   */
-  get userInfo() {
-    const {
-      data: {
-        authenticated: { username },
-      },
-    } = this.session;
-    return username;
-  }
 
   /**
    * Returns true if user is authenticated
@@ -37,7 +24,7 @@ export default class SettingsUserInfoComponent extends Component {
   }
 
   /**
-   * Returns the type of authmethod used by the user
+   * Returns the type of auth-method used by the user
    * @type {string}
    */
   get authMethod() {
@@ -48,15 +35,5 @@ export default class SettingsUserInfoComponent extends Component {
     } = this.session;
     const formattedAuthenticatorType = authenticator.split(':')[1];
     return this.intl.t(`resources.account.types.${formattedAuthenticatorType}`);
-  }
-
-  // =actions
-
-  /**
-   * Delegates invalidation to the session service.
-   */
-  @action
-  invalidateSession() {
-    this.session.invalidate();
   }
 }

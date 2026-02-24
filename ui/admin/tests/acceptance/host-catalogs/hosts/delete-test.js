@@ -1,28 +1,27 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   let getHostCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
       hostCatalog: null,
@@ -43,7 +42,6 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,12 +67,20 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
-    // Generate resource couner
+    // Generate resource counter
     getHostCount = () => this.server.schema.hosts.all().models.length;
-    await authenticateSession({});
   });
 
   test('can delete host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getHostCount();
     await visit(urls.host);
 
@@ -92,6 +98,15 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   });
 
   test('can accept delete host via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -106,6 +121,15 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   });
 
   test('cannot cancel delete host via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -120,6 +144,15 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   });
 
   test('deleting a host which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/hosts/:id', () => {
       return new Response(
         490,

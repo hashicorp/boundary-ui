@@ -1,20 +1,20 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { currentURL, waitUntil, visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupMirage } from 'admin/tests/helpers/mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP } from 'api/models/target';
 
 module('Unit | Controller | onboarding/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let store;
   let controller;
@@ -36,13 +36,19 @@ module('Unit | Controller | onboarding/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:onboarding/index');
 
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      type: 'global',
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    instances.authMethod = this.server.schema.authMethods.first();
+    instances.account = this.server.schema.accounts.first();
+    await authenticateSession({
+      isGlobal: true,
+      account_id: instances.account.id,
     });
 
     urls.onboarding = '/onboarding';

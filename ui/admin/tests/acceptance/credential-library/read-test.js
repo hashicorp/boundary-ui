@@ -1,24 +1,27 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 module('Acceptance | credential-libraries | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -39,7 +42,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -65,19 +67,35 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    await authenticateSession({ username: 'admin' });
   });
 
   test('can navigate to resource', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibraries);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
   test('cannot navigate to resource without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'read',
@@ -90,6 +108,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
@@ -109,8 +136,17 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownCredentialLibrary);
-    await a11yAudit();
+
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
@@ -131,5 +167,50 @@ module('Acceptance | credential-libraries | read', function (hooks) {
 
     assert.notEqual(currentURL(), incorrectUrl);
     assert.strictEqual(currentURL(), correctUrl);
+  });
+
+  test('visiting vault credential library of type username password and domain', async function (assert) {
+    const usernamePasswordDomainCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      },
+    );
+    const url = `${urls.credentialLibraries}/${usernamePasswordDomainCredentialLibrary.id}`;
+
+    await visit(url);
+
+    assert.strictEqual(currentURL(), url);
+  });
+
+  test('visiting vault ldap credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    const vaultLDAPCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      },
+    );
+
+    await visit(urls.credentialLibraries);
+
+    const url = `${urls.credentialLibraries}/${vaultLDAPCredentialLibrary.id}`;
+
+    await visit(url);
+
+    assert.strictEqual(currentURL(), url);
   });
 });

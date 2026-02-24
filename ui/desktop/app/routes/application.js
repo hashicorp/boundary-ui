@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service rdp;
 
   // =attributes
 
@@ -49,7 +50,12 @@ export default class ApplicationRoute extends Route {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
+
+      await this.session.loadAuthenticatedAccount();
     }
+
+    // initialize RDP service with rdp client data
+    await this.rdp.initialize();
   }
 
   /**

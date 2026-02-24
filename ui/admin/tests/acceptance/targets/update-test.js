@@ -1,45 +1,46 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { click, currentURL, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_TARGET_RDP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   let featuresService;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
     target: null,
+    rdpTarget: null,
+    sshTarget: null,
   };
   const urls = {
     projectScope: null,
     targets: null,
     target: null,
+    rdpTarget: null,
+    sshTarget: null,
   };
 
   hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -51,15 +52,34 @@ module('Acceptance | targets | update', function (hooks) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
     });
+    instances.rdpTarget = this.server.create('target', {
+      type: TYPE_TARGET_RDP,
+      scope: instances.scopes.project,
+      injected_application_credential_source_ids: [],
+    });
+    instances.sshTarget = this.server.create('target', {
+      type: TYPE_TARGET_SSH,
+      scope: instances.scopes.project,
+      injected_application_credential_source_ids: [],
+    });
     // Generate route URLs for resources
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-
-    await authenticateSession({});
+    urls.rdpTarget = `${urls.targets}/${instances.rdpTarget.id}`;
+    urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
   });
 
   test('can save changes to existing target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     assert.notEqual(instances.target.name, 'random string');
     assert.notEqual(instances.target.worker_filter, 'random filter');
@@ -77,6 +97,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can cancel changes to existing target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.target));
@@ -89,6 +118,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     this.server.patch('/targets/:id', () => {
       return new Response(
@@ -123,6 +161,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
@@ -148,6 +195,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
@@ -173,6 +229,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('cannot make changes to an existing target without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'update');
@@ -183,6 +248,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
@@ -230,6 +304,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
@@ -270,5 +353,118 @@ module('Acceptance | targets | update', function (hooks) {
       undefined,
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
+  });
+
+  test('can save changes to existing rdp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+    featuresService.enable('ssh-target');
+
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.rdpTarget));
+
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL)
+      .exists('Injected application credential alert is displayed');
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL_ADD_BTN)
+      .hasAttribute(
+        'href',
+        `${urls.rdpTarget}/add-injected-application-credential-sources`,
+      );
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(currentURL(), urls.rdpTarget);
+    assert.strictEqual(
+      this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models[0]
+        .name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+  });
+
+  test('displays add injected credentials alert for ssh target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-26
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('ssh-target');
+
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.sshTarget));
+
+    assert
+      .dom(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL)
+      .exists('Injected application credential alert is displayed');
+
+    await click(selectors.ALERT_INJECTED_APPLICATION_CREDENTIAL_ADD_BTN);
+
+    assert.strictEqual(
+      currentURL(),
+      `${urls.sshTarget}/add-injected-application-credential-sources`,
+    );
+  });
+
+  test('it shows additional helper text in field labels for rdp targets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    featuresService.enable('rdp-target');
+
+    const staticDefaultClientPortHelperText =
+      'The local proxy port on which to listen by default when a session is started on a client.';
+    const staticMaxConnectionsHelperText =
+      'The maximum number of connections allowed per session. For unlimited, specify "-1".';
+
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.target);
+
+    assert
+      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_HELPER_TEXT)
+      .hasText(staticDefaultClientPortHelperText);
+    assert
+      .dom(selectors.FIELD_MAX_CONNECTIONS_HELPER_TEXT)
+      .hasText(staticMaxConnectionsHelperText);
+
+    await visit(urls.rdpTarget);
+    assert
+      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_HELPER_TEXT)
+      .hasText(
+        `${staticDefaultClientPortHelperText} Note: Windows OS prevents port 3389 from being used.`,
+      );
+    assert
+      .dom(selectors.FIELD_MAX_CONNECTIONS_HELPER_TEXT)
+      .hasText(
+        `${staticMaxConnectionsHelperText} Note: The Windows Remote Desktop Connection client requires a connection limit of 2 or higher`,
+      );
   });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -31,7 +31,9 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page
       .getByRole('link', { name: 'Storage Buckets', exact: true })
       .click();
-    await this.page.getByRole('link', { name: 'New Storage Bucket' }).click();
+    await this.page
+      .getByRole('link', { name: 'New Storage Bucket', exact: true })
+      .click();
     await this.page.getByLabel('Name (Optional)').fill(storageBucketName);
     await this.page.getByLabel('Scope').selectOption({ label: scope });
     await this.page
@@ -44,10 +46,10 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page.getByLabel('Secret access key').fill(secretAccessKey);
     await this.page
       .getByLabel('Worker filter')
-      .locator('textarea')
+      .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -82,7 +84,9 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page
       .getByRole('link', { name: 'Storage Buckets', exact: true })
       .click();
-    await this.page.getByRole('link', { name: 'New Storage Bucket' }).click();
+    await this.page
+      .getByRole('link', { name: 'New Storage Bucket', exact: true })
+      .click();
     await this.page.getByLabel('Name (Optional)').fill(storageBucketName);
     await this.page.getByLabel('Scope').selectOption({ label: scope });
     await this.page
@@ -96,10 +100,10 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page.getByLabel('Secret access key').fill(secretAccessKey);
     await this.page
       .getByLabel('Worker filter')
-      .locator('textarea')
+      .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

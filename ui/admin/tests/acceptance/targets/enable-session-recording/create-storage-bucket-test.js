@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -13,17 +13,17 @@ import {
   waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | enable session recording | create storage bucket',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
+    setupSqlite(hooks);
 
     let features;
     let getStorageBucketCount;
@@ -37,7 +37,6 @@ module(
 
     const instances = {
       scopes: {
-        global: null,
         org: null,
       },
     };
@@ -50,7 +49,6 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -74,10 +72,23 @@ module(
 
       features = this.owner.lookup('service:features');
       features.enable('ssh-session-recording');
-      await authenticateSession({ username: 'admin' });
     });
 
     test('users can create a new storage bucket with global scope', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -114,6 +125,20 @@ module(
     });
 
     test('users can create a new storage bucket with org scope', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -150,6 +175,20 @@ module(
     });
 
     test('user can cancel new storage bucket creation', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -165,6 +204,20 @@ module(
     });
 
     test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'The request was invalid.';
       const errorDescription = 'Name is required.';
       this.server.post('/storage-buckets', () => {

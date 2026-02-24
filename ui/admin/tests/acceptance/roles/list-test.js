@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -14,22 +14,19 @@ import {
   currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { faker } from '@faker-js/faker';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     role1: null,
@@ -45,7 +42,6 @@ module('Acceptance | roles | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -61,10 +57,18 @@ module('Acceptance | roles | list', function (hooks) {
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role1 = `${urls.roles}/${instances.role1.id}`;
     urls.role2 = `${urls.roles}/${instances.role2.id}`;
-    await authenticateSession({});
   });
 
   test('users can navigate to roles with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.orgScope));
@@ -76,6 +80,15 @@ module('Acceptance | roles | list', function (hooks) {
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.globalScope);
 
@@ -88,6 +101,15 @@ module('Acceptance | roles | list', function (hooks) {
   });
 
   test('users can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.authorized_collection_actions.roles = ['create'];
     await visit(urls.globalScope);
 
@@ -97,6 +119,15 @@ module('Acceptance | roles | list', function (hooks) {
   });
 
   test('user can search for a specific role by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.roles));
@@ -114,6 +145,15 @@ module('Acceptance | roles | list', function (hooks) {
   });
 
   test('user can search for roles and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.roles));
@@ -130,6 +170,15 @@ module('Acceptance | roles | list', function (hooks) {
   });
 
   test('correct badge in grants applied column is visible to user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.role1.grant_scope_ids = instances.role1.grant_scope_ids.filter(
       (id) => id !== GRANT_SCOPE_THIS,
     );
@@ -187,14 +236,6 @@ module('Acceptance | roles | list', function (hooks) {
         expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
         column: 1,
       },
-      'on grants applied': {
-        attribute: {
-          key: 'grant_scope_ids',
-          values: [[GRANT_SCOPE_THIS], [GRANT_SCOPE_THIS], [], [], []],
-        },
-        expectedAscendingSort: ['No', 'No', 'No', 'Yes', 'Yes'],
-        column: 2,
-      },
       'on id': {
         attribute: {
           key: 'id',
@@ -211,6 +252,15 @@ module('Acceptance | roles | list', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.roles.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('role', {

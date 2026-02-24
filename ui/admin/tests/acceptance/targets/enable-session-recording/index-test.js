@@ -1,24 +1,24 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, find, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from '../selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | enable session recording | index',
   function (hooks) {
     setupApplicationTest(hooks);
-    setupMirage(hooks);
+    setupSqlite(hooks);
+
     let intl;
     let featuresService;
     let storageBucketOne;
@@ -54,7 +54,7 @@ module(
     hooks.beforeEach(async function () {
       featuresService = this.owner.lookup('service:features');
       // Generate resources
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.scopes.global = this.server.schema.scopes.find('global');
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -85,20 +85,26 @@ module(
       urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 
       intl = this.owner.lookup('service:intl');
-
-      await authenticateSession({ username: 'admin' });
     });
 
     test('cannot enable session recording for a target without proper authorization', async function (assert) {
       assert.false(featuresService.isEnabled('ssh-session-recording'));
 
       await visit(urls.target);
-      await a11yAudit();
 
       assert.dom(SESSION_RECORDING_ENABLE_BTN).doesNotExist();
     });
 
     test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
 
@@ -110,6 +116,15 @@ module(
     });
 
     test('users can click on settings link in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       instances.target.update({
         storageBucketId: storageBucketOne.id,
@@ -122,6 +137,15 @@ module(
     });
 
     test('users can click on associated storage bucket card on an ssh target', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       instances.target.update({
         storageBucketId: storageBucketOne.id,
@@ -134,6 +158,15 @@ module(
     });
 
     test('toggle should be disabled and storage buckets list should be shown when enable session recording button is clicked', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
       await click(SESSION_RECORDING_ENABLE_BTN);
@@ -144,6 +177,15 @@ module(
     });
 
     test('storage buckets list is hidden when toggle is disabled', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
       await click(SESSION_RECORDING_ENABLE_BTN);
@@ -158,6 +200,20 @@ module(
     });
 
     test('link to add new storage bucket should be displayed and redirect to new storage buckets form', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
       await click(SESSION_RECORDING_ENABLE_BTN);
@@ -171,6 +227,15 @@ module(
     });
 
     test('retain last selected dropdown list value when the toggle is off', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       instances.target.update({
         storageBucketId: storageBucketOne.id,
@@ -200,6 +265,15 @@ module(
     });
 
     test('can assign a storage bucket for the target', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
       await click(SESSION_RECORDING_ENABLE_BTN);
@@ -228,6 +302,15 @@ module(
     });
 
     test('can cancel changes to an existing storage bucket selection', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       instances.target.update({
         storageBucketId: storageBucketOne.id,

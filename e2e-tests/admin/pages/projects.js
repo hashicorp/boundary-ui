@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -22,7 +22,7 @@ export class ProjectsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(projectName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page

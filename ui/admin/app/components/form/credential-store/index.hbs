@@ -1,14 +1,13 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{#if @model.type}}
-  {{component
-    (concat 'form/credential-store/' @model.type)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-    changeType=@changeType
-  }}
+  <this.credentialStoreFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @changeType={{@changeType}}
+  />
 {{/if}}

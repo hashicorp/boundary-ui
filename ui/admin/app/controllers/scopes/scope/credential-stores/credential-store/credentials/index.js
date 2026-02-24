@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -56,10 +56,11 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
   async cancel(credential) {
     const { isNew } = credential;
     credential.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credentials',
       );
+    }
   }
 
   /**
@@ -68,7 +69,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
    */
   @action
   @loading
-  @notifyError(({ message }) => message)
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )

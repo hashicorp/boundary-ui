@@ -1,12 +1,11 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeScopesIndexRoute extends Route {
   // =attributes
@@ -70,8 +69,12 @@ export default class ScopesScopeScopesIndexRoute extends Route {
 
       const sort =
         sortAttribute === 'name'
-          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
-          : { attribute: sortAttribute, direction: sortDirection };
+          ? {
+              attributes: [sortAttribute, 'id'],
+              direction: sortDirection,
+              isCoalesced: true,
+            }
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       const subScopes = await this.store.query('scope', {
         scope_id,
@@ -101,7 +104,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const scopes = await this.store.query(
       'scope',
       {

@@ -1,27 +1,23 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | read', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let featuresService;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -39,7 +35,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -63,35 +58,58 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
-    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 
   test('visiting static credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
 
     await click(commonSelectors.HREF(urls.staticCredentialStore));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
   });
 
   test('visiting vault credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialStores);
 
     assert.strictEqual(currentURL(), urls.credentialStores);
 
     await click(commonSelectors.HREF(urls.vaultCredentialStore));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
   });
 
   test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
@@ -109,6 +127,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
@@ -127,15 +154,32 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownCredentialStore);
 
-    await a11yAudit();
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));

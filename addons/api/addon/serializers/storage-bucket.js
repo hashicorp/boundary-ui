@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -76,9 +76,10 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
     // This deletes any fields that don't belong to the record's credential type
     if (options.isNestedAttribute && json.attributes) {
       // The key must be included in the fieldsByType list above
-      if (!fieldsByCredentialType[credentialType].includes(key))
+      if (!fieldsByCredentialType[credentialType].includes(key)) {
         // API requires these fields to be null
         json.attributes[key] = null;
+      }
     }
 
     //json.secrets is only present, if there are any updates to the secret fields

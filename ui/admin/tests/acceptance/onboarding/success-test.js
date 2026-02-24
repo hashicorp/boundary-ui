@@ -1,23 +1,19 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | onboarding | success', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-
-  hooks.beforeEach(async function () {
-    await authenticateSession({});
-  });
+  setupSqlite(hooks);
 
   const urls = {
     onboarding: '/onboarding',
@@ -26,12 +22,30 @@ module('Acceptance | onboarding | success', function (hooks) {
   };
 
   test('check if the done button is present', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.success);
 
     assert.dom(selectors.DONE_BTN).isVisible();
   });
 
   test('check the controller url is copyable', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const origin = window.location.origin;
     await visit(urls.success);
 
@@ -39,6 +53,15 @@ module('Acceptance | onboarding | success', function (hooks) {
   });
 
   test('fill the onboarding form and redirect user to target detail when done is clicked', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.onboarding);
     await fillIn(
       selectors.FIELD_TARGET_ADDRESS,

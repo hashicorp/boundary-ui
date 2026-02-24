@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -26,6 +26,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service store;
   @service can;
   @service intl;
+  @service rdp;
 
   // =attributes
 
@@ -190,6 +191,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const options = {
       target_id: target.id,
       token: this.session.data.authenticated.token,
+      session_max_seconds: target.session_max_seconds,
     };
 
     if (host) options.host_id = host.id;
@@ -243,6 +245,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       'scopes.scope.projects.sessions.session',
       session_id,
     );
+
+    return session;
   }
 
   /**
@@ -309,5 +313,24 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   async refresh() {
     await this.currentRoute.refreshAll();
+  }
+
+  /**
+   * Quick connect method used to call main connect method and
+   * then launch RDP client
+   * @param {TargetModel} target
+   */
+  @action
+  async quickConnectAndLaunchRdp(target) {
+    try {
+      const session = await this.connect(target);
+      // Launch RDP client
+      await this.rdp.launchRdpClient(session.id);
+    } catch (error) {
+      this.confirm
+        .confirm(error.message, { isConnectError: true })
+        // Retry
+        .then(() => this.quickConnectAndLaunchRdp(target));
+    }
   }
 }

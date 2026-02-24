@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -31,10 +31,10 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   const projectsPage = new ProjectsPage(page);
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
-  targetName = await targetsPage.createTargetWithAddress(
-    targetAddress,
-    targetPort,
-  );
+  targetName = await targetsPage.createTarget({
+    port: targetPort,
+    address: targetAddress,
+  });
   const credentialStoresPage = new CredentialStoresPage(page);
   await credentialStoresPage.createStaticCredentialStore();
 });
@@ -191,12 +191,10 @@ test(
         .getByRole('link', { name: 'Credentials', exact: true })
         .click();
       await page.getByRole('link', { name: 'New', exact: true }).click();
-      await page.getByLabel('Name (Optional)').fill(credentialName);
+      await page.getByLabel('Name', { exact: true }).fill(credentialName);
       await page.getByLabel('Description').fill('This is an automated test');
-      await page
-        .getByRole('group', { name: 'Type' })
-        .getByLabel('JSON')
-        .click();
+      await page.getByRole('combobox', { name: 'Type' }).click();
+      await page.getByRole('option', { name: 'JSON' }).click();
       await page.getByText('{}').click();
       const testName = 'name-json';
       const testPassword = 'password-json';
@@ -303,9 +301,8 @@ test(
 
       // Remove the host source from the target
       await page
-        .getByRole('link', { name: credentialName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: credentialName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();

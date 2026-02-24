@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -57,7 +57,7 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(targetPort);
+      const targetName = await targetsPage.createTarget({ port: targetPort });
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add/Remove another host source
@@ -88,8 +88,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -127,10 +127,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddress(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        port: targetPort,
+        address: targetAddress,
+      });
 
       await boundaryCli.authenticateBoundary(
         controllerAddr,
@@ -155,8 +155,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -191,7 +191,10 @@ test(
       const projectsPage = new ProjectsPage(page);
       await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+      await targetsPage.createTarget({
+        port: targetPort,
+        address: targetAddress,
+      });
 
       // Update target
       await page.getByRole('button', { name: 'Edit Form' }).click();
@@ -230,10 +233,21 @@ test(
       ).toBeVisible();
       await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-      await page.locator('textarea').click({ force: true });
-      await page.keyboard.press('Meta+A');
+      await page
+        .locator('.CodeMirror')
+        .getByRole('textbox')
+        .click({ force: true });
+      await expect(
+        page.locator('.CodeMirror').getByRole('textbox'),
+      ).toBeFocused();
+      const selectAllShortcut =
+        process.platform === 'darwin' ? 'Meta+A' : 'Control+A';
+      await page.keyboard.press(selectAllShortcut);
       await page.keyboard.press('Backspace');
-      await page.locator('textarea').fill('"prod" in "/tags/type"');
+      await page
+        .locator('.CodeMirror')
+        .getByRole('textbox')
+        .fill('"prod" in "/tags/type"');
       await page.getByRole('button', { name: 'Save' }).click();
       const basePage = new BasePage(page);
       await basePage.dismissSuccessAlert();

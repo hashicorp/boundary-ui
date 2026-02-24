@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -20,10 +20,12 @@ module(
           <Rose::Form::Actions::EditToggle
             @enableEdit={{this.enableEdit}}
             @enableEditText='Edit'
+            @ariaDescriptionEdit='Resource'
           />
         `,
       );
       assert.ok(find('button'));
+      assert.dom('[aria-description]').exists();
     });
 
     test('it executes a function on button click', async function (assert) {
@@ -34,6 +36,7 @@ module(
           <Rose::Form::Actions::EditToggle
             @enableEdit={{this.enableEdit}}
             @enableEditText='Edit'
+            @ariaDescriptionEdit='Resource'
           />
         `,
       );

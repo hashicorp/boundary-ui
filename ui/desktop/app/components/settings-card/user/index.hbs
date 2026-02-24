@@ -1,5 +1,5 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -29,19 +29,19 @@
         {{t 'form.username.label'}}
       </Hds::Text::Display>
       <Hds::Text::Body @tag='p' @weight='medium' data-test-username>
-        {{this.userInfo}}
+        {{this.session.username}}
       </Hds::Text::Body>
     </div>
   </:body>
 
   <:action>
     <Hds::Button
-      data-test-signout-button
+      data-test-settings-signout-btn
       @text={{t 'actions.deauthenticate'}}
       @color='critical'
       @icon='sign-out'
       @size='medium'
-      {{on 'click' this.invalidateSession}}
+      {{on 'click' @onSignout}}
     />
   </:action>
 </SettingsCard>

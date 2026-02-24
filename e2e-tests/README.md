@@ -22,6 +22,11 @@
   - [Developing Tests](#developing-tests)
     - [Test names and tagging](#test-names-and-tagging)
     - [Selecting / Locating Elements](#selecting--locating-elements)
+    - [Api Client Fixture](#api-client-fixture)
+      - [Using the fixture](#using-the-fixture)
+      - [Features](#features)
+      - [Generating the api client](#generating-the-api-client)
+    - [Testing with resources (api, page objects, cli)](#testing-with-resources-api-page-objects-cli)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -259,3 +264,80 @@ accessibility features perceive the page. `getByLabel` should be used for form f
 
 Additional information can be found [here](https://playwright.dev/docs/locators#locating-elements)
 and [here](https://testing-library.com/docs/queries/about/#priority).
+
+### Api Client Fixture
+The `apiClient` fixture is available in tests to make calls against the boundary api. This fixture wraps an api client that is auto-generated from the [boundary api openapi swagger spec](https://raw.githubusercontent.com/hashicorp/boundary/main/internal/gen/controller.swagger.json).
+
+#### Using the fixture
+The api client fixture can be used in tests anywhere fixtures are available:
+```js
+// within a test
+test(
+  'An example test',
+  { tag: ['@ce', '@ent', '@aws', '@docker'] },
+  async ({ apiClient }) => {
+    org = await apiClient.clients.Scope.scopeServiceCreateScope({
+      item: {
+        name: 'Org A',
+        scopeId: 'global',
+      },
+    });
+  }
+);
+
+// in `beforeEach` (also works the same for `afterEach`)
+test.beforeEach(async ({ apiClient }) => {
+  org = await apiClient.clients.Scope.scopeServiceCreateScope({
+    item: {
+      name: 'Org A',
+      scopeId: 'global',
+    },
+  });
+});
+```
+
+#### Features
+
+* The api client should have all publicly documented APIs
+* Generated api client uses typescript to help with the discovery of the required arguments
+  * Any untyped `attributes` that have been documented by a `description` in the swagger doc will also be included as a docblock comment when inspecting `attributes` in the editor (see `ControllerApiResourcesAccountsV1Account.attributes` in `models/ControllerApiResourcesAccountsV1Account.ts` for an example)
+* Automatic resource clean up
+  * Any resources created by the api client will be automatically cleaned up after the test is finished. To skip cleanup of a resource pass in the created resource to `apiClient.skipCleanup(createdResource);` (where `createdResource` has an `id` property).
+  * In some cases resources will need child resources, created outside the api, to be cleaned up first. For example, a storage bucket created by the api client cannot be automatically cleaned up until all session recordings have been deleted. Session recordings are created automatically and not tracked by the API so these need to be deleted manually. Session recordings cannot be deleted unless they are in a `available` state which depends on the session being recorded being in a `terminated` state. Sessions also are not created by the api and need to be cleaned up manually.
+* Error logging
+  * When api calls fail with an http status code >= 400 the error response is logged
+
+#### Generating the api client
+
+The generated client is found in the `api-client` folder. Manual changes should not be made to any of the files in this folder because they will be overriden the next time the client is generated.
+
+To regenerate the api-client run the `generate:api` package.json scripts command. By default this will use the latest swagger doc from the public [`boundary` repo](https://github.com/hashicorp/boundary) on the `main` branch at `main/internal/gen/controller.swagger.json`. Note: The `generate:api` script calls `openapi-generator-cli` which requires java to be available on your PATH environment variable.
+
+```shell
+pnpm generate:api-client
+```
+
+If working on an E2E test that is working against a different version of the boundary api, ensure the updated openapi swagger doc has been generated and set `OPENAPI_SWAGGER_URL_OR_FILE` to the path or url:
+```shell
+# using a custom url (must be publicly accessible)
+# in the following example $COMMITISH can be replaced with a branch name, commit, or tag
+OPENAPI_SWAGGER_URL_OR_FILE=https://raw.githubusercontent.com/hashicorp/boundary/$COMMITISH/internal/gen/controller.swagger.json pnpm generate:api-client
+
+# using a local absolute or relative path 
+OPENAPI_SWAGGER_URL_OR_FILE=../../boundary-enterprise/internal/gen/controller.swagger.json pnpm generate:api-client
+```
+
+Consider committing any changes to the generated `api-client` directory if the changes are needed for the current e2e tests to pass.
+
+### Testing with resources (api, page objects, cli)
+
+When testing an E2E workflow, resources often use page objects (within `admin/pages` and `desktop/pages`) or use methods on playwright locators directly. These simulate user actions to ensure that we are testing our applications the way our users use them.
+
+In cases where resources need to be scaffolded as a prerequisite to a test, but are not needed to be tested directly, the `apiClient` fixture should be used. This type of common setup can usually be done in `test.beforeEach` to separate it from the `test` itself. Using the `apiClient` has the added benefit of:
+* being quicker to set up (api calls are faster)
+* return api responses and resource definitions
+* any created resource is automatically cleaned up after the test
+
+Aside from creating resources, the `apiClient` fixture can be used in any case where interaction with the boundary api is needed.
+
+As a last resort when page objects and the `apiClient` fixture can't be used then the boundary cli helper can be used.

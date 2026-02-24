@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -14,15 +14,15 @@ import {
   waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | storage-buckets | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   let features;
   let getStorageBucketCount;
@@ -41,7 +41,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -54,10 +54,23 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new storage bucket aws plugin type with global scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -95,6 +108,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket aws plugin type with org scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -131,6 +158,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket minio plugin type with org scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
 
     // Navigate to new storage bucket
@@ -183,6 +224,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket aws plugin type with dynamic credentials', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -217,6 +272,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket aws plugin type with static credentials', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -251,6 +320,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket minio plugin type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
 
     // Navigate to new storage bucket
@@ -301,6 +384,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('user can cancel new storage bucket creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -314,6 +411,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/storage-buckets', () => {
       return new Response(
         400,

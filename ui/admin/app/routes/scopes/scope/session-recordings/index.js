@@ -1,11 +1,10 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATE_SESSION_RECORDING_STARTED,
@@ -59,8 +58,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     },
   };
 
-  allSessionRecordings;
-
   /**
    * Load all session recordings.
    * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], doSessionRecordingsExist: boolean, doStorageBucketsExist: boolean }>}
@@ -70,17 +67,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
     return this.retrieveData.perform({ ...params, useDebounce });
   }
-
-  sortState = (recordA, recordB) => {
-    const stateMap = {
-      [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
-      [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
-      [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
-    };
-    return String(stateMap[recordA.attributes.state]).localeCompare(
-      String(stateMap[recordB.attributes.state]),
-    );
-  };
 
   retrieveData = restartableTask(
     async ({
@@ -107,25 +93,35 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       let doStorageBucketsExist = false;
       const filters = {
         created_time: [],
-        'create_time_values.user.id': [],
-        'create_time_values.target.scope.id': [],
-        'create_time_values.target.id': [],
+        user_id: [],
+        target_scope_id: [],
+        target_id: [],
       };
       if (time) filters.created_time.push({ gte: new Date(time) });
       users.forEach((user) => {
-        filters['create_time_values.user.id'].push({ equals: user });
+        filters['user_id'].push({ equals: user });
       });
       scopes.forEach((scope) => {
-        filters['create_time_values.target.scope.id'].push({ equals: scope });
+        filters['target_scope_id'].push({ equals: scope });
       });
       targets.forEach((target) => {
-        filters['create_time_values.target.id'].push({ equals: target });
+        filters['target_id'].push({ equals: target });
       });
+
+      const stateMap = {
+        [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
+        [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
+        [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
+      };
 
       const sort =
         sortAttribute === 'state'
-          ? { sortFunction: this.sortState, direction: sortDirection }
-          : { attribute: sortAttribute, direction: sortDirection };
+          ? {
+              attributes: [sortAttribute],
+              customSort: { attributeMap: stateMap },
+              direction: sortDirection,
+            }
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       if (
         this.can.can('list scope', scope, {
@@ -145,10 +141,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
           queryOptions,
         );
         totalItems = sessionRecordings.meta?.totalItems;
-        // Query all session recordings for filtering values if entering route for the first time
-        if (!this.allSessionRecordings) {
-          await this.getAllSessionRecordings(scope_id);
-        }
         doSessionRecordingsExist = await this.getDoSessionRecordingsExist(
           scope_id,
           totalItems,
@@ -158,29 +150,12 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         return {
           sessionRecordings,
           doSessionRecordingsExist: doSessionRecordingsExist,
-          allSessionRecordings: this.allSessionRecordings,
           totalItems,
           doStorageBucketsExist: doStorageBucketsExist,
         };
       }
     },
   );
-
-  /**
-   * Sets allSessionRecordings to all session recordings for filters
-   * @param {string} scope_id
-   */
-  async getAllSessionRecordings(scope_id) {
-    const options = { pushToStore: false, peekIndexedDB: true };
-    this.allSessionRecordings = await this.store.query(
-      'session-recording',
-      {
-        scope_id,
-        recursive: true,
-      },
-      options,
-    );
-  }
 
   /**
    * Sets doSessionRecordingsExist to true if there are any session recordings.
@@ -192,7 +167,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const sessionRecordings = await this.store.query(
       'session-recording',
       {
@@ -229,14 +204,11 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =actions
 
   /**
-   * refreshes all session recording route data.
+   * Loads initial filter options in controller so it happens outside of model hook
+   * @param controller
    */
-  @action
-  async refreshAll() {
-    const scope = this.modelFor('scopes.scope');
-
-    await this.getAllSessionRecordings(scope.id);
-
-    return super.refresh(...arguments);
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.loadItems.perform();
   }
 }

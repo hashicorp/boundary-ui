@@ -6,15 +6,18 @@ The Admin UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Pnpm Commands](#pnpm-commands)
-- [Running / Development](#running--development)
-  - [Building for Production](#building-for-production)
-    - [Environment Variables](#environment-variables)
-  - [Running Tests](#running-tests)
-  - [Deploying](#deploying)
-- [Further Reading / Useful Links](#further-reading--useful-links)
+- [Admin UI](#admin-ui)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Pnpm Commands](#pnpm-commands)
+  - [Running / Development](#running--development)
+    - [Building for Production](#building-for-production)
+      - [Environment Variables](#environment-variables)
+    - [Running Tests](#running-tests)
+      - [Light vs Dark Mode A11y Tests](#light-vs-dark-mode-a11y-tests)
+      - [Explicit a11yAudit usage](#explicit-a11yaudit-usage)
+    - [Deploying](#deploying)
+  - [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,7 +65,7 @@ List of available project commands.  `pnpm run <command-name>`
 
 Before executing a build, be sure to set any environment variables necessary
 for your target environment (see next section).  To build this UI for
-production, run the following commads from this folder:
+production, run the following commands from this folder:
 
 ```bash
 pnpm install
@@ -79,11 +82,13 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
+| `COLOR_THEME` | | Define (`dark`) to set the test browser appearance to dark for running tests in dark mode. |
 
 ### Running Tests
 
-* `npm test` runs full tests in random order with coverage
+* `pnpm test` runs full tests in random order with coverage
 * `ember test --server`
+* `COLOR_THEME=dark ember test --server` runs tests in dark mode
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
@@ -93,8 +98,44 @@ of testing".  Use test coverage as a guide to help you identify untested
 high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
-If you write acceptance tests, please ensure at least one validation per
-route using `await a11yAudit();`.
+Write acceptance tests like normal. Our a11y testing strategy will automatically
+run `a11yAudit()` after [specific helper actions](tests/test-helper.js#L26), like visit, click, and fillIn.
+Our a11y tests have their own pnpm commands:
+
+* `pnpm test-a11y` runs a11y tests for light and dark mode
+* `pnpm test-a11y:light` runs a11y tests just for light mode
+* `pnpm test-a11y:dark` runs a11y tests just for dark mode
+
+#### Light vs Dark Mode A11y Tests
+
+When running a11y tests in light mode, we audit against multiple WCAG standards.
+However, dark mode will only tests against the `color-contrast` rule. Unless fixing
+a specific test, please use `pnpm test-a11y` for full a11y testing coverage.
+
+#### Explicit a11yAudit usage
+
+We no longer need to call `a11yAudit()` directly but there any be times we need to.
+An example would be when an action is taken in our tests that alters the UI but
+does not trigger an audit via our default helpers. In the below example, we use
+a dispatch to insert text into a code editor. This will not trigger an audit and
+inserting an `a11yAudit()` right after would be acceptable. Wrap the audit with
+`shouldForceAudit` so the audit is only run when testing a11y.
+
+```javascript
+import { shouldForceAudit } from 'ember-a11y-testing/test-support';
+
+const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+const editorView = editorElement.editor;
+editorView.dispatch({
+  changes: {
+    from: editorView.state.selection.main.from,
+    insert: '{"test": "value"}',
+  },
+});
+if (shouldForceAudit()) {
+  await a11yAudit();
+}
+```
 
 ### Deploying
 

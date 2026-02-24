@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -23,9 +23,16 @@ class SessionManager {
    * @param {string} target_id
    * @param {string} token
    * @param {string} host_id
+   * @param {number} session_max_seconds
    */
-  start(addr, target_id, token, host_id) {
-    const session = new Session(addr, target_id, token, host_id);
+  start(addr, target_id, token, host_id, session_max_seconds) {
+    const session = new Session(
+      addr,
+      target_id,
+      token,
+      host_id,
+      session_max_seconds,
+    );
     this.#sessions.push(session);
     return session.start();
   }
@@ -39,8 +46,22 @@ class SessionManager {
     return session?.stop?.();
   }
 
+  /**
+   * Get session by identifier.
+   * @param {string} sessionId
+   * @returns {Session} The session object
+   */
+  getSessionById(sessionId) {
+    return this.#sessions.find((session) => session.id === sessionId);
+  }
+
+  /**
+   * Stop all active and pending target sessions
+   * Returning Promise.all() ensures all sessions in the list have been
+   * stopped before calling the next fn
+   */
   stopAll() {
-    this.#sessions.forEach((session) => session.stop());
+    return Promise.all(this.#sessions.map((session) => session.stop()));
   }
 }
 

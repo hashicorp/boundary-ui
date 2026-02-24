@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -22,7 +22,7 @@ export class OrgsPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New Org' }).click();
     await this.page.getByLabel('Name').fill(orgName);
     await this.page.getByLabel('Description').fill('This is an automated test');
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -45,7 +45,7 @@ export class OrgsPage extends BaseResourcePage {
     await this.page
       .getByLabel('Storage Policy')
       .selectOption({ label: policyName });
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(policyName),
@@ -60,16 +60,15 @@ export class OrgsPage extends BaseResourcePage {
   async chooseScopeFromDropdown(fromScope, toScope) {
     await this.page
       .getByRole('button', { name: fromScope, exact: true })
-      .click()
-    await this.page
-      .getByRole('option', { name: toScope, exact: true })
-      .click()
+      .click();
+    await this.page.getByRole('option', { name: toScope, exact: true }).click();
     await expect(
-      this.page.getByRole('button', { name: toScope, exact: true })
-    ).toBeVisible()
-    if (toScope != 'Global')
+      this.page.getByRole('button', { name: toScope, exact: true }),
+    ).toBeVisible();
+    if (toScope !== 'Global') {
       await expect(
-        this.page.getByRole('link', { name: toScope, exact: true })
-      ).toBeVisible()
+        this.page.getByRole('link', { name: toScope, exact: true }),
+      ).toBeVisible();
+    }
   }
 }

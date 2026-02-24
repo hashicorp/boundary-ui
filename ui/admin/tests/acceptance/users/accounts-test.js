@@ -1,15 +1,13 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_LDAP,
@@ -17,17 +15,17 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | accounts', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   let accountsCount;
   let features;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     user: null,
@@ -41,8 +39,6 @@ module('Acceptance | users | accounts', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -66,16 +62,33 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('visiting user accounts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.accounts);
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
   });
 
   test('can remove an account', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -89,6 +102,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot remove an account without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.user.authorized_actions.filter(
       (item) => item !== 'remove-accounts',
     );
@@ -103,6 +125,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot remove an ldap account when feature flag disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -122,6 +153,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can remove an ldap account when feature flag enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     features.enable('ldap-auth-methods');
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
@@ -142,6 +182,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('shows error message on account remove', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/users/:idMethod', () => {
       return new Response(
         400,
@@ -167,16 +216,33 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('visiting account add accounts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.accounts);
 
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.addAccounts);
   });
 
   test('can navigate to add accounts with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -186,6 +252,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot navigate to add accounts without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.user.authorized_actions.filter(
       (item) => item !== 'add-accounts',
     );
@@ -198,6 +273,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot add ldap accounts to user when feature flag is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -208,8 +292,8 @@ module('Acceptance | users | accounts', function (hooks) {
       authMethod,
     });
     const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
+      this.server.schema.accounts.where({ scopeId: instances.scopes.org.id })
+        .length - instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -222,6 +306,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can add ldap accounts to user when feature flag is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     features.enable('ldap-auth-methods');
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
@@ -233,8 +326,8 @@ module('Acceptance | users | accounts', function (hooks) {
       authMethod,
     });
     const accountsAvailableCount =
-      this.server.schema.accounts.all().length -
-      instances.user.accountIds.length;
+      this.server.schema.accounts.where({ scopeId: instances.scopes.org.id })
+        .length - instances.user.accountIds.length;
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -247,6 +340,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('select and save accounts to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.user.update({ accountIds: [] });
     await visit(urls.user);
 
@@ -271,6 +373,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('select and cancel accounts to add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
@@ -290,6 +401,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('shows error message on account add', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/users/:idMethod', () => {
       return new Response(
         400,
@@ -312,6 +432,15 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to account link for password account', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.user);
     await click(commonSelectors.HREF(urls.accounts));
 
@@ -326,9 +455,16 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to account link for oidc account', async function (assert) {
-    this.server.schema.authMethods.all().destroy();
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.users.all().destroy();
-    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',
@@ -355,9 +491,16 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to account link for ldap account', async function (assert) {
-    this.server.schema.authMethods.all().destroy();
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.users.all().destroy();
-    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',

@@ -1,25 +1,23 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let featuresService;
 
@@ -43,8 +41,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -74,6 +70,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to managed groups with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.authMethods);
 
     await click(commonSelectors.HREF(urls.authMethod));
@@ -92,6 +97,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
 
@@ -111,6 +125,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_collection_actions['managed-groups'] = [];
     await visit(urls.authMethods);
 
@@ -130,6 +153,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to ldap managed group index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       [];
@@ -151,6 +183,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',
     ];
@@ -164,6 +205,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',

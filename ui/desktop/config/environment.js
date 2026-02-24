@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -7,6 +7,8 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const locationType = process.env.EMBER_CLI_ELECTRON ? 'hash' : 'history';
+const ENABLE_A11Y_AUDIT = process.env.ENABLE_A11Y_AUDIT || false;
+const COLOR_THEME = process.env.COLOR_THEME ?? 'light';
 
 module.exports = function (environment) {
   const ENV = {
@@ -30,11 +32,6 @@ module.exports = function (environment) {
     isElectron: process.env.EMBER_CLI_ELECTRON
       ? JSON.parse(process.env.EMBER_CLI_ELECTRON)
       : false,
-
-    'ember-cli-mirage': {
-      //enabled: ENABLE_MIRAGE,
-      directory: '../../addons/api/mirage',
-    },
 
     api: {
       // there is no default API host in desktop
@@ -77,9 +74,14 @@ module.exports = function (environment) {
     // usually the same as the application origin.
     ENV.autoOrigin = true;
 
-    ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
-      ? JSON.parse(process.env.ENABLE_MIRAGE)
-      : true;
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'test') {
@@ -107,7 +109,14 @@ module.exports = function (environment) {
       memory: true,
     };
 
-    // Enable tests for development features
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
+
+    ENV.mirage = {
+      enabled: process.env.ENABLE_MIRAGE
+        ? JSON.parse(process.env.ENABLE_MIRAGE)
+        : true,
+    };
   }
 
   if (environment === 'production') {

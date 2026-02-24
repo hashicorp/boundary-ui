@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -9,10 +9,7 @@
  * Mixin for specifying a font-size/line-height size on an element, with
  * an option for specifying weight.
  */
-@mixin type($size, $weight: &) {
+@mixin type($size) {
   font-size: typography.font-size($size);
   line-height: typography.line-height($size);
-  @if $weight {
-    font-weight: typography.font-weight($weight);
-  }
 }

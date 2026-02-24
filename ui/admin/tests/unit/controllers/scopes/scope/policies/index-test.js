@@ -1,20 +1,18 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'admin/tests/helpers/mirage';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
   let intl;
@@ -34,12 +32,19 @@ module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({});
     intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/policies/index');
 
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create(
+      'scope',
+      { id: 'global' },
+      'withGlobalAuth',
+    );
+    await authenticateSession({
+      isGlobal: true,
+      account_id: this.server.schema.accounts.first().id,
+    });
     instances.policy = this.server.create('policy', {
       scopeId: 'global',
     });

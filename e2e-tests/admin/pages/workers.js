@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -25,7 +25,7 @@ export class WorkersPage extends BaseResourcePage {
     await this.page.getByLabel('Key').fill(key);
     await this.page.getByLabel('Value').fill(value);
     await this.page.getByRole('button', { name: 'Add' }).click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
 
     await this.dismissSuccessAlert();
   }
@@ -38,16 +38,15 @@ export class WorkersPage extends BaseResourcePage {
    */
   async editTag(origKey, newKey, newValue) {
     await this.page
-      .getByRole('table')
-      .getByRole('cell', { name: origKey })
-      .locator('..')
-      .getByRole('cell', { name: 'Overflow Options' })
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: origKey }) })
+      .getByRole('button', { name: 'Overflow Options' })
       .click();
     await this.page.getByRole('button', { name: 'Edit Tag' }).click();
 
     await this.page.getByLabel('Key').fill(newKey);
     await this.page.getByLabel('Value').fill(newValue);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
 
     await this.dismissSuccessAlert();
   }
@@ -58,10 +57,9 @@ export class WorkersPage extends BaseResourcePage {
    */
   async removeTag(key) {
     await this.page
-      .getByRole('table')
-      .getByRole('cell', { name: key })
-      .locator('..')
-      .getByRole('cell', { name: 'Overflow Options' })
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: key }) })
+      .getByRole('button', { name: 'Overflow Options' })
       .click();
     await this.page.getByRole('button', { name: 'Remove Tag' }).click();
 

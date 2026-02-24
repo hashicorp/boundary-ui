@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -44,21 +44,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
       if (!serialized.attributes?.http_method?.match(/post/i)) {
         serialized.attributes.http_request_body = null;
       }
-      const { credential_type, credential_mapping_overrides } = serialized;
-
-      // API expects to send null to fields if it is undefined or deleted
-      if (credential_mapping_overrides && !isNew) {
-        serialized.credential_mapping_overrides = options.mapping_overrides[
-          credential_type
-        ].reduce((obj, key) => {
-          if (credential_mapping_overrides[key]) {
-            obj[key] = credential_mapping_overrides[key];
-          } else {
-            obj[key] = null;
-          }
-          return obj;
-        }, {});
-      }
+      this.handleCredentialMappingOverrides(serialized, isNew);
       return serialized;
     }
   }
@@ -72,6 +58,31 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         serialized.attributes.key_bits = null;
       }
       return serialized;
+    }
+  }
+
+  /**
+   * Handle credential mapping overrides for serialization.
+   * @param {Object} serialized - The serialized object.
+   * @param {boolean} isNew - Indicates if the record is new.
+   */
+  handleCredentialMappingOverrides(serialized, isNew) {
+    const { credential_type, credential_mapping_overrides } = serialized;
+    if (Object.keys(credential_mapping_overrides).length === 0) {
+      serialized.credential_mapping_overrides = null;
+    }
+    // API expects to send null to fields if it is undefined or deleted
+    if (credential_mapping_overrides && !isNew) {
+      serialized.credential_mapping_overrides = options.mapping_overrides[
+        credential_type
+      ].reduce((obj, key) => {
+        if (credential_mapping_overrides[key]) {
+          obj[key] = credential_mapping_overrides[key];
+        } else {
+          obj[key] = null;
+        }
+        return obj;
+      }, {});
     }
   }
 }

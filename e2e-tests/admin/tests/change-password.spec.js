@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -72,6 +72,9 @@ test(
       await page.getByRole('button', { name: 'Save' }).click();
       await expect(
         page.getByRole('alert').getByText('Success', { exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole('heading', { name: 'Projects' }),
       ).toBeVisible();
 
       // Confirm user cannot log in with old password

@@ -30,13 +30,12 @@
   },
   "dependencies": {
     "@babel/core": "^7.26.10",
-    "@hashicorp/design-system-components": "^4.20.2",
+    "@hashicorp/design-system-components": "^5.2.0",
     "@hashicorp/design-system-tokens": "^2.3.0",
     "@hashicorp/flight-icons": "^3.10.0",
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.10",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
-    "ember-cli-clipboard": "^1.2.1",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-cli-sass": "^11.0.1",
     "ember-focus-trap": "^1.0.1",
@@ -50,7 +49,7 @@
     "@ember/optional-features": "^2.1.0",
     "@ember/test-helpers": "^5.2.1",
     "@embroider/test-setup": "^4.0.0",
-    "@glimmer/component": "^1.1.2",
+    "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",
@@ -66,7 +65,7 @@
     "ember-inline-svg": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
     "ember-maybe-import-regenerator": "^1.0.0",
-    "ember-modifier": "^3.2.7",
+    "ember-modifier": "^4.2.2",
     "ember-page-title": "^8.2.3",
     "ember-qunit": "^8.1.0",
     "ember-resolver": "^12.0.1",
@@ -85,10 +84,11 @@
     "prettier": "^3.3.3",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
+    "sinon": "^19.0.2",
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
-    "webpack": "^5.95.0"
+    "webpack": "^5.104.1"
   },
   "peerDependencies": {
     "ember-source": ">= 4.0.0"

@@ -1,28 +1,27 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { faker } from '@faker-js/faker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { formatDateUserFriendly } from 'admin/tests/helpers/format-date-user-friendly';
 import {
   STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_AVAILABLE,
   STATE_SESSION_RECORDING_UNKNOWN,
 } from 'api/models/session-recording';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
-module('Acceptance | session recordings | list', function (hooks) {
+module('Acceptance | session-recordings | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
   setupIntl(hooks, 'en-us');
 
   const CREATED_TIME_VALUES_ARRAY = [
@@ -32,6 +31,10 @@ module('Acceptance | session recordings | list', function (hooks) {
     '2020-01-01T00:00:10.000Z',
     '2020-01-01T00:01:00.000Z',
   ];
+
+  const CREATED_TIME_VALUES_FORMATTED = CREATED_TIME_VALUES_ARRAY.map(
+    formatDateUserFriendly,
+  );
 
   let featuresService;
   let createdTimeValues;
@@ -61,7 +64,7 @@ module('Acceptance | session recordings | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -121,11 +124,18 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-session-recording');
-
-    await authenticateSession({});
   });
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
     assert.true(
       instances.scopes.global.authorized_collection_actions[
@@ -162,6 +172,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can search for a session recording by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -177,6 +196,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can search for a session recording by id and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -193,6 +221,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -200,13 +237,23 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('user'));
+    await waitFor(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
-  test('user can filter session recordings by scope', async function (assert) {
+  test('user can filter session recordings by target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -214,13 +261,23 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('target'));
+    await waitFor(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
-  test('user can filter session recordings by target', async function (assert) {
+  test('user can filter session recordings by scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -228,6 +285,9 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('scope'));
+    await waitFor(
+      commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.scope.id),
+    );
     await click(
       commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.scope.id),
     );
@@ -237,6 +297,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by time', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -250,8 +319,19 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('session recordings table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.sessionRecordings.all().destroy();
     const expectedDescendingSort = CREATED_TIME_VALUES_ARRAY.toReversed();
+    const expectedDescendingFormattedSort =
+      CREATED_TIME_VALUES_FORMATTED.toReversed();
     faker.helpers.shuffle(expectedDescendingSort).forEach((value) => {
       this.server.create('session-recording', {
         created_time: value,
@@ -264,7 +344,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert
       .dom(commonSelectors.TABLE_ROWS)
       .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
-    expectedDescendingSort.forEach((expected, index) => {
+    expectedDescendingFormattedSort.forEach((expected, index) => {
       // nth-child index starts at 1
       assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
     });
@@ -278,7 +358,7 @@ module('Acceptance | session recordings | list', function (hooks) {
           key: 'created_time',
           values: CREATED_TIME_VALUES_ARRAY,
         },
-        expectedAscendingSort: CREATED_TIME_VALUES_ARRAY,
+        expectedAscendingSort: CREATED_TIME_VALUES_FORMATTED,
         column: 1,
       },
       'on state': {
@@ -296,6 +376,15 @@ module('Acceptance | session recordings | list', function (hooks) {
     },
 
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.sessionRecordings.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('session-recording', {

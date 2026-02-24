@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -16,8 +16,9 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated)
+    if (this.session.isAuthenticated) {
       this.router.transitionTo('scopes.scope.index');
+    }
   }
 
   /**

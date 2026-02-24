@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -21,7 +21,7 @@
   margin-bottom: sizing.rems(xs);
   padding: sizing.rems(xs) sizing.rems(xxl) sizing.rems(xs) sizing.rems(xs);
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-  border-radius: sizing.rems(xxxs);
+  border-radius: var(--token-border-radius-x-small);
   box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs)
     rgba(var(--stark-components), var(--opacity-2));
   background: var(--ui-gray-subtler-5)

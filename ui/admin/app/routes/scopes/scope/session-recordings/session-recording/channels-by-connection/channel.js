@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -56,7 +56,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       }
     } else {
       this.flashMessages.danger(this.intl.t('errors.404.title'), {
-        notificationType: 'error',
+        color: 'critical',
+        title: this.intl.t('states.error'),
         sticky: true,
         dismiss: (flash) => flash.destroyMessage(),
       });

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -13,20 +13,22 @@ import {
   fillIn,
   waitFor,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_TARGET_RDP } from 'api/models/target';
+import sinon from 'sinon';
+import { RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
   const TARGET_TABLE_CONNECT_BUTTON = (id) =>
     `[data-test-targets-connect-button="${id}"]`;
+  const TARGET_OPEN_BUTTON = `[data-test-target-detail-open-button]`;
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
   const TARGET_HOST_SOURCE_CONNECT_BUTTON = (id) =>
     `[data-test-target-connect-button=${id}]`;
@@ -81,12 +83,11 @@ module('Acceptance | projects | targets | target', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession();
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -99,9 +100,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     });
 
     // Generate resources
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -155,10 +154,23 @@ module('Acceptance | projects | targets | target', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+
+    // mock RDP service calls
+    this.rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(this.rdpService, 'initialize').resolves();
   });
 
   test('user can connect to a target with an address', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
@@ -180,6 +192,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('handles cli error on connect', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(4);
     this.ipcStub.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
@@ -196,6 +217,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('handles connect error', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(4);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
@@ -233,6 +263,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target with one host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(2);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
@@ -253,6 +292,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can search for a host source by name, description, and address', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const host1 =
       instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0];
     const host2 =
@@ -293,6 +341,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can search for host sources and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     await click(`[href="${urls.targetWithTwoHosts}"]`);
 
@@ -305,6 +362,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can see host source table when visiting a target via resource link', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetId = instances.targetWithTwoHosts.id;
 
     await visit(urls.targets);
@@ -314,6 +380,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can see host source table when visiting a target via connect button', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetId = instances.targetWithTwoHosts.id;
 
     await visit(urls.targets);
@@ -323,6 +398,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target with two hosts using host source table', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const hostId =
       instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0].id;
 
@@ -359,6 +443,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.targets);
 
       await click(`[href="${urls[input.target]}"]`);
@@ -368,6 +461,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   );
 
   test('user can use table pagination to see more hosts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     await click(`[href="${urls.targetWithManyHosts}"]`);
 
@@ -380,6 +482,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can change page size', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     await click(`[href="${urls.targetWithManyHosts}"]`);
 
@@ -391,6 +502,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details screen without read permissions for host-set', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
 
@@ -402,6 +522,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details screen without read permissions for host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
 
@@ -413,6 +542,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details and should not see the associated aliases if there are none', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(`[href="${urls.targetWithOneHost}"]`);
@@ -422,6 +560,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details and see the associated aliases', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     instances.targetWithOneHost.update({
       aliases: [{ id: instances.alias.id, value: instances.alias.value }],
@@ -431,7 +578,17 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetWithOneHost);
     assert.dom('.aliases').exists();
   });
+
   test('user can connect to a target without read permissions for host-set', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -451,6 +608,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can connect to a target without read permissions for host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -467,5 +633,113 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(TARGET_CONNECT_BUTTON);
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('shows `Open` and `Connect` button for RDP target with preferred client', async function (assert) {
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.stubCacheDaemonSearch();
+
+    await visit(urls.target);
+
+    assert.dom(TARGET_OPEN_BUTTON).exists();
+    assert.dom(TARGET_OPEN_BUTTON).hasText('Open');
+    assert.dom(TARGET_CONNECT_BUTTON).exists();
+    assert.dom(TARGET_CONNECT_BUTTON).hasText('Connect');
+  });
+
+  test('shows "Connect" button for RDP target without preferred client', async function (assert) {
+    this.rdpService.preferredRdpClient = null;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.stubCacheDaemonSearch();
+
+    await visit(urls.target);
+
+    assert.dom(TARGET_CONNECT_BUTTON).exists();
+    assert.dom(TARGET_CONNECT_BUTTON).hasText('Connect');
+  });
+
+  test('clicking `open` button for RDP target triggers launchRdpClient', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.stubCacheDaemonSearch();
+    this.ipcStub.withArgs('launchRdpClient').resolves();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.target);
+
+    await click(TARGET_OPEN_BUTTON);
+
+    assert.ok(this.ipcStub.calledWith('launchRdpClient', instances.session.id));
+  });
+
+  test('shows `Connect` button for rdp target without preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.rdpService.preferredRdpClient = null;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.stubCacheDaemonSearch();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    await visit(urls.target);
+
+    assert.dom(TARGET_CONNECT_BUTTON).exists();
+    assert.dom(TARGET_CONNECT_BUTTON).hasText('Connect');
+    assert.dom(TARGET_OPEN_BUTTON).doesNotExist();
+
+    await click(TARGET_CONNECT_BUTTON);
+
+    assert.ok(this.ipcStub.calledWith('connect'));
+    assert.notOk(this.ipcStub.calledWith('launchRdpClient'));
+  });
+
+  test('shows confirm modal when quickConnectAndLaunchRdp fails', async function (assert) {
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+    this.stubCacheDaemonSearch();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.target);
+
+    await click('[data-test-target-detail-open-button]');
+
+    // The modal should be visible because cliExists was not stubbed, and the connection failed
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
   });
 });

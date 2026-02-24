@@ -1,5 +1,5 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -152,14 +152,25 @@
           <div {{style display='inline-block'}}>
             {{#if (can 'connect target' B.data)}}
               {{#if (can 'read target' B.data)}}
-                <Hds::Button
-                  data-test-targets-connect-button={{B.data.id}}
-                  @text={{t 'resources.session.actions.connect'}}
-                  @color='secondary'
-                  @route='scopes.scope.projects.targets.target'
-                  @model={{B.data.id}}
-                  @query={{hash isConnecting=true}}
-                />
+                {{#if (and B.data.isRDP this.rdp.isPreferredRdpClientSet)}}
+                  <Hds::Button
+                    data-test-targets-open-button={{B.data.id}}
+                    @text={{t 'actions.open'}}
+                    @icon='external-link'
+                    @iconPosition='trailing'
+                    @color='secondary'
+                    {{on 'click' (fn this.quickConnectAndLaunchRdp B.data)}}
+                  />
+                {{else}}
+                  <Hds::Button
+                    data-test-targets-connect-button={{B.data.id}}
+                    @text={{t 'resources.session.actions.connect'}}
+                    @color='secondary'
+                    @route='scopes.scope.projects.targets.target'
+                    @model={{B.data.id}}
+                    @query={{hash isConnecting=true}}
+                  />
+                {{/if}}
               {{else}}
                 <Hds::Button
                   data-test-targets-connect-button={{B.data.id}}
@@ -242,9 +253,10 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <time datetime={{format-date-iso B.data.created_time}}>
-                {{format-date-iso-human B.data.created_time}}
-              </time>
+              <Hds::Time
+                @date={{B.data.created_time}}
+                @display='friendly-local'
+              />
             </B.Td>
             <B.Td>
               <div class='link-copy-button-container'>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -93,7 +93,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
     if (!search) {
       return totalItems;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const scopes = await this.store.query(
       'scope',
       {
@@ -123,7 +123,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
     if (role.scope.isGlobal && selectedProjectIDs.length) {
       const id = [];
       selectedProjectIDs.forEach((projectID) => id.push({ equals: projectID }));
-      const options = { pushToStore: false, peekIndexedDB: true };
+      const options = { pushToStore: false, peekDb: true };
       const projects = await this.store.query(
         'scope',
         { scope_id: 'global', query: { filters: { id } } },

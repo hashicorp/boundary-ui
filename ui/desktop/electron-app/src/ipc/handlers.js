@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -19,6 +19,7 @@ const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 const { releaseVersion } = require('../../config/config.js');
 const store = require('../services/electron-store-manager');
+const rdpClientManager = require('../services/rdp-client-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -71,14 +72,25 @@ handle('cliExists', () => boundaryCli.exists());
 /**
  * Establishes a boundary session and returns session details.
  */
-handle('connect', ({ target_id, token, host_id }) =>
-  sessionManager.start(runtimeSettings.clusterUrl, target_id, token, host_id),
+handle('connect', ({ target_id, token, host_id, session_max_seconds }) =>
+  sessionManager.start(
+    runtimeSettings.clusterUrl,
+    target_id,
+    token,
+    host_id,
+    session_max_seconds,
+  ),
 );
 
 /**
- * Cancel an established boundary session spawned process.
+ * Stop an established boundary session spawned process.
  */
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
+
+/**
+ * Stop all active and pending target sessions.
+ */
+handle('stopAll', async () => sessionManager.stopAll());
 
 /**
  * Check for OS window chrome. Enabled on MacOS only.
@@ -115,6 +127,12 @@ handle('toggleFullscreenWindow', () => {
  * Quit app
  */
 handle('closeWindow', () => app.quit());
+
+/**
+ * Check if session manager has running sessions
+ * Return boolean
+ */
+handle('hasRunningSessions', () => sessionManager.hasRunningSessions);
 
 /**
  * Focus the window
@@ -251,6 +269,32 @@ handle('getLogPath', () => {
       return '~/.config/Boundary/logs/desktop-client.log';
   }
 });
+
+/**
+ * Returns the available RDP clients
+ */
+handle('getRdpClients', async () => rdpClientManager.getAvailableRdpClients());
+
+/**
+ * Returns the preferred RDP client
+ */
+handle('getPreferredRdpClient', async () =>
+  rdpClientManager.getPreferredRdpClient(),
+);
+
+/**
+ * Sets the preferred RDP client
+ */
+handle('setPreferredRdpClient', (preferredClient) =>
+  rdpClientManager.setPreferredRdpClient(preferredClient),
+);
+
+/**
+ * Launches the RDP client with the provided session ID.
+ */
+handle('launchRdpClient', async (sessionId) =>
+  rdpClientManager.launchRdpClient(sessionId, sessionManager),
+);
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

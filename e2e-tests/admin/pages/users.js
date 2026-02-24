@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -21,7 +21,7 @@ export class UsersPage extends BaseResourcePage {
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page.getByLabel('Name').fill(userName);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -46,8 +46,8 @@ export class UsersPage extends BaseResourcePage {
       .getByRole('link', { name: 'Add Accounts', exact: true })
       .click();
     await this.page
-      .getByRole('cell', { name: loginName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: loginName }) })
       .getByRole('checkbox')
       .click({ force: true });
 

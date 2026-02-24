@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -41,10 +41,11 @@ test(
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+        address: targetAddress,
+      });
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
       const credentialName =
@@ -69,9 +70,8 @@ test(
 
       // Remove a credential from the target
       await page
-        .getByRole('link', { name: credentialName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: credentialName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();
@@ -92,9 +92,8 @@ test(
 
       // Remove a credential from the target
       await page
-        .getByRole('link', { name: credentialName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: credentialName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();

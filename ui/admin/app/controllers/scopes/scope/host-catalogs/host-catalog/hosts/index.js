@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -56,8 +56,9 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsIndexController exte
   cancel(host) {
     const { isNew } = host;
     host.rollbackAttributes();
-    if (isNew)
+    if (isNew) {
       this.router.transitionTo('scopes.scope.host-catalogs.host-catalog.hosts');
+    }
   }
 
   /**

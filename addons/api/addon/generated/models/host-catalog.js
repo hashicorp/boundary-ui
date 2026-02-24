@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -72,7 +72,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   @attr('string', {
     for: {
       type: 'plugin',
-      name: ['aws', 'gcp'],
+      name: ['aws', 'azure', 'gcp'],
     },
     description:
       'An expression used to filter the workers that have network access to a service that is hosting the external object store.',

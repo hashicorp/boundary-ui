@@ -1,19 +1,20 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, fillIn, find, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | storage-buckets | update', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
+  setupSqlite(hooks);
 
   let features;
 
@@ -32,7 +33,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.storageBucket = this.server.create('storage-bucket', {
       scope: instances.scopes.global,
     });
@@ -49,6 +50,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can save changes to an existing storage-bucket', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucket));
@@ -67,6 +82,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can cancel changes to an existing storage-bucket', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const name = instances.storageBucket.name;
     await visit(urls.storageBuckets);
 
@@ -80,6 +109,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can save changes to access key fields', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucket));
@@ -115,6 +158,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can cancel changes to access key fields', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucket));
@@ -138,6 +195,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('saving an existing storage-bucket with invalid fields will display error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
     this.server.patch('/storage-buckets/:id', () => {
       return new Response(
@@ -189,6 +260,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('user cannot edit scope, provider, bucket name, bucket prefix and region fields in a Amazon S3 storage bucket form', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucket));
@@ -209,6 +294,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('user cannot edit scope, provider, endpoint_url, bucket name or region fields in a MinIO storage bucket', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
 
     await click(commonSelectors.HREF(urls.storageBucketMinio));
@@ -225,6 +324,20 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('user sees an editable code editor while updating and readonly code block before/after', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.storageBuckets);
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 

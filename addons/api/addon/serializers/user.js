@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -18,8 +18,9 @@ export default class UserSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
     const accountIDs = snapshot?.adapterOptions?.accountIDs;
-    if (accountIDs)
+    if (accountIDs) {
       serialized = this.serializewithAccounts(snapshot, accountIDs);
+    }
     return serialized;
   }
 

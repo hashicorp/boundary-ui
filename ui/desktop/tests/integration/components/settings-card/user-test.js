@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -12,7 +12,6 @@ import Service from '@ember/service';
 
 const data = {
   authenticated: {
-    username: 'admin',
     authenticator: 'authenticator:password',
   },
 };
@@ -25,16 +24,23 @@ module('Integration | Component | settings-card/user', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
+  hooks.beforeEach(function () {
+    this.set('application', { showModalOrLogout: () => {} });
+  });
+
   test('it renders password correctly', async function (assert) {
     this.owner.register(
       'service:session',
       class extends Service {
         data = data;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('Password');
@@ -49,10 +55,13 @@ module('Integration | Component | settings-card/user', function (hooks) {
       class extends Service {
         data = oidcData;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('OIDC');
@@ -67,10 +76,13 @@ module('Integration | Component | settings-card/user', function (hooks) {
       class extends Service {
         data = ldapData;
         isAuthenticated = true;
+        username = 'admin';
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('LDAP');

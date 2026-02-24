@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -10,20 +10,24 @@ import {
   currentRouteName,
   click,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { setupApplicationTest } from 'desktop/tests/helpers';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
-  authenticateSession,
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
+import { TYPE_TARGET_RDP } from 'api/models/target';
+import sinon from 'sinon';
+import { RDP_CLIENT_NONE, RDP_CLIENT_WINDOWS_APP } from 'desktop/services/rdp';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
   setupStubs(hooks);
 
   let getTargetCount;
@@ -42,7 +46,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
     '[data-test-targets-sessions-flyout] .hds-flyout__title';
   const SESSIONS_FLYOUT_CLOSE_BUTTON =
     '[data-test-targets-sessions-flyout] .hds-flyout__dismiss';
-
+  const TARGET_OPEN_BUTTON = (id) => `[data-test-targets-open-button="${id}"]`;
+  const TARGET_CONNECT_BUTTON = (id) =>
+    `[data-test-targets-connect-button="${id}"]`;
   const instances = {
     scopes: {
       global: null,
@@ -74,6 +80,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     targets: null,
     target: null,
     session: null,
+    sessions: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -83,15 +90,11 @@ module('Acceptance | projects | targets | index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', {
-      id: 'global',
-      name: 'Global',
-    });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -113,9 +116,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
 
     // Generate resources
-    instances.authMethods.global = this.server.create('auth-method', {
-      scope: instances.scopes.global,
-    });
+    instances.authMethods.global = this.server.schema.authMethods.first();
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
@@ -150,6 +151,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
+    urls.sessions = `${urls.projects}/sessions`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
@@ -161,31 +163,36 @@ module('Acceptance | projects | targets | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+
+    // mock RDP service calls
+    this.rdpService = this.owner.lookup('service:rdp');
+    sinon.stub(this.rdpService, 'initialize').resolves();
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     await invalidateSession();
     this.stubCacheDaemonSearch();
     await visit(urls.targets);
-    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting targets index', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetsCount = getTargetCount();
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
-    await a11yAudit();
 
     assert.dom('.hds-segmented-group').exists();
     assert.strictEqual(currentURL(), urls.targets);
@@ -193,6 +200,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting a target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -207,7 +223,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('visiting targets list view with no targets', async function (assert) {
     this.server.schema.targets.all().destroy();
     this.server.schema.sessions.all().destroy();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -217,9 +233,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot navigate to a target without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -231,6 +256,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can connect to a target with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -244,11 +278,20 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot connect to a target without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     await visit(urls.projects);
 
@@ -263,6 +306,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
@@ -278,9 +330,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can connect without target read permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -302,11 +363,20 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can retry connect without target read permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -323,6 +393,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can open sessions flyout when target has active or pending sessions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -346,16 +425,30 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can cancel a session from inside target sessions flyout', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.stubCacheDaemonSearch(
       'sessions',
       'targets',
       'aliases',
+      'sessions',
       {
         resource: 'sessions',
         func: () => [],
       },
       'targets',
       'aliases',
+      {
+        resource: 'sessions',
+        func: () => [],
+      },
     );
     await visit(urls.projects);
 
@@ -383,9 +476,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'cancel');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -404,6 +506,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can navigate to session details from sessions table in flyout', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -421,9 +532,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
-    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -444,16 +564,27 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can change org scope and only targets for that org will be displayed', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.stubCacheDaemonSearch(
       'sessions',
       'targets',
       'aliases',
+      'sessions',
       'sessions',
       {
         resource: 'targets',
         func: () => [instances.target],
       },
       'aliases',
+      'sessions',
     );
 
     await visit(urls.scopes.global);
@@ -477,6 +608,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('targets list view still loads with no cache daemon', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
     this.stubCacheDaemonSearch();
     const targetsCount = getTargetCount();
@@ -491,6 +631,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('target includes aliases', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
     await click(`[href="${urls.targets}"]`);
 
@@ -501,5 +650,228 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert
       .dom(`[data-test-target-aliases="${instances.target2.id}"]`)
       .hasNoText();
+  });
+
+  test('active sessions are refreshed when visiting the targets list page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+
+      'sessions',
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+    );
+
+    const activeSessionFlyoutButtonSelector = (id) =>
+      `[data-test-targets-sessions-flyout-button="${id}"]`;
+
+    assert.strictEqual(instances.session.status, STATUS_SESSION_ACTIVE);
+    await visit(urls.targets);
+    const emberDataSessionModelBefore = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+
+    assert.strictEqual(
+      emberDataSessionModelBefore.status,
+      STATUS_SESSION_ACTIVE,
+    );
+
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .exists();
+
+    await click(`[href="${urls.sessions}"]`);
+
+    assert
+      .dom('.hds-table tbody tr:first-child')
+      .includesText(instances.session.id);
+    assert.dom('.hds-table tbody tr:first-child').includesText('Active');
+
+    // simulate the session has been cancelled externally
+    instances.session.status = STATUS_SESSION_TERMINATED;
+
+    await click(`[href="${urls.targets}"]`);
+
+    const emberDataSessionModelAfter = this.owner
+      .lookup('service:store')
+      .peekRecord('session', instances.session.id);
+    assert.strictEqual(
+      emberDataSessionModelAfter.status,
+      STATUS_SESSION_TERMINATED,
+    );
+    assert
+      .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
+      .doesNotExist();
+  });
+
+  test('shows `Open` button for RDP target with preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({
+      type: TYPE_TARGET_RDP,
+    });
+    await visit(urls.targets);
+
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).hasText('Open');
+    assert.dom('[data-test-icon=external-link]').exists();
+  });
+
+  test('shows `Connect` button for RDP target with no preferred client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
+    instances.target.update({
+      type: TYPE_TARGET_RDP,
+    });
+    await visit(urls.targets);
+
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).hasText('Connect');
+    assert.dom('[data-test-icon=external-link]').doesNotExist();
+  });
+
+  test('shows `Connect` button for non-RDP target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.targets);
+
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).hasText('Connect');
+  });
+
+  test('clicking `Open` button for RDP target calls launchRdpClient IPC', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.ipcStub.withArgs('launchRdpClient').resolves();
+
+    // visit targets page
+    await visit(urls.targets);
+
+    assert.dom(TARGET_OPEN_BUTTON(instances.target.id)).exists();
+
+    await click(TARGET_OPEN_BUTTON(instances.target.id));
+
+    assert.ok(this.ipcStub.calledWith('launchRdpClient', instances.session.id));
+  });
+
+  test('clicking `Connect` button for RDP target without preferred client calls connect IPC', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+
+    // visit targets page
+    await visit(urls.targets);
+
+    assert.dom(TARGET_CONNECT_BUTTON(instances.target.id)).exists();
+
+    await click(TARGET_CONNECT_BUTTON(instances.target.id));
+
+    assert.ok(this.ipcStub.calledWith('connect'));
+  });
+
+  test('shows confirm modal when connection error occurs on launching rdp client', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-02
+          enabled: false,
+        },
+      },
+    });
+
+    this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
+    instances.target.update({ type: TYPE_TARGET_RDP });
+
+    this.ipcStub.withArgs('cliExists').returns(true);
+    // target quick connection is a success but launching RDP client fails
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'rdp',
+    });
+    this.ipcStub.withArgs('launchRdpClient').rejects();
+
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.targets);
+    await click(`[data-test-targets-open-button="${instances.target.id}"]`);
+
+    // Assert that the confirm modal appears
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
   });
 });

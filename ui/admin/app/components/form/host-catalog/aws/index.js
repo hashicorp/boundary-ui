@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -34,9 +34,12 @@ export default class FormHostCatalogAwsComponent extends Component {
   }
 
   /**
-   * Returns true if current edition is HCP.
+   * Returns true if current edition is HCP and dynamic credential type is specified.
    */
   get isWorkerFilterRequired() {
-    return this.featureEdition.edition === 'hcp';
+    return (
+      this.featureEdition.edition === 'hcp' &&
+      this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC
+    );
   }
 }

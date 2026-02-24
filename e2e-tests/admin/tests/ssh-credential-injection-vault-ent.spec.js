@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -89,10 +89,11 @@ test(
 
       // Create target
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
-        targetAddress,
-        targetPort,
-      );
+      const targetName = await targetsPage.createTarget({
+        targetType: 'ssh',
+        port: targetPort,
+        address: targetAddress,
+      });
 
       // Create credentials
       const credentialStoresPage = new CredentialStoresPage(page);

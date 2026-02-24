@@ -1,9 +1,17 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 'use strict';
+
+const COLOR_THEME = process.env.COLOR_THEME ?? 'light';
+
+if (!['dark', 'light'].includes(COLOR_THEME)) {
+  throw new Error(
+    `Only values of "dark" and "light" are allowed for environment variable COLOR_THEME`,
+  );
+}
 
 module.exports = {
   test_page: 'tests/index.html?hidepassed',
@@ -13,6 +21,12 @@ module.exports = {
   browser_start_timeout: 120,
   browser_args: {
     Chrome: {
+      all: [
+        COLOR_THEME === 'dark'
+          ? '--enable-features=WebContentsForceDark'
+          : null,
+        COLOR_THEME === 'dark' ? '--force-dark-mode' : '--force-light-mode',
+      ].filter(Boolean),
       ci: [
         // --no-sandbox is needed when running Chrome inside a container
         process.env.CI ? '--no-sandbox' : null,

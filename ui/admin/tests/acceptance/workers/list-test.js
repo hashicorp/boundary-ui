@@ -1,21 +1,17 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | list', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
 
   let featuresService;
 
@@ -35,7 +31,7 @@ module('Acceptance | workers | list', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.schema.scopes.find('global');
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
     });
@@ -46,11 +42,19 @@ module('Acceptance | workers | list', function (hooks) {
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.workerTags = `${urls.worker}/tags`;
-    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 
   test('Users can navigate to workers with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     await visit(urls.globalScope);
 
@@ -63,6 +67,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users cannot navigate to workers without list or create permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = [];
     await visit(urls.globalScope);
@@ -71,6 +84,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can navigate to workers with only create permission', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = [
       'create:worker-led',
@@ -81,6 +103,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can navigate to workers with only list permission', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = ['list'];
     await visit(urls.globalScope);
@@ -89,6 +120,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can filter by tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     await visit(urls.workers);
 
@@ -102,6 +142,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can open and close tags flyout for a specific worker', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     await visit(urls.workers);
 
@@ -119,6 +168,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can see worker tags in the tags flyout', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     await visit(urls.workers);
 
@@ -132,6 +190,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can only see first 10 tags in the tags flyout', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.worker.update({
       configTags: {
@@ -159,6 +226,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can click on "view more tags" if there are more than 10 tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.worker.update({
       configTags: {
@@ -187,6 +263,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users do not see "view more tags" if there are 10 or less tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     instances.worker.update({
       configTags: {
@@ -211,6 +296,15 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users do not see worker tags flyout when returning to workers list', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow');
     await visit(urls.workers);
 

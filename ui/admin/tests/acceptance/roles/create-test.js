@@ -1,29 +1,24 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let getRolesCount;
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -36,7 +31,6 @@ module('Acceptance | roles | create', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    await authenticateSession({ username: 'admin' });
     instances.scopes.org = this.server.create(
       'scope',
       {
@@ -140,7 +134,6 @@ module('Acceptance | roles | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });

@@ -1,19 +1,18 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 {{#if @model.type}}
-  {{component
-    (concat 'form/storage-bucket/' @model.compositeType)
-    model=@model
-    submit=@submit
-    cancel=@cancel
-    updateScope=this.updateScope
-    scopes=@scopes
-    pluginTypes=this.pluginTypes
-    changePluginType=@changePluginType
-    changeCredentialType=@changeCredentialType
-    rollbackSecretAttrs=this.rollbackSecretAttrs
-    toggleDisableCredentialRotation=this.toggleDisableCredentialRotation
-  }}
+  <this.storageBucketFormComponent
+    @model={{@model}}
+    @submit={{@submit}}
+    @cancel={{@cancel}}
+    @updateScope={{this.updateScope}}
+    @scopes={{@scopes}}
+    @pluginTypes={{this.pluginTypes}}
+    @changePluginType={{@changePluginType}}
+    @changeCredentialType={{@changeCredentialType}}
+    @rollbackSecretAttrs={{this.rollbackSecretAttrs}}
+    @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}}
+  />
 {{/if}}

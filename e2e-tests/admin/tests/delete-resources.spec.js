@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -61,9 +61,9 @@ test(
       await boundaryCli.makeAuthMethodPrimary(orgId, authMethodId);
       let passwordAccountId =
         await boundaryCli.createPasswordAccount(authMethodId);
-      let projectScopeRoleId = await boundaryCli.createRole(projectId);
-      let orgScopeRoleId = await boundaryCli.createRole(orgId);
-      let globalScopeRoleId = await boundaryCli.createRole('global');
+      let projectScopeRoleId = await boundaryCli.createRole(projectId, {});
+      let orgScopeRoleId = await boundaryCli.createRole(orgId, {});
+      let globalScopeRoleId = await boundaryCli.createRole('global', {});
       let groupId = await boundaryCli.createGroup(orgId);
       let userId = await boundaryCli.createUser(orgId);
       let staticHostCatalogId =
@@ -177,7 +177,7 @@ test(
       await workersPage.deleteResource(page);
 
       // Delete project
-      await page.goto(`/scopes/${projectId}`);
+      await page.goto(`/scopes/${projectId}/edit`);
       await baseResourcePage.deleteResource(page);
 
       // Delete org

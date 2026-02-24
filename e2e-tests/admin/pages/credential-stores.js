@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -27,7 +27,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('group', { name: 'Type' })
       .getByLabel('Static')
       .click();
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -59,7 +59,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .click();
     await this.page.getByLabel('Address').fill(vaultAddr);
     await this.page.getByLabel('Token').fill(clientToken);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -97,10 +97,10 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByLabel('Address').fill(vaultAddr);
     await this.page
       .getByLabel('Worker filter')
-      .locator('textarea')
+      .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Token').fill(clientToken);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -147,18 +147,20 @@ export class CredentialStoresPage extends BaseResourcePage {
       await this.page.getByRole('link', { name: 'New Credential' }).click();
     }
 
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('Username & Key Pair')
+      .getByRole('option', { name: 'Username & Key Pair' })
       .click();
-    await this.page.getByLabel('Username', { exact: true }).fill(username);
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
     const keyData = await readFile(keyPath, {
       encoding: 'utf-8',
     });
     await this.page.getByLabel('SSH Private Key').fill(keyData);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -205,15 +207,84 @@ export class CredentialStoresPage extends BaseResourcePage {
     }
 
     const credentialName = 'Credential ' + nanoid();
-    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
     await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
     await this.page
-      .getByRole('group', { name: 'Type' })
-      .getByLabel('Username & Password')
+      .getByRole('option', { name: 'Username & Password' })
       .click();
-    await this.page.getByLabel('Username', { exact: true }).fill(username);
-    await this.page.getByLabel('Password', { exact: true }).fill(password);
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
+    await this.page
+      .getByLabel('Password Required', { exact: true })
+      .fill(password);
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(credentialName),
+    ).toBeVisible();
+
+    return credentialName;
+  }
+
+  /**
+   * Creates a static username, password & Domain credential.
+   * Assumes you have selected the desired project.
+   * @param {string} username username for the credential
+   * @param {string} password password for the credential
+   * @param {string} domain domain for the credential
+   * @returns Name of the credential
+   */
+  async createStaticCredentialUsernamePasswordDomain(
+    username,
+    password,
+    domain,
+  ) {
+    const credentialsBreadcrumbIsVisible = await this.page
+      .getByRole('breadcrumbs', { name: 'Credentials' })
+      .isVisible();
+    if (credentialsBreadcrumbIsVisible) {
+      await this.page.getByRole('breadcrumbs', { name: 'Credentials' }).click();
+    } else {
+      await this.page
+        .getByRole('link', { name: 'Credentials', exact: true })
+        .click();
+    }
+
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Credentials'),
+    ).toBeVisible();
+
+    const newButtonIsVisible = await this.page
+      .getByRole('link', { name: 'New', exact: true })
+      .isVisible();
+    if (newButtonIsVisible) {
+      await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    } else {
+      await this.page.getByText('Manage').click();
+      await this.page.getByRole('link', { name: 'New Credential' }).click();
+    }
+
+    const credentialName = 'Credential ' + nanoid();
+    await this.page.getByLabel('Name', { exact: true }).fill(credentialName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page.getByRole('combobox', { name: 'Type' }).click();
+    await this.page
+      .getByRole('option', { name: 'Username, Password & Domain' })
+      .click();
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
+    await this.page
+      .getByLabel('Password Required', { exact: true })
+      .fill(password);
+    await this.page.getByLabel('Domain Required', { exact: true }).fill(domain);
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
       this.page
@@ -237,11 +308,9 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'Credential Libraries' }).click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
     await this.page
-      .getByLabel('Name (Optional)', { exact: true })
+      .getByLabel('Name', { exact: true })
       .fill(credentialLibraryName);
-    await this.page
-      .getByLabel('Description (Optional)')
-      .fill('This is an automated test');
+    await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
       .getByLabel('Generic Secrets')
@@ -254,7 +323,7 @@ export class CredentialStoresPage extends BaseResourcePage {
         .selectOption(credentialType);
     }
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
 
     return credentialLibraryName;
@@ -274,11 +343,9 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
 
     await this.page
-      .getByLabel('Name (Optional)', { exact: true })
+      .getByLabel('Name', { exact: true })
       .fill(credentialLibraryName);
-    await this.page
-      .getByLabel('Description (Optional)')
-      .fill('This is an automated test');
+    await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
       .getByRole('group', { name: 'Type' })
       .getByLabel('SSH Certificates')
@@ -297,7 +364,7 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByRole('button', { name: 'Add' })
       .click();
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
 
     return credentialLibraryName;

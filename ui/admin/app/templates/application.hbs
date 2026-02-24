@@ -1,5 +1,5 @@
 {{!
-  Copyright (c) HashiCorp, Inc.
+  Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
 }}
 
@@ -54,45 +54,90 @@
                   >
                     {{feature}}
                   </dd.Checkbox>
+
                 {{/each}}
+                <dd.Separator />
+                <dd.Title @text={{t 'actions.manage-db'}} />
+                <dd.Interactive
+                  @icon='save'
+                  @isLoading={{(is-loading)}}
+                  {{on 'click' this.downloadDatabase}}
+                >
+                  {{t 'actions.download-db'}}
+                </dd.Interactive>
+                <dd.Interactive @icon='trash' {{on 'click' this.clearDatabase}}>
+                  {{t 'actions.clear-db'}}
+                </dd.Interactive>
               </Hds::Dropdown>
             {{/if}}
 
-            <Hds::Dropdown
-              @enableCollisionDetection={{true}}
-              data-test-side-nav-user-dropdown
-              as |dd|
-            >
-              {{#if this.session.data.authenticated.username}}
+            {{#if this.session.username}}
+              <Hds::Dropdown
+                @enableCollisionDetection={{true}}
+                class='user-menu-dropdown'
+                data-test-side-nav-user-dropdown
+                as |dd|
+              >
                 <dd.ToggleButton
                   @icon='user'
-                  @text={{this.session.data.authenticated.username}}
+                  @text={{this.session.username}}
+                  {{hds-tooltip this.session.username}}
+                  class='user-menu-dropdown__toggle-button'
                 />
-              {{else}}
+                <dd.Title @text={{t 'titles.authenticated'}} />
+                <dd.Description @text={{this.session.username}} />
+                <dd.Separator />
+
+                <dd.Interactive @route='account.change-password'>{{t
+                    'actions.change-password'
+                  }}</dd.Interactive>
+                <dd.Separator />
+
+                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                    'actions.deauthenticate'
+                  }}</dd.Interactive>
+                <dd.Separator />
+
+                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+                {{#each this.themes as |theme|}}
+                  <dd.Radio
+                    @value={{theme.value}}
+                    checked={{eq this.session.data.theme theme.value}}
+                    {{on 'change' (fn this.toggleTheme theme.value)}}
+                  >
+                    {{t (concat 'themes.' theme.label)}}
+                  </dd.Radio>
+                {{/each}}
+              </Hds::Dropdown>
+            {{else}}
+              <Hds::Dropdown
+                @enableCollisionDetection={{true}}
+                data-test-side-nav-user-dropdown
+                as |dd|
+              >
                 <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
-              {{/if}}
+                <dd.Interactive @route='account.change-password'>{{t
+                    'actions.change-password'
+                  }}</dd.Interactive>
+                <dd.Separator />
 
-              <dd.Interactive @route='account.change-password'>{{t
-                  'actions.change-password'
-                }}</dd.Interactive>
-              <dd.Separator />
+                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                    'actions.deauthenticate'
+                  }}</dd.Interactive>
+                <dd.Separator />
 
-              <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
-                  'actions.deauthenticate'
-                }}</dd.Interactive>
-              <dd.Separator />
-
-              <dd.Title @text={{t 'actions.toggle-color-theme'}} />
-              {{#each this.themes as |theme|}}
-                <dd.Radio
-                  @value={{theme.value}}
-                  checked={{eq this.session.data.theme theme.value}}
-                  {{on 'change' (fn this.toggleTheme theme.value)}}
-                >
-                  {{t (concat 'themes.' theme.label)}}
-                </dd.Radio>
-              {{/each}}
-            </Hds::Dropdown>
+                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+                {{#each this.themes as |theme|}}
+                  <dd.Radio
+                    @value={{theme.value}}
+                    checked={{eq this.session.data.theme theme.value}}
+                    {{on 'change' (fn this.toggleTheme theme.value)}}
+                  >
+                    {{t (concat 'themes.' theme.label)}}
+                  </dd.Radio>
+                {{/each}}
+              </Hds::Dropdown>
+            {{/if}}
           </:actions>
         </Hds::SideNav::Header>
       </:header>
@@ -124,12 +169,12 @@
     {{#each this.flashMessages.queue as |flash|}}
       <div class='ember-notify-show ember-notify'>
         <Hds::Toast
-          @color={{map-type-to-color flash.notificationType}}
+          @color={{flash.color}}
           @onDismiss={{fn flash.dismiss flash}}
           data-test-toast-notification
           as |T|
         >
-          <T.Title>{{t (concat 'states.' flash.notificationType)}}</T.Title>
+          <T.Title>{{flash.title}}</T.Title>
           <T.Description>{{flash.message}}</T.Description>
         </Hds::Toast>
       </div>
@@ -171,3 +216,5 @@
     </M.Footer>
   </Hds::Modal>
 </PendingConfirmations>
+
+<BasicDropdownWormhole />

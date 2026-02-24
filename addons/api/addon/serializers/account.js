@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -98,8 +98,9 @@ export default class AccountSerializer extends ApplicationSerializer {
       serialized.attributes = {};
     }
     // New record case
-    if (password && snapshot?.record?.isNew)
+    if (password && snapshot?.record?.isNew) {
       serialized.attributes.password = password;
+    }
     // Set password custom method
     if (snapshot?.adapterOptions?.method === 'set-password') {
       serialized = this.serializeForSetPassword(snapshot, password);

@@ -1,12 +1,12 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'desktop/tests/helpers/mirage';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { waitUntil, visit } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -15,7 +15,11 @@ import {
   STATUS_SESSION_PENDING,
   STATUS_SESSION_CANCELING,
 } from 'api/models/session';
-import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
+import {
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 
 module(
   'Unit | Controller | scopes/scope/projects/targets/index',
@@ -44,13 +48,17 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      await authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/projects/targets/index',
       );
 
-      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.scopes.global = this.server.create(
+        'scope',
+        { id: 'global' },
+        'withGlobalAuth',
+      );
+      instances.account = this.server.schema.accounts.first();
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
         scope: { id: 'global', type: 'global' },
@@ -72,7 +80,8 @@ module(
       urls.targets = `${urls.projectScope}/targets`;
 
       this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+      await authenticateSession({ account_id: instances.account.id });
     });
 
     test('it exists', function (assert) {
@@ -89,7 +98,7 @@ module(
 
     test('noResults returns truthy when no targets exist but there is a search term', async function (assert) {
       this.server.schema.targets.all().destroy();
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       controller.search = 'target that does not exist';
       await visit(urls.targets);
 
@@ -98,7 +107,7 @@ module(
 
     test('noTargets returns truthy when no targets exist', async function (assert) {
       this.server.schema.targets.all().destroy();
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await visit(urls.targets);
 
       assert.ok(controller.noTargets);
@@ -139,7 +148,7 @@ module(
         'target',
         instances.target.id,
       );
-      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
+      this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
       await visit(urls.targets);
 
       const sortedSessions = controller.sortedTargetSessions;
@@ -167,6 +176,7 @@ module(
       assert.deepEqual(controller.targetTypeOptions, [
         { id: TYPE_TARGET_TCP, name: 'Generic TCP' },
         { id: TYPE_TARGET_SSH, name: 'SSH' },
+        { id: TYPE_TARGET_RDP, name: 'RDP' },
       ]);
     });
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) HashiCorp, Inc.
+ * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
 
@@ -13,17 +13,15 @@ import {
   waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
-  setupMirage(hooks);
-  setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   let featuresService;
   let getCredentialStoresCount;
@@ -32,7 +30,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
       project: null,
     },
@@ -45,7 +42,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
   hooks.beforeEach(async function () {
     // Generate resources
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -69,7 +65,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
       return this.server.schema.credentialStores.where({ type: 'vault' }).models
         .length;
     };
-    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 
@@ -85,6 +80,15 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can create a new credential store of type vault', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     const count = getVaultCredentialStoresCount();
     await visit(urls.newCredentialStore);
@@ -97,6 +101,20 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can create a new credential store of type vault with a worker filter', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     featuresService.enable('worker-filter');
     const count = getVaultCredentialStoresCount();
@@ -122,6 +140,15 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can cancel create new credential stores', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
 
@@ -147,6 +174,15 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('saving a new static credential store with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMsg =
       'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/credential-stores', () => {
@@ -168,6 +204,15 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('saving a new vault credential store with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/credential-stores', () => {
       return new Response(
         400,
@@ -201,6 +246,15 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can link to docs page for new credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.newCredentialStore);
 
     assert
