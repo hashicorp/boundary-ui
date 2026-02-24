@@ -42,9 +42,11 @@
   },
   "dependencies": {
     "@babel/runtime": "7.27.6",
+    "@ember/string": "^4.0.0",
     "@xterm/addon-canvas": "^0.7.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
+    "ember-inflector": "^6.0.0",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.23",
     "uuid": "^11.0.3"
@@ -55,7 +57,6 @@
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@ember/optional-features": "^2.1.0",
     "@ember/render-modifiers": "^2.0.4",
-    "@ember/string": "^4.0.0",
     "@ember/test-helpers": "^5.2.1",
     "@embroider/macros": "^1.18.1",
     "@faker-js/faker": "^8.0.2",
