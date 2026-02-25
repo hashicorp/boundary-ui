@@ -57,7 +57,7 @@ module('Acceptance | accounts | change password', function (hooks) {
 
     await visit(urls.orgScope);
 
-    await click(commonSelectors.SIDEBAR_USER_DROPDOWN);
+    await click(commonSelectors.HEADER_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
 
     assert.strictEqual(currentURL(), urls.changePassword);
@@ -150,7 +150,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(commonSelectors.SIDEBAR_USER_DROPDOWN);
+    await click(commonSelectors.HEADER_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
     await fillIn(
       selectors.FIELD_CURRENT_PASSWORD,
