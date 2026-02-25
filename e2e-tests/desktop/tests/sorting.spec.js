@@ -48,6 +48,16 @@ test.afterEach(async ({ request }) => {
 });
 
 test('Sorts targets table by name correctly', async ({ authedPage }) => {
+  await expect(
+    authedPage.getByRole('heading', { name: 'Targets' }),
+  ).toBeVisible();
+
+  // Assert table is visible and loaded before switching scopes since there is a bug
+  // where page errors out if we switch scopes before the table loads.
+  const table = authedPage.getByRole('table');
+  await expect(table).toBeVisible();
+
+  // Switch to org scope to see targets created in beforeEach
   const headerNavLocator = authedPage.getByLabel('header-nav');
   await expect(headerNavLocator).toBeVisible();
   await headerNavLocator.click();
@@ -56,15 +66,9 @@ test('Sorts targets table by name correctly', async ({ authedPage }) => {
     headerNavLocator.locator('.hds-dropdown-toggle-button'),
   ).toHaveText(org.name);
 
-  await expect(
-    authedPage.getByRole('heading', { name: 'Targets' }),
-  ).toBeVisible();
-
-  const table = authedPage.getByRole('table');
   const tableRows = table
     .getByRole('row')
     .filter({ hasNot: authedPage.getByRole('columnheader') });
-
   await expect(tableRows).toHaveCount(targetNamesToCreate.length);
 
   // Assert "Name" column is present
