@@ -48,7 +48,7 @@ test(
     await page.getByRole('link', { name: org.name }).click();
     await page.getByRole('link', { name: project.name }).click();
     await page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await expect(page.getByRole('heading', { name: 'Targets' })).toBeVisible();
