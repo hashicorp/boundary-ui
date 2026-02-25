@@ -555,13 +555,10 @@ importers:
         version: 2.3.0
       '@hashicorp/flight-icons':
         specifier: ^3.10.0
-        version: 3.11.1
+        version: 3.10.0
       '@nullvoxpopuli/ember-composable-helpers':
         specifier: ^5.2.10
         version: 5.2.10(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))
-      codemirror:
-        specifier: 5.65.7
-        version: 5.65.7
       ember-auto-import:
         specifier: ^2.10.0
         version: 2.10.0(@glint/template@1.5.2)(webpack@5.104.1(esbuild@0.25.9))

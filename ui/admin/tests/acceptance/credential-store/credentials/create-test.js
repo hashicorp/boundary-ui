@@ -447,7 +447,6 @@ module(
       assert
         .dom(commonSelectors.CODE_EDITOR_CODE)
         .includesText('{"test": "value"}');
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
       await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
