@@ -5,151 +5,160 @@
 
 {{page-title (app-name)}}
 
-<Hds::AppFrame @hasHeader={{false}} @hasSidebar={{this.showSideNav}} as |Frame|>
-  <Frame.Sidebar class='app-frame-sidebar-style-overrides'>
-    <Hds::SideNav
+<Hds::AppFrame
+  @hasHeader={{this.showSideNav}}
+  @hasSidebar={{this.showSideNav}}
+  as |Frame|
+>
+  <Frame.Header>
+    <Hds::AppHeader
       @a11yRefocusRouteChangeValidator={{this.customRouteChangeValidator}}
-      class='side-nav-style-overrides'
+      class='app-header-dark-mode-overrides'
     >
-      <:header>
-        <Hds::SideNav::Header>
-          <:logo>
-            <Hds::SideNav::Header::HomeLink
-              @icon='boundary'
-              @color='var(--token-color-boundary-brand)'
-              @ariaLabel={{(app-name)}}
-              @route='index'
-            />
-          </:logo>
-          <:actions>
-            {{#if (feature-flag 'dev-edition-toggle')}}
-              <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
-                <dd.ToggleIcon
-                  @icon='layers'
-                  @text={{t
-                    'titles.feature-edition'
-                    edition=this.featureEdition.edition
-                  }}
-                  data-test-dev-edition-toggle
-                />
+      <:logo>
+        <Hds::AppHeader::HomeLink
+          @icon='boundary'
+          @color='var(--token-color-boundary-brand)'
+          @text={{(app-name)}}
+          @route='index'
+          class='home-link-color-override'
+        />
+      </:logo>
 
-                <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
-                {{#each this.featureEdition.editions as |edition|}}
-                  <dd.Radio
-                    @value={{edition}}
-                    checked={{eq this.featureEdition.edition edition}}
-                    {{on 'change' (fn this.toggleEdition edition)}}
-                  >
-                    {{edition}}
-                  </dd.Radio>
-                {{/each}}
-                <dd.Separator />
-
-                <dd.Title @text={{t 'actions.toggle-licensed-features'}} />
-                {{#each this.featureEdition.licensedFeatures as |feature|}}
-                  <dd.Checkbox
-                    @value={{feature}}
-                    checked={{feature-flag feature}}
-                    {{on 'change' (fn this.toggleFeature feature)}}
-                  >
-                    {{feature}}
-                  </dd.Checkbox>
-
-                {{/each}}
-                <dd.Separator />
-                <dd.Title @text={{t 'actions.manage-db'}} />
-                <dd.Interactive
-                  @icon='save'
-                  @isLoading={{(is-loading)}}
-                  {{on 'click' this.downloadDatabase}}
-                >
-                  {{t 'actions.download-db'}}
-                </dd.Interactive>
-                <dd.Interactive @icon='trash' {{on 'click' this.clearDatabase}}>
-                  {{t 'actions.clear-db'}}
-                </dd.Interactive>
-              </Hds::Dropdown>
-            {{/if}}
-
-            {{#if this.session.username}}
-              <Hds::Dropdown
-                @enableCollisionDetection={{true}}
-                class='user-menu-dropdown'
-                data-test-side-nav-user-dropdown
-                as |dd|
-              >
-                <dd.ToggleButton
-                  @icon='user'
-                  @text={{this.session.username}}
-                  {{hds-tooltip this.session.username}}
-                  class='user-menu-dropdown__toggle-button'
-                />
-                <dd.Title @text={{t 'titles.authenticated'}} />
-                <dd.Description @text={{this.session.username}} />
-                <dd.Separator />
-
-                <dd.Interactive @route='account.change-password'>{{t
-                    'actions.change-password'
-                  }}</dd.Interactive>
-                <dd.Separator />
-
-                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
-                    'actions.deauthenticate'
-                  }}</dd.Interactive>
-                <dd.Separator />
-
-                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
-                {{#each this.themes as |theme|}}
-                  <dd.Radio
-                    @value={{theme.value}}
-                    checked={{eq this.session.data.theme theme.value}}
-                    {{on 'change' (fn this.toggleTheme theme.value)}}
-                  >
-                    {{t (concat 'themes.' theme.label)}}
-                  </dd.Radio>
-                {{/each}}
-              </Hds::Dropdown>
-            {{else}}
-              <Hds::Dropdown
-                @enableCollisionDetection={{true}}
-                data-test-side-nav-user-dropdown
-                as |dd|
-              >
-                <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
-                <dd.Interactive @route='account.change-password'>{{t
-                    'actions.change-password'
-                  }}</dd.Interactive>
-                <dd.Separator />
-
-                <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
-                    'actions.deauthenticate'
-                  }}</dd.Interactive>
-                <dd.Separator />
-
-                <dd.Title @text={{t 'actions.toggle-color-theme'}} />
-                {{#each this.themes as |theme|}}
-                  <dd.Radio
-                    @value={{theme.value}}
-                    checked={{eq this.session.data.theme theme.value}}
-                    {{on 'change' (fn this.toggleTheme theme.value)}}
-                  >
-                    {{t (concat 'themes.' theme.label)}}
-                  </dd.Radio>
-                {{/each}}
-              </Hds::Dropdown>
-            {{/if}}
-          </:actions>
-        </Hds::SideNav::Header>
-      </:header>
-
-      <:body>
-        <Hds::SideNav::Portal::Target />
-      </:body>
-
-      <:footer>
+      <:globalActions>
         <ScopePicker />
-      </:footer>
-    </Hds::SideNav>
+      </:globalActions>
+
+      <:utilityActions>
+        {{#if (feature-flag 'dev-edition-toggle')}}
+          <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
+            <dd.ToggleIcon
+              @icon='layers'
+              @text={{t
+                'titles.feature-edition'
+                edition=this.featureEdition.edition
+              }}
+              class='dropdown-toggle-color-override'
+              data-test-dev-edition-toggle
+            />
+            <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
+            {{#each this.featureEdition.editions as |edition|}}
+              <dd.Radio
+                @value={{edition}}
+                checked={{eq this.featureEdition.edition edition}}
+                {{on 'change' (fn this.toggleEdition edition)}}
+              >
+                {{edition}}
+              </dd.Radio>
+            {{/each}}
+            <dd.Separator />
+
+            <dd.Title @text={{t 'actions.toggle-licensed-features'}} />
+            {{#each this.featureEdition.licensedFeatures as |feature|}}
+              <dd.Checkbox
+                @value={{feature}}
+                checked={{feature-flag feature}}
+                {{on 'change' (fn this.toggleFeature feature)}}
+              >
+                {{feature}}
+              </dd.Checkbox>
+            {{/each}}
+            <dd.Separator />
+
+            <dd.Title @text={{t 'actions.manage-db'}} />
+            <dd.Interactive
+              @icon='save'
+              @isLoading={{(is-loading)}}
+              {{on 'click' this.downloadDatabase}}
+            >
+              {{t 'actions.download-db'}}
+            </dd.Interactive>
+            <dd.Interactive @icon='trash' {{on 'click' this.clearDatabase}}>
+              {{t 'actions.clear-db'}}
+            </dd.Interactive>
+          </Hds::Dropdown>
+        {{/if}}
+
+        {{#if this.session.username}}
+          <Hds::Dropdown
+            @enableCollisionDetection={{true}}
+            class='user-menu-dropdown'
+            data-test-header-user-dropdown
+            as |dd|
+          >
+            <dd.ToggleButton
+              @icon='user'
+              @text={{this.session.username}}
+              {{hds-tooltip this.session.username}}
+              class='user-menu-dropdown__toggle-button dropdown-toggle-color-override'
+            />
+            <dd.Title @text={{t 'titles.authenticated'}} />
+            <dd.Description @text={{this.session.username}} />
+            <dd.Separator />
+
+            <dd.Interactive @route='account.change-password'>{{t
+                'actions.change-password'
+              }}</dd.Interactive>
+            <dd.Separator />
+
+            <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                'actions.deauthenticate'
+              }}</dd.Interactive>
+            <dd.Separator />
+
+            <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+            {{#each this.themes as |theme|}}
+              <dd.Radio
+                @value={{theme.value}}
+                checked={{eq this.session.data.theme theme.value}}
+                {{on 'change' (fn this.toggleTheme theme.value)}}
+              >
+                {{t (concat 'themes.' theme.label)}}
+              </dd.Radio>
+            {{/each}}
+          </Hds::Dropdown>
+        {{else}}
+          <Hds::Dropdown
+            @enableCollisionDetection={{true}}
+            data-test-header-user-dropdown
+            as |dd|
+          >
+            <dd.ToggleIcon
+              @icon='user'
+              @text={{t 'titles.user-menu'}}
+              class='dropdown-toggle-color-override'
+            />
+            <dd.Interactive @route='account.change-password'>{{t
+                'actions.change-password'
+              }}</dd.Interactive>
+            <dd.Separator />
+
+            <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                'actions.deauthenticate'
+              }}</dd.Interactive>
+            <dd.Separator />
+
+            <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+            {{#each this.themes as |theme|}}
+              <dd.Radio
+                @value={{theme.value}}
+                checked={{eq this.session.data.theme theme.value}}
+                {{on 'change' (fn this.toggleTheme theme.value)}}
+              >
+                {{t (concat 'themes.' theme.label)}}
+              </dd.Radio>
+            {{/each}}
+          </Hds::Dropdown>
+        {{/if}}
+      </:utilityActions>
+
+    </Hds::AppHeader>
+  </Frame.Header>
+
+  <Frame.Sidebar>
+    <Hds::AppSideNav>
+      <Hds::AppSideNav::Portal::Target />
+    </Hds::AppSideNav>
   </Frame.Sidebar>
 
   <Frame.Main>

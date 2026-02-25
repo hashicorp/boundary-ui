@@ -53,12 +53,12 @@ export default class ScopesScopeRoute extends Route {
    */
   async afterModel(model) {
     // First, load orgs and, if necessary, projects
-    let orgs, projects;
+    let orgs;
     orgs = await this.store
       .query('scope', { scope_id: 'global' })
       .catch(() => new TrackedArray([]));
     if (model.isProject) {
-      projects = await this.store.query('scope', { scope_id: model.scopeID });
+      await this.store.query('scope', { scope_id: model.scopeID });
     }
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg, selectedProject;
@@ -70,16 +70,6 @@ export default class ScopesScopeRoute extends Route {
     // Update the scope service with the current scope(s);
     this.scope.org = selectedOrg;
     this.scope.project = selectedProject;
-    this.scopes = { orgs, projects, selectedOrg, selectedProject };
-  }
-
-  /**
-   * Adds the scopes hash to the controller context (see `afterModel`).
-   * @param {Controller} controller
-   */
-  setupController(controller) {
-    super.setupController(...arguments);
-    const scopes = this.scopes;
-    controller.setProperties({ scopes });
+    this.scope.orgsList = orgs;
   }
 }

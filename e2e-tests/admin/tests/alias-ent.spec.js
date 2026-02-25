@@ -93,7 +93,7 @@ test.describe('Aliases (Enterprise)', () => {
 
         // Clear destination from alias
         await page
-          .getByRole('navigation', { name: 'Application local navigation' })
+          .getByRole('navigation', { name: 'Primary' })
           .getByRole('link', { name: 'Targets' })
           .click();
         await page.getByRole('link', { name: targetName }).click();
@@ -285,7 +285,7 @@ test.describe('Aliases (Enterprise)', () => {
         const aliasesPage = new AliasesPage(page);
         await aliasesPage.createAliasForTarget(alias, targetId);
         await page
-          .getByRole('navigation', { name: 'Application local navigation' })
+          .getByRole('navigation', { name: 'Primary' })
           .getByRole('link', { name: 'Orgs' })
           .click();
         await page.getByRole('link', { name: orgName }).click();

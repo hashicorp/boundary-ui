@@ -44,21 +44,18 @@ export const PAGE_MESSAGE_LINK =
 export const HREF = (url) => `[href="${url}"]`;
 
 export const SIDEBAR_NAV_LINK = (url) =>
-  `.hds-side-nav__content a[href="${url}"]`;
-export const SIDEBAR_NAV_CONTENT = '.hds-side-nav__content';
-export const SIDEBAR_USER_DROPDOWN =
-  '[data-test-side-nav-user-dropdown] button';
-export const SIDEBAR_SCOPE_DROPDOWN =
-  '[data-test-side-nav-scope-dropdown] button';
-export const SIDEBAR_SCOPE_LINK = (url) =>
-  `[data-test-side-nav-scope-dropdown] a[href="${url}"]`;
+  `.hds-app-side-nav__list a[href="${url}"]`;
+export const SIDEBAR_NAV_CONTENT = '.hds-app-side-nav__list';
+export const HEADER_USER_DROPDOWN = '[data-test-header-user-dropdown] button';
+export const HEADER_SCOPE_DROPDOWN = '[data-test-header-scope-dropdown] button';
+export const HEADER_SCOPE_LINK = (url) =>
+  `[data-test-header-scope-dropdown] a[href="${url}"]`;
 export const TOGGLE_THEME_DEFAULT =
-  '[data-test-side-nav-user-dropdown] [value=system-default-theme]';
+  '[data-test-header-user-dropdown] [value=system-default-theme]';
 export const TOGGLE_THEME_LIGHT =
-  '[data-test-side-nav-user-dropdown] [value=light]';
+  '[data-test-header-user-dropdown] [value=light]';
 export const TOGGLE_THEME_DARK =
-  '[data-test-side-nav-user-dropdown] [value=dark]';
-
+  '[data-test-header-user-dropdown] [value=dark]';
 export const ALERT_TOAST = '[data-test-toast-notification]';
 export const ALERT_TOAST_BODY =
   '[data-test-toast-notification] .hds-alert__description';

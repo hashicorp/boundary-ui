@@ -69,8 +69,7 @@ module('Acceptance | authentication', function (hooks) {
   const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
   const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
   const MODAL_CANCEL_BTN = '.hds-modal__footer .hds-button--color-secondary';
-  const HEADER_DROPDOWN_BTN =
-    '.rose-header-utilities .header-dropdown-button-override button';
+  const HEADER_DROPDOWN_BTN = '.app-header__utility-actions button';
 
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;

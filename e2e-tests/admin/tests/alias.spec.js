@@ -75,7 +75,7 @@ test.describe('Aliases', () => {
 
         // Clear destination from alias
         await page
-          .getByRole('navigation', { name: 'Application local navigation' })
+          .getByRole('navigation', { name: 'Primary' })
           .getByRole('link', { name: 'Targets' })
           .click();
         await page.getByRole('link', { name: targetName }).click();

@@ -168,7 +168,7 @@ test(
         .getByRole('link', { name: 'Back to Global', exact: true })
         .click();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Session Recordings', exact: true })
         .click();
       await page

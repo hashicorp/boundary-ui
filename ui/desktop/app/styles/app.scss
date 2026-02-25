@@ -24,34 +24,6 @@
   }
 }
 
-/**
- * This section enables scrolling within the sidebar columns separately,
- * rather than the whole viewport.  This ensures the sidebar and application
- * header remain visible when scrolling.
- */
-.rose-layout-global {
-  max-height: 100vh;
-
-  .rose-layout-global-body {
-    max-height: 100vh;
-    overflow: auto;
-
-    main {
-      /** This overrides the main defined within Rose.
-       * HDS has this set to 1.5rem top/bottom 3rem left/right. HDS assumes the usage of breadcrumbs
-       * but the DC have no breadcrumbs, so we will keep it at 3rem all around.
-      */
-      padding: 3rem;
-      flex-grow: 1;
-    }
-  }
-
-  .rose-layout-sidebar-sidebar,
-  .rose-layout-sidebar-body {
-    overflow-y: auto;
-  }
-}
-
 .rose-nav-sidebar {
   margin-top: sizing.rems(xxl);
 
@@ -74,95 +46,11 @@
   }
 }
 
-.rose-header {
-  -webkit-app-region: drag;
-  min-height: sizing.rems(l) * 2;
-  position: relative;
-  -webkit-user-select: none;
-
-  .rose-header-brand,
-  .rose-header-nav,
-  .rose-header-utilities button {
-    -webkit-app-region: no-drag;
-  }
-
-  &.header-cushion {
-    padding-left: sizing.rems(l) * 3;
-  }
-
-  .button-window-minimize,
-  .button-window-fullscreen,
-  .button-window-close {
-    background: transparent;
-    border: transparent;
-    color: var(--white);
-    margin: sizing.rems(xs);
-  }
-
-  .button-window-close {
-    &:hover {
-      background: var(--failure);
-    }
-  }
-
-  .button-window-minimize,
-  .button-window-fullscreen {
-    &:hover {
-      background: var(--white);
-      color: var(--black);
-    }
-  }
-
-  .logotype {
-    display: none;
-  }
-
-  &.loading {
-    &::after {
-      animation: gradient 1s linear infinite;
-      background: repeating-linear-gradient(
-        to right,
-        var(--subtle),
-        var(--subtle),
-        var(--info),
-        var(--subtle),
-        var(--subtle)
-      );
-      background-position: -100% 0;
-      background-size: 200% auto;
-      content: ' ';
-      height: 3px;
-      left: 0;
-      position: absolute;
-      right: 0;
-      top: 100%;
-
-      @keyframes gradient {
-        0% {
-          background-position: -100% 0;
-        }
-
-        100% {
-          background-position: -200% 0;
-        }
-      }
-    }
-  }
-}
-
-[class*='session-status-'] {
-  color: var(--ui-gray-subtler-2);
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
 .branded-card {
   border: 1px solid var(--ui-border-subtler-1);
   border-radius: var(--token-border-radius-x-small);
   margin: 0 auto;
-  margin-top: sizing.rems(l) * 1.25;
+  margin-top: sizing.rems(xl) * 1.5;
   padding: (sizing.rems(l) * 4) (sizing.rems(l) * 3) (sizing.rems(l) * 2)
     (sizing.rems(l) * 3);
   position: relative;
@@ -421,6 +309,47 @@
 
     .hds-alert {
       flex-basis: 100%;
+    }
+  }
+}
+
+.app-header {
+  -webkit-app-region: drag;
+  user-select: none;
+
+  &.header-cushion {
+    padding-left: sizing.rems(l) * 4;
+  }
+
+  &__logo,
+  &__global-actions,
+  &__utility-actions,
+  .hds-app-header__menu-button {
+    -webkit-app-region: no-drag;
+  }
+
+  .hds-app-header__utility-actions {
+    .button-window-minimize,
+    .button-window-fullscreen,
+    .button-window-close {
+      background: transparent;
+      border: transparent;
+      color: var(--white);
+      margin: sizing.rems(xs);
+    }
+
+    .button-window-close {
+      &:hover {
+        background: var(--failure);
+      }
+    }
+
+    .button-window-minimize,
+    .button-window-fullscreen {
+      &:hover {
+        background: var(--white);
+        color: var(--black);
+      }
     }
   }
 }

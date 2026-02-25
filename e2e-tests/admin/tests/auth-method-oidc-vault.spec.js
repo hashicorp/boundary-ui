@@ -147,7 +147,7 @@ test(
           .getByText(orgName),
       ).toBeVisible();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await page.getByRole('link', { name: oidcAuthMethodName }).click();
@@ -236,7 +236,7 @@ test(
 
       // View the User account and verify attributes
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Users' })
         .click();
       await page

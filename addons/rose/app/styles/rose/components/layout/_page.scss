@@ -18,6 +18,7 @@
   .rose-layout-page-header {
     grid-area: header;
     margin-bottom: sizing.rems(s);
+    margin-top: sizing.rems(l);
 
     h1 {
       display: flex;

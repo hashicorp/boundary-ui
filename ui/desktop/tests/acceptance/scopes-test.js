@@ -258,17 +258,23 @@ module('Acceptance | scopes', function (hooks) {
     );
     await visit(urls.targets);
 
-    await click('.rose-header-nav .hds-dropdown-toggle-button');
-
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org}"]`,
+    );
 
     assert.strictEqual(currentURL(), urls.targets);
 
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(4) a');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org2}"]`,
+    );
 
     assert.strictEqual(currentURL(), urls.org2Targets);
 
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(1) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.global}"]`,
+    );
 
     assert.strictEqual(currentURL(), urls.globalTargets);
   });

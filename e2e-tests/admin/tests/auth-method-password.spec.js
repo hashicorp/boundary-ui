@@ -75,7 +75,7 @@ test(
 
       // Set a new password on the account
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Orgs' })
         .click();
       await page.getByRole('link', { name: orgName }).click();
@@ -85,7 +85,7 @@ test(
           .getByText(orgName),
       ).toBeVisible();
       await page
-        .getByRole('navigation', { name: 'Application local navigation' })
+        .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await page.getByRole('link', { name: authMethodName }).click();
