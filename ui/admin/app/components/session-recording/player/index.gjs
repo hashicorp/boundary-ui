@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Button from '@hashicorp/design-system-components/components/hds/button/index';
 import t from 'ember-intl/helpers/t';
 import AsciinemaPlayer from 'admin/components/session-recording/player/asciinema-player';

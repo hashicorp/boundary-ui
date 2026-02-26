@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Form from 'rose/components/rose/form';
 import WorkerFilterGenerator from 'admin/components/worker-filter-generator/index';
 import can from 'admin/helpers/can';

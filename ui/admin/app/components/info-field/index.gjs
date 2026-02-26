@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Icon from '@hashicorp/design-system-components/components/hds/icon/index';
 import Field from '@hashicorp/design-system-components/components/hds/form/text-input/field';
 <template>

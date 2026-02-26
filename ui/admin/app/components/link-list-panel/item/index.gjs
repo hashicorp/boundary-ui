@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import isArray from 'ember-truth-helpers/helpers/is-array';
 import { LinkTo } from '@ember/routing';
 import IconTile from '@hashicorp/design-system-components/components/hds/icon-tile/index';

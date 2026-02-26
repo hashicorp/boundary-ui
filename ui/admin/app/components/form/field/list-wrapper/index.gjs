@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Fieldset from '@hashicorp/design-system-components/components/hds/form/fieldset/index';
 import { hash } from '@ember/helper';
 import FormFieldListWrapperKeyValue from 'admin/components/form/field/list-wrapper/key-value/index';

@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import and from 'ember-truth-helpers/helpers/and';
 import OrderedSeriesDiagram from 'admin/components/ordered-series-diagram/index';
 import t from 'ember-intl/helpers/t';

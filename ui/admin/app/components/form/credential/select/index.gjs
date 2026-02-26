@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Field from '@hashicorp/design-system-components/components/hds/form/super-select/single/field';
 import t from 'ember-intl/helpers/t';
 import Body from '@hashicorp/design-system-components/components/hds/text/body';

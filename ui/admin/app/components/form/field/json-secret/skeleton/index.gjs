@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 <template>
   <div class='secret-editor-skeleton-wrapper'>
     <div class='secret-editor-skeleton-gutter'></div>

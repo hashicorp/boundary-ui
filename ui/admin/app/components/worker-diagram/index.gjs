@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import featureFlag from 'ember-feature-flags/helpers/feature-flag';
 import Hcp from 'admin/components/worker-diagram/dual-filter/hcp/index';
 import DualFilter from 'admin/components/worker-diagram/dual-filter/index';

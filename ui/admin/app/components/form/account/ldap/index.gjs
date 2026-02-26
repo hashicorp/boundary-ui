@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Form from 'rose/components/rose/form';
 import InfoField from 'admin/components/info-field/index';
 import t from 'ember-intl/helpers/t';
