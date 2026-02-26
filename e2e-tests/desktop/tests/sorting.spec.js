@@ -58,7 +58,9 @@ test('Sorts targets table by name correctly', async ({ authedPage }) => {
   await expect(table).toBeVisible();
 
   // Switch to org scope to see targets created in beforeEach
-  const headerNavLocator = authedPage.getByLabel('header-nav');
+  const headerNavLocator = authedPage.locator(
+    'header .app-header__global-actions',
+  );
   await expect(headerNavLocator).toBeVisible();
   await headerNavLocator.click();
   await authedPage.getByRole('link', { name: org.name }).click();
