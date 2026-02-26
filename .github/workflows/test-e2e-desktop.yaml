@@ -56,7 +56,7 @@ jobs:
         run: |
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
           unzip /tmp/vault.zip -d /usr/local/bin
-
+      
       - name: Checkout boundary-enterprise
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -64,6 +64,19 @@ jobs:
           ref: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
           path: support/src/boundary-enterprise
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+
+      - name: Checkout boundary-ui-enterprise
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: hashicorp/boundary-ui-enterprise
+          ref: 'main'
+          path: support/src/boundary-ui-enterprise
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+
+      - name: Get boundary-ui-enterprise commit SHA
+        run: |
+          cd support/src/boundary-ui-enterprise
+          git rev-parse HEAD > ../boundary-enterprise/internal/ui/VERSION_ent
 
       - name: GH fix for localhost resolution
         run: |
@@ -85,6 +98,7 @@ jobs:
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
+          export ENOS_VAR_ui_build_override="ent" && \
           export ENOS_VAR_boundary_edition="ent" && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
