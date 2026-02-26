@@ -63,7 +63,7 @@ test('Sorts targets table by name correctly', async ({ authedPage }) => {
   );
   await expect(headerNavLocator).toBeVisible();
   await headerNavLocator.click();
-  await authedPage.getByRole('link', { name: org.name }).click();
+  await authedPage.getByRole('option', { name: org.name }).click();
   await expect(
     headerNavLocator.locator('.hds-dropdown-toggle-button'),
   ).toHaveText(org.name);
