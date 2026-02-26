@@ -16,7 +16,7 @@ export class OrgsPage extends BaseResourcePage {
   async createOrg() {
     const orgName = 'Org ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Orgs' })
       .click();
     await this.page.getByRole('link', { name: 'New Org' }).click();

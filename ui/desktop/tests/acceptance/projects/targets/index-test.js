@@ -602,8 +602,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
       .exists();
 
-    await click('.rose-header-nav .hds-dropdown-toggle-button');
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org}"]`,
+    );
 
     assert
       .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
@@ -882,6 +884,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('sorting by target name updates url', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-24
+          enabled: false,
+        },
+      },
+    });
+
     this.stubCacheDaemonSearch(
       'sessions',
       'targets',

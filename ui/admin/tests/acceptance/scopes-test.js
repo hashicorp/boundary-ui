@@ -133,12 +133,12 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.globalScope);
 
-    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
-    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.orgScope));
+    await click(commonSelectors.HEADER_SCOPE_DROPDOWN);
+    await click(commonSelectors.HEADER_SCOPE_LINK(urls.orgScope));
     assert.strictEqual(currentURL(), urls.orgScopes);
 
-    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
-    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.org2Scope));
+    await click(commonSelectors.HEADER_SCOPE_DROPDOWN);
+    await click(commonSelectors.HEADER_SCOPE_LINK(urls.org2Scope));
 
     assert.strictEqual(currentURL(), urls.org2Scopes);
   });
@@ -167,8 +167,8 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.projectTargets);
 
-    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
-    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.project2Scope));
+    await click(commonSelectors.HEADER_SCOPE_DROPDOWN);
+    await click(commonSelectors.HEADER_SCOPE_LINK(urls.project2Scope));
 
     assert.strictEqual(currentURL(), urls.project2Targets);
   });

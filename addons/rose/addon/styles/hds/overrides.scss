@@ -47,41 +47,8 @@ form {
   }
 }
 
-// TODO: This is a temporary hack to fix an issue causing weird whitespace
-//   and scrollbars from an accessible class in HDS. We have to use !important
-//   as they already forced it with !important and we can't override it otherwise
-.sr-only {
-  position: unset !important;
-}
-
 .hds-dropdown {
   .hds-dropdown-toggle-icon {
     color: inherit;
-  }
-}
-
-// TODO: This is a temporary fix that ensures changing the color theme won't alter the dropdown colors.
-.app-frame-sidebar-style-overrides .side-nav-style-overrides {
-  .hds-button:not(
-    .hds-dropdown__content *,
-    .ember-basic-dropdown-content *,
-    .hds-dialog-primitive__wrapper *
-  ),
-  button[class*='hds-dropdown-toggle']:not(
-      .hds-dropdown__content *,
-      .ember-basic-dropdown-content *,
-      .hds-dialog-primitive__wrapper *
-    ) {
-    background: var(--token-side-nav-color-surface-primary);
-    border-color: var(--token-app-side-nav-color-foreground-faint);
-
-    &:hover {
-      background: var(--token-side-nav-color-surface-interactive-hover);
-    }
-
-    &:active,
-    &:focus {
-      background: var(--token-side-nav-color-surface-primary);
-    }
   }
 }
