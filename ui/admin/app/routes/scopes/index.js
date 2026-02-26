@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { get } from '@ember/object';
 
 export default class ScopesIndexRoute extends Route {
   // =services
@@ -22,10 +21,7 @@ export default class ScopesIndexRoute extends Route {
    * @param {?ScopeModel} model[0]
    */
   redirect() {
-    const authenticatedScopeID = get(
-      this.session,
-      'data.authenticated.scope.id',
-    );
+    const authenticatedScopeID = this.session.data?.authenticated?.scope?.id;
     if (authenticatedScopeID) {
       this.router.transitionTo('scopes.scope', authenticatedScopeID);
     } else {
