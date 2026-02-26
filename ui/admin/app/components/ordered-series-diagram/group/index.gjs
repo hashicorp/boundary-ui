@@ -1,28 +1,34 @@
-import { concat } from "@ember/helper";
-import Icon from "@hashicorp/design-system-components/components/hds/icon/index";
-<template>{{!--
+import { concat } from '@ember/helper';
+import Icon from '@hashicorp/design-system-components/components/hds/icon/index';
+<template>
+  {{!
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
---}}
+}}
 
-<li class="ordered-series-diagram-group">
+  <li class='ordered-series-diagram-group'>
 
-  <div class="ordered-series-diagram-group-content
-      {{if @color (concat "hds-surface-" @color)}}">
-    <div class="ordered-series-diagram-group-title
-        {{if @color (concat "hds-foreground-" @color "-on-surface")}}">
-      {{@title}}
+    <div
+      class='ordered-series-diagram-group-content
+        {{if @color (concat "hds-surface-" @color)}}'
+    >
+      <div
+        class='ordered-series-diagram-group-title
+          {{if @color (concat "hds-foreground-" @color "-on-surface")}}'
+      >
+        {{@title}}
+      </div>
+      <ol class='ordered-series-diagram-group-items'>
+        {{yield}}
+      </ol>
     </div>
-    <ol class="ordered-series-diagram-group-items">
-      {{yield}}
-    </ol>
-  </div>
 
-  <div class="ordered-series-diagram-separator-icon">
-    {{!--
+    <div class='ordered-series-diagram-separator-icon'>
+      {{!
       Separator icon is not configurable, but potentially could be.
-    --}}
-    <Icon @name="arrow-right" @size="24" @isInline={{true}} />
-  </div>
+    }}
+      <Icon @name='arrow-right' @size='24' @isInline={{true}} />
+    </div>
 
-</li></template>
+  </li>
+</template>
