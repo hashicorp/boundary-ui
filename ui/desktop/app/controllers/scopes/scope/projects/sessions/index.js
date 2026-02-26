@@ -35,6 +35,8 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     { scopes: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked targets = [];
@@ -46,14 +48,20 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   // =methods
 
   /**
-   * A list of sessions sorted by created time then sorted by availability
+   * A list of sessions sorted by created time then sorted by availability it no sort
+   * query params are set, otherwise sorted by the specified attribute and direction.
    * @type {[SessionModel]}
    */
   get sortedSessions() {
+    if (this.sortAttribute && this.sortDirection) {
+      return this.model.sessions;
+    }
     return orderBy(
       this.model.sessions,
       ['isAvailable', 'created_time'],
@@ -104,6 +112,8 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     };
   }
 
+  // =actions
+
   /**
    * Sets the query params to value of selectedItems
    * to trigger a query and closes the dropdown
@@ -116,7 +126,17 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     this.page = 1;
   }
 
-  // =actions
+  /**
+   * Sets sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
+  }
 
   /**
    * Cancels the specified session and notifies user of success or error.
