@@ -17,6 +17,11 @@ on:
         required: true
         default: 'main'
         type: string
+      boundary-ui-enterprise-branch:
+        description: 'Branch of boundary-ui-enterprise to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
 
 jobs:
   test:
@@ -69,7 +74,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: hashicorp/boundary-ui-enterprise
-          ref: 'main'
+          ref: ${{ github.event.inputs.boundary-ui-enterprise-branch || 'main' }}
           path: support/src/boundary-ui-enterprise
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
