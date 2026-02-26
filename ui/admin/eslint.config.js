@@ -9,6 +9,7 @@ const { defineConfig, globalIgnores } = require('eslint/config');
 const babelParser = require('@babel/eslint-parser');
 const js = require('@eslint/js');
 const eslintPluginEmberRecommended = require('eslint-plugin-ember/configs/recommended');
+const eslintPluginEmberRecommendedGjs = require('eslint-plugin-ember/configs/recommended');
 const nPlugin = require('eslint-plugin-n');
 const qunitPlugin = require('eslint-plugin-qunit');
 const eslintConfigPrettier = require('eslint-config-prettier/flat');
@@ -48,6 +49,8 @@ module.exports = defineConfig([
         'off',
     },
   },
+
+  eslintPluginEmberRecommendedGjs,
 
   // Node files configuration
   {
