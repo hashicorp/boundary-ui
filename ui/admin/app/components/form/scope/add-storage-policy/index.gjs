@@ -22,11 +22,7 @@ export default class FormAddStoragePolicyIndexComponent extends Component {
   selectPolicy({ target: { value: policyId } }) {
     this.args.model.storage_policy_id = policyId;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form class="full-width" @onSubmit={{@submit}} @cancel={{@cancel}} as |form|>
   <Field class="select-policy" @isRequired={{true}} @isInvalid={{@model.errors.storage_policy_id}} @value={{@model.storage_policy_id}} @type="text" @width="30%" name="policy_id" {{on "change" this.selectPolicy}} as |F|>
     <F.Label>{{t "resources.policy.title"}}</F.Label>

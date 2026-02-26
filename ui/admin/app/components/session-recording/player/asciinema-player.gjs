@@ -69,9 +69,5 @@ export default class SessionRecordingPlayerAsciinemaPlayerComponent extends Comp
       this.player = null;
     };
   });
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <div ...attributes {{this.initializePlayer data=@data}}></div></template>}

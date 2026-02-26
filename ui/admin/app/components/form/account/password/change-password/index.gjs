@@ -75,11 +75,7 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
     this.resetPasswords();
     fn();
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form class="full-width" @onSubmit={{fn this.submit @submit this.currentPassword this.newPassword}} @cancel={{fn this.cancel @cancel}} @disabled={{@model.isSaving}} as |form|>
 
   <Field @isRequired={{true}} @value={{this.currentPassword}} @type="password" name="currentPassword" autocomplete="current-password" disabled={{form.disabled}} {{on "input" (setFromEvent this "currentPassword")}} as |F|>

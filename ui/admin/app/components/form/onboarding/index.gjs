@@ -46,11 +46,7 @@ export default class FormOnboardingComponent extends Component {
       this.args.submit(this.targetAddress, this.targetPort);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form class="full-width" @cancel={{@cancel}} @onSubmit={{this.submit}} @disabled={{this.isSaving}} as |form|>
   <div class="create-resources-form">
     <Field name="targetAddress" @type="text" @value={{this.targetAddress}} @isRequired={{true}} @isInvalid={{this.targetAddressInvalid}} {{on "input" (setFromEvent this "targetAddress")}} as |F|>

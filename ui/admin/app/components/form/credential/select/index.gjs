@@ -3,11 +3,6 @@ import t from 'ember-intl/helpers/t';
 import Body from '@hashicorp/design-system-components/components/hds/text/body';
 import { concat } from '@ember/helper';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Field
     name={{t 'form.type.label'}}
     @isRequired={{true}}

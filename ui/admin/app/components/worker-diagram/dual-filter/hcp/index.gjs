@@ -4,11 +4,6 @@ import t from 'ember-intl/helpers/t';
 import Body from '@hashicorp/design-system-components/components/hds/text/body';
 import featureFlag from 'ember-feature-flags/helpers/feature-flag';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{#if (and @egressWorkerFilterEnabled @ingressWorkerFilterEnabled)}}
     <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-on-ingress-on as |D|>
       <D.Item @icon='user'>

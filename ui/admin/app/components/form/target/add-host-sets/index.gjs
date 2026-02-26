@@ -102,11 +102,7 @@ export default class FormTargetAddHostSetsComponent extends Component {
 
     await this.args.submit(this.selectedHostSetIDs);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if this.hasAvailableHostSets}}
   <Form class="full-width" @onSubmit={{this.submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 

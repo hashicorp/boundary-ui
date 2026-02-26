@@ -211,11 +211,7 @@ unzip *.zip ;\\
   toggleEnableRecordingStoragePath() {
     this.enableRecordingStoragePath = !this.enableRecordingStoragePath;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @onSubmit={{fn @submit this.generatedWorkerAuthToken}} @disabled={{@model.isSaving}} @showEditToggle={{false}} as |form|>
   <Display @tag="h3" @size="300" @weight="bold">
     {{t "resources.worker.form.steps.1.title"}}

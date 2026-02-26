@@ -3,11 +3,6 @@ import { on } from '@ember/modifier';
 import t from 'ember-intl/helpers/t';
 import eq from 'ember-truth-helpers/helpers/eq';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Base
     @value={{@value}}
     @width={{@width}}

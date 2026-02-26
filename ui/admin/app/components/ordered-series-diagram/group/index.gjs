@@ -1,11 +1,6 @@
 import { concat } from '@ember/helper';
 import Icon from '@hashicorp/design-system-components/components/hds/icon/index';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <li class='ordered-series-diagram-group'>
 
     <div

@@ -22,9 +22,5 @@ export default class PrincipalTypeBadgeComponent extends Component {
   get icon() {
     return principalTypes[this.args.model.constructor.modelName];
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Badge @icon={{this.icon}} @text={{t (concat "resources.role.principal.types." @model.constructor.modelName)}} /></template>}

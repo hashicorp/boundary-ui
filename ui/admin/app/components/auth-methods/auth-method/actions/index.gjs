@@ -6,11 +6,6 @@ import eq from 'ember-truth-helpers/helpers/eq';
 import { on } from '@ember/modifier';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{#if (or @model.isOIDC @model.isLDAP)}}
     <Dropdown class='change-state' data-test-change-state as |dd|>
       <dd.Title @text={{t 'actions.change-state'}} />

@@ -28,11 +28,7 @@ export default class FormEnableSessionRecordingIndexComponent extends Component 
   selectStorageBucket({ target: { value: selectedStorageBucketID } }) {
     this.args.model.storage_bucket_id = selectedStorageBucketID;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @onSubmit={{@submit}} @cancel={{@cancel}} as |form|>
   <div class="enable-session-recording-toggle">
     <Field name="target-enable-session-recording" checked={{@model.enable_session_recording}} {{on "change" this.toggleSessionRecording}} as |F|>

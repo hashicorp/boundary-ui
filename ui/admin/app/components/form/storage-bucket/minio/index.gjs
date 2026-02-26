@@ -20,11 +20,6 @@ import WorkerFilterGenerator from 'admin/components/worker-filter-generator/inde
 import Field2 from '@hashicorp/design-system-components/components/hds/form/checkbox/field';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

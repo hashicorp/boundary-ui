@@ -7,11 +7,6 @@ import Fieldset from '@hashicorp/design-system-components/components/hds/form/fi
 import Base from '@hashicorp/design-system-components/components/hds/form/text-input/base';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

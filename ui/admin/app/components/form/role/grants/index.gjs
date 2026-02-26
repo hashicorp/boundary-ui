@@ -68,11 +68,7 @@ export default class FormRoleGrantsComponent extends Component {
     addGrantFn(this.newGrantString);
     this.newGrantString = '';
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if (can "setGrants role" @model)}}
   <Form @onSubmit={{fn this.createGrant @addGrant}} @cancel={{@cancel}} @disabled={{@model.isSaving}}>
     <KeyValue as |list|>

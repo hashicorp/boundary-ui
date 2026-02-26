@@ -29,11 +29,7 @@ export default class FormCredentialLibraryRadioComponent extends Component {
           (type) => type !== TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
         );
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Group @name={{t "form.type.label"}} @isRequired={{true}} @alignment="center" as |G|>
   <G.Legend>{{t "form.type.label"}}</G.Legend>
   {{#each this.credentialTypes as |type|}}

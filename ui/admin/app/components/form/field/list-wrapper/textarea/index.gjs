@@ -66,11 +66,7 @@ export default class MappingListTextAreaComponent extends Component {
       set(this.args.model, field, newArray);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Table class="list-wrapper-field" name={{@name}}>
 
   <:body as |B|>

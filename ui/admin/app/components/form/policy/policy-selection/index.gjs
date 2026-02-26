@@ -108,11 +108,7 @@ export default class FormPolicySelectionComponent extends Component {
       };
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Fieldset @isRequired={{true}} class="policy" as |F|>
 
   <F.Legend>{{t (concat "resources.policy.form." @name ".label")}}</F.Legend>

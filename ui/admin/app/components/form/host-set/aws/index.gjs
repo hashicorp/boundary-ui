@@ -10,11 +10,6 @@ import Inline from '@hashicorp/design-system-components/components/hds/link/inli
 import docUrl from 'core/helpers/doc-url';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @edit={{@edit}}
     @onSubmit={{@submit}}

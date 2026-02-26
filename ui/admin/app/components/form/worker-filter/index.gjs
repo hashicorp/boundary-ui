@@ -3,11 +3,6 @@ import WorkerFilterGenerator from 'admin/components/worker-filter-generator/inde
 import can from 'admin/helpers/can';
 import t from 'ember-intl/helpers/t';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     class='full-width'
     @onSubmit={{@submit}}

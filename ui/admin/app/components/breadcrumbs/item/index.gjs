@@ -28,11 +28,7 @@ export default class BreadcrumbsItemComponent extends Component {
     const lastCrumb = crumbs[crumbs.length - 1];
     return lastCrumb.isEqualNode(this.element);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#each this.breadcrumbsService.containers as |container|}}
   {{#in-element container.element insertBefore=null}}
     <Item @text={{@text}} @icon={{@icon}} @route={{@route}} @models={{@models}} @query={{@query}} @model={{@model}} @current={{this.current}} ...attributes {{this.insertedBreadcrumbItem}} data-test-breadcrumbs-item />

@@ -35,11 +35,7 @@ export default class FormManagedGroupLdapComponent extends Component {
     }
     this.newGroup = '';
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @edit={{@edit}} @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
   <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
     <F.Label>{{t "form.type.label"}}</F.Label>

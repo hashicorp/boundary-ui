@@ -30,11 +30,7 @@ export default class BreadcrumbsContainerComponent extends Component {
 
     return () => this.breadcrumbsService.unregisterContainer(this.container);
   });
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Breadcrumb ...attributes data-test-breadcrumbs-container {{this.insertedBreadcrumbContainer}}>
   {{yield}}
 </Breadcrumb></template>}

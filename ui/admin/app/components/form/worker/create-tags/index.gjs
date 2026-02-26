@@ -62,11 +62,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
     this.args.submit(apiTags);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @onSubmit={{this.save}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{false}} as |form|>
   <ListWrapper @layout="vertical" @disabled={{form.disabled}}>
     <:field as |F|>

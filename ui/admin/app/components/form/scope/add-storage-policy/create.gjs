@@ -7,11 +7,6 @@ import Container from 'admin/components/breadcrumbs/container/index';
 import Policy from 'admin/components/form/policy/index';
 import { fn } from '@ember/helper';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{pageTitle (t 'titles.new')}}
   <Item
     @text={{t 'resources.policy.titles.new'}}

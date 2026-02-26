@@ -101,11 +101,7 @@ export default class MappingListComponent extends Component {
       set(this.args.model, field, newArray);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#let (uniqueId) (uniqueId) as |keyHeaderID valueHeaderID|}}
   <Table class="list-wrapper-field" name={{@name}}>
     <:head as |H|>

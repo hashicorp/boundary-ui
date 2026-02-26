@@ -5,11 +5,6 @@ import Dropdown from '@hashicorp/design-system-components/components/hds/dropdow
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{#let
     (hash
       canAddMembers=(can 'addMembers group' @model)

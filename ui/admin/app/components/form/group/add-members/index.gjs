@@ -53,11 +53,7 @@ export default class FormGroupAddMembersComponent extends Component {
   submit(fn) {
     fn(this.selectedMemberIDs);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if this.availableUsers}}
   <Form class="full-width" @onSubmit={{fn this.submit @submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 

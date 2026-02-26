@@ -60,11 +60,7 @@ export default class FormFieldSecretInputIndexComponent extends Component {
     this.isEditing = false;
     this.args.cancel();
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <div class="secret-input" ...attributes>
   {{#if (or this.isDisabled this.isActionable)}}
     <span class="overlay"></span>

@@ -113,11 +113,7 @@ export default class FormAuthMethodLdapComponent extends Component {
       set(this.args.model, currentAttr, oldVal);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @edit={{@edit}} @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
 
   <Field @type="text" @value={{@model.type}} name="type" disabled={{true}} as |F|>

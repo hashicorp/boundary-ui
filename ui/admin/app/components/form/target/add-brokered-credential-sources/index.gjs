@@ -37,11 +37,7 @@ export default class FormTargetAddBrokeredCredentialSourcesIndexComponent extend
       this.selectedCredentialSourceIDs.removeObject(credentialSourceId);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form class="full-width" @onSubmit={{fn @submit this.selectedCredentialSourceIDs}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
   <form.actions @submitText={{t "resources.target.actions.add-brokered-credential-sources"}} @cancelText={{t "actions.cancel"}} />
 

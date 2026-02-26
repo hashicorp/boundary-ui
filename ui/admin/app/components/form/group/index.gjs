@@ -6,11 +6,6 @@ import t from 'ember-intl/helpers/t';
 import Field0 from '@hashicorp/design-system-components/components/hds/form/textarea/field';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

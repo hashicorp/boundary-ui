@@ -11,11 +11,6 @@ import { fn, concat } from '@ember/helper';
 import InfoField from 'admin/components/info-field/index';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

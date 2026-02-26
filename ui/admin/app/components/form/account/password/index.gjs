@@ -47,11 +47,7 @@ export default class FormAccountPasswordIndexComponent extends Component {
     this.resetPassword();
     return this.args.model.isNew ? fn(password) : fn();
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @onSubmit={{fn this.submit @submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
   <InfoField @value={{@model.type}} readonly={{true}} as |F|>
     <F.Label>{{t "form.type.label"}}</F.Label>

@@ -30,11 +30,7 @@ export default class LinkToPrincipalComponent extends Component {
   get link() {
     return principalTypeRoutes[this.args.model.constructor.modelName];
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if this.isManagedGroup}}
   <LinkTo @route={{this.link}} @models={{array @model.auth_method_id @model.id}}>
     {{@model.displayName}}

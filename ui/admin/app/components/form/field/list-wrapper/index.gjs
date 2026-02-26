@@ -5,11 +5,6 @@ import FormFieldListWrapperTextInput from 'admin/components/form/field/list-wrap
 import FormFieldListWrapperTextarea from 'admin/components/form/field/list-wrapper/textarea/index';
 import FormFieldListWrapperSelect from 'admin/components/form/field/list-wrapper/select/index';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Fieldset
     @layout={{@layout}}
     @isRequired={{@isRequired}}

@@ -53,11 +53,7 @@ export default class FormFieldJsonSecretComponent extends Component {
   enableEditing() {
     if (!this.args.disabled) this.editing = true;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <div class="secret-editor">
   {{#if this.isDisabled}}
     <Skeleton>

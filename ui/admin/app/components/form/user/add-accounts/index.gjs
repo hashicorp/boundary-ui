@@ -70,11 +70,7 @@ export default class FormUserAddAccountsComponent extends Component {
   submit(fn) {
     fn(this.selectedAccountIDs);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if this.hasAvailableAccounts}}
   <Form class="full-width" @onSubmit={{fn this.submit @submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 

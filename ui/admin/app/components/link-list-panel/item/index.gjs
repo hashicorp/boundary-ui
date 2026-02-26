@@ -4,11 +4,6 @@ import IconTile from '@hashicorp/design-system-components/components/hds/icon-ti
 import Body from '@hashicorp/design-system-components/components/hds/text/body';
 import Icon from '@hashicorp/design-system-components/components/hds/icon/index';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <li class='link-list-item'>
     {{#if @route}}
       {{#if (isArray @model)}}

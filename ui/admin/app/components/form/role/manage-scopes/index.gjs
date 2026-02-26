@@ -82,11 +82,7 @@ export default class FormRoleManageScopesIndexComponent extends Component {
       removeValue(value);
     }
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form class="full-width role-manage-scopes-form" @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 
   <Field @value={{this.keywords.keyThis}} name={{this.keywords.keyThis}} checked={{includes this.keywords.keyThis @model.grant_scope_ids}} disabled={{form.disabled}} {{on "change" this.toggleField}} as |F|>

@@ -71,11 +71,7 @@ export default class FormPolicyComponent extends Component {
   get selectDeletePolicyType() {
     return this.args.model.delete_after?.days > 0 ? 'custom' : 'do_not_delete';
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Form @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
   <Field @isOptional={{true}} @value={{@model.name}} @isInvalid={{@model.errors.name}} @type="text" name="name" disabled={{form.disabled}} {{on "input" (setFromEvent @model "name")}} as |F|>
     <F.Label>{{t "form.name.label"}}</F.Label>

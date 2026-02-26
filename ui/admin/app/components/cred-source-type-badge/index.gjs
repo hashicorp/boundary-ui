@@ -2,11 +2,6 @@ import Badge from '@hashicorp/design-system-components/components/hds/badge/inde
 import t from 'ember-intl/helpers/t';
 import { concat } from '@ember/helper';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{#if @model.isUnknown}}
     <Badge @text={{t 'resources.credential.types.unknown'}} />
   {{else if @model.isVault}}

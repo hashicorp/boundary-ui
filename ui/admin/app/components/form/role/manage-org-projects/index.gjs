@@ -46,11 +46,7 @@ export default class FormRoleManageOrgProjectsIndexComponent extends Component {
       }
     });
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if @model.totalItemsCount}}
   <Form class="full-width role-manage-custom-scopes-form" @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.role.isSaving}} as |form|>
     <SegmentedGroup as |S|>

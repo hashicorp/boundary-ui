@@ -2,11 +2,6 @@ import OrderedSeriesDiagram from 'admin/components/ordered-series-diagram/index'
 import t from 'ember-intl/helpers/t';
 import Body from '@hashicorp/design-system-components/components/hds/text/body';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   {{#if @egressWorkerFilterEnabled}}
     <OrderedSeriesDiagram data-test-single-filter-egress-on as |D|>
       <D.Item @icon='user'>

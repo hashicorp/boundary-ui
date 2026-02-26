@@ -51,11 +51,7 @@ export default class ScopePickerComponent extends Component {
   get truncatedProjectsList() {
     return orderBy(this.scope.projectsList, 'updated_time', 'desc').slice(0, 5);
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Dropdown class="scope-picker" @enableCollisionDetection={{true}} @listPosition="bottom-left" data-test-header-scope-dropdown ...attributes as |D|>
   {{#let this.currentScope as |scope|}}
     <D.ToggleButton @text={{scope.name}} @icon={{scope.icon}} class="dropdown-toggle-color-override" />

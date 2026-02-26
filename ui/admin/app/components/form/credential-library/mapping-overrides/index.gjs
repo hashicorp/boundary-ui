@@ -18,11 +18,7 @@ export default class FormCredentialLibraryMappingOverridesComponent extends Comp
   get mappingOverrides() {
     return options.mapping_overrides[this.args.model.credential_type];
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Fieldset as |F|>
   <F.Legend>{{t "resources.credential-library.form.credential_mapping_overrides.label"}}</F.Legend>
   <F.HelperText>{{t "resources.credential-library.form.credential_mapping_overrides.help"}}</F.HelperText>

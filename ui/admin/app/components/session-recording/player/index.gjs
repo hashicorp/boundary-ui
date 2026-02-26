@@ -2,11 +2,6 @@ import Button from '@hashicorp/design-system-components/components/hds/button/in
 import t from 'ember-intl/helpers/t';
 import AsciinemaPlayer from 'admin/components/session-recording/player/asciinema-player';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <div class='session-recording-player'>
     <div class='session-recording-player-header'>
       <Button

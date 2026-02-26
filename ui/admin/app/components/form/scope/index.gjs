@@ -8,11 +8,6 @@ import and from 'ember-truth-helpers/helpers/and';
 import can from 'admin/helpers/can';
 import not from 'ember-truth-helpers/helpers/not';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

@@ -93,11 +93,7 @@ export default class WorkerFilterGeneratorIndexComponent extends Component {
     this.operator = '';
     this.selectedGeneratorType = event.target.value;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Field as |F|>
   <F.Control>
     <CodeEditor as |c|>

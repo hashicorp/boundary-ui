@@ -78,10 +78,7 @@ export default class FormStorageBucketComponent extends Component {
     this.showDynamicCredentials =
       this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
+<template>
 {{#if @model.type}}
   <this.storageBucketFormComponent @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} @updateScope={{this.updateScope}} @scopes={{@scopes}} @pluginTypes={{this.pluginTypes}} @changePluginType={{@changePluginType}} @changeCredentialType={{@changeCredentialType}} @rollbackSecretAttrs={{this.rollbackSecretAttrs}} @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}} />
 {{/if}}</template>}

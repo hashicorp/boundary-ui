@@ -19,9 +19,5 @@ export default class HostCatalogTypeComponent extends Component {
       `${this.args.model.compositeType}-color`
     );
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 <Badge @icon={{this.icon}} @text={{t (concat "resources.host-catalog.types." @model.compositeType)}} /></template>}

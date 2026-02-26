@@ -10,11 +10,6 @@ import { concat } from '@ember/helper';
 import or from 'ember-truth-helpers/helpers/or';
 import can from 'admin/helpers/can';
 <template>
-  {{!
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
-}}
-
   <Form
     @onSubmit={{@submit}}
     @cancel={{@cancel}}

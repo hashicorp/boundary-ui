@@ -44,11 +44,7 @@ export default class FormCredentialComponent extends Component {
     );
     return component;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if @model.type}}
   <this.credentialFormComponent @model={{@model}} @types={{this.credentialTypes}} @submit={{@submit}} @cancel={{@cancel}} @changeType={{@changeType}} />
 {{/if}}</template>}

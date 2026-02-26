@@ -87,11 +87,7 @@ export default class FormTargetComponent extends Component {
   get showTargetTypeRadioGroup() {
     return (this.isRDPEnabled || this.isSSHEnabled) && this.args.model.isNew;
   }
-<template>{{!--
-  Copyright IBM Corp. 2021, 2026
-  SPDX-License-Identifier: BUSL-1.1
---}}
-
+<template>
 {{#if this.showInjectedApplicationCredentialAlert}}
   <Alert data-test-injected-application-credential-alert class="injected-app-credential-alert" @type="inline" @color="critical" as |A|>
     <A.Title>{{t "resources.target.injected-application-credential-source.messages.alert.title"}}</A.Title>
