@@ -206,7 +206,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -339,7 +339,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -523,7 +523,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -710,7 +710,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -957,7 +957,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -1183,7 +1183,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.4.2))
       eslint-plugin-ember:
         specifier: ^12.7.5
-        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+        version: 12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-n:
         specifier: ^17.24.0
         version: 17.24.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
@@ -3147,6 +3147,12 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4 <5.9.0'
 
+  '@typescript-eslint/tsconfig-utils@8.56.1':
+    resolution: {integrity: sha512-qOtCYzKEeyr3aR9f28mPJqBty7+DBqsdd63eO0yyDwc6vgThj2UjWfJIcsFeSucYydqcuudMOprZ+x1SpF3ZuQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      typescript: '>=4.8.4 <6.0.0'
+
   '@typescript-eslint/types@8.34.0':
     resolution: {integrity: sha512-9V24k/paICYPniajHfJ4cuAWETnt7Ssy+R0Rbcqo5sSFr3QEZ/8TSoUi9XeXVBGXCaLtwTOKSLGcInCAvyZeMA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -3614,6 +3620,7 @@ packages:
   basic-ftp@5.0.5:
     resolution: {integrity: sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.0, please upgrade
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -4980,8 +4987,8 @@ packages:
     resolution: {integrity: sha512-3slTltQV5ke53t3YVP2GYoswsQ6y+lhuVzKmt09tbEx91DapG8I/xa8W5OA0StvcQlavL3/vHrz/vCQEFs8bBA==}
     engines: {node: 14.* || 16.* || >= 18}
 
-  ember-eslint-parser@0.5.9:
-    resolution: {integrity: sha512-IW4/3cEiFp49M2LiKyzi7VcT1egogOe8UxQ9eUKTooenC7Q4qNhzTD6rOZ8j51m8iJC+8hCzjbNCa3K4CN0Hhg==}
+  ember-eslint-parser@0.5.13:
+    resolution: {integrity: sha512-b6ALDaxs9Bb4v0uagWud/5lECb78qpXHFv7M340dUHFW4Y0RuhlsfA4Rb+765X1+6KHp8G7TaAs0UgggWUqD3g==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@babel/core': ^7.23.6
@@ -11970,7 +11977,7 @@ snapshots:
 
   '@typescript-eslint/project-service@8.34.0(typescript@5.8.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.34.0(typescript@5.8.3)
+      '@typescript-eslint/tsconfig-utils': 8.56.1(typescript@5.8.3)
       '@typescript-eslint/types': 8.34.0
       debug: 4.4.3
       typescript: 5.8.3
@@ -11988,6 +11995,10 @@ snapshots:
     dependencies:
       typescript: 5.8.3
     optional: true
+
+  '@typescript-eslint/tsconfig-utils@8.56.1(typescript@5.8.3)':
+    dependencies:
+      typescript: 5.8.3
 
   '@typescript-eslint/types@8.34.0':
     optional: true
@@ -14439,11 +14450,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-eslint-parser@0.5.9(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2)):
+  ember-eslint-parser@0.5.13(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
       '@babel/core': 7.27.1
       '@babel/eslint-parser': 7.27.1(@babel/core@7.27.1)(eslint@9.39.2(jiti@2.4.2))
-      '@glimmer/syntax': 0.92.3
+      '@glimmer/syntax': 0.94.9
+      '@typescript-eslint/tsconfig-utils': 8.56.1(typescript@5.8.3)
       content-tag: 2.0.3
       eslint-scope: 7.2.2
       html-tags: 3.3.1
@@ -14453,6 +14465,7 @@ snapshots:
       '@typescript-eslint/parser': 8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
     transitivePeerDependencies:
       - eslint
+      - typescript
 
   ember-exam@8.0.0(@glint/template@1.5.2)(ember-qunit@8.1.1(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))(qunit@2.24.1))(qunit@2.24.1)(webpack@5.104.1(esbuild@0.25.9)):
     dependencies:
@@ -15139,11 +15152,11 @@ snapshots:
 
   eslint-formatter-kakoune@1.0.0: {}
 
-  eslint-plugin-ember@12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2)):
+  eslint-plugin-ember@12.7.5(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
       '@ember-data/rfc395-data': 0.0.4
       css-tree: 3.1.0
-      ember-eslint-parser: 0.5.9(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))
+      ember-eslint-parser: 0.5.13(@babel/core@7.27.1)(@typescript-eslint/parser@8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3))(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
       ember-rfc176-data: 0.3.18
       eslint: 9.39.2(jiti@2.4.2)
       eslint-utils: 3.0.0(eslint@9.39.2(jiti@2.4.2))
@@ -15156,6 +15169,7 @@ snapshots:
       '@typescript-eslint/parser': 8.34.0(eslint@9.39.2(jiti@2.4.2))(typescript@5.8.3)
     transitivePeerDependencies:
       - '@babel/core'
+      - typescript
 
   eslint-plugin-es-x@7.8.0(eslint@9.39.2(jiti@2.4.2)):
     dependencies:
