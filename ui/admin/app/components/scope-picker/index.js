@@ -7,7 +7,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import orderBy from 'lodash/orderBy';
 
-export default class ScopePickerIndexComponent extends Component {
+export default class ScopePickerComponent extends Component {
   // =services
 
   @service intl;

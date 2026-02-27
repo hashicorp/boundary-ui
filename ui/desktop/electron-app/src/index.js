@@ -3,13 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-console */
 const path = require('path');
 const { net } = require('electron');
-const {
-  default: installExtension,
-  EMBER_INSPECTOR,
-} = require('electron-devtools-installer');
 const {
   session,
   app,

@@ -13,7 +13,7 @@ module('Unit | Mixin | build-url', function (hooks) {
   setupTest(hooks);
 
   test('it does not interfere with basic URLs', function (assert) {
-    /* eslint-disable-next-line ember/no-new-mixins, ember/no-classic-classes */
+    /* eslint-disable-next-line ember/no-new-mixins */
     const Adapter = RESTAdapter.extend(AdapterBuildURLMixin);
     this.owner.register('adapter:adapter', Adapter);
     const adapter = this.owner.lookup('adapter:adapter');

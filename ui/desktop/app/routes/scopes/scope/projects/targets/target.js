@@ -61,7 +61,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         hosts = Array.from(
           new Map(allFilteredHosts.map((host) => [host.id, host])).values(),
         );
-      } catch (error) {
+      } catch {
         // no operation
       }
     }

@@ -11,12 +11,6 @@
 @use 'notify';
 @use 'asciinema-player/dist/bundle/asciinema-player.css';
 
-.rose-layout-global {
-  .rose-layout-global-body {
-    justify-content: center;
-  }
-}
-
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
@@ -87,14 +81,6 @@
       }
     }
   }
-}
-
-[class*='session-status-'] {
-  color: var(--ui-gray-subtler-2);
-}
-
-.session-status-active {
-  color: var(--success);
 }
 
 .nowrap {
@@ -1005,18 +991,6 @@
   }
 }
 
-// scope picker
-.scope-picker {
-  &__toggle-button {
-    width: 100%;
-  }
-
-  li:has(.indentation),
-  li.indentation {
-    margin-left: 1.5rem;
-  }
-}
-
 // dropdown checkbox list
 .dropdown-checkbox-list {
   margin-bottom: 1rem;
@@ -1025,6 +999,14 @@
 // target
 .injected-app-credential-alert {
   margin-bottom: 1rem;
+}
+
+// Scope picker in global header
+.scope-picker {
+  li:has(.indentation),
+  li.indentation {
+    margin-left: 1.5rem;
+  }
 }
 
 // User menu dropdown in global side nav
