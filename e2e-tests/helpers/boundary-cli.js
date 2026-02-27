@@ -31,7 +31,7 @@ export * from './boundary-cli/workers.js';
 export async function checkBoundaryCli() {
   try {
     execSync('which boundary');
-  } catch (e) {
+  } catch {
     throw new Error('boundary does not exist on the path');
   }
 }

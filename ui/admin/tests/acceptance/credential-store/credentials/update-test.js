@@ -552,7 +552,7 @@ module(
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -595,7 +595,7 @@ module(
 
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -637,7 +637,7 @@ module(
 
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -677,7 +677,7 @@ module(
       assert.strictEqual(currentURL(), urls.passwordCredential);
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -722,7 +722,7 @@ module(
 
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
@@ -769,7 +769,7 @@ module(
 
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
@@ -827,7 +827,7 @@ module(
       assert.strictEqual(currentURL(), urls.jsonCredential);
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.jsonCredential);
@@ -871,7 +871,7 @@ module(
 
       try {
         await visit(urls.credentials);
-      } catch (e) {
+      } catch {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');

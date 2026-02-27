@@ -28,7 +28,6 @@ export default class ClockTickService extends Service {
    * Updates the value of `now` every `frequency` milliseconds.
    */
   _tick = task(async () => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       await timeout(this.frequency);
       this.now = Date.now();

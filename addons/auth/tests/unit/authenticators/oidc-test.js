@@ -39,7 +39,7 @@ module('Unit | Authenticator | OIDC', function (hooks) {
     // Because assert.throws doesn't work with async errors/promise rejections
     try {
       await authenticator.startAuthentication();
-    } catch (e) {
+    } catch {
       assert.ok(true);
     }
   });

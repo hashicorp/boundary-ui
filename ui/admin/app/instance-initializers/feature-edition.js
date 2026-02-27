@@ -20,7 +20,7 @@ async function autoInitializeFeatureEdition(owner) {
 
     edition = json?.license?.edition;
     features = json?.license?.features;
-  } catch (e) {
+  } catch {
     // if the request fails, the service will initialize the default edition
     // as specified in the config
   }

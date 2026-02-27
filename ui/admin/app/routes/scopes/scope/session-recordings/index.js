@@ -195,7 +195,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         recursive: true,
       });
       return Boolean(storageBuckets.length);
-    } catch (e) {
+    } catch {
       // no op
       return false;
     }

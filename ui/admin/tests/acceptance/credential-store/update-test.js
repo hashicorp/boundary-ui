@@ -259,7 +259,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     try {
       await visit(urls.credentialStores);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -297,7 +297,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     try {
       await visit(urls.credentialStores);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
@@ -327,7 +327,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     try {
       await visit(urls.credentialStores);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
@@ -366,7 +366,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     try {
       await visit(urls.credentialStores);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);

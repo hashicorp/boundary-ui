@@ -34,7 +34,7 @@ export default class AccountChangePasswordController extends Controller {
     // TransitionAborted error, which we do not want to show to the user.
     try {
       await this.router.replaceWith('index');
-    } catch (e) {
+    } catch {
       // no-op
     }
   }

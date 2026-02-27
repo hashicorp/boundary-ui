@@ -197,7 +197,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     // Wrap on a try/catch because transitioning while editing returns error
     try {
       await visit(urls.hosts);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).exists();
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hosts);
@@ -235,7 +235,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     // Wrap on a try/catch because transitioning while editing returns error
     try {
       await visit(urls.hosts);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).exists();
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 

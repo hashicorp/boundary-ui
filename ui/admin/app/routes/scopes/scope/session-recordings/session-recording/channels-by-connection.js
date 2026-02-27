@@ -39,7 +39,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
           storage_bucket_id,
         );
       }
-    } catch (e) {
+    } catch {
       // no op
     }
 

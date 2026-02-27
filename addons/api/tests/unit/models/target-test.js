@@ -268,7 +268,6 @@ module('Unit | Model | target', function (hooks) {
         attributes: {},
       },
     });
-    /* eslint-enable no-self-assign */
     assert.strictEqual(
       target.brokered_credential_source_ids.length,
       2,

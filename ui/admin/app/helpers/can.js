@@ -43,7 +43,6 @@ class DevelopmentCanHelper extends CanHelper {
 
   removeAllFlags() {
     this.features.flags.forEach((flag) =>
-      /* eslint-disable-next-line ember/no-observers */
       this.features.removeObserver(flag, this, 'recompute'),
     );
   }

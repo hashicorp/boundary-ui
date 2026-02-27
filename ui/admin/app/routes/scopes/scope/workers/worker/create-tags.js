@@ -27,7 +27,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsRoute extends Route {
         });
         controller.set('apiTags', new TrackedArray([]));
         transition.retry();
-      } catch (e) {
+      } catch {
         // if user denies, do nothing
       }
     }

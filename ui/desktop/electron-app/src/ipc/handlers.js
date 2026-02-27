@@ -178,7 +178,7 @@ handle('searchCacheDaemon', async (request) =>
 handle('isCacheDaemonRunning', async () => {
   try {
     await cacheDaemonManager.status();
-  } catch (e) {
+  } catch {
     // There was likely an error connecting to the cache daemon.
     return false;
   }
@@ -208,7 +208,7 @@ handle('isClientAgentRunning', async () => {
     }
 
     return status.status === 'running';
-  } catch (e) {
+  } catch {
     // There was likely an error connecting to client agent.
     return false;
   }

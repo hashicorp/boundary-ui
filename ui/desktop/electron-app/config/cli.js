@@ -99,6 +99,7 @@ module.exports = {
         await extract(artifactPath, artifactDestination);
       } catch (e) {
         console.error('ERROR: Failed setting up CLI.', e);
+        // eslint-disable-next-line n/no-process-exit
         process.exit(1);
       }
     } else {

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { URL } = require('url');
-
 module.exports = {
   /**
    * Super paranoid shell quote/escape and validation.  Input must be base62.
@@ -27,7 +25,7 @@ module.exports = {
     try {
       const url = new URL(str);
       return `${url.protocol}//${url.host}`;
-    } catch (e) {
+    } catch {
       // Parse error
       throw new Error(`URL ${str} could not be validated.`);
     }

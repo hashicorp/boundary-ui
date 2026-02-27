@@ -346,7 +346,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.hostSet);
     try {
       await visit(urls.hostSets);
-    } catch (e) {
+    } catch {
       assert.ok(find(commonSelectors.MODAL_WARNING));
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hostSets);

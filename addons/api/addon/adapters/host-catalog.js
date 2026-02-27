@@ -23,7 +23,7 @@ export default class HostCatalogAdapter extends ApplicationAdapter {
       try {
         const pluginName = snapshot.attr('plugin')?.name;
         if (pluginName) url = `${url}?plugin_name=${pluginName}`;
-      } catch (e) {
+      } catch {
         // Ignore any adapter errors here
       }
     }

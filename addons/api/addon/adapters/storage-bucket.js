@@ -22,7 +22,7 @@ export default class StorageBucketAdapter extends ApplicationAdapter {
     let pluginName;
     try {
       pluginName = snapshot?.attr('plugin')?.name;
-    } catch (e) {
+    } catch {
       // Ignore any adapter errors here
     }
     if (requestType === 'createRecord' && pluginName) {
