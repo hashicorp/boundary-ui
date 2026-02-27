@@ -77,15 +77,6 @@ module('Acceptance | aliases | delete', function (hooks) {
   });
 
   test('users cannot delete an alias without proper authorization', async function (assert) {
-    setRunOptions({
-      rules: {
-        'color-contrast': {
-          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
-          enabled: false,
-        },
-      },
-    });
-
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'delete');
 
