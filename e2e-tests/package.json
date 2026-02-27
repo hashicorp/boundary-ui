@@ -31,7 +31,7 @@
     "@babel/core": "^7.26.10",
     "@babel/eslint-parser": "^7.21.3",
     "@eslint/js": "^9.18.0",
-    "@openapitools/openapi-generator-cli": "^2.25.2",
+    "@openapitools/openapi-generator-cli": "^2.30.0",
     "@playwright/test": "^1.56.1",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
