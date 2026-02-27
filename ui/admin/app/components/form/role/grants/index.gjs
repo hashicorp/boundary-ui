@@ -5,6 +5,7 @@
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import { computed, action } from '@ember/object';
 import can from "admin/helpers/can";
 import Form from "rose/components/rose/form";
