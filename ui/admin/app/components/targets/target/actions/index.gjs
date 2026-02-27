@@ -1,0 +1,79 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+import { hash, fn } from '@ember/helper';
+import can from 'admin/helpers/can';
+import or from 'ember-truth-helpers/helpers/or';
+import Dropdown from '@hashicorp/design-system-components/components/hds/dropdown/index';
+import t from 'ember-intl/helpers/t';
+import { on } from '@ember/modifier';
+<template>
+  {{#let
+    (hash
+      canAddHostSources=(can 'addHostSources target' @model)
+      canAddBrokeredCredSources=(can
+        'addBrokeredCredentialSources target' @model
+      )
+      canAddInjectedApplicationCredSources=(can
+        'addInjectedApplicationCredentialSources target' @model
+      )
+      canDelete=(can 'delete model' @model)
+    )
+    as |perms|
+  }}
+    {{#if
+      (or
+        perms.canAddHostSources
+        perms.canAddBrokeredCredSources
+        perms.canAddInjectedApplicationCredSources
+        perms.canDelete
+      )
+    }}
+      <Dropdown data-test-manage-targets-dropdown as |dd|>
+        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+        {{#if perms.canAddHostSources}}
+          <dd.Interactive
+            @route='scopes.scope.targets.target.add-host-sources'
+            data-test-add-host-sources-action
+          >
+            {{t 'resources.target.actions.add-host-sources'}}
+          </dd.Interactive>
+        {{/if}}
+        {{#if perms.canAddBrokeredCredSources}}
+          <dd.Interactive
+            @route='scopes.scope.targets.target.add-brokered-credential-sources'
+            data-test-add-brokered-cred-sources-action
+          >
+            {{t 'resources.target.actions.add-brokered-credential-sources'}}
+          </dd.Interactive>
+        {{/if}}
+        {{#if perms.canAddInjectedApplicationCredSources}}
+          <dd.Interactive
+            @route='scopes.scope.targets.target.add-injected-application-credential-sources'
+            data-test-add-injected-cred-sources-action
+          >
+            {{t
+              'resources.target.actions.add-injected-application-credential-sources'
+            }}
+          </dd.Interactive>
+        {{/if}}
+        {{#if perms.canDelete}}
+          {{#if
+            (or
+              perms.canAddHostSources
+              perms.canAddBrokeredCredSources
+              perms.canAddInjectedApplicationCredSources
+            )
+          }}
+            <dd.Separator />
+          {{/if}}
+          <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+            {{t 'resources.target.actions.delete'}}
+          </dd.Interactive>
+        {{/if}}
+      </Dropdown>
+    {{/if}}
+  {{/let}}
+</template>
