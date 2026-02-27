@@ -47,7 +47,6 @@ module('Unit | Model | group', function (hooks) {
         attributes: {},
       },
     });
-    // eslint-disable-next-line no-self-assign
     group.member_ids = [...group.member_ids];
     assert.strictEqual(
       group.member_ids.length,

@@ -120,6 +120,7 @@ class CacheDaemonManager {
   async search(requestData) {
     const start = Date.now();
     // Log request data, but clean up token from log
+    // eslint-disable-next-line no-unused-vars
     const { auth_token_id, token, ...logRequestData } = requestData;
 
     if (isWindows()) {
