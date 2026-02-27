@@ -5,11 +5,7 @@
 
 import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
-import {
-  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
-  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
-} from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC, TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE, TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
 import VaultGenericFormComponent from './vault-generic';
 import VaultSshCertificateFormComponent from './vault-ssh-certificate';
 import VaultLdapFormComponent from './vault-ldap';
@@ -30,19 +26,11 @@ export default class FormCredentialLibraryIndex extends Component {
     );
     return component;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if @model.type}}
-  <this.credentialLibraryFormComponent
-    @model={{@model}}
-    @submit={{@submit}}
-    @cancel={{@cancel}}
-    @changeType={{@changeType}}
-    @edit={{@edit}}
-  />
-{{/if}}
+  <this.credentialLibraryFormComponent @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} @changeType={{@changeType}} @edit={{@edit}} />
+{{/if}}</template>}

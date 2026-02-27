@@ -5,6 +5,17 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Form from "rose/components/rose/form";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import t from "ember-intl/helpers/t";
+import Field0 from "@hashicorp/design-system-components/components/hds/form/textarea/field";
+import Select from "admin/components/form/credential/select/index";
+import InfoField from "admin/components/info-field/index";
+import { concat } from "@ember/helper";
+import or from "ember-truth-helpers/helpers/or";
+import can from "admin/helpers/can";
 
 export default class FormCredentialUsernamePasswordDomainComponent extends Component {
   // =actions
@@ -51,31 +62,16 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
       }
     }
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  @onSubmit={{this.handleSubmit}}
-  @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
-  @showEditToggle={{if @model.isNew false true}}
-  as |form|
->
+<Form @onSubmit={{this.handleSubmit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
 
-  <Hds::Form::TextInput::Field
-    name='name'
-    @value={{@model.name}}
-    @isInvalid={{@model.errors.name}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'name')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.name.label'}}</F.Label>
-    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+  <Field name="name" @value={{@model.name}} @isInvalid={{@model.errors.name}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "name")}} as |F|>
+    <F.Label>{{t "form.name.label"}}</F.Label>
+    <F.HelperText>{{t "form.name.help"}}</F.HelperText>
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
@@ -85,17 +81,11 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::TextInput::Field>
+  </Field>
 
-  <Hds::Form::Textarea::Field
-    name='description'
-    @value={{@model.description}}
-    @isInvalid={{@model.errors.description}}
-    disabled={{form.disabled}}
-    as |F|
-  >
-    <F.Label>{{t 'form.description.label'}}</F.Label>
-    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+  <Field0 name="description" @value={{@model.description}} @isInvalid={{@model.errors.description}} disabled={{form.disabled}} as |F|>
+    <F.Label>{{t "form.description.label"}}</F.Label>
+    <F.HelperText>{{t "form.description.help"}}</F.HelperText>
     {{#if @model.errors.description}}
       <F.Error as |E|>
         {{#each @model.errors.description as |error|}}
@@ -103,38 +93,21 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::Textarea::Field>
+  </Field0>
 
   {{#if @model.isNew}}
-    <Form::Credential::Select
-      @model={{@model}}
-      @types={{@types}}
-      @changeType={{@changeType}}
-    />
+    <Select @model={{@model}} @types={{@types}} @changeType={{@changeType}} />
   {{else}}
-    <InfoField
-      @value={{t (concat 'resources.credential.types.' @model.type)}}
-      readonly={{true}}
-      as |F|
-    >
-      <F.Label>{{t 'form.type.label'}}</F.Label>
-      <F.HelperText>{{t (concat 'resources.credential.help.' @model.type)}}
+    <InfoField @value={{t (concat "resources.credential.types." @model.type)}} readonly={{true}} as |F|>
+      <F.Label>{{t "form.type.label"}}</F.Label>
+      <F.HelperText>{{t (concat "resources.credential.help." @model.type)}}
       </F.HelperText>
     </InfoField>
   {{/if}}
 
-  <Hds::Form::TextInput::Field
-    name='username'
-    @isRequired={{true}}
-    @value={{@model.username}}
-    @isInvalid={{@model.errors.username}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'username')}}
-    {{on 'blur' this.handleUsername}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.credential.form.username.label'}}</F.Label>
-    <F.HelperText>{{t 'resources.credential.form.username.help'}}</F.HelperText>
+  <Field name="username" @isRequired={{true}} @value={{@model.username}} @isInvalid={{@model.errors.username}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "username")}} {{on "blur" this.handleUsername}} as |F|>
+    <F.Label>{{t "resources.credential.form.username.label"}}</F.Label>
+    <F.HelperText>{{t "resources.credential.form.username.help"}}</F.HelperText>
     {{#if @model.errors.username}}
       <F.Error as |E|>
         {{#each @model.errors.username as |error|}}
@@ -142,24 +115,12 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::TextInput::Field>
+  </Field>
 
   {{#if (or @model.isNew form.isEditable)}}
-    <Hds::Form::TextInput::Field
-      name='password'
-      @isRequired={{true}}
-      @type='password'
-      @value={{@model.password}}
-      @isInvalid={{@model.errors.password}}
-      disabled={{form.disabled}}
-      autocomplete='new-password'
-      {{on 'input' (set-from-event @model 'password')}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.credential.form.password.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.credential.form.password.help'
-        }}</F.HelperText>
+    <Field name="password" @isRequired={{true}} @type="password" @value={{@model.password}} @isInvalid={{@model.errors.password}} disabled={{form.disabled}} autocomplete="new-password" {{on "input" (setFromEvent @model "password")}} as |F|>
+      <F.Label>{{t "resources.credential.form.password.label"}}</F.Label>
+      <F.HelperText>{{t "resources.credential.form.password.help"}}</F.HelperText>
       {{#if @model.errors.password}}
         <F.Error as |E|>
           {{#each @model.errors.password as |error|}}
@@ -169,37 +130,23 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Field>
   {{/if}}
 
-  <Hds::Form::TextInput::Field
-    name='domain'
-    @isRequired={{true}}
-    @value={{@model.domain}}
-    @isInvalid={{@model.errors.domain}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'domain')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.credential.form.domain.label'}}</F.Label>
-    <F.HelperText>{{t 'resources.credential.form.domain.help'}}</F.HelperText>
+  <Field name="domain" @isRequired={{true}} @value={{@model.domain}} @isInvalid={{@model.errors.domain}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "domain")}} as |F|>
+    <F.Label>{{t "resources.credential.form.domain.label"}}</F.Label>
+    <F.HelperText>{{t "resources.credential.form.domain.help"}}</F.HelperText>
     {{#if @model.errors.domain}}
       <F.Error as |E|>
         {{#each @model.errors.domain as |error|}}
-          <E.Message
-            data-test-error-message-domain
-          >{{error.message}}</E.Message>
+          <E.Message data-test-error-message-domain>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::TextInput::Field>
+  </Field>
 
-  {{#if (can 'save model' @model)}}
-    <form.actions
-      @enableEditText={{t 'actions.edit-form'}}
-      @submitText={{t 'actions.save'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+  {{#if (can "save model" @model)}}
+    <form.actions @enableEditText={{t "actions.edit-form"}} @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
   {{/if}}
 
-</Rose::Form>
+</Form></template>}

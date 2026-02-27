@@ -5,6 +5,12 @@
 
 import Component from '@glimmer/component';
 import { options } from 'api/models/credential-library';
+import Fieldset from "@hashicorp/design-system-components/components/hds/form/fieldset/index";
+import t from "ember-intl/helpers/t";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { get, concat } from "@ember/helper";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
 
 export default class FormCredentialLibraryMappingOverridesComponent extends Component {
   // =attributes
@@ -12,36 +18,19 @@ export default class FormCredentialLibraryMappingOverridesComponent extends Comp
   get mappingOverrides() {
     return options.mapping_overrides[this.args.model.credential_type];
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Form::Fieldset as |F|>
-  <F.Legend>{{t
-      'resources.credential-library.form.credential_mapping_overrides.label'
-    }}</F.Legend>
-  <F.HelperText>{{t
-      'resources.credential-library.form.credential_mapping_overrides.help'
-    }}</F.HelperText>
+<Fieldset as |F|>
+  <F.Legend>{{t "resources.credential-library.form.credential_mapping_overrides.label"}}</F.Legend>
+  <F.HelperText>{{t "resources.credential-library.form.credential_mapping_overrides.help"}}</F.HelperText>
   <F.Control>
     {{#each this.mappingOverrides as |option|}}
-      <Hds::Form::TextInput::Field
-        name={{option}}
-        @value={{get @model.credential_mapping_overrides option}}
-        disabled={{@disabled}}
-        {{on
-          'input'
-          (set-from-event @model.credential_mapping_overrides option)
-        }}
-        as |F|
-      >
-        <F.Label>{{t
-            (concat 'resources.credential-library.titles.' option)
-          }}</F.Label>
-      </Hds::Form::TextInput::Field>
+      <Field name={{option}} @value={{get @model.credential_mapping_overrides option}} disabled={{@disabled}} {{on "input" (setFromEvent @model.credential_mapping_overrides option)}} as |F|>
+        <F.Label>{{t (concat "resources.credential-library.titles." option)}}</F.Label>
+      </Field>
     {{/each}}
   </F.Control>
   {{#if @model.errors.credential_mapping_overrides}}
@@ -51,4 +40,4 @@ export default class FormCredentialLibraryMappingOverridesComponent extends Comp
       {{/each}}
     </F.Error>
   {{/if}}
-</Hds::Form::Fieldset>
+</Fieldset></template>}

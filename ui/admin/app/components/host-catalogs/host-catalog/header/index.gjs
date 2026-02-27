@@ -1,15 +1,18 @@
-{{!
+import t from "ember-intl/helpers/t";
+import DocLink from "core/components/doc-link";
+import Snippet from "@hashicorp/design-system-components/components/hds/copy/snippet/index";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 <@header.Title>
-  {{t 'resources.host-catalog.title'}}
-  <DocLink @doc='host-catalog' />
+  {{t "resources.host-catalog.title"}}
+  <DocLink @doc="host-catalog" />
 </@header.Title>
 <@header.Description>
-  {{t 'resources.host-catalog.description'}}
+  {{t "resources.host-catalog.description"}}
 </@header.Description>
 <@header.Generic>
-  <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
-</@header.Generic>
+  <Snippet @textToCopy={{@model.id}} @color="secondary" />
+</@header.Generic></template>

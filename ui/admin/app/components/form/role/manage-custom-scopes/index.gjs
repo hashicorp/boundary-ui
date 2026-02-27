@@ -6,6 +6,26 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import Form from "rose/components/rose/form";
+import SegmentedGroup from "@hashicorp/design-system-components/components/hds/segmented-group/index";
+import t from "ember-intl/helpers/t";
+import { on } from "@ember/modifier";
+import Dropdown from "core/components/dropdown/index";
+import { fn, array, hash, get } from "@ember/helper";
+import Body from "@hashicorp/design-system-components/components/hds/text/body";
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import includes from "@nullvoxpopuli/ember-composable-helpers/helpers/includes";
+import Snippet from "@hashicorp/design-system-components/components/hds/copy/snippet/index";
+import Standalone from "@hashicorp/design-system-components/components/hds/link/standalone";
+import FilterTags from "core/components/filter-tags/index";
+import can from "admin/helpers/can";
+import Inline from "@hashicorp/design-system-components/components/hds/link/inline";
+import or from "ember-truth-helpers/helpers/or";
+import Pagination from "rose/components/rose/pagination";
+import ApplicationState from "@hashicorp/design-system-components/components/hds/application-state/index";
+import Modal from "@hashicorp/design-system-components/components/hds/modal/index";
+import ButtonSet from "@hashicorp/design-system-components/components/hds/button-set/index";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
 
 export default class FormRoleManageCustomScopesIndexComponent extends Component {
   // =attributes
@@ -129,279 +149,138 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
       }
     });
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if @model.totalItemsCount}}
-  <Rose::Form
-    class='full-width role-manage-custom-scopes-form'
-    @onSubmit={{@submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.role.isSaving}}
-    as |form|
-  >
-    <Hds::SegmentedGroup as |S|>
-      <S.TextInput
-        @value={{@search}}
-        @type='search'
-        placeholder={{t 'actions.search'}}
-        aria-label={{t 'actions.search'}}
-        {{on 'input' @handleSearchInput}}
-      />
+  <Form class="full-width role-manage-custom-scopes-form" @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.role.isSaving}} as |form|>
+    <SegmentedGroup as |S|>
+      <S.TextInput @value={{@search}} @type="search" placeholder={{t "actions.search"}} aria-label={{t "actions.search"}} {{on "input" @handleSearchInput}} />
       {{#unless @model.canSelectOrgs}}
         <S.Generic>
-          <Dropdown
-            name='org'
-            @toggleText={{t 'resources.org.title'}}
-            @itemOptions={{@orgScopes}}
-            @checkedItems={{@orgs}}
-            @applyFilter={{fn @applyFilter 'orgs'}}
-            @isSearchable={{true}}
-          />
+          <Dropdown name="org" @toggleText={{t "resources.org.title"}} @itemOptions={{@orgScopes}} @checkedItems={{@orgs}} @applyFilter={{fn @applyFilter "orgs"}} @isSearchable={{true}} />
         </S.Generic>
       {{/unless}}
-    </Hds::SegmentedGroup>
+    </SegmentedGroup>
 
     {{#if @model.scopes}}
       {{#if @model.canSelectOrgs}}
-        <div class='table-selected-items-text'>
+        <div class="table-selected-items-text">
           {{#if @model.role.grantScopeOrgIDs.length}}
-            <Hds::Text::Body @tag='p' @color='faint'>
-              {{t
-                'resources.role.scope.titles.selected'
-                items=@model.role.grantScopeOrgIDs.length
-                total=@model.totalItemsCount
-              }}
-            </Hds::Text::Body>
+            <Body @tag="p" @color="faint">
+              {{t "resources.role.scope.titles.selected" items=@model.role.grantScopeOrgIDs.length total=@model.totalItemsCount}}
+            </Body>
           {{/if}}
         </div>
 
-        <Hds::Table
-          @columns={{array
-            (hash label=(t 'resources.role.scope.title'))
-            (hash label=(t 'form.id.label'))
-            (hash label=(t 'resources.role.scope.titles.projects_selected'))
-          }}
-          @model={{@model.scopes}}
-          @isSelectable={{true}}
-          @onSelectionChange={{this.orgSelectionChange}}
-          @valign='middle'
-        >
+        <Table @columns={{array (hash label=(t "resources.role.scope.title")) (hash label=(t "form.id.label")) (hash label=(t "resources.role.scope.titles.projects_selected"))}} @model={{@model.scopes}} @isSelectable={{true}} @onSelectionChange={{this.orgSelectionChange}} @valign="middle">
           <:body as |B|>
-            <B.Tr
-              @selectionKey={{B.data.id}}
-              @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}}
-              @selectionAriaLabelSuffix='row {{B.data.id}}'
-              data-test-org-scopes-table-row={{B.data.id}}
-            >
+            <B.Tr @selectionKey={{B.data.id}} @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}} @selectionAriaLabelSuffix="row {{B.data.id}}" data-test-org-scopes-table-row={{B.data.id}}>
               <B.Td>
-                <Hds::Text::Body @tag='p'>
+                <Body @tag="p">
                   {{B.data.displayName}}
-                </Hds::Text::Body>
+                </Body>
               </B.Td>
               <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
+                <Snippet @textToCopy={{B.data.id}} @color="secondary" />
               </B.Td>
               <B.Td>
                 {{#let (get @model.projectTotals B.data.id) as |projectTotals|}}
                   {{#if projectTotals}}
-                    <Hds::Link::Standalone
-                      @icon='arrow-right'
-                      @iconPosition='trailing'
-                      @text={{t
-                        'resources.role.scope.actions.view-projects'
-                        selected=projectTotals.selected.length
-                        total=projectTotals.total
-                      }}
-                      @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
-                      @model={{B.data.id}}
-                    />
+                    <Standalone @icon="arrow-right" @iconPosition="trailing" @text={{t "resources.role.scope.actions.view-projects" selected=projectTotals.selected.length total=projectTotals.total}} @route="scopes.scope.roles.role.manage-scopes.manage-org-projects" @model={{B.data.id}} />
                   {{/if}}
                 {{/let}}
               </B.Td>
             </B.Tr>
           </:body>
-        </Hds::Table>
+        </Table>
       {{else}}
         <FilterTags @filters={{@filters}} />
 
-        <div class='table-selected-items-text'>
+        <div class="table-selected-items-text">
           {{#if @model.role.grantScopeProjectIDs.length}}
-            <Hds::Text::Body @tag='p' @color='faint'>
-              {{t
-                'resources.role.scope.titles.selected'
-                items=@model.role.grantScopeProjectIDs.length
-                total=@model.totalItemsCount
-              }}
-            </Hds::Text::Body>
+            <Body @tag="p" @color="faint">
+              {{t "resources.role.scope.titles.selected" items=@model.role.grantScopeProjectIDs.length total=@model.totalItemsCount}}
+            </Body>
           {{/if}}
         </div>
 
-        <Hds::Table
-          @columns={{array
-            (hash label=(t 'resources.project.title'))
-            (hash label=(t 'form.id.label'))
-            (hash
-              label=(t 'resources.org.title')
-              tooltip=(t
-                'resources.role.scope.messages.manage-custom-scopes.tooltip'
-              )
-            )
-          }}
-          @model={{@model.scopes}}
-          @isSelectable={{true}}
-          @onSelectionChange={{this.projectSelectionChange}}
-          @valign='middle'
-        >
+        <Table @columns={{array (hash label=(t "resources.project.title")) (hash label=(t "form.id.label")) (hash label=(t "resources.org.title") tooltip=(t "resources.role.scope.messages.manage-custom-scopes.tooltip"))}} @model={{@model.scopes}} @isSelectable={{true}} @onSelectionChange={{this.projectSelectionChange}} @valign="middle">
           <:body as |B|>
-            <B.Tr
-              @selectionKey={{B.data.id}}
-              @isSelected={{includes
-                B.data.id
-                @model.role.grantScopeProjectIDs
-              }}
-              @selectionAriaLabelSuffix='row {{B.data.id}}'
-              data-test-project-scopes-table-row={{B.data.id}}
-            >
+            <B.Tr @selectionKey={{B.data.id}} @isSelected={{includes B.data.id @model.role.grantScopeProjectIDs}} @selectionAriaLabelSuffix="row {{B.data.id}}" data-test-project-scopes-table-row={{B.data.id}}>
               <B.Td>
-                <Hds::Text::Body @tag='p'>
+                <Body @tag="p">
                   {{B.data.displayName}}
-                </Hds::Text::Body>
+                </Body>
               </B.Td>
               <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
+                <Snippet @textToCopy={{B.data.id}} @color="secondary" />
               </B.Td>
               <B.Td>
-                {{#if (can 'read model' B.data)}}
-                  <Hds::Link::Inline
-                    @route='scopes.scope'
-                    @model={{B.data.scope.id}}
-                    @icon='org'
-                    @iconPosition='leading'
-                  >
+                {{#if (can "read model" B.data)}}
+                  <Inline @route="scopes.scope" @model={{B.data.scope.id}} @icon="org" @iconPosition="leading">
                     {{~or B.data.scope.name B.data.scope.id}}
-                  </Hds::Link::Inline>
+                  </Inline>
                 {{else}}
                   {{or B.data.scope.name B.data.scope.id}}
                 {{/if}}
               </B.Td>
             </B.Tr>
           </:body>
-        </Hds::Table>
+        </Table>
       {{/if}}
-      <Rose::Pagination
-        @model={{@model.role.id}}
-        @totalItems={{@model.totalItems}}
-        @currentPage={{@page}}
-        @currentPageSize={{@pageSize}}
-      />
+      <Pagination @model={{@model.role.id}} @totalItems={{@model.totalItems}} @currentPage={{@page}} @currentPageSize={{@pageSize}} />
 
-      <form.actions
-        @submitText={{t 'actions.save'}}
-        @cancelText={{t 'actions.cancel'}}
-      />
+      <form.actions @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
     {{else}}
-      <Hds::ApplicationState data-test-no-grant-scope-results as |A|>
-        <A.Header @title={{t 'titles.no-results-found'}} />
-        <A.Body
-          @text={{t
-            'descriptions.no-search-results'
-            query=@search
-            resource=(t 'resources.scope.title_plural')
-          }}
-        />
-      </Hds::ApplicationState>
+      <ApplicationState data-test-no-grant-scope-results as |A|>
+        <A.Header @title={{t "titles.no-results-found"}} />
+        <A.Body @text={{t "descriptions.no-search-results" query=@search resource=(t "resources.scope.title_plural")}} />
+      </ApplicationState>
     {{/if}}
-  </Rose::Form>
+  </Form>
 {{else}}
-  <Hds::ApplicationState as |A|>
-    <A.Header
-      @title={{t
-        'resources.role.scope.messages.no-scopes.title'
-        type=(t 'resources.org.title')
-      }}
-    />
-    <A.Body
-      @text={{t
-        'resources.role.scope.messages.no-scopes.description'
-        type=(t 'resources.org.title')
-      }}
-    />
+  <ApplicationState as |A|>
+    <A.Header @title={{t "resources.role.scope.messages.no-scopes.title" type=(t "resources.org.title")}} />
+    <A.Body @text={{t "resources.role.scope.messages.no-scopes.description" type=(t "resources.org.title")}} />
     <A.Footer as |F|>
-      <F.LinkStandalone
-        @icon='arrow-left'
-        @text={{t 'actions.back'}}
-        @route='scopes.scope.roles.role.manage-scopes'
-      />
+      <F.LinkStandalone @icon="arrow-left" @text={{t "actions.back"}} @route="scopes.scope.roles.role.manage-scopes" />
     </A.Footer>
-  </Hds::ApplicationState>
+  </ApplicationState>
 {{/if}}
 
 {{#if this.selectedOrg}}
-  <Hds::Modal
-    @onClose={{this.toggleRemoveOrgModal}}
-    data-test-manage-scopes-remove-org-modal
-    as |M|
-  >
-    <M.Header>{{t 'resources.role.scope.remove-org.title'}}</M.Header>
+  <Modal @onClose={{this.toggleRemoveOrgModal}} data-test-manage-scopes-remove-org-modal as |M|>
+    <M.Header>{{t "resources.role.scope.remove-org.title"}}</M.Header>
     <M.Body>
-      <Hds::Text::Body @tag='p' @color='primary'>
-        {{t
-          'resources.role.scope.remove-org.description'
-          orgDisplayName=this.orgDisplayName
-        }}
-      </Hds::Text::Body>
+      <Body @tag="p" @color="primary">
+        {{t "resources.role.scope.remove-org.description" orgDisplayName=this.orgDisplayName}}
+      </Body>
     </M.Body>
     <M.Footer as |F|>
-      <Hds::ButtonSet>
-        <Hds::Button
-          @text={{t 'resources.role.scope.actions.remove-org-and-projects'}}
-          {{on 'click' (fn this.removeProjects false)}}
-        />
-        <Hds::Button
-          @color='secondary'
-          @text={{t 'resources.role.scope.actions.remove-org-only'}}
-          {{on 'click' F.close}}
-        />
-      </Hds::ButtonSet>
+      <ButtonSet>
+        <Button @text={{t "resources.role.scope.actions.remove-org-and-projects"}} {{on "click" (fn this.removeProjects false)}} />
+        <Button @color="secondary" @text={{t "resources.role.scope.actions.remove-org-only"}} {{on "click" F.close}} />
+      </ButtonSet>
     </M.Footer>
-  </Hds::Modal>
+  </Modal>
 {{/if}}
 
 {{#if this.selectedOrgs}}
-  <Hds::Modal
-    @onClose={{this.toggleRemoveAllModal}}
-    data-test-manage-scopes-remove-all-orgs-modal
-    as |M|
-  >
-    <M.Header>{{t 'resources.role.scope.remove-all-orgs.title'}}</M.Header>
+  <Modal @onClose={{this.toggleRemoveAllModal}} data-test-manage-scopes-remove-all-orgs-modal as |M|>
+    <M.Header>{{t "resources.role.scope.remove-all-orgs.title"}}</M.Header>
     <M.Body>
-      <Hds::Text::Body @tag='p' @color='primary'>
-        {{t 'resources.role.scope.remove-all-orgs.description'}}
-      </Hds::Text::Body>
+      <Body @tag="p" @color="primary">
+        {{t "resources.role.scope.remove-all-orgs.description"}}
+      </Body>
     </M.Body>
     <M.Footer as |F|>
-      <Hds::ButtonSet>
-        <Hds::Button
-          @text={{t 'resources.role.scope.actions.remove-orgs-and-projects'}}
-          {{on 'click' (fn this.removeProjects true)}}
-        />
-        <Hds::Button
-          @color='secondary'
-          @text={{t 'resources.role.scope.actions.remove-orgs-only'}}
-          {{on 'click' F.close}}
-        />
-      </Hds::ButtonSet>
+      <ButtonSet>
+        <Button @text={{t "resources.role.scope.actions.remove-orgs-and-projects"}} {{on "click" (fn this.removeProjects true)}} />
+        <Button @color="secondary" @text={{t "resources.role.scope.actions.remove-orgs-only"}} {{on "click" F.close}} />
+      </ButtonSet>
     </M.Footer>
-  </Hds::Modal>
-{{/if}}
+  </Modal>
+{{/if}}</template>}

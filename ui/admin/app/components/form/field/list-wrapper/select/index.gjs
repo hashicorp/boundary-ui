@@ -7,6 +7,16 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { set } from '@ember/object';
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import Base from "@hashicorp/design-system-components/components/hds/form/select/base";
+import t from "ember-intl/helpers/t";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import eq from "ember-truth-helpers/helpers/eq";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
+import { fn } from "@ember/helper";
+import or from "ember-truth-helpers/helpers/or";
+import not from "ember-truth-helpers/helpers/not";
 
 export default class MappingListSelectComponent extends Component {
   // =attributes
@@ -58,52 +68,32 @@ export default class MappingListSelectComponent extends Component {
       set(this.args.model, field, newArray);
     }
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Table class='list-wrapper-field' name={{@name}}>
+<Table class="list-wrapper-field" name={{@name}}>
 
   <:body as |B|>
 
     {{#each this.options as |select index|}}
       <B.Tr>
         <B.Td>
-          <Hds::Form::Select::Base
-            @value={{select.value}}
-            @width={{@width}}
-            disabled={{@disabled}}
-            aria-label={{t 'titles.value'}}
-            {{on 'change' (set-from-event select 'value')}}
-            as |F|
-          >
+          <Base @value={{select.value}} @width={{@width}} disabled={{@disabled}} aria-label={{t "titles.value"}} {{on "change" (setFromEvent select "value")}} as |F|>
             <F.Options>
               {{#each @selectOptions as |selectOption|}}
-                <option
-                  value={{selectOption}}
-                  selected={{eq select.value selectOption}}
-                >
+                <option value={{selectOption}} selected={{eq select.value selectOption}}>
                   {{selectOption}}
                 </option>
               {{/each}}
             </F.Options>
-          </Hds::Form::Select::Base>
+          </Base>
         </B.Td>
 
         <B.Td>
           {{#if this.removeOptionByIndex}}
-            <Hds::Button
-              data-test-remove-option-button={{select.value}}
-              @text={{t 'actions.remove'}}
-              @color='critical'
-              @icon='trash'
-              @isIconOnly={{true}}
-              disabled={{@disabled}}
-              {{on 'click' (fn this.removeOptionByIndex index)}}
-            />
+            <Button data-test-remove-option-button={{select.value}} @text={{t "actions.remove"}} @color="critical" @icon="trash" @isIconOnly={{true}} disabled={{@disabled}} {{on "click" (fn this.removeOptionByIndex index)}} />
           {{/if}}
         </B.Td>
       </B.Tr>
@@ -111,42 +101,25 @@ export default class MappingListSelectComponent extends Component {
 
     <B.Tr>
       <B.Td>
-        <Hds::Form::Select::Base
-          @value={{this.newOptionValue}}
-          @width={{@width}}
-          disabled={{@disabled}}
-          aria-label={{t 'titles.value'}}
-          {{on 'change' (set-from-event this 'newOptionValue')}}
-          as |F|
-        >
+        <Base @value={{this.newOptionValue}} @width={{@width}} disabled={{@disabled}} aria-label={{t "titles.value"}} {{on "change" (setFromEvent this "newOptionValue")}} as |F|>
 
           <F.Options>
-            <option disabled={{@disabled}} hidden selected value=''>
-              {{t 'titles.choose-an-option'}}
+            <option disabled={{@disabled}} hidden selected value>
+              {{t "titles.choose-an-option"}}
             </option>
             {{#each @selectOptions as |selectOption|}}
-              <option
-                value={{selectOption}}
-                selected={{eq selectOption this.newOptionValue}}
-              >
+              <option value={{selectOption}} selected={{eq selectOption this.newOptionValue}}>
                 {{selectOption}}
               </option>
             {{/each}}
           </F.Options>
 
-        </Hds::Form::Select::Base>
+        </Base>
       </B.Td>
 
       <B.Td>
-        <Hds::Button
-          data-test-add-option-button
-          @text={{t 'actions.add'}}
-          @color='secondary'
-          type='button'
-          disabled={{or @disabled (not this.newOptionValue)}}
-          {{on 'click' this.addOption}}
-        />
+        <Button data-test-add-option-button @text={{t "actions.add"}} @color="secondary" type="button" disabled={{or @disabled (not this.newOptionValue)}} {{on "click" this.addOption}} />
       </B.Td>
     </B.Tr>
   </:body>
-</Hds::Table>
+</Table></template>}

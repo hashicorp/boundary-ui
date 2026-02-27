@@ -5,11 +5,8 @@
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import {
-  STATE_SESSION_RECORDING_STARTED,
-  STATE_SESSION_RECORDING_AVAILABLE,
-  STATE_SESSION_RECORDING_UNKNOWN,
-} from 'api/models/session-recording';
+import { STATE_SESSION_RECORDING_STARTED, STATE_SESSION_RECORDING_AVAILABLE, STATE_SESSION_RECORDING_UNKNOWN } from 'api/models/session-recording';
+import Badge from "@hashicorp/design-system-components/components/hds/badge/index";
 
 export default class SessionRecordingStatusComponent extends Component {
   // =services
@@ -39,16 +36,9 @@ export default class SessionRecordingStatusComponent extends Component {
         };
     }
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Badge
-  class='session-recording-status-badge'
-  @icon={{this.status.icon}}
-  @color={{this.status.color}}
-  @text={{this.status.text}}
-/>
+<Badge class="session-recording-status-badge" @icon={{this.status.icon}} @color={{this.status.color}} @text={{this.status.text}} /></template>}

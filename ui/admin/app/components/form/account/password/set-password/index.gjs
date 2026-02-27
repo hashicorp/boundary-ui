@@ -6,6 +6,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import Form from "rose/components/rose/form";
+import { fn } from "@ember/helper";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import t from "ember-intl/helpers/t";
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
   // =properties
@@ -45,34 +51,18 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
     this.resetPassword();
     fn(password);
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form @onSubmit={{fn this.submit @submit this.password}} as |form|>
+<Form @onSubmit={{fn this.submit @submit this.password}} as |form|>
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @value={{this.password}}
-    @type='password'
-    name='password'
-    autocomplete='new-password'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event this 'password')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.set_password.label'}}</F.Label>
-    <F.HelperText>{{t 'form.set_password.help'}}</F.HelperText>
-  </Hds::Form::TextInput::Field>
+  <Field @isRequired={{true}} @value={{this.password}} @type="password" name="password" autocomplete="new-password" disabled={{form.disabled}} {{on "input" (setFromEvent this "password")}} as |F|>
+    <F.Label>{{t "form.set_password.label"}}</F.Label>
+    <F.HelperText>{{t "form.set_password.help"}}</F.HelperText>
+  </Field>
 
-  <form.actions
-    @submitDisabled={{this.cannotSave}}
-    @showCancel={{false}}
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
+  <form.actions @submitDisabled={{this.cannotSave}} @showCancel={{false}} @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
 
-</Rose::Form>
+</Form></template>}

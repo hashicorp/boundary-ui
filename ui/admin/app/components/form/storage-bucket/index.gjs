@@ -8,10 +8,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { set } from '@ember/object';
 import { assert } from '@ember/debug';
-import {
-  TYPE_CREDENTIAL_DYNAMIC,
-  TYPES_STORAGE_BUCKET_PLUGIN,
-} from 'api/models/storage-bucket';
+import { TYPE_CREDENTIAL_DYNAMIC, TYPES_STORAGE_BUCKET_PLUGIN } from 'api/models/storage-bucket';
 import awsFormComponent from './aws';
 import minioFormComponent from './minio';
 
@@ -81,23 +78,10 @@ export default class FormStorageBucketComponent extends Component {
     this.showDynamicCredentials =
       this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 {{#if @model.type}}
-  <this.storageBucketFormComponent
-    @model={{@model}}
-    @submit={{@submit}}
-    @cancel={{@cancel}}
-    @updateScope={{this.updateScope}}
-    @scopes={{@scopes}}
-    @pluginTypes={{this.pluginTypes}}
-    @changePluginType={{@changePluginType}}
-    @changeCredentialType={{@changeCredentialType}}
-    @rollbackSecretAttrs={{this.rollbackSecretAttrs}}
-    @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}}
-  />
-{{/if}}
+  <this.storageBucketFormComponent @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} @updateScope={{this.updateScope}} @scopes={{@scopes}} @pluginTypes={{this.pluginTypes}} @changePluginType={{@changePluginType}} @changeCredentialType={{@changeCredentialType}} @rollbackSecretAttrs={{this.rollbackSecretAttrs}} @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}} />
+{{/if}}</template>}

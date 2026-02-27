@@ -7,6 +7,15 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { set } from '@ember/object';
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import t from "ember-intl/helpers/t";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
+import { fn } from "@ember/helper";
+import or from "ember-truth-helpers/helpers/or";
+import not from "ember-truth-helpers/helpers/not";
 
 export default class MappingListTextInputComponent extends Component {
   // =attributes
@@ -58,40 +67,24 @@ export default class MappingListTextInputComponent extends Component {
       set(this.args.model, field, newArray);
     }
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Table class='list-wrapper-field' name={{@name}}>
+<Table class="list-wrapper-field" name={{@name}}>
 
   <:body as |B|>
 
     {{#each @options as |option index|}}
       <B.Tr>
         <B.Td>
-          <Hds::Form::TextInput::Field
-            @value={{option.value}}
-            @type='text'
-            disabled={{@disabled}}
-            aria-label={{t 'titles.value'}}
-            {{on 'input' (set-from-event option 'value')}}
-          />
+          <Field @value={{option.value}} @type="text" disabled={{@disabled}} aria-label={{t "titles.value"}} {{on "input" (setFromEvent option "value")}} />
         </B.Td>
 
         <B.Td>
           {{#if this.removeOptionByIndex}}
-            <Hds::Button
-              data-test-remove-button
-              @text={{t 'actions.remove'}}
-              @color='critical'
-              @icon='trash'
-              @isIconOnly={{true}}
-              disabled={{@disabled}}
-              {{on 'click' (fn this.removeOptionByIndex index)}}
-            />
+            <Button data-test-remove-button @text={{t "actions.remove"}} @color="critical" @icon="trash" @isIconOnly={{true}} disabled={{@disabled}} {{on "click" (fn this.removeOptionByIndex index)}} />
           {{/if}}
         </B.Td>
       </B.Tr>
@@ -100,25 +93,13 @@ export default class MappingListTextInputComponent extends Component {
     <B.Tr>
 
       <B.Td>
-        <Hds::Form::TextInput::Field
-          @value={{this.newOptionValue}}
-          @type='text'
-          disabled={{@disabled}}
-          aria-label={{t 'titles.value'}}
-          {{on 'input' (set-from-event this 'newOptionValue')}}
-        />
+        <Field @value={{this.newOptionValue}} @type="text" disabled={{@disabled}} aria-label={{t "titles.value"}} {{on "input" (setFromEvent this "newOptionValue")}} />
       </B.Td>
 
       <B.Td>
-        <Hds::Button
-          @text={{t 'actions.add'}}
-          @color='secondary'
-          type='button'
-          disabled={{or @disabled (not this.newOptionValue)}}
-          {{on 'click' this.addOption}}
-        />
+        <Button @text={{t "actions.add"}} @color="secondary" type="button" disabled={{or @disabled (not this.newOptionValue)}} {{on "click" this.addOption}} />
       </B.Td>
     </B.Tr>
 
   </:body>
-</Hds::Table>
+</Table></template>}

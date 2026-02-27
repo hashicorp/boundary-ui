@@ -1,35 +1,31 @@
-{{!
+import { hash, fn } from "@ember/helper";
+import can from "admin/helpers/can";
+import or from "ember-truth-helpers/helpers/or";
+import Dropdown from "@hashicorp/design-system-components/components/hds/dropdown/index";
+import t from "ember-intl/helpers/t";
+import { on } from "@ember/modifier";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-{{#let
-  (hash
-    canSetWorkerTags=(can 'setWorkerTags worker' @model)
-    canDelete=(can 'delete worker' @model)
-  )
-  as |perms|
-}}
+{{#let (hash canSetWorkerTags=(can "setWorkerTags worker" @model) canDelete=(can "delete worker" @model)) as |perms|}}
   {{#if (or perms.canSetWorkerTags perms.canDelete)}}
-    <Hds::Dropdown data-test-manage-worker-dropdown as |dd|>
-      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+    <Dropdown data-test-manage-worker-dropdown as |dd|>
+      <dd.ToggleButton @text={{t "actions.manage"}} @color="secondary" />
       {{#if perms.canSetWorkerTags}}
-        <dd.Interactive @route='scopes.scope.workers.worker.create-tags'>
-          {{t 'resources.worker.actions.create_tags'}}
+        <dd.Interactive @route="scopes.scope.workers.worker.create-tags">
+          {{t "resources.worker.actions.create_tags"}}
         </dd.Interactive>
       {{/if}}
       {{#if perms.canDelete}}
         {{#if perms.canSetWorkerTags}}
           <dd.Separator />
         {{/if}}
-        <dd.Interactive
-          @icon='trash'
-          @color='critical'
-          {{on 'click' (fn @delete @model)}}
-        >
-          {{t 'resources.worker.actions.delete'}}
+        <dd.Interactive @icon="trash" @color="critical" {{on "click" (fn @delete @model)}}>
+          {{t "resources.worker.actions.delete"}}
         </dd.Interactive>
       {{/if}}
-    </Hds::Dropdown>
+    </Dropdown>
   {{/if}}
-{{/let}}
+{{/let}}</template>

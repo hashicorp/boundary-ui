@@ -12,6 +12,7 @@ import { modifier } from 'ember-modifier';
   so registering or unregistering a container will cause the DOM
   to re-render a container with the correct breadcrumbs.
 */
+import Breadcrumb from "@hashicorp/design-system-components/components/hds/breadcrumb/index";
 
 export default class BreadcrumbsContainerComponent extends Component {
   @service('breadcrumbs') breadcrumbsService;
@@ -29,17 +30,11 @@ export default class BreadcrumbsContainerComponent extends Component {
 
     return () => this.breadcrumbsService.unregisterContainer(this.container);
   });
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Breadcrumb
-  ...attributes
-  data-test-breadcrumbs-container
-  {{this.insertedBreadcrumbContainer}}
->
+<Breadcrumb ...attributes data-test-breadcrumbs-container {{this.insertedBreadcrumbContainer}}>
   {{yield}}
-</Hds::Breadcrumb>
+</Breadcrumb></template>}

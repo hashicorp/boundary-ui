@@ -5,10 +5,25 @@
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import {
-  TYPES_CREDENTIALS,
-  TYPE_CREDENTIAL_DYNAMIC,
-} from 'api/models/host-catalog';
+import { TYPES_CREDENTIALS, TYPE_CREDENTIAL_DYNAMIC } from 'api/models/host-catalog';
+import Form from "rose/components/rose/form";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import t from "ember-intl/helpers/t";
+import Field0 from "@hashicorp/design-system-components/components/hds/form/textarea/field";
+import Group from "@hashicorp/design-system-components/components/hds/form/radio-card/group";
+import eq from "ember-truth-helpers/helpers/eq";
+import { fn, concat } from "@ember/helper";
+import InfoField from "admin/components/info-field/index";
+import Inline from "@hashicorp/design-system-components/components/hds/link/inline";
+import docUrl from "core/helpers/doc-url";
+import Group0 from "@hashicorp/design-system-components/components/hds/form/radio/group";
+import ListWrapper from "admin/components/form/field/list-wrapper/index";
+import featureFlag from "ember-feature-flags/helpers/feature-flag";
+import not from "ember-truth-helpers/helpers/not";
+import Field1 from "@hashicorp/design-system-components/components/hds/form/checkbox/field";
+import can from "admin/helpers/can";
 
 export default class FormHostCatalogAwsComponent extends Component {
   // =services
@@ -42,34 +57,18 @@ export default class FormHostCatalogAwsComponent extends Component {
       this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC
     );
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  @onSubmit={{@submit}}
-  @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
-  @showEditToggle={{if @model.isNew false true}}
-  as |form|
->
-  <Hds::Form::TextInput::Field
-    name='name'
-    @value={{@model.name}}
-    @isInvalid={{@model.errors.name}}
-    @isOptional={{true}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'name')}}
-    as |F|
-  >
+<Form @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{if @model.isNew false true}} as |form|>
+  <Field name="name" @value={{@model.name}} @isInvalid={{@model.errors.name}} @isOptional={{true}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "name")}} as |F|>
     <F.Label>
-      {{t 'form.name.label'}}
+      {{t "form.name.label"}}
     </F.Label>
     <F.HelperText>
-      {{t 'form.name.help'}}
+      {{t "form.name.help"}}
     </F.HelperText>
     {{#if @model.errors.name}}
       <F.Error as |E|>
@@ -80,21 +79,14 @@ export default class FormHostCatalogAwsComponent extends Component {
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::TextInput::Field>
+  </Field>
 
-  <Hds::Form::Textarea::Field
-    name='description'
-    @value={{@model.description}}
-    @isInvalid={{@model.errors.description}}
-    @isOptional={{true}}
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <Field0 name="description" @value={{@model.description}} @isInvalid={{@model.errors.description}} @isOptional={{true}} disabled={{form.disabled}} as |F|>
     <F.Label>
-      {{t 'form.description.label'}}
+      {{t "form.description.label"}}
     </F.Label>
     <F.HelperText>
-      {{t 'form.description.help'}}
+      {{t "form.description.help"}}
     </F.HelperText>
     {{#if @model.errors.description}}
       <F.Error as |E|>
@@ -105,151 +97,95 @@ export default class FormHostCatalogAwsComponent extends Component {
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::Textarea::Field>
+  </Field0>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group @name={{t 'form.type.label'}} as |G|>
+    <Group @name={{t "form.type.label"}} as |G|>
       <G.Legend>
-        {{t 'form.type.label'}}
+        {{t "form.type.label"}}
       </G.Legend>
       {{#each @hostCatalogTypes as |hostCatalogType|}}
-        <G.RadioCard
-          @value={{hostCatalogType}}
-          @maxWidth='20rem'
-          @checked={{eq hostCatalogType @model.type}}
-          {{on 'input' (fn @changeType hostCatalogType)}}
-          as |R|
-        >
+        <G.RadioCard @value={{hostCatalogType}} @maxWidth="20rem" @checked={{eq hostCatalogType @model.type}} {{on "input" (fn @changeType hostCatalogType)}} as |R|>
           <R.Label>
-            {{t (concat 'resources.host-catalog.types.' hostCatalogType)}}
+            {{t (concat "resources.host-catalog.types." hostCatalogType)}}
           </R.Label>
           <R.Description>
-            {{t (concat 'resources.host-catalog.help.' hostCatalogType)}}
+            {{t (concat "resources.host-catalog.help." hostCatalogType)}}
           </R.Description>
         </G.RadioCard>
       {{/each}}
-    </Hds::Form::RadioCard::Group>
-    <Hds::Form::RadioCard::Group
-      @name={{t 'form.plugin_type.label'}}
-      @alignment='center'
-      as |G|
-    >
+    </Group>
+    <Group @name={{t "form.plugin_type.label"}} @alignment="center" as |G|>
       <G.Legend>
-        {{t 'titles.provider'}}
+        {{t "titles.provider"}}
       </G.Legend>
       <G.Legend>
-        {{t 'titles.choose-a-provider'}}
+        {{t "titles.choose-a-provider"}}
       </G.Legend>
       <G.HelperText>
-        {{t 'descriptions.choose-a-provider'}}
+        {{t "descriptions.choose-a-provider"}}
       </G.HelperText>
 
       {{#each-in @mapResourceTypeWithIcon as |pluginType icon|}}
-        <G.RadioCard
-          @value={{pluginType}}
-          @maxWidth='20rem'
-          @checked={{eq pluginType @model.compositeType}}
-          {{on 'input' (fn @changeType pluginType)}}
-          as |R|
-        >
+        <G.RadioCard @value={{pluginType}} @maxWidth="20rem" @checked={{eq pluginType @model.compositeType}} {{on "input" (fn @changeType pluginType)}} as |R|>
           <R.Label>
-            {{t (concat 'resources.host-catalog.types.' pluginType)}}
+            {{t (concat "resources.host-catalog.types." pluginType)}}
           </R.Label>
           <R.Icon @name={{icon}} />
         </G.RadioCard>
       {{/each-in}}
-    </Hds::Form::RadioCard::Group>
+    </Group>
   {{else}}
-    <InfoField
-      @value={{t 'resources.host-catalog.types.aws'}}
-      @icon='aws-color'
-      readonly={{true}}
-      as |F|
-    >
+    <InfoField @value={{t "resources.host-catalog.types.aws"}} @icon="aws-color" readonly={{true}} as |F|>
       <F.Label>
-        {{t 'titles.provider'}}
+        {{t "titles.provider"}}
       </F.Label>
       <F.HelperText>
-        {{t 'descriptions.provider'}}
+        {{t "descriptions.provider"}}
       </F.HelperText>
     </InfoField>
   {{/if}}
 
-  <Hds::Form::TextInput::Field
-    name='region'
-    @value={{@model.region}}
-    @isRequired={{true}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'region')}}
-    as |F|
-  >
+  <Field name="region" @value={{@model.region}} @isRequired={{true}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "region")}} as |F|>
     <F.Label>
-      {{t 'resources.host-catalog.form.aws_region.label'}}
+      {{t "resources.host-catalog.form.aws_region.label"}}
     </F.Label>
     <F.HelperText>
-      {{t 'resources.host-catalog.form.aws_region.help'}}
-      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws.region'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
+      {{t "resources.host-catalog.form.aws_region.help"}}
+      <Inline @href={{docUrl "host-catalog.aws.region"}}>
+        {{t "actions.learn-more"}}
+      </Inline>
     </F.HelperText>
-  </Hds::Form::TextInput::Field>
+  </Field>
 
-  <Hds::Form::Radio::Group
-    class='credential-selection'
-    @layout='vertical'
-    @name='credential_type'
-    as |G|
-  >
+  <Group0 class="credential-selection" @layout="vertical" @name="credential_type" as |G|>
     <G.Legend>
-      {{t 'resources.host-catalog.types.credential.label'}}
+      {{t "resources.host-catalog.types.credential.label"}}
     </G.Legend>
     <G.HelperText>
-      {{t 'resources.host-catalog.types.credential.help'}}
+      {{t "resources.host-catalog.types.credential.help"}}
     </G.HelperText>
 
     {{#each this.credentials as |credentialType|}}
-      <G.RadioField
-        name={{credentialType}}
-        @value={{credentialType}}
-        checked={{eq credentialType @model.credentialType}}
-        disabled={{form.disabled}}
-        {{on 'input' (fn @changeCredentialType credentialType)}}
-        as |F|
-      >
+      <G.RadioField name={{credentialType}} @value={{credentialType}} checked={{eq credentialType @model.credentialType}} disabled={{form.disabled}} {{on "input" (fn @changeCredentialType credentialType)}} as |F|>
         <F.Label>
-          {{t
-            (concat
-              'resources.host-catalog.types.credential.' credentialType '.label'
-            )
-          }}
+          {{t (concat "resources.host-catalog.types.credential." credentialType ".label")}}
         </F.Label>
         <F.HelperText>
-          {{t
-            (concat
-              'resources.host-catalog.types.credential.' credentialType '.help'
-            )
-          }}
+          {{t (concat "resources.host-catalog.types.credential." credentialType ".help")}}
         </F.HelperText>
       </G.RadioField>
     {{/each}}
-  </Hds::Form::Radio::Group>
+  </Group0>
 
   {{#if this.showDynamicCredentials}}
-    {{! role_arn }}
-    <Hds::Form::TextInput::Field
-      name='role_arn'
-      @isOptional={{true}}
-      @value={{@model.role_arn}}
-      @isInvalid={{@model.errors.role_arn}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'role_arn')}}
-      as |F|
-    >
+    {{!-- role_arn --}}
+    <Field name="role_arn" @isOptional={{true}} @value={{@model.role_arn}} @isInvalid={{@model.errors.role_arn}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "role_arn")}} as |F|>
       <F.Label>
-        {{t 'resources.storage-bucket.form.role_arn.label'}}
+        {{t "resources.storage-bucket.form.role_arn.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'resources.host-catalog.help.role_arn'}}
+        {{t "resources.host-catalog.help.role_arn"}}
       </F.HelperText>
       {{#if @model.errors.role_arn}}
         <F.Error as |E|>
@@ -260,23 +196,15 @@ export default class FormHostCatalogAwsComponent extends Component {
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    {{! role_external_id }}
-    <Hds::Form::TextInput::Field
-      name='role_external_id'
-      @isOptional={{true}}
-      @value={{@model.role_external_id}}
-      @isInvalid={{@model.errors.role_external_id}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'role_external_id')}}
-      as |F|
-    >
+    {{!-- role_external_id --}}
+    <Field name="role_external_id" @isOptional={{true}} @value={{@model.role_external_id}} @isInvalid={{@model.errors.role_external_id}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "role_external_id")}} as |F|>
       <F.Label>
-        {{t 'resources.storage-bucket.form.role_external_id.label'}}
+        {{t "resources.storage-bucket.form.role_external_id.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'resources.storage-bucket.form.role_external_id.help'}}
+        {{t "resources.storage-bucket.form.role_external_id.help"}}
       </F.HelperText>
       {{#if @model.errors.role_external_id}}
         <F.Error as |E|>
@@ -287,23 +215,15 @@ export default class FormHostCatalogAwsComponent extends Component {
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    {{! role_session_name }}
-    <Hds::Form::TextInput::Field
-      name='role_session_name'
-      @isOptional={{true}}
-      @value={{@model.role_session_name}}
-      @isInvalid={{@model.errors.role_session_name}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'role_session_name')}}
-      as |F|
-    >
+    {{!-- role_session_name --}}
+    <Field name="role_session_name" @isOptional={{true}} @value={{@model.role_session_name}} @isInvalid={{@model.errors.role_session_name}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "role_session_name")}} as |F|>
       <F.Label>
-        {{t 'resources.storage-bucket.form.role_session_name.label'}}
+        {{t "resources.storage-bucket.form.role_session_name.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'resources.storage-bucket.form.role_session_name.help'}}
+        {{t "resources.storage-bucket.form.role_session_name.help"}}
       </F.HelperText>
       {{#if @model.errors.role_session_name}}
         <F.Error as |E|>
@@ -314,20 +234,16 @@ export default class FormHostCatalogAwsComponent extends Component {
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    {{! role_tags }}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @isOptional={{true}}
-      @disabled={{form.disabled}}
-    >
+    {{!-- role_tags --}}
+    <ListWrapper @layout="horizontal" @isOptional={{true}} @disabled={{form.disabled}}>
       <:fieldset as |F|>
         <F.Legend>
-          {{t 'resources.storage-bucket.form.role_tags.label'}}
+          {{t "resources.storage-bucket.form.role_tags.label"}}
         </F.Legend>
         <F.HelperText>
-          {{t 'resources.storage-bucket.form.role_tags.help'}}
+          {{t "resources.storage-bucket.form.role_tags.help"}}
         </F.HelperText>
 
         {{#if @model.errors.role_tags}}
@@ -341,11 +257,7 @@ export default class FormHostCatalogAwsComponent extends Component {
         {{/if}}
       </:fieldset>
       <:field as |F|>
-        <F.KeyValue
-          @name='role_tags'
-          @options={{@model.role_tags}}
-          @model={{@model}}
-        >
+        <F.KeyValue @name="role_tags" @options={{@model.role_tags}} @model={{@model}}>
           <:key as |K|>
             <K.text />
           </:key>
@@ -354,66 +266,42 @@ export default class FormHostCatalogAwsComponent extends Component {
           </:value>
         </F.KeyValue>
       </:field>
-    </Form::Field::ListWrapper>
+    </ListWrapper>
 
   {{else}}
-    <Hds::Form::TextInput::Field
-      name='access_key_id'
-      @value={{@model.access_key_id}}
-      @isOptional={{true}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
+    <Field name="access_key_id" @value={{@model.access_key_id}} @isOptional={{true}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "access_key_id")}} as |F|>
       <F.Label>
-        {{t 'form.access_key_id.label'}}
+        {{t "form.access_key_id.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'form.access_key_id.help'}}
-        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
+        {{t "form.access_key_id.help"}}
+        <Inline @href={{docUrl "host-catalog.aws"}}>
+          {{t "actions.learn-more"}}
+        </Inline>
       </F.HelperText>
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    <Hds::Form::TextInput::Field
-      name='secret_access_key'
-      @value={{@model.secret_access_key}}
-      @isOptional={{true}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'secret_access_key')}}
-      as |F|
-    >
+    <Field name="secret_access_key" @value={{@model.secret_access_key}} @isOptional={{true}} disabled={{form.disabled}} {{on "input" (setFromEvent @model "secret_access_key")}} as |F|>
       <F.Label>
-        {{t 'form.secret_access_key.label'}}
+        {{t "form.secret_access_key.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'form.secret_access_key.help'}}
-        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
+        {{t "form.secret_access_key.help"}}
+        <Inline @href={{docUrl "host-catalog.aws"}}>
+          {{t "actions.learn-more"}}
+        </Inline>
       </F.HelperText>
-    </Hds::Form::TextInput::Field>
+    </Field>
   {{/if}}
 
-  {{#if (feature-flag 'worker-filter')}}
-    <Hds::Form::Textarea::Field
-      name='worker_filter'
-      @value={{@model.worker_filter}}
-      @isRequired={{this.isWorkerFilterRequired}}
-      @isOptional={{not this.isWorkerFilterRequired}}
-      @isInvalid={{@model.errors.worker_filter}}
-      disabled={{form.disabled}}
-      as |F|
-    >
-      <F.Label data-test-aws-worker-filter-label>{{t
-          'form.worker_filter.label'
-        }}</F.Label>
+  {{#if (featureFlag "worker-filter")}}
+    <Field0 name="worker_filter" @value={{@model.worker_filter}} @isRequired={{this.isWorkerFilterRequired}} @isOptional={{not this.isWorkerFilterRequired}} @isInvalid={{@model.errors.worker_filter}} disabled={{form.disabled}} as |F|>
+      <F.Label data-test-aws-worker-filter-label>{{t "form.worker_filter.label"}}</F.Label>
       <F.HelperText>
-        {{t 'resources.host-catalog.form.worker_filter.help'}}
-        <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
+        {{t "resources.host-catalog.form.worker_filter.help"}}
+        <Inline @href={{docUrl "worker.create-tags"}}>
+          {{t "actions.learn-more"}}
+        </Inline>
       </F.HelperText>
       {{#if @model.errors.worker_filter}}
         <F.Error as |E|>
@@ -424,43 +312,28 @@ export default class FormHostCatalogAwsComponent extends Component {
           {{/each}}
         </F.Error>
       {{/if}}
-    </Hds::Form::Textarea::Field>
+    </Field0>
   {{/if}}
 
   {{#if this.showDynamicCredentials}}
-    <Hds::Form::Checkbox::Field
-      name='disable_credential_rotation'
-      checked={{true}}
-      disabled={{true}}
-      as |F|
-    >
+    <Field1 name="disable_credential_rotation" checked={{true}} disabled={{true}} as |F|>
       <F.Label>
-        {{t 'form.disable_credential_rotation.label'}}
+        {{t "form.disable_credential_rotation.label"}}
       </F.Label>
       <F.HelperText>
-        {{t 'resources.host-catalog.help.disable_credential_rotation'}}
+        {{t "resources.host-catalog.help.disable_credential_rotation"}}
       </F.HelperText>
-    </Hds::Form::Checkbox::Field>
+    </Field1>
   {{else}}
-    <Hds::Form::Checkbox::Field
-      name='disable_credential_rotation'
-      checked={{@model.disable_credential_rotation}}
-      disabled={{form.disabled}}
-      {{on 'change' (fn @toggleDisableCredentialRotation @model)}}
-      as |F|
-    >
+    <Field1 name="disable_credential_rotation" checked={{@model.disable_credential_rotation}} disabled={{form.disabled}} {{on "change" (fn @toggleDisableCredentialRotation @model)}} as |F|>
       <F.Label>
-        {{t 'form.disable_credential_rotation.label'}}
+        {{t "form.disable_credential_rotation.label"}}
       </F.Label>
-    </Hds::Form::Checkbox::Field>
+    </Field1>
   {{/if}}
   &nbsp;
 
-  {{#if (can 'save model' @model)}}
-    <form.actions
-      @enableEditText={{t 'actions.edit-form'}}
-      @submitText={{t 'actions.save'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+  {{#if (can "save model" @model)}}
+    <form.actions @enableEditText={{t "actions.edit-form"}} @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
   {{/if}}
-</Rose::Form>
+</Form></template>}

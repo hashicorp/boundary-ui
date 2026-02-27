@@ -9,6 +9,16 @@ import { A } from '@ember/array';
 import { service } from '@ember/service';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
+import Form from "rose/components/rose/form";
+import t from "ember-intl/helpers/t";
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import { array, hash, fn } from "@ember/helper";
+import Field from "@hashicorp/design-system-components/components/hds/form/checkbox/field";
+import { on } from "@ember/modifier";
+import HostCatalogTypeBadge from "admin/components/host-catalog-type-badge/index";
+import Code from "@hashicorp/design-system-components/components/hds/text/code";
+import Centered from "rose/components/rose/layout/centered";
+import ApplicationState from "@hashicorp/design-system-components/components/hds/application-state/index";
 
 export default class FormTargetAddHostSetsComponent extends Component {
   // =services
@@ -92,77 +102,46 @@ export default class FormTargetAddHostSetsComponent extends Component {
 
     await this.args.submit(this.selectedHostSetIDs);
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if this.hasAvailableHostSets}}
-  <Rose::Form
-    class='full-width'
-    @onSubmit={{this.submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    as |form|
-  >
+  <Form class="full-width" @onSubmit={{this.submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 
-    <form.actions
-      @submitText={{t 'resources.target.actions.add-host-sources'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+    <form.actions @submitText={{t "resources.target.actions.add-host-sources"}} @cancelText={{t "actions.cancel"}} />
 
-    <Hds::Table
-      @model={{this.filteredHostSets}}
-      @columns={{array
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.type.label'))
-        (hash label=(t 'resources.host-catalog.title'))
-      }}
-      @valign='middle'
-    >
+    <Table @model={{this.filteredHostSets}} @columns={{array (hash label=(t "form.id.label")) (hash label=(t "form.name.label")) (hash label=(t "form.type.label")) (hash label=(t "resources.host-catalog.title"))}} @valign="middle">
       <:body as |B|>
         <B.Tr>
           <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleHostSet B.data.id)}}
-              as |F|
-            >
+            <Field {{on "change" (fn this.toggleHostSet B.data.id)}} as |F|>
               <F.Label>{{B.data.id}}</F.Label>
               <F.HelperText>{{B.data.description}}</F.HelperText>
-            </Hds::Form::Checkbox::Field>
+            </Field>
           </B.Td>
           <B.Td>{{B.data.name}}</B.Td>
           <B.Td><HostCatalogTypeBadge @model={{B.data}} /></B.Td>
           <B.Td>
-            <Hds::Text::Code>
+            <Code>
               {{B.data.host_catalog_id}}
-            </Hds::Text::Code>
+            </Code>
           </B.Td>
         </B.Tr>
       </:body>
-    </Hds::Table>
-  </Rose::Form>
+    </Table>
+  </Form>
 {{/if}}
 
 {{#unless this.hasAvailableHostSets}}
-  <Rose::Layout::Centered>
-    <Hds::ApplicationState as |A|>
-      <A.Header
-        @title={{t 'resources.target.host-source.messages.none.title'}}
-      />
-      <A.Body
-        @text={{t 'resources.target.host-source.messages.none.description'}}
-      />
+  <Centered>
+    <ApplicationState as |A|>
+      <A.Header @title={{t "resources.target.host-source.messages.none.title"}} />
+      <A.Body @text={{t "resources.target.host-source.messages.none.description"}} />
       <A.Footer as |F|>
-        <F.LinkStandalone
-          @icon='arrow-left'
-          @text={{t 'actions.back'}}
-          @route='scopes.scope.targets.target.host-sources'
-        />
+        <F.LinkStandalone @icon="arrow-left" @text={{t "actions.back"}} @route="scopes.scope.targets.target.host-sources" />
       </A.Footer>
-    </Hds::ApplicationState>
-  </Rose::Layout::Centered>
-{{/unless}}
+    </ApplicationState>
+  </Centered>
+{{/unless}}</template>}

@@ -6,6 +6,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import Skeleton from "admin/components/form/field/json-secret/skeleton/index";
+import Icon from "@hashicorp/design-system-components/components/hds/icon/index";
+import t from "ember-intl/helpers/t";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
+import { on } from "@ember/modifier";
+import CodeEditor from "rose/components/rose/code-editor";
+import { hash, array } from "@ember/helper";
 
 export default class FormFieldJsonSecretComponent extends Component {
   // =properties
@@ -46,41 +53,24 @@ export default class FormFieldJsonSecretComponent extends Component {
   enableEditing() {
     if (!this.args.disabled) this.editing = true;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<div class='secret-editor'>
+<div class="secret-editor">
   {{#if this.isDisabled}}
-    <Form::Field::JsonSecret::Skeleton>
-      <Hds::Icon @name='eye-off' @isInline={{true}} />
-      {{t 'form.secret-editor.details'}}
-    </Form::Field::JsonSecret::Skeleton>
+    <Skeleton>
+      <Icon @name="eye-off" @isInline={{true}} />
+      {{t "form.secret-editor.details"}}
+    </Skeleton>
   {{else if this.isActionable}}
-    <Form::Field::JsonSecret::Skeleton>
-      <Hds::Button
-        class='secret-editor-skeleton-button'
-        @icon='pencil-tool'
-        @color='secondary'
-        @text={{t 'form.secret-editor.edit'}}
-        {{on 'click' this.enableEditing}}
-      />
-    </Form::Field::JsonSecret::Skeleton>
+    <Skeleton>
+      <Button class="secret-editor-skeleton-button" @icon="pencil-tool" @color="secondary" @text={{t "form.secret-editor.edit"}} {{on "click" this.enableEditing}} />
+    </Skeleton>
   {{else}}
-    <Rose::CodeEditor as |c|>
-      <c.fieldEditor
-        class='secret-editor-json'
-        @onInput={{@onInput}}
-        @value={{@value}}
-        @options={{hash
-          mode='application/json'
-          gutters=(array 'CodeMirror-lint-markers')
-          lint='true'
-        }}
-      />
-    </Rose::CodeEditor>
+    <CodeEditor as |c|>
+      <c.fieldEditor class="secret-editor-json" @onInput={{@onInput}} @value={{@value}} @options={{hash mode="application/json" gutters=(array "CodeMirror-lint-markers") lint="true"}} />
+    </CodeEditor>
   {{/if}}
-</div>
+</div></template>}

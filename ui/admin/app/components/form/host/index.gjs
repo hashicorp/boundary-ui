@@ -5,16 +5,12 @@
 
 import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
-import {
-  TYPE_HOST_CATALOG_PLUGIN_AWS,
-  TYPE_HOST_CATALOG_PLUGIN_AZURE,
-  TYPE_HOST_CATALOG_PLUGIN_GCP,
-  TYPE_HOST_CATALOG_STATIC,
-} from 'api/models/host-catalog';
+import { TYPE_HOST_CATALOG_PLUGIN_AWS, TYPE_HOST_CATALOG_PLUGIN_AZURE, TYPE_HOST_CATALOG_PLUGIN_GCP, TYPE_HOST_CATALOG_STATIC } from 'api/models/host-catalog';
 import awsHostFormComponent from './aws';
 import azureHostFormComponent from './azure';
 import gcpHostFormComponent from './gcp';
 import staticHostFormComponent from './static';
+import Static from "admin/components/form/host/static/index";
 
 const modelCompositeTypeToComponent = {
   [TYPE_HOST_CATALOG_PLUGIN_AWS]: awsHostFormComponent,
@@ -37,25 +33,15 @@ export default class FormHostIndex extends Component {
     );
     return component;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if @model.compositeType}}
-  <this.hostFormComponent
-    @model={{@model}}
-    @submit={{@submit}}
-    @cancel={{@cancel}}
-  />
+  <this.hostFormComponent @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} />
 {{else}}
-  {{! create-and-add-host cancel route doesn't have a model and this else part is required
-      to prevent erroring out here. This has been noted in the tech debt doc to further investigate }}
-  <Form::Host::Static
-    @model={{@model}}
-    @submit={{@submit}}
-    @cancel={{@cancel}}
-  />
-{{/if}}
+  {{!-- create-and-add-host cancel route doesn't have a model and this else part is required
+      to prevent erroring out here. This has been noted in the tech debt doc to further investigate --}}
+  <Static @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} />
+{{/if}}</template>}

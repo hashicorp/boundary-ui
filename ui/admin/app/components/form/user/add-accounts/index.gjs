@@ -7,6 +7,16 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { service } from '@ember/service';
+import Form from "rose/components/rose/form";
+import { fn, array, hash, concat } from "@ember/helper";
+import t from "ember-intl/helpers/t";
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import Field from "@hashicorp/design-system-components/components/hds/form/checkbox/field";
+import { on } from "@ember/modifier";
+import Badge from "@hashicorp/design-system-components/components/hds/badge/index";
+import Code from "@hashicorp/design-system-components/components/hds/text/code";
+import Centered from "rose/components/rose/layout/centered";
+import ApplicationState from "@hashicorp/design-system-components/components/hds/application-state/index";
 
 export default class FormUserAddAccountsComponent extends Component {
   // =properties
@@ -60,77 +70,48 @@ export default class FormUserAddAccountsComponent extends Component {
   submit(fn) {
     fn(this.selectedAccountIDs);
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if this.hasAvailableAccounts}}
-  <Rose::Form
-    class='full-width'
-    @onSubmit={{fn this.submit @submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    as |form|
-  >
+  <Form class="full-width" @onSubmit={{fn this.submit @submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 
-    <form.actions
-      @submitText={{t 'resources.user.actions.add-accounts'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+    <form.actions @submitText={{t "resources.user.actions.add-accounts"}} @cancelText={{t "actions.cancel"}} />
 
-    <Hds::Table
-      @model={{this.filteredAccounts}}
-      @columns={{array
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.type.label'))
-        (hash label=(t 'resources.auth-method.title'))
-      }}
-      @valign='middle'
-    >
+    <Table @model={{this.filteredAccounts}} @columns={{array (hash label=(t "form.id.label")) (hash label=(t "form.name.label")) (hash label=(t "form.type.label")) (hash label=(t "resources.auth-method.title"))}} @valign="middle">
       <:body as |B|>
         <B.Tr>
           <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleAccount B.data.id)}}
-              as |F|
-            >
+            <Field {{on "change" (fn this.toggleAccount B.data.id)}} as |F|>
               <F.Label>{{B.data.id}}</F.Label>
               <F.HelperText>{{B.data.description}}</F.HelperText>
-            </Hds::Form::Checkbox::Field>
+            </Field>
           </B.Td>
           <B.Td>{{B.data.accountName}}</B.Td>
           <B.Td>
-            <Hds::Badge
-              @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
-            />
+            <Badge @text={{t (concat "resources.auth-method.types." B.data.type)}} />
           </B.Td>
           <B.Td>
-            <Hds::Text::Code>
+            <Code>
               {{B.data.auth_method_id}}
-            </Hds::Text::Code>
+            </Code>
           </B.Td>
         </B.Tr>
       </:body>
-    </Hds::Table>
-  </Rose::Form>
+    </Table>
+  </Form>
 {{/if}}
 
 {{#unless this.hasAvailableAccounts}}
-  <Rose::Layout::Centered>
-    <Hds::ApplicationState as |A|>
-      <A.Header @title={{t 'resources.user.messages.no-accounts.title'}} />
-      <A.Body @text={{t 'resources.user.messages.no-accounts.description'}} />
+  <Centered>
+    <ApplicationState as |A|>
+      <A.Header @title={{t "resources.user.messages.no-accounts.title"}} />
+      <A.Body @text={{t "resources.user.messages.no-accounts.description"}} />
       <A.Footer as |F|>
-        <F.LinkStandalone
-          @icon='arrow-left'
-          @text={{t 'actions.back'}}
-          @route='scopes.scope.users.user.accounts'
-        />
+        <F.LinkStandalone @icon="arrow-left" @text={{t "actions.back"}} @route="scopes.scope.users.user.accounts" />
       </A.Footer>
-    </Hds::ApplicationState>
-  </Rose::Layout::Centered>
-{{/unless}}
+    </ApplicationState>
+  </Centered>
+{{/unless}}</template>}

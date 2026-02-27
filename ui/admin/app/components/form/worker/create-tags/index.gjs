@@ -7,6 +7,9 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import Tag from '../tag';
+import Form from "rose/components/rose/form";
+import ListWrapper from "admin/components/form/field/list-wrapper/index";
+import t from "ember-intl/helpers/t";
 
 export default class FormWorkerCreateTagsIndexComponent extends Component {
   // =services
@@ -59,29 +62,15 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
     this.args.submit(apiTags);
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  @onSubmit={{this.save}}
-  @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
-  @showEditToggle={{false}}
-  as |form|
->
-  <Form::Field::ListWrapper @layout='vertical' @disabled={{form.disabled}}>
+<Form @onSubmit={{this.save}} @cancel={{@cancel}} @disabled={{@model.isSaving}} @showEditToggle={{false}} as |form|>
+  <ListWrapper @layout="vertical" @disabled={{form.disabled}}>
     <:field as |F|>
-      <F.KeyValue
-        @name='api_tags'
-        @options={{@apiTags}}
-        @disabled={{form.disabled}}
-        @addOption={{this.addApiTag}}
-        @removeOptionByIndex={{this.removeApiTagByIndex}}
-      >
+      <F.KeyValue @name="api_tags" @options={{@apiTags}} @disabled={{form.disabled}} @addOption={{this.addApiTag}} @removeOptionByIndex={{this.removeApiTagByIndex}}>
         <:key as |K|>
           <K.text />
         </:key>
@@ -90,10 +79,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
         </:value>
       </F.KeyValue>
     </:field>
-  </Form::Field::ListWrapper>
+  </ListWrapper>
 
-  <form.actions
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
-</Rose::Form>
+  <form.actions @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
+</Form></template>}

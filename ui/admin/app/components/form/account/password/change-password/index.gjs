@@ -6,6 +6,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import Form from "rose/components/rose/form";
+import { fn } from "@ember/helper";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import t from "ember-intl/helpers/t";
 
 export default class FormAccountPasswordChangePasswordIndexComponent extends Component {
   // =properties
@@ -69,51 +75,21 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
     this.resetPasswords();
     fn();
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  class='full-width'
-  @onSubmit={{fn this.submit @submit this.currentPassword this.newPassword}}
-  @cancel={{fn this.cancel @cancel}}
-  @disabled={{@model.isSaving}}
-  as |form|
->
+<Form class="full-width" @onSubmit={{fn this.submit @submit this.currentPassword this.newPassword}} @cancel={{fn this.cancel @cancel}} @disabled={{@model.isSaving}} as |form|>
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @value={{this.currentPassword}}
-    @type='password'
-    name='currentPassword'
-    autocomplete='current-password'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event this 'currentPassword')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.current_password.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
+  <Field @isRequired={{true}} @value={{this.currentPassword}} @type="password" name="currentPassword" autocomplete="current-password" disabled={{form.disabled}} {{on "input" (setFromEvent this "currentPassword")}} as |F|>
+    <F.Label>{{t "form.current_password.label"}}</F.Label>
+  </Field>
 
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @value={{this.newPassword}}
-    @type='password'
-    name='newPassword'
-    autocomplete='new-password'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event this 'newPassword')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.new_password.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
+  <Field @isRequired={{true}} @value={{this.newPassword}} @type="password" name="newPassword" autocomplete="new-password" disabled={{form.disabled}} {{on "input" (setFromEvent this "newPassword")}} as |F|>
+    <F.Label>{{t "form.new_password.label"}}</F.Label>
+  </Field>
 
-  <form.actions
-    @submitDisabled={{this.cannotSave}}
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
+  <form.actions @submitDisabled={{this.cannotSave}} @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
 
-</Rose::Form>
+</Form></template>}

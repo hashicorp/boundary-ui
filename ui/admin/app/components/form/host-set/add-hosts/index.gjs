@@ -6,6 +6,15 @@
 import Component from '@glimmer/component';
 import { action, computed } from '@ember/object';
 import { A } from '@ember/array';
+import Form from "rose/components/rose/form";
+import { fn, array, hash } from "@ember/helper";
+import t from "ember-intl/helpers/t";
+import Table from "@hashicorp/design-system-components/components/hds/table/index";
+import Field from "@hashicorp/design-system-components/components/hds/form/checkbox/field";
+import { on } from "@ember/modifier";
+import Badge from "@hashicorp/design-system-components/components/hds/badge/index";
+import Centered from "rose/components/rose/layout/centered";
+import ApplicationState from "@hashicorp/design-system-components/components/hds/application-state/index";
 
 export default class FormHostSetAddHostsIndexComponent extends Component {
   // =properties
@@ -60,71 +69,41 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
   submit(fn) {
     fn(this.selectedHostIDs);
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if this.hasAvailableHosts}}
-  <Rose::Form
-    class='full-width'
-    @onSubmit={{fn this.submit @submit}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    as |form|
-  >
+  <Form class="full-width" @onSubmit={{fn this.submit @submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 
-    <form.actions
-      @submitText={{t 'actions.add-hosts'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
+    <form.actions @submitText={{t "actions.add-hosts"}} @cancelText={{t "actions.cancel"}} />
 
-    <Hds::Table
-      @model={{this.filteredHosts}}
-      @columns={{array
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.type.label'))
-      }}
-      @valign='middle'
-    >
+    <Table @model={{this.filteredHosts}} @columns={{array (hash label=(t "form.id.label")) (hash label=(t "form.name.label")) (hash label=(t "form.type.label"))}} @valign="middle">
       <:body as |B|>
         <B.Tr>
           <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleHost B.data.id)}}
-              as |F|
-            >
+            <Field {{on "change" (fn this.toggleHost B.data.id)}} as |F|>
               <F.Label>{{B.data.id}}</F.Label>
               <F.HelperText>{{B.data.description}}</F.HelperText>
-            </Hds::Form::Checkbox::Field>
+            </Field>
           </B.Td>
           <B.Td>{{B.data.name}}</B.Td>
-          <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+          <B.Td><Badge @text={{B.data.type}} /></B.Td>
         </B.Tr>
       </:body>
-    </Hds::Table>
-  </Rose::Form>
+    </Table>
+  </Form>
 {{/if}}
 
 {{#unless this.hasAvailableHosts}}
-  <Rose::Layout::Centered>
-    <Hds::ApplicationState as |A|>
-      <A.Header
-        @title={{t 'resources.host-set.host.messages.add-none.title'}}
-      />
-      <A.Body
-        @text={{t 'resources.host-set.host.messages.add-none.description'}}
-      />
+  <Centered>
+    <ApplicationState as |A|>
+      <A.Header @title={{t "resources.host-set.host.messages.add-none.title"}} />
+      <A.Body @text={{t "resources.host-set.host.messages.add-none.description"}} />
       <A.Footer as |F|>
-        <F.LinkStandalone
-          @icon='arrow-left'
-          @text={{t 'actions.back'}}
-          @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
-        />
+        <F.LinkStandalone @icon="arrow-left" @text={{t "actions.back"}} @route="scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts" />
       </A.Footer>
-    </Hds::ApplicationState>
-  </Rose::Layout::Centered>
-{{/unless}}
+    </ApplicationState>
+  </Centered>
+{{/unless}}</template>}

@@ -1,34 +1,32 @@
-{{!
+import Tabs from "rose/components/rose/nav/tabs";
+import t from "ember-intl/helpers/t";
+import featureFlag from "ember-feature-flags/helpers/feature-flag";
+import can from "admin/helpers/can";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Nav::Tabs as |nav|>
-  <nav.link @route='scopes.scope.credential-stores.credential-store.index'>
-    {{t 'titles.details'}}
+<Tabs as |nav|>
+  <nav.link @route="scopes.scope.credential-stores.credential-store.index">
+    {{t "titles.details"}}
   </nav.link>
   {{#if @model.isVault}}
-    {{#if (feature-flag 'worker-filter')}}
-      <nav.link
-        @route='scopes.scope.credential-stores.credential-store.worker-filter'
-      >
-        {{t 'form.worker_filter.label'}}
+    {{#if (featureFlag "worker-filter")}}
+      <nav.link @route="scopes.scope.credential-stores.credential-store.worker-filter">
+        {{t "form.worker_filter.label"}}
       </nav.link>
     {{/if}}
-    {{#if (can 'navigate model' @model collection='credential-libraries')}}
-      <nav.link
-        @route='scopes.scope.credential-stores.credential-store.credential-libraries'
-      >
-        {{t 'resources.credential-library.title_plural'}}
+    {{#if (can "navigate model" @model collection="credential-libraries")}}
+      <nav.link @route="scopes.scope.credential-stores.credential-store.credential-libraries">
+        {{t "resources.credential-library.title_plural"}}
       </nav.link>
     {{/if}}
   {{else}}
-    {{#if (can 'navigate model' @model collection='credentials')}}
-      <nav.link
-        @route='scopes.scope.credential-stores.credential-store.credentials'
-      >
-        {{t 'resources.credential.title_plural'}}
+    {{#if (can "navigate model" @model collection="credentials")}}
+      <nav.link @route="scopes.scope.credential-stores.credential-store.credentials">
+        {{t "resources.credential.title_plural"}}
       </nav.link>
     {{/if}}
   {{/if}}
-</Rose::Nav::Tabs>
+</Tabs></template>

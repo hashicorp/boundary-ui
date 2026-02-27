@@ -1,18 +1,15 @@
-{{!
+import Icon from "@hashicorp/design-system-components/components/hds/icon/index";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<div class='info-field{{if @icon " has-icon"}}'>
+<div class="info-field{{if @icon " has-icon"}}">
   {{#if @icon}}
-    <Hds::Icon @name={{@icon}} @size='24' @isInline={{true}} />
+    <Icon @name={{@icon}} @size="24" @isInline={{true}} />
   {{/if}}
-  <Hds::Form::TextInput::Field
-    @value={{@value}}
-    readonly={{true}}
-    ...attributes
-    as |F|
-  >
+  <Field @value={{@value}} readonly={{true}} ...attributes as |F|>
     {{yield F}}
-  </Hds::Form::TextInput::Field>
-</div>
+  </Field>
+</div></template>

@@ -1,19 +1,16 @@
-{{!
+import Base from "@hashicorp/design-system-components/components/hds/form/select/base";
+import { on } from "@ember/modifier";
+import t from "ember-intl/helpers/t";
+import eq from "ember-truth-helpers/helpers/eq";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Hds::Form::Select::Base
-  @value={{@value}}
-  @width={{@width}}
-  disabled={{@disabled}}
-  aria-labelledby={{@ariaLabelledBy}}
-  {{on 'change' @setContext}}
-  as |F|
->
+<Base @value={{@value}} @width={{@width}} disabled={{@disabled}} aria-labelledby={{@ariaLabelledBy}} {{on "change" @setContext}} as |F|>
   <F.Options>
-    <option hidden selected value=''>
-      {{t 'titles.choose-an-option'}}
+    <option hidden selected value>
+      {{t "titles.choose-an-option"}}
     </option>
     {{#each @selectOptions as |selectOption|}}
       <option value={{selectOption}} selected={{eq selectOption @value}}>
@@ -21,4 +18,4 @@
       </option>
     {{/each}}
   </F.Options>
-</Hds::Form::Select::Base>
+</Base></template>

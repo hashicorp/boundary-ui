@@ -5,14 +5,7 @@
 
 import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
-import {
-  TYPES_CREDENTIAL,
-  TYPE_CREDENTIAL_USERNAME_PASSWORD,
-  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
-  TYPE_CREDENTIAL_JSON,
-  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
-  TYPE_CREDENTIAL_PASSWORD,
-} from 'api/models/credential';
+import { TYPES_CREDENTIAL, TYPE_CREDENTIAL_USERNAME_PASSWORD, TYPE_CREDENTIAL_SSH_PRIVATE_KEY, TYPE_CREDENTIAL_JSON, TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN, TYPE_CREDENTIAL_PASSWORD } from 'api/models/credential';
 import usernamePasswordFormComponent from './username_password';
 import sshPrivateKeyFormComponent from './ssh_private_key';
 import jsonFormComponent from './json';
@@ -51,19 +44,11 @@ export default class FormCredentialComponent extends Component {
     );
     return component;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
 {{#if @model.type}}
-  <this.credentialFormComponent
-    @model={{@model}}
-    @types={{this.credentialTypes}}
-    @submit={{@submit}}
-    @cancel={{@cancel}}
-    @changeType={{@changeType}}
-  />
-{{/if}}
+  <this.credentialFormComponent @model={{@model}} @types={{this.credentialTypes}} @submit={{@submit}} @cancel={{@cancel}} @changeType={{@changeType}} />
+{{/if}}</template>}

@@ -6,14 +6,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { assert } from '@ember/debug';
-import {
-  TYPES_HOST_CATALOG,
-  TYPES_HOST_CATALOG_PLUGIN,
-  TYPE_HOST_CATALOG_PLUGIN_AWS,
-  TYPE_HOST_CATALOG_PLUGIN_AZURE,
-  TYPE_HOST_CATALOG_PLUGIN_GCP,
-  TYPE_HOST_CATALOG_STATIC,
-} from 'api/models/host-catalog';
+import { TYPES_HOST_CATALOG, TYPES_HOST_CATALOG_PLUGIN, TYPE_HOST_CATALOG_PLUGIN_AWS, TYPE_HOST_CATALOG_PLUGIN_AZURE, TYPE_HOST_CATALOG_PLUGIN_GCP, TYPE_HOST_CATALOG_STATIC } from 'api/models/host-catalog';
 import awsHostCatalogFormComponent from './aws';
 import azureHostCatalogFormComponent from './azure';
 import gcpHostCatalogFormComponent from './gcp';
@@ -62,20 +55,9 @@ export default class FormHostCatalogIndexComponent extends Component {
   toggleDisableCredentialRotation(model) {
     model.disable_credential_rotation = !model.disable_credential_rotation;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<this.hostCatalogFormComponent
-  @model={{@model}}
-  @submit={{@submit}}
-  @cancel={{@cancel}}
-  @changeType={{@changeType}}
-  @changeCredentialType={{@changeCredentialType}}
-  @mapResourceTypeWithIcon={{this.mapResourceTypeWithIcon}}
-  @hostCatalogTypes={{this.hostCatalogTypes}}
-  @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}}
-/>
+<this.hostCatalogFormComponent @model={{@model}} @submit={{@submit}} @cancel={{@cancel}} @changeType={{@changeType}} @changeCredentialType={{@changeCredentialType}} @mapResourceTypeWithIcon={{this.mapResourceTypeWithIcon}} @hostCatalogTypes={{this.hostCatalogTypes}} @toggleDisableCredentialRotation={{this.toggleDisableCredentialRotation}} /></template>}

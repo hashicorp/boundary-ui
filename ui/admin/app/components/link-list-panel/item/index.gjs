@@ -1,57 +1,62 @@
-{{!
+import isArray from "ember-truth-helpers/helpers/is-array";
+import { LinkTo } from "@ember/routing";
+import IconTile from "@hashicorp/design-system-components/components/hds/icon-tile/index";
+import Body from "@hashicorp/design-system-components/components/hds/text/body";
+import Icon from "@hashicorp/design-system-components/components/hds/icon/index";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<li class='link-list-item'>
+<li class="link-list-item">
   {{#if @route}}
-    {{#if (is-array @model)}}
+    {{#if (isArray @model)}}
       <LinkTo @route={{@route}} @models={{@model}}>
-        <div class='link-list-item__info'>
+        <div class="link-list-item__info">
           {{#if @icon}}
-            <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+            <IconTile @color={{@color}} @icon={{@icon}} @size="small" />
           {{/if}}
 
           <div>
-            <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+            <Body @tag="p" @size="300" class="link-list-item__text">
               {{@text}}
-            </Hds::Text::Body>
+            </Body>
             {{yield}}
           </div>
         </div>
 
-        <Hds::Icon @name='arrow-right' @isInline={{true}} />
+        <Icon @name="arrow-right" @isInline={{true}} />
       </LinkTo>
     {{else}}
       <LinkTo @route={{@route}} @model={{@model}}>
-        <div class='link-list-item__info'>
+        <div class="link-list-item__info">
           {{#if @icon}}
-            <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+            <IconTile @color={{@color}} @icon={{@icon}} @size="small" />
           {{/if}}
 
           <div>
-            <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+            <Body @tag="p" @size="300" class="link-list-item__text">
               {{@text}}
-            </Hds::Text::Body>
+            </Body>
             {{yield}}
           </div>
         </div>
 
-        <Hds::Icon @name='arrow-right' @isInline={{true}} />
+        <Icon @name="arrow-right" @isInline={{true}} />
       </LinkTo>
     {{/if}}
   {{else}}
-    <div class='link-list-item__info'>
+    <div class="link-list-item__info">
       {{#if @icon}}
-        <Hds::IconTile @color={{@color}} @icon={{@icon}} @size='small' />
+        <IconTile @color={{@color}} @icon={{@icon}} @size="small" />
       {{/if}}
 
       <div>
-        <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+        <Body @tag="p" @size="300" class="link-list-item__text">
           {{@text}}
-        </Hds::Text::Body>
+        </Body>
         {{yield}}
       </div>
     </div>
   {{/if}}
-</li>
+</li></template>

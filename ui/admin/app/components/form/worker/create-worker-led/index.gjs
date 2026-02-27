@@ -9,6 +9,26 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { TrackedArray } from 'tracked-built-ins';
 import Tag from '../tag';
+import Form from "rose/components/rose/form";
+import { fn } from "@ember/helper";
+import Display from "@hashicorp/design-system-components/components/hds/text/display";
+import t from "ember-intl/helpers/t";
+import featureFlag from "ember-feature-flags/helpers/feature-flag";
+import Field from "@hashicorp/design-system-components/components/hds/form/text-input/field";
+import { on } from "@ember/modifier";
+import setFromEvent from "rose/helpers/set-from-event";
+import Inline from "@hashicorp/design-system-components/components/hds/link/inline";
+import docUrl from "core/helpers/doc-url";
+import not from "ember-truth-helpers/helpers/not";
+import ListWrapper from "admin/components/form/field/list-wrapper/index";
+import Fieldset from "@hashicorp/design-system-components/components/hds/form/fieldset/index";
+import Field0 from "@hashicorp/design-system-components/components/hds/form/toggle/field";
+import Body from "@hashicorp/design-system-components/components/hds/text/body";
+import CodeBlock from "@hashicorp/design-system-components/components/hds/code-block/index";
+import Code from "@hashicorp/design-system-components/components/hds/text/code";
+import can from "admin/helpers/can";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
+import Icon from "@hashicorp/design-system-components/components/hds/icon/index";
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
@@ -191,108 +211,63 @@ unzip *.zip ;\\
   toggleEnableRecordingStoragePath() {
     this.enableRecordingStoragePath = !this.enableRecordingStoragePath;
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  @onSubmit={{fn @submit this.generatedWorkerAuthToken}}
-  @disabled={{@model.isSaving}}
-  @showEditToggle={{false}}
-  as |form|
->
-  <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-    {{t 'resources.worker.form.steps.1.title'}}
-  </Hds::Text::Display>
-  <div class='worker-create-section'>
-    {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
-      <Hds::Form::TextInput::Field
-        name='cluster_id'
-        @value={{this.clusterID}}
-        @isOptional={{true}}
-        placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
-        {{on 'input' (set-from-event this 'clusterID')}}
-        as |F|
-      >
-        <F.Label>{{t 'resources.worker.form.cluster_id.label'}}</F.Label>
+<Form @onSubmit={{fn @submit this.generatedWorkerAuthToken}} @disabled={{@model.isSaving}} @showEditToggle={{false}} as |form|>
+  <Display @tag="h3" @size="300" @weight="bold">
+    {{t "resources.worker.form.steps.1.title"}}
+  </Display>
+  <div class="worker-create-section">
+    {{#if (featureFlag "byow-pki-hcp-cluster-id")}}
+      <Field name="cluster_id" @value={{this.clusterID}} @isOptional={{true}} placeholder="69b6ddb3-ffec-42ab-a994-f43a6519470a" {{on "input" (setFromEvent this "clusterID")}} as |F|>
+        <F.Label>{{t "resources.worker.form.cluster_id.label"}}</F.Label>
         <F.HelperText>
-          {{t 'resources.worker.form.cluster_id.help'}}
-          <Hds::Link::Inline @href={{doc-url 'worker.manage-workers'}}>
-            {{t 'actions.learn-more'}}
-          </Hds::Link::Inline>
+          {{t "resources.worker.form.cluster_id.help"}}
+          <Inline @href={{docUrl "worker.manage-workers"}}>
+            {{t "actions.learn-more"}}
+          </Inline>
         </F.HelperText>
-      </Hds::Form::TextInput::Field>
+      </Field>
     {{/if}}
 
-    <Hds::Form::TextInput::Field
-      name='ip_address'
-      @value={{this.ipAddress}}
-      @isOptional={{true}}
-      placeholder='worker1.example.com'
-      {{on 'input' (set-from-event this 'ipAddress')}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.worker.form.ip_address.label'}}</F.Label>
+    <Field name="ip_address" @value={{this.ipAddress}} @isOptional={{true}} placeholder="worker1.example.com" {{on "input" (setFromEvent this "ipAddress")}} as |F|>
+      <F.Label>{{t "resources.worker.form.ip_address.label"}}</F.Label>
       <F.HelperText>
-        {{t 'resources.worker.form.ip_address.help'}}
-        <Hds::Link::Inline @href={{doc-url 'worker'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
+        {{t "resources.worker.form.ip_address.help"}}
+        <Inline @href={{docUrl "worker"}}>
+          {{t "actions.learn-more"}}
+        </Inline>
       </F.HelperText>
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    <Hds::Form::TextInput::Field
-      name='config_file_path'
-      @value={{this.configFilePath}}
-      @isOptional={{true}}
-      placeholder='/home/ubuntu/boundary'
-      {{on 'input' (set-from-event this 'configFilePath')}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.worker.form.config_file_path.label'}}</F.Label>
+    <Field name="config_file_path" @value={{this.configFilePath}} @isOptional={{true}} placeholder="/home/ubuntu/boundary" {{on "input" (setFromEvent this "configFilePath")}} as |F|>
+      <F.Label>{{t "resources.worker.form.config_file_path.label"}}</F.Label>
       <F.HelperText>
-        {{t 'resources.worker.form.config_file_path.help'}}
+        {{t "resources.worker.form.config_file_path.help"}}
       </F.HelperText>
-    </Hds::Form::TextInput::Field>
+    </Field>
 
-    {{#if (not (feature-flag 'byow-pki-hcp-cluster-id'))}}
-      <Hds::Form::TextInput::Field
-        name='initial_upstreams'
-        @value={{this.initialUpstreams}}
-        @isOptional={{true}}
-        placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
-        {{on 'input' (set-from-event this 'initialUpstreams')}}
-        as |F|
-      >
-        <F.Label>{{t 'resources.worker.form.initial_upstreams.label'}}</F.Label>
+    {{#if (not (featureFlag "byow-pki-hcp-cluster-id"))}}
+      <Field name="initial_upstreams" @value={{this.initialUpstreams}} @isOptional={{true}} placeholder="10.0.0.1, 10.0.0.2, 10.0.0.3" {{on "input" (setFromEvent this "initialUpstreams")}} as |F|>
+        <F.Label>{{t "resources.worker.form.initial_upstreams.label"}}</F.Label>
         <F.HelperText>
-          {{t 'resources.worker.form.initial_upstreams.help'}}
+          {{t "resources.worker.form.initial_upstreams.help"}}
         </F.HelperText>
-      </Hds::Form::TextInput::Field>
+      </Field>
     {{/if}}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @disabled={{form.disabled}}
-      @isOptional={{true}}
-    >
+    <ListWrapper @layout="horizontal" @disabled={{form.disabled}} @isOptional={{true}}>
       <:fieldset as |F|>
-        <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+        <F.Legend>{{t "resources.worker.form.worker_tags.label"}}</F.Legend>
         <F.HelperText>
-          {{t 'resources.worker.form.worker_tags.help'}}
+          {{t "resources.worker.form.worker_tags.help"}}
         </F.HelperText>
       </:fieldset>
 
       <:field as |F|>
-        <F.KeyValue
-          @name='worker_tags'
-          @options={{this.workerTags}}
-          @disabled={{form.disabled}}
-          @addOption={{this.addWorkerTag}}
-          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
-        >
+        <F.KeyValue @name="worker_tags" @options={{this.workerTags}} @disabled={{form.disabled}} @addOption={{this.addWorkerTag}} @removeOptionByIndex={{this.removeWorkerTagByIndex}}>
           <:key as |K|>
             <K.text />
           </:key>
@@ -301,127 +276,77 @@ unzip *.zip ;\\
           </:value>
         </F.KeyValue>
       </:field>
-    </Form::Field::ListWrapper>
+    </ListWrapper>
 
-    {{#if (feature-flag 'ssh-session-recording')}}
-      <Hds::Form::Fieldset @isOptional={{true}} as |F|>
-        <F.Legend>{{t
-            'resources.worker.form.local_session_recording_storage.label'
-          }}</F.Legend>
+    {{#if (featureFlag "ssh-session-recording")}}
+      <Fieldset @isOptional={{true}} as |F|>
+        <F.Legend>{{t "resources.worker.form.local_session_recording_storage.label"}}</F.Legend>
         <F.HelperText>
-          {{t 'resources.worker.form.local_session_recording_storage.help'}}
-          <Hds::Link::Inline @href={{doc-url 'session-recording'}}>{{t
-              'actions.learn-more'
-            }}</Hds::Link::Inline>
+          {{t "resources.worker.form.local_session_recording_storage.help"}}
+          <Inline @href={{docUrl "session-recording"}}>{{t "actions.learn-more"}}</Inline>
         </F.HelperText>
         <F.Control>
-          <Hds::Form::Toggle::Field
-            name='enableRecordingStoragePath'
-            checked={{this.enableRecordingStoragePath}}
-            {{on 'change' this.toggleEnableRecordingStoragePath}}
-            as |F|
-          >
-            <F.Label>{{t
-                'resources.worker.form.enable_recording_storage_path.label'
-              }}</F.Label>
-          </Hds::Form::Toggle::Field>
+          <Field0 name="enableRecordingStoragePath" checked={{this.enableRecordingStoragePath}} {{on "change" this.toggleEnableRecordingStoragePath}} as |F|>
+            <F.Label>{{t "resources.worker.form.enable_recording_storage_path.label"}}</F.Label>
+          </Field0>
         </F.Control>
         {{#if this.enableRecordingStoragePath}}
           <F.Control>
-            <Hds::Form::TextInput::Field
-              name='recording_storage_path'
-              @value={{this.recording_storage_path}}
-              placeholder='/tmp/worker1'
-              {{on 'input' (set-from-event this 'recording_storage_path')}}
-              as |F|
-            >
-              <F.Label>{{t
-                  'resources.worker.form.recording_storage_path.label'
-                }}</F.Label>
+            <Field name="recording_storage_path" @value={{this.recording_storage_path}} placeholder="/tmp/worker1" {{on "input" (setFromEvent this "recording_storage_path")}} as |F|>
+              <F.Label>{{t "resources.worker.form.recording_storage_path.label"}}</F.Label>
               <F.HelperText>
-                {{t 'resources.worker.form.recording_storage_path.help'}}
+                {{t "resources.worker.form.recording_storage_path.help"}}
               </F.HelperText>
-            </Hds::Form::TextInput::Field>
+            </Field>
           </F.Control>
         {{/if}}
-      </Hds::Form::Fieldset>
+      </Fieldset>
     {{/if}}
 
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.worker.form.steps.1.create_directory'}}
-    </Hds::Text::Body>
+    <Body @tag="p" @size="300" class="p">
+      {{t "resources.worker.form.steps.1.create_directory"}}
+    </Body>
 
-    <Hds::CodeBlock
-      @language='bash'
-      @value={{this.createConfigText}}
-      @hasCopyButton={{true}}
-      @hasLineNumbers={{false}}
-      data-test-worker-directory
-    />
+    <CodeBlock @language="bash" @value={{this.createConfigText}} @hasCopyButton={{true}} @hasLineNumbers={{false}} data-test-worker-directory />
 
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.worker.form.steps.1.create_config'}}
-    </Hds::Text::Body>
+    <Body @tag="p" @size="300" class="p">
+      {{t "resources.worker.form.steps.1.create_config"}}
+    </Body>
 
-    <Hds::CodeBlock
-      @language='hcl'
-      @value={{this.workerConfigText}}
-      @hasCopyButton={{true}}
-      @hasLineNumbers={{false}}
-      data-test-worker-config
-    />
+    <CodeBlock @language="hcl" @value={{this.workerConfigText}} @hasCopyButton={{true}} @hasLineNumbers={{false}} data-test-worker-config />
 
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
-    </Hds::Text::Body>
+    <Body @tag="p" @size="300" class="p">
+      {{t "resources.worker.form.steps.1.save_config" htmlSafe=true}}
+    </Body>
   </div>
 
-  <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-    {{t 'resources.worker.form.steps.2.title'}}
-  </Hds::Text::Display>
-  <div class='worker-create-section'>
+  <Display @tag="h3" @size="300" @weight="bold">
+    {{t "resources.worker.form.steps.2.title"}}
+  </Display>
+  <div class="worker-create-section">
 
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.worker.form.steps.2.run_command'}}
-    </Hds::Text::Body>
+    <Body @tag="p" @size="300" class="p">
+      {{t "resources.worker.form.steps.2.run_command"}}
+    </Body>
 
-    <Hds::CodeBlock
-      @language='bash'
-      @value={{this.installBoundaryText}}
-      @hasCopyButton={{true}}
-      @hasLineNumbers={{false}}
-    />
+    <CodeBlock @language="bash" @value={{this.installBoundaryText}} @hasCopyButton={{true}} @hasLineNumbers={{false}} />
 
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.worker.form.steps.2.copy_registration_request'}}
-      <Hds::Text::Code @size='300' @color='primary'>
-        {{t
-          'resources.worker.form.steps.3.worker_auth_registration_request.label'
-        }}</Hds::Text::Code>.
-    </Hds::Text::Body>
+    <Body @tag="p" @size="300" class="p">
+      {{t "resources.worker.form.steps.2.copy_registration_request"}}
+      <Code @size="300" @color="primary">
+        {{t "resources.worker.form.steps.3.worker_auth_registration_request.label"}}</Code>.
+    </Body>
   </div>
 
-  <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
-    {{t 'resources.worker.form.steps.3.title'}}
-  </Hds::Text::Display>
-  <div class='worker-create-section'>
-    <div class='worker-auth-token'>
-      <Hds::Form::TextInput::Field
-        name='worker_auth_registration_request'
-        @value={{this.generatedWorkerAuthToken}}
-        @isRequired={{true}}
-        @isInvalid={{@model.errors.worker_generated_auth_token}}
-        disabled={{form.disabled}}
-        {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
-        as |F|
-      >
-        <F.Label>{{t
-            'resources.worker.form.steps.3.worker_auth_registration_request.label'
-          }}</F.Label>
+  <Display @tag="h3" @size="300" @weight="bold">
+    {{t "resources.worker.form.steps.3.title"}}
+  </Display>
+  <div class="worker-create-section">
+    <div class="worker-auth-token">
+      <Field name="worker_auth_registration_request" @value={{this.generatedWorkerAuthToken}} @isRequired={{true}} @isInvalid={{@model.errors.worker_generated_auth_token}} disabled={{form.disabled}} {{on "input" (setFromEvent this "generatedWorkerAuthToken")}} as |F|>
+        <F.Label>{{t "resources.worker.form.steps.3.worker_auth_registration_request.label"}}</F.Label>
         <F.HelperText>
-          {{t
-            'resources.worker.form.steps.3.worker_auth_registration_request.help'
-          }}
+          {{t "resources.worker.form.steps.3.worker_auth_registration_request.help"}}
         </F.HelperText>
         {{#if @model.errors.worker_generated_auth_token}}
           <F.Error as |E|>
@@ -430,41 +355,28 @@ unzip *.zip ;\\
             {{/each}}
           </F.Error>
         {{/if}}
-      </Hds::Form::TextInput::Field>
-      {{#if (can 'save worker' @model)}}
-        <Hds::Button
-          @text={{t 'resources.worker.actions.register'}}
-          type='submit'
-          disabled={{@model.cannotSave}}
-          class='nowrap'
-        />
+      </Field>
+      {{#if (can "save worker" @model)}}
+        <Button @text={{t "resources.worker.actions.register"}} type="submit" disabled={{@model.cannotSave}} class="nowrap" />
       {{/if}}
     </div>
 
     {{#unless @model.isNew}}
-      <div class='worker-success'>
+      <div class="worker-success">
         <div>
-          <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
-          <Hds::Text::Body @tag='p' @size='300' class='p'>
+          <Icon @name="cpu" @color="success" @isInline={{true}} />
+          <Body @tag="p" @size="300" class="p">
             {{this.generatedWorkerAuthToken}}
-          </Hds::Text::Body>
+          </Body>
         </div>
         <div>
-          <Hds::Icon
-            @name='check-circle-fill'
-            @color='success'
-            @isInline={{true}}
-          />
-          <Hds::Text::Body @tag='p' @size='300' class='p' @color='success'>
-            {{t 'resources.worker.form.steps.3.registered'}}
-          </Hds::Text::Body>
+          <Icon @name="check-circle-fill" @color="success" @isInline={{true}} />
+          <Body @tag="p" @size="300" class="p" @color="success">
+            {{t "resources.worker.form.steps.3.registered"}}
+          </Body>
         </div>
       </div>
     {{/unless}}
   </div>
-  <Hds::Button
-    @color='secondary'
-    @text={{if @model.isNew (t 'actions.cancel') (t 'actions.done')}}
-    {{on 'click' @cancel}}
-  />
-</Rose::Form>
+  <Button @color="secondary" @text={{if @model.isNew (t "actions.cancel") (t "actions.done")}} {{on "click" @cancel}} />
+</Form></template>}

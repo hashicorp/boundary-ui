@@ -5,11 +5,17 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  GRANT_SCOPE_THIS,
-  GRANT_SCOPE_CHILDREN,
-  GRANT_SCOPE_DESCENDANTS,
-} from 'api/models/role';
+import { GRANT_SCOPE_THIS, GRANT_SCOPE_CHILDREN, GRANT_SCOPE_DESCENDANTS } from 'api/models/role';
+import Form from "rose/components/rose/form";
+import Field from "@hashicorp/design-system-components/components/hds/form/toggle/field";
+import includes from "@nullvoxpopuli/ember-composable-helpers/helpers/includes";
+import { on } from "@ember/modifier";
+import t from "ember-intl/helpers/t";
+import Alert from "@hashicorp/design-system-components/components/hds/alert/index";
+import Inline from "@hashicorp/design-system-components/components/hds/link/inline";
+import docUrl from "core/helpers/doc-url";
+import Button from "@hashicorp/design-system-components/components/hds/button/index";
+import HelperText from "@hashicorp/design-system-components/components/hds/form/helper-text/index";
 
 export default class FormRoleManageScopesIndexComponent extends Component {
   // =attributes
@@ -76,111 +82,48 @@ export default class FormRoleManageScopesIndexComponent extends Component {
       removeValue(value);
     }
   }
-}
-
-{{!
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<Rose::Form
-  class='full-width role-manage-scopes-form'
-  @onSubmit={{@submit}}
-  @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
-  as |form|
->
+<Form class="full-width role-manage-scopes-form" @onSubmit={{@submit}} @cancel={{@cancel}} @disabled={{@model.isSaving}} as |form|>
 
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyThis}}
-    name={{this.keywords.keyThis}}
-    checked={{includes this.keywords.keyThis @model.grant_scope_ids}}
-    disabled={{form.disabled}}
-    {{on 'change' this.toggleField}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.role.scope.form.this.help'
-        scopeDisplayName=(if
-          @model.scope.name @model.scope.name @model.scope.id
-        )
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
+  <Field @value={{this.keywords.keyThis}} name={{this.keywords.keyThis}} checked={{includes this.keywords.keyThis @model.grant_scope_ids}} disabled={{form.disabled}} {{on "change" this.toggleField}} as |F|>
+    <F.Label>{{t "resources.role.scope.form.this.label"}}</F.Label>
+    <F.HelperText>{{t "resources.role.scope.form.this.help" scopeDisplayName=(if @model.scope.name @model.scope.name @model.scope.id)}}</F.HelperText>
+  </Field>
 
-  <Hds::Form::Toggle::Field
-    @value={{this.keywords.keyChildren}}
-    name={{this.keywords.keyChildren}}
-    checked={{includes this.keywords.keyChildren @model.grant_scope_ids}}
-    disabled={{form.disabled}}
-    {{on 'change' this.toggleField}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
-    <F.HelperText>{{if
-        @model.scope.isGlobal
-        (t 'resources.role.scope.form.children.help.0')
-        (t 'resources.role.scope.form.children.help.1')
-      }}</F.HelperText>
-  </Hds::Form::Toggle::Field>
+  <Field @value={{this.keywords.keyChildren}} name={{this.keywords.keyChildren}} checked={{includes this.keywords.keyChildren @model.grant_scope_ids}} disabled={{form.disabled}} {{on "change" this.toggleField}} as |F|>
+    <F.Label>{{t "resources.role.scope.form.children.label"}}</F.Label>
+    <F.HelperText>{{if @model.scope.isGlobal (t "resources.role.scope.form.children.help.0") (t "resources.role.scope.form.children.help.1")}}</F.HelperText>
+  </Field>
 
   {{#if @model.scope.isGlobal}}
-    <Hds::Form::Toggle::Field
-      @value={{this.keywords.keyDescendants}}
-      name={{this.keywords.keyDescendants}}
-      checked={{includes this.keywords.keyDescendants @model.grant_scope_ids}}
-      disabled={{form.disabled}}
-      {{on 'change' this.toggleField}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.role.scope.form.descendants.help'
-        }}</F.HelperText>
-    </Hds::Form::Toggle::Field>
+    <Field @value={{this.keywords.keyDescendants}} name={{this.keywords.keyDescendants}} checked={{includes this.keywords.keyDescendants @model.grant_scope_ids}} disabled={{form.disabled}} {{on "change" this.toggleField}} as |F|>
+      <F.Label>{{t "resources.role.scope.form.descendants.label"}}</F.Label>
+      <F.HelperText>{{t "resources.role.scope.form.descendants.help"}}</F.HelperText>
+    </Field>
   {{/if}}
 
   {{#if this.showAlert}}
-    <Hds::Alert @type='compact' as |A|>
+    <Alert @type="compact" as |A|>
       <A.Description>
-        {{t
-          'resources.role.scope.messages.keywords-selected.description'
-          htmlSafe=true
-        }}
-        <Hds::Link::Inline
-          @color='secondary'
-          @href={{doc-url 'role.add-grant-scopes'}}
-        >
-          {{t 'resources.role.scope.messages.keywords-selected.link'}}
-        </Hds::Link::Inline>
+        {{t "resources.role.scope.messages.keywords-selected.description" htmlSafe=true}}
+        <Inline @color="secondary" @href={{docUrl "role.add-grant-scopes"}}>
+          {{t "resources.role.scope.messages.keywords-selected.link"}}
+        </Inline>
       </A.Description>
-    </Hds::Alert>
+    </Alert>
   {{/if}}
 
   {{#if this.showManageScopesBtn}}
-    <Hds::Button
-      @text={{t 'resources.role.scope.actions.manage-custom-scopes.text'}}
-      @color='secondary'
-      @icon={{if @showCheckIcon 'check-circle'}}
-      @route={{if
-        @model.scope.isGlobal
-        'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
-        'scopes.scope.roles.role.manage-scopes.manage-org-projects'
-      }}
-      @model={{if @model.scope.isOrg @model.scope.id}}
-      data-test-manage-custom-scopes-button
-    />
+    <Button @text={{t "resources.role.scope.actions.manage-custom-scopes.text"}} @color="secondary" @icon={{if @showCheckIcon "check-circle"}} @route={{if @model.scope.isGlobal "scopes.scope.roles.role.manage-scopes.manage-custom-scopes" "scopes.scope.roles.role.manage-scopes.manage-org-projects"}} @model={{if @model.scope.isOrg @model.scope.id}} data-test-manage-custom-scopes-button />
 
-    <Hds::Form::HelperText
-      @controlId='for-manage-custom-scopes-button'
-      class='manage-custom-scopes-helper-text'
-    >
-      {{t 'resources.role.scope.actions.manage-custom-scopes.help'}}
-    </Hds::Form::HelperText>
+    <HelperText @controlId="for-manage-custom-scopes-button" class="manage-custom-scopes-helper-text">
+      {{t "resources.role.scope.actions.manage-custom-scopes.help"}}
+    </HelperText>
   {{/if}}
 
-  <form.actions
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
-</Rose::Form>
+  <form.actions @submitText={{t "actions.save"}} @cancelText={{t "actions.cancel"}} />
+</Form></template>}

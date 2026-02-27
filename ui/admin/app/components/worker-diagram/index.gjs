@@ -1,24 +1,20 @@
-{{!
+import featureFlag from "ember-feature-flags/helpers/feature-flag";
+import Hcp from "admin/components/worker-diagram/dual-filter/hcp/index";
+import DualFilter from "admin/components/worker-diagram/dual-filter/index";
+import SingleFilter from "admin/components/worker-diagram/single-filter/index";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-<div class='worker-diagram'>
-  {{#if (feature-flag 'worker-filter')}}
-    {{#if (feature-flag 'worker-filter-hcp')}}
-      <WorkerDiagram::DualFilter::Hcp
-        @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-        @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
-      />
+<div class="worker-diagram">
+  {{#if (featureFlag "worker-filter")}}
+    {{#if (featureFlag "worker-filter-hcp")}}
+      <Hcp @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}} @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}} />
     {{else}}
-      <WorkerDiagram::DualFilter
-        @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-        @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}
-      />
+      <DualFilter @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}} @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}} />
     {{/if}}
   {{else}}
-    <WorkerDiagram::SingleFilter
-      @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
-    />
+    <SingleFilter @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}} />
   {{/if}}
-</div>
+</div></template>

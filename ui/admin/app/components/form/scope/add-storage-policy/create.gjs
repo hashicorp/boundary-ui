@@ -1,31 +1,32 @@
-{{!
+import pageTitle from "ember-page-title/helpers/page-title";
+import t from "ember-intl/helpers/t";
+import Item from "admin/components/breadcrumbs/item/index";
+import Page from "rose/components/rose/layout/page";
+import PageHeader from "@hashicorp/design-system-components/components/hds/page-header/index";
+import Container from "admin/components/breadcrumbs/container/index";
+import Policy from "admin/components/form/policy/index";
+import { fn } from "@ember/helper";
+<template>{{!--
   Copyright IBM Corp. 2021, 2026
   SPDX-License-Identifier: BUSL-1.1
-}}
+--}}
 
-{{page-title (t 'titles.new')}}
-<Breadcrumbs::Item
-  @text={{t 'resources.policy.titles.new'}}
-  @route='scopes.scope.add-storage-policy.create'
-/>
+{{pageTitle (t "titles.new")}}
+<Item @text={{t "resources.policy.titles.new"}} @route="scopes.scope.add-storage-policy.create" />
 
-<Rose::Layout::Page as |page|>
+<Page as |page|>
   <page.header>
-    <Hds::PageHeader as |PH|>
+    <PageHeader as |PH|>
       <PH.Breadcrumb>
-        <Breadcrumbs::Container />
+        <Container />
       </PH.Breadcrumb>
       <PH.Title>
-        {{t 'resources.policy.titles.new'}}
+        {{t "resources.policy.titles.new"}}
       </PH.Title>
-    </Hds::PageHeader>
+    </PageHeader>
   </page.header>
 
   <page.body>
-    <Form::Policy
-      @model={{@model}}
-      @submit={{fn this.save @model}}
-      @cancel={{fn this.cancel @model}}
-    />
+    <Policy @model={{@model}} @submit={{fn this.save @model}} @cancel={{fn this.cancel @model}} />
   </page.body>
-</Rose::Layout::Page>
+</Page></template>
