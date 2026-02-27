@@ -110,6 +110,10 @@ class Session {
       options,
     );
 
+    childProcess.on('close', () => {
+      this.#onClose(this.#id);
+    });
+
     if (stderr) {
       const errorResponse = jsonify(stderr);
       const error = errorResponse.api_error || errorResponse.error;
@@ -122,10 +126,6 @@ class Session {
     this.#process = childProcess;
     this.#proxyDetails = response;
     this.#id = response.session_id;
-
-    this.#process.on('close', () => {
-      this.#onClose(this.#id);
-    });
 
     return response;
   }
