@@ -613,6 +613,53 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources.
     actions:
       create: New Grant
+  grant-templates:
+    title_plural: Grant Templates
+    actions:
+      add-grant-templates: Add Grant Templates
+    messages:
+      add-grant-templates:
+        title: Add Grant Templates
+        description: Select grant templates to add to this role.
+    titles:
+      grant-strings: Grant Strings
+    templates:
+      global-admin:
+        name: Global Admin
+        description: Full administrative access to all resources in Boundary
+      org-admin:
+        name: Org Admin
+        description: Administrative access to all resources within an organization
+      project-admin:
+        name: Project Admin
+        description: Administrative access to all resources within a project
+      session-manager:
+        name: Session Manager
+        description: Can view and cancel sessions
+      target-manager:
+        name: Target Manager
+        description: Can create and manage targets
+      host-resource-manager:
+        name: Host Resource Manager
+        description: Can manage hosts and host catalogs
+      credential-manager:
+        name: Credential Manager
+        description: Can manage credentials and credential stores
+      user-manager:
+        name: User Manager
+        description: Can manage users, groups, and accounts
+      auth-method-manager:
+        name: Auth Method Manager
+        description: Can manage auth methods and managed groups
+      session-auditor:
+        name: Session Auditor
+        description: Can view session recordings
+      target-user:
+        name: Target User
+        description: Can connect to targets but cannot manage anything
+      read-only-user:
+        name: Read-Only User
+        description: Can view but not modify any resources
   scope:
     title: Scope
     title_plural: Scopes
@@ -624,7 +671,6 @@ role:
       parent_scope: Parent scope
       resource_type: Resource type
       projects_selected: Projects selected
-      selected: '{items} selected out of {total}'
     messages:
       none:
         title: No scopes added

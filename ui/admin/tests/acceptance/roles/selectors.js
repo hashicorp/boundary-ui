@@ -14,6 +14,8 @@ export const MANAGE_DROPDOWN_ROLES_REMOVE =
   '[data-test-manage-roles-dropdown] div:last-child button';
 export const MANAGE_DROPDOWN_ADD_PRINCIPALS =
   '[data-test-manage-role-principals]';
+export const MANAGE_DROPDOWN_ADD_GRANT_TEMPLATES =
+  '[data-test-manage-role-grant-templates]';
 
 export const ROLE_BADGE = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
@@ -32,6 +34,8 @@ export const NO_RESULTS_GRANT_SCOPE_MSG = '[data-test-no-grant-scope-results]';
 
 export const NO_SCOPES_MSG = '.role-grant-scopes div';
 export const NO_SCOPES_MSG_LINK = '.role-grant-scopes div div:nth-child(3) a';
+
+export const NO_GRANT_TEMPLATES_MSG = '[data-test-no-grant-template-results]';
 
 // Manage scopes selectors
 export const SCOPE_TOGGLE = (name) => `.hds-form-toggle input[name="${name}"]`;

@@ -7,11 +7,19 @@
   (hash
     canAddPrincipals=(can 'addPrincipals role' @model)
     canSetGrantScopes=(can 'setGrantScopes role' @model)
+    canSetGrants=(can 'setGrants role' @model)
     canDelete=(can 'delete model' @model)
   )
   as |perms|
 }}
-  {{#if (or perms.canAddPrincipals perms.canSetGrantScopes perms.canDelete)}}
+  {{#if
+    (or
+      perms.canAddPrincipals
+      perms.canSetGrantScopes
+      perms.canSetGrants
+      perms.canDelete
+    )
+  }}
     <Hds::Dropdown data-test-manage-roles-dropdown as |dd|>
       <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
       {{#if perms.canAddPrincipals}}
@@ -30,8 +38,18 @@
           {{t 'resources.role.scope.actions.manage-scopes'}}
         </dd.Interactive>
       {{/if}}
+      {{#if perms.canSetGrants}}
+        <dd.Interactive
+          @route='scopes.scope.roles.role.add-grant-templates'
+          data-test-manage-role-grant-templates
+        >
+          {{t 'resources.role.grant-templates.actions.add-grant-templates'}}
+        </dd.Interactive>
+      {{/if}}
       {{#if perms.canDelete}}
-        {{#if (or perms.canAddPrincipals perms.canSetGrantScopes)}}
+        {{#if
+          (or perms.canAddPrincipals perms.canSetGrantScopes perms.canSetGrants)
+        }}
           <dd.Separator />
         {{/if}}
         <dd.Interactive
