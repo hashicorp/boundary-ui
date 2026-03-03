@@ -132,23 +132,6 @@
   }
 }
 
-@mixin dark-mode-button-override {
-  /* stylelint-disable selector-class-pattern */
-  .hds-app-frame:has(
-    .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-  ) {
-    .hds-button,
-    .hds-dropdown-toggle-button,
-    .hds-dropdown-toggle-icon,
-    .hds-app-header__home-link {
-      color: var(--token-color-palette-neutral-200);
-      background-color: var(--token-color-palette-neutral-50);
-      border-color: var(--token-color-palette-neutral-100);
-    }
-  }
-  /* stylelint-enable selector-class-pattern */
-}
-
 @mixin dark-mode-app-header-override {
   .app-header-dark-mode-overrides {
     color: var(--token-color-palette-neutral-700);
@@ -156,8 +139,12 @@
     border-bottom-color: var(--token-color-palette-neutral-100);
 
     /* stylelint-disable selector-class-pattern */
-    .home-link-color-override,
-    .hds-app-header__actions {
+    .home-link-color-override {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+
+    &.hds-app-header--is-mobile.hds-app-header--menu-is-open
+      .hds-app-header__actions {
       background-color: var(--token-color-palette-neutral-0);
     }
 
@@ -211,7 +198,6 @@
     @include dark-mode-ember-dropdown-override;
     @include dark-mode-app-header-override;
     @include dark-mode-app-side-nav-override;
-    @include dark-mode-button-override;
   }
 }
 
@@ -221,5 +207,4 @@
   @include dark-mode-ember-dropdown-override;
   @include dark-mode-app-header-override;
   @include dark-mode-app-side-nav-override;
-  @include dark-mode-button-override;
 }
