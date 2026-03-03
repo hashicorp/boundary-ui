@@ -49,6 +49,12 @@ module('Acceptance | projects | targets | index', function (hooks) {
   const TARGET_OPEN_BUTTON = (id) => `[data-test-targets-open-button="${id}"]`;
   const TARGET_CONNECT_BUTTON = (id) =>
     `[data-test-targets-connect-button="${id}"]`;
+  const TABLE_SORT_BTN = 'thead tr th:nth-child(1) button';
+  const TABLE_SORT_BTN_ARROW_UP =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-up';
+  const TABLE_SORT_BTN_ARROW_DOWN =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-down';
+
   const instances = {
     scopes: {
       global: null,
@@ -596,8 +602,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
       .exists();
 
-    await click('.rose-header-nav .hds-dropdown-toggle-button');
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org}"]`,
+    );
 
     assert
       .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
@@ -873,5 +881,47 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     // Assert that the confirm modal appears
     assert.dom(HDS_DIALOG_MODAL).isVisible();
+  });
+
+  test('sorting by target name updates url', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-24
+          enabled: false,
+        },
+      },
+    });
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+    );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=name'));
+    assert.true(currentURL().includes('sortDirection=asc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_UP).isVisible();
+
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=name'));
+    assert.true(currentURL().includes('sortDirection=desc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_DOWN).isVisible();
   });
 });

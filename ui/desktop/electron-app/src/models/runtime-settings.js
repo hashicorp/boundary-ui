@@ -43,7 +43,7 @@ class RuntimeSettings {
       if (result.statusCode >= 400) {
         throw new Error();
       }
-    } catch (e) {
+    } catch {
       throw new Error(`Cluster URL ${clusterUrl} could not be validated.`);
     }
   }

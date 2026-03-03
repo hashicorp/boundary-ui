@@ -81,7 +81,7 @@ export default class FormTargetAddHostSetsComponent extends Component {
             confirm: 'resources.target.actions.remove-address',
           },
         );
-      } catch (e) {
+      } catch {
         // if the user denies, do nothing and return
         return;
       }

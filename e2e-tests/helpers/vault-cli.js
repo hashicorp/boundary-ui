@@ -11,7 +11,7 @@ import { execSync } from 'node:child_process';
 export async function checkVaultCli() {
   try {
     execSync('which vault');
-  } catch (e) {
+  } catch {
     throw new Error('vault does not exist on the path');
   }
 }

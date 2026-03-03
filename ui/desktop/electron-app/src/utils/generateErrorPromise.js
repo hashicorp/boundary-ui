@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 const jsonify = require('./jsonify');
-const log = require('electron-log/main');
 
 // Convert to json
 const generateErrorPromise = async (stderr) => {

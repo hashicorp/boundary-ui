@@ -37,7 +37,7 @@ export class TargetsPage extends BaseResourcePage {
     }
 
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -193,7 +193,7 @@ export class TargetsPage extends BaseResourcePage {
    */
   async addBrokeredCredentialsToTarget(targetName, credentialName) {
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await expect(
@@ -241,7 +241,7 @@ export class TargetsPage extends BaseResourcePage {
    */
   async addInjectedCredentialsToTarget(targetName, credentialName) {
     await this.page
-      .getByRole('navigation', { name: 'Application local navigation' })
+      .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await expect(
