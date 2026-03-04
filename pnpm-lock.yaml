@@ -570,8 +570,8 @@ importers:
         specifier: 6.1.0-rc-20260304193609
         version: 6.1.0-rc-20260304193609(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-basic-dropdown@8.8.0(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9))))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9)))
       '@hashicorp/design-system-tokens':
-        specifier: ^2.3.0
-        version: 2.3.0
+        specifier: 4.0.1-rc-20260304193609
+        version: 4.0.1-rc-20260304193609
       '@hashicorp/flight-icons':
         specifier: ^3.10.0
         version: 3.10.0
@@ -2919,9 +2919,6 @@ packages:
     peerDependenciesMeta:
       ember-intl:
         optional: true
-
-  '@hashicorp/design-system-tokens@2.3.0':
-    resolution: {integrity: sha512-T2XhcgUeiGkNqvPu73yittDghEccUpIZc7Fh/g4PG7KEvJwbXItFWTRWoHSGR8T6r6LpOP5E6CC4hSVwGRugRg==}
 
   '@hashicorp/design-system-tokens@4.0.1-rc-20260304193609':
     resolution: {integrity: sha512-czCRHFVLLsBtOMWTnHtE3qP4DzsdN4yIo2m5CAzjOZafG5mcYUerPoZ6abHcp69p5j9Eyo6d9R8Wn1n7f2doDw==}
@@ -12229,8 +12226,6 @@ snapshots:
       - '@glint/template'
       - ember-source
       - supports-color
-
-  '@hashicorp/design-system-tokens@2.3.0': {}
 
   '@hashicorp/design-system-tokens@4.0.1-rc-20260304193609': {}
 
