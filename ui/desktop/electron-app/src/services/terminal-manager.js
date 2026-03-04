@@ -96,8 +96,16 @@ class TerminalManager {
         nodeIntegration: false,
         preload: path.join(__dirname, '..', 'terminal-preload.js'),
       },
-      // add loadfile for terminal view
     });
+
+    const terminalViewPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      'terminal-view-dist',
+      'terminal.html',
+    );
+    this.#terminalView.webContents.loadFile(terminalViewPath);
 
     this.mainWindow.contentView.addChildView(this.#terminalView);
     this.positionTerminalView(position);
