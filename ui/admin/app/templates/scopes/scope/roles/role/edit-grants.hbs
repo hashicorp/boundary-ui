@@ -1,0 +1,34 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.role.edit-grants.title')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.edit-grants.title'}}
+  @route='scopes.scope.roles.role.edit-grants'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.edit-grants.title'}}
+        {{! TODO: Add correct doc link once it's created}}
+        {{! <DocLink @doc='role.' /> }}
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.role.edit-grants.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
+  </page.header>
+
+  <page.body>
+    <Form::Role::EditGrants />
+  </page.body>
+
+</Rose::Layout::Page>
