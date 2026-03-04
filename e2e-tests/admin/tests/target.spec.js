@@ -233,10 +233,7 @@ test(
       ).toBeVisible();
       await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-      await page
-        .locator('.hds-code-editor')
-        .getByRole('textbox')
-        .click({ force: true });
+      await page.locator('.hds-code-editor').getByRole('textbox').click();
       await expect(
         page.locator('.hds-code-editor').getByRole('textbox'),
       ).toBeFocused();
