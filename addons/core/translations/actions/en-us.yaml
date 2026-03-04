@@ -23,6 +23,7 @@ retry: Retry
 play: Play
 pause: Pause
 resume: Resume
+export: Export
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard
