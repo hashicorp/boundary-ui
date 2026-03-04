@@ -660,6 +660,9 @@ role:
       read-only-user:
         name: Read-Only User
         description: Can view but not modify any resources
+  edit-grants:
+    title: Edit Grants
+    description: Modify existing grant strings or add new grant strings to this role.
   scope:
     title: Scope
     title_plural: Scopes

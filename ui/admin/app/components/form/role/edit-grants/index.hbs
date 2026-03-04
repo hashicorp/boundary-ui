@@ -1,0 +1,31 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form class='full-width' as |form|>
+  {{! TODO: Add responsive options to @colspan once we upgrade to HDS v6.0.0}}
+  <Hds::Layout::Grid @gap='32' as |LG|>
+    <LG.Item @colspan={{2}}>
+      {{! TODO: Add grants code editor. }}
+    </LG.Item>
+
+    <LG.Item @colspan={{1}}>
+      {{! TODO: Add string options and actions. }}
+    </LG.Item>
+  </Hds::Layout::Grid>
+
+  <form.actions class='margin-top-l'>
+    <:actions>
+      <Hds::ButtonSet>
+        <Hds::Button type='submit' @text={{t 'actions.save'}} />
+        <Hds::Button @text={{t 'actions.cancel'}} @color='secondary' />
+        <Hds::Button
+          @text={{t 'actions.export'}}
+          @color='tertiary'
+          @icon='upload'
+        />
+      </Hds::ButtonSet>
+    </:actions>
+  </form.actions>
+</Rose::Form>
