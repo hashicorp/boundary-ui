@@ -55,8 +55,9 @@ module.exports = {
    * @param path
    */
   spawn(command, options, path = boundaryPath) {
+    const { onClose, ...spawnOptions } = options;
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path, command, options);
+      const childProcess = spawn(path, command, spawnOptions);
       childProcess.stdout.on('data', (data) => {
         resolve({ childProcess, stdout: data.toString() });
       });
@@ -71,12 +72,13 @@ module.exports = {
       // a timeout occurs so this guarantees we return a response to the caller.
       // Otherwise this should not get hit as we should be returning a response
       // from one of the handlers above.
-      childProcess.on('close', () =>
+      childProcess.on('close', () => {
+        onClose?.();
         resolve({
           childProcess,
           stderr: JSON.stringify({ error: 'Process was closed.' }),
-        }),
-      );
+        });
+      });
     });
   },
 };

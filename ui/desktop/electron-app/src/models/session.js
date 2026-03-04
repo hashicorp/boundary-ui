@@ -104,15 +104,12 @@ class Session {
       timeout: this.#sessionMaxSeconds
         ? this.#sessionMaxSeconds * 1000
         : undefined,
+      onClose: () => this.#onClose(this.#id),
     };
     const { childProcess, stdout, stderr } = await spawn(
       this.connectCommand,
       options,
     );
-
-    childProcess.on('close', () => {
-      this.#onClose(this.#id);
-    });
 
     if (stderr) {
       const errorResponse = jsonify(stderr);
