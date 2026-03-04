@@ -111,8 +111,8 @@ importers:
         specifier: ^19.0.2
         version: 19.0.5
       tracked-built-ins:
-        specifier: ^4.0.0
-        version: 4.0.0(@babel/core@7.27.1)
+        specifier: ^4.1.0
+        version: 4.1.0(@babel/core@7.27.1)
       uuid:
         specifier: ^11.0.3
         version: 11.1.0
@@ -1001,8 +1001,8 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
-        specifier: ^4.0.0
-        version: 4.0.0(@babel/core@7.27.1)
+        specifier: ^4.1.0
+        version: 4.1.0(@babel/core@7.27.1)
       webpack:
         specifier: ^5.104.1
         version: 5.104.1(esbuild@0.25.9)
@@ -1233,8 +1233,8 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
-        specifier: ^4.0.0
-        version: 4.0.0(@babel/core@7.27.1)
+        specifier: ^4.1.0
+        version: 4.1.0(@babel/core@7.27.1)
       webpack:
         specifier: ^5.104.1
         version: 5.104.1(esbuild@0.25.9)
@@ -9221,9 +9221,6 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  tracked-built-ins@4.0.0:
-    resolution: {integrity: sha512-0Jl43A1SDZd+yYCJvXfgDSn4Wk/zcawkyFTBPqOETU5UJRngnVEnQ8oOjawqPRg6qja3sKjIQ8z6X9xJzcUTUA==}
-
   tracked-built-ins@4.1.0:
     resolution: {integrity: sha512-v1+jca3sD3LgbAFVsontSONTv7HsZll3yeUB00L6KPwLilFRrY77gvgptDe35fTalk9ea7mmrM2wABD56pTvuw==}
 
@@ -15397,7 +15394,7 @@ snapshots:
       ember-cli-babel: 8.2.0(@babel/core@7.27.1)
       ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.104.1(esbuild@0.25.9))
       ember-template-imports: 4.3.0
-      tracked-built-ins: 4.0.0(@babel/core@7.27.1)
+      tracked-built-ins: 4.1.0(@babel/core@7.27.1)
     transitivePeerDependencies:
       - '@glint/template'
       - supports-color
@@ -20149,15 +20146,6 @@ snapshots:
       ieee754: 1.2.1
 
   tr46@0.0.3: {}
-
-  tracked-built-ins@4.0.0(@babel/core@7.27.1):
-    dependencies:
-      '@embroider/addon-shim': 1.10.0
-      decorator-transforms: 2.3.0(@babel/core@7.27.1)
-      ember-tracked-storage-polyfill: 1.0.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - supports-color
 
   tracked-built-ins@4.1.0(@babel/core@7.27.1):
     dependencies:

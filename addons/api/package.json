@@ -42,7 +42,7 @@
     "esbuild": "^0.25.4",
     "promise-worker-bi": "^5.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
-    "tracked-built-ins": "^4.0.0",
+    "tracked-built-ins": "^4.1.0",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
