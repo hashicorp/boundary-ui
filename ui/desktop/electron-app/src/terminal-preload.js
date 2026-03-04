@@ -30,7 +30,7 @@ contextBridge.exposeInMainWorld('terminal', {
   },
   cleanup: (callback) => {
     const listener = () => callback();
-    ipcRenderer.on('cleanupTerminal', listener);
+    ipcRenderer.once('cleanupTerminal', listener);
     // Return a function for the caller to handle cleaning up the listener
     return () => ipcRenderer.removeListener('cleanupTerminal', listener);
   },

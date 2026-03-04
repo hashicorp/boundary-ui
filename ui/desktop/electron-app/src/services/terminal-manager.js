@@ -56,9 +56,6 @@ class TerminalManager {
 
     // Resize listener
     const resizeListener = (event, size) => {
-      console.log(
-        `Resizing terminal listener ${id} to cols: ${size.cols}, rows: ${size.rows}`,
-      );
       const { cols, rows } = size;
       ptyProcess.resize(cols, rows);
     };
@@ -105,10 +102,9 @@ class TerminalManager {
       'terminal-view-dist',
       'terminal.html',
     );
-    this.#terminalView.webContents.loadFile(terminalViewPath);
-
     this.mainWindow.contentView.addChildView(this.#terminalView);
     this.positionTerminalView(position);
+    this.#terminalView.webContents.loadFile(terminalViewPath);
   }
 
   positionTerminalView(position) {

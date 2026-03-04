@@ -30,6 +30,21 @@ process.once('loaded', () => {
   });
 });
 
+contextBridge.exposeInMainWorld('webContentView', {
+  createTerminalView: (params) => {
+    ipcRenderer.send('createTerminalView', params);
+  },
+  destroyTerminalView: () => {
+    ipcRenderer.send('destroyTerminalView');
+  },
+  hideTerminalView: () => {
+    ipcRenderer.send('hideTerminalView');
+  },
+  positionTerminalView: (params) => {
+    ipcRenderer.send('positionTerminalView', params);
+  },
+});
+
 /**
  * Listener on electron app when user triggers before-quit event
  */
