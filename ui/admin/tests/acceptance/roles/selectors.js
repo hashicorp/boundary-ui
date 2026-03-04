@@ -16,6 +16,7 @@ export const MANAGE_DROPDOWN_ADD_PRINCIPALS =
   '[data-test-manage-role-principals]';
 export const MANAGE_DROPDOWN_ADD_GRANT_TEMPLATES =
   '[data-test-manage-role-grant-templates]';
+export const MANAGE_DROPDOWN_EDIT_GRANTS = '[data-test-manage-dropdown-grants]';
 
 export const ROLE_BADGE = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
