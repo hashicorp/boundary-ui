@@ -9,7 +9,6 @@ import { notifyError } from 'core/decorators/notify';
 import { tracked } from '@glimmer/tracking';
 
 export default class SessionService extends BaseSessionService {
-  @service ipc;
   @service store;
 
   @tracked username;
@@ -24,7 +23,7 @@ export default class SessionService extends BaseSessionService {
 
     if (this.session.isAuthenticated) {
       const sessionData = this.data?.authenticated;
-      await this.ipc.invoke('addTokenToDaemons', {
+      await window.boundary.addTokenToDaemons({
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });

@@ -11,7 +11,6 @@ import { notifyError } from 'core/decorators/notify';
 
 export default class SettingsCardClientAgentComponent extends Component {
   // =services
-  @service ipc;
   @service router;
   @service loading;
 
@@ -59,9 +58,9 @@ export default class SettingsCardClientAgentComponent extends Component {
   @notifyError(({ message }) => message)
   async changeClientAgentState() {
     if (this.isClientAgentStatusRunning) {
-      await this.ipc.invoke('pauseClientAgent');
+      await window.boundary.pauseClientAgent();
     } else {
-      await this.ipc.invoke('resumeClientAgent');
+      await window.boundary.resumeClientAgent();
     }
     // Refresh projects page in order to stop or start
     // polling when client agent status changes.

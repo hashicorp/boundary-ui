@@ -14,7 +14,6 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
   // =services
 
   @service session;
-  @service ipc;
   @service intl;
   @service router;
 
@@ -39,7 +38,7 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
    * @param {string} url
    */
   async openExternalOIDCFlow(url) {
-    await this.ipc.invoke('openExternal', url);
+    await window.boundary.openExternal(url);
   }
 
   // =actions

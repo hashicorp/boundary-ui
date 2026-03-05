@@ -5,12 +5,8 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 
 export default class SettingsCardLogsComponent extends Component {
-  // =services
-  @service ipc;
-
   // =attributes
 
   /**
@@ -30,6 +26,6 @@ export default class SettingsCardLogsComponent extends Component {
    */
   @action
   async selectLogLevel({ target: { value } }) {
-    await this.ipc.invoke('setLogLevel', value);
+    await window.boundary.setLogLevel(value);
   }
 }

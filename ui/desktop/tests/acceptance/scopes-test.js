@@ -18,13 +18,14 @@ import {
   currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../helpers/window-mock-ipc';
+import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import sinon from 'sinon';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE = '.hds-application-state__title';
@@ -134,10 +135,9 @@ module('Acceptance | scopes', function (hooks) {
     urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
 
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    window.boundary.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     // mock RDP service calls
@@ -319,7 +319,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - windows build', async function (assert) {
-    this.ipcStub.withArgs('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -342,7 +342,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - mac build', async function (assert) {
-    this.ipcStub.withArgs('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: false,
       isMac: true,
       isLinux: false,
@@ -365,7 +365,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - linux build', async function (assert) {
-    this.ipcStub.withArgs('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: false,
       isMac: false,
       isLinux: true,
@@ -388,7 +388,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - failed to fetch metaData', async function (assert) {
-    this.ipcStub.withArgs('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -413,7 +413,7 @@ module('Acceptance | scopes', function (hooks) {
   test('pagination is not supported - navigate to cluster url page', async function (assert) {
     await invalidateSession();
     this.stubCacheDaemonSearch();
-    this.ipcStub.withArgs('checkOS').returns({
+    window.boundary.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,

@@ -4,7 +4,6 @@
  */
 
 import Service from '@ember/service';
-import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export const RDP_CLIENT_NONE = 'none';
@@ -26,10 +25,6 @@ const windowsRecommendedRdpClient = {
 };
 
 export default class RdpService extends Service {
-  // =services
-
-  @service ipc;
-
   // =properties
 
   /**
@@ -84,7 +79,7 @@ export default class RdpService extends Service {
       return this.rdpClients;
     }
     try {
-      this.rdpClients = await this.ipc.invoke('getRdpClients');
+      this.rdpClients = await window.boundary.getRdpClients();
       return this.rdpClients;
     } catch (error) {
       __electronLog?.error('Failed to fetch RDP clients', error.message);
@@ -103,7 +98,7 @@ export default class RdpService extends Service {
       if (this.recommendedRdpClient !== null) {
         return this.recommendedRdpClient;
       }
-      const { isWindows, isMac } = await this.ipc.invoke('checkOS');
+      const { isWindows, isMac } = await window.boundary.checkOS();
       if (isWindows) {
         this.recommendedRdpClient = windowsRecommendedRdpClient;
       } else if (isMac) {
@@ -128,7 +123,7 @@ export default class RdpService extends Service {
       return this.preferredRdpClient;
     }
     try {
-      this.preferredRdpClient = await this.ipc.invoke('getPreferredRdpClient');
+      this.preferredRdpClient = await window.boundary.getPreferredRdpClient();
       return this.preferredRdpClient;
     } catch (error) {
       __electronLog?.error(
@@ -148,7 +143,7 @@ export default class RdpService extends Service {
    */
   async setPreferredRdpClient(rdpClient) {
     try {
-      await this.ipc.invoke('setPreferredRdpClient', rdpClient);
+      await window.boundary.setPreferredRdpClient(rdpClient);
       this.preferredRdpClient = rdpClient;
       return this.preferredRdpClient;
     } catch (error) {
@@ -165,6 +160,6 @@ export default class RdpService extends Service {
    * @param {string} sessionId - The ID of the active session
    */
   async launchRdpClient(sessionId) {
-    await this.ipc.invoke('launchRdpClient', sessionId);
+    await window.boundary.launchRdpClient(sessionId);
   }
 }

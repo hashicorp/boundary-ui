@@ -13,15 +13,16 @@ import {
   RDP_CLIENT_WINDOWS_APP_LINK,
   RDP_CLIENT_MSTSC_LINK,
 } from 'desktop/services/rdp';
+import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
 
 module('Unit | Service | rdp', function (hooks) {
   setupTest(hooks);
+  setupBoundaryContextBridgeApiMock(hooks);
 
-  let service, ipcService;
+  let service;
 
   hooks.beforeEach(function () {
     service = this.owner.lookup('service:rdp');
-    ipcService = this.owner.lookup('service:ipc');
   });
 
   hooks.afterEach(function () {
@@ -29,9 +30,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getRdpClients sets to fallback value on error', async function (assert) {
-    const ipcStub = sinon.stub(ipcService, 'invoke');
-    ipcStub.withArgs('getRdpClients').rejects();
-    ipcStub.withArgs('checkOS').resolves({ isMac: true });
+    window.boundary.getRdpClients.rejects();
     await service.getRdpClients();
 
     assert.deepEqual(
@@ -42,10 +41,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getPreferredRdpClient sets to fallback value on error', async function (assert) {
-    sinon
-      .stub(ipcService, 'invoke')
-      .withArgs('getPreferredRdpClient')
-      .rejects();
+    window.boundary.getPreferredRdpClient.rejects();
     await service.getPreferredRdpClient();
 
     assert.strictEqual(
@@ -56,10 +52,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('setPreferredRdpClient sets to fallback value on error', async function (assert) {
-    sinon
-      .stub(ipcService, 'invoke')
-      .withArgs('setPreferredRdpClient', RDP_CLIENT_MSTSC)
-      .rejects();
+    window.boundary.setPreferredRdpClient.rejects();
     await service.setPreferredRdpClient(RDP_CLIENT_MSTSC);
 
     assert.strictEqual(
@@ -70,10 +63,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('sets recommendedRdpClient correctly based on OS', async function (assert) {
-    sinon
-      .stub(ipcService, 'invoke')
-      .withArgs('checkOS')
-      .resolves({ isWindows: true });
+    window.boundary.checkOS.resolves({ isWindows: true });
     await service.getRecommendedRdpClient();
 
     assert.deepEqual(
@@ -85,7 +75,7 @@ module('Unit | Service | rdp', function (hooks) {
       'recommendedRdpClient is set correctly for windows',
     );
 
-    ipcService.invoke.withArgs('checkOS').resolves({ isMac: true });
+    window.boundary.checkOS.resolves({ isMac: true });
     service.recommendedRdpClient = null;
     await service.getRecommendedRdpClient();
 

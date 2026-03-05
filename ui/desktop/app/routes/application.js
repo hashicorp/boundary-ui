@@ -14,7 +14,6 @@ export default class ApplicationRoute extends Route {
 
   @service session;
   @service clusterUrl;
-  @service ipc;
   @service intl;
   @service rdp;
 
@@ -46,7 +45,7 @@ export default class ApplicationRoute extends Route {
     // Add token to cache daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      await this.ipc.invoke('addTokenToDaemons', {
+      await window.boundary.addTokenToDaemons({
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
@@ -62,10 +61,10 @@ export default class ApplicationRoute extends Route {
    * Add window frame config on controller.
    */
   async setupController(controller) {
-    controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
+    controller.set('hasMacOSChrome', await window.boundary.hasMacOSChrome());
     controller.set(
       'showWindowActions',
-      await this.ipc.invoke('showWindowActions'),
+      await window.boundary.showWindowActions(),
     );
   }
 

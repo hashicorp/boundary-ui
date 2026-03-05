@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Service, { inject as service } from '@ember/service';
+import Service from '@ember/service';
 
 export default class ClientAgentSessionsService extends Service {
-  // =services
-  @service ipc;
-
   // =attributes
   #sessionsSet;
 
@@ -19,7 +16,7 @@ export default class ClientAgentSessionsService extends Service {
    * @returns {Promise<*>}
    */
   async getClientAgentSessions() {
-    return this.ipc.invoke('getClientAgentSessions');
+    return window.boundary.getClientAgentSessions();
   }
 
   /**
