@@ -53,7 +53,7 @@ export default class ApplicationRoute extends Route {
           });
           maybeModel?.rollbackAttributes();
           transition.retry();
-        } catch (e) {
+        } catch {
           // if user denies, do nothing
         }
       }

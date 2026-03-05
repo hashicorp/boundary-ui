@@ -251,7 +251,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
     try {
       await visit(urls.credentialLibraries);
-    } catch (e) {
+    } catch {
       assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);

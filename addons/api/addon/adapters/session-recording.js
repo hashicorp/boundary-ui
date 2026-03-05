@@ -23,7 +23,7 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
     let method;
     try {
       method = snapshot?.adapterOptions?.method;
-    } catch (e) {
+    } catch {
       // Ignore any adapter errors here
     }
     if (method === 'download') {
