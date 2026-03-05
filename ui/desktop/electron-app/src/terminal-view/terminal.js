@@ -6,7 +6,6 @@
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { CanvasAddon } from '@xterm/addon-canvas';
-// eslint-disable-next-line n/no-extraneous-import
 import { v4 as uuidv4 } from 'uuid';
 import '@xterm/xterm/css/xterm.css';
 import './terminal.css';
@@ -26,6 +25,23 @@ xterm.loadAddon(canvasAddon);
 xterm.open(terminalElement);
 fitAddon.fit();
 xterm.focus();
+
+/**
+ * Custom key event handler for windows to achieve Ctrl+C as on the other OS's
+ */
+const isWindows = navigator.userAgent.toLowerCase().includes('win');
+if (isWindows) {
+  xterm.attachCustomKeyEventHandler(async (arg) => {
+    if (arg.ctrlKey && arg.code === 'KeyC' && arg.type === 'keydown') {
+      const selection = xterm.getSelection();
+      if (selection) {
+        await navigator.clipboard.writeText(selection);
+        return false;
+      }
+    }
+    return true;
+  });
+}
 
 // create terminal through the terminal API exposed by terminal-preload script
 window.terminal.create({
