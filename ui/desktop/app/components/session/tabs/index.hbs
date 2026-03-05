@@ -17,7 +17,7 @@
 {{else}}
   {{! Non-RDP: Show tabbed interface }}
   <Hds::Tabs as |T|>
-    <T.Tab>{{t 'titles.details'}}</T.Tab>
+    <T.Tab {{on 'click' this.openDetails}}>{{t 'titles.details'}}</T.Tab>
     <T.Tab @icon='terminal' {{on 'click' this.openTerminal}}>
       {{t 'resources.session.shell'}}
     </T.Tab>
