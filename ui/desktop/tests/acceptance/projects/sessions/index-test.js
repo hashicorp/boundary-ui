@@ -29,6 +29,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   const APP_STATE_TITLE =
     '[data-test-no-sessions] .hds-application-state__title';
+  const TABLE_SORT_BTN = 'thead tr th:nth-child(1) button';
+  const TABLE_SORT_BTN_ARROW_UP =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-up';
+  const TABLE_SORT_BTN_ARROW_DOWN =
+    'thead tr th:nth-child(1) button .hds-icon-arrow-down';
 
   const instances = {
     scopes: {
@@ -539,8 +544,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       .isVisible();
 
     // change scope in app header
-    await click('.rose-header-nav .hds-dropdown-toggle-button');
-    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(4) a');
+    await click('[data-test-header-scope-dropdown] button');
+    await click(
+      `[data-test-header-scope-dropdown] a[href="${urls.scopes.org2}"]`,
+    );
     // navigate to back sessions
     await click(`[href="${urls.sessions2}"]`);
 
@@ -572,5 +579,42 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     assert.dom('.hds-segmented-group').doesNotExist();
     assert.strictEqual(currentURL(), urls.globalSessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });
+  });
+
+  test('sorting by session created time updates url', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-24
+          enabled: false,
+        },
+      },
+    });
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+
+      'sessions',
+      'targets',
+    );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.sessions}"]`);
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=created_time'));
+    assert.true(currentURL().includes('sortDirection=asc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_UP).isVisible();
+
+    await click(TABLE_SORT_BTN);
+
+    assert.true(currentURL().includes('sortAttribute=created_time'));
+    assert.true(currentURL().includes('sortDirection=desc'));
+    assert.dom(TABLE_SORT_BTN_ARROW_DOWN).isVisible();
   });
 });

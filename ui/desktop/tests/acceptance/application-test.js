@@ -62,7 +62,7 @@ module('Acceptance | Application', function (hooks) {
     window.boundary.hasMacOSChrome.resolves(true);
     await visit(urls.clusterUrl);
     assert.ok(
-      find('.rose-header.header-cushion'),
+      find('.app-header.header-cushion'),
       'Adds header padding around native window actions',
     );
   });
@@ -72,7 +72,7 @@ module('Acceptance | Application', function (hooks) {
     window.boundary.hasMacOSChrome.resolves(false);
     await visit(urls.clusterUrl);
     assert.notOk(
-      find('.rose-header.header-cushion'),
+      find('.app-header.header-cushion'),
       'Does not add header padding around native window actions',
     );
   });

@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { paramValueFinder } from 'admin/utils/param-value-finder';
+import { paramValueFinder } from 'core/utils/param-value-finder';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends Route {
   // =services

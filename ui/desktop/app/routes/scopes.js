@@ -28,7 +28,7 @@ export default class ScopesRoute extends Route {
       if (scopesCheck.response_type) {
         this.isPaginationSupported = true;
       }
-    } catch (e) {
+    } catch {
       // no op
     }
   }
@@ -79,7 +79,7 @@ export default class ScopesRoute extends Route {
         }
 
         if (!downloadLink) throw new Error('No build found');
-      } catch (e) {
+      } catch {
         // this is a catch for any errors that may occur and shows the user
         // an error alert directing them to the releases page
         downloadError = true;

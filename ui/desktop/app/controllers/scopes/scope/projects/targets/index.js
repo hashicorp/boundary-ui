@@ -210,7 +210,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       session = await this.store.findRecord('session', session_id, {
         reload: true,
       });
-    } catch (error) {
+    } catch {
       /**
        * if the user cannot read or fetch the session we add the important
        * information returned from the connect command to allow the user

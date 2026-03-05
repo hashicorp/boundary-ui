@@ -41,6 +41,14 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   allSessions;
@@ -66,7 +74,15 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    * all targets and all projects for filtering options for the current user.
    * @return {Promise<{sessions: [SessionModel], projects: [ScopeModel], allSessions: [SessionModel], associatedTargets: [TargetModel], totalItems: number}>}
    */
-  async model({ targets, status, scopes, page, pageSize }) {
+  async model({
+    targets,
+    status,
+    scopes,
+    page,
+    pageSize,
+    sortAttribute,
+    sortDirection,
+  }) {
     const projects = this.modelFor('scopes.scope.projects');
     const orgScope = this.modelFor('scopes.scope');
     // orgFilter used to narrow down resources to only those under
@@ -89,10 +105,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       filters.scope_id.push({ equals: scope });
     });
 
+    const sort = { attribute: sortAttribute, direction: sortDirection };
     const queryOptions = {
       scope_id: orgScope.id,
       recursive: true,
-      query: { filters },
+      query: { filters, sort },
       page,
       pageSize,
       force_refresh: true,

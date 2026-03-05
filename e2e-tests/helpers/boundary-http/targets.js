@@ -15,10 +15,13 @@ import { checkResponse } from './responseHelper.js';
  * @param {string} address Optional target address
  * @returns {Promise<Serializable>}
  */
-export async function createTarget(request, { scopeId, type, port, address }) {
+export async function createTarget(
+  request,
+  { scopeId, name, type, port, address },
+) {
   const response = await request.post(`/v1/targets`, {
     data: {
-      name: `Target-${nanoid()}`,
+      name: name || `Target-${nanoid()}`,
       scope_id: scopeId,
       type: type,
       attributes: {

@@ -90,7 +90,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
       try {
         const host = await this.store.findRecord('host', session.host_id);
         session.addHost(host);
-      } catch (error) {
+      } catch {
         // no operation
       }
     }
