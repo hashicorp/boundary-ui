@@ -22,6 +22,7 @@ export default class ApplicationController extends Controller {
   @service router;
   @service scope;
   @service intl;
+  @service terminal;
 
   // =attributes
 
@@ -72,6 +73,7 @@ export default class ApplicationController extends Controller {
   @action
   async confirmCloseSessions() {
     await this.ipc.invoke('stopAll');
+    this.terminal.cleanup();
     if (this.isAppQuitting) {
       this.isAppQuitting = false;
       this.close();
@@ -91,8 +93,10 @@ export default class ApplicationController extends Controller {
     const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
     if (hasRunningSessions) {
       this.isLoggingOut = true;
+      this.terminal.hideTerminalView();
     } else {
       this.session.invalidate();
+      this.terminal.cleanup();
     }
   }
 
@@ -151,6 +155,9 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
+    if (this.terminal.shouldDisplayExistingTerminal) {
+      this.terminal.displayTerminalView();
+    }
   }
 
   willDestroy() {
