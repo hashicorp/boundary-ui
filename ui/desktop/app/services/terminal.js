@@ -28,7 +28,15 @@ const calculateTerminalContainerHeight = (termContainer) => {
 };
 
 export default class TerminalService extends Service {
+  // =properties
+
+  /**
+   * Helps track if the terminal view should be hidden on Session Details page:
+   * 1. When we navigate away to Details tab
+   * 2. When signout modal is open
+   */
   @tracked isTerminalViewOpen = false;
+
   @tracked isTerminalViewCreated = false;
 
   get terminalPosition() {
