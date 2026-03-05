@@ -3,6 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+/**
+ * This terminal renderer bootstraps an xterm.js instance and connects it to the Electron main process
+ * via the `window.terminal` API exposed by the preload `terminal-preload.js`.
+ */
+
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { CanvasAddon } from '@xterm/addon-canvas';

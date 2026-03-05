@@ -3,6 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+/**
+ * This preload is for the sandboxed terminal renderer.
+ * Exposes `window.terminal` API (via `contextBridge`) used by
+ * `terminal-view/terminal.js` to connect xterm.js to a node-pty instance running
+ * in the main process.
+ */
+
 const { ipcRenderer, contextBridge } = require('electron');
 
 contextBridge.exposeInMainWorld('terminal', {
