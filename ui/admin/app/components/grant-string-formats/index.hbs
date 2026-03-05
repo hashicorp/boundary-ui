@@ -1,0 +1,63 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Hds::Form::Radio::Group
+  @name='string-formats'
+  {{on 'change' (set-from-event this 'selectedFormatType')}}
+  as |G|
+>
+  <G.RadioField
+    @value={{this.stringFormatTypes.resourceType}}
+    checked={{eq this.selectedFormatType this.stringFormatTypes.resourceType}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.role.edit-grants.string-formats.resource-type.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.role.edit-grants.string-formats.resource-type.help'
+      }}</F.HelperText>
+  </G.RadioField>
+  <G.RadioField
+    @value={{this.stringFormatTypes.resource}}
+    checked={{eq this.selectedFormatType this.stringFormatTypes.resource}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.role.edit-grants.string-formats.resource.label'
+      }}</F.Label>
+    <F.HelperText>{{t
+        'resources.role.edit-grants.string-formats.resource.help'
+      }}</F.HelperText>
+  </G.RadioField>
+  <G.RadioField
+    @value={{this.stringFormatTypes.pinnedId}}
+    checked={{eq this.selectedFormatType this.stringFormatTypes.pinnedId}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.role.edit-grants.string-formats.pinned-id.label'
+      }}</F.Label>
+    <F.HelperText>
+      {{t 'resources.role.edit-grants.string-formats.pinned-id.help'}}
+      <Hds::Link::Inline
+        @color='secondary'
+        @href={{doc-url 'role.grant-string-format.pinned-id'}}
+      >
+        {{t 'resources.role.edit-grants.string-formats.pinned-id.link'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </G.RadioField>
+</Hds::Form::Radio::Group>
+
+<Hds::Form::Textarea::Field
+  name='string-format'
+  readOnly
+  @value={{this.stringFormat}}
+  @height='3.5rem'
+  as |F|
+>
+  <F.Label>{{t 'resources.role.edit-grants.string-formats.title'}}</F.Label>
+</Hds::Form::Textarea::Field>

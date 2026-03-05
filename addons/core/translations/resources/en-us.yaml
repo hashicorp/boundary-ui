@@ -663,6 +663,23 @@ role:
   edit-grants:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
+    string-formats:
+      title: String format
+      title_plural: String formats
+      resource-type:
+        label: Singular resource type
+        help: Applies actions to a specific resource type
+      resource:
+        label: Specific resource(s)
+        help: Applies actions to one or more individual resources
+      pinned-id:
+        label: Pinned ID
+        help: '"Pins" actions to a non-top-level type within a specific resource ID. Only available for certain resource types. '
+        link: More info
+      insert-actions: insert actions
+      insert-resource-types: insert resource types
+      insert-id: insert id
+      insert-resource-ids: insert resource ids
   scope:
     title: Scope
     title_plural: Scopes
