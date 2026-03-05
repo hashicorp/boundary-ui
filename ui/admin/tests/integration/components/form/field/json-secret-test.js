@@ -8,6 +8,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Integration | Component | form/field/json-secret', function (hooks) {
   setupRenderingTest(hooks);
@@ -31,8 +32,10 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
     assert.dom('.secret-editor').isVisible();
     assert.dom('.secret-editor-json').isVisible();
 
-    await waitFor('.cm-editor');
-    assert.dom('.cm-content').hasText(this.model.json_object);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .hasText(this.model.json_object);
   });
 
   test('it renders the disabled editor', async function (assert) {

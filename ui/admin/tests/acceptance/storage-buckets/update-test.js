@@ -342,11 +342,11 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
     assert.dom(selectors.READONLY_WORKER_FILTER).isVisible();
-    assert.dom(commonSelectors.CODE_EDITOR).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).doesNotExist();
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
-    assert.dom(commonSelectors.CODE_EDITOR).isVisible();
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).isVisible();
     assert.dom(selectors.READONLY_WORKER_FILTER).doesNotExist();
   });
 });

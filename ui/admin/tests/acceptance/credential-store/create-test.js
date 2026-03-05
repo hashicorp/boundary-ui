@@ -135,7 +135,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(commonSelectors.CODE_EDITOR).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).doesNotExist();
     assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 
