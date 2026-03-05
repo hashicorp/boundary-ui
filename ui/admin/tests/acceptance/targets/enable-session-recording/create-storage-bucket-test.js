@@ -32,8 +32,6 @@ module(
     const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
     const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
     const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
-    const EDITOR_WORKER_FILTER_CM_LOADED = '.cm-editor';
-    const EDITOR_WORKER_FILTER = '.hds-code-editor__editor';
 
     const instances = {
       scopes: {
@@ -98,9 +96,9 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(FIELD_SCOPE('global'));
-      await waitFor(EDITOR_WORKER_FILTER_CM_LOADED);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-      const editorElement = find(EDITOR_WORKER_FILTER);
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
       const editorView = editorElement.editor;
       editorView.dispatch({
         changes: {
@@ -148,9 +146,9 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(FIELD_SCOPE(instances.scopes.org.scope.id));
-      await waitFor(EDITOR_WORKER_FILTER_CM_LOADED);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-      const editorElement = find(EDITOR_WORKER_FILTER);
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
       const editorView = editorElement.editor;
       editorView.dispatch({
         changes: {
@@ -242,9 +240,9 @@ module(
       await visit(urls.enableSessionRecording);
 
       await click(commonSelectors.HREF(urls.newStorageBucket));
-      await waitFor(EDITOR_WORKER_FILTER_CM_LOADED);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-      const editorElement = find(EDITOR_WORKER_FILTER);
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
       const editorView = editorElement.editor;
       editorView.dispatch({
         changes: {
