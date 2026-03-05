@@ -23,6 +23,7 @@ const sessionManager = require('./services/session-manager.js');
 const cacheDaemonManager = require('./services/cache-daemon-manager');
 const rdpClientManager = require('./services/rdp-client-manager');
 const store = require('./services/electron-store-manager');
+const terminalManager = require('./services/terminal-manager.js');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -192,6 +193,15 @@ const createWindow = async (partition, closeWindowCB) => {
     closeWindowCB();
   });
 
+  browserWindow.webContents.on('before-input-event', (event, input) => {
+    const activeTerminalId = terminalManager.getActiveTerminalId();
+
+    if (activeTerminalId !== null && input.type === 'keyDown') {
+      terminalManager.handleInputForActiveTerminal(input, activeTerminalId);
+      event.preventDefault();
+    }
+  });
+
   return browserWindow;
 };
 
@@ -299,6 +309,7 @@ app.on('quit', () => {
   cacheDaemonManager.stop();
   // we should stop any active RDP client processes
   rdpClientManager.stopAll();
+  terminalManager.stopAllTerminals();
 });
 
 // Handle an unhandled error in the main thread
