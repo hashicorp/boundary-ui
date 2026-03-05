@@ -11,7 +11,7 @@ const path = require('path');
 
 class TerminalManager {
   #terminalView = null;
-  #sessionId = null;
+  #sessionId = undefined;
   #autoSSH = false;
 
   get mainWindow() {
@@ -30,10 +30,10 @@ class TerminalManager {
       cwd: process.env.HOME,
       env: process.env,
     });
+    const session = sessionManager.getSessionById(this.#sessionId);
 
     // If autoSSH is enabled, we need to send the SSH command to the terminal once it's created
-    if (this.#autoSSH) {
-      const session = sessionManager.getSessionById(this.#sessionId);
+    if (this.#autoSSH && session) {
       const {
         proxyDetails: { address, port },
       } = session;
@@ -82,7 +82,7 @@ class TerminalManager {
    * @param {string} id - An optional identifier for the terminal session
    * @param {boolean} autoSSH - Whether to automatically send an SSH command to the terminal upon creation
    */
-  createTerminalView({ position, id = null, autoSSH = false }) {
+  createTerminalView({ position, id = undefined, autoSSH = false }) {
     this.#sessionId = id;
     this.#autoSSH = autoSSH;
     this.#terminalView = new WebContentsView({
@@ -119,7 +119,7 @@ class TerminalManager {
     this.#terminalView.webContents.send('cleanupTerminal');
     this.mainWindow.contentView.removeChildView(this.#terminalView);
     this.#terminalView = null;
-    this.#sessionId = null;
+    this.#sessionId = undefined;
     this.#autoSSH = false;
   }
 }
