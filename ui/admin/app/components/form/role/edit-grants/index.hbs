@@ -4,15 +4,25 @@
 }}
 
 <Rose::Form class='full-width' as |form|>
-  {{! TODO: Add responsive options to @colspan once we upgrade to HDS v6.0.0}}
-  <Hds::Layout::Grid @gap='32' as |LG|>
-    <LG.Item @colspan={{2}}>
+  <Hds::Layout::Grid
+    @columnWidth={{hash sm='100%' md='33.33%'}}
+    @gap='12'
+    as |LG|
+  >
+    <LG.Item @colspan={{hash sm=1 md=2}}>
       {{! TODO: Add grants code editor. }}
     </LG.Item>
 
-    <LG.Item @colspan={{1}}>
-      {{! TODO: Add string options and actions. }}
-    </LG.Item>
+    <Hds::Accordion @size='large' as |A|>
+      <A.Item>
+        <:toggle>{{t
+            'resources.role.edit-grants.string-formats.title_plural'
+          }}</:toggle>
+        <:content>
+          <GrantStringFormats />
+        </:content>
+      </A.Item>
+    </Hds::Accordion>
   </Hds::Layout::Grid>
 
   <form.actions class='margin-top-l'>
