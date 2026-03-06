@@ -177,6 +177,7 @@ sync-interval:
 tags:
   label: Tags
 secret-editor:
+  label: Secret Editor
   details: This secret is saved but won't be displayed
   edit: Click to replace this secret
 created:

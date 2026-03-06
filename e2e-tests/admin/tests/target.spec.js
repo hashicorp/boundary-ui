@@ -233,19 +233,16 @@ test(
       ).toBeVisible();
       await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-      await page
-        .locator('.CodeMirror')
-        .getByRole('textbox')
-        .click({ force: true });
+      await page.locator('.hds-code-editor').getByRole('textbox').click();
       await expect(
-        page.locator('.CodeMirror').getByRole('textbox'),
+        page.locator('.hds-code-editor').getByRole('textbox'),
       ).toBeFocused();
       const selectAllShortcut =
         process.platform === 'darwin' ? 'Meta+A' : 'Control+A';
       await page.keyboard.press(selectAllShortcut);
       await page.keyboard.press('Backspace');
       await page
-        .locator('.CodeMirror')
+        .locator('.hds-code-editor')
         .getByRole('textbox')
         .fill('"prod" in "/tags/type"');
       await page.getByRole('button', { name: 'Save' }).click();

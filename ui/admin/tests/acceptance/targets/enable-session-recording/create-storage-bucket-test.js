@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -23,7 +30,6 @@ module(
 
     const FIELD_BUCKET_NAME = '[name="bucket_name"]';
     const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
-    const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
     const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
     const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
 
@@ -90,7 +96,16 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(FIELD_SCOPE('global'));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: WORKER_FILTER_VALUE,
+        },
+      });
 
       assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
       assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
@@ -131,7 +146,16 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(FIELD_SCOPE(instances.scopes.org.scope.id));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: WORKER_FILTER_VALUE,
+        },
+      });
 
       assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
       assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
@@ -216,7 +240,16 @@ module(
       await visit(urls.enableSessionRecording);
 
       await click(commonSelectors.HREF(urls.newStorageBucket));
-      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: WORKER_FILTER_VALUE,
+        },
+      });
       await click(commonSelectors.SAVE_BTN);
 
       assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
