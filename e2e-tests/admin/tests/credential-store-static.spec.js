@@ -195,7 +195,9 @@ test(
       await page.getByLabel('Description').fill('This is an automated test');
       await page.getByRole('combobox', { name: 'Type' }).click();
       await page.getByRole('option', { name: 'JSON' }).click();
-      await page.getByText('{}').click();
+      await page.locator('.hds-code-editor').getByRole('textbox').click();
+      // Move cursor to middle of '{}' to avoid typing outside of the braces
+      await page.keyboard.press('ArrowLeft');
       const testName = 'name-json';
       const testPassword = 'password-json';
       const testId = 'id-json';
