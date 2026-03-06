@@ -97,6 +97,8 @@ module.exports = function (environment) {
         'role.add-principals':
           '/tutorials/oss-administration/oss-manage-roles#create-a-role',
         'role.add-grant-scopes': '/docs/commands/roles/add-grant-scopes',
+        'role.grant-string-format.pinned-id':
+          '/docs/rbac/permission-grant-formats#pinned-id',
         session: '/docs/concepts/domain-model/sessions',
         target: '/docs/concepts/domain-model/targets',
         'target.new': '/docs/common-workflows/manage-targets',
