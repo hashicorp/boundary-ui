@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn } from '@ember/test-helpers';
+import { visit, click, fillIn, find, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -71,7 +71,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN, 'Click save');
 
-    assert.dom(`[href="${urls.storageBucket}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(urls.storageBucket)).isVisible();
     assert
       .dom(commonSelectors.FIELD_NAME)
       .hasValue(commonSelectors.FIELD_NAME_VALUE);
@@ -234,12 +234,18 @@ module('Acceptance | storage-buckets | update', function (hooks) {
       );
     });
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: '"dev" in "/tags/env"',
+      },
+    });
     await click(commonSelectors.SAVE_BTN);
 
     assert
@@ -336,11 +342,11 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
     assert.dom(selectors.READONLY_WORKER_FILTER).isVisible();
-    assert.dom(commonSelectors.CODE_EDITOR_CONTENT).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).doesNotExist();
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
-    assert.dom(commonSelectors.CODE_EDITOR_CONTENT).isVisible();
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).isVisible();
     assert.dom(selectors.READONLY_WORKER_FILTER).doesNotExist();
   });
 });
