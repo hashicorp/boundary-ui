@@ -90,10 +90,10 @@ export default function transformer(file, api) {
       } else {
         // if an array is provided and it's argument is a literal (number, boolean, string) then this is used for the test name
         // otherwise if it's an object the index in the array is what is used for the test name
-        eachTestNames = testArguments[1].elements.map((element, i) => element.type.endsWith('Literal') ? element.value : i);
+        eachTestNames = testArguments[1].elements?.map((element, i) => element.type.endsWith('Literal') ? element.value : i);
       }
 
-      testName = eachTestNames.map(eachTestName => `${testName} [${eachTestName}]`);
+      testName = eachTestNames?.map(eachTestName => `${testName} [${eachTestName}]`);
     } else {
       testName = [testName];
     }
@@ -270,16 +270,27 @@ export default function transformer(file, api) {
     }
   };
 
+  const existingEmberA11yImport = f.find(j.ImportDeclaration, {
+    source: {
+      value: 'ember-a11y-testing/test-support',
+    },
+  });
+
   tests.forEach(testHandler);
   testsEach.forEach(testHandler);
 
   const code = f.toSource();
 
-  // the codemod will insert a newline between existing import statements,
-  // this regex removes the extra new line
-  //
-  return code.replace(
-    /(?<newline>\n)(import .*ember-a11y-testing\/test-support.*)/g,
-    '$2',
-  );
+
+
+  if (existingEmberA11yImport.length > 0) {
+    return code;
+  } else {
+    // the codemod will insert a newline between existing import statements,
+    // this regex removes the extra new line
+    return code.replace(
+      /(?<newline>\n)(import .*ember-a11y-testing\/test-support.*)/g,
+      '$2',
+    );
+  }
 }
