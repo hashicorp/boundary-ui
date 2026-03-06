@@ -52,7 +52,8 @@
     "@ember/render-modifiers": "^2.0.4",
     "@ember/string": "^4.0.0",
     "@ember/test-helpers": "^5.2.1",
-    "@embroider/macros": "^1.18.1",
+    "@embroider/macros": "^1.20.1",
+    "@eslint/js": "^9.18.0",
     "@faker-js/faker": "^8.0.2",
     "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
@@ -93,7 +94,6 @@
     "eslint-plugin-ember": "^12.7.5",
     "eslint-plugin-n": "^17.24.0",
     "eslint-plugin-qunit": "^8.2.6",
-    "@eslint/js": "^9.18.0",
     "globals": "^17.3.0",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
@@ -107,7 +107,7 @@
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
-    "tracked-built-ins": "^4.0.0",
+    "tracked-built-ins": "^4.1.0",
     "webpack": "^5.104.1"
   },
   "engines": {
