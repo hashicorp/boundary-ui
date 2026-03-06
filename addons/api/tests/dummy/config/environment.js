@@ -30,7 +30,7 @@ module.exports = function (environment) {
     },
 
     mirage: {
-      enabled: true
+      enabled: true,
     },
   };
 
