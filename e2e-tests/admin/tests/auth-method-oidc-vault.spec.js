@@ -36,7 +36,7 @@ test(
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
-    vaultAddr,
+    vaultAddrUnified,
   }) => {
     await page.goto('/');
     let orgName;
@@ -47,7 +47,7 @@ test(
       const email = 'vault@hashicorp.com';
       const { issuer, clientId, clientSecret, authPolicyName } =
         await vaultCli.setupVaultOidc(
-          vaultAddr,
+          vaultAddrUnified,
           userName,
           password,
           email,
