@@ -37,6 +37,7 @@ export default class ApplicationController extends Controller {
     // Setup removeOnAppQuitListener to destroy the listener afterwards
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
+      this.terminal.hideTerminalView();
     });
   }
 
@@ -73,7 +74,6 @@ export default class ApplicationController extends Controller {
   @action
   async confirmCloseSessions() {
     await this.ipc.invoke('stopAll');
-    this.terminal.cleanup();
     if (this.isAppQuitting) {
       this.isAppQuitting = false;
       this.close();
@@ -96,7 +96,6 @@ export default class ApplicationController extends Controller {
       this.terminal.hideTerminalView();
     } else {
       this.session.invalidate();
-      this.terminal.cleanup();
     }
   }
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { ipcRenderer, contextBridge } = require('electron');
+const { ipcRenderer, contextBridge, webFrame } = require('electron');
 
 // Messages must originate from this origin
 const emberAppOrigin = window.location.origin;
@@ -32,7 +32,10 @@ process.once('loaded', () => {
 
 contextBridge.exposeInMainWorld('webContentView', {
   createTerminalView: (params) => {
-    ipcRenderer.send('createTerminalView', params);
+    ipcRenderer.send('createTerminalView', {
+      ...params,
+      zoomFactor: webFrame.getZoomFactor(),
+    });
   },
   destroyTerminalView: () => {
     ipcRenderer.send('destroyTerminalView');
@@ -40,8 +43,11 @@ contextBridge.exposeInMainWorld('webContentView', {
   hideTerminalView: () => {
     ipcRenderer.send('hideTerminalView');
   },
-  positionTerminalView: (params) => {
-    ipcRenderer.send('positionTerminalView', params);
+  positionTerminalView: (position) => {
+    ipcRenderer.send('positionTerminalView', {
+      position,
+      zoomFactor: webFrame.getZoomFactor(),
+    });
   },
 });
 
