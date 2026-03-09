@@ -50,7 +50,7 @@ test(
     sshKeyPath,
     targetAddress,
     targetPort,
-    vaultAddr,
+    vaultAddrPrivate,
   }) => {
     let orgId;
     try {
@@ -60,8 +60,8 @@ test(
       execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
       execSync(
         `vault kv put -mount ${secretsPath} ${secretName} ` +
-          ` username=${sshUser}` +
-          ` private_key=@${sshKeyPath}`,
+        ` username=${sshUser}` +
+        ` private_key=@${sshKeyPath}`,
       );
       execSync(
         `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
@@ -69,13 +69,13 @@ test(
       const vaultToken = JSON.parse(
         execSync(
           `vault token create` +
-            ` -no-default-policy=true` +
-            ` -policy=${boundaryPolicyName}` +
-            ` -policy=${secretPolicyName}` +
-            ` -orphan=true` +
-            ` -period=20m` +
-            ` -renewable=true` +
-            ` -format=json`,
+          ` -no-default-policy=true` +
+          ` -policy=${boundaryPolicyName}` +
+          ` -policy=${secretPolicyName}` +
+          ` -orphan=true` +
+          ` -period=20m` +
+          ` -renewable=true` +
+          ` -format=json`,
         ),
       );
       const clientToken = vaultToken.auth.client_token;
@@ -91,7 +91,7 @@ test(
       });
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createVaultCredentialStore(
-        vaultAddr,
+        vaultAddrPrivate,
         clientToken,
       );
 
