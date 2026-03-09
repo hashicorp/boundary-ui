@@ -13,14 +13,15 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
 
   // =methods
   async model() {
-    const { versionNumber: cliVersion } = await window.boundary.getCliVersion();
+    const { versionNumber: cliVersion } =
+      await window.desktop.system.getCliVersion();
 
-    const { desktopVersion } = await window.boundary.getDesktopVersion();
+    const { desktopVersion } = await window.desktop.system.getDesktopVersion();
     const cacheDaemonStatus = await this.getCacheStatus();
     const clientAgentStatus = await this.getClientAgentStatus();
 
-    const logLevel = await window.boundary.getLogLevel();
-    const logPath = await window.boundary.getLogPath();
+    const logLevel = await window.desktop.logging.getLogLevel();
+    const logPath = await window.desktop.logging.getLogPath();
     const serverInformation = this.clusterUrl.rendererClusterUrl;
 
     return {
@@ -38,7 +39,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     let cacheDaemonStatus;
     let cacheDaemonStatusError = [];
     try {
-      cacheDaemonStatus = await window.boundary.cacheDaemonStatus();
+      cacheDaemonStatus = await window.desktop.daemon.cacheDaemonStatus();
     } catch (e) {
       cacheDaemonStatusError.push(e);
     }
@@ -64,7 +65,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     let clientAgentStatus;
     let clientAgentStatusError = [];
     try {
-      clientAgentStatus = await window.boundary.clientAgentStatus();
+      clientAgentStatus = await window.desktop.clientAgent.clientAgentStatus();
     } catch (e) {
       clientAgentStatusError.push(e);
     }

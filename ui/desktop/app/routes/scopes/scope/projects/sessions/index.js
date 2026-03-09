@@ -136,7 +136,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       associatedTargets,
       totalItems,
-      isCacheDaemonRunning: await window.boundary.isCacheDaemonRunning(),
+      isCacheDaemonRunning: await window.desktop.daemon.isCacheDaemonRunning(),
     };
   }
 

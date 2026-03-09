@@ -112,7 +112,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         await timeout(250);
       }
 
-      const isCacheRunningPromise = window.boundary.isCacheDaemonRunning();
+      const isCacheRunningPromise =
+        window.desktop.daemon.isCacheDaemonRunning();
 
       const orgScope = this.modelFor('scopes.scope');
       const projects = this.modelFor('scopes.scope.projects');

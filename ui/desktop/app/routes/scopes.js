@@ -64,7 +64,8 @@ export default class ScopesRoute extends Route {
     if (!this.isPaginationSupported) {
       const metaDataUrl =
         'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
-      const { isWindows, isMac, isLinux } = await window.boundary.checkOS();
+      const { isWindows, isMac, isLinux } =
+        await window.desktop.system.checkOS();
 
       try {
         const metaDataResponse = await fetch(metaDataUrl);

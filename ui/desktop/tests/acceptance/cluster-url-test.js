@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../helpers/desktop-context-bridge-api-mock';
 import config from '../../config/environment';
 
 module('Acceptance | clusterUrl', function (hooks) {
@@ -53,7 +53,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     projects: null,
     targets: null,
   };
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await invalidateSession();
@@ -110,35 +110,35 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.expect(2);
     await visit(urls.index);
 
-    assert.notOk(window.boundary.clusterUrl);
+    assert.notOk(window.desktop.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('can set clusterUrl', async function (assert) {
     assert.expect(3);
-    assert.notOk(window.boundary.clusterUrl);
+    assert.notOk(window.desktop.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(window.boundary.clusterUrl, currentOrigin);
+    assert.strictEqual(window.desktop.clusterUrl, currentOrigin);
   });
 
   test('can reset clusterUrl before authentication', async function (assert) {
     assert.expect(4);
-    assert.notOk(window.boundary.clusterUrl);
+    assert.notOk(window.desktop.clusterUrl);
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
-    assert.strictEqual(window.boundary.clusterUrl, currentOrigin);
+    assert.strictEqual(window.desktop.clusterUrl, currentOrigin);
     await click('.change-origin a');
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
   test('captures error on clusterUrl update', async function (assert) {
     assert.expect(2);
-    assert.notOk(window.boundary.clusterUrl);
+    assert.notOk(window.desktop.clusterUrl);
     sinon
       .stub(this.owner.lookup('service:clusterUrl'), 'setClusterUrl')
       .throws();

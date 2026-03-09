@@ -26,6 +26,6 @@ export default class SettingsCardLogsComponent extends Component {
    */
   @action
   async selectLogLevel({ target: { value } }) {
-    await window.boundary.setLogLevel(value);
+    await window.desktop.logging.setLogLevel(value);
   }
 }

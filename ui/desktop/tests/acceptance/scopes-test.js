@@ -18,14 +18,14 @@ import {
   currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../helpers/desktop-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import sinon from 'sinon';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE = '.hds-application-state__title';
@@ -137,7 +137,7 @@ module('Acceptance | scopes', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    window.boundary.isCacheDaemonRunning.resolves(true);
+    window.desktop.daemon.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 
     // mock RDP service calls
@@ -319,7 +319,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - windows build', async function (assert) {
-    window.boundary.checkOS.resolves({
+    window.desktop.system.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -342,7 +342,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - mac build', async function (assert) {
-    window.boundary.checkOS.resolves({
+    window.desktop.system.checkOS.resolves({
       isWindows: false,
       isMac: true,
       isLinux: false,
@@ -365,7 +365,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - linux build', async function (assert) {
-    window.boundary.checkOS.resolves({
+    window.desktop.system.checkOS.resolves({
       isWindows: false,
       isMac: false,
       isLinux: true,
@@ -388,7 +388,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test.skip('pagination is not supported - failed to fetch metaData', async function (assert) {
-    window.boundary.checkOS.resolves({
+    window.desktop.system.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,
@@ -413,7 +413,7 @@ module('Acceptance | scopes', function (hooks) {
   test('pagination is not supported - navigate to cluster url page', async function (assert) {
     await invalidateSession();
     this.stubCacheDaemonSearch();
-    window.boundary.checkOS.resolves({
+    window.desktop.system.checkOS.resolves({
       isWindows: true,
       isMac: false,
       isLinux: false,

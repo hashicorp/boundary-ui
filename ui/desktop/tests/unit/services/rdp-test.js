@@ -13,11 +13,11 @@ import {
   RDP_CLIENT_WINDOWS_APP_LINK,
   RDP_CLIENT_MSTSC_LINK,
 } from 'desktop/services/rdp';
-import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-bridge-api-mock';
 
 module('Unit | Service | rdp', function (hooks) {
   setupTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   let service;
 
@@ -30,7 +30,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getRdpClients sets to fallback value on error', async function (assert) {
-    window.boundary.getRdpClients.rejects();
+    window.desktop.rdp.getRdpClients.rejects();
     await service.getRdpClients();
 
     assert.deepEqual(
@@ -41,7 +41,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('getPreferredRdpClient sets to fallback value on error', async function (assert) {
-    window.boundary.getPreferredRdpClient.rejects();
+    window.desktop.rdp.getPreferredRdpClient.rejects();
     await service.getPreferredRdpClient();
 
     assert.strictEqual(
@@ -52,7 +52,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('setPreferredRdpClient sets to fallback value on error', async function (assert) {
-    window.boundary.setPreferredRdpClient.rejects();
+    window.desktop.rdp.setPreferredRdpClient.rejects();
     await service.setPreferredRdpClient(RDP_CLIENT_MSTSC);
 
     assert.strictEqual(
@@ -63,7 +63,7 @@ module('Unit | Service | rdp', function (hooks) {
   });
 
   test('sets recommendedRdpClient correctly based on OS', async function (assert) {
-    window.boundary.checkOS.resolves({ isWindows: true });
+    window.desktop.system.checkOS.resolves({ isWindows: true });
     await service.getRecommendedRdpClient();
 
     assert.deepEqual(
@@ -75,7 +75,7 @@ module('Unit | Service | rdp', function (hooks) {
       'recommendedRdpClient is set correctly for windows',
     );
 
-    window.boundary.checkOS.resolves({ isMac: true });
+    window.desktop.system.checkOS.resolves({ isMac: true });
     service.recommendedRdpClient = null;
     await service.getRecommendedRdpClient();
 

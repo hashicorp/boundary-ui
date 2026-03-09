@@ -7,7 +7,7 @@ import { createServer, Response } from 'miragejs';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
-import initializeMockBoundaryContextBridgeAPI from './scenarios/ipc/boundary-context-bridge-api';
+import initializeMockDesktopContextBridgeAPI from './scenarios/ipc/desktop-context-bridge-api';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
@@ -66,7 +66,7 @@ import workerSerializer from './serializers/worker';
 
 // mirage scenarios (alphabetical)
 import defaultScenario from './scenarios/default';
-import boundaryContextBridgeApiScenario from './scenarios/ipc/boundary-context-bridge-api';
+import desktopContextBridgeApiScenario from './scenarios/ipc/desktop-context-bridge-api';
 
 // mirage factories (alphabetical)
 import accountFactory from './factories/account';
@@ -103,7 +103,7 @@ export default function (mirageConfig) {
 
     scenarios: {
       default: defaultScenario,
-      boundaryContextBridgeApiScenario: boundaryContextBridgeApiScenario,
+      desktopContextBridgeApiScenario: desktopContextBridgeApiScenario,
     },
 
     factories: {
@@ -190,7 +190,7 @@ export default function (mirageConfig) {
 
 // Only routes are defined here
 function routes() {
-  initializeMockBoundaryContextBridgeAPI(this, environmentConfig);
+  initializeMockDesktopContextBridgeAPI(this, environmentConfig);
 
   this.passthrough();
   // make this `http://localhost:8080`, for example, if your API is on a different server

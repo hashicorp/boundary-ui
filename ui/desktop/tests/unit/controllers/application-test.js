@@ -6,11 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-bridge-api-mock';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   let controller;
   let clusterUrl;
@@ -46,12 +46,12 @@ module('Unit | Controller | application', function (hooks) {
 
     assert.true(session.isAuthenticated);
     assert.strictEqual(clusterUrl.rendererClusterUrl, url);
-    assert.strictEqual(await window.boundary.getClusterUrl(), url);
+    assert.strictEqual(await window.desktop.cluster.getClusterUrl(), url);
 
     await controller.disconnect();
 
     assert.false(session.isAuthenticated);
     assert.notOk(clusterUrl.rendererClusterUrl);
-    assert.notOk(await window.boundary.getClusterUrl());
+    assert.notOk(await window.desktop.cluster.getClusterUrl());
   });
 });

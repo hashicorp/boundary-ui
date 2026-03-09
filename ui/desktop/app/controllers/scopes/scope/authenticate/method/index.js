@@ -38,7 +38,7 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
    * @param {string} url
    */
   async openExternalOIDCFlow(url) {
-    await window.boundary.openExternal(url);
+    await window.desktop.system.openExternal(url);
   }
 
   // =actions

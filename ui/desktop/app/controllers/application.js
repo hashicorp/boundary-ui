@@ -33,7 +33,7 @@ export default class ApplicationController extends Controller {
     super(...arguments);
     // Listen for when user attempts to quit app
     // Setup removeOnAppQuitListener to destroy the listener afterwards
-    this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
+    this.removeOnAppQuitListener = this.window.desktop?.app.onAppQuit(() => {
       this.isAppQuitting = true;
     });
   }
@@ -70,7 +70,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   async confirmCloseSessions() {
-    await window.boundary.stopAllSessions();
+    await window.desktop.session.stopAllSessions();
     if (this.isAppQuitting) {
       this.isAppQuitting = false;
       this.close();
@@ -87,7 +87,8 @@ export default class ApplicationController extends Controller {
    */
   @action
   async showModalOrLogout() {
-    const hasRunningSessions = await window.boundary.hasRunningSessions();
+    const hasRunningSessions =
+      await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
     } else {
@@ -107,17 +108,17 @@ export default class ApplicationController extends Controller {
 
   @action
   minimize() {
-    window.boundary.minimizeWindow();
+    window.desktop.windowAction.minimizeWindow();
   }
 
   @action
   toggleFullScreen() {
-    window.boundary.toggleFullscreenWindow();
+    window.desktop.windowAction.toggleFullscreenWindow();
   }
 
   @action
   close() {
-    window.boundary.closeWindow();
+    window.desktop.windowAction.closeWindow();
   }
 
   /**

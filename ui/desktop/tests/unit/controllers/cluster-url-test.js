@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIntl } from 'ember-intl/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-bridge-api-mock';
 
 module('Unit | Controller | cluster-url', function (hooks) {
   setupTest(hooks);
@@ -16,7 +16,7 @@ module('Unit | Controller | cluster-url', function (hooks) {
   let controller;
   let clusterUrl;
 
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
@@ -31,11 +31,11 @@ module('Unit | Controller | cluster-url', function (hooks) {
   test('setClusterUrl action de-authenticates a user and resets cluster url', async function (assert) {
     const newClusterUrl = 'http://localhost:9200';
     assert.notEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
-    assert.notEqual(window.boundary.clusterUrl, newClusterUrl);
+    assert.notEqual(window.desktop.clusterUrl, newClusterUrl);
 
     await controller.setClusterUrl(newClusterUrl);
 
     assert.strictEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
-    assert.strictEqual(window.boundary.clusterUrl, newClusterUrl);
+    assert.strictEqual(window.desktop.clusterUrl, newClusterUrl);
   });
 });

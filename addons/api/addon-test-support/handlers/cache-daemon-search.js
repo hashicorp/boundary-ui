@@ -11,7 +11,7 @@ import { underscore } from '@ember/string';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
- * Must be called after setupMirage and setupBoundaryContextBridgeApiMock in tests.
+ * Must be called after setupMirage and setupDesktopContextBridgeApiMock in tests.
  *
  * ```js
  * import setupStubs from 'api/test-support/handlers/cache-daemon-search';
@@ -19,14 +19,14 @@ import { underscore } from '@ember/string';
  * module('Acceptance | my test', function(hooks) {
  *  setupApplicationTest(hooks);
  *  setupMirage(hooks);
- *  setupBoundaryContextBridgeApiMock(hooks);
+ *  setupDesktopContextBridgeApiMock(hooks);
  *  setupStubs(hooks);
  *
  *   // add your actual tests here
  * });
  * ```
  *
- * This will setup a stub for window.boundary.searchCacheDaemon and include
+ * This will setup a stub for window.desktop.daemon.searchCacheDaemon and include
  * helper methods to help setup what the cache daemon search command returns.
  *
  * @module Test Helpers

@@ -18,14 +18,13 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../helpers/boundary-context-bridge-api-mock';
-import Service from '@ember/service';
+import { setupDesktopContextBridgeApiMock } from '../helpers/desktop-context-bridge-api-mock';
 import sinon from 'sinon';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   const instances = {
     scopes: {
@@ -192,7 +191,7 @@ module('Acceptance | authentication', function (hooks) {
         },
       },
     });
-    window.boundary.hasRunningSessions.resolves(false);
+    window.desktop.session.hasRunningSessions.resolves(false);
 
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
@@ -316,7 +315,7 @@ module('Acceptance | authentication', function (hooks) {
     await click(MODAL_CONFIRM_BTN);
 
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
-    assert.ok(window.boundary.stopAllSessions.calledOnce);
+    assert.ok(window.desktop.session.stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -330,21 +329,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    // We need to encapsulate the event listener inside a mocked window service to ensure
-    // the entire event is torn down (including the mocked window), since "window" exists
-    // globally across all tests, and we don't want tests impacting one another
-    const mockElectronEvent = class WindowElectronMock extends Service {
-      electron = {
-        onAppQuit: (callback) => {
-          window.addEventListener('onAppQuit', callback);
-          return () => {
-            window.removeEventListener('onAppQuit', callback);
-          };
-        },
-      };
-    };
-
-    this.owner.register('service:browser/window', mockElectronEvent);
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -365,7 +349,7 @@ module('Acceptance | authentication', function (hooks) {
       .includesText('Close sessions before quitting?');
 
     await click(MODAL_CONFIRM_BTN);
-    assert.ok(window.boundary.stopAllSessions.calledOnce);
-    assert.ok(window.boundary.closeWindow.calledOnce);
+    assert.ok(window.desktop.session.stopAllSessions.calledOnce);
+    assert.ok(window.desktop.windowAction.closeWindow.calledOnce);
   });
 });

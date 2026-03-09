@@ -9,7 +9,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../../helpers/desktop-context-bridge-api-mock';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -19,7 +19,7 @@ import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
@@ -179,7 +179,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(4);
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -207,7 +207,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -279,7 +279,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -336,7 +336,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -372,7 +372,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     // First RDP Session visit should show the toast notification
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       protocol: 'rdp',
     });
@@ -419,7 +419,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -451,7 +451,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     };
 
     this.server.get('/sessions/:id', () => new Response(403));
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -576,7 +576,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(1);
-    window.boundary.stopSession.throws();
+    window.desktop.session.stopSession.throws();
 
     await visit(urls.session);
 
@@ -600,7 +600,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -617,7 +617,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click(RDP_OPEN_BUTTON);
 
     assert.ok(
-      window.boundary.launchRdpClient.calledWith(instances.rdpSession.id),
+      window.desktop.rdp.launchRdpClient.calledWith(instances.rdpSession.id),
     );
   });
 
@@ -634,7 +634,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -662,14 +662,14 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    window.boundary.launchRdpClient.rejects();
+    window.desktop.rdp.launchRdpClient.rejects();
 
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -699,7 +699,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     instances.target.update({ type: TYPE_TARGET_RDP });
     instances.rdpSession.update({ authorized_actions: [] });
 
-    window.boundary.connectSession.resolves({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',

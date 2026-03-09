@@ -56,7 +56,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     // was initiated through the client agent.
     if (
       !session.credentials.length &&
-      (await window.boundary.isClientAgentRunning())
+      (await window.desktop.clientAgent.isClientAgentRunning())
     ) {
       try {
         const clientAgentSession =

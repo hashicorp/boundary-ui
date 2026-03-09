@@ -45,7 +45,7 @@ export default class ApplicationRoute extends Route {
     // Add token to cache daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      await window.boundary.addTokenToDaemons({
+      await window.desktop.daemon.addTokenToDaemons({
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
@@ -61,10 +61,13 @@ export default class ApplicationRoute extends Route {
    * Add window frame config on controller.
    */
   async setupController(controller) {
-    controller.set('hasMacOSChrome', await window.boundary.hasMacOSChrome());
+    controller.set(
+      'hasMacOSChrome',
+      await window.desktop.windowAction.hasMacOSChrome(),
+    );
     controller.set(
       'showWindowActions',
-      await window.boundary.showWindowActions(),
+      await window.desktop.windowAction.showWindowActions(),
     );
   }
 

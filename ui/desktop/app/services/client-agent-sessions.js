@@ -16,7 +16,7 @@ export default class ClientAgentSessionsService extends Service {
    * @returns {Promise<*>}
    */
   async getClientAgentSessions() {
-    return window.boundary.getClientAgentSessions();
+    return window.desktop.clientAgent.getClientAgentSessions();
   }
 
   /**

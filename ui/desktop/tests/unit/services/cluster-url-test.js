@@ -5,11 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { setupBoundaryContextBridgeApiMock } from '../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-bridge-api-mock';
 
 module('Unit | Service | clusterUrl', function (hooks) {
   setupTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   let service;
 
@@ -24,7 +24,7 @@ module('Unit | Service | clusterUrl', function (hooks) {
 
     assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    window.boundary.setClusterUrl.rejects();
+    window.desktop.cluster.setClusterUrl.rejects();
     service.setClusterUrl('invalid-origin').catch(() => {
       assert.notOk(service.rendererClusterUrl);
       assert.strictEqual(service.adapter.host, window.location.origin);

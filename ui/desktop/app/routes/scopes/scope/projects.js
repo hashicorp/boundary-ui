@@ -50,7 +50,8 @@ export default class ScopesScopeProjectsRoute extends Route {
    * @return {Promise<ScopeModel>}
    */
   async model() {
-    const isClientAgentRunning = await window.boundary.isClientAgentRunning();
+    const isClientAgentRunning =
+      await window.desktop.clientAgent.isClientAgentRunning();
     if (isClientAgentRunning) {
       this.poller.perform();
       // start polling task
@@ -94,7 +95,7 @@ export default class ScopesScopeProjectsRoute extends Route {
           const token = sessionData?.token;
 
           try {
-            await window.boundary.addTokenToDaemons({
+            await window.desktop.daemon.addTokenToDaemons({
               tokenId: auth_token_id,
               token,
             });
@@ -155,7 +156,7 @@ export default class ScopesScopeProjectsRoute extends Route {
           }
 
           window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
-          await window.boundary.focusWindow();
+          await window.desktop.windowAction.focusWindow();
         };
       });
       await timeout(POLL_TIMEOUT_SECONDS * 1000);

@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../../helpers/desktop-context-bridge-api-mock';
 import {
   currentSession,
   invalidateSession,
@@ -24,7 +24,7 @@ import sinon from 'sinon';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const APP_STATE_TITLE =
@@ -150,7 +150,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     setDefaultClusterUrl(this);
 
-    window.boundary.isCacheDaemonRunning.resolves(true);
+    window.desktop.daemon.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
 
     // mock RDP service calls
@@ -499,7 +499,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    window.boundary.stopSession.throws();
+    window.desktop.session.stopSession.throws();
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -569,7 +569,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     });
 
-    window.boundary.isCacheDaemonRunning.resolves(false);
+    window.desktop.daemon.isCacheDaemonRunning.resolves(false);
 
     this.stubCacheDaemonSearch();
     const sessionsCount = this.server.schema.sessions.all().models.length;

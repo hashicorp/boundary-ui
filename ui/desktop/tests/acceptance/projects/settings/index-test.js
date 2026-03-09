@@ -16,7 +16,7 @@ import {
   authenticateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
-import { setupBoundaryContextBridgeApiMock } from '../../../helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from '../../../helpers/desktop-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 import {
@@ -28,7 +28,7 @@ import {
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
-  setupBoundaryContextBridgeApiMock(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const instances = {
@@ -99,9 +99,12 @@ module('Acceptance | projects | settings | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     // mock RDP client data
-    window.boundary.getRdpClients.resolves([RDP_CLIENT_MSTSC, RDP_CLIENT_NONE]);
-    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_MSTSC);
-    window.boundary.checkOS.resolves({ isWindows: true, isMac: false });
+    window.desktop.rdp.getRdpClients.resolves([
+      RDP_CLIENT_MSTSC,
+      RDP_CLIENT_NONE,
+    ]);
+    window.desktop.rdp.getPreferredRdpClient.resolves(RDP_CLIENT_MSTSC);
+    window.desktop.system.checkOS.resolves({ isWindows: true, isMac: false });
   });
 
   test('can navigate to the settings page', async function (assert) {
@@ -183,7 +186,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
       },
     });
 
-    window.boundary.hasRunningSessions.resolves(false);
+    window.desktop.session.hasRunningSessions.resolves(false);
 
     await authenticateSession({ account_id: instances.account.id });
     assert.expect(2);
@@ -226,7 +229,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     await click(MODAL_CONFIRM_BTN);
 
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
-    assert.ok(window.boundary.stopAllSessions.calledOnce);
+    assert.ok(window.desktop.session.stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -266,12 +269,12 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     // update window bounday mock fo mac
-    window.boundary.checkOS.resolves({ isWindows: false, isMac: true });
-    window.boundary.getRdpClients.resolves([
+    window.desktop.system.checkOS.resolves({ isWindows: false, isMac: true });
+    window.desktop.rdp.getRdpClients.resolves([
       RDP_CLIENT_WINDOWS_APP,
       RDP_CLIENT_NONE,
     ]);
-    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_WINDOWS_APP);
+    window.desktop.rdp.getPreferredRdpClient.resolves(RDP_CLIENT_WINDOWS_APP);
     await visit(urls.settings);
 
     assert
@@ -296,8 +299,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     // update window boundary mock for no RDP clients
-    window.boundary.getRdpClients.resolves([RDP_CLIENT_NONE]);
-    window.boundary.getPreferredRdpClient.resolves(RDP_CLIENT_NONE);
+    window.desktop.rdp.getRdpClients.resolves([RDP_CLIENT_NONE]);
+    window.desktop.rdp.getPreferredRdpClient.resolves(RDP_CLIENT_NONE);
     await visit(urls.settings);
 
     assert.dom(RDP_RECOMMENDED_CLIENT).isVisible();
@@ -329,7 +332,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     await select(RDP_PREFERRED_CLIENT, RDP_CLIENT_NONE);
 
     assert.ok(
-      window.boundary.setPreferredRdpClient.calledWith(RDP_CLIENT_NONE),
+      window.desktop.rdp.setPreferredRdpClient.calledWith(RDP_CLIENT_NONE),
     );
     assert.strictEqual(rdpService.preferredRdpClient, RDP_CLIENT_NONE);
   });

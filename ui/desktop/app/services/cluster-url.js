@@ -41,7 +41,7 @@ export default class ClusterUrlService extends Service {
    * @type {Promise{?string}}
    */
   get mainClusterUrl() {
-    return window.boundary.getClusterUrl();
+    return window.desktop.cluster.getClusterUrl();
   }
 
   // =methods
@@ -75,7 +75,7 @@ export default class ClusterUrlService extends Service {
       this.adapter.host = clusterUrl;
       this.rendererClusterUrl = clusterUrl;
       if (clusterUrl !== (await this.mainClusterUrl)) {
-        await window.boundary.setClusterUrl(clusterUrl);
+        await window.desktop.cluster.setClusterUrl(clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;
@@ -93,6 +93,6 @@ export default class ClusterUrlService extends Service {
   })
   async resetClusterUrl() {
     this.rendererClusterUrl = null;
-    await window.boundary.resetClusterUrl();
+    await window.desktop.cluster.resetClusterUrl();
   }
 }

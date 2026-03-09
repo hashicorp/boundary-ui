@@ -45,7 +45,7 @@ export default class SessionTerminalTabsComponent extends Component {
       return;
     }
 
-    const { isWindows } = await window.boundary.checkOS();
+    const { isWindows } = await window.desktop.system.checkOS();
     const xterm = new Terminal(terminalOptions);
     this.terminal = xterm;
     const fitAddon = new FitAddon();
@@ -78,7 +78,8 @@ export default class SessionTerminalTabsComponent extends Component {
     this.id = uuidv4();
     this.#setupTerminal(fitAddon, xterm, termContainer);
 
-    const isSSHCommandAvailable = await window.boundary.checkCommand('ssh');
+    const isSSHCommandAvailable =
+      await window.desktop.system.checkCommand('ssh');
     const { model } = this.args;
 
     const { proxy_address, proxy_port, started_desktop_client, target } = model;

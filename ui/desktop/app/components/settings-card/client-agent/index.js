@@ -58,9 +58,9 @@ export default class SettingsCardClientAgentComponent extends Component {
   @notifyError(({ message }) => message)
   async changeClientAgentState() {
     if (this.isClientAgentStatusRunning) {
-      await window.boundary.pauseClientAgent();
+      await window.desktop.clientAgent.pauseClientAgent();
     } else {
-      await window.boundary.resumeClientAgent();
+      await window.desktop.clientAgent.resumeClientAgent();
     }
     // Refresh projects page in order to stop or start
     // polling when client agent status changes.

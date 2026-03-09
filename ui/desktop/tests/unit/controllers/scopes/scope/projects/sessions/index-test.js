@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'desktop/tests/helpers/mirage';
-import { setupBoundaryContextBridgeApiMock } from 'desktop/tests/helpers/boundary-context-bridge-api-mock';
+import { setupDesktopContextBridgeApiMock } from 'desktop/tests/helpers/desktop-context-bridge-api-mock';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { visit } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -23,7 +23,7 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupBoundaryContextBridgeApiMock(hooks);
+    setupDesktopContextBridgeApiMock(hooks);
     setupStubs(hooks);
     setupIntl(hooks, 'en-us');
 
@@ -77,7 +77,7 @@ module(
       urls.projectScope = `/scopes/${instances.scopes.org.id}/projects`;
       urls.sessions = `${urls.projectScope}/sessions`;
 
-      window.boundary.isCacheDaemonRunning.resolves(true);
+      window.desktop.daemon.isCacheDaemonRunning.resolves(true);
       this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
       await authenticateSession({ account_id: instances.account.id });
     });

@@ -79,7 +79,7 @@ export default class RdpService extends Service {
       return this.rdpClients;
     }
     try {
-      this.rdpClients = await window.boundary.getRdpClients();
+      this.rdpClients = await window.desktop.rdp.getRdpClients();
       return this.rdpClients;
     } catch (error) {
       __electronLog?.error('Failed to fetch RDP clients', error.message);
@@ -98,7 +98,7 @@ export default class RdpService extends Service {
       if (this.recommendedRdpClient !== null) {
         return this.recommendedRdpClient;
       }
-      const { isWindows, isMac } = await window.boundary.checkOS();
+      const { isWindows, isMac } = await window.desktop.system.checkOS();
       if (isWindows) {
         this.recommendedRdpClient = windowsRecommendedRdpClient;
       } else if (isMac) {
@@ -123,7 +123,8 @@ export default class RdpService extends Service {
       return this.preferredRdpClient;
     }
     try {
-      this.preferredRdpClient = await window.boundary.getPreferredRdpClient();
+      this.preferredRdpClient =
+        await window.desktop.rdp.getPreferredRdpClient();
       return this.preferredRdpClient;
     } catch (error) {
       __electronLog?.error(
@@ -143,7 +144,7 @@ export default class RdpService extends Service {
    */
   async setPreferredRdpClient(rdpClient) {
     try {
-      await window.boundary.setPreferredRdpClient(rdpClient);
+      await window.desktop.rdp.setPreferredRdpClient(rdpClient);
       this.preferredRdpClient = rdpClient;
       return this.preferredRdpClient;
     } catch (error) {
@@ -160,6 +161,6 @@ export default class RdpService extends Service {
    * @param {string} sessionId - The ID of the active session
    */
   async launchRdpClient(sessionId) {
-    await window.boundary.launchRdpClient(sessionId);
+    await window.desktop.rdp.launchRdpClient(sessionId);
   }
 }
