@@ -73,12 +73,6 @@ module('Acceptance | scopes', function (hooks) {
     target: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
@@ -135,8 +129,7 @@ module('Acceptance | scopes', function (hooks) {
     urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
 
-    setDefaultClusterUrl(this);
-
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
     window.desktop.daemon.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
 

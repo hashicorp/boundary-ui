@@ -17,37 +17,59 @@ module('Unit | Service | clusterUrl', function (hooks) {
     service = this.owner.lookup('service:clusterUrl');
   });
 
-  test('resets clusterUrl on error', async function (assert) {
-    assert.expect(4);
-
+  test('keeps clusterUrl on error', async function (assert) {
+    assert.expect(3);
     await service.setClusterUrl(window.location.origin);
-
-    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
     window.desktop.cluster.setClusterUrl.rejects();
-    service.setClusterUrl('invalid-origin').catch(() => {
-      assert.notOk(service.rendererClusterUrl);
+
+    try {
+      await service.setClusterUrl('http://other-origin');
+    } catch {
       assert.strictEqual(service.adapter.host, window.location.origin);
-    });
+      assert.ok(
+        window.desktop.cluster.setClusterUrl.calledWithExactly('http://other-origin'),
+      );
+    }
   });
 
   test('drops trailing slashes from clusterUrl on setClusterUrl', async function (assert) {
     assert.expect(4);
     await service.setClusterUrl(`${window.location.origin}/`);
-    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
+    assert.ok(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    );
+
     await service.setClusterUrl(`${window.location.origin}//////`);
-    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
+    assert.ok(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    );
   });
 
   test('trim spaces from clusterUrl on setClusterUrl', async function (assert) {
     assert.expect(4);
     await service.setClusterUrl(` ${window.location.origin}/ `);
-    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
+    assert.ok(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    );
+
     await service.setClusterUrl(`   ${window.location.origin}   `);
-    assert.strictEqual(service.rendererClusterUrl, window.location.origin);
     assert.strictEqual(service.adapter.host, window.location.origin);
+    assert.ok(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    );
+  });
+
+  test('resetClusterUrl clears adapter host and invokes IPC', async function (assert) {
+    await service.setClusterUrl(window.location.origin);
+    assert.strictEqual(service.adapter.host, window.location.origin);
+
+    await service.resetClusterUrl();
+
+    assert.strictEqual(service.adapter.host, undefined);
+    assert.ok(window.desktop.cluster.resetClusterUrl.calledOnce);
   });
 });
