@@ -16,25 +16,17 @@ module('Integration | Component | settings-card/server', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = 'hashicorp.cloud';
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
-  setDefaultClusterUrl(this);
-
   test('it displays HCP cluster url in server information section', async function (assert) {
-    await render(hbs`<SettingsCard::Server/>`);
+    this.set('model', { serverInformation: 'boundary.hashicorp.cloud' });
+    await render(hbs`<SettingsCard::Server @model={{this.model}}/>`);
     assert.dom(SERVER_NAME).hasText('HashiCorp Cloud Platform');
-    assert.dom(SERVER_URL).hasText('hashicorp.cloud');
+    assert.dom(SERVER_URL).hasText('boundary.hashicorp.cloud');
   });
 
   test('it displays non HCP cluster url in server information section', async function (assert) {
-    this.owner.lookup('service:clusterUrl').rendererClusterUrl =
-      'everythingelse';
-    await render(hbs`<SettingsCard::Server/>`);
-    assert.dom(SERVER_NAME).hasText('Self-Managed');
+    this.set('model', { serverInformation: 'everythingelse' });
+    await render(hbs`<SettingsCard::Server @model={{this.model}}/>`);
+    assert.dom(SERVER_NAME).hasText('Self-managed');
     assert.dom(SERVER_URL).hasText('everythingelse');
   });
 });

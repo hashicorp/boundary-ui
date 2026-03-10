@@ -123,11 +123,6 @@ const createWindow = async (partition, closeWindowCB) => {
 
   const browserWindow = new BrowserWindow(browserWindowOptions);
 
-  const clusterUrl = store.get('clusterUrl');
-  if (clusterUrl) {
-    runtimeSettings.clusterUrl = clusterUrl;
-  }
-
   // If the user-specified cluster URL changes, reload the page so that
   // the content security policy (CSP) can be refreshed with the source allowed
   runtimeSettings.onClusterUrlChange(

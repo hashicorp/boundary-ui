@@ -44,7 +44,7 @@ export default class ApplicationController extends Controller {
    * @type {object}
    */
   get currentScope() {
-    if (this.scope.org.isOrg) {
+    if (this.scope.org?.isOrg) {
       return { name: this.scope.org.displayName, icon: 'org' };
     } else {
       return { name: this.intl.t('titles.global'), icon: 'globe' };
@@ -97,8 +97,9 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Disconnects from clusterUrl and invalidates session, thereby resetting
-   * the client and reloading to the onboarding clusterUrl screen.
+   * Invalidates the session and navigates to the cluster-url route.
+   * The cluster URL is preserved so that upon reload the user is directed
+   * back to the authentication screen for the same cluster.
    */
   @action
   disconnect() {

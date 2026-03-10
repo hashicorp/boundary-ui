@@ -48,12 +48,6 @@ module('Acceptance | projects', function (hooks) {
     projects: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     instances.scopes.global = this.server.schema.scopes.find('global');
     instances.authMethods.global = this.server.schema.authMethods.first();
@@ -88,7 +82,8 @@ module('Acceptance | projects', function (hooks) {
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultClusterUrl(this);
+    const mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+    mockIPC.clusterUrl = window.location.origin;
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

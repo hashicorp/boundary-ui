@@ -58,13 +58,14 @@ export default class ClusterUrlService extends Service {
   }
 
   /**
-   * Resets the clusterUrl.
+   * Resets the clusterUrl in both the electron store and the adapter host.
    */
   @notifyError(({ message }) => message, {
     catch: true,
     log: { origin: 'resetClusterUrl' },
   })
   async resetClusterUrl() {
+    this.adapter.host = undefined;
     await this.ipc.invoke('resetClusterUrl');
   }
 }

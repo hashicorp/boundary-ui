@@ -17,7 +17,7 @@ export default class IndexRoute extends Route {
   /**
    * If no clusterUrl is specified yet, redirects to cluster-url, otherwise scopes.
    */
-  async redirect() {
+  async beforeModel() {
     const clusterUrl = await this.clusterUrl.getClusterUrl();
 
     if (!clusterUrl) {
