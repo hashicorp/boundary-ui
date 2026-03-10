@@ -90,6 +90,9 @@ config/config.js
 ember-dist/
 ember-test/
 
+# Terminal view build output
+terminal-view-dist/
+
 # CLI
 /cli/
 

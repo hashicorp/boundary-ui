@@ -22,6 +22,7 @@ export default class ApplicationController extends Controller {
   @service router;
   @service scope;
   @service intl;
+  @service terminal;
 
   // =attributes
 
@@ -36,6 +37,7 @@ export default class ApplicationController extends Controller {
     // Setup removeOnAppQuitListener to destroy the listener afterwards
     this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
+      this.terminal.hideTerminalView();
     });
   }
 
@@ -91,6 +93,7 @@ export default class ApplicationController extends Controller {
     const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
     if (hasRunningSessions) {
       this.isLoggingOut = true;
+      this.terminal.hideTerminalView();
     } else {
       this.session.invalidate();
     }
@@ -151,6 +154,9 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
+    if (this.terminal.shouldDisplayExistingTerminal) {
+      this.terminal.displayTerminalView();
+    }
   }
 
   willDestroy() {
