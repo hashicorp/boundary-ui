@@ -8,14 +8,11 @@ import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
-import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import config from '../../config/environment';
 
 module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
-  setupBrowserFakes(hooks, { window: true });
-
   const currentOrigin = window.location.origin;
   let mockIPC;
 
@@ -106,6 +103,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('visiting index', async function (assert) {
     assert.expect(1);
+    setupMockIpc(this);
     await visit(urls.clusterUrl);
 
     assert.strictEqual(currentURL(), urls.clusterUrl);
@@ -114,7 +112,15 @@ module('Acceptance | clusterUrl', function (hooks) {
   test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
     setupMockIpc(this);
-    await visit(urls.index);
+    try {
+      await visit(urls.index);
+    } catch (e) {
+      if (e.message === 'TransitionAborted') {
+        // Ignore the expected transition abort error caused by the redirect in beforeModel
+      } else {
+        throw e;
+      }
+    }
 
     assert.notOk(mockIPC.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
@@ -161,6 +167,13 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('clusterUrl set automatically when autoOrigin is true', async function (assert) {
     assert.expect(1);
+    this.owner.register(
+      'service:browser/window',
+      class TestWindow extends WindowMockIPC {
+        location = { origin: currentOrigin };
+      },
+    );
+
     config.autoOrigin = true;
     await visit(urls.clusterUrl);
     assert.strictEqual(find('[name="host"]').value, currentOrigin);
@@ -169,6 +182,7 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('clusterUrl is *not* set automatically when autoOrigin is false', async function (assert) {
     assert.expect(2);
+    setupMockIpc(this);
     assert.notOk(config.autoOrigin, 'autoOrigin is disabled');
     await visit(urls.clusterUrl);
     assert.notOk(find('[name="host"]').value, 'Origin field is empty');

@@ -34,12 +34,6 @@ module(
       targets: null,
     };
 
-    const setDefaultClusterUrl = (test) => {
-      const windowOrigin = window.location.origin;
-      const clusterUrl = test.owner.lookup('service:clusterUrl');
-      clusterUrl.rendererClusterUrl = windowOrigin;
-    };
-
     hooks.beforeEach(async function () {
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
@@ -58,7 +52,8 @@ module(
       urls.targets = '/scopes/global/projects/targets';
 
       this.owner.register('service:browser/window', WindowMockIPC);
-      setDefaultClusterUrl(this);
+      const mockIPC = this.owner.lookup('service:browser/window').mockIPC;
+      mockIPC.clusterUrl = window.location.origin;
     });
 
     test('it exists', function (assert) {

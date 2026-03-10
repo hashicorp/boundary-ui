@@ -13,7 +13,6 @@ export default class ClusterUrlService extends Service {
 
   @service ipc;
   @service store;
-  @service storage;
 
   // =attributes
 
@@ -24,35 +23,10 @@ export default class ClusterUrlService extends Service {
     return this.store.adapterFor('application');
   }
 
-  /**
-   * @type {?string}
-   */
-  get rendererClusterUrl() {
-    return this.storage.getItem('cluster-url');
-  }
-
-  /**
-   * @param {?string} clusterUrl
-   */
-  set rendererClusterUrl(clusterUrl) {
-    this.storage.setItem('cluster-url', clusterUrl);
-  }
-
-  /**
-   * @type {Promise{?string}}
-   */
-  get mainClusterUrl() {
-    return this.ipc.invoke('getClusterUrl');
-  }
-
   // =methods
 
-  /**
-   * Sets the main clusterUrl equal to the current renderer clusterUrl (if any).
-   */
-  async updateClusterUrl() {
-    const rendererClusterUrl = this.rendererClusterUrl;
-    if (rendererClusterUrl) await this.setClusterUrl(rendererClusterUrl);
+  async getClusterUrl() {
+    return this.ipc.invoke('getClusterUrl');
   }
 
   /**
@@ -74,26 +48,24 @@ export default class ClusterUrlService extends Service {
       clusterUrl = clusterUrl.trim();
       clusterUrl = clusterUrl.replace(/\/*$/, '');
       this.adapter.host = clusterUrl;
-      this.rendererClusterUrl = clusterUrl;
-      if (clusterUrl !== (await this.mainClusterUrl)) {
+      if (clusterUrl !== (await this.getClusterUrl())) {
         await this.ipc.invoke('setClusterUrl', clusterUrl);
       }
     } catch (e) {
       this.adapter.host = originalHost;
-      this.rendererClusterUrl = null;
       throw e;
     }
   }
 
   /**
-   * Resets the clusterUrl.
+   * Resets the clusterUrl in both the electron store and the adapter host.
    */
   @notifyError(({ message }) => message, {
     catch: true,
     log: { origin: 'resetClusterUrl' },
   })
   async resetClusterUrl() {
-    this.rendererClusterUrl = null;
+    this.adapter.host = undefined;
     await this.ipc.invoke('resetClusterUrl');
   }
 }

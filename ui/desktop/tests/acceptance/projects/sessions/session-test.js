@@ -57,12 +57,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     rdpSession: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   let originalUncaughtException = QUnit.onUncaughtException;
 
   hooks.beforeEach(async function () {
@@ -139,7 +133,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     urls.rdpSession = `${urls.projects}/sessions/${instances.rdpSession.id}`;
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultClusterUrl(this);
+    this.ipcStub.withArgs('getClusterUrl').returns(window.location.origin);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
 

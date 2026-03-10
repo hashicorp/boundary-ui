@@ -14,7 +14,6 @@ module('Unit | Controller | cluster-url', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   let controller;
-  let clusterUrl;
   let mockIPC;
 
   const setupMockIpc = (test) => {
@@ -25,7 +24,6 @@ module('Unit | Controller | cluster-url', function (hooks) {
   hooks.beforeEach(async function () {
     await authenticateSession({});
     controller = this.owner.lookup('controller:cluster-url');
-    clusterUrl = this.owner.lookup('service:cluster-url');
     setupMockIpc(this);
   });
 
@@ -35,12 +33,10 @@ module('Unit | Controller | cluster-url', function (hooks) {
 
   test('setClusterUrl action de-authenticates a user and resets cluster url', async function (assert) {
     const newClusterUrl = 'http://localhost:9200';
-    assert.notEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
     assert.notEqual(mockIPC.clusterUrl, newClusterUrl);
 
     await controller.setClusterUrl(newClusterUrl);
 
-    assert.strictEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
     assert.strictEqual(mockIPC.clusterUrl, newClusterUrl);
   });
 });

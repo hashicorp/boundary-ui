@@ -71,12 +71,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     session: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     // create scopes
     instances.scopes.global = this.server.schema.scopes.find('global');
@@ -149,7 +143,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultClusterUrl(this);
+    this.ipcStub.withArgs('getClusterUrl').returns(window.location.origin);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
