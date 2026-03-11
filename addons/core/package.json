@@ -92,7 +92,7 @@
     "qunit-dom": "^3.2.1",
     "rose": "workspace:*",
     "sinon": "^19.0.2",
-    "webpack": "^5.104.1"
+    "webpack": "^5.105.4"
   },
   "engines": {
     "node": "20.* || 22.*"
