@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const grantSchemaData = {
+export const grantsSchemaData = {
   resource_types: [
     {
       type: 'auth-method',
