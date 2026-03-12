@@ -11,6 +11,7 @@ import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
+import { grantSchemaData } from './data/grant-schema';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
 import environmentConfig from 'ember-get-config';
 
@@ -208,6 +209,10 @@ function routes() {
       },
     };
     return metadata;
+  });
+
+  this.get('/grant-schema.json', () => {
+    return grantSchemaData;
   });
 
   // make this `/api`, for example, if your API is namespaced
