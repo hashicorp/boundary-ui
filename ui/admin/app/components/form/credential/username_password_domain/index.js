@@ -22,9 +22,9 @@ export default class FormCredentialUsernamePasswordDomainComponent extends Compo
    * Process the username input and call the submit action
    */
   @action
-  handleSubmit() {
+  async handleSubmit() {
     this.processUsername(this.args.model.username);
-    this.args.submit();
+    await this.args.submit();
   }
 
   /**
