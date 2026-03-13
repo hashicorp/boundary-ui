@@ -680,6 +680,11 @@ role:
       insert-resource-types: insert resource types
       insert-id: insert id
       insert-resource-ids: insert resource ids
+    export:
+      format: Format
+      options:
+        terraform: Terraform
+        native-hcl: Native HCL
   scope:
     title: Scope
     title_plural: Scopes

@@ -25,16 +25,67 @@
     </Hds::Accordion>
   </Hds::Layout::Grid>
 
+  {{#if this.showExportOptionsFlyout}}
+    <Hds::Flyout
+      id='export-options-flyout'
+      @size='large'
+      @onClose={{this.toggleExportOptionsFlyout}}
+      data-test-export-options-flyout
+      as |M|
+    >
+      <M.Header>{{t 'actions.export'}}</M.Header>
+      <M.Body>
+        <Hds::Form::Select::Field
+          name='export-format'
+          @width='100%'
+          {{on 'change' (set-from-event this 'selectedExportOption')}}
+          as |F|
+        >
+          <F.Label>{{t 'resources.role.edit-grants.export.format'}}</F.Label>
+          <F.Options>
+            {{#each this.exportOptions as |type|}}
+              <option
+                value={{type}}
+                selected={{eq type this.selectedExportOption}}
+              >
+                {{t (concat 'resources.role.edit-grants.export.options.' type)}}
+              </option>
+            {{/each}}
+          </F.Options>
+        </Hds::Form::Select::Field>
+
+        <Hds::CodeBlock
+          @ariaLabel='formatted-export'
+          @hasCopyButton={{true}}
+          @language='hcl'
+          @value={{this.formattedExport}}
+        />
+
+        <Hds::Button
+          class='margin-top-l'
+          @text={{t 'actions.download'}}
+          @icon='download'
+          @color='secondary'
+          {{on 'click' this.downloadFormattedExport}}
+        />
+      </M.Body>
+    </Hds::Flyout>
+  {{/if}}
+
   <form.actions class='margin-top-l'>
     <:actions>
       <Hds::ButtonSet>
         <Hds::Button type='submit' @text={{t 'actions.save'}} />
         <Hds::Button @text={{t 'actions.cancel'}} @color='secondary' />
-        <Hds::Button
-          @text={{t 'actions.export'}}
-          @color='tertiary'
-          @icon='upload'
-        />
+        {{#if this.grantStringLines}}
+          <Hds::Button
+            @text={{t 'actions.export'}}
+            @color='tertiary'
+            @icon='upload'
+            data-test-export-grants-btn
+            {{on 'click' this.toggleExportOptionsFlyout}}
+          />
+        {{/if}}
       </Hds::ButtonSet>
     </:actions>
   </form.actions>
