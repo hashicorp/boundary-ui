@@ -8,21 +8,20 @@ import { service } from '@ember/service';
 
 export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
   // =services
-  @service ipc;
   @service session;
   @service clusterUrl;
 
   // =methods
   async model() {
     const { versionNumber: cliVersion } =
-      await this.ipc.invoke('getCliVersion');
+      await window.desktop.system.getCliVersion();
 
-    const { desktopVersion } = await this.ipc.invoke('getDesktopVersion');
+    const { desktopVersion } = await window.desktop.system.getDesktopVersion();
     const cacheDaemonStatus = await this.getCacheStatus();
     const clientAgentStatus = await this.getClientAgentStatus();
 
-    const logLevel = await this.ipc.invoke('getLogLevel');
-    const logPath = await this.ipc.invoke('getLogPath');
+    const logLevel = await window.desktop.logging.getLogLevel();
+    const logPath = await window.desktop.logging.getLogPath();
     const serverInformation = this.clusterUrl.rendererClusterUrl;
 
     return {
@@ -40,7 +39,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     let cacheDaemonStatus;
     let cacheDaemonStatusError = [];
     try {
-      cacheDaemonStatus = await this.ipc.invoke('cacheDaemonStatus');
+      cacheDaemonStatus = await window.desktop.daemon.cacheDaemonStatus();
     } catch (e) {
       cacheDaemonStatusError.push(e);
     }
@@ -66,7 +65,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     let clientAgentStatus;
     let clientAgentStatusError = [];
     try {
-      clientAgentStatus = await this.ipc.invoke('clientAgentStatus');
+      clientAgentStatus = await window.desktop.clientAgent.clientAgentStatus();
     } catch (e) {
       clientAgentStatusError.push(e);
     }

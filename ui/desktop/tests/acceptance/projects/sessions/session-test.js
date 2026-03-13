@@ -9,7 +9,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import { Response } from 'miragejs';
-import WindowMockIPC from '../../../helpers/window-mock-ipc';
+import { setupDesktopContextBridgeApiMock } from '../../../helpers/desktop-context-bridge-api-mock';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -19,6 +19,7 @@ import { RDP_CLIENT_WINDOWS_APP, RDP_CLIENT_NONE } from 'desktop/services/rdp';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
   setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
@@ -137,11 +138,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     urls.sessions = `${urls.projects}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
     urls.rdpSession = `${urls.projects}/sessions/${instances.rdpSession.id}`;
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
-    setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+    setDefaultClusterUrl(this);
 
     // mock RDP service calls
     this.rdpService = this.owner.lookup('service:rdp');
@@ -181,8 +179,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(4);
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -210,8 +207,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -283,8 +279,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -341,8 +336,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -378,8 +372,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     // First RDP Session visit should show the toast notification
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       protocol: 'rdp',
     });
@@ -426,8 +419,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -459,8 +451,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     };
 
     this.server.get('/sessions/:id', () => new Response(403));
-    this.ipcStub.withArgs('cliExists').returns(true);
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -585,7 +576,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     });
 
     assert.expect(1);
-    this.ipcStub.withArgs('stop').throws();
+    window.desktop.session.stopSession.throws();
 
     await visit(urls.session);
 
@@ -606,12 +597,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -628,7 +617,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click(RDP_OPEN_BUTTON);
 
     assert.ok(
-      this.ipcStub.calledWith('launchRdpClient', instances.rdpSession.id),
+      window.desktop.rdp.launchRdpClient.calledWith(instances.rdpSession.id),
     );
   });
 
@@ -642,12 +631,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_NONE;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -672,19 +659,17 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
-
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
 
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',
       port: 'p_123',
       protocol: 'rdp',
     });
-    this.ipcStub.withArgs('launchRdpClient', instances.rdpSession.id).rejects();
+    window.desktop.rdp.launchRdpClient.rejects();
 
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -710,12 +695,11 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('cliExists').returns(true);
     this.rdpService.preferredRdpClient = RDP_CLIENT_WINDOWS_APP;
     instances.target.update({ type: TYPE_TARGET_RDP });
     instances.rdpSession.update({ authorized_actions: [] });
 
-    this.ipcStub.withArgs('connect').returns({
+    window.desktop.session.connectSession.resolves({
       session_id: instances.rdpSession.id,
       host_id: 'h_123',
       address: 'a_123',

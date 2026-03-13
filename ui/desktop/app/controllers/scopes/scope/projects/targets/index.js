@@ -20,7 +20,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   // =services
 
   @service confirm;
-  @service ipc;
   @service router;
   @service session;
   @service store;
@@ -189,7 +188,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @loading
   async connect(target, host) {
     // Check for CLI
-    const cliExists = await this.ipc.invoke('cliExists');
+    const cliExists = await window.desktop.system.cliExists();
     if (!cliExists) throw new Error('Cannot find Boundary CLI.');
 
     const options = {
@@ -201,7 +200,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     if (host) options.host_id = host.id;
 
     // Create target session
-    const connectionDetails = await this.ipc.invoke('connect', options);
+    const connectionDetails =
+      await window.desktop.session.connectSession(options);
 
     // Associate the connection details with the session
     let session;
@@ -307,7 +307,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     }
 
     await updatedSession.cancelSession();
-    await this.ipc.invoke('stop', { session_id: session.id });
+    await window.desktop.session.stopSession({ session_id: session.id });
     this.router.refresh();
   }
 

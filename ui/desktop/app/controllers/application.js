@@ -16,7 +16,6 @@ export default class ApplicationController extends Controller {
 
   @service clusterUrl;
   @service flashMessages;
-  @service ipc;
   @service session;
   @service('browser/window') window;
   @service router;
@@ -34,7 +33,7 @@ export default class ApplicationController extends Controller {
     super(...arguments);
     // Listen for when user attempts to quit app
     // Setup removeOnAppQuitListener to destroy the listener afterwards
-    this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
+    this.removeOnAppQuitListener = this.window.desktop?.app.onAppQuit(() => {
       this.isAppQuitting = true;
     });
   }
@@ -71,7 +70,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   async confirmCloseSessions() {
-    await this.ipc.invoke('stopAll');
+    await window.desktop.session.stopAllSessions();
     if (this.isAppQuitting) {
       this.isAppQuitting = false;
       this.close();
@@ -88,7 +87,8 @@ export default class ApplicationController extends Controller {
    */
   @action
   async showModalOrLogout() {
-    const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
+    const hasRunningSessions =
+      await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
     } else {
@@ -108,17 +108,17 @@ export default class ApplicationController extends Controller {
 
   @action
   minimize() {
-    this.ipc.invoke('minimizeWindow');
+    window.desktop.windowAction.minimizeWindow();
   }
 
   @action
   toggleFullScreen() {
-    this.ipc.invoke('toggleFullscreenWindow');
+    window.desktop.windowAction.toggleFullscreenWindow();
   }
 
   @action
   close() {
-    this.ipc.invoke('closeWindow');
+    window.desktop.windowAction.closeWindow();
   }
 
   /**
