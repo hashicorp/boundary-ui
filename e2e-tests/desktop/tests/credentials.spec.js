@@ -41,7 +41,7 @@ test.beforeEach(
     targetPort,
     sshUser,
     sshKeyPath,
-    vaultAddr,
+    vaultAddrPrivate,
   }) => {
     org = await boundaryHttp.createOrg(request);
     const project = await boundaryHttp.createProject(request, org.id);
@@ -138,7 +138,7 @@ test.beforeEach(
     const vaultCredentialStore = await boundaryHttp.createVaultCredentialStore(
       request,
       project.id,
-      vaultAddr,
+      vaultAddrPrivate,
       clientToken,
     );
     vaultGenericCredentialLibrary =

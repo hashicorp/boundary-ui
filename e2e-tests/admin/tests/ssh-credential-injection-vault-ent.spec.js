@@ -47,7 +47,7 @@ test(
     sshKeyPath,
     targetAddress,
     targetPort,
-    vaultAddr,
+    vaultAddrPrivate,
   }) => {
     let orgId;
     let connect;
@@ -98,7 +98,7 @@ test(
       // Create credentials
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createVaultCredentialStore(
-        vaultAddr,
+        vaultAddrPrivate,
         clientToken,
       );
       const credentialLibraryName =

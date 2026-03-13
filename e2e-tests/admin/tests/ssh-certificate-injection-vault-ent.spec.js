@@ -46,7 +46,7 @@ test(
     sshCaKeyPublic,
     targetAddress,
     targetPort,
-    vaultAddr,
+    vaultAddrPrivate,
   }) => {
     await page.goto('/');
     let orgId;
@@ -108,7 +108,7 @@ test(
       // Create credentials
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createVaultCredentialStore(
-        vaultAddr,
+        vaultAddrPrivate,
         clientToken,
       );
       const credentialLibraryName =
