@@ -18,13 +18,13 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../helpers/window-mock-ipc';
-import Service from '@ember/service';
+import { setupDesktopContextBridgeApiMock } from '../helpers/desktop-context-bridge-api-mock';
 import sinon from 'sinon';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   const instances = {
     scopes: {
@@ -80,9 +80,6 @@ module('Acceptance | authentication', function (hooks) {
   hooks.beforeEach(async function () {
     await invalidateSession();
 
-    const ipcService = this.owner.lookup('service:ipc');
-    this.ipcStub = sinon.stub(ipcService, 'invoke');
-
     // create scopes
     instances.scopes.global = this.server.schema.scopes.find('global');
     stubs.global = { id: 'global', type: 'global' };
@@ -133,8 +130,6 @@ module('Acceptance | authentication', function (hooks) {
     urls.targets = `${urls.projects}/targets`;
     urls.sessions = `${urls.projects}/sessions`;
 
-    // Mock the postMessage interface used by IPC.
-    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
   });
 
@@ -196,6 +191,7 @@ module('Acceptance | authentication', function (hooks) {
         },
       },
     });
+    window.desktop.session.hasRunningSessions.resolves(false);
 
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
@@ -274,8 +270,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
-
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -305,9 +299,6 @@ module('Acceptance | authentication', function (hooks) {
       },
     });
 
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
-
     await visit(urls.authenticate.methods.global);
 
     await authenticateSession({ account_id: instances.account.id });
@@ -324,7 +315,7 @@ module('Acceptance | authentication', function (hooks) {
     await click(MODAL_CONFIRM_BTN);
 
     assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
-    assert.ok(stopAllSessions.calledOnce);
+    assert.ok(window.desktop.session.stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
@@ -337,26 +328,6 @@ module('Acceptance | authentication', function (hooks) {
         },
       },
     });
-
-    // We need to encapsulate the event listener inside a mocked window service to ensure
-    // the entire event is torn down (including the mocked window), since "window" exists
-    // globally across all tests, and we don't want tests impacting one another
-    const mockElectronEvent = class WindowElectronMock extends Service {
-      electron = {
-        onAppQuit: (callback) => {
-          window.addEventListener('onAppQuit', callback);
-          return () => {
-            window.removeEventListener('onAppQuit', callback);
-          };
-        },
-      };
-    };
-
-    this.owner.register('service:browser/window', mockElectronEvent);
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    const quitApp = this.ipcStub.withArgs('closeWindow');
-
-    this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
     await visit(urls.authenticate.methods.global);
 
@@ -378,7 +349,7 @@ module('Acceptance | authentication', function (hooks) {
       .includesText('Close sessions before quitting?');
 
     await click(MODAL_CONFIRM_BTN);
-    assert.ok(stopAllSessions.calledOnce);
-    assert.ok(quitApp.calledOnce);
+    assert.ok(window.desktop.session.stopAllSessions.calledOnce);
+    assert.ok(window.desktop.windowAction.closeWindow.calledOnce);
   });
 });
