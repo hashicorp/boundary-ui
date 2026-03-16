@@ -98,19 +98,16 @@ class TerminalManager {
         contextIsolation: true,
         nodeIntegration: false,
         preload: path.join(__dirname, '..', 'terminal-preload.js'),
+        partition: 'persist:boundary',
       },
     });
 
-    const terminalViewPath = path.join(
-      __dirname,
-      '..',
-      '..',
-      'terminal-view-dist',
-      'terminal.html',
-    );
     this.mainWindow.contentView.addChildView(this.#terminalView);
     this.positionTerminalView({ position, zoomFactor });
-    this.#terminalView.webContents.loadFile(terminalViewPath);
+
+    this.#terminalView.webContents.loadURL(
+      'serve://boundary/terminal/terminal.html',
+    );
   }
 
   positionTerminalView({ position, zoomFactor }) {

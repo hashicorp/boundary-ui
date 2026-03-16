@@ -223,6 +223,16 @@ app.on('ready', async () => {
       : path.normalize(`${emberAppDir}${absolutePath}`);
 
     if (isDev) console.log('[serving]', request.url);
+
+    if (request.url.includes('/terminal/')) {
+      // Serve terminal view
+      const urlPath = new URL(request.url).pathname;
+      const filename = path.basename(urlPath);
+      const terminalViewPath = path.normalize(
+        `${__dirname}/../terminal-view-dist/${filename}`,
+      );
+      return net.fetch(`file://${terminalViewPath}`);
+    }
     return net.fetch(`file://${normalizedPath}`);
   });
 
