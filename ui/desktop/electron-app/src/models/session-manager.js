@@ -6,16 +6,14 @@
 const Session = require('./session.js');
 
 class SessionManager {
-  #sessions = new Map();
+  #sessions = [];
 
   /**
    * Checks for running sessions
    * @returns {boolean}
    */
   get hasRunningSessions() {
-    return Boolean(
-      this.#sessions.values().find((session) => session.isRunning),
-    );
+    return Boolean(this.#sessions.find((session) => session.isRunning));
   }
 
   /**
@@ -27,31 +25,25 @@ class SessionManager {
    * @param {string} host_id
    * @param {number} session_max_seconds
    */
-  async start(addr, target_id, token, host_id, session_max_seconds) {
+  start(addr, target_id, token, host_id, session_max_seconds) {
     const session = new Session(
       addr,
       target_id,
       token,
       host_id,
       session_max_seconds,
-      (sessionId) => this.#sessions.delete(sessionId),
     );
-    const sessionDetails = await session.start();
-    // Store session by id for tracking and stopping later
-    // Needs to be done after session.start() resolves
-    // since session id is generated in start()
-    this.#sessions.set(session.id, session);
-    return sessionDetails;
+    this.#sessions.push(session);
+    return session.start();
   }
 
   /**
-   * Stop a session using identifier
-   * and remove it from tracking.
+   * Stop a session using identifier.
    * @param {string} session_id
    */
   stopById(session_id) {
-    const session = this.#sessions.get(session_id);
-    return session?.stop();
+    const session = this.#sessions.find((session) => session.id === session_id);
+    return session?.stop?.();
   }
 
   /**
@@ -60,19 +52,16 @@ class SessionManager {
    * @returns {Session} The session object
    */
   getSessionById(sessionId) {
-    return this.#sessions.get(sessionId);
+    return this.#sessions.find((session) => session.id === sessionId);
   }
 
   /**
    * Stop all active and pending target sessions
    * Returning Promise.all() ensures all sessions in the list have been
    * stopped before calling the next fn
-   * along with clearing the sessions list.
    */
   stopAll() {
-    return Promise.all(
-      this.#sessions.values().map((session) => session.stop()),
-    );
+    return Promise.all(this.#sessions.map((session) => session.stop()));
   }
 }
 

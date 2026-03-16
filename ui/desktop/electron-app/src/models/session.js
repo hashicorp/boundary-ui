@@ -4,9 +4,11 @@
  */
 
 const sanitizer = require('../utils/sanitizer.js');
-const { spawnSync, spawn } = require('../helpers/spawn-promise.js');
+const {
+  spawnAsyncJSONPromise,
+  spawnSync,
+} = require('../helpers/spawn-promise.js');
 const log = require('electron-log/main');
-const jsonify = require('../utils/jsonify.js');
 
 class Session {
   #id;
@@ -17,7 +19,6 @@ class Session {
   #targetId;
   #proxyDetails;
   #sessionMaxSeconds;
-  #onClose;
 
   /**
    * Initialize a session to a controller address
@@ -27,15 +28,13 @@ class Session {
    * @param {string} token
    * @param {string} hostId
    * @param {number} sessionMaxSeconds
-   * @param {function} onClose
    */
-  constructor(addr, targetId, token, hostId, sessionMaxSeconds, onClose) {
+  constructor(addr, targetId, token, hostId, sessionMaxSeconds) {
     this.#addr = addr;
     this.#targetId = targetId;
     this.#token = token;
     this.#hostId = hostId;
     this.#sessionMaxSeconds = sessionMaxSeconds;
-    this.#onClose = onClose;
   }
 
   /**
@@ -94,37 +93,18 @@ class Session {
    * Using cli, initialize a session to a target.
    * Tracks local proxy details if successful.
    */
-  async start() {
+  start() {
     const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-    const options = {
-      env: {
-        ...process.env,
-        BOUNDARY_TOKEN: sanitizedToken,
-      },
-      timeout: this.#sessionMaxSeconds
-        ? this.#sessionMaxSeconds * 1000
-        : undefined,
-      onClose: () => this.#onClose(this.#id),
-    };
-    const { childProcess, stdout, stderr } = await spawn(
+    return spawnAsyncJSONPromise(
       this.connectCommand,
-      options,
-    );
-
-    if (stderr) {
-      const errorResponse = jsonify(stderr);
-      const error = errorResponse.api_error || errorResponse.error;
-      throw new Error(
-        error?.message ?? 'Unknown error occurred while starting session',
-      );
-    }
-
-    const response = jsonify(stdout);
-    this.#process = childProcess;
-    this.#proxyDetails = response;
-    this.#id = response.session_id;
-
-    return response;
+      sanitizedToken,
+      this.#sessionMaxSeconds,
+    ).then((spawnedSession) => {
+      this.#process = spawnedSession.childProcess;
+      this.#proxyDetails = spawnedSession.response;
+      this.#id = this.#proxyDetails.session_id;
+      return this.#proxyDetails;
+    });
   }
 
   /**
