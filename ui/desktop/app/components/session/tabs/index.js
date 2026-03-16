@@ -10,7 +10,6 @@ import { service } from '@ember/service';
 export default class SessionTerminalTabsComponent extends Component {
   // =services
 
-  @service ipc;
   @service terminal;
 
   // =actions
@@ -26,7 +25,8 @@ export default class SessionTerminalTabsComponent extends Component {
     }
 
     // If the terminal view has not been created yet, we create it.
-    const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
+    const isSSHCommandAvailable =
+      await window.desktop.system.checkCommand('ssh');
     const { started_desktop_client, target, id } = this.args.model;
 
     const autoSSH = Boolean(

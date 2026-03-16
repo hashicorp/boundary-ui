@@ -83,7 +83,7 @@
     "prettier": "^3.3.3",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
-    "webpack": "^5.104.1"
+    "webpack": "^5.105.4"
   },
   "peerDependencies": {
     "@faker-js/faker": "^8.0.2",

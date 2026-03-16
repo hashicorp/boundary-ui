@@ -54,7 +54,7 @@
       "ember-try-config>package-json": "^10.0.1",
       "ember-loading>ember-concurrency": "^4.0.0",
       "tmp": "^0.2.5",
-      "tar": "^7.5.8"
+      "tar": "^7.5.10"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",

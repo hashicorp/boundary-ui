@@ -22,7 +22,6 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
   @service intl;
   @service store;
-  @service ipc;
   @service session;
   @service router;
   @service abilities;
@@ -158,7 +157,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
     try {
       await updatedSession.cancelSession();
-      await this.ipc.invoke('stop', { session_id: session.id });
+      await window.desktop.session.stopSession({ session_id: session.id });
       if (
         this.router.currentRoute.name ===
         'scopes.scope.projects.sessions.session.index'
