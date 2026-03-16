@@ -11,6 +11,7 @@ export default class IndexRoute extends Route {
 
   @service clusterUrl;
   @service router;
+  @service terminal;
 
   // =methods
 
@@ -18,6 +19,9 @@ export default class IndexRoute extends Route {
    * If no clusterUrl is specified yet, redirects to cluster-url, otherwise scopes.
    */
   redirect() {
+    // hide terminal view when navigating to index route - on window reload
+    this.terminal.hideTerminalView();
+
     const rendererClusterUrl = this.clusterUrl.rendererClusterUrl;
     if (!rendererClusterUrl) {
       this.router.replaceWith('cluster-url');

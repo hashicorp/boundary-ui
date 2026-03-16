@@ -17,11 +17,15 @@ export default class SessionTerminalTabsComponent extends Component {
 
   @action
   async openTerminal() {
-    // If the terminal view is already created but not opened, we can skip creating a new terminal view and just display the existing one.
-    if (this.terminal.isTerminalViewCreated) {
-      this.terminal.displayTerminalView();
+    // If the terminal view is already created but not opened, just display the existing one.
+    this.terminal.displayTerminalView();
+
+    // If the terminal view has been created and opened, skip creation.
+    if (this.terminal.isTerminalViewOpen) {
       return;
     }
+
+    // If the terminal view has not been created yet, we create it.
     const isSSHCommandAvailable = await this.ipc.invoke('checkCommand', 'ssh');
     const { started_desktop_client, target, id } = this.args.model;
 

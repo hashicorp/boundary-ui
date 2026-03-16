@@ -17,6 +17,7 @@ export default class ApplicationRoute extends Route {
   @service ipc;
   @service intl;
   @service rdp;
+  @service terminal;
 
   // =attributes
 
@@ -82,9 +83,12 @@ export default class ApplicationRoute extends Route {
   error(e) {
     const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
     if (isUnauthenticated) {
+      this.terminal.hideTerminalView();
       this.session.invalidate();
       return false;
     }
+    // hide terminal for all other errors
+    this.terminal.hideTerminalView();
     return true;
   }
 }
