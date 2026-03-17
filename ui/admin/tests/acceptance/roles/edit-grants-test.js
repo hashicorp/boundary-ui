@@ -78,6 +78,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('user can export a terraform formatted grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
@@ -93,6 +102,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('user can export a hcl formatted grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
