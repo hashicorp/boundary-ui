@@ -15,7 +15,7 @@ export default class FormRoleEditGrants extends Component {
 
   // TODO: Replace with actual grant lines from code editor once implemented.
   grantStringLines =
-    'id=hc_123;type=host-catalog;actions=*\nid=ttcp_123;type=target;actions=read\ntype=credential;actions=*';
+    'ids=hc_123;type=host-catalog;actions=read,create,list\nids=ttcp_123;type=target;actions=list\ntype=credential;actions=create';
 
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
