@@ -212,7 +212,6 @@ function routes() {
   });
 
   this.get('/grants-schema.json', () => {
-    console.log(grantsSchema);
     return grantsSchema;
   });
 
