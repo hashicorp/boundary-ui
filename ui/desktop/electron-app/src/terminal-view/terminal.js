@@ -59,7 +59,7 @@ xterm.onData((data) => {
   window.terminal.send(data, terminalId);
 });
 
-window.terminal.receive((value) => {
+const cleanupTerminalListener = window.terminal.receive((value) => {
   xterm.write(value);
 }, terminalId);
 
@@ -75,6 +75,7 @@ resizeObserver.observe(terminalElement);
 
 window.terminal.cleanup(() => {
   resizeObserver.disconnect();
+  cleanupTerminalListener();
   xterm.dispose();
   window.terminal.remove(terminalId);
 });

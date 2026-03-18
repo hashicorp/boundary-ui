@@ -36,9 +36,6 @@ contextBridge.exposeInMainWorld('terminal', {
     ipcRenderer.send(`resizeTerminal-${id}`, size);
   },
   cleanup: (callback) => {
-    const listener = () => callback();
-    ipcRenderer.once('cleanupTerminal', listener);
-    // Return a function for the caller to handle cleaning up the listener
-    return () => ipcRenderer.removeListener('cleanupTerminal', listener);
+    ipcRenderer.once('cleanupTerminal', () => callback());
   },
 });

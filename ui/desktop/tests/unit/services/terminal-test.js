@@ -68,7 +68,10 @@ module('Unit | Service | terminal', function (hooks) {
     service.isTerminalViewOpen = false;
 
     service.hideTerminalView();
-    assert.false(window.webContentView.hideTerminalView.calledOnce);
+    assert.true(window.webContentView.hideTerminalView.calledOnce);
+    assert.false(service.isTerminalViewOpen);
+
+    window.webContentView.hideTerminalView.reset();
 
     service.isTerminalViewOpen = true;
     service.hideTerminalView();
