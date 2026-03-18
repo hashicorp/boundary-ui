@@ -4,5 +4,16 @@
  */
 
 import Route from '@ember/routing/route';
+import { service } from '@ember/service';
 
-export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {}
+export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
+  // =services
+
+  @service grantsSchema;
+
+  // =methods
+
+  async model() {
+    await this.grantsSchema.load();
+  }
+}

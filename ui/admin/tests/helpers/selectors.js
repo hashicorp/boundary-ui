@@ -21,6 +21,8 @@ export const FIELD_PASSWORD_VALUE = 'password';
 export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error message on the DOM.
 export const FIELD_IDENTIFICATION = '[name=identification]';
 
+export const TABLE = 'table';
+export const TABLE_DATA = 'td';
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 export const TABLE_ROWS = 'tbody tr';
 export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;
