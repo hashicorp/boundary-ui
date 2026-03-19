@@ -26,6 +26,10 @@ on:
 jobs:
   test:
     name: test
+    # don't need to run e2e tests on ce -> ent merges since tests were already
+    # run in the ce branch, and there are currently no code diffferences between
+    # the two repos
+    if: github.actor != 'hc-github-team-secure-boundary'
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     env:
       ENOS_VAR_boundary_edition: "ent"
@@ -59,9 +63,13 @@ jobs:
 
       - name: Install Vault CLI
         run: |
-          wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
-          unzip /tmp/vault.zip -d /usr/local/bin
-      
+          wget https://releases.hashicorp.com/vault/1.17.6/vault_1.17.6_linux_amd64.zip -O /tmp/vault.zip
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            unzip -o -q /tmp/vault.zip -d /usr/local/bin
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            unzip -o -q /tmp/vault.zip -d "$HOME/bin"
+          fi
+
         # TODO: We should consider modifying to also build CE binary. For now
         # building ENT binary using most recent UI commit is sufficient.
       - name: Checkout boundary-enterprise
@@ -87,18 +95,28 @@ jobs:
 
       - name: GH fix for localhost resolution
         run: |
-          cat /etc/hosts && echo "-----------"
-          sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
-          cat /etc/hosts
-          ssh -V
-
-          echo "127.0.0.1 localhost boundary" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            cat /etc/hosts && echo "-----------"
+            sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
+            cat /etc/hosts
+            ssh -V
+          fi
 
       - name: Set git config
         run: |
           git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+
+      - name: Determine Go version
+        id: get-go-version
+        run: |
+          echo "Building with Go $(cat ./support/src/boundary-enterprise/.go-version)"
+          echo "go-version=$(cat ./support/src/boundary-enterprise/.go-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version: ${{ steps.get-go-version.outputs.go-version }}
+          cache: false
 
       - name: Set up test infra
         id: infra
@@ -114,22 +132,36 @@ jobs:
 
       - name: Move boundary binary
         run: |
-          mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            mv ./support/src/boundary-enterprise/bin/boundary $HOME/bin
+          fi
           boundary version
-      
+
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
           cd e2e-tests
-          pnpm playwright install --with-deps
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            pnpm playwright install --with-deps
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            # playwright dependencies can't be installed on a self-hosted runner
+            # due to permission issues
+            pnpm playwright install
+
+            sudo apt update -qq
+            sudo apt install xvfb -y
+          fi
 
         # Runner is headless so we need to enable a display to run the client
       - name: Run Tests
         run: |
           source <(bash ./support/src/boundary-enterprise/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
+
           export DISPLAY=:99
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           pnpm run desktop
 
       - name: Upload Playwright report
