@@ -8,6 +8,7 @@ import { expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -33,8 +34,9 @@ test(
     targetPort,
   }) => {
     let orgName;
+    const basePage = new BasePage(page);
     try {
-      await page.goto('/');
+      await basePage.goToRootLoggedIn();
 
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();

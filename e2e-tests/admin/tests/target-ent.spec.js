@@ -7,6 +7,7 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -32,10 +33,12 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgId;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -100,10 +103,12 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgId;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -175,10 +180,12 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgId;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -269,9 +276,11 @@ test(
   'Verify RDP target creation',
   { tag: ['@ent', '@aws', '@docker'] },
   async ({ request, page, sshUser, targetAddress, targetPort }) => {
-    await page.goto('/');
     let org;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       org = await boundaryHttp.createOrg(request);
       const project = await boundaryHttp.createProject(request, org.id);
 

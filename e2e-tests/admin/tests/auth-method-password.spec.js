@@ -9,6 +9,7 @@ import { execSync } from 'node:child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
+import { BasePage } from '../pages/base.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { UsersPage } from '../pages/users.js';
@@ -30,10 +31,12 @@ test(
     adminLoginName,
     adminPassword,
   }) => {
-    await page.goto('/');
     let orgName;
     let authMethodName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedOut();
+
       // Log in
       const loginPage = new LoginPage(page);
       await loginPage.login(adminLoginName, adminPassword);

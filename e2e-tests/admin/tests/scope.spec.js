@@ -5,6 +5,7 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
+import { BasePage } from '../pages/base.js';
 import { OrgsPage } from '../pages/orgs.js';
 
 import * as boundaryHttp from '../../helpers/boundary-http.js';
@@ -20,7 +21,8 @@ test(
       const project = await boundaryHttp.createProject(request, org.id);
 
       // Choose the org from the scope picker
-      await page.goto('/');
+      const basePage = new BasePage(page);
+      await basePage.goToRootLoggedIn();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
       const orgsPage = new OrgsPage(page);
       await orgsPage.chooseScopeFromDropdown('Global', org.name);

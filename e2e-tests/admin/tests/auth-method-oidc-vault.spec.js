@@ -10,6 +10,7 @@ import { execSync } from 'child_process';
 import * as boundaryCli from '../../helpers/boundary-cli';
 import * as vaultCli from '../../helpers/vault-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
+import { BasePage } from '../pages/base.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
@@ -38,10 +39,12 @@ test(
     adminPassword,
     vaultAddrUnified,
   }) => {
-    await page.goto('/');
     let orgName;
     let policyName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedOut();
+
       const userName = 'end-user';
       const password = 'password123';
       const email = 'vault@hashicorp.com';

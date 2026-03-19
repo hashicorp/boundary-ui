@@ -9,6 +9,7 @@ import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -24,7 +25,8 @@ let projectName;
 let targetName;
 
 test.beforeEach(async ({ page, targetAddress, targetPort }) => {
-  await page.goto('/');
+  const basePage = new BasePage(page);
+  await basePage.goToRootLoggedIn();
 
   const orgsPage = new OrgsPage(page);
   orgName = await orgsPage.createOrg();

@@ -7,6 +7,8 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
+import { BasePage } from '../pages/base.js';
+
 test(
   'Search and Pagination (Targets)',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
@@ -44,7 +46,8 @@ test(
     }
 
     // Navigate to targets page
-    await page.goto('/');
+    const basePage = new BasePage(page);
+    await basePage.goToRootLoggedIn();
     await page.getByRole('link', { name: org.name }).click();
     await page.getByRole('link', { name: project.name }).click();
     await page

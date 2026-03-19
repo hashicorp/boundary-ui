@@ -7,6 +7,7 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
+import { BasePage } from '../pages/base.js';
 import { WorkersPage } from '../pages/workers.js';
 
 test(
@@ -15,7 +16,8 @@ test(
   async ({ page }) => {
     const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 10);
 
-    await page.goto('/');
+    const basePage = new BasePage(page);
+    await basePage.goToRootLoggedIn();
     await page
       .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Workers' })

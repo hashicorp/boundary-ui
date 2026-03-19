@@ -11,6 +11,7 @@ import { readFile } from 'fs/promises';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import * as vaultCli from '../../helpers/vault-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -28,7 +29,8 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  const basePage = new BasePage(page);
+  await basePage.goToRootLoggedIn();
 });
 
 test.afterEach(() => {
@@ -60,8 +62,8 @@ test(
       execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
       execSync(
         `vault kv put -mount ${secretsPath} ${secretName} ` +
-        ` username=${sshUser}` +
-        ` private_key=@${sshKeyPath}`,
+          ` username=${sshUser}` +
+          ` private_key=@${sshKeyPath}`,
       );
       execSync(
         `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
@@ -69,13 +71,13 @@ test(
       const vaultToken = JSON.parse(
         execSync(
           `vault token create` +
-          ` -no-default-policy=true` +
-          ` -policy=${boundaryPolicyName}` +
-          ` -policy=${secretPolicyName}` +
-          ` -orphan=true` +
-          ` -period=20m` +
-          ` -renewable=true` +
-          ` -format=json`,
+            ` -no-default-policy=true` +
+            ` -policy=${boundaryPolicyName}` +
+            ` -policy=${secretPolicyName}` +
+            ` -orphan=true` +
+            ` -period=20m` +
+            ` -renewable=true` +
+            ` -format=json`,
         ),
       );
       const clientToken = vaultToken.auth.client_token;

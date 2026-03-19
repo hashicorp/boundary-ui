@@ -7,6 +7,7 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { StoragePoliciesPage } from '../pages/storage-policies.js';
 
@@ -20,9 +21,11 @@ test(
     adminLoginName,
     adminPassword,
   }) => {
-    await page.goto('/');
     let policyName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       // Create a storage policy
       const storagePoliciesPage = new StoragePoliciesPage(page);
       policyName = await storagePoliciesPage.createStoragePolicy();

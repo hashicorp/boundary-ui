@@ -8,6 +8,7 @@ import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -41,13 +42,14 @@ test(
     targetPort,
     workerTagEgress,
   }) => {
-    await page.goto('/');
-
     let orgId;
     let policyName;
     let storageBucket;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       await boundaryCli.authenticateBoundary(
         controllerAddr,
         adminAuthMethodId,

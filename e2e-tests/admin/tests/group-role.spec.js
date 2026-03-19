@@ -6,6 +6,7 @@
 import { test } from '../../global-setup.js';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { GroupsPage } from '../pages/groups.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
@@ -24,9 +25,11 @@ test(
     adminLoginName,
     adminPassword,
   }) => {
-    await page.goto('/');
     let orgName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
       const groupsPage = new GroupsPage(page);

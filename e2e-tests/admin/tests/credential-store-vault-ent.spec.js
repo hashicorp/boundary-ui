@@ -9,6 +9,7 @@ import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import * as vaultCli from '../../helpers/vault-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -26,7 +27,8 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  const basePage = new BasePage(page);
+  await basePage.goToRootLoggedIn();
 });
 
 test.afterEach(() => {

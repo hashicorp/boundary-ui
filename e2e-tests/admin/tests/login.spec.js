@@ -6,6 +6,7 @@
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
+import { BasePage } from '../pages/base.js';
 import { LoginPage } from '../pages/login.js';
 
 // Reset storage state for this file to avoid being authenticated
@@ -15,7 +16,8 @@ test(
   'Log in, log out, and then log back in',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({ page, adminLoginName, adminPassword }) => {
-    await page.goto('/');
+    const basePage = new BasePage(page);
+    await basePage.goToRootLoggedOut();
 
     // Log in
     const loginPage = new LoginPage(page);
@@ -38,7 +40,8 @@ test(
 
 test.describe('Failure Cases', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    const basePage = new BasePage(page);
+    await basePage.goToRootLoggedOut();
   });
 
   test(

@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
+import { BasePage } from '../pages/base.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
@@ -38,9 +39,11 @@ test(
     ldapUserName,
     ldapUserPassword,
   }) => {
-    await page.goto('/');
     let orgName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedOut();
+
       // Log in
       const loginPage = new LoginPage(page);
       await loginPage.login(adminLoginName, adminPassword);

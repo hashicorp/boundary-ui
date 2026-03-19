@@ -32,10 +32,12 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgId;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -118,10 +120,12 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgId;
     let connect;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -183,9 +187,11 @@ test(
     targetAddress,
     targetPort,
   }) => {
-    await page.goto('/');
     let orgName;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedIn();
+
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
@@ -249,7 +255,6 @@ test(
         .getByRole('textbox')
         .fill('"prod" in "/tags/type"');
       await page.getByRole('button', { name: 'Save' }).click();
-      const basePage = new BasePage(page);
       await basePage.dismissSuccessAlert();
     } finally {
       await boundaryCli.authenticateBoundary(

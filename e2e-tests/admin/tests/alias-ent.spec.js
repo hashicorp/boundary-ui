@@ -9,6 +9,7 @@ import { customAlphabet } from 'nanoid';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { AliasesPage } from '../pages/aliases.js';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -34,12 +35,14 @@ test.describe('Aliases (Enterprise)', () => {
       targetAddress,
       targetPort,
     }) => {
-      await page.goto('/');
       let orgName;
       let alias;
       let connect;
       const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
+      const basePage = new BasePage(page);
       try {
+        await basePage.goToRootLoggedIn();
+
         const orgsPage = new OrgsPage(page);
         orgName = await orgsPage.createOrg();
         const projectsPage = new ProjectsPage(page);
@@ -148,12 +151,14 @@ test.describe('Aliases (Enterprise)', () => {
       targetAddress,
       targetPort,
     }) => {
-      await page.goto('/');
       let orgName;
       let alias;
       let connect;
       const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
+      const basePage = new BasePage(page);
       try {
+        await basePage.goToRootLoggedIn();
+
         const orgsPage = new OrgsPage(page);
         orgName = await orgsPage.createOrg();
         await boundaryCli.authenticateBoundary(
@@ -226,12 +231,14 @@ test.describe('Aliases (Enterprise)', () => {
       targetAddress,
       targetPort,
     }) => {
-      await page.goto('/');
       const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
       let orgId;
       let alias;
       let connect;
+      const basePage = new BasePage(page);
       try {
+        await basePage.goToRootLoggedIn();
+
         const orgsPage = new OrgsPage(page);
         const orgName = await orgsPage.createOrg();
         const projectsPage = new ProjectsPage(page);

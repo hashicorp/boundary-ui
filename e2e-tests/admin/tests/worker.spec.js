@@ -6,13 +6,16 @@
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
+import { BasePage } from '../pages/base.js';
+
 test(
   'Create a worker',
   { tag: ['@ce', '@aws', '@docker'] },
   async ({ page, browserName }) => {
     test.skip(browserName === 'webkit', 'Bug in worker form on Safari');
 
-    await page.goto('/');
+    const basePage = new BasePage(page);
+    await basePage.goToRootLoggedIn();
     await page
       .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'Workers' })

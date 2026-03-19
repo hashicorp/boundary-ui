@@ -8,6 +8,7 @@ import { expect } from '@playwright/test';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
+import { BasePage } from '../pages/base.js';
 import { LoginPage } from '../pages/login.js';
 
 // Reset storage state for this file to avoid being authenticated
@@ -21,10 +22,12 @@ test(
   'Verify user can change password',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({ page, request }) => {
-    await page.goto('/');
     let org;
     let authMethod;
+    const basePage = new BasePage(page);
     try {
+      await basePage.goToRootLoggedOut();
+
       let account;
       let user;
 

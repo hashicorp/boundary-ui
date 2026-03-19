@@ -8,6 +8,7 @@ import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import { BasePage } from '../pages/base.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -16,7 +17,8 @@ import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  const basePage = new BasePage(page);
+  await basePage.goToRootLoggedIn();
 });
 
 test.describe('AWS', () => {
