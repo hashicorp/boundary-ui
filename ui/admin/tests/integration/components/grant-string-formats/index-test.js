@@ -41,7 +41,7 @@ module(
       assert.dom(PINNED_ID_OPTION).isNotChecked();
       assert
         .dom(STRING_FORMAT_FIELD)
-        .hasValue('id=<insert resource ids>;actions=<insert actions>');
+        .hasValue('ids=<insert resource ids>;actions=<insert actions>');
     });
 
     test('it renders string format when type is changed to pinned id', async function (assert) {
@@ -55,7 +55,7 @@ module(
       assert
         .dom(STRING_FORMAT_FIELD)
         .hasValue(
-          'id=<insert id>;type=<insert resource types>;actions=<insert actions>',
+          'ids=<insert id>;type=<insert resource types>;actions=<insert actions>',
         );
     });
   },
