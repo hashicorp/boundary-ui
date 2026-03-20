@@ -60,6 +60,12 @@ export const FIELD_GRANT = 'form:nth-child(2) [name="grant"]';
 export const FIELD_GRANT_VALUE = 'ids=123,action=delete';
 export const FIELD_GRANT_REMOVE_BTN = 'form:nth-child(2) button[type="button"]';
 export const GRANTS_FORM = 'form:nth-child(2)';
+export const EXPORT_OPTIONS_FLYOUT = '[data-test-export-options-flyout]';
+export const EXPORT_FORMAT_SELECT =
+  '[data-test-export-options-flyout] [name="export-format"]';
+export const FORMATTED_EXPORT_CODE_BLOCK =
+  '[data-test-export-options-flyout] .hds-code-block code';
 // We need to use a different selector for the grants form because the
 // grants form has multiple submit buttons
 export const SAVE_BTN = '.rose-form-actions [type=submit]';
+export const EXPORT_GRANTS_BTN = '[data-test-export-grants-btn]';
