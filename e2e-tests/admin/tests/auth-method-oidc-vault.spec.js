@@ -30,15 +30,19 @@ test.beforeEach(async () => {
 test(
   'Set up OIDC auth method',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({
-    page,
-    context,
-    controllerAddr,
-    adminAuthMethodId,
-    adminLoginName,
-    adminPassword,
-    vaultAddrUnified,
-  }) => {
+  async (
+    {
+      page,
+      context,
+      controllerAddr,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
+      vaultAddr,
+      vaultAddrUnified,
+    },
+    testInfo,
+  ) => {
     let orgName;
     let policyName;
     const basePage = new BasePage(page);
@@ -48,9 +52,20 @@ test(
       const userName = 'end-user';
       const password = 'password123';
       const email = 'vault@hashicorp.com';
+
+      const isDocker = testInfo.tags.includes('@docker');
+      const isAws = testInfo.tags.includes('@aws');
+      let vaultAddress;
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (isDocker) {
+        vaultAddress = vaultAddrUnified;
+      } else if (isAws) {
+        vaultAddress = vaultAddr;
+      }
+
       const { issuer, clientId, clientSecret, authPolicyName } =
         await vaultCli.setupVaultOidc(
-          vaultAddrUnified,
+          vaultAddress,
           userName,
           password,
           email,
