@@ -10,7 +10,7 @@ const { WebContentsView, BrowserWindow } = require('electron');
 const path = require('path');
 
 class TerminalManager {
-  #terminalView = null;
+  #terminalView = undefined;
   #sessionId = undefined;
   #autoSSH = false;
 
@@ -111,6 +111,9 @@ class TerminalManager {
   }
 
   positionTerminalView({ position, zoomFactor }) {
+    if (!this.#terminalView) {
+      return;
+    }
     // Keep terminal view zoom synced so that it scales correctly with the rest of the UI and appears at the correct size relative to the main window contents.
     this.#terminalView.webContents.setZoomFactor(zoomFactor);
 
@@ -128,13 +131,18 @@ class TerminalManager {
   }
 
   hideTerminalView() {
-    this.#terminalView.setBounds({ x: 0, y: 0, width: 0, height: 0 });
+    if (this.#terminalView) {
+      this.#terminalView.setBounds({ x: 0, y: 0, width: 0, height: 0 });
+    }
   }
 
   destroyTerminalView() {
+    if (!this.#terminalView) {
+      return;
+    }
     this.#terminalView.webContents.send('cleanupTerminal');
     this.mainWindow.contentView.removeChildView(this.#terminalView);
-    this.#terminalView = null;
+    this.#terminalView = undefined;
     this.#sessionId = undefined;
     this.#autoSSH = false;
   }

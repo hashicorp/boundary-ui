@@ -84,13 +84,12 @@ export default class ApplicationRoute extends Route {
   @action
   error(e) {
     const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
+    // clean up terminal view for all errors
+    this.terminal.cleanup();
     if (isUnauthenticated) {
-      this.terminal.hideTerminalView();
       this.session.invalidate();
       return false;
     }
-    // hide terminal for all other errors
-    this.terminal.hideTerminalView();
     return true;
   }
 }

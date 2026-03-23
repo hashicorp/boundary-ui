@@ -90,7 +90,11 @@ export default class TerminalService extends Service {
   }
 
   cleanup() {
-    if (this.isTerminalViewCreated) {
+    // additional check because on reload the `isTerminalViewCreated` will be false
+    if (
+      this.isTerminalViewCreated ||
+      window.webContentView?.destroyTerminalView()
+    ) {
       window.webContentView.destroyTerminalView();
       window.onresize = null;
       this.isTerminalViewCreated = false;
