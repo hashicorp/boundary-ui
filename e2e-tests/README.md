@@ -157,7 +157,7 @@ Using Terminal 1:
 - `cd boundary/enos` or `cd boundary_enterprise/enos`.
 - `doormat login`. Login with Doormat.
 - `eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
-- `enos scenario launch e2e_ui_aws builder:local` or `enos scenario launch e2e_ui_aws_ent builder:local` if in enterprise.
+- `enos scenario launch e2e_ui_aws builder:local protocol:https` or `enos scenario launch e2e_ui_aws_ent builder:local protocol:https` if in enterprise.
   - Launches enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal. Check out more scenarios [here](https://github.com/hashicorp/boundary/tree/main/enos).
 - `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are needed within Boundary UI to run the test against the enos scenario.
 
@@ -168,6 +168,7 @@ bash scripts/test_e2e_env.sh > (boundary-ui directory)/e2e-tests/.env
 
 > [!IMPORTANT]
 > Be aware that once an aws scenario is launched you will create and run resources within AWS. After you are done using the scenario, [you should destroy it](#destroy-enos-scenario). This isn't necessary but still a good idea for docker enos scenarios.
+> Depending on which tests you are running you will need to specify http or https. Likely you should default to https when using aws but you will need to manually trust the certificate created. More info on that [here](https://github.com/hashicorp/boundary/tree/main/enos#trust-certificate-for-https-testing).
 
 #### Admin
 
