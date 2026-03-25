@@ -54,9 +54,6 @@ export default class TerminalService extends Service {
    * Displays the terminal view if it has already been created and is not currently open.
    */
   displayTerminalView() {
-    if (!this.shouldDisplayExistingTerminal) {
-      return;
-    }
     window.webContentView.positionTerminalView(this.terminalPosition);
     this.isTerminalViewOpen = true;
   }
@@ -65,9 +62,7 @@ export default class TerminalService extends Service {
    * Hides the terminal view. We do this instead of destroying the view because we want to preserve the state of the terminal session.
    */
   hideTerminalView() {
-    if (window.webContentView?.hideTerminalView) {
-      window.webContentView.hideTerminalView();
-    }
+    window.webContentView.hideTerminalView();
     this.isTerminalViewOpen = false;
   }
 
@@ -90,15 +85,9 @@ export default class TerminalService extends Service {
   }
 
   cleanup() {
-    // additional check because on reload the `isTerminalViewCreated` will be false
-    if (
-      this.isTerminalViewCreated ||
-      window.webContentView?.destroyTerminalView()
-    ) {
-      window.webContentView.destroyTerminalView();
-      window.onresize = null;
-      this.isTerminalViewCreated = false;
-      this.isTerminalViewOpen = false;
-    }
+    window.webContentView.destroyTerminalView();
+    window.onresize = null;
+    this.isTerminalViewCreated = false;
+    this.isTerminalViewOpen = false;
   }
 }

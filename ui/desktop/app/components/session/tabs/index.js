@@ -17,10 +17,8 @@ export default class SessionTerminalTabsComponent extends Component {
   @action
   async openTerminal() {
     // If the terminal view is already created but not opened, just display the existing one.
-    this.terminal.displayTerminalView();
-
-    // If the terminal view has been created and opened, skip creation.
-    if (this.terminal.isTerminalViewOpen) {
+    if (this.terminal.shouldDisplayExistingTerminal) {
+      this.terminal.displayTerminalView();
       return;
     }
 

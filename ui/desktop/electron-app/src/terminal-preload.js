@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('terminal', {
   send: (data, id) => {
     ipcRenderer.send(`terminalKeystroke-${id}`, data);
   },
-  receive: (callback, id) => {
+  onReceive: (callback, id) => {
     const incomingDataChannel = `terminalIncomingData-${id}`;
     const listenerCallback = (_event, value) => callback(value);
     ipcRenderer.on(incomingDataChannel, listenerCallback);
@@ -35,7 +35,7 @@ contextBridge.exposeInMainWorld('terminal', {
   resize: (size, id) => {
     ipcRenderer.send(`resizeTerminal-${id}`, size);
   },
-  cleanup: (callback) => {
+  onCleanup: (callback) => {
     ipcRenderer.once('cleanupTerminal', () => callback());
   },
 });
