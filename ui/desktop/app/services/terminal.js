@@ -62,7 +62,7 @@ export default class TerminalService extends Service {
    * Hides the terminal view. We do this instead of destroying the view because we want to preserve the state of the terminal session.
    */
   hideTerminalView() {
-    window.webContentView.hideTerminalView();
+    window.webContentView?.hideTerminalView();
     this.isTerminalViewOpen = false;
   }
 
@@ -85,7 +85,7 @@ export default class TerminalService extends Service {
   }
 
   cleanup() {
-    window.webContentView.destroyTerminalView();
+    window.webContentView?.destroyTerminalView();
     window.onresize = null;
     this.isTerminalViewCreated = false;
     this.isTerminalViewOpen = false;
