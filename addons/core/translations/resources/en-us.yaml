@@ -681,12 +681,8 @@ role:
       insert-id: insert id
       insert-resource-ids: insert resource ids
     actions:
-      title: Actions
       collection-actions: Collection Actions
       id-actions: ID Actions
-      table:
-        name: Action
-        description: Description
       create: Create a new {resourceType}
       list: List all {resourceType} resources
       read: Read a {resourceType}
