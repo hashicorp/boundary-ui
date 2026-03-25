@@ -10,16 +10,34 @@ export default class GrantActionsComponent extends Component {
   // =services
 
   @service intl;
-  @service grantsSchema;
 
   // =attributes
 
   /**
-   * The resource type entry from the grant schema matching the given type.
+   * Returns all available resource type names.
+   * @returns {string[]}
+   */
+  get resourceTypeNames() {
+    if (!this.args.grantsSchema?.resource_types) return [];
+    return this.args.grantsSchema.resource_types.map((rt) => rt.type);
+  }
+
+  /**
+   * Returns true if there are no grants schema available.
+   * @type {boolean}
+   */
+  get isGrantsSchemaUnavailable() {
+    return this.resourceTypeNames.length === 0;
+  }
+
+  /**
+   * The resource type from the grant schema matching the given type.
    * @type {object}
    */
   get resourceType() {
-    return this.grantsSchema.findResourceType(this.args.currentResourceType);
+    return this.args.grantsSchema?.resource_types?.find(
+      (rt) => rt.type === this.args.currentResourceType,
+    );
   }
 
   /**

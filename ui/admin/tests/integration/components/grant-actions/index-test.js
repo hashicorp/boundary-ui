@@ -8,51 +8,69 @@ import { setupRenderingTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { grantsSchema } from 'api/utils/grants-schema';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Integration | Component | grant-actions/index', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
-  hooks.beforeEach(function () {
-    const grantsSchemaService = this.owner.lookup('service:grants-schema');
-    grantsSchemaService.data = grantsSchema;
-    grantsSchemaService.isLoaded = true;
-    grantsSchemaService.loadError = null;
-  });
-
   // selector for the "No type", "No grant actions available", and "no actions" messages
   const NO_TEXT = 'p';
 
+  const grantsSchema = {
+    resource_types: [
+      {
+        type: 'target',
+        collection_actions: ['create', 'list'],
+        id_actions: [
+          'read',
+          'update',
+          'delete',
+          'authorize-session',
+          'add-host-sources',
+          'set-host-sources',
+          'remove-host-sources',
+          'add-credential-sources',
+          'set-credential-sources',
+          'remove-credential-sources',
+        ],
+      },
+    ],
+  };
+
   test('it shows "No type detected." when no currentResourceType is provided', async function (assert) {
-    await render(hbs`<GrantActions />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(hbs`<GrantActions @grantsSchema={{this.grantsSchema}} />`);
 
     assert.dom(commonSelectors.TABLE).doesNotExist();
     assert.dom(NO_TEXT).hasText('No type detected.');
   });
 
   test('it shows "No type detected." when currentResourceType is empty string', async function (assert) {
-    await render(hbs`<GrantActions @currentResourceType='' />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='' />`,
+    );
 
     assert.dom(commonSelectors.TABLE).doesNotExist();
     assert.dom(NO_TEXT).hasText('No type detected.');
   });
 
   test('it shows an unavailable message when the grants schema failed to load', async function (assert) {
-    const grantsSchemaService = this.owner.lookup('service:grants-schema');
-    grantsSchemaService.data = null;
-    grantsSchemaService.isLoaded = false;
-    grantsSchemaService.loadError = new Error('network failure');
-
-    await render(hbs`<GrantActions @currentResourceType='target' />`);
+    this.set('grantsSchema', { resource_types: [] });
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='target' />`,
+    );
 
     assert.dom(commonSelectors.TABLE).doesNotExist();
     assert.dom(NO_TEXT).hasText('Grant actions information not available.');
   });
 
   test('it renders a table with actions for a valid resource type', async function (assert) {
-    await render(hbs`<GrantActions @currentResourceType='target' />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='target' />`,
+    );
 
     // target has: collection_actions=['create', 'list'] + id_actions (10 actions) = 12 total
     assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 12 });
@@ -77,7 +95,10 @@ module('Integration | Component | grant-actions/index', function (hooks) {
   });
 
   test('it interpolates the resource type in CRUD action descriptions', async function (assert) {
-    await render(hbs`<GrantActions @currentResourceType='target' />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='target' />`,
+    );
 
     const rows = this.element.querySelectorAll(commonSelectors.TABLE_ROWS);
     const rowData = [...rows].map((row) => {
@@ -105,7 +126,10 @@ module('Integration | Component | grant-actions/index', function (hooks) {
   });
 
   test('it shows non-interpolated descriptions for non-CRUD actions', async function (assert) {
-    await render(hbs`<GrantActions @currentResourceType='target' />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='target' />`,
+    );
 
     const rows = this.element.querySelectorAll(commonSelectors.TABLE_ROWS);
     const rowData = [...rows].map((row) => {
@@ -127,7 +151,10 @@ module('Integration | Component | grant-actions/index', function (hooks) {
   });
 
   test('it shows "No actions available" for unknown type', async function (assert) {
-    await render(hbs`<GrantActions @currentResourceType='unknown' />`);
+    this.set('grantsSchema', grantsSchema);
+    await render(
+      hbs`<GrantActions @grantsSchema={{this.grantsSchema}} @currentResourceType='unknown' />`,
+    );
 
     assert.dom(commonSelectors.TABLE).doesNotExist();
     assert.dom(NO_TEXT).hasText('No actions available for this resource type.');

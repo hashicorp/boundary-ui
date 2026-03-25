@@ -30,7 +30,10 @@
         @level='mid'
         class='grant-actions-card'
       >
-        <GrantActions @currentResourceType={{this.selectedResourceType}} />
+        <GrantActions
+          @grantsSchema={{@grantsSchema}}
+          @currentResourceType={{this.selectedResourceType}}
+        />
       </Hds::Card::Container>
     </LG.Item>
   </Hds::Layout::Grid>

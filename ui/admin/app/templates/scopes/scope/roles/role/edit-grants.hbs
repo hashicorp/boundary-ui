@@ -28,7 +28,10 @@
   </page.header>
 
   <page.body>
-    <Form::Role::EditGrants />
+    <Form::Role::EditGrants
+      @model={{@model.role}}
+      @grantsSchema={{@model.grantsSchema}}
+    />
   </page.body>
 
 </Rose::Layout::Page>
