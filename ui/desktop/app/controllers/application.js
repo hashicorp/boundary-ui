@@ -39,7 +39,7 @@ export default class ApplicationController extends Controller {
     // Setup removeOnAppQuitListener to destroy the listener afterwards
     this.removeOnAppQuitListener = this.window.desktop?.app.onAppQuit(() => {
       this.isAppQuitting = true;
-      this.terminal.hideTerminalView();
+      this.hideTerminalViewForModal();
     });
   }
 
@@ -96,10 +96,7 @@ export default class ApplicationController extends Controller {
       await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
-      this.isTerminalViewOpenBeforeLogout = this.terminal.isTerminalViewOpen;
-      if (this.isTerminalViewOpenBeforeLogout) {
-        this.terminal.hideTerminalView();
-      }
+      this.hideTerminalViewForModal();
     } else {
       this.session.invalidate();
     }
@@ -198,4 +195,18 @@ export default class ApplicationController extends Controller {
     }
     return defaultValidator(transition);
   }
+
+  /**
+   * Hides terminal if open for logout/app quit modal
+   */
+  hideTerminalViewForModal() {
+    if (
+      this.terminal.isTerminalViewOpen &&
+      !this.isTerminalViewOpenBeforeLogout
+    ) {
+      this.isTerminalViewOpenBeforeLogout = true;
+      this.terminal.hideTerminalView();
+    }
+  }
+  å;
 }
