@@ -22,18 +22,17 @@ const log = (method, request = '', response = '', type = 'log') => {
 module.exports = function handle(command, handler) {
   ipcMain.handle(command, async function (event, request) {
     const requestPayload = request;
-    let result;
     try {
-      result = await handler(requestPayload);
+      const result = await handler(requestPayload);
       log(command, requestPayload, result);
+      return { ok: true, result };
     } catch (e) {
       // If e is an Error instance, we need to extract the message and wrap
       // it in a POJO before stringifying it.  If not an Error, e is assumed to
       // be already a POJO.
-      const errorMessage = e instanceof Error ? { message: e.message } : e;
-      result = new Error(JSON.stringify(errorMessage));
+      const error = e instanceof Error ? { message: e.message } : e;
       log(command, requestPayload, e, 'error');
+      return { ok: false, error };
     }
-    return result;
   });
 };
