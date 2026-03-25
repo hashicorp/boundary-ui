@@ -69,7 +69,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
    */
   @action
   @loading
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
