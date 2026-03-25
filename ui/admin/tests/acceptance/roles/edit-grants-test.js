@@ -106,7 +106,7 @@ module('Acceptance | roles/edit grants', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.editGrants);
     assert
-      .dom('.grant-actions-card')
+      .dom('.grant-actions')
       .includesText('Grant actions information not available.');
   });
 

@@ -12,13 +12,8 @@
     <Hds::Table
       @model={{this.allActions}}
       @columns={{array
-        (hash
-          key='name' label=(t 'resources.role.edit-grants.actions.table.name')
-        )
-        (hash
-          key='description'
-          label=(t 'resources.role.edit-grants.actions.table.description')
-        )
+        (hash key='name' label=(t 'titles.action'))
+        (hash key='description' label=(t 'form.description.label'))
       }}
       @valign='middle'
     >

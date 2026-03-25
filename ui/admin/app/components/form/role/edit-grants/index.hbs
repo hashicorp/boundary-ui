@@ -13,29 +13,26 @@
       {{! TODO: Add grants code editor. }}
     </LG.Item>
 
-    <LG.Item @colspan={{hash sm=1 md=1}}>
-      <Hds::Accordion @size='large' as |A|>
-        <A.Item>
-          <:toggle>{{t
-              'resources.role.edit-grants.string-formats.title_plural'
-            }}</:toggle>
-          <:content>
-            <GrantStringFormats />
-          </:content>
-        </A.Item>
-      </Hds::Accordion>
+    <Hds::Accordion @size='large' as |A|>
+      <A.Item>
+        <:toggle>{{t
+            'resources.role.edit-grants.string-formats.title_plural'
+          }}</:toggle>
+        <:content>
+          <GrantStringFormats />
+        </:content>
+      </A.Item>
+      <A.Item @isOpen={{true}} @isStatic={{true}} class='grant-actions'>
+        <:toggle>{{t 'titles.actions'}}</:toggle>
+        <:content>
+          <GrantActions
+            @grantsSchema={{@grantsSchema}}
+            @currentResourceType={{this.selectedResourceType}}
+          />
+        </:content>
+      </A.Item>
+    </Hds::Accordion>
 
-      <Hds::Card::Container
-        @hasBorder={{true}}
-        @level='mid'
-        class='grant-actions-card'
-      >
-        <GrantActions
-          @grantsSchema={{@grantsSchema}}
-          @currentResourceType={{this.selectedResourceType}}
-        />
-      </Hds::Card::Container>
-    </LG.Item>
   </Hds::Layout::Grid>
 
   <form.actions class='margin-top-l'>
