@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -87,6 +87,7 @@ module('Acceptance | roles/edit grants', function (hooks) {
         },
       },
     });
+    
     this.server.get('/grants-schema.json', () => {
       return new Response(
         505,
@@ -98,12 +99,12 @@ module('Acceptance | roles/edit grants', function (hooks) {
         },
       );
     });
-
+    
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_EDIT_GRANTS);
-
+    
     assert.strictEqual(currentURL(), urls.editGrants);
     assert
       .dom('.grant-actions')
@@ -113,4 +114,51 @@ module('Acceptance | roles/edit grants', function (hooks) {
   // TODO: add tests for grant actions card behavior once the edit grants
   // code editor is implemented, to verify that the grant actions
   // are displayed correctly
+
+  test('user can export a terraform formatted grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.role);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_EDIT_GRANTS);
+
+    await click(selectors.EXPORT_GRANTS_BTN);
+
+    assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
+    assert.dom(selectors.EXPORT_FORMAT_SELECT).hasValue('terraform');
+    // TODO: Update to check for the actual formatted grant string.
+    assert
+      .dom(selectors.FORMATTED_EXPORT_CODE_BLOCK)
+      .includesText('grant_strings');
+  });
+
+  test('user can export a hcl formatted grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.role);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_EDIT_GRANTS);
+    await click(selectors.EXPORT_GRANTS_BTN);
+    await select(selectors.EXPORT_FORMAT_SELECT, 'native-hcl');
+
+    assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
+    assert.dom(selectors.EXPORT_FORMAT_SELECT).hasValue('native-hcl');
+    // TODO: Update to check for the actual formatted grant string.
+  });
 });

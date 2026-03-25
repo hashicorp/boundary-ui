@@ -745,6 +745,11 @@ role:
       no-actions: No actions available for this resource type.
       no-type-detected: No type detected.
       unavailable: Grant actions information not available.
+    export:
+      format: Format
+      options:
+        terraform: Terraform
+        native-hcl: Native HCL
   scope:
     title: Scope
     title_plural: Scopes
