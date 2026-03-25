@@ -4,6 +4,7 @@
  */
 
 import { test } from '../../global-setup.js';
+import { isAwsController } from '../../helpers/general.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
@@ -26,6 +27,7 @@ test.beforeEach(async () => {
   execSync(`vault auth disable userpass`);
 });
 
+/* eslint-disable playwright/no-conditional-in-test */
 test(
   'Set up OIDC auth method',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
@@ -36,18 +38,29 @@ test(
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
+    vaultAddr,
     vaultAddrUnified,
   }) => {
-    await page.goto('/');
     let orgName;
     let policyName;
     try {
+      await page.goto('/');
+
       const userName = 'end-user';
       const password = 'password123';
       const email = 'vault@hashicorp.com';
+
+      const isAws = await isAwsController(controllerAddr);
+      let vaultAddress;
+      if (isAws) {
+        vaultAddress = vaultAddr;
+      } else {
+        vaultAddress = vaultAddrUnified;
+      }
+
       const { issuer, clientId, clientSecret, authPolicyName } =
         await vaultCli.setupVaultOidc(
-          vaultAddrUnified,
+          vaultAddress,
           userName,
           password,
           email,
