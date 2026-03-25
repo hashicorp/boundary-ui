@@ -30,6 +30,9 @@ export default class ApplicationController extends Controller {
 
   removeOnAppQuitListener;
 
+  // This is used to track if the terminal view was open when user attempted to logout, so that we can conditionally show the terminal view again if they cancel logout
+  isTerminalViewOpenBeforeLogout = false;
+
   constructor() {
     super(...arguments);
     // Listen for when user attempts to quit app
@@ -93,7 +96,10 @@ export default class ApplicationController extends Controller {
       await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
-      this.terminal.hideTerminalView();
+      this.isTerminalViewOpenBeforeLogout = this.terminal.isTerminalViewOpen;
+      if (this.isTerminalViewOpenBeforeLogout) {
+        this.terminal.hideTerminalView();
+      }
     } else {
       this.session.invalidate();
     }
@@ -154,9 +160,13 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
-    if (this.terminal.shouldDisplayExistingTerminal) {
+    if (
+      this.isTerminalViewOpenBeforeLogout &&
+      this.terminal.shouldDisplayExistingTerminal
+    ) {
       this.terminal.displayTerminalView();
     }
+    this.isTerminalViewOpenBeforeLogout = false;
   }
 
   willDestroy() {
