@@ -87,7 +87,7 @@ module('Acceptance | roles/edit grants', function (hooks) {
         },
       },
     });
-    
+
     this.server.get('/grants-schema.json', () => {
       return new Response(
         505,
@@ -99,15 +99,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
         },
       );
     });
-    
+
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_EDIT_GRANTS);
-    
+
     assert.strictEqual(currentURL(), urls.editGrants);
     assert
-      .dom('.grant-actions')
+      .dom('[data-test-grant-actions]')
       .includesText('Grant actions information not available.');
   });
 
