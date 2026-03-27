@@ -30,32 +30,33 @@ const calculateTerminalContainerHeight = (termContainer) => {
 export default class TerminalService extends Service {
   // =properties
 
-  /**
-   * Helps track if the terminal view should be hidden on Session Details page:
-   * 1. When we navigate away to Details tab
-   * 2. When signout modal is open
-   */
-  @tracked isTerminalViewOpen = false;
-
   @tracked isTerminalViewCreated = false;
+
+  /**
+   * Helps track whether the terminal tab is active so we can determine whether to display/hide the existing terminal view
+   */
+  @tracked isTerminalTabActive = false;
 
   get terminalPosition() {
     const termContainer = document.getElementById('terminal-container');
     return calculateTerminalContainerHeight(termContainer);
   }
 
-  get shouldDisplayExistingTerminal() {
-    return this.isTerminalViewCreated && !this.isTerminalViewOpen;
-  }
-
   // =methods
 
+  setTerminalTabActive(isActive) {
+    this.isTerminalTabActive = isActive;
+
+    if (!isActive) {
+      this.hideTerminalView();
+    }
+  }
+
   /**
-   * Displays the terminal view if it has already been created and is not currently open.
+   * Displays the existing terminal view if it has already been created and is not currently open.
    */
   displayTerminalView() {
     window.webContentView.positionTerminalView(this.terminalPosition);
-    this.isTerminalViewOpen = true;
   }
 
   /**
@@ -63,7 +64,6 @@ export default class TerminalService extends Service {
    */
   hideTerminalView() {
     window.webContentView?.hideTerminalView();
-    this.isTerminalViewOpen = false;
   }
 
   createTerminalView(payload) {
@@ -73,7 +73,6 @@ export default class TerminalService extends Service {
     };
     window.webContentView.createTerminalView(updatedPayload);
     this.isTerminalViewCreated = true;
-    this.isTerminalViewOpen = true;
     // Handle resizing terminal windows. We debounce the resizing as we don't want
     // to resize xterm and the pty process before the previous one has finished
     const debouncedFit = debounce(() => {
@@ -88,6 +87,6 @@ export default class TerminalService extends Service {
     window.webContentView?.destroyTerminalView();
     window.onresize = null;
     this.isTerminalViewCreated = false;
-    this.isTerminalViewOpen = false;
+    this.isTerminalTabActive = false;
   }
 }

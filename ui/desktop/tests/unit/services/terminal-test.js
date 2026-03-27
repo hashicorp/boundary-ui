@@ -34,21 +34,19 @@ module('Unit | Service | terminal', function (hooks) {
     assert.ok(service);
   });
 
-  test('shouldDisplayExistingTerminal is true only when terminal is created but not open', function (assert) {
-    service.isTerminalViewCreated = false;
-    service.isTerminalViewOpen = false;
-    assert.false(service.shouldDisplayExistingTerminal);
+  test('setTerminalTabActive hides the terminal when the terminal tab is not active', function (assert) {
+    service.setTerminalTabActive(true);
 
-    service.isTerminalViewCreated = true;
-    service.isTerminalViewOpen = true;
-    assert.false(service.shouldDisplayExistingTerminal);
+    assert.true(service.isTerminalTabActive);
+    assert.false(window.webContentView.hideTerminalView.called);
 
-    service.isTerminalViewCreated = true;
-    service.isTerminalViewOpen = false;
-    assert.true(service.shouldDisplayExistingTerminal);
+    service.setTerminalTabActive(false);
+
+    assert.false(service.isTerminalTabActive);
+    assert.true(window.webContentView.hideTerminalView.calledOnce);
   });
 
-  test('displayTerminalView positions and opens an existing terminal view', function (assert) {
+  test('displayTerminalView positions an existing terminal view', function (assert) {
     sinon.stub(service, 'terminalPosition').get(() => ({
       x: 10,
       y: 20,
@@ -57,27 +55,20 @@ module('Unit | Service | terminal', function (hooks) {
     }));
 
     service.isTerminalViewCreated = true;
-    service.isTerminalViewOpen = false;
     service.displayTerminalView();
 
     assert.true(window.webContentView.positionTerminalView.calledOnce);
-    assert.true(service.isTerminalViewOpen);
   });
 
   test('hideTerminalView hides the terminal', function (assert) {
-    service.isTerminalViewOpen = false;
-
     service.hideTerminalView();
     assert.true(window.webContentView.hideTerminalView.calledOnce);
-    assert.false(service.isTerminalViewOpen);
 
     window.webContentView.hideTerminalView.reset();
 
-    service.isTerminalViewOpen = true;
     service.hideTerminalView();
 
     assert.true(window.webContentView.hideTerminalView.calledOnce);
-    assert.false(service.isTerminalViewOpen);
   });
 
   test('createTerminalView is called with the correct payload', function (assert) {
@@ -101,17 +92,16 @@ module('Unit | Service | terminal', function (hooks) {
     assert.deepEqual(updatedPayload.position, expectedPosition);
 
     assert.true(service.isTerminalViewCreated);
-    assert.true(service.isTerminalViewOpen);
   });
 
   test('cleanup destroys the terminal view', function (assert) {
     service.isTerminalViewCreated = true;
-    service.isTerminalViewOpen = true;
+    service.isTerminalTabActive = true;
 
     service.cleanup();
 
     assert.true(window.webContentView.destroyTerminalView.calledOnce);
     assert.false(service.isTerminalViewCreated);
-    assert.false(service.isTerminalViewOpen);
+    assert.false(service.isTerminalTabActive);
   });
 });

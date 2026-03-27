@@ -81,14 +81,8 @@ class TerminalManager {
    * @param {Object} position - The position and size of the terminal view
    * @param {string} id - An optional identifier for the terminal session
    * @param {boolean} autoSSH - Whether to automatically send an SSH command to the terminal upon creation
-   * @param {number} zoomFactor - The main window zoom factor, used to scale the terminal view appropriately
    */
-  createTerminalView({
-    position,
-    id = undefined,
-    autoSSH = false,
-    zoomFactor,
-  }) {
+  createTerminalView({ position, id = undefined, autoSSH = false }) {
     this.#sessionId = id;
     this.#autoSSH = autoSSH;
     this.#terminalView = new WebContentsView({
@@ -103,29 +97,27 @@ class TerminalManager {
     });
 
     this.mainWindow.contentView.addChildView(this.#terminalView);
-    this.positionTerminalView({ position, zoomFactor });
+    this.positionTerminalView(position);
 
     this.#terminalView.webContents.loadURL(
       'serve://boundary/terminal/terminal.html',
     );
   }
 
-  positionTerminalView({ position, zoomFactor }) {
+  positionTerminalView(position) {
     if (!this.#terminalView) {
       return;
     }
+    const zoomFactor = this.mainWindow.webContents.getZoomFactor();
     // Keep terminal view zoom synced so that it scales correctly with the rest of the UI and appears at the correct size relative to the main window contents.
     this.#terminalView.webContents.setZoomFactor(zoomFactor);
 
-    const shouldScale = zoomFactor !== 1;
-    const scaledPosition = shouldScale
-      ? {
-          x: Math.round(position.x * zoomFactor),
-          y: Math.round(position.y * zoomFactor),
-          width: Math.round(position.width * zoomFactor),
-          height: Math.round(position.height * zoomFactor),
-        }
-      : position;
+    const scaledPosition = {
+      x: Math.round(position.x * zoomFactor),
+      y: Math.round(position.y * zoomFactor),
+      width: Math.round(position.width * zoomFactor),
+      height: Math.round(position.height * zoomFactor),
+    };
 
     this.#terminalView.setBounds(scaledPosition);
   }

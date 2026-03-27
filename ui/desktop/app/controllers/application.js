@@ -30,9 +30,6 @@ export default class ApplicationController extends Controller {
 
   removeOnAppQuitListener;
 
-  // This is used to track if the terminal view was open when user attempted to logout, so that we can conditionally show the terminal view again if they cancel logout
-  isTerminalViewOpenBeforeLogout = false;
-
   constructor() {
     super(...arguments);
     // Listen for when user attempts to quit app
@@ -157,13 +154,9 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
-    if (
-      this.isTerminalViewOpenBeforeLogout &&
-      this.terminal.shouldDisplayExistingTerminal
-    ) {
+    if (this.terminal.isTerminalTabActive) {
       this.terminal.displayTerminalView();
     }
-    this.isTerminalViewOpenBeforeLogout = false;
   }
 
   willDestroy() {
@@ -197,16 +190,11 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Hides terminal if open for logout/app quit modal
+   * Hides terminal if open and on shell tab of Session details page for logout/app quit modal
    */
   hideTerminalViewForModal() {
-    if (
-      this.terminal.isTerminalViewOpen &&
-      !this.isTerminalViewOpenBeforeLogout
-    ) {
-      this.isTerminalViewOpenBeforeLogout = true;
+    if (this.terminal.isTerminalTabActive) {
       this.terminal.hideTerminalView();
     }
   }
-  å;
 }

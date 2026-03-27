@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { ipcRenderer, contextBridge, webFrame } = require('electron');
+const { ipcRenderer, contextBridge } = require('electron');
 
 /**
  * Exposes `desktop` via Electron ContextBridge to the renderer process. It is grouped into nested objects based on the type of functionality.
@@ -85,12 +85,12 @@ contextBridge.exposeInMainWorld('desktop', {
   },
 });
 
+/**
+ * Exposes `webContentView` via Electron ContextBridge to the renderer process for managing the terminal view
+ */
 contextBridge.exposeInMainWorld('webContentView', {
   createTerminalView: (params) => {
-    ipcRenderer.send('createTerminalView', {
-      ...params,
-      zoomFactor: webFrame.getZoomFactor(),
-    });
+    ipcRenderer.send('createTerminalView', params);
   },
   destroyTerminalView: () => {
     ipcRenderer.send('destroyTerminalView');
@@ -99,9 +99,6 @@ contextBridge.exposeInMainWorld('webContentView', {
     ipcRenderer.send('hideTerminalView');
   },
   positionTerminalView: (position) => {
-    ipcRenderer.send('positionTerminalView', {
-      position,
-      zoomFactor: webFrame.getZoomFactor(),
-    });
+    ipcRenderer.send('positionTerminalView', position);
   },
 });
