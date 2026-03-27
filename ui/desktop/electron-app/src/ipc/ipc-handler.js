@@ -25,14 +25,15 @@ module.exports = function handle(command, handler) {
     try {
       const result = await handler(requestPayload);
       log(command, requestPayload, result);
-      return { ok: true, result };
+      return { result };
     } catch (e) {
-      // If e is an Error instance, we need to extract the message and wrap
-      // it in a POJO before stringifying it.  If not an Error, e is assumed to
+      // If e is an Error instance, we need to extract the message, name and wrap
+      // it in a POJO. If not an Error, e is assumed to
       // be already a POJO.
-      const error = e instanceof Error ? { message: e.message } : e;
+      const error =
+        e instanceof Error ? { message: e.message, name: e.name } : e;
       log(command, requestPayload, e, 'error');
-      return { ok: false, error };
+      return { error };
     }
   });
 };

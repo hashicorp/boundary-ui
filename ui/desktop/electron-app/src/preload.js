@@ -9,11 +9,14 @@ const { ipcRenderer, contextBridge, webFrame } = require('electron');
  * Helper function to invoke IPC calls to properly handle errors
  */
 async function invoke(method, payload) {
-  const response = await ipcRenderer.invoke(method, payload);
-  if (response?.ok) return response.result;
-
-  const errorMessage = response?.error?.message ?? 'Unknown error';
-  throw new Error(errorMessage);
+  const { error, result } = await ipcRenderer.invoke(method, payload);
+  if (error) {
+    const { message, name } = error;
+    const err = new Error(message ?? 'Unknown error');
+    err.name = name ?? 'Error';
+    throw err;
+  }
+  return result;
 }
 
 /**
@@ -93,9 +96,6 @@ contextBridge.exposeInMainWorld('desktop', {
   },
 });
 
-/**
- * Exposes `webContentView` via Electron ContextBridge to the renderer process for managing the terminal view
- */
 contextBridge.exposeInMainWorld('webContentView', {
   createTerminalView: (params) => {
     ipcRenderer.send('createTerminalView', {
