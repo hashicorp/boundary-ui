@@ -129,7 +129,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_EDIT_GRANTS);
-
     await click(selectors.EXPORT_GRANTS_BTN);
 
     assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
