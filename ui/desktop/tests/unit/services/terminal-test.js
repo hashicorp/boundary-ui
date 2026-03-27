@@ -105,26 +105,4 @@ module('Unit | Service | terminal', function (hooks) {
     assert.false(service.isTerminalTabActive);
     assert.false(service.isSideNavMinimized);
   });
-
-  test('canDisplayExistingTerminal returns correctly when terminal tab is active and side nav is minimized', function (assert) {
-    service.isTerminalTabActive = true;
-    service.isSideNavMinimized = true;
-
-    assert.true(service.canDisplayExistingTerminal);
-
-    service.isTerminalTabActive = false;
-    service.isSideNavMinimized = true;
-
-    assert.false(service.canDisplayExistingTerminal);
-
-    service.isTerminalTabActive = true;
-    service.isSideNavMinimized = false;
-
-    assert.false(service.canDisplayExistingTerminal);
-
-    service.isTerminalTabActive = false;
-    service.isSideNavMinimized = false;
-
-    assert.false(service.canDisplayExistingTerminal);
-  });
 });

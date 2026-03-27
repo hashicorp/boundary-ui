@@ -154,7 +154,7 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
-    if (this.terminal.canDisplayExistingTerminal) {
+    if (this.terminal.isTerminalTabActive) {
       this.terminal.displayTerminalView();
     }
   }
@@ -193,7 +193,7 @@ export default class ApplicationController extends Controller {
    * Hides terminal if open and on terminal tab of Session details page for logout/app quit modal
    */
   hideTerminalViewForModal() {
-    if (this.terminal.canDisplayExistingTerminal) {
+    if (this.terminal.isTerminalTabActive) {
       this.terminal.hideTerminalView();
     }
   }

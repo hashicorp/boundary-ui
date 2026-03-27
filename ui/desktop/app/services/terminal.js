@@ -47,10 +47,6 @@ export default class TerminalService extends Service {
     return calculateTerminalContainerHeight(termContainer);
   }
 
-  get canDisplayExistingTerminal() {
-    return this.isTerminalTabActive && this.isSideNavMinimized;
-  }
-
   // =methods
 
   setTerminalTabActive(isActive) {
