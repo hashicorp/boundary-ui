@@ -6,70 +6,78 @@
 const { ipcRenderer, contextBridge } = require('electron');
 
 /**
+ * Helper function to invoke IPC calls to properly handle errors
+ */
+async function invoke(method, payload) {
+  const { error, result } = await ipcRenderer.invoke(method, payload);
+  if (error) {
+    throw new Error(error.message ?? 'Unknown error');
+  }
+  return result;
+}
+
+/**
  * Exposes `desktop` via Electron ContextBridge to the renderer process. It is grouped into nested objects based on the type of functionality.
  * use example: window.desktop.cluster.getClusterUrl().
  */
 contextBridge.exposeInMainWorld('desktop', {
   cluster: {
-    getClusterUrl: () => ipcRenderer.invoke('getClusterUrl'),
-    setClusterUrl: (url) => ipcRenderer.invoke('setClusterUrl', url),
-    resetClusterUrl: () => ipcRenderer.invoke('resetClusterUrl'),
+    getClusterUrl: () => invoke('getClusterUrl'),
+    setClusterUrl: (url) => invoke('setClusterUrl', url),
+    resetClusterUrl: () => invoke('resetClusterUrl'),
   },
 
   system: {
-    openExternal: (href) => ipcRenderer.invoke('openExternal', href),
-    cliExists: () => ipcRenderer.invoke('cliExists'),
-    getCliVersion: () => ipcRenderer.invoke('getCliVersion'),
-    checkCommand: (command) => ipcRenderer.invoke('checkCommand', command),
-    checkOS: () => ipcRenderer.invoke('checkOS'),
-    getDesktopVersion: () => ipcRenderer.invoke('getDesktopVersion'),
+    openExternal: (href) => invoke('openExternal', href),
+    cliExists: () => invoke('cliExists'),
+    getCliVersion: () => invoke('getCliVersion'),
+    checkCommand: (command) => invoke('checkCommand', command),
+    checkOS: () => invoke('checkOS'),
+    getDesktopVersion: () => invoke('getDesktopVersion'),
   },
 
   session: {
-    connectSession: (params) => ipcRenderer.invoke('connect', params),
-    stopSession: (params) => ipcRenderer.invoke('stop', params),
-    stopAllSessions: () => ipcRenderer.invoke('stopAll'),
-    hasRunningSessions: () => ipcRenderer.invoke('hasRunningSessions'),
+    connectSession: (params) => invoke('connect', params),
+    stopSession: (params) => invoke('stop', params),
+    stopAllSessions: () => invoke('stopAll'),
+    hasRunningSessions: () => invoke('hasRunningSessions'),
   },
 
   windowAction: {
-    hasMacOSChrome: () => ipcRenderer.invoke('hasMacOSChrome'),
-    showWindowActions: () => ipcRenderer.invoke('showWindowActions'),
-    minimizeWindow: () => ipcRenderer.invoke('minimizeWindow'),
-    toggleFullscreenWindow: () => ipcRenderer.invoke('toggleFullscreenWindow'),
-    closeWindow: () => ipcRenderer.invoke('closeWindow'),
-    focusWindow: () => ipcRenderer.invoke('focusWindow'),
+    hasMacOSChrome: () => invoke('hasMacOSChrome'),
+    showWindowActions: () => invoke('showWindowActions'),
+    minimizeWindow: () => invoke('minimizeWindow'),
+    toggleFullscreenWindow: () => invoke('toggleFullscreenWindow'),
+    closeWindow: () => invoke('closeWindow'),
+    focusWindow: () => invoke('focusWindow'),
   },
 
   daemon: {
-    addTokenToDaemons: (data) => ipcRenderer.invoke('addTokenToDaemons', data),
-    searchCacheDaemon: (request) =>
-      ipcRenderer.invoke('searchCacheDaemon', request),
-    isCacheDaemonRunning: () => ipcRenderer.invoke('isCacheDaemonRunning'),
-    cacheDaemonStatus: () => ipcRenderer.invoke('cacheDaemonStatus'),
+    addTokenToDaemons: (data) => invoke('addTokenToDaemons', data),
+    searchCacheDaemon: (request) => invoke('searchCacheDaemon', request),
+    isCacheDaemonRunning: () => invoke('isCacheDaemonRunning'),
+    cacheDaemonStatus: () => invoke('cacheDaemonStatus'),
   },
 
   clientAgent: {
-    getClientAgentSessions: () => ipcRenderer.invoke('getClientAgentSessions'),
-    isClientAgentRunning: () => ipcRenderer.invoke('isClientAgentRunning'),
-    clientAgentStatus: () => ipcRenderer.invoke('clientAgentStatus'),
-    pauseClientAgent: () => ipcRenderer.invoke('pauseClientAgent'),
-    resumeClientAgent: () => ipcRenderer.invoke('resumeClientAgent'),
+    getClientAgentSessions: () => invoke('getClientAgentSessions'),
+    isClientAgentRunning: () => invoke('isClientAgentRunning'),
+    clientAgentStatus: () => invoke('clientAgentStatus'),
+    pauseClientAgent: () => invoke('pauseClientAgent'),
+    resumeClientAgent: () => invoke('resumeClientAgent'),
   },
 
   logging: {
-    getLogLevel: () => ipcRenderer.invoke('getLogLevel'),
-    setLogLevel: (logLevel) => ipcRenderer.invoke('setLogLevel', logLevel),
-    getLogPath: () => ipcRenderer.invoke('getLogPath'),
+    getLogLevel: () => invoke('getLogLevel'),
+    setLogLevel: (logLevel) => invoke('setLogLevel', logLevel),
+    getLogPath: () => invoke('getLogPath'),
   },
 
   rdp: {
-    getRdpClients: () => ipcRenderer.invoke('getRdpClients'),
-    getPreferredRdpClient: () => ipcRenderer.invoke('getPreferredRdpClient'),
-    setPreferredRdpClient: (client) =>
-      ipcRenderer.invoke('setPreferredRdpClient', client),
-    launchRdpClient: (sessionId) =>
-      ipcRenderer.invoke('launchRdpClient', sessionId),
+    getRdpClients: () => invoke('getRdpClients'),
+    getPreferredRdpClient: () => invoke('getPreferredRdpClient'),
+    setPreferredRdpClient: (client) => invoke('setPreferredRdpClient', client),
+    launchRdpClient: (sessionId) => invoke('launchRdpClient', sessionId),
   },
 
   app: {
