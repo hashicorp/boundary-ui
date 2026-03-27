@@ -11,10 +11,7 @@ const { ipcRenderer, contextBridge, webFrame } = require('electron');
 async function invoke(method, payload) {
   const { error, result } = await ipcRenderer.invoke(method, payload);
   if (error) {
-    const { message, name } = error;
-    const err = new Error(message ?? 'Unknown error');
-    err.name = name ?? 'Error';
-    throw err;
+    throw error;
   }
   return result;
 }
