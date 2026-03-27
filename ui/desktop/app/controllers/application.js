@@ -154,7 +154,7 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
-    if (this.terminal.isTerminalTabActive) {
+    if (this.terminal.canDisplayExistingTerminal) {
       this.terminal.displayTerminalView();
     }
   }
@@ -190,11 +190,31 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Hides terminal if open and on shell tab of Session details page for logout/app quit modal
+   * Hides terminal if open and on terminal tab of Session details page for logout/app quit modal
    */
   hideTerminalViewForModal() {
-    if (this.terminal.isTerminalTabActive) {
+    if (this.terminal.canDisplayExistingTerminal) {
       this.terminal.hideTerminalView();
+    }
+  }
+
+  /**
+   * Handles side nav toggle to hide/show terminal based on side nav state
+   * @param {boolean} isMinimized - Whether the side nav is minimized i.e. collapsed
+   */
+  @action
+  handleSideNavToggle(isMinimized) {
+    this.terminal.setSideNavMinimized(isMinimized);
+
+    // update terminal view if we're on the terminal tab
+    if (this.terminal.isTerminalTabActive) {
+      if (isMinimized) {
+        // Side nav is collapsed, display terminal view
+        this.terminal.displayTerminalView();
+      } else {
+        // Side nav is expanded, hide terminal view
+        this.terminal.hideTerminalView();
+      }
     }
   }
 }

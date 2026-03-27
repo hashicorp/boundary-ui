@@ -133,7 +133,7 @@
   </Frame.Header>
 
   <Frame.Sidebar>
-    <Hds::AppSideNav>
+    <Hds::AppSideNav @onToggleMinimizedStatus={{this.handleSideNavToggle}}>
       <Hds::AppSideNav::Portal::Target />
     </Hds::AppSideNav>
   </Frame.Sidebar>

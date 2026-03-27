@@ -37,9 +37,18 @@ export default class TerminalService extends Service {
    */
   @tracked isTerminalTabActive = false;
 
+  /**
+   * Tracks whether the app side nav is minimized i.e. collapsed so we can determine whether to display/hide the existing terminal view
+   */
+  @tracked isSideNavMinimized = true;
+
   get terminalPosition() {
     const termContainer = document.getElementById('terminal-container');
     return calculateTerminalContainerHeight(termContainer);
+  }
+
+  get canDisplayExistingTerminal() {
+    return this.isTerminalTabActive && this.isSideNavMinimized;
   }
 
   // =methods
@@ -50,6 +59,10 @@ export default class TerminalService extends Service {
     if (!isActive) {
       this.hideTerminalView();
     }
+  }
+
+  setSideNavMinimized(isMinimized) {
+    this.isSideNavMinimized = isMinimized;
   }
 
   /**
@@ -88,5 +101,6 @@ export default class TerminalService extends Service {
     window.onresize = null;
     this.isTerminalViewCreated = false;
     this.isTerminalTabActive = false;
+    this.isSideNavMinimized = false;
   }
 }
