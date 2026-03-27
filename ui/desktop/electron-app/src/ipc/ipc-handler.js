@@ -26,9 +26,9 @@ module.exports = function handle(command, handler) {
       const result = await handler(requestPayload);
       log(command, requestPayload, result);
       return { result };
-    } catch (e) {
-      log(command, requestPayload, e, 'error');
-      return { error: e };
+    } catch (error) {
+      log(command, requestPayload, error, 'error');
+      return { error };
     }
   });
 };
