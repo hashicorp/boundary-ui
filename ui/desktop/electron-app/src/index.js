@@ -23,6 +23,7 @@ const sessionManager = require('./services/session-manager.js');
 const cacheDaemonManager = require('./services/cache-daemon-manager');
 const rdpClientManager = require('./services/rdp-client-manager');
 const store = require('./services/electron-store-manager');
+const terminalManager = require('./services/terminal-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -223,6 +224,16 @@ app.on('ready', async () => {
       : path.normalize(`${emberAppDir}${absolutePath}`);
 
     if (isDev) console.log('[serving]', request.url);
+
+    if (request.url.includes('/terminal/')) {
+      // Serve terminal view
+      const urlPath = new URL(request.url).pathname;
+      const filename = path.basename(urlPath);
+      const terminalViewPath = path.normalize(
+        `${__dirname}/../terminal-view-dist/${filename}`,
+      );
+      return net.fetch(`file://${terminalViewPath}`);
+    }
     return net.fetch(`file://${normalizedPath}`);
   });
 
@@ -299,6 +310,8 @@ app.on('quit', () => {
   cacheDaemonManager.stop();
   // we should stop any active RDP client processes
   rdpClientManager.stopAll();
+  // destroy the terminal view
+  terminalManager.destroyTerminalView();
 });
 
 // Handle an unhandled error in the main thread
