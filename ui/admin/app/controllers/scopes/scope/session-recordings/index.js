@@ -17,6 +17,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   @service store;
   @service intl;
   @service db;
+  @service router;
 
   // =attributes
 
