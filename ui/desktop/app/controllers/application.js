@@ -21,6 +21,7 @@ export default class ApplicationController extends Controller {
   @service router;
   @service scope;
   @service intl;
+  @service terminal;
 
   // =attributes
 
@@ -35,6 +36,7 @@ export default class ApplicationController extends Controller {
     // Setup removeOnAppQuitListener to destroy the listener afterwards
     this.removeOnAppQuitListener = this.window.desktop?.app.onAppQuit(() => {
       this.isAppQuitting = true;
+      this.hideTerminalViewForModal();
     });
   }
 
@@ -91,6 +93,7 @@ export default class ApplicationController extends Controller {
       await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
+      this.hideTerminalViewForModal();
     } else {
       this.session.invalidate();
     }
@@ -151,6 +154,9 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
+    if (this.terminal.isTerminalTabActive) {
+      this.terminal.displayTerminalView();
+    }
   }
 
   willDestroy() {
@@ -181,5 +187,34 @@ export default class ApplicationController extends Controller {
       return JSON.stringify(toParams) !== JSON.stringify(fromParams);
     }
     return defaultValidator(transition);
+  }
+
+  /**
+   * Hides terminal if open and on terminal tab of Session details page for logout/app quit modal
+   */
+  hideTerminalViewForModal() {
+    if (this.terminal.isTerminalTabActive) {
+      this.terminal.hideTerminalView();
+    }
+  }
+
+  /**
+   * Handles side nav toggle to hide/show terminal based on side nav state
+   * @param {boolean} isMinimized - Whether the side nav is minimized i.e. collapsed
+   */
+  @action
+  handleSideNavToggle(isMinimized) {
+    this.terminal.setSideNavMinimized(isMinimized);
+
+    // update terminal view if we're on the terminal tab
+    if (this.terminal.isTerminalTabActive) {
+      if (isMinimized) {
+        // Side nav is collapsed, display terminal view
+        this.terminal.displayTerminalView();
+      } else {
+        // Side nav is expanded, hide terminal view
+        this.terminal.hideTerminalView();
+      }
+    }
   }
 }

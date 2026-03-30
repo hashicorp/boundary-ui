@@ -25,6 +25,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   @service session;
   @service router;
   @service abilities;
+  @service terminal;
 
   // =attributes
 
@@ -154,14 +155,19 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
       });
     }
 
-    await updatedSession.cancelSession();
-
-    await window.desktop.session.stopSession({ session_id: session.id });
-    if (
-      this.router.currentRoute.name ===
-      'scopes.scope.projects.sessions.session.index'
-    ) {
-      this.router.replaceWith('scopes.scope.projects.targets.index');
+    try {
+      await updatedSession.cancelSession();
+      await window.desktop.session.stopSession({ session_id: session.id });
+      if (
+        this.router.currentRoute.name ===
+        'scopes.scope.projects.sessions.session.index'
+      ) {
+        this.router.replaceWith('scopes.scope.projects.targets.index');
+      }
+    } catch (e) {
+      // hide terminal view
+      this.terminal.hideTerminalView();
+      throw e;
     }
   }
 

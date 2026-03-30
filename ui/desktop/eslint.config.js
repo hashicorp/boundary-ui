@@ -103,5 +103,7 @@ module.exports = defineConfig([
     '.node_modules.ember-try/',
     'electron-app/out/',
     'electron-app/ember-dist/',
+    'electron-app/terminal-view-dist/',
+    'electron-app/src/terminal-view/**/*.js',
   ]),
 ]);

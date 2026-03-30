@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service intl;
   @service rdp;
+  @service terminal;
 
   // =attributes
 
@@ -83,6 +84,8 @@ export default class ApplicationRoute extends Route {
   @action
   error(e) {
     const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
+    // clean up terminal view for all errors
+    this.terminal.cleanup();
     if (isUnauthenticated) {
       this.session.invalidate();
       return false;
