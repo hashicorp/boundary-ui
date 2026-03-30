@@ -10,7 +10,12 @@
     as |LG|
   >
     <LG.Item @colspan={{hash sm=1 md=2}}>
-      {{! TODO: Add grants code editor. }}
+      <Hds::CodeEditor
+        @ariaLabel='grant-strings-editor'
+        @value={{this.grantStringsText}}
+        @customExtensions={{this.customExtensions}}
+        {{on 'input' (set-from-event this 'grantStringsText')}}
+      />
     </LG.Item>
 
     <Hds::Accordion @size='large' as |A|>
@@ -77,7 +82,7 @@
       <Hds::ButtonSet>
         <Hds::Button type='submit' @text={{t 'actions.save'}} />
         <Hds::Button @text={{t 'actions.cancel'}} @color='secondary' />
-        {{#if this.grantStringLines}}
+        {{#if this.grantStringsText}}
           <Hds::Button
             @text={{t 'actions.export'}}
             @color='tertiary'

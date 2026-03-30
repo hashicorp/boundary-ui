@@ -28,6 +28,10 @@ module('Acceptance | roles/edit grants', function (hooks) {
     instances.scopes.global = this.server.schema.scopes.find('global');
     instances.role = this.server.create('role', {
       scope: instances.scopes.global,
+      grant_strings: [
+        'ids=*;type=role;actions=read',
+        'ids=ttcp_1234567890;type=target;actions=authorize-session',
+      ],
     });
     urls.role = `/scopes/global/roles/${instances.role.id}`;
     urls.editGrants = `${urls.role}/edit-grants`;

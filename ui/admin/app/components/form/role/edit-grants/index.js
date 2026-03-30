@@ -6,17 +6,26 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-
+import {
+  linter,
+  lintGutter,
+  keymap,
+  lintKeymap,
+} from '@hashicorp/design-system-components/codemirror';
+import { createGrantLinter } from 'admin/utils/grant-linter';
 export default class FormRoleEditGrants extends Component {
   // =attributes
 
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
+  linterSource = createGrantLinter(this.args.grantsSchema);
+  customExtensions = [
+    linter(this.linterSource),
+    lintGutter(),
+    keymap.of(lintKeymap),
+  ];
 
-  // TODO: Replace with actual grant lines from code editor once implemented.
-  grantStringLines =
-    'ids=hc_123;type=host-catalog;actions=read,create,list\nids=ttcp_123;type=target;actions=list\ntype=credential;actions=create';
-
+  @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
 
@@ -37,7 +46,7 @@ export default class FormRoleEditGrants extends Component {
    */
   get terraformFormattedExport() {
     let formatted = `grant_strings = [ \n`;
-    this.grantStringLines.split('\n').forEach((line) => {
+    this.grantStringsText.split('\n').forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
@@ -50,7 +59,7 @@ export default class FormRoleEditGrants extends Component {
    */
   get nativeHclFormattedExport() {
     let formatted = `[ \n`;
-    this.grantStringLines.split('\n').forEach((line) => {
+    this.grantStringsText.split('\n').forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
