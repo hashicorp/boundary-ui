@@ -312,21 +312,21 @@ const grantLinter = (context, schema) => {
     if (parsedFields.ids) {
       const idsValue = parsedFields.ids.trim();
       const pos = fieldPositions.ids;
-      if (idsValue !== '*') {
-        const idsList = idsValue
-          .split(',')
-          .map((id) => id.trim())
-          .filter((id) => id);
-        const typeValue = parsedFields?.type?.trim();
-        if (idsList.length === 0) {
-          const pos = fieldPositions.ids;
-          diagnostics.push({
-            from: pos.valueStart,
-            to: pos.valueEnd,
-            severity: 'error',
-            message: '"ids" field must contain at least one id',
-          });
-        } else if (idsList.includes('*') && idsList.length > 1) {
+      const idsList = idsValue
+        .split(',')
+        .map((id) => id.trim())
+        .filter((id) => id);
+      const typeValue = parsedFields?.type?.trim();
+      if (idsList.length === 0) {
+        const pos = fieldPositions.ids;
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: '"ids" field must contain at least one id',
+        });
+      } else if (idsList.includes('*')) {
+        if (idsList.length > 1) {
           const wildCardIndex = pos.valueStart + parsedFields.ids.indexOf('*');
           diagnostics.push({
             from: wildCardIndex,
@@ -335,98 +335,98 @@ const grantLinter = (context, schema) => {
             message: 'Wildcard id "*" cannot be combined with other ids',
             actions: [createDeleteTextAction('Remove wildcard from ids')],
           });
-        } else if (typeValue === '*') {
-          // If type is wildcard, then pinned id(s) must support child types
-          let expectedIdType; // Type to which ids must match
-          for (const id of idsList) {
-            const prefix = id.split('_')[0];
-            if (!schema.parentResourcesByPrefix[prefix]) {
-              const pos = fieldPositions.ids;
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: `Id must support child types. Invalid id "${id}"`,
-              });
-              break; // Only show one error per ids field
-            }
-            expectedIdType =
-              expectedIdType || schema.parentResourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
-            if (schema.parentResourcesByPrefix[prefix] !== expectedIdType) {
-              const pos = fieldPositions.ids;
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: `All ids must have the same type. Invalid id "${id}"`,
-              });
-              break; // Only show one error per ids field
-            }
-          }
-        } else if (schema.validResourceTypes.includes(typeValue)) {
-          // Validate pinned-id format only if type is a specific resource type (not wildcard)
-          const expectedIdType =
-            typeValue === 'scope'
-              ? typeValue
-              : schema.resourcesByType[typeValue]?.parentType;
-          if (!expectedIdType) {
+        }
+      } else if (typeValue === '*') {
+        // If type is wildcard, then pinned id(s) must support child types
+        let expectedIdType; // Type to which ids must match
+        for (const id of idsList) {
+          const prefix = id.split('_')[0];
+          if (!schema.parentResourcesByPrefix[prefix]) {
+            const pos = fieldPositions.ids;
             diagnostics.push({
-              from: fieldPositions.type.valueStart,
-              to: fieldPositions.type.valueEnd,
+              from: pos.valueStart,
+              to: pos.valueEnd,
               severity: 'error',
-              message: `Resource type "${typeValue}" cannot be used for pinning by id`,
+              message: `Id must support child types. Invalid id "${id}"`,
             });
-          } else {
-            const allowedPrefixes =
-              schema.resourcesByType[expectedIdType].idPrefixes;
-            for (const id of idsList) {
-              const prefix = id.split('_')[0];
-              if (!allowedPrefixes.includes(prefix)) {
-                diagnostics.push({
-                  from: pos.valueStart,
-                  to: pos.valueEnd,
-                  severity: 'error',
-                  message: `Invalid id "${id}" for resource type "${typeValue}". Valid id prefixes: ${allowedPrefixes.join(', ')}`,
-                });
-                break; // Only show one error per ids field
-              }
-            }
+            break; // Only show one error per ids field
           }
+          expectedIdType =
+            expectedIdType || schema.parentResourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
+          if (schema.parentResourcesByPrefix[prefix] !== expectedIdType) {
+            const pos = fieldPositions.ids;
+            diagnostics.push({
+              from: pos.valueStart,
+              to: pos.valueEnd,
+              severity: 'error',
+              message: `All ids must have the same type. Invalid id "${id}"`,
+            });
+            break; // Only show one error per ids field
+          }
+        }
+      } else if (schema.validResourceTypes.includes(typeValue)) {
+        // Validate pinned-id format only if type is a specific resource type (not wildcard)
+        const expectedIdType =
+          typeValue === 'scope'
+            ? typeValue
+            : schema.resourcesByType[typeValue]?.parentType;
+        if (!expectedIdType) {
+          diagnostics.push({
+            from: fieldPositions.type.valueStart,
+            to: fieldPositions.type.valueEnd,
+            severity: 'error',
+            message: `Resource type "${typeValue}" cannot be used for pinning by id`,
+          });
         } else {
-          let expectedIdType; // Type to which ids must match
+          const allowedPrefixes =
+            schema.resourcesByType[expectedIdType].idPrefixes;
           for (const id of idsList) {
             const prefix = id.split('_')[0];
-            if (schema.templateIdTypes.includes(id)) {
-              continue; // Skip validation for valid template IDs
-            }
-            if (id.startsWith('{{') && id.endsWith('}}')) {
+            if (!allowedPrefixes.includes(prefix)) {
               diagnostics.push({
                 from: pos.valueStart,
                 to: pos.valueEnd,
                 severity: 'error',
-                message: `Unknown template "${id}". Valid templates: ${schema.templateIdTypes.join(', ')}`,
+                message: `Invalid id "${id}" for resource type "${typeValue}". Valid id prefixes: ${allowedPrefixes.join(', ')}`,
               });
               break; // Only show one error per ids field
             }
-            if (!schema.resourcesByPrefix[prefix]) {
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: `Invalid id "${id}"`,
-              });
-              break; // Only show one error per ids field
-            }
-            expectedIdType = expectedIdType || schema.resourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
-            if (schema.resourcesByPrefix[prefix] !== expectedIdType) {
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: `All ids must have the same type. Invalid id "${id}"`,
-              });
-              break; // Only show one error per ids field
-            }
+          }
+        }
+      } else {
+        let expectedIdType; // Type to which ids must match
+        for (const id of idsList) {
+          const prefix = id.split('_')[0];
+          if (schema.templateIdTypes.includes(id)) {
+            continue; // Skip validation for valid template IDs
+          }
+          if (id.startsWith('{{') && id.endsWith('}}')) {
+            diagnostics.push({
+              from: pos.valueStart,
+              to: pos.valueEnd,
+              severity: 'error',
+              message: `Unknown template "${id}". Valid templates: ${schema.templateIdTypes.join(', ')}`,
+            });
+            break; // Only show one error per ids field
+          }
+          if (!schema.resourcesByPrefix[prefix]) {
+            diagnostics.push({
+              from: pos.valueStart,
+              to: pos.valueEnd,
+              severity: 'error',
+              message: `Invalid id "${id}"`,
+            });
+            break; // Only show one error per ids field
+          }
+          expectedIdType = expectedIdType || schema.resourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
+          if (schema.resourcesByPrefix[prefix] !== expectedIdType) {
+            diagnostics.push({
+              from: pos.valueStart,
+              to: pos.valueEnd,
+              severity: 'error',
+              message: `All ids must have the same type. Invalid id "${id}"`,
+            });
+            break; // Only show one error per ids field
           }
         }
       }

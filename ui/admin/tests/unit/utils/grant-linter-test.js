@@ -168,6 +168,14 @@ module('Unit | Utility | grant-linter', function (hooks) {
         'All ids must have the same type. Invalid id "g_1234"',
       ], // all ids must be same type when type is not specified
       ['ids=none_1234,csvlt_123;actions=list', 'Invalid id "none_1234"'], // valid ids prefixes only
+      [
+        'ids=g_123,amoidc_456;type=*;actions=read,list',
+        'Id must support child types. Invalid id "g_123"',
+      ], // all ids must support child types when type is wildcard
+      [
+        'ids=amoidc_456,hcst_123;type=*;actions=read,list',
+        'All ids must have the same type. Invalid id "hcst_123"',
+      ], // all ids must be the same type when type is wildcard
       ['ids=cs_1234,csst_5678;actions=read'], // valid ids when they are the same type and type is not specified
       ['ids=*;actions=read'], // valid wildcard id
       ['ids=hcst_123,hcplg_456;type=host-set;actions=read'], // valid pinned ids for host-set resource type
@@ -175,6 +183,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids={{.Account.Id}},{{.User.Id}};actions=read'], // valid template ids when type is not specified
       ['ids=global,o_123;type=scope;actions=list,read'], // valid ids for type scope
       ['ids=csst_1234,csvlt_5678;actions=*'], // valid id prefixes with same type
+      ['ids=amldap_123,amoidc_456;type=*;actions=read,list'], // valid ids with wildcard type
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));
