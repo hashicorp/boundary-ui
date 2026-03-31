@@ -868,10 +868,10 @@ packages:
         integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==,
       }
 
-  brace-expansion@2.0.2:
+  brace-expansion@2.0.3:
     resolution:
       {
-        integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==,
+        integrity: sha512-MCV/fYJEbqx68aE58kv2cA/kiky1G8vux3OR6/jbS+jIMe/6fJWa0DTzJU7dqijOWYwHi1t29FlfYI9uytqlpA==,
       }
 
   brace-expansion@5.0.3:
@@ -2297,10 +2297,10 @@ packages:
       }
     engines: { node: ^12.13.0 || ^14.15.0 || >=16.0.0 }
 
-  minipass-flush@1.0.5:
+  minipass-flush@1.0.7:
     resolution:
       {
-        integrity: sha512-JmQSYYpPUqX5Jyn1mXaRwOda1uQ8HP5KAT/oDSLCzt1BYRhQU0/hDtsB1ufZfEEzMZ9aAVmsBw8+FWsIXlClWw==,
+        integrity: sha512-TbqTz9cUwWyHS2Dy89P3ocAGUGxKjjLuR9z8w4WUTGAVgEj17/4nhgo2Du56i0Fm3Pm30g4iA8Lcqctc76jCzA==,
       }
     engines: { node: '>= 8' }
 
@@ -2680,10 +2680,10 @@ packages:
         integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==,
       }
 
-  picomatch@2.3.1:
+  picomatch@2.3.2:
     resolution:
       {
-        integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==,
+        integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==,
       }
     engines: { node: '>=8.6' }
 
@@ -4163,7 +4163,7 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.0.2:
+  brace-expansion@2.0.3:
     dependencies:
       balanced-match: 1.0.2
 
@@ -4195,7 +4195,7 @@ snapshots:
       lru-cache: 7.18.3
       minipass: 3.3.6
       minipass-collect: 1.0.2
-      minipass-flush: 1.0.5
+      minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
@@ -5040,7 +5040,7 @@ snapshots:
       minipass: 3.3.6
       minipass-collect: 1.0.2
       minipass-fetch: 2.1.2
-      minipass-flush: 1.0.5
+      minipass-flush: 1.0.7
       minipass-pipeline: 1.2.4
       negotiator: 0.6.4
       promise-retry: 2.0.1
@@ -5070,7 +5070,7 @@ snapshots:
   micromatch@4.0.8:
     dependencies:
       braces: 3.0.3
-      picomatch: 2.3.1
+      picomatch: 2.3.2
 
   mimic-fn@2.1.0: {}
 
@@ -5086,7 +5086,7 @@ snapshots:
 
   minimatch@5.1.9:
     dependencies:
-      brace-expansion: 2.0.2
+      brace-expansion: 2.0.3
 
   minimatch@9.0.8:
     dependencies:
@@ -5106,7 +5106,7 @@ snapshots:
     optionalDependencies:
       encoding: 0.1.13
 
-  minipass-flush@1.0.5:
+  minipass-flush@1.0.7:
     dependencies:
       minipass: 3.3.6
 
@@ -5301,7 +5301,7 @@ snapshots:
 
   pend@1.2.0: {}
 
-  picomatch@2.3.1: {}
+  picomatch@2.3.2: {}
 
   pify@2.3.0: {}
 
