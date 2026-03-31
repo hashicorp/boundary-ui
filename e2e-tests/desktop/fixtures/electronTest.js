@@ -140,19 +140,13 @@ export const electronTest = test.extend({
   // Get terminal WebContentsView when it's created
   terminalView: async ({ electronApp }, use) => {
     const getTerminalView = async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-
-      const windows = electronApp.windows();
+      const windows = await electronApp.windows();
       // terminal view is loaded at - serve://boundary/terminal
-      const terminal = windows.find((w) => w.url().includes('terminal'));
-
-      if (terminal) {
-        return terminal;
-      }
-
-      return undefined;
+      const terminal = windows.find((window) =>
+        window.url().includes('terminal'),
+      );
+      return terminal;
     };
-
     await use(getTerminalView);
   },
 });
