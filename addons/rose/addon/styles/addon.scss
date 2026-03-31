@@ -3,6 +3,40 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@use '@hashicorp/design-system-components';
+@use 'themed-tokens/with-css-selectors--migration/tokens.css';
+@use '@hashicorp/design-system-components-common.scss';
+@use '@hashicorp/design-system-plex-fonts.css';
 @use 'hds/themes/dark-mode';
 @use 'hds/overrides';
+
+// TEMP - THEME TESTING
+
+.projects-theming-test {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 24px 0;
+
+  --local-foreground-color: var(--token-color-foreground-primary);
+  --local-background-color: var(--token-color-surface-faint);
+  --local-font-family: var(--token-typography-font-stack-text);
+  --local-font-size: var(--token-typography-body-200-font-size);
+  --local-font-weight: var(--token-typography-font-weight-semibold);
+}
+
+.projects-theming-test-normal-local-classes {
+  color: var(--token-color-foreground-primary);
+  background-color: var(--token-color-surface-faint);
+  font-family: var(--token-typography-font-stack-text);
+  font-size: var(--token-typography-body-200-font-size);
+  font-weight: var(--token-typography-font-weight-semibold);
+}
+
+.projects-theming-test-aliased-local-classes {
+  color: var(--local-foreground-color);
+  background-color: var(--local-background-color);
+  font-family: var(--local-font-family);
+  font-size: var(--local-font-size);
+  font-weight: var(--local-font-weight);
+}

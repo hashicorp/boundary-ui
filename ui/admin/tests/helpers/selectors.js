@@ -51,7 +51,7 @@ export const HEADER_SCOPE_DROPDOWN = '[data-test-header-scope-dropdown] button';
 export const HEADER_SCOPE_LINK = (url) =>
   `[data-test-header-scope-dropdown] a[href="${url}"]`;
 export const TOGGLE_THEME_DEFAULT =
-  '[data-test-header-user-dropdown] [value=system-default-theme]';
+  '[data-test-header-user-dropdown] [value=system]';
 export const TOGGLE_THEME_LIGHT =
   '[data-test-header-user-dropdown] [value=light]';
 export const TOGGLE_THEME_DARK =
