@@ -50,12 +50,22 @@ const normalizeGrantsSchema = (grantsSchema) => {
     });
     return map;
   }, {});
+  const parentResourcesByPrefix = resourceTypes.reduce((map, resource) => {
+    const parentType = resource.parent_type;
+    if (parentType) {
+      resourcesByType[parentType]?.idPrefixes.forEach((prefix) => {
+        map[prefix] = parentType;
+      });
+    }
+    return map;
+  }, {});
   const templateIdTypes = ['{{.Account.Id}}', '{{.User.Id}}'];
   return {
     resourcesByType,
     validResourceTypes,
     validActions: Array.from(allActions),
     resourcesByPrefix,
+    parentResourcesByPrefix,
     templateIdTypes,
   };
 };
@@ -327,9 +337,32 @@ const grantLinter = (context, schema) => {
           });
         } else if (typeValue === '*') {
           // If type is wildcard, then pinned id(s) must support child types
-          // TODO: abstract ids validation to a separate function
-          // ex: ids=amldap_1234567890,amoidc_1234567890;type=*;actions=read,list
-          // ids must be all of same type + valid prefixes for that type
+          let expectedIdType; // Type to which ids must match
+          for (const id of idsList) {
+            const prefix = id.split('_')[0];
+            if (!schema.parentResourcesByPrefix[prefix]) {
+              const pos = fieldPositions.ids;
+              diagnostics.push({
+                from: pos.valueStart,
+                to: pos.valueEnd,
+                severity: 'error',
+                message: `Id must support child types. Invalid id "${id}"`,
+              });
+              break; // Only show one error per ids field
+            }
+            expectedIdType =
+              expectedIdType || schema.parentResourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
+            if (schema.parentResourcesByPrefix[prefix] !== expectedIdType) {
+              const pos = fieldPositions.ids;
+              diagnostics.push({
+                from: pos.valueStart,
+                to: pos.valueEnd,
+                severity: 'error',
+                message: `All ids must have the same type. Invalid id "${id}"`,
+              });
+              break; // Only show one error per ids field
+            }
+          }
         } else if (schema.validResourceTypes.includes(typeValue)) {
           // Validate pinned-id format only if type is a specific resource type (not wildcard)
           const expectedIdType =
@@ -344,10 +377,10 @@ const grantLinter = (context, schema) => {
               message: `Resource type "${typeValue}" cannot be used for pinning by id`,
             });
           } else {
+            const allowedPrefixes =
+              schema.resourcesByType[expectedIdType].idPrefixes;
             for (const id of idsList) {
               const prefix = id.split('_')[0];
-              const allowedPrefixes =
-                schema.resourcesByType[expectedIdType].idPrefixes;
               if (!allowedPrefixes.includes(prefix)) {
                 diagnostics.push({
                   from: pos.valueStart,
@@ -360,7 +393,6 @@ const grantLinter = (context, schema) => {
             }
           }
         } else {
-          const allValidIdPrefixes = Object.keys(schema.resourcesByPrefix);
           let expectedIdType; // Type to which ids must match
           for (const id of idsList) {
             const prefix = id.split('_')[0];
@@ -376,7 +408,7 @@ const grantLinter = (context, schema) => {
               });
               break; // Only show one error per ids field
             }
-            if (!allValidIdPrefixes.includes(prefix)) {
+            if (!schema.resourcesByPrefix[prefix]) {
               diagnostics.push({
                 from: pos.valueStart,
                 to: pos.valueEnd,
