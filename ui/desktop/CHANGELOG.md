@@ -6,7 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New & Improved
 
-- Upgrade CLI to v0.21.2 ([PR](https://github.com/hashicorp/boundary-ui/pull/))
+- Upgrade CLI to v0.21.2 ([PR](https://github.com/hashicorp/boundary-ui/pull/3217))
 - Refactor session terminal rendering to restrict access ([PR](https://github.com/hashicorp/boundary-ui/pull/3190))
 - Add sort by created time support to sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/3174))
 - Add sort by name support to targets ([PR](https://github.com/hashicorp/boundary-ui/pull/3168))
