@@ -118,8 +118,8 @@ export const electronTest = test.extend({
     },
     { auto: true },
   ],
-  launchElectronApp: async ({ playwright }, use) => {
-    const apps = [];
+  launchElectronApp: async ({ playwright }, use, testInfo) => {
+    const launchedApps = [];
     await use(async (options) => {
       const app = await playwright._electron.launch({
         executablePath: getExecutablePath(),
@@ -131,12 +131,58 @@ export const electronTest = test.extend({
         ...options,
       });
 
-      apps.push(app);
+      const childProcess = app.process();
+      const processLogs = {
+        stdout: '',
+        stderr: '',
+      };
+
+      childProcess?.stdout?.on('data', (chunk) => {
+        processLogs.stdout += chunk.toString();
+      });
+      childProcess?.stderr?.on('data', (chunk) => {
+        processLogs.stderr += chunk.toString();
+      });
+
+      launchedApps.push({ app, childProcess, processLogs });
       return app;
     });
 
-    for (const app of apps) {
-      await app.close();
+    for (const { app, childProcess, processLogs } of launchedApps) {
+      const windows = await Promise.all(
+        (await app.windows()).map(async (window) => ({
+          title: await window.title().catch(() => '<unavailable>'),
+          url: window.url(),
+          isClosed: window.isClosed(),
+        })),
+      );
+
+      const closeResult = await Promise.race([
+        app.close().then(() => 'closed'),
+        new Promise((resolve) => {
+          setTimeout(() => resolve('timeout'), 10000);
+        }),
+      ]);
+
+      if (closeResult === 'timeout') {
+        await testInfo.attach('electron-close-debug', {
+          body: Buffer.from(
+            JSON.stringify(
+              {
+                windows,
+                stdout: processLogs.stdout,
+                stderr: processLogs.stderr,
+              },
+              null,
+              2,
+            ),
+          ),
+          contentType: 'application/json',
+        });
+
+        childProcess?.kill('SIGKILL');
+        throw new Error('Electron app.close() timed out');
+      }
     }
   },
   electronApp: async ({ launchElectronApp }, use) => {
