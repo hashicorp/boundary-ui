@@ -77,27 +77,39 @@ const getExecutablePath = (buildDirectory = 'out') => {
 
 export const electronTest = test.extend({
   // The screenshot/trace config option from playwright doesn't quite work since we use electron
-  // so we'll manually take a screenshot/trace and attach it to the test report if the test fails.
+  // so we'll manually take a screenshot/trace and attach it to the test report.
   saveTestFailureInfo: [
     async ({ electronPage }, use, testInfo) => {
       await use();
 
-      const path = testInfo.outputPath('trace.zip');
-      await electronPage.context().tracing.stop({ path });
+      const tracePath = testInfo.outputPath('trace.zip');
 
-      // After the test we can check whether the test passed or failed.
-      if (testInfo.status !== testInfo.expectedStatus) {
-        const screenshot = await electronPage.screenshot();
-        await testInfo.attach('screenshot', {
-          body: screenshot,
-          contentType: 'image/png',
-        });
-
-        await testInfo.attach('trace', { path });
+      try {
+        await electronPage.context().tracing.stop({ path: tracePath });
+      } catch {
+        // Ignore teardown issues so the original failure is preserved.
       }
 
-      // Clean up the trace files
-      fs.rmSync(path);
+      try {
+        const screenshotPath = testInfo.outputPath('end-state.png');
+        await electronPage.screenshot({ path: screenshotPath, fullPage: true });
+        await testInfo.attach('end-state', {
+          path: screenshotPath,
+          contentType: 'image/png',
+        });
+      } catch {
+        // Ignore teardown issues so the original failure is preserved.
+      }
+
+      // After the test we can check whether the test passed or failed.
+      if (
+        testInfo.status !== testInfo.expectedStatus &&
+        fs.existsSync(tracePath)
+      ) {
+        await testInfo.attach('trace', { path: tracePath });
+      }
+
+      fs.rmSync(tracePath, { force: true });
       try {
         fs.rmdirSync(testInfo.outputPath());
       } catch {

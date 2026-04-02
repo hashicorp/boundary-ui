@@ -7,7 +7,7 @@ import { test } from '@playwright/test';
 import { createWorker } from 'tesseract.js';
 
 export const textToMatch =
-  /To run a command as administrator|Welcome to OpenSSH Server/;
+  /To run a command as administrator|Welcome to OpenSSH Server|Welcome to Ubuntu/;
 
 export const tesseractTest = test.extend({
   tesseract: [
