@@ -4,6 +4,14 @@
  */
 
 const Session = require('./session.js');
+const log = require('electron-log/main');
+
+const STOP_ALL_SESSION_TIMEOUT_MS = Number.parseInt(
+  process.env.STOP_ALL_SESSION_TIMEOUT_MS ?? '7000',
+  10,
+);
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class SessionManager {
   #sessions = new Map();
@@ -28,19 +36,36 @@ class SessionManager {
    * @param {number} session_max_seconds
    */
   async start(addr, target_id, token, host_id, session_max_seconds) {
+    log.info(
+      `[session-manager:start] creating session target=${target_id} host=${host_id ?? 'none'}`,
+    );
     const session = new Session(
       addr,
       target_id,
       token,
       host_id,
       session_max_seconds,
-      (sessionId) => this.#sessions.delete(sessionId),
+      (sessionId) => {
+        if (!sessionId) {
+          log.warn(
+            '[session-manager:onClose] close callback before session id was assigned',
+          );
+          return;
+        }
+        const didDelete = this.#sessions.delete(sessionId);
+        log.info(
+          `[session-manager:onClose] sessionId=${sessionId} removed=${didDelete}`,
+        );
+      },
     );
     const sessionDetails = await session.start();
     // Store session by id for tracking and stopping later
     // Needs to be done after session.start() resolves
     // since session id is generated in start()
     this.#sessions.set(session.id, session);
+    log.info(
+      `[session-manager:start] tracking sessionId=${session.id} trackedCount=${this.#sessions.size}`,
+    );
     return sessionDetails;
   }
 
@@ -51,6 +76,9 @@ class SessionManager {
    */
   stopById(session_id) {
     const session = this.#sessions.get(session_id);
+    log.info(
+      `[session-manager:stopById] requested sessionId=${session_id} found=${Boolean(session)}`,
+    );
     return session?.stop();
   }
 
@@ -69,10 +97,47 @@ class SessionManager {
    * stopped before calling the next fn
    * along with clearing the sessions list.
    */
-  stopAll() {
-    return Promise.all(
-      Array.from(this.#sessions.values()).map((session) => session.stop()),
+  async stopAll() {
+    const sessions = Array.from(this.#sessions.values());
+    log.info(
+      `[session-manager:stopAll] requested trackedCount=${sessions.length}`,
     );
+
+    const results = await Promise.allSettled(
+      sessions.map((session) =>
+        Promise.race([
+          session.stop(),
+          delay(STOP_ALL_SESSION_TIMEOUT_MS).then(() => {
+            throw new Error(
+              `Session stop timed out after ${STOP_ALL_SESSION_TIMEOUT_MS}ms for session ${session.id ?? 'unknown'}`,
+            );
+          }),
+        ]),
+      ),
+    );
+
+    const failures = [];
+    for (const [index, result] of results.entries()) {
+      const sessionId = sessions[index]?.id ?? 'unknown';
+      if (result.status === 'fulfilled') {
+        log.info(`[session-manager:stopAll] stopped sessionId=${sessionId}`);
+      } else {
+        log.error(
+          `[session-manager:stopAll] failed sessionId=${sessionId}: ${result.reason?.message ?? result.reason}`,
+        );
+        failures.push(
+          `sessionId=${sessionId}: ${result.reason?.message ?? result.reason}`,
+        );
+      }
+    }
+
+    if (failures.length > 0) {
+      throw new Error(
+        `stopAll failed for ${failures.length} session(s): ${failures.join('; ')}`,
+      );
+    }
+
+    log.info('[session-manager:stopAll] completed');
   }
 }
 

@@ -8,6 +8,17 @@ const { spawnSync, spawn } = require('../helpers/spawn-promise.js');
 const log = require('electron-log/main');
 const jsonify = require('../utils/jsonify.js');
 
+const SESSION_STOP_TIMEOUT_MS = Number.parseInt(
+  process.env.SESSION_STOP_TIMEOUT_MS ?? '5000',
+  10,
+);
+const SESSION_FORCE_KILL_GRACE_MS = Number.parseInt(
+  process.env.SESSION_FORCE_KILL_GRACE_MS ?? '1000',
+  10,
+);
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 class Session {
   #id;
   #addr;
@@ -95,6 +106,9 @@ class Session {
    * Tracks local proxy details if successful.
    */
   async start() {
+    log.info(
+      `[session:start] starting target=${this.#targetId} host=${this.#hostId ?? 'none'} timeoutSeconds=${this.#sessionMaxSeconds ?? 'none'}`,
+    );
     const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
     const options = {
       env: {
@@ -104,16 +118,28 @@ class Session {
       timeout: this.#sessionMaxSeconds
         ? this.#sessionMaxSeconds * 1000
         : undefined,
-      onClose: () => this.#onClose(this.#id),
+      onClose: () => {
+        log.info(
+          `[session:onClose] process closed for sessionId=${this.#id ?? 'unknown'}`,
+        );
+        this.#onClose?.(this.#id);
+      },
     };
     const { childProcess, stdout, stderr } = await spawn(
       this.connectCommand,
       options,
     );
 
+    log.info(
+      `[session:start] spawn resolved pid=${childProcess?.pid ?? 'unknown'} hasStdout=${Boolean(stdout)} hasStderr=${Boolean(stderr)}`,
+    );
+
     if (stderr) {
       const errorResponse = jsonify(stderr);
       const error = errorResponse.api_error || errorResponse.error;
+      log.error(
+        `[session:start] failed target=${this.#targetId} pid=${childProcess?.pid ?? 'unknown'} error=${error?.message ?? 'unknown'}`,
+      );
       throw new Error(
         error?.message ?? 'Unknown error occurred while starting session',
       );
@@ -124,41 +150,111 @@ class Session {
     this.#proxyDetails = response;
     this.#id = response.session_id;
 
+    log.info(
+      `[session:start] started sessionId=${this.#id} pid=${this.#process?.pid ?? 'unknown'}`,
+    );
+
     return response;
   }
 
   /**
    * Stop proxy process used by session.
    */
-  stop() {
-    return new Promise((resolve, reject) => {
-      if (this.isRunning) {
-        this.#process.on('close', () => resolve());
-        this.#process.on('error', (e) => {
-          log.error('Process error in session stop method: ', e);
-          return reject(e);
-        });
+  async stop() {
+    if (!this.isRunning) {
+      log.info(
+        `[session:stop] skipping stop; not running sessionId=${this.#id ?? 'unknown'}`,
+      );
+      return;
+    }
 
-        // Cancel session before killing process
-        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-        const sanitizedAddr = sanitizer.urlValidate(this.#addr);
-        const cancelSessionCommand = [
-          'sessions',
-          'cancel',
-          `-id=${this.id}`,
-          `-addr=${sanitizedAddr}`,
-          '-token=env://BOUNDARY_TOKEN',
-        ];
-        spawnSync(cancelSessionCommand, {
-          BOUNDARY_TOKEN: sanitizedToken,
-        });
+    const processRef = this.#process;
+    const sessionId = this.#id ?? 'unknown';
+    const pid = processRef?.pid ?? 'unknown';
+    log.info(`[session:stop] stopping sessionId=${sessionId} pid=${pid}`);
 
-        this.#process.kill();
-      } else {
-        // Do nothing when process isn't running
+    let closeResolved = false;
+    const closePromise = new Promise((resolve, reject) => {
+      processRef.once('close', () => {
+        closeResolved = true;
+        log.info(
+          `[session:stop] process closed sessionId=${sessionId} pid=${pid}`,
+        );
         resolve();
-      }
+      });
+      processRef.once('error', (error) => {
+        log.error(
+          `[session:stop] process error sessionId=${sessionId} pid=${pid}:`,
+          error,
+        );
+        reject(error);
+      });
     });
+
+    // Cancel session before killing process.
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+    const sanitizedAddr = sanitizer.urlValidate(this.#addr);
+    const cancelSessionCommand = [
+      'sessions',
+      'cancel',
+      `-id=${this.id}`,
+      `-addr=${sanitizedAddr}`,
+      '-token=env://BOUNDARY_TOKEN',
+    ];
+
+    const cancelResult = spawnSync(cancelSessionCommand, {
+      BOUNDARY_TOKEN: sanitizedToken,
+    });
+    if (cancelResult.error || cancelResult.stderr) {
+      log.warn(
+        `[session:stop] cancel returned issues sessionId=${sessionId} pid=${pid} hasError=${Boolean(cancelResult.error)} hasStderr=${Boolean(cancelResult.stderr)}`,
+      );
+    }
+
+    try {
+      processRef.kill();
+      log.info(`[session:stop] sent SIGTERM sessionId=${sessionId} pid=${pid}`);
+    } catch (error) {
+      log.warn(
+        `[session:stop] failed to send SIGTERM sessionId=${sessionId} pid=${pid}:`,
+        error,
+      );
+    }
+
+    try {
+      await Promise.race([
+        closePromise,
+        delay(SESSION_STOP_TIMEOUT_MS).then(() => {
+          throw new Error(
+            `Timed out waiting ${SESSION_STOP_TIMEOUT_MS}ms for session close`,
+          );
+        }),
+      ]);
+    } catch (error) {
+      if (!closeResolved) {
+        log.warn(
+          `[session:stop] timeout reached, force-killing sessionId=${sessionId} pid=${pid}`,
+        );
+        try {
+          processRef.kill('SIGKILL');
+        } catch (killError) {
+          log.warn(
+            `[session:stop] failed to send SIGKILL sessionId=${sessionId} pid=${pid}:`,
+            killError,
+          );
+        }
+        await Promise.race([
+          closePromise,
+          delay(SESSION_FORCE_KILL_GRACE_MS).then(() => {
+            throw new Error(
+              `Force-kill grace period expired after ${SESSION_FORCE_KILL_GRACE_MS}ms for session ${sessionId}`,
+            );
+          }),
+        ]);
+      } else {
+        throw error;
+      }
+    }
   }
 }
 

@@ -161,6 +161,25 @@ jobs:
           Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           pnpm run desktop
 
+      - name: Collect desktop client logs
+        if: ${{ always() }}
+        run: |
+          mkdir -p e2e-tests/artifacts/desktop-client-logs
+          log_path="$HOME/.config/Boundary/logs/desktop-client.log"
+          if [[ -f "$log_path" ]]; then
+            cp "$log_path" e2e-tests/artifacts/desktop-client-logs/desktop-client.log
+          else
+            echo "Desktop client log not found at $log_path"
+          fi
+
+      - name: Upload desktop client logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: desktop-client-logs
+          path: e2e-tests/artifacts/desktop-client-logs
+          if-no-files-found: warn
+
       - name: Upload Playwright report
         if: ${{ failure() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
