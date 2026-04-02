@@ -8,6 +8,9 @@ const { spawnSync, spawn } = require('../helpers/spawn-promise.js');
 const log = require('electron-log/main');
 const jsonify = require('../utils/jsonify.js');
 
+const SESSION_CANCEL_TIMEOUT_MS = 5000;
+const SESSION_STOP_TIMEOUT_MS = 5000;
+
 class Session {
   #id;
   #addr;
@@ -132,32 +135,78 @@ class Session {
    */
   stop() {
     return new Promise((resolve, reject) => {
-      if (this.isRunning) {
-        this.#process.on('close', () => resolve());
-        this.#process.on('error', (e) => {
-          log.error('Process error in session stop method: ', e);
-          return reject(e);
-        });
-
-        // Cancel session before killing process
-        const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
-        const sanitizedAddr = sanitizer.urlValidate(this.#addr);
-        const cancelSessionCommand = [
-          'sessions',
-          'cancel',
-          `-id=${this.id}`,
-          `-addr=${sanitizedAddr}`,
-          '-token=env://BOUNDARY_TOKEN',
-        ];
-        spawnSync(cancelSessionCommand, {
-          BOUNDARY_TOKEN: sanitizedToken,
-        });
-
-        this.#process.kill();
-      } else {
+      if (!this.isRunning) {
         // Do nothing when process isn't running
         resolve();
+        return;
       }
+
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(stopTimeout);
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      };
+
+      const handleClose = () => finish();
+      const handleError = (error) => {
+        log.error('Process error in session stop method: ', error);
+        finish(error);
+      };
+
+      const stopTimeout = setTimeout(() => {
+        log.warn(
+          `Session ${this.id} did not exit after ${SESSION_STOP_TIMEOUT_MS}ms, forcing kill.`,
+        );
+        if (this.isRunning) {
+          this.#process.kill('SIGKILL');
+        }
+        finish();
+      }, SESSION_STOP_TIMEOUT_MS);
+
+      this.#process.once('close', handleClose);
+      this.#process.once('error', handleError);
+
+      // Cancel session before killing process, but bound the time spent waiting
+      // so app shutdown cannot block indefinitely.
+      const sanitizedToken = sanitizer.base62EscapeAndValidate(this.#token);
+      const sanitizedAddr = sanitizer.urlValidate(this.#addr);
+      const cancelSessionCommand = [
+        'sessions',
+        'cancel',
+        `-id=${this.id}`,
+        `-addr=${sanitizedAddr}`,
+        '-token=env://BOUNDARY_TOKEN',
+      ];
+      const { error } = spawnSync(
+        cancelSessionCommand,
+        {
+          BOUNDARY_TOKEN: sanitizedToken,
+        },
+        undefined,
+        {
+          timeout: SESSION_CANCEL_TIMEOUT_MS,
+        },
+      );
+
+      if (error) {
+        log.warn(
+          `Session ${this.id} cancel command did not complete cleanly before stop:`,
+          error,
+        );
+      }
+
+      if (!this.isRunning) {
+        finish();
+        return;
+      }
+
+      this.#process.kill();
     });
   }
 }

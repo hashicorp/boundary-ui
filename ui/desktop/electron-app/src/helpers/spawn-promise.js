@@ -27,8 +27,9 @@ module.exports = {
    * @param {string[]} args
    * @param {object} envVars
    * @param {string} path
-   * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
-  spawnSync(args, envVars = {}, path = boundaryPath) {
+   * @param {object} options
+   * @returns {{stdout: string | undefined, stderr: string | undefined, error: Error | undefined}}   */
+  spawnSync(args, envVars = {}, path = boundaryPath, options = {}) {
     const childProcess = spawnSync(path, args, {
       // Some of our outputs (namely cache daemon searching) can be very large.
       // This an undocumented hack to allow for an unlimited buffer size which
@@ -40,6 +41,7 @@ module.exports = {
         ...process.env,
         ...envVars,
       },
+      ...options,
     });
 
     const { stdout, stderr, error } = childProcess;

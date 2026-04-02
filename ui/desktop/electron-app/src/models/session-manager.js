@@ -13,8 +13,8 @@ class SessionManager {
    * @returns {boolean}
    */
   get hasRunningSessions() {
-    return Boolean(
-      this.#sessions.values().find((session) => session.isRunning),
+    return Array.from(this.#sessions.values()).some(
+      (session) => session.isRunning,
     );
   }
 
@@ -71,7 +71,7 @@ class SessionManager {
    */
   stopAll() {
     return Promise.all(
-      this.#sessions.values().map((session) => session.stop()),
+      Array.from(this.#sessions.values()).map((session) => session.stop()),
     );
   }
 }
