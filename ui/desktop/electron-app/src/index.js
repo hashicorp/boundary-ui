@@ -292,7 +292,11 @@ app.on('ready', async () => {
     }
   });
 
-  await cacheDaemonManager.start();
+  try {
+    await cacheDaemonManager.start();
+  } catch (error) {
+    log.error('Cache daemon failed to start:', error);
+  }
 });
 
 /**
