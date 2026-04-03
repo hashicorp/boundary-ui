@@ -92,8 +92,8 @@ export default class TerminalService extends Service {
     };
   }
 
-  cleanup() {
-    window.webContentView?.destroyTerminalView();
+  async cleanup() {
+    await window.webContentView?.destroyTerminalView();
     window.onresize = null;
     this.isTerminalViewCreated = false;
     this.isTerminalTabActive = false;

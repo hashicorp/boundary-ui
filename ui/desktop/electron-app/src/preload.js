@@ -101,7 +101,7 @@ contextBridge.exposeInMainWorld('webContentView', {
     ipcRenderer.send('createTerminalView', params);
   },
   destroyTerminalView: () => {
-    ipcRenderer.send('destroyTerminalView');
+    return invoke('destroyTerminalView');
   },
   hideTerminalView: () => {
     ipcRenderer.send('hideTerminalView');
