@@ -103,16 +103,19 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
 
   @action
   async willTransition(transition) {
-    // If the terminal tab is active, we want to clean it up before transitioning to prevent the terminal from briefly remaining visible after route transition.
+    // If the terminal tab is active, we want to hide it before transitioning to prevent the terminal from briefly remaining visible after route transition.
     if (this.terminal.isTerminalTabActive) {
       transition.abort();
       try {
-        // wait for terminal cleanup to complete
-        await this.terminal.cleanup();
-        // retry the transition after cleanup
+        // wait for terminal to hide
+        await this.terminal.hideTerminalView();
+        // set terminal tab to inactive to prevent infinite loop on retry
+        this.terminal.setTerminalTabActive(false);
+        // retry the transition after hiding
         transition.retry();
       } catch (error) {
-        __electronLog?.error('Terminal cleanup failed', error.message);
+        __electronLog?.error('Terminal hide failed', error.message);
+        this.terminal.setTerminalTabActive(false);
         // let transition proceed
         transition.retry();
       }

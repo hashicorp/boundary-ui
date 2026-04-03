@@ -313,14 +313,14 @@ ipcMain.on('createTerminalView', (event, payload) => {
 /**
  * Destroys the terminal view and removes it from the main window.
  */
-handle('destroyTerminalView', () => terminalManager.destroyTerminalView());
+ipcMain.on('destroyTerminalView', () => {
+  terminalManager.destroyTerminalView();
+});
 
 /**
  * Hides the terminal view from the main window
  */
-ipcMain.on('hideTerminalView', () => {
-  terminalManager.hideTerminalView();
-});
+handle('hideTerminalView', () => terminalManager.hideTerminalView());
 
 /**
  * Positions the terminal view within the main window based on the provided position
