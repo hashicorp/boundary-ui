@@ -181,7 +181,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert.dom('.hds-segmented-group').exists();
@@ -202,7 +202,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'sessions');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert.dom(APP_STATE_TITLE).hasText('No Sessions Available');
   });
@@ -221,7 +221,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });
@@ -239,7 +239,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click(`[data-test-session-detail-link="${instances.session.id}"]`);
 
     assert.strictEqual(currentURL(), urls.session);
@@ -257,7 +257,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await visit(urls.sessions);
 
     assert
@@ -279,7 +279,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
@@ -300,7 +300,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
@@ -321,7 +321,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
@@ -383,7 +383,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(`[data-test-session-cancel-button="${instances.session.id}"]`)
@@ -404,7 +404,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(`[data-test-session-cancel-button="${instances.session.id}"]`)
@@ -442,7 +442,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert
@@ -462,7 +462,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert.strictEqual(currentURL(), urls.sessions);
@@ -481,7 +481,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.server.post('/sessions/:id_method', () => new Response(400));
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert
@@ -502,7 +502,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     window.desktop.session.stopSession.throws();
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert
@@ -549,7 +549,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       `[data-test-header-scope-dropdown] a[href="${urls.scopes.org2}"]`,
     );
     // navigate to back sessions
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions2}"]`);
 
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
@@ -604,7 +604,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     );
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
     await click(TABLE_SORT_BTN);
 
     assert.true(currentURL().includes('sortAttribute=created_time'));

@@ -197,7 +197,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     const targetsCount = getTargetCount();
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.dom('.hds-segmented-group').exists();
     assert.strictEqual(currentURL(), urls.targets);
@@ -216,7 +216,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.dom(`[data-test-visit-target="${instances.target.id}"]`).exists();
 
@@ -232,7 +232,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.dom(APP_STATE_TITLE).hasText('No Targets Available');
   });
@@ -253,7 +253,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert
       .dom(`[data-test-visit-target="${instances.target.id}"]`)
@@ -272,7 +272,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.true(
       instances.target.authorized_actions.includes('authorize-session'),
@@ -300,7 +300,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.false(
       instances.target.authorized_actions.includes('authorize-session'),
@@ -325,7 +325,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -354,7 +354,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -383,7 +383,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -406,7 +406,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert
       .dom(
@@ -454,7 +454,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     );
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -492,7 +492,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -519,7 +519,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -548,7 +548,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -627,7 +627,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.dom('.hds-segmented-group').doesNotExist();
     assert.strictEqual(currentURL(), urls.targets);
@@ -645,7 +645,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     });
 
     await visit(urls.projects);
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     assert.strictEqual(currentURL(), urls.targets);
     assert
@@ -699,7 +699,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .dom(activeSessionFlyoutButtonSelector(instances.session.targetId))
       .exists();
 
-    await click('[data-test-projects-nav-link-sessions]');
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom('.hds-table tbody tr:first-child')
@@ -709,7 +709,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     // simulate the session has been cancelled externally
     instances.session.status = STATUS_SESSION_TERMINATED;
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
 
     const emberDataSessionModelAfter = this.owner
       .lookup('service:store')
@@ -903,7 +903,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     );
     await visit(urls.projects);
 
-    await click('[data-test-projects-nav-link-targets]');
+    await click(`[href="${urls.targets}"]`);
     await click(TABLE_SORT_BTN);
 
     assert.true(currentURL().includes('sortAttribute=name'));

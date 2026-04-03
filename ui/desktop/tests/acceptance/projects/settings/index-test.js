@@ -123,7 +123,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     });
 
     await visit(urls.projects);
-    await click('[data-test-projects-nav-link-settings]');
+    await click(`[href="${urls.settings}"]`);
     assert.strictEqual(currentURL(), urls.settings);
   });
 

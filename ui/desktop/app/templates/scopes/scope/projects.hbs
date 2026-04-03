@@ -9,34 +9,19 @@
   as |Nav|
 >
   <Nav.Link
-    data-test-projects-nav-link-targets
     @icon='crosshair'
     @text={{t 'resources.target.title_plural'}}
-    @isActive={{this.isTargetsRouteActive}}
-    {{on
-      'click'
-      (fn this.navigateWithTerminalCleanup 'scopes.scope.projects.targets')
-    }}
+    @route='scopes.scope.projects.targets'
   />
   <Nav.Link
-    data-test-projects-nav-link-sessions
     @icon='entry-point'
     @text={{t 'resources.session.title_plural'}}
-    @isActive={{this.isSessionsRouteActive}}
-    {{on
-      'click'
-      (fn this.navigateWithTerminalCleanup 'scopes.scope.projects.sessions')
-    }}
+    @route='scopes.scope.projects.sessions'
   />
   <Nav.Link
-    data-test-projects-nav-link-settings
     @icon='settings'
     @text={{t 'titles.settings'}}
-    @isActive={{this.isSettingsRouteActive}}
-    {{on
-      'click'
-      (fn this.navigateWithTerminalCleanup 'scopes.scope.projects.settings')
-    }}
+    @route='scopes.scope.projects.settings'
   />
 </Hds::AppSideNav::Portal>
 
