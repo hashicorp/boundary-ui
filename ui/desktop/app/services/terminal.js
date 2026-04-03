@@ -71,8 +71,8 @@ export default class TerminalService extends Service {
   /**
    * Hides the terminal view. We do this instead of destroying the view because we want to preserve the state of the terminal session.
    */
-  async hideTerminalView() {
-    await window.webContentView?.hideTerminalView();
+  hideTerminalView() {
+    return window.webContentView?.hideTerminalView();
   }
 
   createTerminalView(payload) {

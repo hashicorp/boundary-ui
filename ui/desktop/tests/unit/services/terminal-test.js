@@ -60,13 +60,13 @@ module('Unit | Service | terminal', function (hooks) {
     assert.true(window.webContentView.positionTerminalView.calledOnce);
   });
 
-  test('hideTerminalView hides the terminal', async function (assert) {
-    await service.hideTerminalView();
+  test('hideTerminalView hides the terminal', function (assert) {
+    service.hideTerminalView();
     assert.true(window.webContentView.hideTerminalView.calledOnce);
 
     window.webContentView.hideTerminalView.reset();
 
-    await service.hideTerminalView();
+    service.hideTerminalView();
 
     assert.true(window.webContentView.hideTerminalView.calledOnce);
   });
