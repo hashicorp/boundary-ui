@@ -53,7 +53,7 @@ export default class TerminalService extends Service {
     this.isTerminalTabActive = isActive;
 
     if (!isActive) {
-      this.hideTerminalView();
+      return this.hideTerminalView();
     }
   }
 

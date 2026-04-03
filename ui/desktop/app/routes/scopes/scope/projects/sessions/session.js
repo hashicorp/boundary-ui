@@ -108,9 +108,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
       transition.abort();
       try {
         // wait for terminal to hide
-        await this.terminal.hideTerminalView();
-        // set terminal tab to inactive to prevent infinite loop on retry
-        this.terminal.setTerminalTabActive(false);
+        await this.terminal.setTerminalTabActive(false);
         // retry the transition after hiding
         transition.retry();
       } catch (error) {
