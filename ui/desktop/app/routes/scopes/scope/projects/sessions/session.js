@@ -113,7 +113,6 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
         transition.retry();
       } catch (error) {
         __electronLog?.error('Terminal hide failed', error.message);
-        this.terminal.setTerminalTabActive(false);
         // let transition proceed
         transition.retry();
       }
