@@ -9,6 +9,7 @@
   as |Nav|
 >
   <Nav.Link
+    data-test-projects-nav-link-targets
     @icon='crosshair'
     @text={{t 'resources.target.title_plural'}}
     @isActive={{this.isTargetsRouteActive}}
@@ -18,6 +19,7 @@
     }}
   />
   <Nav.Link
+    data-test-projects-nav-link-sessions
     @icon='entry-point'
     @text={{t 'resources.session.title_plural'}}
     @isActive={{this.isSessionsRouteActive}}
@@ -27,6 +29,7 @@
     }}
   />
   <Nav.Link
+    data-test-projects-nav-link-settings
     @icon='settings'
     @text={{t 'titles.settings'}}
     @isActive={{this.isSettingsRouteActive}}

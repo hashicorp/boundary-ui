@@ -94,11 +94,11 @@ module('Unit | Service | terminal', function (hooks) {
     assert.true(service.isTerminalViewCreated);
   });
 
-  test('cleanup destroys the terminal view', function (assert) {
+  test('cleanup destroys the terminal view', async function (assert) {
     service.isTerminalViewCreated = true;
     service.isTerminalTabActive = true;
 
-    service.cleanup();
+    await service.cleanup();
 
     assert.true(window.webContentView.destroyTerminalView.calledOnce);
     assert.false(service.isTerminalViewCreated);
