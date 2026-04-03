@@ -2,6 +2,19 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.6.0 [CLI 0.21.2] (2026.04.06)
+
+### New & Improved
+
+- Upgrade CLI to v0.21.2 ([PR](https://github.com/hashicorp/boundary-ui/pull/3217))
+- Refactor session terminal rendering to restrict access ([PR](https://github.com/hashicorp/boundary-ui/pull/3190))
+- Add sort by created time support to sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/3174))
+- Add sort by name support to targets ([PR](https://github.com/hashicorp/boundary-ui/pull/3168))
+
+### Bug Fixes
+
+- Fix flaky modal on user sign out or app quit ([PR](https://github.com/hashicorp/boundary-ui/pull/3148))
+
 ## V2.5.0 [CLI 0.21.0] (2025.12.11)
 
 ### New & Improved
