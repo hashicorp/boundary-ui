@@ -152,6 +152,14 @@ module('Acceptance | session-recordings | list', function (hooks) {
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
     assert.strictEqual(currentURL(), urls.sessionRecordings);
+
+    // Verify refresh button shows "x seconds ago" text after click
+    assert.dom(commonSelectors.TOOLBAR_REFRESHER_TEXT).doesNotExist();
+
+    await click(commonSelectors.TOOLBAR_REFRESHER_BUTTON);
+    await waitFor(commonSelectors.TOOLBAR_REFRESHER_TEXT);
+
+    assert.dom(commonSelectors.TOOLBAR_REFRESHER_TEXT).exists();
   });
 
   test('users cannot navigate to session-recordings without the list action', async function (assert) {
