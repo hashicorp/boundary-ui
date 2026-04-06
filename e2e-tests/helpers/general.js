@@ -19,3 +19,18 @@ export async function checkEnv(envs) {
     throw new Error('Missing Environment Variables -- ' + missing);
   }
 }
+
+/**
+ * Checks if a controller address is an AWS controller by examining the hostname for 'amazonaws.com'
+ * @param {*} controllerAddr
+ * @returns
+ */
+export async function isAwsController(controllerAddr) {
+  try {
+    const { hostname } = new URL(controllerAddr);
+    return hostname === 'amazonaws.com' || hostname.endsWith('.amazonaws.com');
+  } catch {
+    // If the URL is invalid, treat it as non-AWS.
+    return false;
+  }
+}
