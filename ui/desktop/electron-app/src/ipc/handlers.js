@@ -320,9 +320,7 @@ ipcMain.on('destroyTerminalView', () => {
 /**
  * Hides the terminal view from the main window
  */
-ipcMain.on('hideTerminalView', () => {
-  terminalManager.hideTerminalView();
-});
+handle('hideTerminalView', () => terminalManager.hideTerminalView());
 
 /**
  * Positions the terminal view within the main window based on the provided position

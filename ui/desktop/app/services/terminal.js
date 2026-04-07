@@ -53,7 +53,7 @@ export default class TerminalService extends Service {
     this.isTerminalTabActive = isActive;
 
     if (!isActive) {
-      this.hideTerminalView();
+      return this.hideTerminalView();
     }
   }
 
@@ -72,7 +72,7 @@ export default class TerminalService extends Service {
    * Hides the terminal view. We do this instead of destroying the view because we want to preserve the state of the terminal session.
    */
   hideTerminalView() {
-    window.webContentView?.hideTerminalView();
+    return window.webContentView?.hideTerminalView();
   }
 
   createTerminalView(payload) {
