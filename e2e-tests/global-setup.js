@@ -4,6 +4,8 @@
  */
 
 import { chromium, test as baseTest, mergeTests } from '@playwright/test';
+
+import * as boundaryCli from './helpers/boundary-cli';
 import { checkEnv } from './helpers/general.js';
 import { boundaryApiClientTest } from './helpers/boundary-api-client.js';
 import { LoginPage } from './admin/pages/login.js';
@@ -23,6 +25,17 @@ async function globalSetup() {
     'E2E_PASSWORD_AUTH_METHOD_ID',
   ]);
   await authenticateToBoundary();
+
+  // log in via CLI to ensure cache is running the correct version.
+  // when running locally, there's a chance that the cache could have an older
+  // version running. logging in via the CLI will update the cache to the latest version
+  await boundaryCli.checkBoundaryCli();
+  await boundaryCli.authenticateBoundary(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
 }
 
 const authenticateToBoundary = async () => {
