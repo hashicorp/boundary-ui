@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  nomnom>underscore: ^1.12.1
   micromatch: ^4.0.8
   css-select>nth-check: ^2.0.1
   node-gyp: ^10.0.0
@@ -8978,9 +8977,6 @@ packages:
   underscore.string@3.3.6:
     resolution: {integrity: sha512-VoC83HWXmCrF6rgkyxS9GHv8W9Q5nhMKho+OadDJGzL2oDYbYEppBaCMH6pFlwLeqj2QS+hhkw2kpXkSdD1JxQ==}
 
-  underscore@1.13.7:
-    resolution: {integrity: sha512-GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==}
-
   underscore@1.13.8:
     resolution: {integrity: sha512-DXtD3ZtEQzc7M8m4cXotyHR+FAS18C64asBYY5vqZexfYryNNnDc02W4hKg3rdQuqOYas1jkseX0+nZXjTXnvQ==}
 
@@ -17326,7 +17322,7 @@ snapshots:
   nomnom@1.8.1:
     dependencies:
       chalk: 0.4.0
-      underscore: 1.13.7
+      underscore: 1.13.8
 
   nopt@3.0.6:
     dependencies:
@@ -19301,8 +19297,6 @@ snapshots:
     dependencies:
       sprintf-js: 1.1.3
       util-deprecate: 1.0.2
-
-  underscore@1.13.7: {}
 
   underscore@1.13.8: {}
 
