@@ -567,14 +567,14 @@ importers:
         specifier: ^7.26.10
         version: 7.27.1
       '@hashicorp/design-system-components':
-        specifier: 6.1.1-rc-20260408210649
-        version: 6.1.1-rc-20260408210649(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-basic-dropdown@8.8.0(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9))))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))
+        specifier: 6.1.1-rc-20260409201302
+        version: 6.1.1-rc-20260409201302(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-basic-dropdown@8.8.0(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9))))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))
       '@hashicorp/design-system-tokens':
-        specifier: 5.0.0-rc-20260408210649
-        version: 5.0.0-rc-20260408210649
+        specifier: 5.0.0-rc-20260409201302
+        version: 5.0.0-rc-20260409201302
       '@hashicorp/flight-icons':
-        specifier: 5.0.0-rc-20260408210649
-        version: 5.0.0-rc-20260408210649
+        specifier: 5.0.0-rc-20260409201302
+        version: 5.0.0-rc-20260409201302
       '@nullvoxpopuli/ember-composable-helpers':
         specifier: ^5.2.10
         version: 5.2.10(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))
@@ -2567,8 +2567,8 @@ packages:
   '@handlebars/parser@2.0.0':
     resolution: {integrity: sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==}
 
-  '@hashicorp/design-system-components@6.1.1-rc-20260408210649':
-    resolution: {integrity: sha512-s3/aaOkeiIWh0fzmFXhgSxKt4edeOYBlGlm22mXTEC5XY+dIa3YS1+84qjcvPjBdTAUj00UbQDhUsqmEZYlLyg==}
+  '@hashicorp/design-system-components@6.1.1-rc-20260409201302':
+    resolution: {integrity: sha512-UKn1yBB2wIMNCpvUKr98VrOj5LJ0zC3l8QPdTmUwGIFRZhw2DupvRSbeXChGZ48RicIa57hCHl2gNAqLvLF6aQ==}
     engines: {node: '>= 18'}
     peerDependencies:
       '@ember/string': ^3.1.1 || ^4.0.0
@@ -2578,11 +2578,11 @@ packages:
       ember-intl:
         optional: true
 
-  '@hashicorp/design-system-tokens@5.0.0-rc-20260408210649':
-    resolution: {integrity: sha512-mYwXqBetZtgvidscdfwN9XLxwHGKSI7fGZzoLyOuRb/UF5eatqm3oWiXHHem/XwFEq85Q9uN721//ZLwoB/r9Q==}
+  '@hashicorp/design-system-tokens@5.0.0-rc-20260409201302':
+    resolution: {integrity: sha512-v/EdPEMNxORPEC9ZvycWUHkFVO/4FYY+rg3r8GzpuQVZ3mzuYhekVwBUQHvdx+MSQ/TDmR4DX909+SEtB/EsIA==}
 
-  '@hashicorp/flight-icons@5.0.0-rc-20260408210649':
-    resolution: {integrity: sha512-hYG7+MC1o9p2gfkbFNGfkeEbvcwj7HIWCeAfOwLaCtXFHFwqHJ+NdkinoZuC9+SNn9ffoCEh33yuhIx87cOnfg==}
+  '@hashicorp/flight-icons@5.0.0-rc-20260409201302':
+    resolution: {integrity: sha512-pQ/YnPfnJW4EGLww+V+TEpaXCiVlly21XZqKTtBdPk9L1CihDM6QJ53LSRl1V8DCLos1/Hl2mZZPdC5sE2W4yA==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -11242,7 +11242,7 @@ snapshots:
 
   '@handlebars/parser@2.0.0': {}
 
-  '@hashicorp/design-system-components@6.1.1-rc-20260408210649(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-basic-dropdown@8.8.0(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9))))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))':
+  '@hashicorp/design-system-components@6.1.1-rc-20260409201302(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-basic-dropdown@8.8.0(@babel/core@7.27.1)(@ember/string@4.0.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@2.0.0)(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9))))(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))':
     dependencies:
       '@codemirror/autocomplete': 6.20.0
       '@codemirror/commands': 6.8.1
@@ -11264,8 +11264,8 @@ snapshots:
       '@embroider/macros': 1.19.3(@glint/template@1.5.2)
       '@embroider/util': 1.13.5(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.105.4(esbuild@0.25.9)))
       '@floating-ui/dom': 1.7.0
-      '@hashicorp/design-system-tokens': 5.0.0-rc-20260408210649
-      '@hashicorp/flight-icons': 5.0.0-rc-20260408210649
+      '@hashicorp/design-system-tokens': 5.0.0-rc-20260409201302
+      '@hashicorp/flight-icons': 5.0.0-rc-20260409201302
       '@lezer/highlight': 1.2.1
       '@nullvoxpopuli/ember-composable-helpers': 5.3.0(@babel/core@7.27.1)
       clipboard-polyfill: 4.1.1
@@ -11295,9 +11295,9 @@ snapshots:
       - ember-source
       - supports-color
 
-  '@hashicorp/design-system-tokens@5.0.0-rc-20260408210649': {}
+  '@hashicorp/design-system-tokens@5.0.0-rc-20260409201302': {}
 
-  '@hashicorp/flight-icons@5.0.0-rc-20260408210649': {}
+  '@hashicorp/flight-icons@5.0.0-rc-20260409201302': {}
 
   '@humanfs/core@0.19.1': {}
 
