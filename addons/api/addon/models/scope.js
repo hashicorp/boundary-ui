@@ -4,6 +4,7 @@
  */
 
 import GeneratedScopeModel from '../generated/models/scope';
+import { attr } from '@ember-data/model';
 
 export const TYPE_SCOPE_GLOBAL = 'global';
 export const TYPE_SCOPE_ORG = 'org';
@@ -16,6 +17,11 @@ export const TYPES_SCOPE = Object.freeze([
 
 export default class ScopeModel extends GeneratedScopeModel {
   // =attributes
+
+  @attr('string', {
+    description: 'The alias target suffix for project scopes.',
+  })
+  alias_target_suffix;
 
   /**
    * @type {boolean}
@@ -44,6 +50,14 @@ export default class ScopeModel extends GeneratedScopeModel {
   }
   set isProject(value) {
     if (value) this.type = TYPE_SCOPE_PROJECT;
+  }
+
+  /**
+   * Returns true if this scope is a project and has an alias target suffix configured.
+   * @type {boolean}
+   */
+  get hasSuffix() {
+    return this.isProject && this.alias_target_suffix;
   }
 
   /**
