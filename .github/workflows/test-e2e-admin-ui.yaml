@@ -26,6 +26,8 @@ jobs:
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
       matrix:
+        boundary_edition: [community, enterprise]
+        browser: [chromium, firefox, webkit]
         include:
           - boundary_edition: community
             github_repo: hashicorp/boundary
@@ -41,6 +43,11 @@ jobs:
             enos_scenario: e2e_ui_docker_ent
             test_command: admin:ent:docker
             boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
+        # in boundary-ui-enterprise, only run tests on chromium because playwright dependencies can't
+        # be installed on self-hosted runners due to permission issues
+        exclude:
+          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'firefox' }}
+          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'webkit' }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
@@ -210,19 +217,13 @@ jobs:
         run: |
           source <(bash ./support/src/${{matrix.folder_name}}/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
-          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
-            pnpm run ${{ matrix.test_command }} --reporter=html
-          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
-            # only run tests on chromium because playwright dependencies can't
-            # be installed to support other browsers
-            pnpm run ${{ matrix.test_command }} --project=chromium --reporter=html
-          fi
+          pnpm run ${{ matrix.test_command }} --project=${{ matrix.browser}} --reporter=html
 
       - name: Upload Playwright report
         if: ${{ failure() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
-          name: playwright-report-${{ matrix.boundary_edition }}
+          name: playwright-report-${{ matrix.boundary_edition }}-${{ matrix.browser }}
           path: e2e-tests/playwright-report
 
       - name: Clean up test infra
@@ -242,4 +243,4 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: ":x: admin ui e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref || github.ref_name }}"
+            text: ":x: admin ui e2e tests (${{ matrix.boundary_edition }}:${{ matrix.browser }}) failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref || github.ref_name }}"
