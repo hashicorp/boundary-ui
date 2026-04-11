@@ -50,6 +50,17 @@ const normalizeGrantsSchema = (grantsSchema) => {
     });
     return map;
   }, {});
+  const parentTypes = new Set(
+    resourceTypes.filter((r) => r.parent_type).map((r) => r.parent_type),
+  );
+  const topLevelTypes = resourceTypes
+    .filter((r) => {
+      const hasCreateAction = r.collection_actions.includes('create');
+      const hasListAction = r.collection_actions.includes('list');
+      return !r.parent_type && (hasCreateAction || hasListAction);
+    })
+    .map((r) => r.type);
+
   const parentResourcesByPrefix = resourceTypes.reduce((map, resource) => {
     const parentType = resource.parent_type;
     if (parentType) {
@@ -59,7 +70,12 @@ const normalizeGrantsSchema = (grantsSchema) => {
     }
     return map;
   }, {});
-  const templateIdTypes = ['{{.Account.Id}}', '{{.User.Id}}'];
+  const templateIdTypes = [
+    '{{.Account.Id}}',
+    '{{.User.Id}}',
+    '{{user.id}}',
+    '{{account.id}}',
+  ];
   return {
     resourcesByType,
     validResourceTypes,
@@ -67,6 +83,8 @@ const normalizeGrantsSchema = (grantsSchema) => {
     resourcesByPrefix,
     parentResourcesByPrefix,
     templateIdTypes,
+    parentTypes: Array.from(parentTypes),
+    topLevelTypes,
   };
 };
 
@@ -81,18 +99,6 @@ const grantLinter = (context, schema) => {
     const trimmedLine = line.trim();
     const lineStart = currentPos;
     const lineEnd = currentPos + line.length;
-
-    // Disallow empty lines??
-    // if (trimmedLine === '') {
-    //   diagnostics.push({
-    //     from: lineStart,
-    //     to: lineEnd,
-    //     severity: 'error',
-    //     message: 'Remove empty lines. Each grant string must be on its own line.',
-    //   });
-    //   currentPos += line.length + 1; // +1 for newline
-    //   return;
-    // }
 
     // Check for whitespace
     if (line.includes(' ')) {
@@ -196,24 +202,6 @@ const grantLinter = (context, schema) => {
       }
     }
 
-    // Check for missing required fields
-    if (!('actions' in parsedFields)) {
-      diagnostics.push({
-        from: lineStart,
-        to: lineEnd,
-        severity: 'error',
-        message: 'Missing required field: actions',
-      });
-    }
-    if (!('type' in parsedFields) && !('ids' in parsedFields)) {
-      diagnostics.push({
-        from: lineStart,
-        to: lineEnd,
-        severity: 'error',
-        message: 'Missing required fields: ids and/or type',
-      });
-    }
-
     // Validate field values are not empty
     for (const [field, value] of Object.entries(parsedFields)) {
       if (!value.trim()) {
@@ -228,6 +216,7 @@ const grantLinter = (context, schema) => {
     }
 
     // Validate type field value is a valid resource type
+    const parsedTypeField = { value: '', known: false, wildcard: false };
     if (parsedFields.type) {
       const typeValue = parsedFields.type.trim();
       if (!schema.validResourceTypes.includes(typeValue)) {
@@ -238,77 +227,15 @@ const grantLinter = (context, schema) => {
           severity: 'error',
           message: `Invalid resource type "${typeValue}"`,
         });
-      }
-    }
-
-    // Validate actions field
-    if (parsedFields.actions) {
-      const actionsValue = parsedFields.actions.trim();
-      const actionList = actionsValue
-        .split(',')
-        .map((a) => a.trim())
-        .filter((a) => a);
-
-      if (actionList.length === 0) {
-        const pos = fieldPositions.actions;
-        diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
-          severity: 'error',
-          message: '"actions" field must contain at least one action',
-        });
       } else {
-        // Check if actions contain wildcard
-        const hasWildcard = actionList.includes('*');
-
-        if (hasWildcard && actionList.length > 1) {
-          const pos = fieldPositions.actions;
-          const wildcardIndex =
-            pos.valueStart + parsedFields.actions.indexOf('*');
-          diagnostics.push({
-            from: wildcardIndex,
-            to: wildcardIndex + 1,
-            severity: 'error',
-            message:
-              'Wildcard action "*" cannot be combined with other actions',
-            actions: [createDeleteTextAction('Remove wildcard from actions')],
-          });
-        } else if (!hasWildcard) {
-          // Validate individual actions against the resource type
-          const typeValue = parsedFields.type?.trim();
-          const idsValue = parsedFields.ids?.trim();
-
-          let validActions;
-          const bothWildcard = typeValue === '*' && idsValue === '*';
-          const validTypeSpecified =
-            typeValue && schema.validResourceTypes.includes(typeValue);
-          if (validTypeSpecified && !bothWildcard) {
-            validActions = schema.resourcesByType[typeValue].actions;
-          } else {
-            validActions = schema.validActions;
-          }
-
-          for (const action of actionList) {
-            if (!validActions.includes(action)) {
-              const pos = fieldPositions.actions;
-              const errorMessage =
-                bothWildcard || !validTypeSpecified
-                  ? `Invalid action "${action}". Must be a valid Boundary action`
-                  : `Invalid action "${action}" for resource type "${typeValue}". Valid actions: ${validActions.join(', ')}`;
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: errorMessage,
-              });
-              break; // Only show one error per actions field
-            }
-          }
-        }
+        parsedTypeField.known = true;
       }
+      parsedTypeField.value = typeValue;
+      parsedTypeField.wildcard = typeValue === '*';
     }
 
     // Validate ids field
+    const parsedIdsField = { wildcard: false };
     if (parsedFields.ids) {
       const idsValue = parsedFields.ids.trim();
       const pos = fieldPositions.ids;
@@ -316,7 +243,6 @@ const grantLinter = (context, schema) => {
         .split(',')
         .map((id) => id.trim())
         .filter((id) => id);
-      const typeValue = parsedFields?.type?.trim();
       if (idsList.length === 0) {
         const pos = fieldPositions.ids;
         diagnostics.push({
@@ -335,100 +261,99 @@ const grantLinter = (context, schema) => {
             message: 'Wildcard id "*" cannot be combined with other ids',
             actions: [createDeleteTextAction('Remove wildcard from ids')],
           });
-        }
-      } else if (typeValue === '*') {
-        // If type is wildcard, then pinned id(s) must support child types
-        let expectedIdType; // Type to which ids must match
-        for (const id of idsList) {
-          const prefix = id.split('_')[0];
-          if (!schema.parentResourcesByPrefix[prefix]) {
-            const pos = fieldPositions.ids;
-            diagnostics.push({
-              from: pos.valueStart,
-              to: pos.valueEnd,
-              severity: 'error',
-              message: `Id must support child types. Invalid id "${id}"`,
-            });
-            break; // Only show one error per ids field
-          }
-          expectedIdType =
-            expectedIdType || schema.parentResourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
-          if (schema.parentResourcesByPrefix[prefix] !== expectedIdType) {
-            const pos = fieldPositions.ids;
-            diagnostics.push({
-              from: pos.valueStart,
-              to: pos.valueEnd,
-              severity: 'error',
-              message: `All ids must have the same type. Invalid id "${id}"`,
-            });
-            break; // Only show one error per ids field
-          }
-        }
-      } else if (schema.validResourceTypes.includes(typeValue)) {
-        // Validate pinned-id format only if type is a specific resource type (not wildcard)
-        const expectedIdType =
-          typeValue === 'scope'
-            ? typeValue
-            : schema.resourcesByType[typeValue]?.parentType;
-        if (!expectedIdType) {
-          diagnostics.push({
-            from: fieldPositions.type.valueStart,
-            to: fieldPositions.type.valueEnd,
-            severity: 'error',
-            message: `Resource type "${typeValue}" cannot be used for pinning by id`,
-          });
         } else {
-          const allowedPrefixes =
-            schema.resourcesByType[expectedIdType].idPrefixes;
-          for (const id of idsList) {
-            const prefix = id.split('_')[0];
-            if (!allowedPrefixes.includes(prefix)) {
-              diagnostics.push({
-                from: pos.valueStart,
-                to: pos.valueEnd,
-                severity: 'error',
-                message: `Invalid id "${id}" for resource type "${typeValue}". Valid id prefixes: ${allowedPrefixes.join(', ')}`,
-              });
-              break; // Only show one error per ids field
-            }
-          }
+          parsedIdsField.wildcard = true;
         }
       } else {
-        let expectedIdType; // Type to which ids must match
-        for (const id of idsList) {
-          const prefix = id.split('_')[0];
-          if (schema.templateIdTypes.includes(id)) {
-            continue; // Skip validation for valid template IDs
-          }
-          if (id.startsWith('{{') && id.endsWith('}}')) {
-            diagnostics.push({
-              from: pos.valueStart,
-              to: pos.valueEnd,
-              severity: 'error',
-              message: `Unknown template "${id}". Valid templates: ${schema.templateIdTypes.join(', ')}`,
-            });
-            break; // Only show one error per ids field
-          }
-          if (!schema.resourcesByPrefix[prefix]) {
-            diagnostics.push({
-              from: pos.valueStart,
-              to: pos.valueEnd,
-              severity: 'error',
-              message: `Invalid id "${id}"`,
-            });
-            break; // Only show one error per ids field
-          }
-          expectedIdType = expectedIdType || schema.resourcesByPrefix[prefix]; // Set expectedIdType based on the first id's prefix
-          if (schema.resourcesByPrefix[prefix] !== expectedIdType) {
-            diagnostics.push({
-              from: pos.valueStart,
-              to: pos.valueEnd,
-              severity: 'error',
-              message: `All ids must have the same type. Invalid id "${id}"`,
-            });
-            break; // Only show one error per ids field
-          }
+        parsedIdsField.value = idsList;
+        validateIdsField(schema, diagnostics, idsList, parsedTypeField, pos);
+      }
+    }
+
+    if (!parsedFields.actions && !parsedFields.output_fields) {
+      diagnostics.push({
+        from: lineStart,
+        to: lineEnd,
+        severity: 'error',
+        message: 'Missing "actions" field',
+      });
+    }
+
+    if (!parsedFields.ids) {
+      if (!parsedFields.type) {
+        diagnostics.push({
+          from: lineStart,
+          to: lineEnd,
+          severity: 'error',
+          message: 'Missing "ids" or "type" fields',
+        });
+      } else if (parsedTypeField.wildcard) {
+        diagnostics.push({
+          from: lineStart,
+          to: lineEnd,
+          severity: 'error',
+          message: 'Missing "ids" field for wildcard type',
+        });
+      } else {
+        if (!parsedFields.actions && !parsedFields.output_fields) {
+          diagnostics.push({
+            from: lineStart,
+            to: lineEnd,
+            severity: 'error',
+            message: 'Missing "actions" or "output_fields" field',
+          });
         }
+      }
+    } else if (parsedIdsField.wildcard) {
+      if (!parsedFields.type) {
+        diagnostics.push({
+          from: lineStart,
+          to: lineEnd,
+          severity: 'error',
+          message: 'Missing "type" field for wildcard ids',
+        });
+      }
+    }
+
+    // Validate actions field
+    if (parsedFields.actions) {
+      const actionsValue = parsedFields.actions.trim();
+      const actionList = actionsValue
+        .split(',')
+        .map((a) => a.trim())
+        .filter((a) => a);
+      if (actionList.length === 0) {
+        const pos = fieldPositions.actions;
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: '"actions" field must contain at least one action',
+        });
+      } else if (actionList.includes('*')) {
+        if (actionList.length > 1) {
+          const pos = fieldPositions.actions;
+          const wildcardIndex =
+            pos.valueStart + parsedFields.actions.indexOf('*');
+          diagnostics.push({
+            from: wildcardIndex,
+            to: wildcardIndex + 1,
+            severity: 'error',
+            message:
+              'Wildcard action "*" cannot be combined with other actions',
+            actions: [createDeleteTextAction('Remove wildcard from actions')],
+          });
+        }
+      } else {
+        // Validate individual actions against the resource type
+        validateActionsField(
+          schema,
+          diagnostics,
+          actionList,
+          parsedIdsField,
+          parsedTypeField,
+          fieldPositions.actions,
+        );
       }
     }
 
@@ -436,6 +361,128 @@ const grantLinter = (context, schema) => {
   });
 
   return diagnostics;
+};
+
+// Returns template, resource type, or null;
+const idType = (schema, id) => {
+  if (id.startsWith('{{') && id.endsWith('}}')) {
+    return 'template';
+  }
+  const prefix = id.split('_')[0];
+  return schema.resourcesByPrefix[prefix];
+};
+
+const validateIdsField = (
+  schema,
+  diagnostics,
+  idsList,
+  parsedTypeField,
+  pos,
+) => {
+  let seenIdType;
+  for (const [i, id] of idsList.entries()) {
+    if (i === 0) {
+      seenIdType = idType(schema, id);
+    }
+    const currentIdType = idType(schema, id);
+    if (currentIdType === 'template') {
+      if (!schema.templateIdTypes.includes(id)) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: `Unknown template "${id}". Valid templates: ${schema.templateIdTypes.join(', ')}`,
+        });
+        return;
+      }
+    } else {
+      if (!currentIdType) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: `Invalid id "${id}"`,
+        });
+        return;
+      }
+    }
+    if (currentIdType !== seenIdType) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: `Ids must have the same type. Invalid id "${id}"`,
+      });
+      return;
+    }
+    if (parsedTypeField.wildcard) {
+      // If type is wildcard, then pinned id(s) must support child types
+      if (!schema.parentTypes.includes(currentIdType)) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: `Ids must support child types. Invalid id "${id}"`,
+        });
+        return;
+      }
+    } else if (parsedTypeField.known) {
+      // If type is known and not wildcard, then pinned id(s) must match the type
+      const parentType =
+        schema.resourcesByType[parsedTypeField.value]?.parentType;
+      if (!parentType) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: `Type must support child types. Invalid type "${parsedTypeField.value}"`,
+        });
+        return;
+      }
+      if (currentIdType !== parentType) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: `Ids must match the type "${parentType}". Invalid id "${id}"`,
+        });
+        return;
+      }
+    }
+  }
+};
+
+const validateActionsField = (
+  schema,
+  diagnostics,
+  actionList,
+  parsedIdsField,
+  parsedTypeField,
+  pos,
+) => {
+  let validActions;
+  const bothWildCard = parsedIdsField.wildcard && parsedTypeField.wildcard;
+  const allActionsAllowed = bothWildCard || !parsedTypeField.known;
+  if (allActionsAllowed) {
+    validActions = schema.validActions;
+  } else {
+    validActions = schema.resourcesByType[parsedTypeField.value].actions;
+  }
+
+  for (const action of actionList) {
+    if (!validActions.includes(action)) {
+      const errorMessage = allActionsAllowed
+        ? `Invalid action "${action}"`
+        : `Invalid action "${action}" for resource type "${parsedTypeField.value}". Valid actions: ${validActions.join(', ')}`;
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: errorMessage,
+      });
+      break; // Only show one error per actions field
+    }
+  }
 };
 
 export const createGrantLinter = (grantsSchema) => {

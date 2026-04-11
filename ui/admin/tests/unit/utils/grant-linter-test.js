@@ -43,8 +43,8 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=*;type=*;actions=read,write;', 'Trailing semicolon is not allowed'], // trailing semicolon
       ['ids={{.Account.Id}};type=+;actions=read', 'Invalid character "+"'], // invalid character +
       ['ids={{.Account.Id}};type=();actions=read', 'Invalid character "("'], // invalid characters ()
-      ['type=target', 'Missing required field: actions'], // missing actions field
-      ['actions=read,write', 'Missing required fields: ids and/or type'], // missing type/ids field
+      ['type=target', 'Missing "actions" field'], // missing actions field
+      ['actions=read,write', 'Missing "ids" or "type" fields'], // missing type/ids field
       [
         'type=credential-store;ids=;actions=read',
         '"ids" value cannot be empty',
@@ -145,43 +145,42 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ], // wildcard id cannot be combined with other ids
       [
         'ids={{.Account.Id}};type=credential;actions=read',
-        'Invalid id "{{.Account.Id}}" for resource type "credential". Valid id prefixes: csst, cs, csvlt',
+        'Ids must match the type "credential-store". Invalid id "{{.Account.Id}}"',
       ], // template ids not valid with type specified
       [
         'ids={{.Random.Id}};actions=read',
-        'Unknown template "{{.Random.Id}}". Valid templates: {{.Account.Id}}, {{.User.Id}}',
+        'Unknown template "{{.Random.Id}}". Valid templates: {{.Account.Id}}, {{.User.Id}}, {{user.id}}, {{account.id}}',
       ], // invalid template id
       [
         'type=host-catalog;ids=hcst_1234;actions=list,delete',
-        'Resource type "host-catalog" cannot be used for pinning by id',
+        'Type must support child types. Invalid type "host-catalog"',
       ], // only non-top level resource types can be pinned by id
       [
         'type=host-set;ids=hcst_1234,g_1234;actions=read',
-        'Invalid id "g_1234" for resource type "host-set". Valid id prefixes: hcst, hc, hcplg',
+        'Ids must have the same type. Invalid id "g_1234"',
       ], // all ids must be valid for the resource type
       [
         'type=credential;ids=csst_1234,random;actions=delete',
-        'Invalid id "random" for resource type "credential". Valid id prefixes: csst, cs, csvlt',
+        'Invalid id "random"',
       ], // all ids must be valid for the resource type
       [
         'ids=cs_1234,g_1234;actions=read',
-        'All ids must have the same type. Invalid id "g_1234"',
+        'Ids must have the same type. Invalid id "g_1234"',
       ], // all ids must be same type when type is not specified
       ['ids=none_1234,csvlt_123;actions=list', 'Invalid id "none_1234"'], // valid ids prefixes only
       [
         'ids=g_123,amoidc_456;type=*;actions=read,list',
-        'Id must support child types. Invalid id "g_123"',
+        'Ids must support child types. Invalid id "g_123"',
       ], // all ids must support child types when type is wildcard
       [
         'ids=amoidc_456,hcst_123;type=*;actions=read,list',
-        'All ids must have the same type. Invalid id "hcst_123"',
+        'Ids must have the same type. Invalid id "hcst_123"',
       ], // all ids must be the same type when type is wildcard
       ['ids=cs_1234,csst_5678;actions=read'], // valid ids when they are the same type and type is not specified
-      ['ids=*;actions=read'], // valid wildcard id
+      ['ids=*;type=*;actions=read'], // valid wildcard id
       ['ids=hcst_123,hcplg_456;type=host-set;actions=read'], // valid pinned ids for host-set resource type
       ['ids={{.Account.Id}};actions=read'], // valid template id when type is not specified
       ['ids={{.Account.Id}},{{.User.Id}};actions=read'], // valid template ids when type is not specified
-      ['ids=global,o_123;type=scope;actions=list,read'], // valid ids for type scope
       ['ids=csst_1234,csvlt_5678;actions=*'], // valid id prefixes with same type
       ['ids=amldap_123,amoidc_456;type=*;actions=read,list'], // valid ids with wildcard type
     ],
