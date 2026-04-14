@@ -48,9 +48,10 @@ export default class TargetSerializer extends ApplicationSerializer {
 
     if (isNew && serialized?.with_aliases) {
       // API expects scope id along with every alias value
+      const defaultScopeId = snapshot.record.project?.id || 'global';
       serialized.with_aliases = serialized.with_aliases.map((item) => ({
         ...item,
-        scope_id: 'global',
+        scope_id: item.scope_id || defaultScopeId,
       }));
     } else {
       // This field can't be updated, it is used only during creation time
