@@ -14,7 +14,6 @@ const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   label: noSuggestionsLabel,
   type: 'text',
   apply: () => {},
-  boost: -99,
 });
 
 const parseGrantFields = (lineText) =>
@@ -93,7 +92,7 @@ const getResourceTypesForId = (schema, id) =>
         )?.type,
       ].filter(Boolean)
     : schema.resourceTypesByIdPrefix
-        .filter(({ idPrefix }) => id.startsWith(idPrefix))
+        .filter(({ idPrefix }) => idPrefix.startsWith(id))
         .map(({ type }) => type);
 
 const getCompatibleResourceTypeForIds = (schema, idsValue) => {
@@ -149,7 +148,10 @@ const getTypeOptions = (schema, idsValue) => {
     return schema.resourceTypes
       .filter(
         (resource) =>
-          !resource.parent_type && resource.collection_actions?.length > 0,
+          !resource.parent_type &&
+          resource.collection_actions.some(
+            (action) => action === 'list' || action === 'create',
+          ),
       )
       .map((resource) => resource.type);
   }
@@ -208,14 +210,22 @@ const getActionOptions = (schema, typeValue, idsValue) => {
         : [];
     }
 
-    if (
-      !selectedResource ||
-      !(getCompatibleResourceTypeForIds(schema, idsValue) === typeValue)
-    ) {
+    const matchedType = getCompatibleResourceTypeForIds(schema, idsValue);
+    const isSelectedChildType = (
+      schema.childResourceTypesByParentType[matchedType] ?? []
+    ).includes(typeValue);
+
+    // A specific ID paired with its own type is not a valid combination.
+    // For pinned IDs, only child types are valid.
+    if (!selectedResource || !isSelectedChildType) {
       return [];
     }
 
-    return withWildCard(selectedResource.actions);
+    // Return all the actions for the selected type from a pinned ID
+    return withWildCard([
+      ...selectedResource.collectionActions,
+      ...selectedResource.idActions,
+    ]);
   }
 
   // Should be wildcard IDs with a specific type, so show all actions for that type

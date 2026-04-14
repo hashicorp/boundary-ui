@@ -35,7 +35,6 @@ export default class FormRoleEditGrantsComponent extends Component {
   customExtensions = [
     autocompletion({
       override: [this.completionSource],
-      closeOnBlur: true,
     }),
     keymap.of(completionKeymap),
   ];

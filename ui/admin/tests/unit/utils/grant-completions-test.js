@@ -27,64 +27,7 @@ const createCompletionContext = (lineText) => ({
 const getLabels = (completionResult) =>
   completionResult.options.map(({ label }) => label);
 
-const allActionLabels = [
-  '*',
-  'create',
-  'list',
-  'change-state',
-  'authenticate',
-  'read',
-  'update',
-  'delete',
-  'set-password',
-  'change-password',
-  'read:self',
-  'cancel',
-  'cancel:self',
-  'list-resolvable-aliases',
-  'add-accounts',
-  'set-accounts',
-  'remove-accounts',
-  'delete:self',
-  'add-credential-sources',
-  'remove-credential-sources',
-  'set-host-sources',
-  'set-credential-sources',
-  'authorize-session',
-  'add-host-sources',
-  'remove-host-sources',
-  'create:controller-led',
-  'create:worker-led',
-  'read-certificate-authority',
-  'reinitialize-certificate-authority',
-  'set-worker-tags',
-  'remove-worker-tags',
-  'add-worker-tags',
-  'add-members',
-  'set-members',
-  'remove-members',
-  'add-grant-scopes',
-  'add-principals',
-  'add-grants',
-  'set-grant-scopes',
-  'remove-grant-scopes',
-  'set-principals',
-  'remove-principals',
-  'set-grants',
-  'remove-grants',
-  'add-hosts',
-  'set-hosts',
-  'remove-hosts',
-  'monthly-active-users',
-  'destroy-key-version',
-  'list-keys',
-  'rotate-keys',
-  'list-key-version-destruction-jobs',
-  'attach-storage-policy',
-  'detach-storage-policy',
-  'download',
-  'reapply-storage-policy',
-];
+let allActionLabels;
 
 module('Unit | Utils | grant-completions', function (hooks) {
   setupTest(hooks);
@@ -104,6 +47,17 @@ module('Unit | Utils | grant-completions', function (hooks) {
     }
 
     const grantsSchemaData = await response.json();
+    allActionLabels = grantsSchemaData.resource_types.reduce(
+      (labels, resource) => {
+        const resourceLabels = [
+          ...(resource.collection_actions ?? []),
+          ...(resource.id_actions ?? []),
+        ];
+        return [...new Set([...labels, ...resourceLabels])];
+      },
+      [],
+    );
+    allActionLabels = ['*', ...allActionLabels];
 
     this.grantCompletionSource = createGrantCompletionSource(
       grantsSchemaData,
@@ -131,7 +85,6 @@ module('Unit | Utils | grant-completions', function (hooks) {
           'host-catalog',
           'storage-bucket',
           'policy',
-          'billing',
           'scope',
           'session-recording',
         ],
@@ -140,6 +93,11 @@ module('Unit | Utils | grant-completions', function (hooks) {
         lineText: 'ids=hcst_1234567890;type=',
         expectedLabels: ['*', 'host', 'host-set'],
       },
+      'with a partial id prefix include child resource types for the matched parent':
+        {
+          lineText: 'ids=hcs;type=',
+          expectedLabels: ['*', 'host', 'host-set'],
+        },
       'with specific ids and no child resources show a no suggestions placeholder':
         {
           lineText: 'ids=hs_123;type=',
@@ -212,16 +170,9 @@ module('Unit | Utils | grant-completions', function (hooks) {
             'update',
           ],
         },
-      'ids with a matching type suggest all actions for that type': {
+      'ids with a matching type show a no suggestions placeholder': {
         lineText: 'ids=s_123;type=session;actions=',
-        expectedLabels: [
-          '*',
-          'list',
-          'read',
-          'read:self',
-          'cancel',
-          'cancel:self',
-        ],
+        expectedLabels: ['NO_SUGGESTIONS'],
       },
       'ids that conflict with the selected type show a no suggestions placeholder':
         {
@@ -232,6 +183,21 @@ module('Unit | Utils | grant-completions', function (hooks) {
         {
           lineText: 'ids=hs_123,s_123;actions=',
           expectedLabels: ['NO_SUGGESTIONS'],
+        },
+      'pinned ids with a specific child resource type suggest that type actions':
+        {
+          lineText: 'ids=hcst_1234567890;type=host-set;actions=',
+          expectedLabels: [
+            '*',
+            'create',
+            'list',
+            'delete',
+            'add-hosts',
+            'set-hosts',
+            'remove-hosts',
+            'read',
+            'update',
+          ],
         },
       'wildcard ids with a specific child resource type suggest that type actions':
         {
@@ -263,6 +229,26 @@ module('Unit | Utils | grant-completions', function (hooks) {
             'remove-hosts',
           ],
         },
+      'a partial parent id prefix with a wildcard type suggests child resource actions':
+        {
+          lineText: 'ids=hcs;type=*;actions=',
+          expectedLabels: [
+            '*',
+            'create',
+            'list',
+            'read',
+            'update',
+            'delete',
+            'add-hosts',
+            'set-hosts',
+            'remove-hosts',
+          ],
+        },
+      'a partial parent id prefix with the same type shows a no suggestions placeholder':
+        {
+          lineText: 'ids=hcs;type=host-catalog;actions=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
       'ids from different parent resource types with a wildcard type show a no suggestions placeholder':
         {
           lineText: 'ids=hcst_1234567890,o_123;type=*;actions=',
@@ -270,22 +256,25 @@ module('Unit | Utils | grant-completions', function (hooks) {
         },
       'wildcard ids without a type suggest all actions': {
         lineText: 'ids=*;actions=',
-        expectedLabels: allActionLabels,
+        expectedLabels: () => allActionLabels,
       },
       'wildcard ids with a wildcard type suggest all actions': {
         lineText: 'ids=*;type=*;actions=',
-        expectedLabels: allActionLabels,
+        expectedLabels: () => allActionLabels,
       },
-      'template ids without a type show a no suggestions placeholder': {
-        lineText: 'ids={{user.id}};actions=',
-        expectedLabels: ['NO_SUGGESTIONS'],
-      },
+      'canonical template ids without a type show a no suggestions placeholder':
+        {
+          lineText: 'ids={{.User.Id}};actions=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
     },
     function (assert, { lineText, expectedLabels }) {
       const completionResult = this.grantCompletionSource(
         createCompletionContext(lineText),
       );
-      const resolvedLabels = expectedLabels.map((label) =>
+      const resolvedLabels = (
+        typeof expectedLabels === 'function' ? expectedLabels() : expectedLabels
+      ).map((label) =>
         label === 'NO_SUGGESTIONS' ? this.noSuggestionsLabel : label,
       );
 
