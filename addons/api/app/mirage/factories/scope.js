@@ -55,6 +55,7 @@ export default factory.extend({
       collectionActions['host-catalogs'] = ['create', 'list'];
       collectionActions.sessions = ['list'];
       collectionActions.targets = ['create', 'list'];
+      collectionActions.aliases = ['create', 'list'];
     }
 
     return collectionActions;
@@ -125,5 +126,9 @@ export default factory.extend({
         });
       }
     },
+  }),
+
+  withAliasSuffix: trait({
+    alias_target_suffix: () => `.${faker.word.words()}`,
   }),
 });

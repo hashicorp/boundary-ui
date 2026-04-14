@@ -269,14 +269,54 @@ function routes() {
 
       if (method === 'attach-storage-policy') {
         updatedAttrs.storagePolicyId = attrs.storagePolicyId;
+        return scope.update(updatedAttrs);
       }
 
       if (method === 'detach-storage-policy') {
         updatedAttrs.storagePolicyId = '';
+        return scope.update(updatedAttrs);
       }
-      return scope.update(updatedAttrs);
+
+      if (method === 'set-alias-target-suffix') {
+        return scope.update({
+          alias_target_suffix: attrs.alias_target_suffix,
+          version: attrs.version,
+        });
+      }
+
+      if (method === 'remove-alias-target-suffix') {
+        return scope.update({
+          alias_target_suffix: null,
+          version: attrs.version,
+        });
+      }
+
+      // Fallback for unknown methods
+      return scope;
     },
   );
+
+  this.get(
+    '/scopes/:idMethod',
+    function ({ scopes }, { params: { idMethod } }) {
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const scope = scopes.find(id);
+
+      if (method === 'get-target-alias-target-suffix') {
+        return {
+          item: {
+            ...scope.attrs,
+            alias_target_suffix: scope.alias_target_suffix,
+          },
+        };
+      }
+
+      // Fallback
+      return scope;
+    },
+  );
+
   // Auth & IAM resources
 
   this.get('/auth-methods');
@@ -930,10 +970,29 @@ function routes() {
   this.get('/aliases/:id');
   this.del('/aliases/:id');
   this.patch('/aliases/:id');
-  this.post('/aliases', function ({ aliases }) {
+  this.post('/aliases', function ({ aliases, scopes }) {
     const attrs = this.normalizedRequestAttrs();
 
-    return aliases.create(attrs);
+    // Get the scope to check for suffix
+    const scope = scopes.find(attrs.scope_id);
+    let fullValue = attrs.value;
+    let baseValue = attrs.value;
+
+    // If scope has a suffix, append it to create the full value
+    if (scope && scope.alias_target_suffix) {
+      fullValue = `${attrs.value}${scope.alias_target_suffix}`;
+      baseValue = attrs.value;
+    }
+
+    // Create the alias with both base_value and value
+    const aliasAttrs = {
+      ...attrs,
+      value: fullValue,
+      base_value: baseValue,
+      scope,
+    };
+
+    return aliases.create(aliasAttrs);
   });
 
   // session recordings

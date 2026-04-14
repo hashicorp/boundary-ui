@@ -8,4 +8,8 @@ import Model from './base';
 
 export default Model.extend({
   scope: belongsTo(),
+
+  get scopeId() {
+    return this.scope_id || this.scope?.id;
+  },
 });
