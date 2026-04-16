@@ -31,6 +31,8 @@
     <Form::Role::EditGrants
       @model={{@model.role}}
       @grantsSchema={{@model.grantsSchema}}
+      @submit={{fn this.save @model.role}}
+      @cancel={{fn this.cancel @model.role}}
     />
   </page.body>
 

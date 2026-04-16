@@ -4,30 +4,74 @@
  */
 
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import {
+  autocompletion,
+  completionKeymap,
+  keymap,
   linter,
   lintGutter,
-  keymap,
   lintKeymap,
 } from '@hashicorp/design-system-components/codemirror';
+import { createGrantCompletionSource } from 'admin/utils/grant-completions';
 import { createGrantLinter } from 'admin/utils/grant-linter';
-export default class FormRoleEditGrants extends Component {
+
+export default class FormRoleEditGrantsComponent extends Component {
+  @service intl;
+
   // =attributes
 
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
+  completionTranslatedStrings = {
+    noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
+    wildcardTypes: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-types',
+    ),
+    wildcardIds: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-ids',
+    ),
+    templateValue: this.intl.t(
+      'resources.role.edit-grants.completion-info.template-value',
+    ),
+    wildcardActions: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-actions',
+    ),
+    allFields: this.intl.t(
+      'resources.role.edit-grants.completion-info.all-fields',
+    ),
+  };
+
+  completionSource = createGrantCompletionSource(
+    this.args.grantsSchema,
+    this.completionTranslatedStrings,
+  );
   linterSource = createGrantLinter(this.args.grantsSchema);
-  customExtensions = [
-    linter(this.linterSource),
-    lintGutter(),
-    keymap.of(lintKeymap),
-  ];
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
+  @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
+
+  customExtensions = [
+    autocompletion({
+      override: [this.completionSource],
+      // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
+      activateOnCompletion: (completion) => completion.type === 'keyword',
+    }),
+    linter(this.linterSource),
+    lintGutter(),
+    keymap.of([...completionKeymap, ...lintKeymap]),
+  ];
+
+  get grantStrings() {
+    return this.grantStringsText
+      .split('\n')
+      .map((grantString) => grantString.trim())
+      .filter(Boolean);
+  }
 
   /**
    * Returns the formatted export based on the selected export option.
@@ -67,6 +111,14 @@ export default class FormRoleEditGrants extends Component {
   }
 
   // =actions
+
+  @action
+  onInput(value, view) {
+    this.grantStringsText = value;
+
+    const line = view.state.doc.lineAt(view.state.selection.main.head);
+    this.currentLineText = line.text;
+  }
 
   /**
    * Toggles the export options flyout open and closed.

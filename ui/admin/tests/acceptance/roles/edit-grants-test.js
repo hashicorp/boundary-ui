@@ -4,9 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL, select } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  currentURL,
+  find,
+  select,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles/edit grants', function (hooks) {
@@ -125,5 +133,44 @@ module('Acceptance | roles/edit grants', function (hooks) {
     assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
     assert.dom(selectors.EXPORT_FORMAT_SELECT).hasValue('native-hcl');
     // TODO: Update to check for the actual formatted grant string.
+  });
+
+  test('loads current grants in the editor and updates them', async function (assert) {
+    assert.expect(4);
+    const newGrantString = 'ids=*;type=session;actions=list,read';
+    const expectedGrantStrings = [
+      ...instances.role.grant_strings,
+      newGrantString,
+    ];
+
+    await visit(urls.editGrants);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .includesText(instances.role.grant_strings[0]);
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .includesText(instances.role.grant_strings[1]);
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.doc.length,
+        insert: `\n${newGrantString}`,
+      },
+    });
+
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .includesText(newGrantString);
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.deepEqual(
+      this.server.schema.roles.find(instances.role.id).attrs.grantStrings,
+      expectedGrantStrings,
+    );
   });
 });
