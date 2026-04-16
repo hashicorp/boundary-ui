@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const VALID_FIELDS = ['actions', 'ids', 'type', 'output_fields'];
+const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
+const ID_TEMPLATES = [
+  '{{.Account.Id}}',
+  '{{.User.Id}}',
+  '{{user.id}}',
+  '{{account.id}}',
+];
+
 const createDeleteTextAction = (name) => ({
   name,
   apply(view, from, to) {
@@ -31,11 +38,6 @@ const normalizeGrantsSchema = (grantsSchema) => {
 
     return resources;
   }, {});
-  resourcesByType['*'] = {
-    actions: ['*', 'read', 'update', 'delete', 'list', 'create'],
-    idActions: ['read', 'update', 'delete'],
-    collectionActions: ['list', 'create'],
-  };
 
   const validResourceTypes = resourceTypes.map((resource) => resource.type);
   validResourceTypes.push('*');
@@ -44,15 +46,21 @@ const normalizeGrantsSchema = (grantsSchema) => {
   Object.values(resourcesByType).forEach((resource) => {
     resource.actions.forEach((action) => allActions.add(action));
   });
+  const validActions = Array.from(allActions);
+  validActions.push('*');
+
   const resourcesByPrefix = resourceTypes.reduce((map, resource) => {
     resource.id_prefixes?.forEach((prefix) => {
       map[prefix] = resource.type;
     });
     return map;
   }, {});
-  const parentTypes = new Set(
+
+  let parentTypes = new Set(
     resourceTypes.filter((r) => r.parent_type).map((r) => r.parent_type),
   );
+  parentTypes = Array.from(parentTypes);
+
   const topLevelTypes = resourceTypes
     .filter((r) => {
       const hasCreateAction = r.collection_actions.includes('create');
@@ -61,29 +69,31 @@ const normalizeGrantsSchema = (grantsSchema) => {
     })
     .map((r) => r.type);
 
-  const parentResourcesByPrefix = resourceTypes.reduce((map, resource) => {
-    const parentType = resource.parent_type;
-    if (parentType) {
-      resourcesByType[parentType]?.idPrefixes.forEach((prefix) => {
-        map[prefix] = parentType;
-      });
-    }
-    return map;
-  }, {});
-  const templateIdTypes = [
-    '{{.Account.Id}}',
-    '{{.User.Id}}',
-    '{{user.id}}',
-    '{{account.id}}',
-  ];
+  const childResourceTypesByParentType = resourceTypes.reduce(
+    (childrenByParentType, resourceType) => {
+      const parentType = resourceType.parent_type;
+
+      if (!parentType) {
+        return childrenByParentType;
+      }
+
+      childrenByParentType[parentType] = [
+        ...(childrenByParentType[parentType] ?? []),
+        resourceType.type,
+      ];
+
+      return childrenByParentType;
+    },
+    {},
+  );
+
   return {
     resourcesByType,
     validResourceTypes,
-    validActions: Array.from(allActions),
+    validActions,
     resourcesByPrefix,
-    parentResourcesByPrefix,
-    templateIdTypes,
-    parentTypes: Array.from(parentTypes),
+    childResourceTypesByParentType,
+    parentTypes,
     topLevelTypes,
   };
 };
@@ -128,7 +138,7 @@ const grantLinter = (context, schema) => {
     }
 
     // Check for invalid characters (only allow alphanumeric characters, equal signs, commas, semicolons, underscores, hyphens, curly braces, and periods)
-    const invalidCharMatch = line.match(/[^a-zA-Z0-9=,;_*\-.{}\s]/g) || [];
+    const invalidCharMatch = line.match(/[^a-zA-Z0-9=,;:_*\-.{}\s]/g) || [];
     for (const invalidChar of invalidCharMatch) {
       const invalidCharIndex = lineStart + line.indexOf(invalidChar);
       diagnostics.push({
@@ -191,13 +201,13 @@ const grantLinter = (context, schema) => {
 
     // Validate all fields are recognized
     for (const field of Object.keys(parsedFields)) {
-      if (!VALID_FIELDS.includes(field)) {
+      if (!GRANT_FIELDS.includes(field)) {
         const pos = fieldPositions[field];
         diagnostics.push({
           from: pos.keyStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `Unknown field "${field}". Valid fields are: ${VALID_FIELDS.join(', ')}`,
+          message: `Unknown field "${field}". Valid fields are: ${GRANT_FIELDS.join(', ')}`,
         });
       }
     }
@@ -215,12 +225,14 @@ const grantLinter = (context, schema) => {
       }
     }
 
+    const validatedFields = {};
+
     // Validate type field value is a valid resource type
-    const parsedTypeField = { value: '', known: false, wildcard: false };
     if (parsedFields.type) {
+      validatedFields.type = { value: '', wildcard: false };
       const typeValue = parsedFields.type.trim();
+      const pos = fieldPositions.type;
       if (!schema.validResourceTypes.includes(typeValue)) {
-        const pos = fieldPositions.type;
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
@@ -228,15 +240,25 @@ const grantLinter = (context, schema) => {
           message: `Invalid resource type "${typeValue}"`,
         });
       } else {
-        parsedTypeField.known = true;
+        validatedFields.type.value = typeValue;
+        if (!parsedFields.ids) {
+          if (!schema.topLevelTypes.includes(typeValue)) {
+            diagnostics.push({
+              from: pos.valueStart,
+              to: pos.valueEnd,
+              severity: 'error',
+              message: `Type "${typeValue}" must be a top-level type`,
+            });
+          }
+        }
       }
-      parsedTypeField.value = typeValue;
-      parsedTypeField.wildcard = typeValue === '*';
+      validatedFields.type.wildcard = typeValue === '*';
     }
 
     // Validate ids field
-    const parsedIdsField = { wildcard: false };
+    //const parsedIdsField = { value: [], exists: false, knownType: '', wildcard: false };
     if (parsedFields.ids) {
+      validatedFields.ids = { value: [], knownType: '', wildcard: false };
       const idsValue = parsedFields.ids.trim();
       const pos = fieldPositions.ids;
       const idsList = idsValue
@@ -262,32 +284,39 @@ const grantLinter = (context, schema) => {
             actions: [createDeleteTextAction('Remove wildcard from ids')],
           });
         } else {
-          parsedIdsField.wildcard = true;
+          validatedFields.ids.wildcard = true;
+          if (!parsedFields.type) {
+            diagnostics.push({
+              from: lineStart,
+              to: lineEnd,
+              severity: 'error',
+              message: 'Missing "type" field for wildcard ids',
+            });
+          }
         }
       } else {
-        parsedIdsField.value = idsList;
-        validateIdsField(schema, diagnostics, idsList, parsedTypeField, pos);
+        const validIdType = validateIdsField(
+          schema,
+          diagnostics,
+          idsList,
+          validatedFields.type,
+          pos,
+        );
+        if (validIdType) {
+          validatedFields.ids.knownType = validIdType;
+        }
       }
     }
 
-    if (!parsedFields.actions && !parsedFields.output_fields) {
-      diagnostics.push({
-        from: lineStart,
-        to: lineEnd,
-        severity: 'error',
-        message: 'Missing "actions" field',
-      });
-    }
-
-    if (!parsedFields.ids) {
-      if (!parsedFields.type) {
+    if (!validatedFields.ids) {
+      if (!validatedFields.type) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
           severity: 'error',
           message: 'Missing "ids" or "type" fields',
         });
-      } else if (parsedTypeField.wildcard) {
+      } else if (validatedFields.type.wildcard) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
@@ -304,13 +333,13 @@ const grantLinter = (context, schema) => {
           });
         }
       }
-    } else if (parsedIdsField.wildcard) {
-      if (!parsedFields.type) {
+    } else {
+      if (!parsedFields.actions && !parsedFields.output_fields) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
           severity: 'error',
-          message: 'Missing "type" field for wildcard ids',
+          message: 'Missing "actions" field',
         });
       }
     }
@@ -330,28 +359,24 @@ const grantLinter = (context, schema) => {
           severity: 'error',
           message: '"actions" field must contain at least one action',
         });
-      } else if (actionList.includes('*')) {
-        if (actionList.length > 1) {
-          const pos = fieldPositions.actions;
-          const wildcardIndex =
-            pos.valueStart + parsedFields.actions.indexOf('*');
-          diagnostics.push({
-            from: wildcardIndex,
-            to: wildcardIndex + 1,
-            severity: 'error',
-            message:
-              'Wildcard action "*" cannot be combined with other actions',
-            actions: [createDeleteTextAction('Remove wildcard from actions')],
-          });
-        }
+      } else if (actionList.includes('*') && actionList.length > 1) {
+        const pos = fieldPositions.actions;
+        const wildcardIndex =
+          pos.valueStart + parsedFields.actions.indexOf('*');
+        diagnostics.push({
+          from: wildcardIndex,
+          to: wildcardIndex + 1,
+          severity: 'error',
+          message: 'Wildcard action "*" cannot be combined with other actions',
+          actions: [createDeleteTextAction('Remove wildcard from actions')],
+        });
       } else {
         // Validate individual actions against the resource type
         validateActionsField(
           schema,
           diagnostics,
           actionList,
-          parsedIdsField,
-          parsedTypeField,
+          validatedFields,
           fieldPositions.actions,
         );
       }
@@ -372,26 +397,74 @@ const idType = (schema, id) => {
   return schema.resourcesByPrefix[prefix];
 };
 
+const getChildResourceActions = (schema, parentType) => {
+  if (
+    !parentType ||
+    !schema.childResourceTypesByParentType[parentType]?.length
+  ) {
+    return [];
+  }
+
+  const childTypes = schema.childResourceTypesByParentType[parentType] ?? [];
+
+  return [
+    ...new Set(
+      childTypes.flatMap((type) => schema.resourcesByType[type]?.actions ?? []),
+    ),
+  ];
+};
+
 const validateIdsField = (
   schema,
   diagnostics,
   idsList,
-  parsedTypeField,
+  validatedFieldsType = {},
   pos,
 ) => {
+  if (
+    idsList.includes('{{.Account.Id}}') &&
+    idsList.includes('{{account.id}}')
+  ) {
+    diagnostics.push({
+      from: pos.valueStart,
+      to: pos.valueEnd,
+      severity: 'error',
+      message: 'Duplicate id "{{.Account.Id}}" and "{{account.id}}"',
+    });
+    return;
+  }
+  if (idsList.includes('{{.User.Id}}') && idsList.includes('{{user.id}}')) {
+    diagnostics.push({
+      from: pos.valueStart,
+      to: pos.valueEnd,
+      severity: 'error',
+      message: 'Duplicate id "{{.User.Id}}" and "{{user.id}}"',
+    });
+    return;
+  }
+
   let seenIdType;
   for (const [i, id] of idsList.entries()) {
     if (i === 0) {
       seenIdType = idType(schema, id);
     }
     const currentIdType = idType(schema, id);
+    if (idsList.slice(i + 1).includes(id)) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: `Duplicate id "${id}"`,
+      });
+      return;
+    }
     if (currentIdType === 'template') {
-      if (!schema.templateIdTypes.includes(id)) {
+      if (!ID_TEMPLATES.includes(id)) {
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `Unknown template "${id}". Valid templates: ${schema.templateIdTypes.join(', ')}`,
+          message: `Unknown template "${id}". Valid templates: ${ID_TEMPLATES.join(', ')}`,
         });
         return;
       }
@@ -415,7 +488,7 @@ const validateIdsField = (
       });
       return;
     }
-    if (parsedTypeField.wildcard) {
+    if (validatedFieldsType.wildcard) {
       // If type is wildcard, then pinned id(s) must support child types
       if (!schema.parentTypes.includes(currentIdType)) {
         diagnostics.push({
@@ -426,16 +499,16 @@ const validateIdsField = (
         });
         return;
       }
-    } else if (parsedTypeField.known) {
+    } else if (validatedFieldsType.value) {
       // If type is known and not wildcard, then pinned id(s) must match the type
       const parentType =
-        schema.resourcesByType[parsedTypeField.value]?.parentType;
+        schema.resourcesByType[validatedFieldsType.value]?.parentType;
       if (!parentType) {
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `Type must support child types. Invalid type "${parsedTypeField.value}"`,
+          message: `Type must support child types. Invalid type "${validatedFieldsType.value}"`,
         });
         return;
       }
@@ -450,37 +523,96 @@ const validateIdsField = (
       }
     }
   }
+  if (seenIdType === 'template') {
+    if (idsList.length > 1) {
+      seenIdType = 'template-multiple';
+    } else if (
+      idsList[0] === '{{.Account.Id}}' ||
+      idsList[0] === '{{account.id}}'
+    ) {
+      seenIdType = 'account-template';
+    } else if (idsList[0] === '{{.User.Id}}' || idsList[0] === '{{user.id}}') {
+      seenIdType = 'user-template';
+    }
+  }
+  return seenIdType;
+};
+
+const getIdActionsForResourceType = (schema, resourceType) => {
+  switch (resourceType) {
+    case 'template-multiple':
+      return [
+        '*',
+        ...schema.resourcesByType['account'].idActions,
+        ...schema.resourcesByType['user'].idActions,
+      ];
+    case 'account-template':
+      return ['*', ...schema.resourcesByType['account'].idActions];
+    case 'user-template':
+      return ['*', ...schema.resourcesByType['user'].idActions];
+    default:
+      return ['*', ...schema.resourcesByType[resourceType].idActions];
+  }
 };
 
 const validateActionsField = (
   schema,
   diagnostics,
   actionList,
-  parsedIdsField,
-  parsedTypeField,
+  validatedFields,
   pos,
 ) => {
-  let validActions;
-  const bothWildCard = parsedIdsField.wildcard && parsedTypeField.wildcard;
-  const allActionsAllowed = bothWildCard || !parsedTypeField.known;
-  if (allActionsAllowed) {
-    validActions = schema.validActions;
-  } else {
-    validActions = schema.resourcesByType[parsedTypeField.value].actions;
+  let validActions = schema.validActions;
+  let errorMessage = (action) => `Invalid action "${action}"`;
+  if (!validatedFields.type) {
+    if (validatedFields.ids?.knownType) {
+      // Only id actions belonging to known id type (including wildcard action)
+      validActions = getIdActionsForResourceType(
+        schema,
+        validatedFields.ids.knownType,
+      );
+      errorMessage = (action) =>
+        `Invalid action "${action}". Valid id actions: ${validActions.join(', ')}`;
+    }
+  } else if (validatedFields.type.wildcard) {
+    if (validatedFields.ids?.knownType) {
+      // Any action from associated child resource types would be valid (including wildcard action)
+      validActions = [
+        '*',
+        ...getChildResourceActions(schema, validatedFields.ids.knownType),
+      ];
+      errorMessage = (action) =>
+        `Invalid action "${action}". Valid actions: ${validActions.join(', ')}`;
+    }
+  } else if (validatedFields.type.value) {
+    if (!validatedFields.ids) {
+      // Only collection actions create/list belonging to the specified type
+      validActions =
+        schema.resourcesByType[validatedFields.type.value].collectionActions;
+      validActions = validActions.filter(
+        (action) => action.startsWith('create') || action.startsWith('list'),
+      );
+      errorMessage = (action) =>
+        `Invalid action "${action}". Valid collection action(s): ${validActions.join(', ')}`;
+    } else if (validatedFields.ids.knownType || validatedFields.ids.wildcard) {
+      validActions = [
+        '*',
+        ...schema.resourcesByType[validatedFields.type.value].actions,
+      ];
+      errorMessage = (action) =>
+        `Invalid action "${action}". Valid actions: ${validActions.join(', ')}`;
+    }
   }
 
   for (const action of actionList) {
     if (!validActions.includes(action)) {
-      const errorMessage = allActionsAllowed
-        ? `Invalid action "${action}"`
-        : `Invalid action "${action}" for resource type "${parsedTypeField.value}". Valid actions: ${validActions.join(', ')}`;
       diagnostics.push({
         from: pos.valueStart,
         to: pos.valueEnd,
         severity: 'error',
-        message: errorMessage,
+        message: errorMessage(action),
       });
-      break; // Only show one error per actions field
+      return;
     }
   }
 };

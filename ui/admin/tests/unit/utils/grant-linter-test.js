@@ -43,7 +43,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=*;type=*;actions=read,write;', 'Trailing semicolon is not allowed'], // trailing semicolon
       ['ids={{.Account.Id}};type=+;actions=read', 'Invalid character "+"'], // invalid character +
       ['ids={{.Account.Id}};type=();actions=read', 'Invalid character "("'], // invalid characters ()
-      ['type=target', 'Missing "actions" field'], // missing actions field
+      ['type=target', 'Missing "actions" or "output_fields" field'], // missing actions/output_fields field
       ['actions=read,write', 'Missing "ids" or "type" fields'], // missing type/ids field
       [
         'type=credential-store;ids=;actions=read',
@@ -65,7 +65,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ], // duplicate actions field
       [
         'type=credential;ids=cs_1234;actions=read;random=name',
-        'Unknown field "random". Valid fields are: actions, ids, type, output_fields',
+        'Unknown field "random". Valid fields are: ids, type, actions, output_fields',
       ], // unknown field "random"
       [
         '=credential;actions=;ids=cs_1234',
@@ -83,11 +83,12 @@ module('Unit | Utility | grant-linter', function (hooks) {
     'diagnostics for type field values',
     [
       ['actions=read;type=random', 'Invalid resource type "random"'], // invalid resource type
+      ['actions=read;type=account', 'Type "account" must be a top-level type'], // invalid resource type
       [
         'type=credential,random;actions=read',
         'Invalid resource type "credential,random"',
       ], // invalid resource type
-      ['type=credential-store;actions=read'], // valid grant string
+      ['type=credential-store;actions=create'], // valid grant string
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));
@@ -104,22 +105,23 @@ module('Unit | Utility | grant-linter', function (hooks) {
     'diagnostics for actions field values',
     [
       [
-        'type=credential;actions=,',
+        'type=credential-store;actions=,',
         '"actions" field must contain at least one action',
       ], // actions field must contain at least one action
       [
-        'type=credential;actions=read,*,write',
+        'type=session;actions=read,*,write',
         'Wildcard action "*" cannot be combined with other actions',
       ], // wildcard action cannot be combined with other actions
       [
-        'type=credential;actions=execute',
-        'Invalid action "execute" for resource type "credential". Valid actions: create, list, read, update, delete',
+        'type=policy;actions=execute',
+        'Invalid action "execute". Valid collection action(s): create, list',
       ], // invalid action for resource type
       [
         'type=target;actions=execute',
-        'Invalid action "execute" for resource type "target". Valid actions: list, create, add-credential-sources, remove-credential-sources, delete, set-host-sources, set-credential-sources, authorize-session, read, update, add-host-sources, remove-host-sources',
+        'Invalid action "execute". Valid collection action(s): list, create',
       ], // invalid action when type is not specified
-      ['type=target;actions=read,add-credential-sources'], // valid actions for resource type
+      ['ids=hc_1234;type=*;actions=add-hosts,read'], // valid actions for resource type
+      ['type=worker;actions=create:controller-led'], // valid actions for resource type
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));
