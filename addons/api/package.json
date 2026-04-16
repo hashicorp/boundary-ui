@@ -92,7 +92,7 @@
     "sinon": "^19.0.2"
   },
   "engines": {
-    "node": "20.* || 22.*"
+    "node": "22.* || 24.*"
   },
   "ember": {
     "edition": "octane"
