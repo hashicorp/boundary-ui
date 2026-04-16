@@ -278,20 +278,16 @@ function routes() {
       }
 
       if (method === 'set-alias-target-suffix') {
-        return scope.update({
-          alias_target_suffix: attrs.alias_target_suffix,
-          version: attrs.version,
-        });
+        updatedAttrs.alias_suffix = attrs.alias_suffix;
+        return scope.update(updatedAttrs);
       }
 
       if (method === 'remove-alias-target-suffix') {
-        return scope.update({
-          alias_target_suffix: null,
-          version: attrs.version,
-        });
+        updatedAttrs.alias_suffix = null;
+        return scope.update(updatedAttrs);
       }
 
-      // Fallback for unknown methods
+      // Fallback
       return scope;
     },
   );
@@ -307,7 +303,7 @@ function routes() {
         return {
           item: {
             ...scope.attrs,
-            alias_target_suffix: scope.alias_target_suffix,
+            alias_suffix: scope.alias_suffix,
           },
         };
       }
@@ -964,7 +960,7 @@ function routes() {
   this.get(
     '/aliases',
     ({ aliases }, { queryParams: { scope_id: scopeId } }) => {
-      return aliases.where({ scopeId });
+      return aliases.where({ scope_id: scopeId });
     },
   );
   this.get('/aliases/:id');
@@ -979,8 +975,8 @@ function routes() {
     let baseValue = attrs.value;
 
     // If scope has a suffix, append it to create the full value
-    if (scope && scope.alias_target_suffix) {
-      fullValue = `${attrs.value}${scope.alias_target_suffix}`;
+    if (scope && scope.alias_suffix) {
+      fullValue = `${attrs.value}${scope.alias_suffix}`;
       baseValue = attrs.value;
     }
 
