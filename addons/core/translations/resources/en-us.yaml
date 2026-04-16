@@ -663,6 +663,16 @@ role:
   edit-grants:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
+    no-suggestions: No suggestions
+    completion-info:
+      wildcard-types: Wildcard - matches all types
+      wildcard-ids: Wildcard - matches all IDs
+      wildcard-actions: Wildcard - matches all actions
+      template-value: Template value
+      all-fields: All fields
+    editor:
+      title: Grant Editor
+      description: Add each new grant string on a different line
     string-formats:
       title: String format
       title_plural: String formats
@@ -682,6 +692,7 @@ role:
       insert-resource-ids: insert resource ids
     export:
       format: Format
+      formatted-export-aria-label: Formatted export
       options:
         terraform: Terraform
         native-hcl: Native HCL
