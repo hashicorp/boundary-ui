@@ -4,16 +4,8 @@
  */
 
 import GeneratedAliasModel from '../generated/models/alias';
-import { attr } from '@ember-data/model';
 
 export const TYPE_ALIAS_TARGET = 'target';
 export const TYPES_ALIAS = Object.freeze([TYPE_ALIAS_TARGET]);
 
-export default class AliasModel extends GeneratedAliasModel {
-  // =attributes
-
-  @attr('string', {
-    description: 'The base value provided by the user before suffix appending.',
-  })
-  base_value;
-}
+export default class AliasModel extends GeneratedAliasModel {}

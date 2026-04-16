@@ -130,6 +130,6 @@ export default factory.extend({
   }),
 
   withAliasSuffix: trait({
-    alias_target_suffix: () => `.${faker.word.words()}`,
+    alias_suffix: () => `.${faker.word.words()}`,
   }),
 });

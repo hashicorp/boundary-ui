@@ -17,8 +17,10 @@ export default Factory.extend({
   value(i, attrs) {
     return attrs.base_value;
   },
+  scope_id: () => 'global',
   description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.number.int(),
+  scope: () => ({ id: 'global', type: 'global' }),
 });

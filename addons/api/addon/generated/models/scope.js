@@ -51,6 +51,11 @@ export default class GeneratedScopeModel extends BaseModel {
   version;
 
   @attr('string', {
+    description: 'The alias suffix for project scopes.',
+  })
+  alias_suffix;
+
+  @attr('string', {
     description: 'The ID of the associated storage policy',
   })
   storage_policy_id;
