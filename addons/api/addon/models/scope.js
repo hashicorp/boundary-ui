@@ -15,6 +15,8 @@ export const TYPES_SCOPE = Object.freeze([
 ]);
 
 export default class ScopeModel extends GeneratedScopeModel {
+  // =attributes
+
   /**
    * @type {boolean}
    */
