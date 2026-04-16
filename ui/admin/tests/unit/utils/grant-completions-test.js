@@ -26,6 +26,8 @@ const createCompletionContext = (lineText) => ({
 
 const getLabels = (completionResult) =>
   completionResult.options.map(({ label }) => label);
+const getInfos = (completionResult) =>
+  completionResult.options.map(({ info }) => info ?? '');
 
 let allActionLabels;
 
@@ -36,9 +38,25 @@ module('Unit | Utils | grant-completions', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.intl = this.owner.lookup('service:intl');
-    this.noSuggestionsLabel = this.intl.t(
-      'resources.role.edit-grants.no-suggestions',
-    );
+    this.completionTranslatedStrings = {
+      noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
+      wildcardTypes: this.intl.t(
+        'resources.role.edit-grants.completion-info.wildcard-types',
+      ),
+      wildcardIds: this.intl.t(
+        'resources.role.edit-grants.completion-info.wildcard-ids',
+      ),
+      wildcardActions: this.intl.t(
+        'resources.role.edit-grants.completion-info.wildcard-actions',
+      ),
+      templateValue: this.intl.t(
+        'resources.role.edit-grants.completion-info.template-value',
+      ),
+      allFields: this.intl.t(
+        'resources.role.edit-grants.completion-info.all-fields',
+      ),
+    };
+    this.noSuggestionsLabel = this.completionTranslatedStrings.noSuggestions;
 
     const response = await fetch('/grants-schema.json');
 
@@ -61,7 +79,7 @@ module('Unit | Utils | grant-completions', function (hooks) {
 
     this.grantCompletionSource = createGrantCompletionSource(
       grantsSchemaData,
-      this.noSuggestionsLabel,
+      this.completionTranslatedStrings,
     );
   });
 
@@ -298,4 +316,40 @@ module('Unit | Utils | grant-completions', function (hooks) {
       assert.deepEqual(getLabels(completionResult), expectedLabels);
     },
   );
+
+  test('completion info labels are translated values', function (assert) {
+    const typeCompletionResult = this.grantCompletionSource(
+      createCompletionContext('type='),
+    );
+    const idsCompletionResult = this.grantCompletionSource(
+      createCompletionContext('ids='),
+    );
+    const outputFieldsCompletionResult = this.grantCompletionSource(
+      createCompletionContext('output_fields='),
+    );
+    const actionsCompletionResult = this.grantCompletionSource(
+      createCompletionContext('actions='),
+    );
+
+    assert.strictEqual(
+      typeCompletionResult.options[0].info,
+      this.completionTranslatedStrings.wildcardTypes,
+    );
+
+    assert.deepEqual(getInfos(idsCompletionResult), [
+      this.completionTranslatedStrings.wildcardIds,
+      this.completionTranslatedStrings.templateValue,
+      this.completionTranslatedStrings.templateValue,
+    ]);
+
+    assert.strictEqual(
+      outputFieldsCompletionResult.options[0].info,
+      this.completionTranslatedStrings.allFields,
+    );
+
+    assert.strictEqual(
+      actionsCompletionResult.options[0].info,
+      this.completionTranslatedStrings.wildcardActions,
+    );
+  });
 });

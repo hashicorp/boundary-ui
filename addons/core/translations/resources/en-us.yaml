@@ -664,6 +664,12 @@ role:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
     no-suggestions: No suggestions
+    completion-info:
+      wildcard-types: Wildcard - matches all types
+      wildcard-ids: Wildcard - matches all IDs
+      wildcard-actions: Wildcard - matches all actions
+      template-value: Template value
+      all-fields: All fields
     editor:
       title: Grant Editor
       description: Add each new grant string on a different line

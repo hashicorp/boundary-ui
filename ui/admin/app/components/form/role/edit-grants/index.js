@@ -22,9 +22,28 @@ export default class FormRoleEditGrantsComponent extends Component {
 
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
+  completionTranslatedStrings = {
+    noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
+    wildcardTypes: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-types',
+    ),
+    wildcardIds: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-ids',
+    ),
+    templateValue: this.intl.t(
+      'resources.role.edit-grants.completion-info.template-value',
+    ),
+    wildcardActions: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-actions',
+    ),
+    allFields: this.intl.t(
+      'resources.role.edit-grants.completion-info.all-fields',
+    ),
+  };
+
   completionSource = createGrantCompletionSource(
     this.args.grantsSchema,
-    this.intl.t('resources.role.edit-grants.no-suggestions'),
+    this.completionTranslatedStrings,
   );
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
@@ -35,6 +54,8 @@ export default class FormRoleEditGrantsComponent extends Component {
   customExtensions = [
     autocompletion({
       override: [this.completionSource],
+      // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
+      activateOnCompletion: (completion) => completion.type === 'keyword',
     }),
     keymap.of(completionKeymap),
   ];

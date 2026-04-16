@@ -234,7 +234,7 @@ const getActionOptions = (schema, typeValue, idsValue) => {
     : actionOptions;
 };
 
-function grantCompletions(context, schema, noSuggestionsLabel) {
+function grantCompletions(context, schema, translatedStrings) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
@@ -265,6 +265,7 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
     return {
       from: context.pos - partial.length,
       options,
+      filter: false, // This is to preserve the original order of our array and not let codemirror sort it
     };
   }
 
@@ -280,14 +281,14 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
     const options = filterByPrefix(typeOptions, partial).map((type) => ({
       label: type,
       type: 'type',
+      info: type === '*' ? translatedStrings.wildcardTypes : '',
     }));
 
     return {
       from: context.pos - partial.length,
       options: options.length
         ? options
-        : [getNoSuggestionsOption(noSuggestionsLabel)],
-      filter: options.length > 0,
+        : [getNoSuggestionsOption(translatedStrings.noSuggestions)],
     };
   }
 
@@ -305,8 +306,11 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
         .filter((value) => !enteredIds.includes(value))
         .map((value) => ({
           label: value,
-          type: 'constant',
-          info: value === '*' ? 'Wildcard - matches all IDs' : 'Template value',
+          type: value === '*' ? 'constant' : 'interface',
+          info:
+            value === '*'
+              ? translatedStrings.wildcardIds
+              : translatedStrings.templateValue,
         })),
     };
   }
@@ -325,15 +329,15 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
       .filter((action) => !enteredActions.includes(action))
       .map((action) => ({
         label: action,
-        type: 'function',
+        type: 'constant',
+        info: action === '*' ? translatedStrings.wildcardActions : '',
       }));
 
     return {
       from: context.pos - partial.length,
       options: options.length
         ? options
-        : [getNoSuggestionsOption(noSuggestionsLabel)],
-      filter: options.length > 0,
+        : [getNoSuggestionsOption(translatedStrings.noSuggestions)],
     };
   }
 
@@ -353,8 +357,7 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
         .map((value) => ({
           label: value,
           type: 'constant',
-          apply: value,
-          info: 'All fields',
+          info: translatedStrings.allFields,
         })),
     };
   }
@@ -364,9 +367,9 @@ function grantCompletions(context, schema, noSuggestionsLabel) {
 
 export const createGrantCompletionSource = (
   grantsSchema,
-  noSuggestionsLabel,
+  translatedStrings,
 ) => {
   const schema = normalizeGrantsSchema(grantsSchema);
 
-  return (context) => grantCompletions(context, schema, noSuggestionsLabel);
+  return (context) => grantCompletions(context, schema, translatedStrings);
 };
