@@ -52,6 +52,7 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
     assert.ok(controller.roles);
   });
 
+  // TODO: Will be removed once this view becomes read only
   test('cancel action rolls-back changes on the specified model', async function (assert) {
     await visit(urls.grants);
     const role = await store.findRecord('role', instances.role.id);

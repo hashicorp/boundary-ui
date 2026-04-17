@@ -4,22 +4,72 @@
  */
 
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import {
+  autocompletion,
+  completionKeymap,
+  keymap,
+} from '@hashicorp/design-system-components/codemirror';
 
-export default class FormRoleEditGrants extends Component {
+import { createGrantCompletionSource } from 'admin/utils/grant-completions';
+
+export default class FormRoleEditGrantsComponent extends Component {
+  @service intl;
+
   // =attributes
 
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
+<<<<<<< ICU-18459-create-actions-component
   selectedResourceType = 'target';
+=======
+  completionTranslatedStrings = {
+    noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
+    wildcardTypes: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-types',
+    ),
+    wildcardIds: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-ids',
+    ),
+    templateValue: this.intl.t(
+      'resources.role.edit-grants.completion-info.template-value',
+    ),
+    wildcardActions: this.intl.t(
+      'resources.role.edit-grants.completion-info.wildcard-actions',
+    ),
+    allFields: this.intl.t(
+      'resources.role.edit-grants.completion-info.all-fields',
+    ),
+  };
+>>>>>>> llb/grants-builder
 
-  // TODO: Replace with actual grant lines from code editor once implemented.
-  grantStringLines =
-    'ids=hc_123;type=host-catalog;actions=read,create,list\nids=ttcp_123;type=target;actions=list\ntype=credential;actions=create';
+  completionSource = createGrantCompletionSource(
+    this.args.grantsSchema,
+    this.completionTranslatedStrings,
+  );
 
+  @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
+  @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
+
+  customExtensions = [
+    autocompletion({
+      override: [this.completionSource],
+      // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
+      activateOnCompletion: (completion) => completion.type === 'keyword',
+    }),
+    keymap.of(completionKeymap),
+  ];
+
+  get grantStrings() {
+    return this.grantStringsText
+      .split('\n')
+      .map((grantString) => grantString.trim())
+      .filter(Boolean);
+  }
 
   /**
    * Returns the formatted export based on the selected export option.
@@ -38,7 +88,7 @@ export default class FormRoleEditGrants extends Component {
    */
   get terraformFormattedExport() {
     let formatted = `grant_strings = [ \n`;
-    this.grantStringLines.split('\n').forEach((line) => {
+    this.grantStringsText.split('\n').forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
@@ -51,7 +101,7 @@ export default class FormRoleEditGrants extends Component {
    */
   get nativeHclFormattedExport() {
     let formatted = `[ \n`;
-    this.grantStringLines.split('\n').forEach((line) => {
+    this.grantStringsText.split('\n').forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
@@ -59,6 +109,14 @@ export default class FormRoleEditGrants extends Component {
   }
 
   // =actions
+
+  @action
+  onInput(value, view) {
+    this.grantStringsText = value;
+
+    const line = view.state.doc.lineAt(view.state.selection.main.head);
+    this.currentLineText = line.text;
+  }
 
   /**
    * Toggles the export options flyout open and closed.

@@ -3,14 +3,58 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Form class='full-width' as |form|>
+<Rose::Form
+  class='full-width'
+  @onSubmit={{fn @submit this.grantStrings}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
   <Hds::Layout::Grid
     @columnWidth={{hash sm='100%' md='33.33%'}}
     @gap='12'
     as |LG|
   >
-    <LG.Item @colspan={{hash sm=1 md=2}}>
-      {{! TODO: Add grants code editor. }}
+    <LG.Item @colspan={{hash sm=1 md=2}} @rowspan='2'>
+      <Hds::CodeEditor
+        class='grant-editor'
+        @hasFullScreenButton={{true}}
+        @ariaLabel={{t 'form.secret-editor.label'}}
+        @value={{this.grantStringsText}}
+        @onInput={{this.onInput}}
+        @customExtensions={{this.customExtensions}}
+        data-test-code-editor
+        as |CE|
+      >
+        <CE.Title>
+          {{t 'resources.role.edit-grants.editor.title'}}
+        </CE.Title>
+        <CE.Description>
+          {{t 'resources.role.edit-grants.editor.description'}}
+        </CE.Description>
+      </Hds::CodeEditor>
+      <form.actions class='margin-top-l'>
+        <:actions>
+          <Hds::ButtonSet>
+            <Hds::Button type='submit' @text={{t 'actions.save'}} />
+            <Hds::Button
+              type='button'
+              @text={{t 'actions.cancel'}}
+              @color='secondary'
+              {{on 'click' @cancel}}
+            />
+            {{#if this.grantStringsText}}
+              <Hds::Button
+                @text={{t 'actions.export'}}
+                @color='tertiary'
+                @icon='upload'
+                data-test-export-grants-btn
+                {{on 'click' this.toggleExportOptionsFlyout}}
+              />
+            {{/if}}
+          </Hds::ButtonSet>
+        </:actions>
+      </form.actions>
     </LG.Item>
 
     <Hds::Accordion @size='large' as |A|>
@@ -65,7 +109,9 @@
         </Hds::Form::Select::Field>
 
         <Hds::CodeBlock
-          @ariaLabel='formatted-export'
+          @ariaLabel={{t
+            'resources.role.edit-grants.export.formatted-export-aria-label'
+          }}
           @hasCopyButton={{true}}
           @language='hcl'
           @value={{this.formattedExport}}
@@ -81,22 +127,4 @@
       </M.Body>
     </Hds::Flyout>
   {{/if}}
-
-  <form.actions class='margin-top-l'>
-    <:actions>
-      <Hds::ButtonSet>
-        <Hds::Button type='submit' @text={{t 'actions.save'}} />
-        <Hds::Button @text={{t 'actions.cancel'}} @color='secondary' />
-        {{#if this.grantStringLines}}
-          <Hds::Button
-            @text={{t 'actions.export'}}
-            @color='tertiary'
-            @icon='upload'
-            data-test-export-grants-btn
-            {{on 'click' this.toggleExportOptionsFlyout}}
-          />
-        {{/if}}
-      </Hds::ButtonSet>
-    </:actions>
-  </form.actions>
 </Rose::Form>
