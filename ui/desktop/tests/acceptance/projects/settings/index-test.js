@@ -336,4 +336,17 @@ module('Acceptance | projects | settings | index', function (hooks) {
     );
     assert.strictEqual(rdpService.preferredRdpClient, RDP_CLIENT_NONE);
   });
+
+  test('preferred clients is hidden for Linux', async function (assert) {
+    window.desktop.system.checkOS.resolves({
+      isWindows: false,
+      isMac: false,
+      isLinux: true,
+    });
+
+    await visit(urls.settings);
+
+    assert.dom(RDP_PREFERRED_CLIENT).doesNotExist();
+    assert.dom(RDP_RECOMMENDED_CLIENT).doesNotExist();
+  });
 });
