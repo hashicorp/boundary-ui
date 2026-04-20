@@ -980,22 +980,26 @@ function routes() {
     const attrs = this.normalizedRequestAttrs();
 
     // Get the scope to check for suffix
-    const scope = scopes.find(attrs.scope_id);
-    let fullValue = attrs.value;
-    let baseValue = attrs.value;
+    const scopeId =
+      attrs.scope_id || attrs.scopeId || attrs.scope?.id || 'global';
+    const scope = scopes.find(scopeId);
 
-    // If scope has a suffix, append it to create the full value
-    if (scope && scope.alias_suffix) {
-      fullValue = `${attrs.value}${scope.alias_suffix}`;
-      baseValue = attrs.value;
+    const baseValue =
+      attrs.base_value || attrs.value || attrs.name || faker.word.words();
+
+    let fullValue = attrs.value || baseValue;
+
+    if (scope?.alias_suffix) {
+      fullValue = `${baseValue}${scope.alias_suffix}`;
     }
 
     // Create the alias with both base_value and value
     const aliasAttrs = {
       ...attrs,
+      scope_id: scopeId,
       value: fullValue,
       base_value: baseValue,
-      scope,
+      scope: scope || attrs.scope,
     };
 
     return aliases.create(aliasAttrs);
