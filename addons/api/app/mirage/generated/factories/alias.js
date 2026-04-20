@@ -15,7 +15,7 @@ export default Factory.extend({
   type: TYPE_ALIAS_TARGET,
   base_value: () => faker.word.words(),
   value(i, attrs) {
-    return attrs.base_value;
+    return attrs?.base_value ?? faker.word.words();
   },
   scope_id: () => 'global',
   description: () => faker.word.words(),
