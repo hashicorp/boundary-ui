@@ -24,7 +24,8 @@
     "admin:dev:chrome": "pnpm run admin --project=chromium --headed",
     "admin:dev:firefox": "pnpm run admin --project=firefox --headed",
     "admin:dev:safari": "pnpm run admin --project=webkit --headed",
-    "desktop": "pnpm run --filter desktop build && pnpm run desktop:dev",
+    "desktop:local": "SETUP_CLI=true pnpm run --filter desktop build && pnpm run desktop:dev",
+    "desktop:ci": "pnpm run --filter desktop build && pnpm run desktop:dev",
     "desktop:dev": "pnpm playwright test --config desktop/playwright.config.js --reporter=html"
   },
   "devDependencies": {
