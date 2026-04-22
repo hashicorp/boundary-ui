@@ -121,6 +121,14 @@ module('Acceptance | sessions | list', function (hooks) {
     assert
       .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
+
+    // Verify refresh button shows "x seconds ago" text after click
+    assert.dom(commonSelectors.TOOLBAR_REFRESHER_TEXT).doesNotExist();
+
+    await click(commonSelectors.TOOLBAR_REFRESHER_BUTTON);
+    await waitFor(commonSelectors.TOOLBAR_REFRESHER_TEXT);
+
+    assert.dom(commonSelectors.TOOLBAR_REFRESHER_TEXT).exists();
   });
 
   test('users cannot navigate to sessions tab without proper authorization', async function (assert) {
