@@ -22,9 +22,6 @@ export default class FormRoleEditGrantsComponent extends Component {
 
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
-<<<<<<< ICU-18459-create-actions-component
-  selectedResourceType = 'target';
-=======
   completionTranslatedStrings = {
     noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
     wildcardTypes: this.intl.t(
@@ -43,7 +40,6 @@ export default class FormRoleEditGrantsComponent extends Component {
       'resources.role.edit-grants.completion-info.all-fields',
     ),
   };
->>>>>>> llb/grants-builder
 
   completionSource = createGrantCompletionSource(
     this.args.grantsSchema,
@@ -54,6 +50,7 @@ export default class FormRoleEditGrantsComponent extends Component {
   @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
+  selectedResourceType = 'target';
 
   customExtensions = [
     autocompletion({
