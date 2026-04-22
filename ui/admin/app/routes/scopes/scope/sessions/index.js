@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { action } from '@ember/object';
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -255,6 +256,12 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
+    controller.currentRoute = this;
     controller.loadItems.perform();
+  }
+
+  @action
+  async refreshAll() {
+    return super.refresh(...arguments);
   }
 }
