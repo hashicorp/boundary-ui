@@ -7,17 +7,8 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
 export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
-<<<<<<< ICU-18459-create-actions-component
-  // =services
-
   @service store;
 
-  // =methods
-
-=======
-  @service store;
-
->>>>>>> llb/grants-builder
   async model() {
     const role = this.modelFor('scopes.scope.roles.role');
     let grantsSchema = { resource_types: [] };
@@ -25,11 +16,7 @@ export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
     try {
       grantsSchema = await this.fetchGrantsSchema();
     } catch {
-<<<<<<< ICU-18459-create-actions-component
-      // no-op
-=======
       // TODO: Return an error message
->>>>>>> llb/grants-builder
     }
 
     return { role, grantsSchema };
