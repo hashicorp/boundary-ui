@@ -95,3 +95,8 @@ export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
 
 export const CODE_EDITOR_CONTENT =
   '[data-test-code-editor-field-editor] textarea';
+
+// Toolbar refresher selectors
+export const TOOLBAR_REFRESHER = '.toolbar-refresher';
+export const TOOLBAR_REFRESHER_BUTTON = '.toolbar-refresher button';
+export const TOOLBAR_REFRESHER_TEXT = '.toolbar-refresher p';
