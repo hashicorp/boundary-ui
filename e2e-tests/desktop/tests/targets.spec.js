@@ -254,7 +254,11 @@ test.describe('Targets tests', () => {
     });
   });
 
-  test('Connects to an SSH target', async ({ authedPage, tesseract }) => {
+  test('Connects to an SSH target', async ({
+    authedPage,
+    tesseract,
+    terminalView,
+  }) => {
     await authedPage.getByRole('link', { name: sshTarget.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
 
@@ -265,7 +269,11 @@ test.describe('Targets tests', () => {
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
 
     await expect(async () => {
-      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const terminal = await terminalView();
+      if (!terminal) {
+        throw new Error('Terminal view not found');
+      }
+      const screenshot = await terminal.locator('.xterm-screen').screenshot();
       const result = await tesseract.recognize(screenshot);
       expect(result.data.text).toMatch(textToMatch);
     }).toPass();
