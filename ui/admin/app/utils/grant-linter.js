@@ -11,11 +11,11 @@ const ID_TEMPLATES = [
   '{{account.id}}',
 ];
 
-const createDeleteTextAction = (name) => ({
+const createDeleteTextAction = (name = 'Remove') => ({
   name,
   apply(view, from, to) {
     view.dispatch({
-      changes: { from, to, insert: '' },
+      changes: { from, to },
     });
   },
 });
@@ -48,6 +48,7 @@ const normalizeGrantsSchema = (grantsSchema) => {
   });
   const validActions = Array.from(allActions);
   validActions.push('*');
+  validActions.push('no-op');
 
   const resourcesByPrefix = resourceTypes.reduce((map, resource) => {
     resource.id_prefixes?.forEach((prefix) => {
@@ -98,7 +99,7 @@ const normalizeGrantsSchema = (grantsSchema) => {
   };
 };
 
-const grantLinter = (context, schema) => {
+const grantLinter = (context, schema, translate) => {
   const diagnostics = [];
   const doc = context.state.doc.toString();
   const lines = doc.split('\n');
@@ -111,20 +112,31 @@ const grantLinter = (context, schema) => {
     const lineEnd = currentPos + line.length;
 
     // Check for whitespace
-    if (line.includes(' ')) {
-      const whitespaceMatch = line.match(/\s+/);
-      const firstSpace = lineStart + whitespaceMatch.index;
-      const lastSpace = firstSpace + whitespaceMatch[0].length;
+    const whitespaceMatches = line.matchAll(/\s+/g);
+    for (const match of whitespaceMatches) {
+      const spaceStart = lineStart + match.index;
+      const spaceEnd = spaceStart + match[0].length;
       diagnostics.push({
-        from: firstSpace,
-        to: lastSpace,
+        from: spaceStart,
+        to: spaceEnd,
         severity: 'error',
-        message: 'Whitespace is not allowed',
-        actions: [createDeleteTextAction('Remove whitespace')],
+        message: translate('general.whitespace-not-allowed'),
+        actions: [createDeleteTextAction()],
       });
     }
 
     const trimStart = line.indexOf(trimmedLine);
+    // Check for leading semicolon
+    if (trimmedLine.startsWith(';')) {
+      diagnostics.push({
+        from: lineStart,
+        to: lineStart + trimStart + 1,
+        severity: 'error',
+        message: translate('general.leading-semicolon-not-allowed'),
+        actions: [createDeleteTextAction()],
+      });
+    }
+
     // Check for trailing semicolon
     if (trimmedLine.endsWith(';')) {
       const semicolonPos = lineStart + line.lastIndexOf(';');
@@ -132,8 +144,8 @@ const grantLinter = (context, schema) => {
         from: semicolonPos,
         to: semicolonPos + 1,
         severity: 'error',
-        message: 'Trailing semicolon is not allowed',
-        actions: [createDeleteTextAction('Remove trailing semicolon')],
+        message: translate('general.trailing-semicolon-not-allowed'),
+        actions: [createDeleteTextAction()],
       });
     }
 
@@ -145,8 +157,10 @@ const grantLinter = (context, schema) => {
         from: invalidCharIndex,
         to: invalidCharIndex + 1,
         severity: 'error',
-        message: `Invalid character "${invalidChar}"`,
-        actions: [createDeleteTextAction(`Remove "${invalidChar}"`)],
+        message: translate('general.invalid-character', {
+          character: invalidChar,
+        }),
+        actions: [createDeleteTextAction()],
       });
     }
 
@@ -154,6 +168,8 @@ const grantLinter = (context, schema) => {
     const pairs = trimmedLine.split(';').filter((p) => p.trim());
     const parsedFields = {};
     const fieldPositions = {};
+    const allFields = [];
+    const fieldKeyCount = {};
 
     let pairOffset = trimStart; // Start from where trimmed content begins
 
@@ -169,7 +185,7 @@ const grantLinter = (context, schema) => {
           from: pairStart,
           to: pairStart + pair.length,
           severity: 'error',
-          message: 'Invalid format: expected key=value',
+          message: translate('general.invalid-format'),
         });
         continue;
       }
@@ -178,25 +194,31 @@ const grantLinter = (context, schema) => {
       const keyStartInPair = pair.indexOf(trimmedKey);
       const valueStartInPair = pair.indexOf('=') + 1;
 
-      // Warn about duplicate fields - only the last instance of the field will be used for parsing
-      if (trimmedKey in parsedFields) {
-        const pos = fieldPositions[trimmedKey];
-        diagnostics.push({
-          from: pos.keyStart,
-          to: pos.valueEnd,
-          severity: 'error',
-          message: `Duplicate field "${trimmedKey}" found`,
-          actions: [createDeleteTextAction('Remove duplicate field')], // Action will remove the first instance of the duplicate field
-        });
-      }
-      parsedFields[trimmedKey] = value.trim();
-      fieldPositions[trimmedKey] = {
+      const pos = {
         keyStart: lineStart + pairInLine + keyStartInPair,
         valueStart: lineStart + pairInLine + valueStartInPair,
         valueEnd: lineStart + pairInLine + pair.length,
       };
+      allFields.push({ key: trimmedKey, value: value.trim(), pos });
+      fieldKeyCount[trimmedKey] = (fieldKeyCount[trimmedKey] ?? 0) + 1;
 
       pairOffset = pairInLine + pair.length + 1; // +1 for semicolon
+    }
+
+    // Validate there are no duplicate fields and store the last instance of each field for further validation
+    for (const field of allFields) {
+      parsedFields[field.key] = field.value;
+      fieldPositions[field.key] = field.pos;
+      if (fieldKeyCount[field.key] > 1) {
+        diagnostics.push({
+          from: field.pos.keyStart,
+          to: field.pos.valueEnd,
+          severity: 'error',
+          message: translate('fields.duplicate-field', {
+            field: field.key,
+          }),
+        });
+      }
     }
 
     // Validate all fields are recognized
@@ -207,7 +229,7 @@ const grantLinter = (context, schema) => {
           from: pos.keyStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `Unknown field "${field}". Valid fields are: ${GRANT_FIELDS.join(', ')}`,
+          message: translate('fields.unknown-field', { field }),
         });
       }
     }
@@ -220,7 +242,7 @@ const grantLinter = (context, schema) => {
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `"${field}" value cannot be empty`,
+          message: translate('fields.empty-value', { field }),
         });
       }
     }
@@ -237,7 +259,7 @@ const grantLinter = (context, schema) => {
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: `Invalid resource type "${typeValue}"`,
+          message: translate('type.invalid-type', { type: typeValue }),
         });
       } else {
         validatedFields.type.value = typeValue;
@@ -247,7 +269,9 @@ const grantLinter = (context, schema) => {
               from: pos.valueStart,
               to: pos.valueEnd,
               severity: 'error',
-              message: `Type "${typeValue}" must be a top-level type`,
+              message: translate('type.not-top-level', {
+                type: typeValue,
+              }),
             });
           }
         }
@@ -256,22 +280,21 @@ const grantLinter = (context, schema) => {
     }
 
     // Validate ids field
-    //const parsedIdsField = { value: [], exists: false, knownType: '', wildcard: false };
     if (parsedFields.ids) {
       validatedFields.ids = { value: [], knownType: '', wildcard: false };
-      const idsValue = parsedFields.ids.trim();
       const pos = fieldPositions.ids;
-      const idsList = idsValue
-        .split(',')
-        .map((id) => id.trim())
-        .filter((id) => id);
+      const idsList = validateListField(
+        parsedFields.ids,
+        pos,
+        diagnostics,
+        translate,
+      );
       if (idsList.length === 0) {
-        const pos = fieldPositions.ids;
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: '"ids" field must contain at least one id',
+          message: translate('ids.empty-list'),
         });
       } else if (idsList.includes('*')) {
         if (idsList.length > 1) {
@@ -280,8 +303,7 @@ const grantLinter = (context, schema) => {
             from: wildCardIndex,
             to: wildCardIndex + 1, // Include wildcard and comma after it
             severity: 'error',
-            message: 'Wildcard id "*" cannot be combined with other ids',
-            actions: [createDeleteTextAction('Remove wildcard from ids')],
+            message: translate('ids.wildcard-cannot-combine'),
           });
         } else {
           validatedFields.ids.wildcard = true;
@@ -290,7 +312,7 @@ const grantLinter = (context, schema) => {
               from: lineStart,
               to: lineEnd,
               severity: 'error',
-              message: 'Missing "type" field for wildcard ids',
+              message: translate('type.missing-for-wildcard-ids'),
             });
           }
         }
@@ -301,6 +323,8 @@ const grantLinter = (context, schema) => {
           idsList,
           validatedFields.type,
           pos,
+          fieldPositions.type,
+          translate,
         );
         if (validIdType) {
           validatedFields.ids.knownType = validIdType;
@@ -314,14 +338,14 @@ const grantLinter = (context, schema) => {
           from: lineStart,
           to: lineEnd,
           severity: 'error',
-          message: 'Missing "ids" or "type" fields',
+          message: translate('fields.missing-ids-or-type'),
         });
       } else if (validatedFields.type.wildcard) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
           severity: 'error',
-          message: 'Missing "ids" field for wildcard type',
+          message: translate('type.wildcard-requires-ids'),
         });
       } else {
         if (!parsedFields.actions && !parsedFields.output_fields) {
@@ -329,7 +353,7 @@ const grantLinter = (context, schema) => {
             from: lineStart,
             to: lineEnd,
             severity: 'error',
-            message: 'Missing "actions" or "output_fields" field',
+            message: translate('fields.missing-actions-or-output-fields'),
           });
         }
       }
@@ -339,36 +363,36 @@ const grantLinter = (context, schema) => {
           from: lineStart,
           to: lineEnd,
           severity: 'error',
-          message: 'Missing "actions" field',
+          message: translate('fields.missing-actions'),
         });
       }
     }
 
     // Validate actions field
     if (parsedFields.actions) {
-      const actionsValue = parsedFields.actions.trim();
-      const actionList = actionsValue
-        .split(',')
-        .map((a) => a.trim())
-        .filter((a) => a);
+      const pos = fieldPositions.actions;
+      const actionList = validateListField(
+        parsedFields.actions,
+        pos,
+        diagnostics,
+        translate,
+      );
       if (actionList.length === 0) {
-        const pos = fieldPositions.actions;
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
           severity: 'error',
-          message: '"actions" field must contain at least one action',
+          message: translate('actions.empty-list'),
         });
       } else if (actionList.includes('*') && actionList.length > 1) {
-        const pos = fieldPositions.actions;
         const wildcardIndex =
           pos.valueStart + parsedFields.actions.indexOf('*');
         diagnostics.push({
           from: wildcardIndex,
           to: wildcardIndex + 1,
           severity: 'error',
-          message: 'Wildcard action "*" cannot be combined with other actions',
-          actions: [createDeleteTextAction('Remove wildcard from actions')],
+          message: translate('actions.wildcard-cannot-combine'),
+          actions: [createDeleteTextAction()],
         });
       } else {
         // Validate individual actions against the resource type
@@ -377,15 +401,44 @@ const grantLinter = (context, schema) => {
           diagnostics,
           actionList,
           validatedFields,
-          fieldPositions.actions,
+          pos,
+          translate,
         );
       }
     }
-
     currentPos += line.length + 1; // +1 for newline
   });
 
   return diagnostics;
+};
+
+const validateListField = (fieldValue, pos, diagnostics, translate) => {
+  const unfilteredVals = fieldValue.split(',');
+  const valList = [];
+  let commaPos = 0;
+  let isPrevValEmpty = true;
+  for (const val of unfilteredVals) {
+    const emptyId = val.match(/^\s*$/);
+    if (emptyId) {
+      diagnostics.push({
+        from: pos.valueStart + commaPos,
+        to: pos.valueStart + commaPos + 1, // +1 for comma
+        severity: 'error',
+        message: translate('general.invalid-syntax'),
+        actions: [createDeleteTextAction('Remove comma')],
+      });
+      commaPos += val.length + 1; // +1 for comma
+      isPrevValEmpty = true;
+    } else {
+      valList.push(val.trim());
+      commaPos += val.length;
+      if (!isPrevValEmpty) {
+        commaPos += 1; // +1 for comma
+      }
+      isPrevValEmpty = false;
+    }
+  }
+  return valList;
 };
 
 // Returns template, resource type, or null;
@@ -419,26 +472,34 @@ const validateIdsField = (
   diagnostics,
   idsList,
   validatedFieldsType = {},
-  pos,
+  idsPos,
+  typePos,
+  translate,
 ) => {
   if (
     idsList.includes('{{.Account.Id}}') &&
     idsList.includes('{{account.id}}')
   ) {
     diagnostics.push({
-      from: pos.valueStart,
-      to: pos.valueEnd,
+      from: idsPos.valueStart,
+      to: idsPos.valueEnd,
       severity: 'error',
-      message: 'Duplicate id "{{.Account.Id}}" and "{{account.id}}"',
+      message: translate('ids.duplicate-template', {
+        primary: '{{.Account.Id}}',
+        secondary: '{{account.id}}',
+      }),
     });
     return;
   }
   if (idsList.includes('{{.User.Id}}') && idsList.includes('{{user.id}}')) {
     diagnostics.push({
-      from: pos.valueStart,
-      to: pos.valueEnd,
+      from: idsPos.valueStart,
+      to: idsPos.valueEnd,
       severity: 'error',
-      message: 'Duplicate id "{{.User.Id}}" and "{{user.id}}"',
+      message: translate('ids.duplicate-template', {
+        primary: '{{.User.Id}}',
+        secondary: '{{user.id}}',
+      }),
     });
     return;
   }
@@ -448,43 +509,43 @@ const validateIdsField = (
     if (i === 0) {
       seenIdType = idType(schema, id);
     }
-    const currentIdType = idType(schema, id);
     if (idsList.slice(i + 1).includes(id)) {
       diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
+        from: idsPos.valueStart,
+        to: idsPos.valueEnd,
         severity: 'error',
-        message: `Duplicate id "${id}"`,
+        message: translate('ids.duplicate-id', { id }),
       });
       return;
     }
+    const currentIdType = idType(schema, id);
     if (currentIdType === 'template') {
       if (!ID_TEMPLATES.includes(id)) {
         diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
+          from: idsPos.valueStart,
+          to: idsPos.valueEnd,
           severity: 'error',
-          message: `Unknown template "${id}". Valid templates: ${ID_TEMPLATES.join(', ')}`,
+          message: translate('ids.unknown-template', { id }),
         });
         return;
       }
     } else {
       if (!currentIdType) {
         diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
+          from: idsPos.valueStart,
+          to: idsPos.valueEnd,
           severity: 'error',
-          message: `Invalid id "${id}"`,
+          message: translate('ids.invalid-id', { id }),
         });
         return;
       }
     }
     if (currentIdType !== seenIdType) {
       diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
+        from: idsPos.valueStart,
+        to: idsPos.valueEnd,
         severity: 'error',
-        message: `Ids must have the same type. Invalid id "${id}"`,
+        message: translate('ids.mismatched-types', { id }),
       });
       return;
     }
@@ -492,10 +553,10 @@ const validateIdsField = (
       // If type is wildcard, then pinned id(s) must support child types
       if (!schema.parentTypes.includes(currentIdType)) {
         diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
+          from: idsPos.valueStart,
+          to: idsPos.valueEnd,
           severity: 'error',
-          message: `Ids must support child types. Invalid id "${id}"`,
+          message: translate('ids.must-support-child-types', { id }),
         });
         return;
       }
@@ -505,19 +566,24 @@ const validateIdsField = (
         schema.resourcesByType[validatedFieldsType.value]?.parentType;
       if (!parentType) {
         diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
+          from: typePos.valueStart,
+          to: typePos.valueEnd,
           severity: 'error',
-          message: `Type must support child types. Invalid type "${validatedFieldsType.value}"`,
+          message: translate('type.not-child-type', {
+            type: validatedFieldsType.value,
+          }),
         });
         return;
       }
       if (currentIdType !== parentType) {
         diagnostics.push({
-          from: pos.valueStart,
-          to: pos.valueEnd,
+          from: idsPos.valueStart,
+          to: idsPos.valueEnd,
           severity: 'error',
-          message: `Ids must match the type "${parentType}". Invalid id "${id}"`,
+          message: translate('ids.must-match-parent-type', {
+            id,
+            parentType,
+          }),
         });
         return;
       }
@@ -561,9 +627,11 @@ const validateActionsField = (
   actionList,
   validatedFields,
   pos,
+  translate,
 ) => {
   let validActions = schema.validActions;
-  let errorMessage = (action) => `Invalid action "${action}"`;
+  let errorMessage = (action) =>
+    translate('actions.invalid-action', { action });
   if (!validatedFields.type) {
     if (validatedFields.ids?.knownType) {
       // Only id actions belonging to known id type (including wildcard action)
@@ -572,17 +640,19 @@ const validateActionsField = (
         validatedFields.ids.knownType,
       );
       errorMessage = (action) =>
-        `Invalid action "${action}". Valid id actions: ${validActions.join(', ')}`;
+        translate('actions.id-only', {
+          type: validatedFields.ids.knownType,
+          action,
+        });
     }
   } else if (validatedFields.type.wildcard) {
     if (validatedFields.ids?.knownType) {
       // Any action from associated child resource types would be valid (including wildcard action)
       validActions = [
         '*',
+        'no-op',
         ...getChildResourceActions(schema, validatedFields.ids.knownType),
       ];
-      errorMessage = (action) =>
-        `Invalid action "${action}". Valid actions: ${validActions.join(', ')}`;
     }
   } else if (validatedFields.type.value) {
     if (!validatedFields.ids) {
@@ -593,18 +663,27 @@ const validateActionsField = (
         (action) => action.startsWith('create') || action.startsWith('list'),
       );
       errorMessage = (action) =>
-        `Invalid action "${action}". Valid collection action(s): ${validActions.join(', ')}`;
+        translate('actions.collection-only', { action });
     } else if (validatedFields.ids.knownType || validatedFields.ids.wildcard) {
+      // Any action belonging to the specified type (including wildcard action)
       validActions = [
         '*',
+        'no-op',
         ...schema.resourcesByType[validatedFields.type.value].actions,
       ];
-      errorMessage = (action) =>
-        `Invalid action "${action}". Valid actions: ${validActions.join(', ')}`;
     }
   }
 
-  for (const action of actionList) {
+  for (const [i, action] of actionList.entries()) {
+    if (actionList.slice(i + 1).includes(action)) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: translate('actions.duplicate-action', { action }),
+      });
+      return;
+    }
     if (!validActions.includes(action)) {
       diagnostics.push({
         from: pos.valueStart,
@@ -615,9 +694,32 @@ const validateActionsField = (
       return;
     }
   }
+
+  // no-op should be used with list action or else it has no effect.
+  // Also, no-op is not necessary if there is already any other action specified.
+  if (actionList.includes('no-op')) {
+    if (!actionList.includes('list')) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: translate('actions.noop-requires-list'),
+      });
+      return;
+    }
+    if (actionList.some((action) => action !== 'no-op' && action !== 'list')) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: translate('actions.noop-unnecessary'),
+      });
+      return;
+    }
+  }
 };
 
-export const createGrantLinter = (grantsSchema) => {
+export const createGrantLinter = (grantsSchema, translate) => {
   const schema = normalizeGrantsSchema(grantsSchema);
-  return (context) => grantLinter(context, schema);
+  return (context) => grantLinter(context, schema, translate);
 };

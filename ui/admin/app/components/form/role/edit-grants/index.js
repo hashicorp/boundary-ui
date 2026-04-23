@@ -44,11 +44,17 @@ export default class FormRoleEditGrantsComponent extends Component {
     ),
   };
 
+  translateLintingError = (key, options = {}) =>
+    this.intl.t(`resources.role.edit-grants.linting-errors.${key}`, options);
+
   completionSource = createGrantCompletionSource(
     this.args.grantsSchema,
     this.completionTranslatedStrings,
   );
-  linterSource = createGrantLinter(this.args.grantsSchema);
+  linterSource = createGrantLinter(
+    this.args.grantsSchema,
+    this.translateLintingError,
+  );
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
   @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';

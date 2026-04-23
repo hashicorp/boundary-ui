@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'admin/tests/helpers/mirage';
+import { setupIntl } from 'ember-intl/test-support';
 import { createGrantLinter } from 'admin/utils/grant-linter';
 
 const createContext = (lineText) => ({
@@ -22,6 +23,7 @@ const createContext = (lineText) => ({
 module('Unit | Utility | grant-linter', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
+  setupIntl(hooks, 'en-us');
 
   hooks.beforeEach(async function () {
     const response = await fetch('/grants-schema.json');
@@ -29,9 +31,14 @@ module('Unit | Utility | grant-linter', function (hooks) {
     if (!response.ok) {
       throw new Error(`Failed to fetch grants schema: ${response.status}`);
     }
-
+    this.intl = this.owner.lookup('service:intl');
     const grantsSchemaData = await response.json();
-    this.grantLinter = createGrantLinter(grantsSchemaData);
+    const translateLintingError = (key, options = {}) =>
+      this.intl.t(`resources.role.edit-grants.linting-errors.${key}`, options);
+    this.grantLinter = createGrantLinter(
+      grantsSchemaData,
+      translateLintingError,
+    );
   });
 
   test.each(
@@ -43,7 +50,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=*;type=*;actions=read,write;', 'Trailing semicolon is not allowed'], // trailing semicolon
       ['ids={{.Account.Id}};type=+;actions=read', 'Invalid character "+"'], // invalid character +
       ['ids={{.Account.Id}};type=();actions=read', 'Invalid character "("'], // invalid characters ()
-      ['type=target', 'Missing "actions" or "output_fields" field'], // missing actions/output_fields field
+      ['type=target', 'Missing "actions" or "output_fields" fields'], // missing actions/output_fields field
       ['actions=read,write', 'Missing "ids" or "type" fields'], // missing type/ids field
       [
         'type=credential-store;ids=;actions=read',
@@ -53,19 +60,19 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=csst_1234;actions=', '"actions" value cannot be empty'], // empty actions value
       [
         'type=credential;ids=csst_1234;actions=read,write;ids=cs_5678',
-        'Duplicate field "ids" found',
+        'Duplicate field "ids"',
       ], // duplicate ids field
       [
         'type=credential;actions=read,write;type=host',
-        'Duplicate field "type" found',
+        'Duplicate field "type"',
       ], // duplicate type field
       [
         'type=credential;ids=csst_1234;actions=read,write;actions=delete',
-        'Duplicate field "actions" found',
+        'Duplicate field "actions"',
       ], // duplicate actions field
       [
         'type=credential;ids=cs_1234;actions=read;random=name',
-        'Unknown field "random". Valid fields are: ids, type, actions, output_fields',
+        'Unknown field "random"',
       ], // unknown field "random"
       [
         '=credential;actions=;ids=cs_1234',
@@ -83,7 +90,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
     'diagnostics for type field values',
     [
       ['actions=read;type=random', 'Invalid resource type "random"'], // invalid resource type
-      ['actions=read;type=account', 'Type "account" must be a top-level type'], // invalid resource type
+      ['actions=read;type=account', 'Type "account" is not a top-level type'], // invalid resource type
       [
         'type=credential,random;actions=read',
         'Invalid resource type "credential,random"',
@@ -104,21 +111,18 @@ module('Unit | Utility | grant-linter', function (hooks) {
   test.each(
     'diagnostics for actions field values',
     [
-      [
-        'type=credential-store;actions=,',
-        '"actions" field must contain at least one action',
-      ], // actions field must contain at least one action
+      ['type=credential-store;actions=,', 'Invalid syntax'],
       [
         'type=session;actions=read,*,write',
         'Wildcard action "*" cannot be combined with other actions',
       ], // wildcard action cannot be combined with other actions
       [
         'type=policy;actions=execute',
-        'Invalid action "execute". Valid collection action(s): create, list',
+        'Only collection actions are allowed. Invalid action "execute"',
       ], // invalid action for resource type
       [
         'type=target;actions=execute',
-        'Invalid action "execute". Valid collection action(s): list, create',
+        'Only collection actions are allowed. Invalid action "execute"',
       ], // invalid action when type is not specified
       ['ids=hc_1234;type=*;actions=add-hosts,read'], // valid actions for resource type
       ['type=worker;actions=create:controller-led'], // valid actions for resource type
@@ -137,29 +141,40 @@ module('Unit | Utility | grant-linter', function (hooks) {
   test.each(
     'diagnostics for ids field values',
     [
+      ['type=credential;ids=,,,;actions=read', 'Invalid syntax'],
+      ['ids=cs_1234,cs_1234;actions=read', 'Duplicate id "cs_1234"'], // duplicate ids
       [
-        'type=credential;ids=,,,;actions=read',
-        '"ids" field must contain at least one id',
-      ], // ids field must contain at least one id
+        'ids={{.Account.Id}},{{.Account.Id}};actions=read',
+        'Duplicate id "{{.Account.Id}}"',
+      ], // duplicate template ids
+      [
+        'ids={{.Account.Id}},{{account.id}};actions=read',
+        'Duplicate id "{{.Account.Id}}" and "{{account.id}}"',
+      ], // duplicate template ids
+      [
+        'ids={{.User.Id}},{{user.id}};actions=read',
+        'Duplicate id "{{.User.Id}}" and "{{user.id}}"',
+      ], // duplicate template ids
       [
         'actions=read;type=credential;ids=cs_1234,*,cs_5678',
         'Wildcard id "*" cannot be combined with other ids',
       ], // wildcard id cannot be combined with other ids
       [
         'ids={{.Account.Id}};type=credential;actions=read',
-        'Ids must match the type "credential-store". Invalid id "{{.Account.Id}}"',
+        'Pinned-ids must be "credential-store" ids. Invalid id "{{.Account.Id}}"',
       ], // template ids not valid with type specified
       [
-        'ids={{.Random.Id}};actions=read',
-        'Unknown template "{{.Random.Id}}". Valid templates: {{.Account.Id}}, {{.User.Id}}, {{user.id}}, {{account.id}}',
-      ], // invalid template id
+        'ids=hsst_1234;type=*;actions=read',
+        'Pinned-ids must support child types. Invalid id "hsst_1234"',
+      ], // template ids not valid with type specified
+      ['ids={{.Random.Id}};actions=read', 'Unknown template "{{.Random.Id}}"'], // invalid template id
       [
         'type=host-catalog;ids=hcst_1234;actions=list,delete',
-        'Type must support child types. Invalid type "host-catalog"',
+        'Type "host-catalog" is not a child type',
       ], // only non-top level resource types can be pinned by id
       [
         'type=host-set;ids=hcst_1234,g_1234;actions=read',
-        'Ids must have the same type. Invalid id "g_1234"',
+        'Ids do not have the same type. Invalid id "g_1234"',
       ], // all ids must be valid for the resource type
       [
         'type=credential;ids=csst_1234,random;actions=delete',
@@ -167,16 +182,16 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ], // all ids must be valid for the resource type
       [
         'ids=cs_1234,g_1234;actions=read',
-        'Ids must have the same type. Invalid id "g_1234"',
+        'Ids do not have the same type. Invalid id "g_1234"',
       ], // all ids must be same type when type is not specified
       ['ids=none_1234,csvlt_123;actions=list', 'Invalid id "none_1234"'], // valid ids prefixes only
       [
         'ids=g_123,amoidc_456;type=*;actions=read,list',
-        'Ids must support child types. Invalid id "g_123"',
+        'Pinned-ids must support child types. Invalid id "g_123"',
       ], // all ids must support child types when type is wildcard
       [
         'ids=amoidc_456,hcst_123;type=*;actions=read,list',
-        'Ids must have the same type. Invalid id "hcst_123"',
+        'Ids do not have the same type. Invalid id "hcst_123"',
       ], // all ids must be the same type when type is wildcard
       ['ids=cs_1234,csst_5678;actions=read'], // valid ids when they are the same type and type is not specified
       ['ids=*;type=*;actions=read'], // valid wildcard id

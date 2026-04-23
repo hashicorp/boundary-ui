@@ -30,6 +30,7 @@ export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
     if (!response.ok) {
       throw new Error('Failed to fetch grants schema');
     }
+
     return response.json();
   }
 }
