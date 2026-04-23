@@ -8,6 +8,7 @@ import { setupRenderingTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Integration | Component | grant-actions/index', function (hooks) {
   setupRenderingTest(hooks);
@@ -57,12 +58,23 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-card]').exists();
-    assert.dom('[data-test-grant-action]').exists({ count: 8 });
+    assert.dom('[data-test-grant-actions-table]').exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 8 });
+
+    const rows = [...this.element.querySelectorAll(commonSelectors.TABLE_ROWS)];
+    const rowData = rows.map((row) => {
+      const cells = [...row.querySelectorAll('td')].map((cell) =>
+        cell.textContent.trim(),
+      );
+
+      return {
+        name: cells[0],
+        description: cells[1],
+      };
+    });
+
     assert.deepEqual(
-      [...this.element.querySelectorAll('[data-test-grant-action]')].map(
-        (row) => row.textContent.trim(),
-      ),
+      rowData.map(({ name }) => name),
       [
         'add-hosts',
         'create',
@@ -74,7 +86,24 @@ module('Integration | Component | grant-actions/index', function (hooks) {
         'update',
       ],
     );
+
+    assert.deepEqual(rowData[0], {
+      name: 'add-hosts',
+      description: 'Add hosts to a host set',
+    });
+
+    assert.deepEqual(rowData[1], {
+      name: 'create',
+      description: 'Create a new host-set',
+    });
+
+    assert.deepEqual(rowData.at(-1), {
+      name: 'update',
+      description: 'Update a host-set',
+    });
+
     assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
   });
 
   test('it renders the no resource type detected state when the current line has no detectable type', async function (assert) {
@@ -87,7 +116,7 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-list]').doesNotExist();
+    assert.dom('[data-test-grant-actions-table]').doesNotExist();
     assert
       .dom('[data-test-grant-actions-no-type-detected]')
       .hasText('No resource type detected.');
@@ -104,7 +133,7 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-list]').doesNotExist();
+    assert.dom('[data-test-grant-actions-table]').doesNotExist();
     assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
     assert
       .dom('[data-test-grant-actions-empty-state]')

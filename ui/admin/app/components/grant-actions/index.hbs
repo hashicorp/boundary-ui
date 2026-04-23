@@ -3,30 +3,30 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Card::Container
-  @level='mid'
-  @hasBorder={{true}}
-  data-test-grant-actions-card
->
-  {{#if this.actions.length}}
-    <ul data-test-grant-actions-list>
-      {{#each this.actions as |grantAction|}}
-        <li class='margin-bottom-8' data-test-grant-action>
-          {{grantAction}}
-        </li>
-      {{/each}}
-    </ul>
-  {{else if this.showNoResourceTypeDetected}}
-    <Hds::Alert @type='compact' as |A|>
-      <A.Description data-test-grant-actions-no-type-detected>
-        {{this.noResourceTypeDetectedLabel}}
-      </A.Description>
-    </Hds::Alert>
-  {{else}}
-    <Hds::Alert @type='compact' as |A|>
-      <A.Description data-test-grant-actions-empty-state>
-        {{this.noSuggestionsLabel}}
-      </A.Description>
-    </Hds::Alert>
-  {{/if}}
-</Hds::Card::Container>
+{{#if this.actionRows.length}}
+  <Hds::Table
+    @model={{this.actionRows}}
+    @columns={{this.columns}}
+    @valign='middle'
+    data-test-grant-actions-table
+  >
+    <:body as |B|>
+      <B.Tr data-test-grant-action>
+        <B.Td data-test-grant-action-name>{{B.data.name}}</B.Td>
+        <B.Td data-test-grant-action-description>{{B.data.description}}</B.Td>
+      </B.Tr>
+    </:body>
+  </Hds::Table>
+{{else if this.showNoResourceTypeDetected}}
+  <Hds::Alert @type='compact' as |A|>
+    <A.Description data-test-grant-actions-no-type-detected>
+      {{this.noResourceTypeDetectedLabel}}
+    </A.Description>
+  </Hds::Alert>
+{{else}}
+  <Hds::Alert @type='compact' as |A|>
+    <A.Description data-test-grant-actions-empty-state>
+      {{this.noSuggestionsLabel}}
+    </A.Description>
+  </Hds::Alert>
+{{/if}}

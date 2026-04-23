@@ -696,6 +696,67 @@ role:
       options:
         terraform: Terraform
         native-hcl: Native HCL
+    actions:
+      collection-actions: Collection Actions
+      id-actions: ID Actions
+      create: Create a new {resourceType}
+      list: List all {resourceType} resources
+      read: Read a {resourceType}
+      update: Update a {resourceType}
+      delete: Delete a {resourceType}
+      read:self: Read the {resourceType} associated with the current user
+      delete:self: Delete a {resourceType} associated with the current user
+      cancel: Cancel a {resourceType}
+      cancel:self: Cancel a {resourceType} associated with the current user
+      add-members: Add members to a group
+      set-members: Set the full list of members on a group
+      remove-members: Remove members from a group
+      add-hosts: Add hosts to a host set
+      set-hosts: Set the full list of hosts on a host set
+      remove-hosts: Remove hosts from a host set
+      add-worker-tags: Add tags to a worker
+      set-worker-tags: Set the full list of tags on a worker
+      remove-worker-tags: Remove tags from a worker
+      reinitialize-certificate-authority: Reinitialize the certificate authority that is used to authorize Boundary workers
+      create:controller-led: Create a worker via controller-led workflow
+      create:worker-led: Create a worker via worker-led workflow
+      read-certificate-authority: Read the certificate authority that is used to authorize Boundary workers
+      set-password: Set a password on an account, without requiring the current password
+      change-password: Change the password on an account
+      authenticate: Authenticate to an auth method
+      change-state: Change the active and visibility state of an OIDC-type auth method
+      add-accounts: Add accounts to a user
+      set-accounts: Set the full list of accounts on a user
+      remove-accounts: Remove accounts from a user
+      list-resolvable-aliases: List all aliases that point to resources the user has permission to access
+      add-principals: Add principals to a role
+      set-principals: Set the full list of principals on a role
+      remove-principals: Remove principals from a role
+      set-grants: Set the full list of grants on a role
+      add-grants: Add grants to a role
+      remove-grants: Remove grants from a role
+      add-grant-scopes: Add grant scopes to a role
+      set-grant-scopes: Set the full list of grant scopes on a role
+      remove-grant-scopes: Remove grant scopes from a role
+      authorize-session: Authorize a session via a target
+      add-host-sources: Add host sources to a target
+      set-host-sources: Set the full list of host sources on a target
+      remove-host-sources: Remove host sources from a target
+      add-credential-sources: Add credential sources to a target
+      set-credential-sources: Set the full list of credential sources on a target
+      remove-credential-sources: Remove credential sources from a target
+      attach-storage-policy: Attach a storage policy to all session recordings in the scope
+      detach-storage-policy: Detach a storage policy from all session recordings in the scope
+      list-keys: List the keys within a given scope
+      rotate-keys: Replace a scope's current KEK and DEKs with a new set of keys
+      list-key-version-destruction-jobs: List all pending key version destruction jobs within a scope
+      destroy-key-version: Destroy a key version in the scope
+      download: Download a session recording
+      reapply-storage-policy: Reapply the storage policy to a session recording
+      monthly-active-users: Display the number of monthly active Boundary users to help predict billing
+      no-actions: No actions available for this resource type.
+      no-type-detected: No type detected.
+      unavailable: Grant actions information not available.
   scope:
     title: Scope
     title_plural: Scopes

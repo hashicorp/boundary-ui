@@ -12,6 +12,18 @@ import {
   parseGrantLine,
 } from 'admin/utils/grant-completions';
 
+const ACTIONS_WITH_RESOURCE_TYPE = new Set([
+  'create',
+  'list',
+  'read',
+  'update',
+  'delete',
+  'read:self',
+  'delete:self',
+  'cancel',
+  'cancel:self',
+]);
+
 export default class GrantActionsIndex extends Component {
   @service intl;
 
@@ -38,6 +50,36 @@ export default class GrantActionsIndex extends Component {
       .sort((left, right) => left.localeCompare(right));
   }
 
+  get descriptionResourceType() {
+    const { typeValue } = this.parsedGrantLine;
+
+    if (typeValue === '*') {
+      return null;
+    }
+
+    return (
+      typeValue ||
+      getDetectedResourceTypeForGrantLine(
+        this.args.grantsSchema,
+        this.args.grantString,
+      )
+    );
+  }
+
+  get actionRows() {
+    return this.actions.map((action) => ({
+      name: action,
+      description: this.getActionDescription(action),
+    }));
+  }
+
+  get columns() {
+    return [
+      { key: 'name', label: this.intl.t('titles.action') },
+      { key: 'description', label: this.intl.t('form.description.label') },
+    ];
+  }
+
   get showNoResourceTypeDetected() {
     return (
       !this.actions.length &&
@@ -54,5 +96,25 @@ export default class GrantActionsIndex extends Component {
 
   get noResourceTypeDetectedLabel() {
     return 'No resource type detected.';
+  }
+
+  getActionDescription(action) {
+    const translationKey = `resources.role.edit-grants.actions.${action}`;
+
+    if (!this.intl.exists(translationKey)) {
+      return action;
+    }
+
+    if (ACTIONS_WITH_RESOURCE_TYPE.has(action)) {
+      if (!this.descriptionResourceType) {
+        return action;
+      }
+
+      return this.intl.t(translationKey, {
+        resourceType: this.descriptionResourceType,
+      });
+    }
+
+    return this.intl.t(translationKey);
   }
 }
