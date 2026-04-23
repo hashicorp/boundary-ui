@@ -66,6 +66,15 @@
           <GrantStringFormats />
         </:content>
       </A.Item>
+      <A.Item @isOpen={{true}} @isStatic={{true}} data-test-grant-actions>
+        <:toggle>{{t 'titles.actions'}}</:toggle>
+        <:content>
+          <GrantActions
+            @grantsSchema={{@grantsSchema}}
+            @grantString={{this.currentLineText}}
+          />
+        </:content>
+      </A.Item>
     </Hds::Accordion>
   </Hds::Layout::Grid>
 

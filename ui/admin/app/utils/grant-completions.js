@@ -16,7 +16,7 @@ const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   apply: () => {},
 });
 
-const parseGrantFields = (lineText) =>
+export const parseGrantFields = (lineText = '') =>
   lineText
     .split(';')
     .map((pair) => {
@@ -32,7 +32,23 @@ const parseGrantFields = (lineText) =>
     })
     .filter(({ fieldName }) => fieldName);
 
-const normalizeGrantsSchema = (grantsSchema) => {
+const getGrantFieldValue = (parsedFields, targetFieldName) =>
+  parsedFields.find(({ fieldName }) => fieldName === targetFieldName)
+    ?.fieldValue;
+
+export const parseGrantLine = (lineText = '') => {
+  const parsedFields = parseGrantFields(lineText);
+
+  return {
+    parsedFields,
+    idsValue: getGrantFieldValue(parsedFields, 'ids'),
+    typeValue: getGrantFieldValue(parsedFields, 'type'),
+    actionsValue: getGrantFieldValue(parsedFields, 'actions'),
+    outputFieldsValue: getGrantFieldValue(parsedFields, 'output_fields'),
+  };
+};
+
+export const normalizeGrantsSchema = (grantsSchema) => {
   const resourceTypes = grantsSchema.resource_types ?? [];
 
   const resourcesByType = resourceTypes.reduce((resources, resourceType) => {
@@ -84,6 +100,18 @@ const normalizeGrantsSchema = (grantsSchema) => {
   };
 };
 
+const isNormalizedGrantsSchema = (grantsSchema) =>
+  Boolean(
+    grantsSchema?.resourcesByType &&
+      grantsSchema?.childResourceTypesByParentType &&
+      grantsSchema?.resourceTypesByIdPrefix,
+  );
+
+const getNormalizedGrantsSchema = (grantsSchema) =>
+  isNormalizedGrantsSchema(grantsSchema)
+    ? grantsSchema
+    : normalizeGrantsSchema(grantsSchema);
+
 const getResourceTypesForId = (schema, id) =>
   id.includes('_')
     ? [
@@ -95,7 +123,7 @@ const getResourceTypesForId = (schema, id) =>
         .filter(({ idPrefix }) => idPrefix.startsWith(id))
         .map(({ type }) => type);
 
-const getCompatibleResourceTypeForIds = (schema, idsValue) => {
+export const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   const resourceTypesById = parseIds(idsValue).flatMap((id) =>
     getResourceTypesForId(schema, id),
   );
@@ -123,7 +151,7 @@ const getIdActions = (schema, idsValue) => {
   return schema.resourcesByType[matchedType]?.idActions;
 };
 
-const getChildResourceActions = (schema, idsValue) => {
+export const getChildResourceActions = (schema, idsValue) => {
   const parentType = getCompatibleResourceTypeForIds(schema, idsValue);
 
   if (
@@ -173,7 +201,7 @@ const getTypeOptions = (schema, idsValue) => {
     .map((resource) => resource.type);
 };
 
-const getActionOptions = (schema, typeValue, idsValue) => {
+export const getActionOptions = (schema, typeValue, idsValue) => {
   const actionOptions = withWildCard(
     Object.values(schema.resourcesByType).flatMap(({ actions }) => actions),
   );
@@ -234,19 +262,40 @@ const getActionOptions = (schema, typeValue, idsValue) => {
     : actionOptions;
 };
 
+export const getSuggestedActionsForGrantLine = (
+  grantsSchema,
+  lineText = '',
+) => {
+  const schema = getNormalizedGrantsSchema(grantsSchema);
+  const { idsValue, typeValue } = parseGrantLine(lineText);
+
+  return getActionOptions(schema, typeValue, idsValue);
+};
+
+export const getDetectedResourceTypeForGrantLine = (
+  grantsSchema,
+  lineText = '',
+) => {
+  const schema = getNormalizedGrantsSchema(grantsSchema);
+  const { idsValue, typeValue } = parseGrantLine(lineText);
+
+  if (typeValue && typeValue !== '*') {
+    return typeValue;
+  }
+
+  if (!idsValue) {
+    return null;
+  }
+
+  return getCompatibleResourceTypeForIds(schema, idsValue);
+};
+
 function grantCompletions(context, schema, translatedStrings) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
-  const parsedFields = parseGrantFields(line.text);
+  const { parsedFields, idsValue } = parseGrantLine(line.text);
   const parsedFieldNames = parsedFields.map(({ fieldName }) => fieldName);
-
-  const idsValue = parsedFields.find(
-    ({ fieldName }) => fieldName === 'ids',
-  )?.fieldValue;
-  const typeValue = parsedFields.find(
-    ({ fieldName }) => fieldName === 'type',
-  )?.fieldValue;
 
   // Check if we're typing a field name (e.g. "type=") by starting at the beginning or after a semicolon.
   // This allows us to provide field name suggestions when the user is typing a new field
@@ -322,7 +371,7 @@ function grantCompletions(context, schema, translatedStrings) {
     const partial = enteredActions.pop() ?? '';
     const hasEnteredActions = enteredActions.length > 0;
     const options = filterByPrefix(
-      getActionOptions(schema, typeValue, idsValue),
+      getSuggestedActionsForGrantLine(schema, line.text),
       partial,
     )
       .filter((action) => !hasEnteredActions || action !== '*')

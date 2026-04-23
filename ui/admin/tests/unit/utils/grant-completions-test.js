@@ -8,7 +8,13 @@ import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'admin/tests/helpers/mirage';
 
-import { createGrantCompletionSource } from 'admin/utils/grant-completions';
+import {
+  createGrantCompletionSource,
+  getChildResourceActions,
+  getSuggestedActionsForGrantLine,
+  normalizeGrantsSchema,
+  parseGrantFields,
+} from 'admin/utils/grant-completions';
 
 const createCompletionContext = (lineText) => ({
   pos: lineText.length,
@@ -65,6 +71,7 @@ module('Unit | Utils | grant-completions', function (hooks) {
     }
 
     const grantsSchemaData = await response.json();
+    this.grantsSchemaData = grantsSchemaData;
     allActionLabels = grantsSchemaData.resource_types.reduce(
       (labels, resource) => {
         const resourceLabels = [
@@ -350,6 +357,52 @@ module('Unit | Utils | grant-completions', function (hooks) {
     assert.strictEqual(
       actionsCompletionResult.options[0].info,
       this.completionTranslatedStrings.wildcardActions,
+    );
+  });
+
+  test('parseGrantFields preserves values that contain additional equals signs', function (assert) {
+    assert.deepEqual(
+      parseGrantFields('ids=s_123;type=session=a;actions=read'),
+      [
+        { fieldName: 'ids', fieldValue: 's_123' },
+        { fieldName: 'type', fieldValue: 'session=a' },
+        { fieldName: 'actions', fieldValue: 'read' },
+      ],
+    );
+  });
+
+  test('getChildResourceActions returns the union of child resource actions for a pinned parent id', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.deepEqual(getChildResourceActions(schema, 'hcst_1234567890'), [
+      'create',
+      'list',
+      'read',
+      'update',
+      'delete',
+      'add-hosts',
+      'set-hosts',
+      'remove-hosts',
+    ]);
+  });
+
+  test('getSuggestedActionsForGrantLine derives the same action set the editor uses', function (assert) {
+    assert.deepEqual(
+      getSuggestedActionsForGrantLine(
+        this.grantsSchemaData,
+        'ids=hcst_1234567890;type=host-set',
+      ),
+      [
+        '*',
+        'create',
+        'list',
+        'delete',
+        'add-hosts',
+        'set-hosts',
+        'remove-hosts',
+        'read',
+        'update',
+      ],
     );
   });
 });
