@@ -279,26 +279,21 @@ function routes() {
 
       if (method === 'attach-storage-policy') {
         updatedAttrs.storagePolicyId = attrs.storagePolicyId;
-        return scope.update(updatedAttrs);
       }
 
       if (method === 'detach-storage-policy') {
         updatedAttrs.storagePolicyId = '';
-        return scope.update(updatedAttrs);
       }
 
       if (method === 'set-alias-target-suffix') {
         updatedAttrs.alias_suffix = attrs.alias_suffix;
-        return scope.update(updatedAttrs);
       }
 
       if (method === 'remove-alias-target-suffix') {
         updatedAttrs.alias_suffix = null;
-        return scope.update(updatedAttrs);
       }
 
-      // Fallback
-      return scope;
+      return scope.update(updatedAttrs);
     },
   );
 

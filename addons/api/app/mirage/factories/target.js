@@ -19,6 +19,7 @@ import {
   TYPE_CREDENTIAL_JSON,
   TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
+import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
@@ -184,7 +185,7 @@ export default factory.extend({
       const aliases = Array.from({ length: aliasCount }, () => {
         const baseValue = faker.internet.domainWord();
         const fullValue =
-          scope.type === 'project' && scope.alias_suffix
+          scope.type === TYPE_SCOPE_PROJECT && scope.alias_suffix
             ? `${baseValue}${scope.alias_suffix}`
             : baseValue;
 
