@@ -9,6 +9,7 @@ export * from './boundary-cli/accounts.js';
 export * from './boundary-cli/aliases.js';
 export * from './boundary-cli/auth-methods.js';
 export * from './boundary-cli/authenticate.js';
+export * from './boundary-cli/cache.js';
 export * from './boundary-cli/connect.js';
 export * from './boundary-cli/credential-stores.js';
 export * from './boundary-cli/credentials.js';
