@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL, find, select, waitFor } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  currentURL,
+  find,
+  select,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -165,5 +172,14 @@ module('Acceptance | roles/edit grants', function (hooks) {
       this.server.schema.roles.find(instances.role.id).attrs.grantStrings,
       expectedGrantStrings,
     );
+  });
+
+  test('shows no resource type detected by default on page load', async function (assert) {
+    await visit(urls.editGrants);
+
+    assert
+      .dom('[data-test-grant-actions-no-type-detected]')
+      .hasText('No resource type detected.');
+    assert.dom('[data-test-grant-actions-table]').doesNotExist();
   });
 });

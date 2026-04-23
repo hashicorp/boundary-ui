@@ -47,7 +47,7 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
-  @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
+  @tracked currentLineText = '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
 
