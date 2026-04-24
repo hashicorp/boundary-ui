@@ -422,3 +422,28 @@ export const createGrantCompletionSource = (
 
   return (context) => grantCompletions(context, schema, translatedStrings);
 };
+
+export const createGrantLineHelpers = (grantsSchema) => {
+  const schema = normalizeGrantsSchema(grantsSchema);
+
+  return {
+    getSuggestedActions: (lineText = '') => {
+      const { idsValue, typeValue } = parseGrantLine(lineText);
+
+      return getActionOptions(schema, typeValue, idsValue);
+    },
+    getDetectedResourceType: (lineText = '') => {
+      const { idsValue, typeValue } = parseGrantLine(lineText);
+
+      if (typeValue && typeValue !== '*') {
+        return typeValue;
+      }
+
+      if (!idsValue) {
+        return null;
+      }
+
+      return getCompatibleResourceTypeForIds(schema, idsValue);
+    },
+  };
+};

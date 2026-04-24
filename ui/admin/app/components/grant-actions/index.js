@@ -7,9 +7,8 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 
 import {
-  getDetectedResourceTypeForGrantLine,
+  createGrantLineHelpers,
   getCompatibleResourceTypeForIds,
-  getSuggestedActionsForGrantLine,
   normalizeGrantsSchema,
   parseGrantLine,
 } from 'admin/utils/grant-completions';
@@ -29,9 +28,9 @@ const ACTIONS_WITH_RESOURCE_TYPE = new Set([
 export default class GrantActionsIndex extends Component {
   @service intl;
 
-  get schema() {
-    return normalizeGrantsSchema(this.args.grantsSchema ?? {});
-  }
+  schema = normalizeGrantsSchema(this.args.grantsSchema ?? {});
+
+  #grantLineHelpers = createGrantLineHelpers(this.args.grantsSchema ?? {});
 
   get parsedGrantLine() {
     return parseGrantLine(this.args.grantString);
@@ -111,7 +110,8 @@ export default class GrantActionsIndex extends Component {
       return [];
     }
 
-    return getSuggestedActionsForGrantLine(this.schema, this.args.grantString)
+    return this.#grantLineHelpers
+      .getSuggestedActions(this.args.grantString)
       .filter((action) => action !== '*')
       .sort((left, right) => left.localeCompare(right));
   }
@@ -123,7 +123,7 @@ export default class GrantActionsIndex extends Component {
 
     return (
       this.typeValue ||
-      getDetectedResourceTypeForGrantLine(this.schema, this.args.grantString)
+      this.#grantLineHelpers.getDetectedResourceType(this.args.grantString)
     );
   }
 
@@ -145,7 +145,7 @@ export default class GrantActionsIndex extends Component {
     return (
       !this.showInvalidIdAndType &&
       !this.actions.length &&
-      !getDetectedResourceTypeForGrantLine(this.schema, this.args.grantString)
+      !this.#grantLineHelpers.getDetectedResourceType(this.args.grantString)
     );
   }
 
