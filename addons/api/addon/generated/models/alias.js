@@ -52,6 +52,7 @@ export default class GeneratedAliasModel extends BaseModel {
 
   @attr('string', {
     description: 'The base value provided by the user before suffix appending.',
+    readOnly: true,
   })
   base_value;
 
