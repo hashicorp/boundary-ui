@@ -1,0 +1,40 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  @showEditToggle={{false}}
+  as |form|
+>
+  <Hds::Form::TextInput::Field
+    @value={{@model.alias_suffix}}
+    @isInvalid={{@model.errors.alias_suffix}}
+    @type='text'
+    name='alias_suffix'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'alias_suffix')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.scope.alias-suffix.title'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.scope.alias-suffix.form.helper-text'}}
+    </F.HelperText>
+    {{#if @model.errors.alias_suffix}}
+      <F.Error as |E|>
+        {{#each @model.errors.alias_suffix as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::TextInput::Field>
+
+  <form.actions
+    @enableEditText={{t 'actions.edit-form'}}
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
+</Rose::Form>

@@ -74,4 +74,20 @@ export default class ScopesScopeIndexController extends Controller {
     scope.storage_policy_id = '';
     await scope.detachStoragePolicy(storage_policy_id);
   }
+
+  /**
+   * Removes the alias target suffix from the scope after user confirmation.
+   * @param {ScopeModel} scope
+   */
+  @action
+  @loading
+  @confirm('resources.scope.alias-suffix.questions.delete.message', {
+    title: 'resources.scope.alias-suffix.questions.delete.title',
+    confirm: 'actions.delete',
+  })
+  @notifyError(({ message }) => message)
+  @notifySuccess('resources.scope.alias-suffix.messages.delete')
+  async deleteAliasSuffix(scope) {
+    await scope.removeAliasSuffix();
+  }
 }

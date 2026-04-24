@@ -186,6 +186,57 @@
           </div>
         </bc.Sidebar>
       {{/if}}
+      {{#if (can 'setAliasSuffix scope' @model)}}
+        <bc.Sidebar>
+          <div class='alias-suffix-sidebar'>
+            <Hds::Text::Display @tag='h2' class='remove-margin'>
+              {{t 'resources.scope.alias-suffix.title'}}
+            </Hds::Text::Display>
+
+            <Hds::Text::Body @tag='p' class='description'>
+              {{t 'resources.scope.alias-suffix.description'}}
+            </Hds::Text::Body>
+
+            {{#if @model.hasSuffix}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='identity-user'
+                  @color='boundary'
+                  @text={{@model.alias_suffix}}
+                />
+                <P.Item>
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    <dd.Interactive @route='scopes.scope.add-alias-suffix'>{{t
+                        'resources.scope.alias-suffix.actions.edit'
+                      }}</dd.Interactive>
+                    {{#if (can 'removeAliasSuffix scope' @model)}}
+                      <dd.Separator />
+                      <dd.Interactive
+                        @color='critical'
+                        {{on 'click' (fn this.scopes.deleteAliasSuffix @model)}}
+                      >{{t
+                          'resources.scope.alias-suffix.actions.delete'
+                        }}</dd.Interactive>
+                    {{/if}}
+                  </Hds::Dropdown>
+                </P.Item>
+              </LinkListPanel>
+            {{else}}
+              <Hds::Button
+                @text={{t 'resources.scope.alias-suffix.actions.create'}}
+                @color='secondary'
+                @route='scopes.scope.add-alias-suffix'
+              />
+            {{/if}}
+          </div>
+        </bc.Sidebar>
+      {{/if}}
     </Rose::Layout::BodyContent>
   </page.body>
 

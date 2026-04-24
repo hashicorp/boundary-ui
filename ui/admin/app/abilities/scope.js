@@ -67,4 +67,30 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
       ? this.hasAuthorizedAction('detach-storage-policy')
       : false;
   }
+
+  /**
+   * Setting the alias target suffix is allowed on project scopes when the
+   * `set-alias-target-suffix` authorized action is present.
+   * @type {boolean}
+   */
+  get canSetAliasSuffix() {
+    return (
+      this.model?.isProject &&
+      this.hasAuthorizedAction('set-alias-target-suffix')
+    );
+  }
+
+  /**
+   * Removing the alias target suffix is allowed on project scopes when the
+   * `remove-alias-target-suffix` authorized action is present and a suffix
+   * is currently set.
+   * @type {boolean}
+   */
+  get canRemoveAliasSuffix() {
+    return (
+      this.model?.isProject &&
+      Boolean(this.model?.alias_suffix) &&
+      this.hasAuthorizedAction('remove-alias-target-suffix')
+    );
+  }
 }

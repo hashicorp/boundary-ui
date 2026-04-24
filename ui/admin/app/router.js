@@ -30,6 +30,7 @@ Router.map(function () {
       this.route('add-storage-policy', function () {
         this.route('create');
       });
+      this.route('add-alias-suffix');
 
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {

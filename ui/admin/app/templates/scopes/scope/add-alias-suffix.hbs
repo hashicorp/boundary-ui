@@ -1,0 +1,53 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title
+  (t
+    (if
+      @model.hasSuffix
+      'resources.scope.alias-suffix.actions.edit'
+      'resources.scope.alias-suffix.actions.create'
+    )
+  )
+}}
+<Breadcrumbs::Item
+  @text={{t
+    (if
+      @model.hasSuffix
+      'resources.scope.alias-suffix.actions.edit'
+      'resources.scope.alias-suffix.actions.create'
+    )
+  }}
+  @route='scopes.scope.add-alias-suffix'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t
+          (if
+            @model.hasSuffix
+            'resources.scope.alias-suffix.actions.edit'
+            'resources.scope.alias-suffix.actions.create'
+          )
+        }}
+      </PH.Title>
+    </Hds::PageHeader>
+  </page.header>
+
+  <page.body>
+    <Form::Scope::AliasSuffix
+      @model={{@model}}
+      @submit={{fn this.save @model}}
+      @cancel={{fn this.cancel @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
