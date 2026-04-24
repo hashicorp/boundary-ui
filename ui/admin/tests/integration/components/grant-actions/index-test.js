@@ -10,6 +10,13 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
+const GRANT_ACTIONS_TABLE = '[data-test-grant-actions-table]';
+const GRANT_ACTIONS_EMPTY_STATE = '[data-test-grant-actions-empty-state]';
+const GRANT_ACTIONS_NO_TYPE_DETECTED =
+  '[data-test-grant-actions-no-type-detected]';
+const GRANT_ACTIONS_INVALID_ID_OR_TYPE =
+  '[data-test-grant-actions-invalid-id-or-type]';
+
 module('Integration | Component | grant-actions/index', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
@@ -58,8 +65,8 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-table]').exists();
-    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 8 });
+    assert.dom(GRANT_ACTIONS_TABLE).isVisible();
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 8 });
 
     const rows = [...this.element.querySelectorAll(commonSelectors.TABLE_ROWS)];
     const rowData = rows.map((row) => {
@@ -102,8 +109,8 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       description: 'Update a host-set',
     });
 
-    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
-    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
   });
 
   test('it renders the no resource type detected state when the current line has no detectable type', async function (assert) {
@@ -116,12 +123,12 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-table]').doesNotExist();
-    assert.dom('[data-test-grant-actions-invalid-id-or-type]').doesNotExist();
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE).doesNotExist();
     assert
-      .dom('[data-test-grant-actions-no-type-detected]')
+      .dom(GRANT_ACTIONS_NO_TYPE_DETECTED)
       .hasText('No resource type detected.');
-    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
   });
 
   test('it renders the invalid ID and type state for an unknown type', async function (assert) {
@@ -134,11 +141,11 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-table]').doesNotExist();
-    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
-    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
     assert
-      .dom('[data-test-grant-actions-invalid-id-or-type]')
+      .dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE)
       .hasText('Invalid ID and type. No actions available.');
   });
 
@@ -152,11 +159,11 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-table]').doesNotExist();
-    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
-    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
     assert
-      .dom('[data-test-grant-actions-invalid-id-or-type]')
+      .dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE)
       .hasText('Invalid ID and type. No actions available.');
   });
 
@@ -170,11 +177,9 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       />
     `);
 
-    assert.dom('[data-test-grant-actions-table]').doesNotExist();
-    assert.dom('[data-test-grant-actions-invalid-id-or-type]').doesNotExist();
-    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
-    assert
-      .dom('[data-test-grant-actions-empty-state]')
-      .hasText('No suggestions');
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).hasText('No suggestions');
   });
 });

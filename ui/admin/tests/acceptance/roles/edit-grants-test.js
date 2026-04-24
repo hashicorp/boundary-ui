@@ -178,8 +178,8 @@ module('Acceptance | roles/edit grants', function (hooks) {
     await visit(urls.editGrants);
 
     assert
-      .dom('[data-test-grant-actions-no-type-detected]')
+      .dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED)
       .hasText('No resource type detected.');
-    assert.dom('[data-test-grant-actions-table]').doesNotExist();
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).doesNotExist();
   });
 });

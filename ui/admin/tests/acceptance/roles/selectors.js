@@ -53,6 +53,11 @@ export const REMOVE_ORG_ONLY_BTN = (name) =>
 export const REMOVE_ORG_PROJECTS_BTN = (name) =>
   `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button`;
 
+// Grant actions
+export const GRANT_ACTIONS_TABLE = '[data-test-grant-actions-table]';
+export const GRANT_ACTIONS_NO_TYPE_DETECTED =
+  '[data-test-grant-actions-no-type-detected]';
+
 // Role grants
 export const FIELD_NEW_GRANT = 'form:nth-child(1) [name="grant"]';
 export const FIELD_NEW_GRANT_ADD_BTN = 'form:nth-child(1) [type="submit"]';
