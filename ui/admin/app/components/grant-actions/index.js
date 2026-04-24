@@ -36,24 +36,17 @@ export default class GrantActionsIndex extends Component {
     return parseGrantLine(this.args.grantString);
   }
 
-  get idsValue() {
-    return this.parsedGrantLine.idsValue;
-  }
-
-  get typeValue() {
-    return this.parsedGrantLine.typeValue;
-  }
-
-  get hasGrantContext() {
-    return Boolean(this.idsValue || this.typeValue);
-  }
-
   get hasSpecificIds() {
-    return Boolean(this.idsValue) && !this.idsValue.includes('*');
+    return (
+      this.parsedGrantLine.idsValue &&
+      !this.parsedGrantLine.idsValue.includes('*')
+    );
   }
 
   get hasExplicitType() {
-    return Boolean(this.typeValue) && this.typeValue !== '*';
+    return (
+      this.parsedGrantLine.typeValue && this.parsedGrantLine.typeValue !== '*'
+    );
   }
 
   get hasTemplateIds() {
@@ -61,7 +54,7 @@ export default class GrantActionsIndex extends Component {
       return false;
     }
 
-    return this.idsValue
+    return this.parsedGrantLine.idsValue
       .split(',')
       .filter(Boolean)
       .some((id) => id.startsWith('{{') && id.endsWith('}}'));
@@ -72,11 +65,17 @@ export default class GrantActionsIndex extends Component {
       return null;
     }
 
-    return getCompatibleResourceTypeForIds(this.schema, this.idsValue);
+    return getCompatibleResourceTypeForIds(
+      this.schema,
+      this.parsedGrantLine.idsValue,
+    );
   }
 
   get hasInvalidType() {
-    return this.hasExplicitType && !this.schema.resourcesByType[this.typeValue];
+    return (
+      this.hasExplicitType &&
+      !this.schema.resourcesByType[this.parsedGrantLine.typeValue]
+    );
   }
 
   get hasInvalidIds() {
@@ -102,11 +101,11 @@ export default class GrantActionsIndex extends Component {
         this.compatibleIdsResourceType
       ] ?? [];
 
-    return !childTypes.includes(this.typeValue);
+    return !childTypes.includes(this.parsedGrantLine.typeValue);
   }
 
   get actions() {
-    if (!this.hasGrantContext) {
+    if (!this.parsedGrantLine.idsValue && !this.parsedGrantLine.typeValue) {
       return [];
     }
 
@@ -117,12 +116,12 @@ export default class GrantActionsIndex extends Component {
   }
 
   get descriptionResourceType() {
-    if (this.typeValue === '*') {
+    if (this.parsedGrantLine.typeValue === '*') {
       return null;
     }
 
     return (
-      this.typeValue ||
+      this.parsedGrantLine.typeValue ||
       this.#grantLineHelpers.getDetectedResourceType(this.args.grantString)
     );
   }
@@ -132,13 +131,6 @@ export default class GrantActionsIndex extends Component {
       name: action,
       description: this.getActionDescription(action),
     }));
-  }
-
-  get columns() {
-    return [
-      { key: 'name', label: this.intl.t('titles.action') },
-      { key: 'description', label: this.intl.t('form.description.label') },
-    ];
   }
 
   get showNoResourceTypeDetected() {
@@ -156,18 +148,6 @@ export default class GrantActionsIndex extends Component {
         this.hasInvalidIds ||
         this.hasInvalidPinnedIdTypeCombination)
     );
-  }
-
-  get noSuggestionsLabel() {
-    return this.intl.t('resources.role.edit-grants.no-suggestions');
-  }
-
-  get noResourceTypeDetectedLabel() {
-    return this.intl.t('resources.role.edit-grants.actions.no-type-detected');
-  }
-
-  get invalidIdAndTypeLabel() {
-    return this.intl.t('resources.role.edit-grants.actions.invalid-id-or-type');
   }
 
   getActionDescription(action) {
