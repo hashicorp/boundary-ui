@@ -11,6 +11,7 @@ import {
   autocompletion,
   completionKeymap,
   keymap,
+  EditorView,
 } from '@hashicorp/design-system-components/codemirror';
 
 import { createGrantCompletionSource } from 'admin/utils/grant-completions';
@@ -58,6 +59,12 @@ export default class FormRoleEditGrantsComponent extends Component {
       activateOnCompletion: (completion) => completion.type === 'keyword',
     }),
     keymap.of(completionKeymap),
+    EditorView.updateListener.of((update) => {
+      if (update.selectionSet) {
+        const line = update.state.doc.lineAt(update.state.selection.main.head);
+        this.currentLineText = line.text;
+      }
+    }),
   ];
 
   get grantStrings() {
