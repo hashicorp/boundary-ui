@@ -755,7 +755,8 @@ role:
       reapply-storage-policy: Reapply the storage policy to a session recording
       monthly-active-users: Display the number of monthly active Boundary users to help predict billing
       no-actions: No actions available for this resource type.
-      no-type-detected: No type detected.
+      invalid-id-or-type: Invalid ID and type. No actions available.
+      no-type-detected: No resource type detected.
       unavailable: Grant actions information not available.
   scope:
     title: Scope

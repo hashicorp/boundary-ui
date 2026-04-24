@@ -117,10 +117,47 @@ module('Integration | Component | grant-actions/index', function (hooks) {
     `);
 
     assert.dom('[data-test-grant-actions-table]').doesNotExist();
+    assert.dom('[data-test-grant-actions-invalid-id-or-type]').doesNotExist();
     assert
       .dom('[data-test-grant-actions-no-type-detected]')
       .hasText('No resource type detected.');
     assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+  });
+
+  test('it renders the invalid ID and type state for an unknown type', async function (assert) {
+    this.grantString = 'type=not-a-real-type;actions=';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom('[data-test-grant-actions-table]').doesNotExist();
+    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
+    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert
+      .dom('[data-test-grant-actions-invalid-id-or-type]')
+      .hasText('Invalid ID and type. No actions available.');
+  });
+
+  test('it renders the invalid ID and type state for an unknown ID', async function (assert) {
+    this.grantString = 'ids=bad_123;actions=';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom('[data-test-grant-actions-table]').doesNotExist();
+    assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
+    assert.dom('[data-test-grant-actions-empty-state]').doesNotExist();
+    assert
+      .dom('[data-test-grant-actions-invalid-id-or-type]')
+      .hasText('Invalid ID and type. No actions available.');
   });
 
   test('it keeps the no suggestions state when a type is known but no actions apply', async function (assert) {
@@ -134,6 +171,7 @@ module('Integration | Component | grant-actions/index', function (hooks) {
     `);
 
     assert.dom('[data-test-grant-actions-table]').doesNotExist();
+    assert.dom('[data-test-grant-actions-invalid-id-or-type]').doesNotExist();
     assert.dom('[data-test-grant-actions-no-type-detected]').doesNotExist();
     assert
       .dom('[data-test-grant-actions-empty-state]')

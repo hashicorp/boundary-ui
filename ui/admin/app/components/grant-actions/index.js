@@ -8,7 +8,9 @@ import { service } from '@ember/service';
 
 import {
   getDetectedResourceTypeForGrantLine,
+  getCompatibleResourceTypeForIds,
   getSuggestedActionsForGrantLine,
+  normalizeGrantsSchema,
   parseGrantLine,
 } from 'admin/utils/grant-completions';
 
@@ -27,14 +29,81 @@ const ACTIONS_WITH_RESOURCE_TYPE = new Set([
 export default class GrantActionsIndex extends Component {
   @service intl;
 
+  get schema() {
+    return normalizeGrantsSchema(this.args.grantsSchema ?? {});
+  }
+
   get parsedGrantLine() {
     return parseGrantLine(this.args.grantString);
   }
 
-  get hasGrantContext() {
-    const { idsValue, typeValue } = this.parsedGrantLine;
+  get idsValue() {
+    return this.parsedGrantLine.idsValue;
+  }
 
-    return Boolean(idsValue || typeValue);
+  get typeValue() {
+    return this.parsedGrantLine.typeValue;
+  }
+
+  get hasGrantContext() {
+    return Boolean(this.idsValue || this.typeValue);
+  }
+
+  get hasSpecificIds() {
+    return Boolean(this.idsValue) && !this.idsValue.includes('*');
+  }
+
+  get hasExplicitType() {
+    return Boolean(this.typeValue) && this.typeValue !== '*';
+  }
+
+  get hasTemplateIds() {
+    if (!this.hasSpecificIds) {
+      return false;
+    }
+
+    return this.idsValue
+      .split(',')
+      .filter(Boolean)
+      .some((id) => id.startsWith('{{') && id.endsWith('}}'));
+  }
+
+  get compatibleIdsResourceType() {
+    if (!this.hasSpecificIds || this.hasTemplateIds) {
+      return null;
+    }
+
+    return getCompatibleResourceTypeForIds(this.schema, this.idsValue);
+  }
+
+  get hasInvalidType() {
+    return this.hasExplicitType && !this.schema.resourcesByType[this.typeValue];
+  }
+
+  get hasInvalidIds() {
+    return (
+      this.hasSpecificIds &&
+      !this.hasTemplateIds &&
+      !this.compatibleIdsResourceType
+    );
+  }
+
+  get hasInvalidPinnedIdTypeCombination() {
+    if (
+      !this.hasSpecificIds ||
+      !this.hasExplicitType ||
+      this.hasInvalidIds ||
+      this.hasInvalidType
+    ) {
+      return false;
+    }
+
+    const childTypes =
+      this.schema.childResourceTypesByParentType[
+        this.compatibleIdsResourceType
+      ] ?? [];
+
+    return !childTypes.includes(this.typeValue);
   }
 
   get actions() {
@@ -42,27 +111,19 @@ export default class GrantActionsIndex extends Component {
       return [];
     }
 
-    return getSuggestedActionsForGrantLine(
-      this.args.grantsSchema,
-      this.args.grantString,
-    )
+    return getSuggestedActionsForGrantLine(this.schema, this.args.grantString)
       .filter((action) => action !== '*')
       .sort((left, right) => left.localeCompare(right));
   }
 
   get descriptionResourceType() {
-    const { typeValue } = this.parsedGrantLine;
-
-    if (typeValue === '*') {
+    if (this.typeValue === '*') {
       return null;
     }
 
     return (
-      typeValue ||
-      getDetectedResourceTypeForGrantLine(
-        this.args.grantsSchema,
-        this.args.grantString,
-      )
+      this.typeValue ||
+      getDetectedResourceTypeForGrantLine(this.schema, this.args.grantString)
     );
   }
 
@@ -82,11 +143,18 @@ export default class GrantActionsIndex extends Component {
 
   get showNoResourceTypeDetected() {
     return (
+      !this.showInvalidIdAndType &&
       !this.actions.length &&
-      !getDetectedResourceTypeForGrantLine(
-        this.args.grantsSchema,
-        this.args.grantString,
-      )
+      !getDetectedResourceTypeForGrantLine(this.schema, this.args.grantString)
+    );
+  }
+
+  get showInvalidIdAndType() {
+    return (
+      !this.actions.length &&
+      (this.hasInvalidType ||
+        this.hasInvalidIds ||
+        this.hasInvalidPinnedIdTypeCombination)
     );
   }
 
@@ -95,7 +163,11 @@ export default class GrantActionsIndex extends Component {
   }
 
   get noResourceTypeDetectedLabel() {
-    return 'No resource type detected.';
+    return this.intl.t('resources.role.edit-grants.actions.no-type-detected');
+  }
+
+  get invalidIdAndTypeLabel() {
+    return this.intl.t('resources.role.edit-grants.actions.invalid-id-or-type');
   }
 
   getActionDescription(action) {
