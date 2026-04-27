@@ -51,6 +51,12 @@ export default class GeneratedAliasModel extends BaseModel {
   value;
 
   @attr('string', {
+    description: 'The base value provided by the user before suffix appending.',
+    readOnly: true,
+  })
+  base_value;
+
+  @attr('string', {
     description: 'This is the id of the resource that this Alias points to.',
   })
   destination_id;

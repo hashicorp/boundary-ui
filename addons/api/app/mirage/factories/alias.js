@@ -19,4 +19,5 @@ export default factory.extend({
       'update',
       'delete',
     ],
+  scope: () => ({ id: 'global', type: 'global' }),
 });

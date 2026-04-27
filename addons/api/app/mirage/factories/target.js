@@ -19,6 +19,7 @@ import {
   TYPE_CREDENTIAL_JSON,
   TYPE_CREDENTIAL_PASSWORD,
 } from 'api/models/credential';
+import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
 
 const randomBoolean = (chance = 0.5) => Math.random() < chance;
@@ -179,15 +180,27 @@ export default factory.extend({
         });
       }
 
-      // Add Aliases
-      const aliases = server.schema.aliases.all().models;
-      const randomlySelectedAliases =
-        aliases.length === 0 ? undefined : faker.helpers.arrayElement(aliases);
-      if (randomlySelectedAliases) {
-        target.update({
-          aliases: randomlySelectedAliases.aliases,
+      // Create aliases scoped to this target's scope and attach them to target.
+      const aliasCount = faker.number.int({ min: 1, max: 2 });
+      const aliases = Array.from({ length: aliasCount }, () => {
+        const baseValue = faker.internet.domainWord();
+        const fullValue =
+          scope.type === TYPE_SCOPE_PROJECT && scope.alias_suffix
+            ? `${baseValue}${scope.alias_suffix}`
+            : baseValue;
+
+        return server.create('alias', {
+          scope,
+          scope_id: scope.id,
+          destination_id: target.id,
+          base_value: baseValue,
+          value: fullValue,
         });
-      }
+      });
+
+      target.update({
+        aliases: aliases.map((alias) => ({ id: alias.id, value: alias.value })),
+      });
     },
   }),
 

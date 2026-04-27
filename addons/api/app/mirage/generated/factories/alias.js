@@ -13,9 +13,14 @@ import { TYPE_ALIAS_TARGET } from 'api/models/alias';
 export default Factory.extend({
   name: () => faker.word.words(),
   type: TYPE_ALIAS_TARGET,
-  value: () => faker.word.words(),
+  base_value: () => faker.word.words(),
+  value(i, attrs) {
+    return attrs?.base_value ?? faker.word.words();
+  },
+  scope_id: () => 'global',
   description: () => faker.word.words(),
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.number.int(),
+  scope: () => ({ id: 'global', type: 'global' }),
 });

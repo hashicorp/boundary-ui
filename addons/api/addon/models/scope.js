@@ -47,6 +47,14 @@ export default class ScopeModel extends GeneratedScopeModel {
   }
 
   /**
+   * Returns true if this scope is a project and has an alias target suffix configured.
+   * @type {boolean}
+   */
+  get hasSuffix() {
+    return this.isProject && this.alias_suffix;
+  }
+
+  /**
    * Attach policy via the `attach-staorage-policy` method.
    * @param {[string]} policyId
    * @param {object} options
