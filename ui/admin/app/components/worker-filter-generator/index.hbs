@@ -11,6 +11,7 @@
       @language='shell'
       @value={{or (get @model @name) ''}}
       @onInput={{fn this.setWorkerFilter @model @name}}
+      @cspNonce={{(csp-nonce)}}
       data-test-code-editor
     />
   </F.Control>
