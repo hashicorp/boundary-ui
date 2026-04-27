@@ -28,7 +28,7 @@ const ACTIONS_WITH_RESOURCE_TYPE = new Set([
 export default class GrantActionsIndex extends Component {
   @service intl;
 
-  schema = normalizeGrantsSchema(this.args.grantsSchema ?? {});
+  #normalizedSchema = normalizeGrantsSchema(this.args.grantsSchema ?? {});
 
   #grantLineHelpers = createGrantLineHelpers(this.args.grantsSchema ?? {});
 
@@ -66,7 +66,7 @@ export default class GrantActionsIndex extends Component {
     }
 
     return getCompatibleResourceTypeForIds(
-      this.schema,
+      this.#normalizedSchema,
       this.parsedGrantLine.idsValue,
     );
   }
@@ -74,7 +74,7 @@ export default class GrantActionsIndex extends Component {
   get hasInvalidType() {
     return (
       this.hasExplicitType &&
-      !this.schema.resourcesByType[this.parsedGrantLine.typeValue]
+      !this.#normalizedSchema.resourcesByType[this.parsedGrantLine.typeValue]
     );
   }
 
@@ -97,7 +97,7 @@ export default class GrantActionsIndex extends Component {
     }
 
     const childTypes =
-      this.schema.childResourceTypesByParentType[
+      this.#normalizedSchema.childResourceTypesByParentType[
         this.compatibleIdsResourceType
       ] ?? [];
 
