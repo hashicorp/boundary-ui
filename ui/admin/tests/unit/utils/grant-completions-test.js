@@ -10,10 +10,13 @@ import { setupMirage } from 'admin/tests/helpers/mirage';
 
 import {
   createGrantCompletionSource,
+  createGrantLineHelpers,
   getChildResourceActions,
+  getCompatibleResourceTypeForIds,
   getSuggestedActionsForGrantLine,
   normalizeGrantsSchema,
   parseGrantFields,
+  parseGrantLine,
 } from 'admin/utils/grant-completions';
 
 const createCompletionContext = (lineText) => ({
@@ -89,6 +92,35 @@ module('Unit | Utils | grant-completions', function (hooks) {
       this.completionTranslatedStrings,
     );
   });
+
+  test.each(
+    'field name suggestions',
+    {
+      'suggest all fields on an empty line': {
+        lineText: '',
+        expectedLabels: ['ids=', 'type=', 'actions=', 'output_fields='],
+      },
+      'filter already-used fields from suggestions': {
+        lineText: 'ids=*;',
+        expectedLabels: ['type=', 'actions=', 'output_fields='],
+      },
+      'match a partial field name': {
+        lineText: 'ty',
+        expectedLabels: ['type='],
+      },
+      'filter multiple already-used fields': {
+        lineText: 'ids=*;type=scope;',
+        expectedLabels: ['actions=', 'output_fields='],
+      },
+    },
+    function (assert, { lineText, expectedLabels }) {
+      const completionResult = this.grantCompletionSource(
+        createCompletionContext(lineText),
+      );
+
+      assert.deepEqual(getLabels(completionResult), expectedLabels);
+    },
+  );
 
   test.each(
     'type suggestions',
@@ -314,6 +346,18 @@ module('Unit | Utils | grant-completions', function (hooks) {
         lineText: 'ids={{',
         expectedLabels: ['{{.User.Id}}', '{{.Account.Id}}'],
       },
+      'suggest wildcard and templates on an empty ids value': {
+        lineText: 'ids=',
+        expectedLabels: ['*', '{{.User.Id}}', '{{.Account.Id}}'],
+      },
+      'filter wildcard once an id is already entered': {
+        lineText: 'ids={{.User.Id}},',
+        expectedLabels: ['{{.Account.Id}}'],
+      },
+      'filter already-entered template ids when completing a partial': {
+        lineText: 'ids={{.User.Id}},{{',
+        expectedLabels: ['{{.Account.Id}}'],
+      },
     },
     function (assert, { lineText, expectedLabels }) {
       const completionResult = this.grantCompletionSource(
@@ -358,6 +402,132 @@ module('Unit | Utils | grant-completions', function (hooks) {
       actionsCompletionResult.options[0].info,
       this.completionTranslatedStrings.wildcardActions,
     );
+  });
+
+  test('parseGrantLine extracts all field values from a grant string', function (assert) {
+    assert.deepEqual(
+      parseGrantLine(
+        'ids=s_123;type=session;actions=read,list;output_fields=*',
+      ),
+      {
+        parsedFields: [
+          { fieldName: 'ids', fieldValue: 's_123' },
+          { fieldName: 'type', fieldValue: 'session' },
+          { fieldName: 'actions', fieldValue: 'read,list' },
+          { fieldName: 'output_fields', fieldValue: '*' },
+        ],
+        idsValue: 's_123',
+        typeValue: 'session',
+        actionsValue: 'read,list',
+        outputFieldsValue: '*',
+      },
+    );
+  });
+
+  test('parseGrantLine returns undefined for missing fields', function (assert) {
+    const { idsValue, typeValue, actionsValue, outputFieldsValue } =
+      parseGrantLine('type=session');
+
+    assert.strictEqual(idsValue, undefined);
+    assert.strictEqual(typeValue, 'session');
+    assert.strictEqual(actionsValue, undefined);
+    assert.strictEqual(outputFieldsValue, undefined);
+  });
+
+  test('parseGrantLine returns undefined values for an empty string', function (assert) {
+    const { idsValue, typeValue, actionsValue, outputFieldsValue } =
+      parseGrantLine('');
+
+    assert.strictEqual(idsValue, undefined);
+    assert.strictEqual(typeValue, undefined);
+    assert.strictEqual(actionsValue, undefined);
+    assert.strictEqual(outputFieldsValue, undefined);
+  });
+
+  test('getCompatibleResourceTypeForIds returns the matched type for a known id prefix', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123'),
+      'host-set',
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns null for an unknown id prefix', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'bad_123'),
+      null,
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns null for mixed resource type ids', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123,s_123'),
+      null,
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns the type when all ids share the same resource type', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123,hs_456'),
+      'host-set',
+    );
+  });
+
+  test('createGrantLineHelpers.getSuggestedActions returns the same actions as the completion source uses', function (assert) {
+    const { getSuggestedActions } = createGrantLineHelpers(
+      this.grantsSchemaData,
+    );
+
+    assert.deepEqual(getSuggestedActions('ids=hcst_1234567890;type=host-set'), [
+      '*',
+      'create',
+      'list',
+      'delete',
+      'add-hosts',
+      'set-hosts',
+      'remove-hosts',
+      'read',
+      'update',
+    ]);
+  });
+
+  test('createGrantLineHelpers.getDetectedResourceType returns the type inferred from a specific id', function (assert) {
+    const { getDetectedResourceType } = createGrantLineHelpers(
+      this.grantsSchemaData,
+    );
+
+    assert.strictEqual(getDetectedResourceType('ids=hs_123'), 'host-set');
+  });
+
+  test('createGrantLineHelpers.getDetectedResourceType returns an explicit type value', function (assert) {
+    const { getDetectedResourceType } = createGrantLineHelpers(
+      this.grantsSchemaData,
+    );
+
+    assert.strictEqual(getDetectedResourceType('type=session'), 'session');
+  });
+
+  test('createGrantLineHelpers.getDetectedResourceType returns null when no type can be detected', function (assert) {
+    const { getDetectedResourceType } = createGrantLineHelpers(
+      this.grantsSchemaData,
+    );
+
+    assert.strictEqual(getDetectedResourceType('output_fields=*'), null);
+  });
+
+  test('createGrantLineHelpers.getDetectedResourceType returns null for a wildcard type', function (assert) {
+    const { getDetectedResourceType } = createGrantLineHelpers(
+      this.grantsSchemaData,
+    );
+
+    assert.strictEqual(getDetectedResourceType('type=*'), null);
   });
 
   test('parseGrantFields preserves values that contain additional equals signs', function (assert) {

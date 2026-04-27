@@ -341,7 +341,7 @@ function grantCompletions(context, schema, translatedStrings) {
     };
   }
 
-  const idsValueMatch = beforeCursor.match(/ids=([a-z0-9_*.{},-]*)$/);
+  const idsValueMatch = beforeCursor.match(/ids=([a-zA-Z0-9_*.{},-]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
     const partial = enteredIds.pop() ?? '';

@@ -182,4 +182,83 @@ module('Integration | Component | grant-actions/index', function (hooks) {
     assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
     assert.dom(GRANT_ACTIONS_EMPTY_STATE).hasText('No suggestions');
   });
+
+  test('it renders the no-type-detected state for an empty grant string', async function (assert) {
+    this.grantString = '';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE).doesNotExist();
+    assert
+      .dom(GRANT_ACTIONS_NO_TYPE_DETECTED)
+      .hasText('No resource type detected.');
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
+  });
+
+  test('it renders the no-type-detected state for template IDs', async function (assert) {
+    this.grantString = 'ids={{.User.Id}}';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE).doesNotExist();
+    assert
+      .dom(GRANT_ACTIONS_NO_TYPE_DETECTED)
+      .hasText('No resource type detected.');
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
+  });
+
+  test('it renders the invalid state for a pinned id paired with its own type instead of a child type', async function (assert) {
+    this.grantString = 'ids=hcst_1234567890;type=host-catalog';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom(GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    assert.dom(GRANT_ACTIONS_EMPTY_STATE).doesNotExist();
+    assert
+      .dom(GRANT_ACTIONS_INVALID_ID_OR_TYPE)
+      .hasText('Invalid ID and type. No actions available.');
+  });
+
+  test('it renders actions with fallback descriptions when type is wildcard', async function (assert) {
+    this.grantString = 'ids=*;type=*';
+
+    await render(hbs`
+      <GrantActions
+        @grantsSchema={{this.grantsSchema}}
+        @grantString={{this.grantString}}
+      />
+    `);
+
+    assert.dom(GRANT_ACTIONS_TABLE).isVisible();
+
+    const rows = [...this.element.querySelectorAll(commonSelectors.TABLE_ROWS)];
+    const createRow = rows.find(
+      (row) => row.querySelector('td')?.textContent.trim() === 'create',
+    );
+
+    assert.ok(createRow, 'create action row exists');
+    assert.strictEqual(
+      createRow.querySelectorAll('td')[1].textContent.trim(),
+      'create',
+      'description falls back to the action name when no resource type is detected',
+    );
+  });
 });
