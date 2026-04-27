@@ -205,19 +205,23 @@
                   @text={{@model.alias_suffix}}
                 />
                 <P.Item>
-                  <Hds::Dropdown as |dd|>
+                  <Hds::Dropdown data-test-alias-suffix-dropdown as |dd|>
                     <dd.ToggleIcon
                       @icon='more-horizontal'
                       @text={{t 'actions.manage'}}
                       @hasChevron={{false}}
                       @size='small'
                     />
-                    <dd.Interactive @route='scopes.scope.add-alias-suffix'>{{t
+                    <dd.Interactive
+                      data-test-alias-suffix-edit
+                      @route='scopes.scope.add-alias-suffix'
+                    >{{t
                         'resources.scope.alias-suffix.actions.edit'
                       }}</dd.Interactive>
                     {{#if (can 'removeAliasSuffix scope' @model)}}
                       <dd.Separator />
                       <dd.Interactive
+                        data-test-alias-suffix-delete
                         @color='critical'
                         {{on 'click' (fn this.scopes.deleteAliasSuffix @model)}}
                       >{{t

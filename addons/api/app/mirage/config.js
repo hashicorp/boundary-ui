@@ -276,7 +276,7 @@ function routes() {
       }
 
       if (method === 'set-alias-target-suffix') {
-        updatedAttrs.alias_suffix = attrs.alias_suffix;
+        updatedAttrs.alias_suffix = attrs.aliasSuffix;
       }
 
       if (method === 'remove-alias-target-suffix') {
