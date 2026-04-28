@@ -23,6 +23,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     const logLevel = await window.desktop.logging.getLogLevel();
     const logPath = await window.desktop.logging.getLogPath();
     const serverInformation = this.clusterUrl.rendererClusterUrl;
+    const { isLinux } = await window.desktop.system.checkOS();
 
     return {
       desktopVersion: `v${desktopVersion}`,
@@ -32,6 +33,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
       logLevel,
       logPath,
       serverInformation,
+      isLinux,
     };
   }
 

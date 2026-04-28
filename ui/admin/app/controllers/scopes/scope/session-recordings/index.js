@@ -17,6 +17,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   @service store;
   @service intl;
   @service db;
+  @service router;
 
   // =attributes
 
@@ -235,10 +236,9 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    * Refreshes the all data for the current page
    */
   @action
-  refresh() {
-    this.router.refresh('scopes.scope.session-recordings');
+  async refresh() {
+    await this.currentRoute.refreshAll();
   }
-
   /**
    * Sets sort values and sets page to 1
    * @param {string} sortBy

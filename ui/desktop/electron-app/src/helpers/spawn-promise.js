@@ -54,7 +54,7 @@ module.exports = {
    * @param options
    * @param path
    */
-  spawn(command, options, path = boundaryPath) {
+  spawn(command, options = {}, path = boundaryPath) {
     const { onClose, ...spawnOptions } = options;
     return new Promise((resolve, reject) => {
       const childProcess = spawn(path, command, spawnOptions);
