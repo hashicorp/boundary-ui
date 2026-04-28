@@ -5,7 +5,9 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 import { TYPE_TARGET_RDP } from 'api/models/target';
+
 const { __electronLog } = globalThis;
 
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
@@ -16,6 +18,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   @service flashMessages;
   @service intl;
   @service storage;
+  @service terminal;
 
   // =methods
 
@@ -96,5 +99,23 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     }
 
     return session;
+  }
+
+  @action
+  async willTransition(transition) {
+    // If the terminal tab is active, we want to hide it before transitioning to prevent the terminal from briefly remaining visible after route transition.
+    if (this.terminal.isTerminalTabActive) {
+      transition.abort();
+      try {
+        // wait for terminal to hide
+        await this.terminal.setTerminalTabActive(false);
+        // retry the transition after hiding
+        transition.retry();
+      } catch (error) {
+        __electronLog?.error('Terminal hide failed', error.message);
+        // let transition proceed
+        transition.retry();
+      }
+    }
   }
 }

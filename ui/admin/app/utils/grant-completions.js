@@ -294,8 +294,15 @@ function grantCompletions(context, schema, translatedStrings) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
-  const { parsedFields, idsValue } = parseGrantLine(line.text);
+  const parsedFields = parseGrantFields(line.text);
   const parsedFieldNames = parsedFields.map(({ fieldName }) => fieldName);
+
+  const idsValue = parsedFields.find(
+    ({ fieldName }) => fieldName === 'ids',
+  )?.fieldValue;
+  const typeValue = parsedFields.find(
+    ({ fieldName }) => fieldName === 'type',
+  )?.fieldValue;
 
   // Check if we're typing a field name (e.g. "type=") by starting at the beginning or after a semicolon.
   // This allows us to provide field name suggestions when the user is typing a new field
@@ -430,7 +437,8 @@ export const createGrantLineHelpers = (grantsSchema) => {
     getSuggestedActions: (lineText = '') => {
       const { idsValue, typeValue } = parseGrantLine(lineText);
 
-      return getActionOptions(schema, typeValue, idsValue);
+      return 
+      (schema, typeValue, idsValue);
     },
     getDetectedResourceType: (lineText = '') => {
       const { idsValue, typeValue } = parseGrantLine(lineText);

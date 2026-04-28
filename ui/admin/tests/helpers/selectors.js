@@ -101,3 +101,8 @@ export const CODE_EDITOR_CODE =
 // present once the editor has loaded
 export const CODE_EDITOR_CM = '[data-test-code-editor] .cm-editor';
 export const CODE_EDITOR_CONTENT = '[data-test-code-editor] .cm-content';
+
+// Toolbar refresher selectors
+export const TOOLBAR_REFRESHER = '.toolbar-refresher';
+export const TOOLBAR_REFRESHER_BUTTON = '.toolbar-refresher button';
+export const TOOLBAR_REFRESHER_TEXT = '.toolbar-refresher p';

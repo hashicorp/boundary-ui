@@ -41,7 +41,7 @@
     "ember-focus-trap": "^1.0.1",
     "ember-named-blocks-polyfill": "^0.2.5",
     "sass": "^1.69.5",
-    "uuid": "^11.0.3"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
