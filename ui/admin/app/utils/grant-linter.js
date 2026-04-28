@@ -719,41 +719,44 @@ const validateActionsField = (
 
   // no-op should be used with list action or else it has no effect.
   // Also, no-op is not necessary if there is already any other action specified.
+  const noopAllowed = validActions.includes('no-op');
   const hasNoOp = actionList.includes('no-op');
   const hasList = actionList.includes('list');
   const hasOtherActions = actionList.some(
     (action) => action !== 'list' && action !== 'no-op',
   );
-  if (hasNoOp) {
-    if (!hasList) {
-      diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
-        severity: 'error',
-        message: translate('actions.noop-requires-list'),
-      });
-      return;
+  if (noopAllowed) {
+    if (hasNoOp) {
+      if (!hasList) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: translate('actions.noop-requires-list'),
+        });
+        return;
+      }
+      if (hasOtherActions) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: translate('actions.noop-unnecessary'),
+        });
+        return;
+      }
     }
-    if (hasOtherActions) {
-      diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
-        severity: 'error',
-        message: translate('actions.noop-unnecessary'),
-      });
-      return;
-    }
-  }
-  if (hasList) {
-    if (!hasNoOp && !hasOtherActions) {
-      diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
-        severity: 'error',
-        message: translate('actions.list-requires-noop'),
-        actions: [createAddTextAction(translate('editor.add-noop'))],
-      });
-      return;
+    if (hasList) {
+      if (!hasNoOp && !hasOtherActions) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: translate('actions.list-requires-noop'),
+          actions: [createAddTextAction(translate('editor.add-noop'))],
+        });
+        return;
+      }
     }
   }
 };

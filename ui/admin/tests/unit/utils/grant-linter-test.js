@@ -141,11 +141,16 @@ module('Unit | Utility | grant-linter', function (hooks) {
         '"list" action should be used with "no-op" action to have an effect',
       ],
       [
+        'ids=*;type=account;actions=list',
+        '"list" action should be used with "no-op" action to have an effect',
+      ],
+      [
         'ids=ampw_098;type=account;actions=list,read,no-op',
         '"no-op" action is unnecessary when other actions are specified',
       ],
       ['ids=hc_1234;type=*;actions=add-hosts,read'], // valid actions for resource type
       ['type=worker;actions=create:controller-led'], // valid actions for resource type
+      ['type=auth-method;actions=list'], // valid actions for resource type
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));
