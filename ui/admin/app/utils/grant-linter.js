@@ -20,6 +20,15 @@ const createDeleteTextAction = (name) => ({
   },
 });
 
+const createAddTextAction = (name) => ({
+  name,
+  apply(view, from) {
+    view.dispatch({
+      changes: { from, insert: 'no-op,' },
+    });
+  },
+});
+
 const normalizeGrantsSchema = (grantsSchema) => {
   const resourceTypes = grantsSchema.resource_types ?? [];
 
@@ -742,6 +751,7 @@ const validateActionsField = (
         to: pos.valueEnd,
         severity: 'error',
         message: translate('actions.list-requires-noop'),
+        actions: [createAddTextAction(translate('editor.add-noop'))],
       });
       return;
     }

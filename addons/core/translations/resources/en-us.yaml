@@ -714,6 +714,7 @@ role:
       editor:
         remove: Remove
         remove-comma: Remove comma
+        add-noop: Add "no-op" action
     editor:
       title: Grant Editor
       description: Add each new grant string on a different line
