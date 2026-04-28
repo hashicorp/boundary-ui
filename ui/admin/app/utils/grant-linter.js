@@ -11,7 +11,7 @@ const ID_TEMPLATES = [
   '{{account.id}}',
 ];
 
-const createDeleteTextAction = (name = 'Remove') => ({
+const createDeleteTextAction = (name) => ({
   name,
   apply(view, from, to) {
     view.dispatch({
@@ -121,7 +121,7 @@ const grantLinter = (context, schema, translate) => {
         to: spaceEnd,
         severity: 'error',
         message: translate('general.whitespace-not-allowed'),
-        actions: [createDeleteTextAction()],
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
     }
 
@@ -133,7 +133,7 @@ const grantLinter = (context, schema, translate) => {
         to: lineStart + trimStart + 1,
         severity: 'error',
         message: translate('general.leading-semicolon-not-allowed'),
-        actions: [createDeleteTextAction()],
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
     }
 
@@ -145,7 +145,7 @@ const grantLinter = (context, schema, translate) => {
         to: semicolonPos + 1,
         severity: 'error',
         message: translate('general.trailing-semicolon-not-allowed'),
-        actions: [createDeleteTextAction()],
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
     }
 
@@ -160,7 +160,7 @@ const grantLinter = (context, schema, translate) => {
         message: translate('general.invalid-character', {
           character: invalidChar,
         }),
-        actions: [createDeleteTextAction()],
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
     }
 
@@ -392,7 +392,7 @@ const grantLinter = (context, schema, translate) => {
           to: wildcardIndex + 1,
           severity: 'error',
           message: translate('actions.wildcard-cannot-combine'),
-          actions: [createDeleteTextAction()],
+          actions: [createDeleteTextAction(translate('editor.remove'))],
         });
       } else {
         // Validate individual actions against the resource type
@@ -415,29 +415,29 @@ const grantLinter = (context, schema, translate) => {
 const validateListField = (fieldValue, pos, diagnostics, translate) => {
   const unfilteredVals = fieldValue.split(',');
   const valList = [];
-  let commaPos = 0;
-  let isPrevValEmpty = true;
-  for (const val of unfilteredVals) {
-    const emptyId = val.match(/^\s*$/);
-    if (emptyId) {
-      diagnostics.push({
-        from: pos.valueStart + commaPos,
-        to: pos.valueStart + commaPos + 1, // +1 for comma
-        severity: 'error',
-        message: translate('general.invalid-syntax'),
-        actions: [createDeleteTextAction('Remove comma')],
-      });
-      commaPos += val.length + 1; // +1 for comma
-      isPrevValEmpty = true;
-    } else {
-      valList.push(val.trim());
-      commaPos += val.length;
-      if (!isPrevValEmpty) {
-        commaPos += 1; // +1 for comma
-      }
-      isPrevValEmpty = false;
+  let segmentStart = 0;
+  const maxIndex = unfilteredVals.length - 1;
+  for (const [index, val] of unfilteredVals.entries()) {
+    const emptyVal = val.match(/^\s*$/);
+    if (!emptyVal) {
+      valList.push(val);
     }
+    if (index < maxIndex) {
+      const emptyNextVal = unfilteredVals[index + 1].match(/^\s*$/);
+      if (emptyVal || emptyNextVal) {
+        const commaPos = segmentStart + val.length;
+        diagnostics.push({
+          from: pos.valueStart + commaPos,
+          to: pos.valueStart + commaPos + 1, // +1 for comma
+          severity: 'error',
+          message: translate('general.invalid-syntax'),
+          actions: [createDeleteTextAction(translate('editor.remove-comma'))],
+        });
+      }
+    }
+    segmentStart += val.length + 1; // +1 for comma delimiter
   }
+
   return valList;
 };
 
@@ -503,18 +503,23 @@ const validateIdsField = (
     });
     return;
   }
-
+  let segmentStart = idsPos.valueStart;
   let seenIdType;
   for (const [i, id] of idsList.entries()) {
+    let segmentEnd = segmentStart + id.length;
     if (i === 0) {
       seenIdType = idType(schema, id);
     }
+    if (i < idsList.length - 1) {
+      segmentEnd += 1; // Include comma delimiter for all but last id
+    }
     if (idsList.slice(i + 1).includes(id)) {
       diagnostics.push({
-        from: idsPos.valueStart,
-        to: idsPos.valueEnd,
+        from: segmentStart,
+        to: segmentEnd,
         severity: 'error',
         message: translate('ids.duplicate-id', { id }),
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
       return;
     }
@@ -522,8 +527,8 @@ const validateIdsField = (
     if (currentIdType === 'template') {
       if (!ID_TEMPLATES.includes(id)) {
         diagnostics.push({
-          from: idsPos.valueStart,
-          to: idsPos.valueEnd,
+          from: segmentStart,
+          to: segmentEnd,
           severity: 'error',
           message: translate('ids.unknown-template', { id }),
         });
@@ -532,8 +537,8 @@ const validateIdsField = (
     } else {
       if (!currentIdType) {
         diagnostics.push({
-          from: idsPos.valueStart,
-          to: idsPos.valueEnd,
+          from: segmentStart,
+          to: segmentEnd,
           severity: 'error',
           message: translate('ids.invalid-id', { id }),
         });
@@ -588,6 +593,7 @@ const validateIdsField = (
         return;
       }
     }
+    segmentStart += id.length + 1; // +1 for comma
   }
   if (seenIdType === 'template') {
     if (idsList.length > 1) {
@@ -674,13 +680,19 @@ const validateActionsField = (
     }
   }
 
+  let segmentStart = pos.valueStart;
   for (const [i, action] of actionList.entries()) {
+    let segmentEnd = segmentStart + action.length;
+    if (i < actionList.length - 1) {
+      segmentEnd += 1; // Include comma delimiter for all but last action
+    }
     if (actionList.slice(i + 1).includes(action)) {
       diagnostics.push({
-        from: pos.valueStart,
-        to: pos.valueEnd,
+        from: segmentStart,
+        to: segmentEnd,
         severity: 'error',
         message: translate('actions.duplicate-action', { action }),
+        actions: [createDeleteTextAction(translate('editor.remove'))],
       });
       return;
     }
@@ -693,12 +705,18 @@ const validateActionsField = (
       });
       return;
     }
+    segmentStart += action.length + 1; // +1 for comma
   }
 
   // no-op should be used with list action or else it has no effect.
   // Also, no-op is not necessary if there is already any other action specified.
-  if (actionList.includes('no-op')) {
-    if (!actionList.includes('list')) {
+  const hasNoOp = actionList.includes('no-op');
+  const hasList = actionList.includes('list');
+  const hasOtherActions = actionList.some(
+    (action) => action !== 'list' && action !== 'no-op',
+  );
+  if (hasNoOp) {
+    if (!hasList) {
       diagnostics.push({
         from: pos.valueStart,
         to: pos.valueEnd,
@@ -707,12 +725,23 @@ const validateActionsField = (
       });
       return;
     }
-    if (actionList.some((action) => action !== 'no-op' && action !== 'list')) {
+    if (hasOtherActions) {
       diagnostics.push({
         from: pos.valueStart,
         to: pos.valueEnd,
         severity: 'error',
         message: translate('actions.noop-unnecessary'),
+      });
+      return;
+    }
+  }
+  if (hasList) {
+    if (!hasNoOp && !hasOtherActions) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: translate('actions.list-requires-noop'),
       });
       return;
     }

@@ -48,10 +48,12 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=*;type= *;actions=*', 'Whitespace is not allowed'], // whitespace around equal sign
       ['ids=*;type=*;actions=read, write', 'Whitespace is not allowed'], // whitespace around commas
       ['ids=*;type=*;actions=read,write;', 'Trailing semicolon is not allowed'], // trailing semicolon
+      [';ids=*;type=*;actions=read,write', 'Leading semicolon is not allowed'], // leading semicolon
       ['ids={{.Account.Id}};type=+;actions=read', 'Invalid character "+"'], // invalid character +
       ['ids={{.Account.Id}};type=();actions=read', 'Invalid character "("'], // invalid characters ()
       ['type=target', 'Missing "actions" or "output_fields" fields'], // missing actions/output_fields field
       ['actions=read,write', 'Missing "ids" or "type" fields'], // missing type/ids field
+      ['ids=hc_123', 'Missing "actions" field'], // missing actions field
       [
         'type=credential-store;ids=;actions=read',
         '"ids" value cannot be empty',
@@ -95,6 +97,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
         'type=credential,random;actions=read',
         'Invalid resource type "credential,random"',
       ], // invalid resource type
+      ['ids=*;actions=read', 'Missing "type" field for wildcard ids'], // missing type field with wildcard id
       ['type=credential-store;actions=create'], // valid grant string
     ],
     function (assert, [grantString, errorMsg]) {
@@ -121,9 +124,26 @@ module('Unit | Utility | grant-linter', function (hooks) {
         'Only collection actions are allowed. Invalid action "execute"',
       ], // invalid action for resource type
       [
-        'type=target;actions=execute',
-        'Only collection actions are allowed. Invalid action "execute"',
+        'type=target;actions=list,no-op',
+        'Only collection actions are allowed. Invalid action "no-op"',
       ], // invalid action when type is not specified
+      ['ids=ampw_1234;type=*;actions=read,read', 'Duplicate action "read"'], // duplicate action
+      [
+        'ids=cs_1234;actions=create',
+        'Only id actions for "credential-store" type are allowed. Invalid action "create"',
+      ], // invalid action for specific resource
+      [
+        'ids=*;type=auth-method;actions=no-op',
+        '"no-op" action should only be used with "list" action',
+      ],
+      [
+        'ids=ampw_098;type=account;actions=list',
+        '"list" action should be used with "no-op" action to have an effect',
+      ],
+      [
+        'ids=ampw_098;type=account;actions=list,read,no-op',
+        '"no-op" action is unnecessary when other actions are specified',
+      ],
       ['ids=hc_1234;type=*;actions=add-hosts,read'], // valid actions for resource type
       ['type=worker;actions=create:controller-led'], // valid actions for resource type
     ],
@@ -161,16 +181,16 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ], // wildcard id cannot be combined with other ids
       [
         'ids={{.Account.Id}};type=credential;actions=read',
-        'Pinned-ids must be "credential-store" ids. Invalid id "{{.Account.Id}}"',
+        'Pinned IDs must be "credential-store" ids. Invalid id "{{.Account.Id}}"',
       ], // template ids not valid with type specified
       [
         'ids=hsst_1234;type=*;actions=read',
-        'Pinned-ids must support child types. Invalid id "hsst_1234"',
+        'Pinned IDs must support child types. Invalid id "hsst_1234"',
       ], // template ids not valid with type specified
       ['ids={{.Random.Id}};actions=read', 'Unknown template "{{.Random.Id}}"'], // invalid template id
       [
         'type=host-catalog;ids=hcst_1234;actions=list,delete',
-        'Type "host-catalog" is not a child type',
+        'Type "host-catalog" is not a child type of the pinned ID',
       ], // only non-top level resource types can be pinned by id
       [
         'type=host-set;ids=hcst_1234,g_1234;actions=read',
@@ -187,7 +207,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=none_1234,csvlt_123;actions=list', 'Invalid id "none_1234"'], // valid ids prefixes only
       [
         'ids=g_123,amoidc_456;type=*;actions=read,list',
-        'Pinned-ids must support child types. Invalid id "g_123"',
+        'Pinned IDs must support child types. Invalid id "g_123"',
       ], // all ids must support child types when type is wildcard
       [
         'ids=amoidc_456,hcst_123;type=*;actions=read,list',
