@@ -291,19 +291,8 @@ function routes() {
     '/scopes/:idMethod',
     function ({ scopes }, { params: { idMethod } }) {
       const id = idMethod.split(':')[0];
-      const method = idMethod.split(':')[1];
       const scope = scopes.find(id);
 
-      if (method === 'get-target-alias-target-suffix') {
-        return {
-          item: {
-            ...scope.attrs,
-            alias_suffix: scope.alias_suffix,
-          },
-        };
-      }
-
-      // Fallback
       return scope;
     },
   );

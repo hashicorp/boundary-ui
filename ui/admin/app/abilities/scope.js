@@ -81,6 +81,18 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
   }
 
   /**
+   * Reading the alias target suffix is allowed on project scopes
+   * when the `get-alias-target-suffix` authorized action is present.
+   * @type {boolean}
+   */
+  get canGetAliasSuffix() {
+    return (
+      this.model?.isProject &&
+      this.hasAuthorizedAction('get-alias-target-suffix')
+    );
+  }
+
+  /**
    * Removing the alias target suffix is allowed on project scopes when the
    * `remove-alias-target-suffix` authorized action is present and a suffix
    * is currently set.

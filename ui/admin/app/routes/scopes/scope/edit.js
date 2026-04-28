@@ -12,6 +12,7 @@ export default class ScopesScopeEditRoute extends Route {
   @service session;
   @service router;
   @service store;
+  @service abilities;
   // =methods
 
   /**
@@ -19,6 +20,23 @@ export default class ScopesScopeEditRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
+  }
+
+  /**
+   * Refresh the alias suffix for project scopes.
+   * @param {ScopeModel} scope
+   */
+  async afterModel(scope) {
+    if (this.abilities.can('getAliasSuffix scope', scope)) {
+      try {
+        await this.store.findRecord('scope', scope.id, {
+          adapterOptions: { method: 'get-alias-target-suffix' },
+          reload: true,
+        });
+      } catch {
+        // do nothing
+      }
+    }
   }
 
   /**

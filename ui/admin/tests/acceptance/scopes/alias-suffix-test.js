@@ -160,4 +160,12 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     );
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).hasText(SUFFIX_VALUE);
   });
+
+  test('renders the alias suffix on load', async function (assert) {
+    instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
+
+    await visit(urls.projectScopeEdit);
+
+    assert.dom(selectors.ALIAS_SUFFIX_VALUE).hasText(SUFFIX_VALUE);
+  });
 });
