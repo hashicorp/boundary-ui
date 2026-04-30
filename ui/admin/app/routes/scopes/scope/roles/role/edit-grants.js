@@ -12,7 +12,7 @@ import { notifyError } from 'core/decorators/notify';
 // Only resource types that have a name column are useful for ID suggestions
 // Currently this excludes session-recording and sessions as they aren't likely to be used
 // and could be expensive to load.
-export const NAMED_RESOURCE_TYPES = Object.keys(modelMapping).filter(
+const NAMED_RESOURCE_TYPES = Object.keys(modelMapping).filter(
   (type) => 'name' in modelMapping[type],
 );
 

@@ -218,15 +218,24 @@
       color: var(--token-color-palette-neutral-700);
     }
 
-    // Lint diagnostics panel (shown at the bottom of the editor)
-    .cm-panel.cm-panel-lint ul {
-      background-color: var(--token-color-palette-neutral-0);
+    // Content/gutter border
+    .cm-content {
+      border-left: 1px solid var(--token-color-palette-neutral-100);
     }
 
-    // Lint panel selected diagnostic item
-    .cm-panel.cm-panel-lint ul:focus li.cm-diagnostic[aria-selected] {
-      background-color: var(--token-color-palette-neutral-50);
-      color: var(--token-color-palette-neutral-400);
+    // Lint diagnostics panel (shown at the bottom of the editor)
+    .cm-panel.cm-panel-lint {
+      border-top: 3px solid var(--token-color-palette-neutral-100);
+
+      ul {
+        background-color: var(--token-color-palette-neutral-100);
+
+        // Lint panel > selected diagnostic item highlight
+        &:focus li.cm-diagnostic[aria-selected] {
+          background-color: var(--token-color-palette-neutral-50);
+          color: var(--token-color-palette-neutral-400);
+        }
+      }
     }
   }
   /* stylelint-enable selector-class-pattern */
