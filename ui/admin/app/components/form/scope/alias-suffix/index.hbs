@@ -23,6 +23,7 @@
     <F.HelperText>
       {{t 'resources.scope.alias-suffix.form.helper-text'}}
     </F.HelperText>
+    <F.CharacterCount @maxLength={{127}} />
     {{#if @model.errors.alias_suffix}}
       <F.Error as |E|>
         {{#each @model.errors.alias_suffix as |error|}}

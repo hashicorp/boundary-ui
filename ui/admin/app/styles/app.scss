@@ -868,6 +868,10 @@
     align-items: center;
   }
 
+  .link-list-item__text {
+    overflow-wrap: anywhere;
+  }
+
   .description {
     margin: 0.5rem 0;
   }

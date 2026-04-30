@@ -6,8 +6,8 @@
 {{page-title
   (t
     (if
-      @model.hasSuffix
-      'resources.scope.alias-suffix.actions.edit'
+      this.isEdit
+      'resources.scope.alias-suffix.title'
       'resources.scope.alias-suffix.actions.create'
     )
   )
@@ -15,8 +15,8 @@
 <Breadcrumbs::Item
   @text={{t
     (if
-      @model.hasSuffix
-      'resources.scope.alias-suffix.actions.edit'
+      this.isEdit
+      'resources.scope.alias-suffix.title'
       'resources.scope.alias-suffix.actions.create'
     )
   }}
@@ -33,8 +33,8 @@
       <PH.Title>
         {{t
           (if
-            @model.hasSuffix
-            'resources.scope.alias-suffix.actions.edit'
+            this.isEdit
+            'resources.scope.alias-suffix.title'
             'resources.scope.alias-suffix.actions.create'
           )
         }}

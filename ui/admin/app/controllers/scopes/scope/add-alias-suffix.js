@@ -13,6 +13,15 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
   // =services
 
   @service router;
+  @service confirm;
+  @service intl;
+
+  // =properties
+
+  /**
+   * @type {boolean}
+   */
+  isEdit = false;
 
   // =actions
 
@@ -24,8 +33,22 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
   @action
   @loading
   @notifyError(({ message }) => message)
-  @notifySuccess('notifications.save-success')
+  @notifySuccess('resources.scope.alias-suffix.messages.save')
   async save(scope) {
+    if (this.isEdit) {
+      try {
+        await this.confirm.confirm(
+          this.intl.t('resources.scope.alias-suffix.questions.edit.message'),
+          {
+            title: 'resources.scope.alias-suffix.questions.edit.title',
+            confirm: 'actions.confirm',
+          },
+        );
+      } catch {
+        // do nothing
+        return;
+      }
+    }
     const suffix = scope.alias_suffix;
     await scope.setAliasSuffix(suffix);
     await this.router.transitionTo('scopes.scope.edit', scope.id);

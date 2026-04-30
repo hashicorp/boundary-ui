@@ -1084,8 +1084,12 @@ scope:
       delete:
         title: Delete Alias suffix?
         message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to delete the Alias suffix?
+      edit:
+        title: Change Alias suffix?
+        message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to change the Alias suffix?
     messages:
-      delete: Alias suffix successfully deleted
+      delete: Alias suffix deleted
+      save: Alias suffix saved
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
