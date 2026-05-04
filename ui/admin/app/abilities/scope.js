@@ -3,15 +3,24 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import OverrideModelAbility from './model';
+import ScopeAbility from 'api/abilities/scope';
 import { service } from '@ember/service';
 
-export default class OverrideScopeAbility extends OverrideModelAbility {
+export default class OverrideScopeAbility extends ScopeAbility {
   // =services
 
   @service features;
 
   // =attributes
+
+  /**
+   * Navigating to a resource is allowed if either list or create grants
+   * are present.
+   * @type {boolean}
+   */
+  get canNavigate() {
+    return this.canList || this.canCreate;
+  }
 
   /**
    * Creating a resource is allowed only if a create grant is present
@@ -66,43 +75,5 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
     return this.features.isEnabled('ssh-session-recording')
       ? this.hasAuthorizedAction('detach-storage-policy')
       : false;
-  }
-
-  /**
-   * Setting the alias target suffix is allowed on project scopes when the
-   * `set-alias-target-suffix` authorized action is present.
-   * @type {boolean}
-   */
-  get canSetAliasSuffix() {
-    return (
-      this.model?.isProject &&
-      this.hasAuthorizedAction('set-alias-target-suffix')
-    );
-  }
-
-  /**
-   * Reading the alias target suffix is allowed on project scopes
-   * when the `get-alias-target-suffix` authorized action is present.
-   * @type {boolean}
-   */
-  get canGetAliasSuffix() {
-    return (
-      this.model?.isProject &&
-      this.hasAuthorizedAction('get-alias-target-suffix')
-    );
-  }
-
-  /**
-   * Removing the alias target suffix is allowed on project scopes when the
-   * `remove-alias-target-suffix` authorized action is present and a suffix
-   * is currently set.
-   * @type {boolean}
-   */
-  get canRemoveAliasSuffix() {
-    return (
-      this.model?.isProject &&
-      Boolean(this.model?.alias_suffix) &&
-      this.hasAuthorizedAction('remove-alias-target-suffix')
-    );
   }
 }

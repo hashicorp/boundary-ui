@@ -1073,9 +1073,9 @@ scope:
     project: Project
   alias-suffix:
     title: Alias suffix
-    description: Append this suffix to aliases in this project scope. The alias will appear "alias.customsuffix"
+    description: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix"
     form:
-      helper-text: Append this suffix to aliases in this project scope. The alias will appear "alias.customsuffix" Leave empty if no suffix is needed. To delete the suffix, clear the text field.
+      helper-text: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix".
     actions:
       create: Create Alias suffix
       edit: Edit suffix

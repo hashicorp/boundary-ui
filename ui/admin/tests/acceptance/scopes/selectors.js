@@ -11,13 +11,17 @@ export const MANAGE_PROJECTS_DROPDOWN =
 export const MANAGE_PROJECTS_DROPDOWN_DELETE =
   '[data-test-manage-projects-dropdown] ul li button';
 
-export const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';
-export const ADD_STORAGE_POLICY_BTN = '.policy-sidebar .hds-button';
-export const ADD_STORAGE_POLICY_LINK = '.policy-sidebar .hds-link-standalone';
+export const STORAGE_POLICY_SIDEBAR = '[data-test-storage-policy-sidebar]';
+export const ADD_STORAGE_POLICY_BTN =
+  '[data-test-storage-policy-sidebar] .hds-button';
+export const ADD_STORAGE_POLICY_LINK =
+  '[data-test-storage-policy-sidebar] .hds-link-standalone';
 
-export const ALIAS_SUFFIX_SIDEBAR = '.alias-suffix-sidebar';
-export const CREATE_ALIAS_SUFFIX_BTN = '.alias-suffix-sidebar .hds-button';
-export const ALIAS_SUFFIX_VALUE = '.alias-suffix-sidebar .link-list-item__text';
+export const ALIAS_SUFFIX_SIDEBAR = '[data-test-alias-suffix-sidebar]';
+export const CREATE_ALIAS_SUFFIX_BTN =
+  '[data-test-alias-suffix-sidebar] .hds-button';
+export const ALIAS_SUFFIX_VALUE =
+  '[data-test-alias-suffix-sidebar] .link-list-item__text';
 export const ALIAS_SUFFIX_DROPDOWN_TOGGLE =
   '[data-test-alias-suffix-dropdown] button';
 export const ALIAS_SUFFIX_EDIT_ITEM = '[data-test-alias-suffix-edit]';

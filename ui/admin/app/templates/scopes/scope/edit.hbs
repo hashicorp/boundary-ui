@@ -83,7 +83,7 @@
       </bc.Body>
       {{#if (can 'attachStoragePolicy scope' @model)}}
         <bc.Sidebar>
-          <div class='policy-sidebar'>
+          <div class='scope-sidebar' data-test-storage-policy-sidebar>
             <Hds::Text::Display @tag='h2' class='remove-margin'>
               {{t 'resources.policy.title'}}
             </Hds::Text::Display>
@@ -188,7 +188,7 @@
       {{/if}}
       {{#if (can 'setAliasSuffix scope' @model)}}
         <bc.Sidebar>
-          <div class='alias-suffix-sidebar'>
+          <div class='scope-sidebar' data-test-alias-suffix-sidebar>
             <Hds::Text::Display @tag='h2' class='remove-margin'>
               {{t 'resources.scope.alias-suffix.title'}}
             </Hds::Text::Display>

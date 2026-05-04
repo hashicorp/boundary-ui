@@ -835,29 +835,9 @@
   }
 }
 
-// policy sidebar
+// scope sidebar
 
-.policy-sidebar {
-  background-color: var(--token-form-control-disabled-surface-color);
-  padding: 1.5rem 1rem 0.7rem;
-  width: 300px;
-
-  .hds-card__container > ul {
-    display: flex;
-  }
-
-  .description {
-    margin: 0.5rem 0;
-  }
-
-  .hds-link-standalone__text {
-    margin: 1rem 0;
-  }
-}
-
-// alias suffix sidebar
-
-.alias-suffix-sidebar {
+.scope-sidebar {
   background-color: var(--token-form-control-disabled-surface-color);
   padding: 1.5rem 1rem 0.7rem;
   width: 300px;
@@ -868,12 +848,16 @@
     align-items: center;
   }
 
+  .description {
+    margin: 0.5rem 0;
+  }
+
   .link-list-item__text {
     overflow-wrap: anywhere;
   }
 
-  .description {
-    margin: 0.5rem 0;
+  .hds-link-standalone__text {
+    margin: 1rem 0;
   }
 }
 
