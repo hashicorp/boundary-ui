@@ -724,8 +724,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0
       postcss:
-        specifier: ^8.4.31
-        version: 8.5.3
+        specifier: ^8.5.10
+        version: 8.5.14
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
@@ -746,7 +746,7 @@ importers:
         version: 0.0.1(stylelint@15.11.0(typescript@5.8.3))
       stylelint-config-standard-scss:
         specifier: ^11.0.0
-        version: 11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
+        version: 11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(esbuild@0.25.9)
@@ -974,8 +974,8 @@ importers:
         specifier: ^0.1.48
         version: 0.1.48
       postcss:
-        specifier: ^8.4.31
-        version: 8.5.3
+        specifier: ^8.5.10
+        version: 8.5.14
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
@@ -999,7 +999,7 @@ importers:
         version: 0.0.1(stylelint@15.11.0(typescript@5.8.3))
       stylelint-config-standard-scss:
         specifier: ^11.0.0
-        version: 11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
+        version: 11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
         specifier: ^4.0.0
         version: 4.0.0(@babel/core@7.27.1)
@@ -1188,8 +1188,8 @@ importers:
         specifier: ^0.1.48
         version: 0.1.48
       postcss:
-        specifier: ^8.4.31
-        version: 8.5.3
+        specifier: ^8.5.10
+        version: 8.5.14
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
@@ -1222,7 +1222,7 @@ importers:
         version: 34.0.0(stylelint@15.11.0(typescript@5.8.3))
       stylelint-config-standard-scss:
         specifier: ^11.0.0
-        version: 11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
+        version: 11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
         specifier: ^4.0.0
         version: 4.0.0(@babel/core@7.27.1)
@@ -2971,8 +2971,8 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@tootallnate/once@2.0.0':
-    resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
+  '@tootallnate/once@2.0.1':
+    resolution: {integrity: sha512-HqmEUIGRJ5fSXchkVgR5F7qn48bDBzv0kWj/Kfu5e6uci4UlEeng4331LnBkWffb++Ei3FOVLxo8JJWMFBDMeQ==}
     engines: {node: '>= 10'}
 
   '@tootallnate/quickjs-emscripten@0.23.0':
@@ -6263,6 +6263,10 @@ packages:
     resolution: {integrity: sha512-XXADHxXmvT9+CRxhXg56LJovE+bmWnEWB78LB83VZTprKTmaC5QfruXocxzTZ2Kl0DNwKuBdlIhjL8LeY8Sf8Q==}
     engines: {node: '>= 12'}
 
+  ip-address@10.2.0:
+    resolution: {integrity: sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==}
+    engines: {node: '>= 12'}
+
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -7184,6 +7188,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@3.3.12:
+    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   nanoid@5.1.5:
     resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
     engines: {node: ^18 || >=20}
@@ -7715,6 +7724,10 @@ packages:
 
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
+
+  postcss@8.5.14:
+    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
+    engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.3:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
@@ -8409,6 +8422,10 @@ packages:
     resolution: {integrity: sha512-HLpt+uLy/pxB+bum/9DzAgiKS8CX1EvbWxI4zlmgGCExImLdiad2iCwXT5Z4c9c3Eq8rP2318mPW2c+QbtjK8A==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
+  socks@2.8.8:
+    resolution: {integrity: sha512-NlGELfPrgX2f1TAAcz0WawlLn+0r3FyhhCRpFFK2CemXenPYvzMWWZINv3eDNo9ucdwme7oCHRY0Jnbs4aIkog==}
+    engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
   solid-js@1.9.11:
     resolution: {integrity: sha512-WEJtcc5mkh/BnHA6Yrg4whlF8g6QwpmXXRg4P2ztPmcKeHHlH4+djYecBLhSpecZY2RRECXYUwIc/C2r3yzQ4Q==}
 
@@ -9094,6 +9111,7 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-compile-cache@2.4.0:
@@ -11740,7 +11758,7 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@tootallnate/once@2.0.0': {}
+  '@tootallnate/once@2.0.1': {}
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
@@ -13393,13 +13411,13 @@ snapshots:
 
   css-loader@5.2.7(webpack@5.105.4(esbuild@0.25.9)):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.3)
+      icss-utils: 5.1.0(postcss@8.5.14)
       loader-utils: 2.0.4
-      postcss: 8.5.3
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.3)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.3)
-      postcss-modules-scope: 3.2.1(postcss@8.5.3)
-      postcss-modules-values: 4.0.0(postcss@8.5.3)
+      postcss: 8.5.14
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.14)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.14)
+      postcss-modules-scope: 3.2.1(postcss@8.5.14)
+      postcss-modules-values: 4.0.0(postcss@8.5.14)
       postcss-value-parser: 4.2.0
       schema-utils: 3.3.0
       semver: 7.7.2
@@ -16102,7 +16120,7 @@ snapshots:
 
   http-proxy-agent@5.0.0:
     dependencies:
-      '@tootallnate/once': 2.0.0
+      '@tootallnate/once': 2.0.1
       agent-base: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
@@ -16165,9 +16183,9 @@ snapshots:
       safer-buffer: 2.1.2
     optional: true
 
-  icss-utils@5.1.0(postcss@8.5.3):
+  icss-utils@5.1.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
 
   idb-keyval@6.2.2: {}
 
@@ -16282,6 +16300,8 @@ snapshots:
   invert-kv@3.0.1: {}
 
   ip-address@10.1.0: {}
+
+  ip-address@10.2.0: {}
 
   ipaddr.js@1.9.1: {}
 
@@ -17252,6 +17272,8 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  nanoid@3.3.12: {}
+
   nanoid@5.1.5: {}
 
   natural-compare@1.4.0: {}
@@ -17722,26 +17744,26 @@ snapshots:
 
   postcss-media-query-parser@0.2.3: {}
 
-  postcss-modules-extract-imports@3.1.0(postcss@8.5.3):
+  postcss-modules-extract-imports@3.1.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
 
-  postcss-modules-local-by-default@4.2.0(postcss@8.5.3):
+  postcss-modules-local-by-default@4.2.0(postcss@8.5.14):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.3)
-      postcss: 8.5.3
+      icss-utils: 5.1.0(postcss@8.5.14)
+      postcss: 8.5.14
       postcss-selector-parser: 7.1.0
       postcss-value-parser: 4.2.0
 
-  postcss-modules-scope@3.2.1(postcss@8.5.3):
+  postcss-modules-scope@3.2.1(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
       postcss-selector-parser: 7.1.0
 
-  postcss-modules-values@4.0.0(postcss@8.5.3):
+  postcss-modules-values@4.0.0(postcss@8.5.14):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.3)
-      postcss: 8.5.3
+      icss-utils: 5.1.0(postcss@8.5.14)
+      postcss: 8.5.14
 
   postcss-resolve-nested-selector@0.1.6: {}
 
@@ -17749,9 +17771,9 @@ snapshots:
     dependencies:
       postcss: 8.5.3
 
-  postcss-scss@4.0.9(postcss@8.5.3):
+  postcss-scss@4.0.9(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -17764,6 +17786,12 @@ snapshots:
       util-deprecate: 1.0.2
 
   postcss-value-parser@4.2.0: {}
+
+  postcss@8.5.14:
+    dependencies:
+      nanoid: 3.3.12
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
 
   postcss@8.5.3:
     dependencies:
@@ -18539,7 +18567,7 @@ snapshots:
     dependencies:
       agent-base: 6.0.2
       debug: 4.4.3
-      socks: 2.8.7
+      socks: 2.8.8
     transitivePeerDependencies:
       - supports-color
 
@@ -18554,6 +18582,11 @@ snapshots:
   socks@2.8.7:
     dependencies:
       ip-address: 10.1.0
+      smart-buffer: 4.2.0
+
+  socks@2.8.8:
+    dependencies:
+      ip-address: 10.2.0
       smart-buffer: 4.2.0
 
   solid-js@1.9.11:
@@ -18783,26 +18816,26 @@ snapshots:
     dependencies:
       stylelint: 15.11.0(typescript@5.8.3)
 
-  stylelint-config-recommended-scss@13.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3)):
+  stylelint-config-recommended-scss@13.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3)):
     dependencies:
-      postcss-scss: 4.0.9(postcss@8.5.3)
+      postcss-scss: 4.0.9(postcss@8.5.14)
       stylelint: 15.11.0(typescript@5.8.3)
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0(typescript@5.8.3))
       stylelint-scss: 5.3.2(stylelint@15.11.0(typescript@5.8.3))
     optionalDependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
 
   stylelint-config-recommended@13.0.0(stylelint@15.11.0(typescript@5.8.3)):
     dependencies:
       stylelint: 15.11.0(typescript@5.8.3)
 
-  stylelint-config-standard-scss@11.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3)):
+  stylelint-config-standard-scss@11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3)):
     dependencies:
       stylelint: 15.11.0(typescript@5.8.3)
-      stylelint-config-recommended-scss: 13.1.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.8.3))
+      stylelint-config-recommended-scss: 13.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       stylelint-config-standard: 34.0.0(stylelint@15.11.0(typescript@5.8.3))
     optionalDependencies:
-      postcss: 8.5.3
+      postcss: 8.5.14
 
   stylelint-config-standard@34.0.0(stylelint@15.11.0(typescript@5.8.3)):
     dependencies:
