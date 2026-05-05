@@ -30,7 +30,7 @@ const createAddTextAction = (name) => ({
 });
 
 const normalizeGrantsSchema = (grantsSchema) => {
-  const resourceTypes = grantsSchema.resource_types ?? [];
+  const resourceTypes = grantsSchema?.resource_types ?? [];
 
   const resourcesByType = resourceTypes.reduce((resources, resourceType) => {
     const collectionActions = resourceType.collection_actions ?? [];

@@ -38,25 +38,12 @@ module('Unit | Utils | grant-completions', function (hooks) {
 
   hooks.beforeEach(async function () {
     this.intl = this.owner.lookup('service:intl');
-    this.completionTranslatedStrings = {
-      noSuggestions: this.intl.t('resources.role.edit-grants.no-suggestions'),
-      wildcardTypes: this.intl.t(
-        'resources.role.edit-grants.completion-info.wildcard-types',
-      ),
-      wildcardIds: this.intl.t(
-        'resources.role.edit-grants.completion-info.wildcard-ids',
-      ),
-      wildcardActions: this.intl.t(
-        'resources.role.edit-grants.completion-info.wildcard-actions',
-      ),
-      templateValue: this.intl.t(
-        'resources.role.edit-grants.completion-info.template-value',
-      ),
-      allFields: this.intl.t(
-        'resources.role.edit-grants.completion-info.all-fields',
-      ),
-    };
-    this.noSuggestionsLabel = this.completionTranslatedStrings.noSuggestions;
+
+    this.translate = (key) =>
+      this.intl.t(`resources.role.edit-grants.completion-info.${key}`);
+
+    this.idLookup = async () => [];
+    this.getIsLoading = () => false;
 
     const response = await fetch('/grants-schema.json');
 
@@ -65,6 +52,8 @@ module('Unit | Utils | grant-completions', function (hooks) {
     }
 
     const grantsSchemaData = await response.json();
+    this.grantsSchemaData = grantsSchemaData;
+
     allActionLabels = grantsSchemaData.resource_types.reduce(
       (labels, resource) => {
         const resourceLabels = [
@@ -79,7 +68,9 @@ module('Unit | Utils | grant-completions', function (hooks) {
 
     this.grantCompletionSource = createGrantCompletionSource(
       grantsSchemaData,
-      this.completionTranslatedStrings,
+      this.translate,
+      this.idLookup,
+      this.getIsLoading,
     );
   });
 
@@ -130,13 +121,33 @@ module('Unit | Utils | grant-completions', function (hooks) {
           lineText: 'ids=hs_123;type=h',
           expectedLabels: ['NO_SUGGESTIONS'],
         },
+      '{{.User.Id}} template has no child resource types so shows no suggestions':
+        {
+          lineText: 'ids={{.User.Id}};type=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
+      '{{.Account.Id}} template has no child resource types so shows no suggestions':
+        {
+          lineText: 'ids={{.Account.Id}};type=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
+      '{{user.id}} template has no child resource types so shows no suggestions':
+        {
+          lineText: 'ids={{user.id}};type=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
+      '{{account.id}} template has no child resource types so shows no suggestions':
+        {
+          lineText: 'ids={{account.id}};type=',
+          expectedLabels: ['NO_SUGGESTIONS'],
+        },
     },
-    function (assert, { lineText, expectedLabels }) {
-      const completionResult = this.grantCompletionSource(
+    async function (assert, { lineText, expectedLabels }) {
+      const completionResult = await this.grantCompletionSource(
         createCompletionContext(lineText),
       );
       const resolvedLabels = expectedLabels.map((label) =>
-        label === 'NO_SUGGESTIONS' ? this.noSuggestionsLabel : label,
+        label === 'NO_SUGGESTIONS' ? this.translate('no-suggestions') : label,
       );
 
       assert.deepEqual(getLabels(completionResult), resolvedLabels);
@@ -280,76 +291,439 @@ module('Unit | Utils | grant-completions', function (hooks) {
         lineText: 'ids=*;type=*;actions=',
         expectedLabels: () => allActionLabels,
       },
-      'canonical template ids without a type show a no suggestions placeholder':
-        {
-          lineText: 'ids={{.User.Id}};actions=',
-          expectedLabels: ['NO_SUGGESTIONS'],
-        },
+      '{{.User.Id}} template without a type suggests user id actions': {
+        lineText: 'ids={{.User.Id}};actions=',
+        expectedLabels: [
+          '*',
+          'list-resolvable-aliases',
+          'read',
+          'update',
+          'delete',
+          'add-accounts',
+          'set-accounts',
+          'remove-accounts',
+        ],
+      },
+      '{{.Account.Id}} template without a type suggests account id actions': {
+        lineText: 'ids={{.Account.Id}};actions=',
+        expectedLabels: [
+          '*',
+          'set-password',
+          'change-password',
+          'read',
+          'update',
+          'delete',
+        ],
+      },
+      '{{user.id}} template without a type suggests user id actions': {
+        lineText: 'ids={{user.id}};actions=',
+        expectedLabels: [
+          '*',
+          'list-resolvable-aliases',
+          'read',
+          'update',
+          'delete',
+          'add-accounts',
+          'set-accounts',
+          'remove-accounts',
+        ],
+      },
+      '{{account.id}} template without a type suggests account id actions': {
+        lineText: 'ids={{account.id}};actions=',
+        expectedLabels: [
+          '*',
+          'set-password',
+          'change-password',
+          'read',
+          'update',
+          'delete',
+        ],
+      },
+      'mixed user and account templates show a no suggestions placeholder': {
+        lineText: 'ids={{.User.Id}},{{.Account.Id}};actions=',
+        expectedLabels: ['NO_SUGGESTIONS'],
+      },
     },
-    function (assert, { lineText, expectedLabels }) {
-      const completionResult = this.grantCompletionSource(
+    async function (assert, { lineText, expectedLabels }) {
+      const completionResult = await this.grantCompletionSource(
         createCompletionContext(lineText),
       );
       const resolvedLabels = (
         typeof expectedLabels === 'function' ? expectedLabels() : expectedLabels
       ).map((label) =>
-        label === 'NO_SUGGESTIONS' ? this.noSuggestionsLabel : label,
+        label === 'NO_SUGGESTIONS' ? this.translate('no-suggestions') : label,
       );
 
       assert.deepEqual(getLabels(completionResult), resolvedLabels);
     },
   );
 
-  test.each(
-    'ids suggestions',
-    {
-      'include supported template values': {
-        lineText: 'ids={{',
-        expectedLabels: ['{{.User.Id}}', '{{.Account.Id}}'],
-      },
-    },
-    function (assert, { lineText, expectedLabels }) {
-      const completionResult = this.grantCompletionSource(
-        createCompletionContext(lineText),
-      );
-
-      assert.deepEqual(getLabels(completionResult), expectedLabels);
-    },
-  );
-
-  test('completion info labels are translated values', function (assert) {
-    const typeCompletionResult = this.grantCompletionSource(
+  test('completion info labels are translated values', async function (assert) {
+    const typeCompletionResult = await this.grantCompletionSource(
       createCompletionContext('type='),
     );
-    const idsCompletionResult = this.grantCompletionSource(
+    const idsCompletionResult = await this.grantCompletionSource(
       createCompletionContext('ids='),
     );
-    const outputFieldsCompletionResult = this.grantCompletionSource(
+    const outputFieldsCompletionResult = await this.grantCompletionSource(
       createCompletionContext('output_fields='),
     );
-    const actionsCompletionResult = this.grantCompletionSource(
+    const actionsCompletionResult = await this.grantCompletionSource(
       createCompletionContext('actions='),
     );
 
     assert.strictEqual(
       typeCompletionResult.options[0].info,
-      this.completionTranslatedStrings.wildcardTypes,
+      this.translate('wildcard-types'),
     );
 
     assert.deepEqual(getInfos(idsCompletionResult), [
-      this.completionTranslatedStrings.wildcardIds,
-      this.completionTranslatedStrings.templateValue,
-      this.completionTranslatedStrings.templateValue,
+      this.translate('wildcard-ids'),
+      this.translate('template-value'),
+      this.translate('template-value'),
     ]);
 
     assert.strictEqual(
       outputFieldsCompletionResult.options[0].info,
-      this.completionTranslatedStrings.allFields,
+      this.translate('all-fields'),
     );
 
     assert.strictEqual(
       actionsCompletionResult.options[0].info,
-      this.completionTranslatedStrings.wildcardActions,
+      this.translate('wildcard-actions'),
     );
+  });
+
+  module('id auto completion', function () {
+    test('idLookup results are included alongside static options', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [
+          { id: 'ttcp_abc123', name: 'My Target' },
+          { id: 'ttcp_def456', name: 'Another Target' },
+        ],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+
+      const labels = getLabels(result);
+      assert.true(labels.includes('*'));
+      assert.true(labels.includes('{{.User.Id}}'));
+      assert.true(labels.includes('{{.Account.Id}}'));
+      assert.true(labels.includes('ttcp_abc123'));
+      assert.true(labels.includes('ttcp_def456'));
+    });
+
+    test('idLookup results have detail set to the resource name', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [{ id: 'ttcp_abc123', name: 'My Target' }],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+
+      const idOption = result.options.find((o) => o.label === 'ttcp_abc123');
+      assert.ok(idOption, 'found the ID option');
+      assert.strictEqual(idOption.detail, 'My Target');
+    });
+
+    test('static options appear before idLookup results', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [{ id: 'ttcp_abc123', name: 'My Target' }],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+      const labels = getLabels(result);
+
+      assert.true(
+        labels.indexOf('*') < labels.indexOf('ttcp_abc123'),
+        'wildcard appears before DB results',
+      );
+    });
+
+    test('loading placeholder is appended when getIsLoading returns true', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [{ id: 'ttcp_abc123', name: 'My Target' }],
+        () => true,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+      const labels = getLabels(result);
+
+      assert.true(labels.includes(this.translate('loading-ids')));
+      assert.strictEqual(
+        labels.at(-1),
+        this.translate('loading-ids'),
+        'loading placeholder is the last option',
+      );
+    });
+
+    test('loading placeholder is NOT present when getIsLoading returns false', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+      const labels = getLabels(result);
+
+      assert.false(labels.includes(this.translate('loading-ids')));
+    });
+
+    test('wildcard and templates are hidden when any IDs are already entered', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids=ttcp_abc123,'));
+      const labels = getLabels(result);
+
+      assert.false(labels.includes('*'));
+      assert.false(labels.includes('{{.User.Id}}'));
+      assert.false(labels.includes('{{.Account.Id}}'));
+    });
+
+    test('templates are hidden when a type field is present, even with no IDs entered', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('type=user;ids='));
+      const labels = getLabels(result);
+
+      assert.false(labels.includes('{{.User.Id}}'));
+      assert.false(labels.includes('{{.Account.Id}}'));
+    });
+
+    test('wildcard is still suggested when a type field is present and no IDs are entered', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('type=user;ids='));
+      const labels = getLabels(result);
+
+      assert.true(labels.includes('*'));
+    });
+
+    test('templates are suggested when no type field and no IDs are entered', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+      const labels = getLabels(result);
+
+      assert.true(labels.includes('{{.User.Id}}'));
+      assert.true(labels.includes('{{.Account.Id}}'));
+    });
+
+    test('when type=* idLookup is called with all parent resource types', async function (assert) {
+      assert.expect(1);
+
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async (partial, compatibleResourceTypes) => {
+          assert.deepEqual(compatibleResourceTypes, [
+            'auth-method',
+            'host-catalog',
+            'credential-store',
+          ]);
+          return [];
+        },
+        () => false,
+      );
+
+      await source(createCompletionContext('type=*;ids='));
+    });
+
+    test('when type is a child type idLookup is called with the parent type and its results are included', async function (assert) {
+      assert.expect(2);
+
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async (partial, compatibleResourceTypes) => {
+          assert.deepEqual(compatibleResourceTypes, ['host-catalog']);
+          return [{ id: 'hcst_parentid', name: 'My Host Catalog' }];
+        },
+        () => false,
+      );
+
+      const result = await source(
+        createCompletionContext('type=host-set;ids='),
+      );
+
+      assert.true(getLabels(result).includes('hcst_parentid'));
+    });
+
+    test('already-entered IDs are not offered again', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids={{.User.Id}},'));
+      const labels = getLabels(result);
+
+      assert.false(labels.includes('{{.User.Id}}'));
+    });
+
+    test('empty idLookup result still returns static options', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+
+      assert.deepEqual(getLabels(result), [
+        '*',
+        '{{.User.Id}}',
+        '{{.Account.Id}}',
+      ]);
+    });
+
+    test('partial prefix filters static options correctly', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids={{'));
+
+      const labels = getLabels(result);
+      assert.false(labels.includes('*'), 'wildcard filtered out by prefix');
+      assert.deepEqual(labels, ['{{.User.Id}}', '{{.Account.Id}}']);
+    });
+
+    test('idLookup is called when partial contains uppercase letters and spaces, enabling name-based search', async function (assert) {
+      assert.expect(2);
+
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async (partial) => {
+          assert.strictEqual(partial, 'My Target');
+          return [{ id: 'ttcp_abc123', name: 'My Target' }];
+        },
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids=My Target'));
+      const labels = getLabels(result);
+
+      assert.true(labels.includes('ttcp_abc123'));
+    });
+
+    test('idLookup results with undefined name still work (detail is undefined)', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [{ id: 'ttcp_abc123', name: undefined }],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids='));
+      const idOption = result.options.find((o) => o.label === 'ttcp_abc123');
+
+      assert.ok(idOption);
+      assert.strictEqual(idOption.detail, undefined);
+    });
+
+    test('idLookup is called with compatibleResourceTypes when entered IDs all share a single resource type', async function (assert) {
+      assert.expect(1);
+
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async (partial, compatibleResourceTypes) => {
+          assert.deepEqual(compatibleResourceTypes, ['target']);
+          return [];
+        },
+        () => false,
+      );
+
+      await source(createCompletionContext('ids=ttcp_abc123,'));
+    });
+
+    test('no suggestions shown when entered IDs have mixed resource types', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(
+        createCompletionContext('ids=ttcp_abc123,hs_456,'),
+      );
+
+      assert.deepEqual(getLabels(result), [this.translate('no-suggestions')]);
+    });
+
+    test('idLookup results matching already-entered IDs are excluded', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [
+          { id: 'ttcp_abc123', name: 'Already Entered' },
+          { id: 'ttcp_def456', name: 'New Target' },
+        ],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids=ttcp_abc123,'));
+      const labels = getLabels(result);
+
+      assert.false(
+        labels.includes('ttcp_abc123'),
+        'already-entered ID excluded',
+      );
+      assert.true(labels.includes('ttcp_def456'), 'new ID included');
+    });
+
+    test('no suggestions shown when idLookup returns empty results with entered IDs', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids=ttcp_abc123,'));
+
+      assert.deepEqual(getLabels(result), [this.translate('no-suggestions')]);
+    });
   });
 });

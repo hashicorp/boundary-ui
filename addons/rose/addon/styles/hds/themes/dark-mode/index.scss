@@ -191,6 +191,56 @@
   }
 }
 
+// Overrides for CodeMirror 6 autocomplete and lint tooltips/panels.
+@mixin dark-mode-codemirror-override {
+  /* stylelint-disable selector-class-pattern */
+  .cm-editor {
+    // Autocomplete dropdown and lint hover tooltips
+    .cm-tooltip {
+      background-color: var(--token-color-palette-neutral-50);
+      border: 1px solid var(--token-color-palette-neutral-100);
+      color: var(--token-color-palette-neutral-400);
+    }
+
+    // Arrow pointer for tooltips shown above the cursor
+    .cm-tooltip-above::before {
+      border-top-color: var(--token-color-palette-neutral-50);
+    }
+
+    // Arrow pointer for tooltips shown below the cursor
+    .cm-tooltip-below::before {
+      border-bottom-color: var(--token-color-palette-neutral-50);
+    }
+
+    // Autocomplete list > selected item highlight
+    .cm-tooltip-autocomplete > ul > li[aria-selected] {
+      background-color: var(--token-color-palette-blue-300);
+      color: var(--token-color-palette-neutral-700);
+    }
+
+    // Content/gutter border
+    .cm-content {
+      border-left: 1px solid var(--token-color-palette-neutral-100);
+    }
+
+    // Lint diagnostics panel (shown at the bottom of the editor)
+    .cm-panel.cm-panel-lint {
+      border-top: 3px solid var(--token-color-palette-neutral-100);
+
+      ul {
+        background-color: var(--token-color-palette-neutral-100);
+
+        // Lint panel > selected diagnostic item highlight
+        &:focus li.cm-diagnostic[aria-selected] {
+          background-color: var(--token-color-palette-neutral-50);
+          color: var(--token-color-palette-neutral-400);
+        }
+      }
+    }
+  }
+  /* stylelint-enable selector-class-pattern */
+}
+
 @media (prefers-color-scheme: dark) {
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
@@ -198,6 +248,7 @@
     @include dark-mode-ember-dropdown-override;
     @include dark-mode-app-header-override;
     @include dark-mode-app-side-nav-override;
+    @include dark-mode-codemirror-override;
   }
 }
 
@@ -207,4 +258,5 @@
   @include dark-mode-ember-dropdown-override;
   @include dark-mode-app-header-override;
   @include dark-mode-app-side-nav-override;
+  @include dark-mode-codemirror-override;
 }
