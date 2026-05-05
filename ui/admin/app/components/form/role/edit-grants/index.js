@@ -11,9 +11,12 @@ import {
   autocompletion,
   completionKeymap,
   keymap,
+  linter,
+  lintGutter,
+  lintKeymap,
 } from '@hashicorp/design-system-components/codemirror';
-
 import { createGrantCompletionSource } from 'admin/utils/grant-completions';
+import { createGrantLinter } from 'admin/utils/grant-linter';
 
 export default class FormRoleEditGrantsComponent extends Component {
   @service intl;
@@ -41,9 +44,16 @@ export default class FormRoleEditGrantsComponent extends Component {
     ),
   };
 
+  translateLintingError = (key, options = {}) =>
+    this.intl.t(`resources.role.edit-grants.linting-errors.${key}`, options);
+
   completionSource = createGrantCompletionSource(
     this.args.grantsSchema,
     this.completionTranslatedStrings,
+  );
+  linterSource = createGrantLinter(
+    this.args.grantsSchema,
+    this.translateLintingError,
   );
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
@@ -57,7 +67,9 @@ export default class FormRoleEditGrantsComponent extends Component {
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
       activateOnCompletion: (completion) => completion.type === 'keyword',
     }),
-    keymap.of(completionKeymap),
+    linter(this.linterSource),
+    lintGutter(),
+    keymap.of([...completionKeymap, ...lintKeymap]),
   ];
 
   get grantStrings() {
