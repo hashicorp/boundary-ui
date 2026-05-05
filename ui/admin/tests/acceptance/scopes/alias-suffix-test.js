@@ -128,6 +128,32 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).hasText(UPDATED_SUFFIX_VALUE);
   });
 
+  test('canceling the edit confirm modal does not save and does not show the success toast', async function (assert) {
+    instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
+    confirmService.enabled = true;
+
+    await visit(urls.projectScopeEdit);
+    await click(selectors.ALIAS_SUFFIX_DROPDOWN_TOGGLE);
+    await click(selectors.ALIAS_SUFFIX_EDIT_ITEM);
+
+    await fillIn(selectors.FIELD_ALIAS_SUFFIX, UPDATED_SUFFIX_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
+    // User stays on the add-alias-suffix page with the dirty value
+    assert.strictEqual(currentURL(), urls.addAliasSuffix);
+    // Underlying record is unchanged
+    assert.strictEqual(
+      this.server.schema.scopes.find(instances.scopes.project.id).alias_suffix,
+      SUFFIX_VALUE,
+    );
+    // No success toast should be shown when the user cancels the confirmation
+    assert.dom(commonSelectors.ALERT_TOAST).doesNotExist();
+  });
+
   test('can delete an alias suffix via the confirm dialog', async function (assert) {
     instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
     confirmService.enabled = true;
@@ -188,5 +214,24 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     assert.dom(selectors.ALIAS_SUFFIX_SIDEBAR).isVisible();
     assert.dom(selectors.CREATE_ALIAS_SUFFIX_BTN).isVisible();
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).doesNotExist();
+  });
+
+  test('shows an error flash on the add-alias-suffix page when fetching the suffix fails', async function (assert) {
+    instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
+    this.server.get(
+      '/scopes/:idMethod',
+      function ({ scopes }, { params: { idMethod } }) {
+        const [id, method] = idMethod.split(':');
+        if (method === 'get-alias-target-suffix') {
+          return new Response(500);
+        }
+        return scopes.find(id);
+      },
+    );
+
+    await visit(urls.addAliasSuffix);
+
+    assert.strictEqual(currentURL(), urls.addAliasSuffix);
+    assert.dom(commonSelectors.ALERT_TOAST).isVisible();
   });
 });

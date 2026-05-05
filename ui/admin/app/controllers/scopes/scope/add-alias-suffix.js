@@ -26,14 +26,11 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
   // =actions
 
   /**
-   * Save the alias suffix on the scope via the
-   * `set-alias-target-suffix` custom method, then return to project settings.
+   * Confirms the change with the user when editing an existing suffix, then
+   * delegates persistence to `saveSuffix`.
    * @param {ScopeModel} scope
    */
   @action
-  @loading
-  @notifyError(({ message }) => message)
-  @notifySuccess('resources.scope.alias-suffix.messages.save')
   async save(scope) {
     if (this.isEdit) {
       try {
@@ -45,12 +42,24 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
           },
         );
       } catch {
-        // do nothing
+        // user canceled the confirmation; do nothing
         return;
       }
     }
-    const suffix = scope.alias_suffix;
-    await scope.setAliasSuffix(suffix);
+    await this.saveSuffix(scope);
+  }
+
+  /**
+   * Persists the alias suffix via the `set-alias-target-suffix` method
+   * and transitions back to project settings on success.
+   * @param {ScopeModel} scope
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess('resources.scope.alias-suffix.messages.save')
+  async saveSuffix(scope) {
+    await scope.setAliasSuffix(scope.alias_suffix);
     await this.router.transitionTo('scopes.scope.edit', scope.id);
   }
 

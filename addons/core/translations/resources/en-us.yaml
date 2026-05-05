@@ -1090,6 +1090,7 @@ scope:
     messages:
       delete: Alias suffix deleted
       save: Alias suffix saved
+      fetch-error: Could not load the latest Alias suffix. Please refresh to try again.
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
