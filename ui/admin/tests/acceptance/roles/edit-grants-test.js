@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL, find, select, waitFor } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  currentURL,
+  find,
+  select,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
