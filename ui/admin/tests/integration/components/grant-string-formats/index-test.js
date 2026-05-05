@@ -15,48 +15,96 @@ module(
     setupRenderingTest(hooks);
     setupIntl(hooks, 'en-us');
 
-    const RESOURCE_TYPE_OPTION = '[value="resource-type"]';
-    const RESOURCE_OPTION = '[value="resource"]';
-    const PINNED_ID_OPTION = '[value="pinned-id"]';
+    const STRING_FORMATS_SELECT = '[name="string-formats"]';
+    const RESOURCE_TYPE_OPTION = '[data-option-index="0"]';
+    const RESOURCE_OPTION = '[data-option-index="1"]';
+    const PINNED_ID_OPTION = '[data-option-index="2"]';
+    const OUTPUT_FIELDS_OPTION = '[data-option-index="3"]';
+    const ACCOUNT_TEMPLATE_OPTION = '[data-option-index="4"]';
+    const USER_TEMPLATE_OPTION = '[data-option-index="5"]';
     const STRING_FORMAT_FIELD = '[name="string-format"]';
+    const MORE_INFO_LINK = '.hds-link-standalone';
 
-    test('it renders string format with resource type by default', async function (assert) {
-      await render(hbs`<GrantStringFormats />`);
+    const options = {
+      resourceType: RESOURCE_TYPE_OPTION,
+      resource: RESOURCE_OPTION,
+      pinnedId: PINNED_ID_OPTION,
+      outputFields: OUTPUT_FIELDS_OPTION,
+      accountTemplate: ACCOUNT_TEMPLATE_OPTION,
+      userTemplate: USER_TEMPLATE_OPTION,
+    };
 
-      assert.dom(RESOURCE_TYPE_OPTION).isChecked();
-      assert.dom(RESOURCE_OPTION).isNotChecked();
-      assert.dom(PINNED_ID_OPTION).isNotChecked();
-      assert
-        .dom(STRING_FORMAT_FIELD)
-        .hasValue('type=<insert resource types>;actions=<insert actions>');
-    });
+    test.each(
+      'it renders the expected string format for each option',
+      [
+        {
+          selectedOption: 'resourceType',
+          expectedValue:
+            'type=<insert resource types>;actions=<insert actions>',
+          showsMoreInfoLink: false,
+        },
+        {
+          optionToClick: RESOURCE_OPTION,
+          selectedOption: 'resource',
+          expectedValue: 'ids=<insert resource ids>;actions=<insert actions>',
+          showsMoreInfoLink: false,
+        },
+        {
+          optionToClick: PINNED_ID_OPTION,
+          selectedOption: 'pinnedId',
+          expectedValue:
+            'ids=<insert id>;type=<insert resource types>;actions=<insert actions>',
+          showsMoreInfoLink: true,
+        },
+        {
+          optionToClick: OUTPUT_FIELDS_OPTION,
+          selectedOption: 'outputFields',
+          expectedValue: 'output_fields=<insert output fields>',
+          showsMoreInfoLink: true,
+        },
+        {
+          optionToClick: ACCOUNT_TEMPLATE_OPTION,
+          selectedOption: 'accountTemplate',
+          expectedValue: 'ids={{.Account.Id}}',
+          showsMoreInfoLink: true,
+        },
+        {
+          optionToClick: USER_TEMPLATE_OPTION,
+          selectedOption: 'userTemplate',
+          expectedValue: 'ids={{.User.Id}}',
+          showsMoreInfoLink: true,
+        },
+      ],
+      async function (
+        assert,
+        { optionToClick, selectedOption, expectedValue, showsMoreInfoLink },
+      ) {
+        await render(hbs`<GrantStringFormats />`);
 
-    test('it renders string format when type is changed to specific resource', async function (assert) {
-      await render(hbs`<GrantStringFormats />`);
+        await click(STRING_FORMATS_SELECT);
 
-      await click(RESOURCE_OPTION);
+        if (optionToClick) {
+          await click(optionToClick);
+          await click(STRING_FORMATS_SELECT);
+        }
 
-      assert.dom(RESOURCE_OPTION).isChecked();
-      assert.dom(RESOURCE_TYPE_OPTION).isNotChecked();
-      assert.dom(PINNED_ID_OPTION).isNotChecked();
-      assert
-        .dom(STRING_FORMAT_FIELD)
-        .hasValue('ids=<insert resource ids>;actions=<insert actions>');
-    });
+        for (const [optionName, selector] of Object.entries(options)) {
+          assert
+            .dom(selector)
+            .hasAria(
+              'selected',
+              optionName === selectedOption ? 'true' : 'false',
+            );
+        }
 
-    test('it renders string format when type is changed to pinned id', async function (assert) {
-      await render(hbs`<GrantStringFormats />`);
+        assert.dom(STRING_FORMAT_FIELD).hasValue(expectedValue);
 
-      await click(PINNED_ID_OPTION);
-
-      assert.dom(PINNED_ID_OPTION).isChecked();
-      assert.dom(RESOURCE_TYPE_OPTION).isNotChecked();
-      assert.dom(RESOURCE_OPTION).isNotChecked();
-      assert
-        .dom(STRING_FORMAT_FIELD)
-        .hasValue(
-          'ids=<insert id>;type=<insert resource types>;actions=<insert actions>',
-        );
-    });
+        if (showsMoreInfoLink) {
+          assert.dom(MORE_INFO_LINK).isVisible();
+        } else {
+          assert.dom(MORE_INFO_LINK).doesNotExist();
+        }
+      },
+    );
   },
 );

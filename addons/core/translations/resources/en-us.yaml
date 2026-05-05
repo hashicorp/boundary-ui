@@ -719,22 +719,33 @@ role:
       title: Grant Editor
       description: Add each new grant string on a different line
     string-formats:
-      title: String format
       title_plural: String formats
+      syntax: Syntax
+      syntax-format: Syntax format
+      more-info: More info
       resource-type:
         label: Singular resource type
-        help: Applies actions to a specific resource type
+        help: Applies actions to a specific resource type in a single grant.
       resource:
         label: Specific resource(s)
-        help: Applies actions to one or more individual resources
+        help: Applies actions to one or more individual resources in a single grant.
       pinned-id:
         label: Pinned ID
-        help: '"Pins" actions to a non-top-level type within a specific resource ID. Only available for certain resource types. '
-        link: More info
+        help: '"Pins" actions to a non-top-level type within a specific ID in a single grant.'
+      output-fields:
+        label: Output fields
+        help: Defines which fields from a request are returned to the user.
+      account-template:
+        label: Account template
+        help: Substitutes the account ID from the token used to perform the request.
+      user-template:
+        label: User template
+        help: Substitutes the user ID from the token used to perform the request.
       insert-actions: insert actions
       insert-resource-types: insert resource types
       insert-id: insert id
       insert-resource-ids: insert resource ids
+      insert-output-fields: insert output fields
     export:
       format: Format
       formatted-export-aria-label: Formatted export

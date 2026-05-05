@@ -99,6 +99,12 @@ module.exports = function (environment) {
         'role.add-grant-scopes': '/docs/commands/roles/add-grant-scopes',
         'role.grant-string-format.pinned-id':
           '/docs/rbac/permission-grant-formats#pinned-id',
+        'role.grant-string-format.output-fields':
+          '/docs/rbac/assignable-permissions#output-fields',
+        'role.grant-string-format.account-template':
+          '/docs/rbac/permission-grant-formats#account-id',
+        'role.grant-string-format.user-template':
+          '/docs/rbac/permission-grant-formats#user-id',
         session: '/docs/concepts/domain-model/sessions',
         target: '/docs/concepts/domain-model/targets',
         'target.new': '/docs/common-workflows/manage-targets',
