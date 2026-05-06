@@ -216,7 +216,7 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).doesNotExist();
   });
 
-  test('shows an error flash on the add-alias-suffix page when fetching the suffix fails', async function (assert) {
+  test('renders the error substate on the add-alias-suffix page when fetching the suffix fails', async function (assert) {
     instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
     this.server.get(
       '/scopes/:idMethod',
@@ -231,7 +231,6 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
 
     await visit(urls.addAliasSuffix);
 
-    assert.strictEqual(currentURL(), urls.addAliasSuffix);
-    assert.dom(commonSelectors.ALERT_TOAST).isVisible();
+    assert.dom('[data-test-error-application-state]').isVisible();
   });
 });

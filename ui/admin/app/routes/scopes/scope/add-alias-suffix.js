@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAddAliasSuffixRoute extends Route {
   // =services
@@ -27,11 +26,6 @@ export default class ScopesScopeAddAliasSuffixRoute extends Route {
    * Refresh the alias suffix for project scopes.
    * @param {ScopeModel} scope
    */
-  @notifyError(
-    ({ message }) =>
-      message || 'resources.scope.alias-suffix.messages.fetch-error',
-    { catch: true },
-  )
   async afterModel(scope) {
     if (this.abilities.can('getAliasSuffix scope', scope)) {
       await this.store.findRecord('scope', scope.id, {
