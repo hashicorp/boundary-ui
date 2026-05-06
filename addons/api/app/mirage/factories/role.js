@@ -26,7 +26,7 @@ export default factory.extend({
       'set-grant-scopes',
     ],
   grant_strings: () => [
-    'ids=*;action=*',
+    'ids=*;actions=*',
     'ids=*;type=host-catalog;actions=create,read',
   ],
 

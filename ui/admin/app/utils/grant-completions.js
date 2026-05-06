@@ -6,6 +6,12 @@
 const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
 const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
+const TEMPLATE_RESOURCE_TYPES = {
+  '{{.User.Id}}': 'user',
+  '{{.Account.Id}}': 'account',
+  '{{user.id}}': 'user',
+  '{{account.id}}': 'account',
+};
 const filterByPrefix = (values, partial) =>
   values.filter((value) => value.startsWith(partial));
 const withWildCard = (values = []) => ['*', ...new Set(values)];
@@ -101,8 +107,13 @@ export const normalizeGrantsSchema = (grantsSchema) => {
   };
 };
 
-const getResourceTypesForId = (schema, id) =>
-  id.includes('_')
+const getResourceTypesForId = (schema, id) => {
+  const templateType = TEMPLATE_RESOURCE_TYPES[id];
+  if (templateType) {
+    return [templateType].filter((type) => schema.resourcesByType[type]);
+  }
+
+  return id.includes('_')
     ? [
         schema.resourceTypesByIdPrefix.find(
           ({ idPrefix }) => id.split('_')[0] === idPrefix,
@@ -111,6 +122,7 @@ const getResourceTypesForId = (schema, id) =>
     : schema.resourceTypesByIdPrefix
         .filter(({ idPrefix }) => idPrefix.startsWith(id))
         .map(({ type }) => type);
+};
 
 export const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   const resourceTypesById = parseIds(idsValue).flatMap((id) =>
@@ -322,7 +334,38 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   };
 };
 
-function grantCompletions(context, schema, translatedStrings) {
+const getIdLookupTypes = (schema, typeValue, enteredIds) => {
+  if (enteredIds.length > 0) {
+    const compatibleResourceType = getCompatibleResourceTypeForIds(
+      schema,
+      enteredIds.join(','),
+    );
+    // No valid suggestions if there are mixed resource types across entered IDs
+    return compatibleResourceType ? [compatibleResourceType] : [];
+  }
+
+  if (typeValue === '*') {
+    // Only parent resource IDs (those that have child types) are useful
+    return Object.keys(schema.childResourceTypesByParentType);
+  }
+
+  if (typeValue) {
+    const parentType = schema.resourcesByType[typeValue]?.parentType;
+    // Restrict to the parent's IDs otherwise there are no valid ID suggestions besides wildcard
+    return parentType ? [parentType] : [];
+  }
+
+  // All types are potentially valid
+  return null;
+};
+
+async function grantCompletions(
+  context,
+  schema,
+  translate,
+  idLookup,
+  getIsLoading,
+) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
@@ -362,37 +405,73 @@ function grantCompletions(context, schema, translatedStrings) {
     const options = filterByPrefix(typeOptions, partial).map((type) => ({
       label: type,
       type: 'type',
-      info: type === '*' ? translatedStrings.wildcardTypes : '',
+      info: type === '*' ? translate('wildcard-types') : '',
     }));
 
     return {
       from: context.pos - partial.length,
       options: options.length
         ? options
-        : [getNoSuggestionsOption(translatedStrings.noSuggestions)],
+        : [getNoSuggestionsOption(translate('no-suggestions'))],
     };
   }
 
-  const idsValueMatch = beforeCursor.match(/ids=([a-zA-Z0-9_*.{},-]*)$/);
+  const idsValueMatch = beforeCursor.match(/ids=([\w*.{},\s-]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
     const partial = enteredIds.pop() ?? '';
     const hasEnteredIds = enteredIds.length > 0;
-    // TODO: Add loaded ID suggestions here? Logic below will change
+
+    const staticOptions = filterByPrefix(['*', ...ID_TEMPLATES], partial)
+      .filter((value) => !hasEnteredIds || value !== '*')
+      .filter(
+        (value) =>
+          (!hasEnteredIds && !typeValue) || !ID_TEMPLATES.includes(value),
+      )
+      .filter((value) => !enteredIds.includes(value))
+      .map((value) => ({
+        label: value,
+        type: value === '*' ? 'constant' : 'interface',
+        info:
+          value === '*'
+            ? translate('wildcard-ids')
+            : translate('template-value'),
+      }));
+
+    const compatibleResourceTypes = getIdLookupTypes(
+      schema,
+      typeValue,
+      enteredIds,
+    );
+    const ids = await idLookup(partial, compatibleResourceTypes);
+    const idOptions = ids
+      .filter(({ id }) => !enteredIds.includes(id))
+      .map(({ id, name }) => ({
+        label: id,
+        detail: name,
+        type: 'variable',
+      }));
+
+    const allOptions = [...staticOptions, ...idOptions];
+
+    // Show a loading placeholder when IDs are still being fetched in the background
+    if (getIsLoading()) {
+      allOptions.push({
+        label: translate('loading-ids'),
+        type: 'text',
+        apply: () => {},
+      });
+    }
 
     return {
       from: context.pos - partial.length,
-      options: filterByPrefix(['*', ...ID_TEMPLATES], partial)
-        .filter((value) => !hasEnteredIds || value !== '*')
-        .filter((value) => !enteredIds.includes(value))
-        .map((value) => ({
-          label: value,
-          type: value === '*' ? 'constant' : 'interface',
-          info:
-            value === '*'
-              ? translatedStrings.wildcardIds
-              : translatedStrings.templateValue,
-        })),
+      options: allOptions.length
+        ? allOptions
+        : [getNoSuggestionsOption(translate('no-suggestions'))],
+      // We do our own filtering via DB search, so disable CodeMirror's
+      // built-in filtering. Without this, name-based searches are dropped
+      // because the label (the ID) doesn't match the typed text (the name).
+      filter: false,
     };
   }
 
@@ -402,6 +481,7 @@ function grantCompletions(context, schema, translatedStrings) {
     const enteredActions = actionsValueMatch[1].split(',');
     const partial = enteredActions.pop() ?? '';
     const hasEnteredActions = enteredActions.length > 0;
+
     const options = filterByPrefix(
       getActionOptions(schema, typeValue, idsValue),
       partial,
@@ -411,14 +491,14 @@ function grantCompletions(context, schema, translatedStrings) {
       .map((action) => ({
         label: action,
         type: 'constant',
-        info: action === '*' ? translatedStrings.wildcardActions : '',
+        info: action === '*' ? translate('wildcard-actions') : '',
       }));
 
     return {
       from: context.pos - partial.length,
       options: options.length
         ? options
-        : [getNoSuggestionsOption(translatedStrings.noSuggestions)],
+        : [getNoSuggestionsOption(translate('no-suggestions'))],
     };
   }
 
@@ -438,7 +518,7 @@ function grantCompletions(context, schema, translatedStrings) {
         .map((value) => ({
           label: value,
           type: 'constant',
-          info: translatedStrings.allFields,
+          info: translate('all-fields'),
         })),
     };
   }
@@ -448,9 +528,12 @@ function grantCompletions(context, schema, translatedStrings) {
 
 export const createGrantCompletionSource = (
   grantsSchema,
-  translatedStrings,
+  translate,
+  idLookup,
+  getIsLoading,
 ) => {
   const schema = normalizeGrantsSchema(grantsSchema);
 
-  return (context) => grantCompletions(context, schema, translatedStrings);
+  return (context) =>
+    grantCompletions(context, schema, translate, idLookup, getIsLoading);
 };

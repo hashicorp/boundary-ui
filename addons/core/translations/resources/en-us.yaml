@@ -663,13 +663,59 @@ role:
   edit-grants:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
-    no-suggestions: No suggestions
     completion-info:
+      no-suggestions: No suggestions
       wildcard-types: Wildcard - matches all types
       wildcard-ids: Wildcard - matches all IDs
       wildcard-actions: Wildcard - matches all actions
       template-value: Template value
       all-fields: All fields
+      loading-ids: Still loading ID suggestions…
+    linting-errors:
+      general:
+        whitespace-not-allowed: Whitespace is not allowed
+        leading-semicolon-not-allowed: Leading semicolon is not allowed
+        trailing-semicolon-not-allowed: Trailing semicolon is not allowed
+        invalid-character: Invalid character "{character}"
+        invalid-format: 'Invalid format: expected key=value'
+        invalid-syntax: Invalid syntax
+      fields:
+        duplicate-field: Duplicate field "{field}"
+        unknown-field: Unknown field "{field}"
+        empty-value: '"{field}" value cannot be empty'
+        missing-ids-or-type: Missing "ids" or "type" fields
+        missing-actions: Missing "actions" field
+        missing-actions-or-output-fields: Missing "actions" or "output_fields" fields
+      type:
+        invalid-type: Invalid resource type "{type}"
+        not-top-level: Type "{type}" is not a top-level type
+        not-child-type: Type "{type}" is not a child type of the pinned ID
+        missing-for-wildcard-ids: Missing "type" field for wildcard ids
+        wildcard-requires-ids: Missing "ids" field for wildcard type
+      ids:
+        empty-list: '"ids" field does not contain at least one id'
+        wildcard-cannot-combine: Wildcard id "*" cannot be combined with other ids
+        duplicate-template: Duplicate id "{primary}" and "{secondary}"
+        duplicate-id: Duplicate id "{id}"
+        unknown-template: Unknown template "{id}"
+        invalid-id: Invalid id "{id}"
+        mismatched-types: Ids do not have the same type. Invalid id "{id}"
+        must-support-child-types: Pinned IDs must support child types. Invalid id "{id}"
+        must-match-parent-type: Pinned IDs must be "{parentType}" ids. Invalid id "{id}"
+      actions:
+        empty-list: '"actions" field does not contain at least one action'
+        wildcard-cannot-combine: Wildcard action "*" cannot be combined with other actions
+        duplicate-action: Duplicate action "{action}"
+        invalid-action: Invalid action "{action}"
+        id-only: Only id actions for "{type}" type are allowed. Invalid action "{action}"
+        collection-only: Only collection actions are allowed. Invalid action "{action}"
+        noop-requires-list: '"no-op" action should only be used with "list" action'
+        list-requires-noop: '"list" action should be used with "no-op" action to have an effect'
+        noop-unnecessary: '"no-op" action is unnecessary when other actions are specified'
+      editor:
+        remove: Remove
+        remove-comma: Remove comma
+        add-noop: Add "no-op" action
     editor:
       title: Grant Editor
       description: Add each new grant string on a different line

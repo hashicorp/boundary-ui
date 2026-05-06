@@ -62,14 +62,35 @@ export default class SqliteHandler {
           totalInsert = 0;
 
         if (!peekDb) {
-          const tokenKey = `${type}-${hashCode(remainingQuery)}`;
+          let tokenKey = `${type}-${hashCode(remainingQuery)}`;
+          // The global token key represents a recursive query from global scope,
+          // which pulls back every resource of this type.
+          const globalTokenKey = `${type}-${hashCode({ scope_id: 'global', recursive: true })}`;
           if (storeToken) {
-            const [tokenObj] = await this.sqlite.fetchResource({
-              ...generateSQLExpressions('token', {
-                filters: { id: [{ equals: tokenKey }] },
-              }),
-            });
-            listToken = tokenObj?.token;
+            // Always prefer the global token when it exists for
+            // any more fine-grained query. The global query already fetched every
+            // item for this resource type, so we should just re-use it.
+            if (tokenKey !== globalTokenKey) {
+              const [globalTokenObj] = await this.sqlite.fetchResource({
+                ...generateSQLExpressions('token', {
+                  filters: { id: [{ equals: globalTokenKey }] },
+                }),
+              });
+              if (globalTokenObj?.token) {
+                tokenKey = globalTokenKey;
+                listToken = globalTokenObj.token;
+              }
+            }
+
+            // Only look up the specific token if no global token was found.
+            if (!listToken) {
+              const [tokenObj] = await this.sqlite.fetchResource({
+                ...generateSQLExpressions('token', {
+                  filters: { id: [{ equals: tokenKey }] },
+                }),
+              });
+              listToken = tokenObj?.token;
+            }
           } else {
             // This is a temporary fix of clearing the DB (specifically for auth-methods)
             // since we are not storing the token we do not get back a list of removed_ids
