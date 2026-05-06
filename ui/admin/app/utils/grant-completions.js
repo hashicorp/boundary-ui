@@ -272,10 +272,7 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
 
   const hasTemplateIds =
     hasSpecificIds &&
-    idsValue
-      .split(',')
-      .filter(Boolean)
-      .some((id) => id.startsWith('{{') && id.endsWith('}}'));
+    parseIds(idsValue).some((id) => id.startsWith('{{') && id.endsWith('}}'));
 
   const hasLiteralIds = hasSpecificIds && !hasTemplateIds;
 
@@ -359,13 +356,7 @@ const getIdLookupTypes = (schema, typeValue, enteredIds) => {
   return null;
 };
 
-async function grantCompletions(
-  context,
-  schema,
-  translate,
-  idLookup,
-  getIsLoading,
-) {
+function grantCompletions(context, schema, translate, idLookup, getIsLoading) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
@@ -416,17 +407,18 @@ async function grantCompletions(
     };
   }
 
-  const idsValueMatch = beforeCursor.match(/ids=([\w*.{},\s-]*)$/);
+  const idsValueMatch = beforeCursor.match(/ids=([\w*.{}, -]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
-    const partial = enteredIds.pop() ?? '';
+    const partial = (enteredIds.pop() ?? '').trim();
     const hasEnteredIds = enteredIds.length > 0;
 
     const staticOptions = filterByPrefix(['*', ...ID_TEMPLATES], partial)
       .filter((value) => !hasEnteredIds || value !== '*')
       .filter(
         (value) =>
-          (!hasEnteredIds && !typeValue) || !ID_TEMPLATES.includes(value),
+          !ID_TEMPLATES.includes(value) ||
+          (!typeValue && enteredIds.every((id) => ID_TEMPLATES.includes(id))),
       )
       .filter((value) => !enteredIds.includes(value))
       .map((value) => ({
@@ -443,36 +435,40 @@ async function grantCompletions(
       typeValue,
       enteredIds,
     );
-    const ids = await idLookup(partial, compatibleResourceTypes);
-    const idOptions = ids
-      .filter(({ id }) => !enteredIds.includes(id))
-      .map(({ id, name }) => ({
-        label: id,
-        detail: name,
-        type: 'variable',
-      }));
+    const from = context.pos - partial.length;
 
-    const allOptions = [...staticOptions, ...idOptions];
+    return (async () => {
+      const ids = await idLookup(partial, compatibleResourceTypes);
+      const idOptions = ids
+        .filter(({ id }) => !enteredIds.includes(id))
+        .map(({ id, name }) => ({
+          label: id,
+          detail: name,
+          type: 'variable',
+        }));
 
-    // Show a loading placeholder when IDs are still being fetched in the background
-    if (getIsLoading()) {
-      allOptions.push({
-        label: translate('loading-ids'),
-        type: 'text',
-        apply: () => {},
-      });
-    }
+      const allOptions = [...staticOptions, ...idOptions];
 
-    return {
-      from: context.pos - partial.length,
-      options: allOptions.length
-        ? allOptions
-        : [getNoSuggestionsOption(translate('no-suggestions'))],
-      // We do our own filtering via DB search, so disable CodeMirror's
-      // built-in filtering. Without this, name-based searches are dropped
-      // because the label (the ID) doesn't match the typed text (the name).
-      filter: false,
-    };
+      // Show a loading placeholder when IDs are still being fetched in the background
+      if (getIsLoading()) {
+        allOptions.push({
+          label: translate('loading-ids'),
+          type: 'text',
+          apply: () => {},
+        });
+      }
+
+      return {
+        from,
+        options: allOptions.length
+          ? allOptions
+          : [getNoSuggestionsOption(translate('no-suggestions'))],
+        // We do our own filtering via DB search, so disable CodeMirror's
+        // built-in filtering. Without this, name-based searches are dropped
+        // because the label (the ID) doesn't match the typed text (the name).
+        filter: false,
+      };
+    })();
   }
 
   const actionsValueMatch = beforeCursor.match(/actions=([a-z0-9_:,*-]*)$/);

@@ -102,8 +102,8 @@ module('Unit | Utils | grant-completions', function (hooks) {
         expectedLabels: ['actions=', 'output_fields='],
       },
     },
-    function (assert, { lineText, expectedLabels }) {
-      const completionResult = this.grantCompletionSource(
+    async function (assert, { lineText, expectedLabels }) {
+      const completionResult = await this.grantCompletionSource(
         createCompletionContext(lineText),
       );
 
@@ -415,7 +415,7 @@ module('Unit | Utils | grant-completions', function (hooks) {
         expectedLabels: ['{{.Account.Id}}'],
       },
     },
-    function (assert, { lineText, expectedLabels }) {
+    async function (assert, { lineText, expectedLabels }) {
       const completionResult = await this.grantCompletionSource(
         createCompletionContext(lineText),
       );

@@ -663,6 +663,7 @@ role:
   edit-grants:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
+    no-suggestions: No suggestions
     completion-info:
       no-suggestions: No suggestions
       wildcard-types: Wildcard - matches all types
