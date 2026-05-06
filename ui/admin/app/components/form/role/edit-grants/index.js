@@ -48,7 +48,7 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
-  @tracked currentLineText = '';
+  @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
 
@@ -60,9 +60,12 @@ export default class FormRoleEditGrantsComponent extends Component {
     }),
     keymap.of(completionKeymap),
     EditorView.updateListener.of((update) => {
-      if (update.selectionSet) {
+      if (update.docChanged || update.selectionSet) {
         const line = update.state.doc.lineAt(update.state.selection.main.head);
         this.currentLineText = line.text;
+      }
+      if (update.docChanged) {
+        this.grantStringsText = update.state.doc.toString();
       }
     }),
   ];
@@ -112,14 +115,6 @@ export default class FormRoleEditGrantsComponent extends Component {
   }
 
   // =actions
-
-  @action
-  onInput(value, view) {
-    this.grantStringsText = value;
-
-    const line = view.state.doc.lineAt(view.state.selection.main.head);
-    this.currentLineText = line.text;
-  }
 
   /**
    * Toggles the export options flyout open and closed.

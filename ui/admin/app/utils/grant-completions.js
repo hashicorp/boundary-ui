@@ -5,6 +5,7 @@
 
 const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
+const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
 const filterByPrefix = (values, partial) =>
   values.filter((value) => value.startsWith(partial));
 const withWildCard = (values = []) => ['*', ...new Set(values)];
@@ -100,18 +101,6 @@ export const normalizeGrantsSchema = (grantsSchema) => {
   };
 };
 
-const isNormalizedGrantsSchema = (grantsSchema) =>
-  Boolean(
-    grantsSchema?.resourcesByType &&
-      grantsSchema?.childResourceTypesByParentType &&
-      grantsSchema?.resourceTypesByIdPrefix,
-  );
-
-const getNormalizedGrantsSchema = (grantsSchema) =>
-  isNormalizedGrantsSchema(grantsSchema)
-    ? grantsSchema
-    : normalizeGrantsSchema(grantsSchema);
-
 const getResourceTypesForId = (schema, id) =>
   id.includes('_')
     ? [
@@ -201,7 +190,7 @@ const getTypeOptions = (schema, idsValue) => {
     .map((resource) => resource.type);
 };
 
-export const getActionOptions = (schema, typeValue, idsValue) => {
+const getActionOptions = (schema, typeValue, idsValue) => {
   const actionOptions = withWildCard(
     Object.values(schema.resourcesByType).flatMap(({ actions }) => actions),
   );
@@ -262,44 +251,83 @@ export const getActionOptions = (schema, typeValue, idsValue) => {
     : actionOptions;
 };
 
-export const getSuggestedActionsForGrantLine = (
-  grantsSchema,
-  lineText = '',
-) => {
-  const schema = getNormalizedGrantsSchema(grantsSchema);
-  const { idsValue, typeValue } = parseGrantLine(lineText);
+export const analyzeGrantString = (grantsSchema, grantString = '') => {
+  const schema = normalizeGrantsSchema(grantsSchema);
+  const { idsValue, typeValue } = parseGrantLine(grantString);
 
-  return getActionOptions(schema, typeValue, idsValue);
-};
+  const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
+  const hasExplicitType = Boolean(typeValue) && typeValue !== '*';
 
-export const getDetectedResourceTypeForGrantLine = (
-  grantsSchema,
-  lineText = '',
-) => {
-  const schema = getNormalizedGrantsSchema(grantsSchema);
-  const { idsValue, typeValue } = parseGrantLine(lineText);
+  const hasTemplateIds =
+    hasSpecificIds &&
+    idsValue
+      .split(',')
+      .filter(Boolean)
+      .some((id) => id.startsWith('{{') && id.endsWith('}}'));
 
-  if (typeValue && typeValue !== '*') {
-    return typeValue;
-  }
+  const hasLiteralIds = hasSpecificIds && !hasTemplateIds;
 
-  if (!idsValue) {
-    return null;
-  }
+  const compatibleIdsResourceType = hasLiteralIds
+    ? getCompatibleResourceTypeForIds(schema, idsValue)
+    : null;
 
-  return getCompatibleResourceTypeForIds(schema, idsValue);
+  const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
+  const hasInvalidIds = hasLiteralIds && !compatibleIdsResourceType;
+
+  const hasInvalidPinnedIdTypeCombination = (() => {
+    if (
+      !hasSpecificIds ||
+      !hasExplicitType ||
+      hasInvalidIds ||
+      hasInvalidType
+    ) {
+      return false;
+    }
+    const childTypes =
+      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? [];
+    return !childTypes.includes(typeValue);
+  })();
+
+  const isWildcard = idsValue === '*' || typeValue === '*';
+
+  const detectedResourceType = (() => {
+    if (typeValue && typeValue !== '*') return typeValue;
+    if (!idsValue) return null;
+    return getCompatibleResourceTypeForIds(schema, idsValue);
+  })();
+
+  const actions =
+    idsValue || typeValue
+      ? getActionOptions(schema, typeValue, idsValue)
+          .filter(
+            (action) =>
+              action !== '*' && (!isWildcard || CRUDL_ACTIONS.has(action)),
+          )
+          .sort((left, right) => left.localeCompare(right))
+      : [];
+
+  return {
+    idsValue,
+    typeValue,
+    hasSpecificIds,
+    hasExplicitType,
+    hasTemplateIds,
+    compatibleIdsResourceType,
+    hasInvalidType,
+    hasInvalidIds,
+    hasInvalidPinnedIdTypeCombination,
+    isWildcard,
+    detectedResourceType,
+    actions,
+  };
 };
 
 function grantCompletions(context, schema, translatedStrings) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
-  const parsedFields = parseGrantFields(line.text);
+  const { parsedFields, idsValue, typeValue } = parseGrantLine(line.text);
   const parsedFieldNames = parsedFields.map(({ fieldName }) => fieldName);
-
-  const idsValue = parsedFields.find(
-    ({ fieldName }) => fieldName === 'ids',
-  )?.fieldValue;
 
   // Check if we're typing a field name (e.g. "type=") by starting at the beginning or after a semicolon.
   // This allows us to provide field name suggestions when the user is typing a new field
@@ -375,7 +403,7 @@ function grantCompletions(context, schema, translatedStrings) {
     const partial = enteredActions.pop() ?? '';
     const hasEnteredActions = enteredActions.length > 0;
     const options = filterByPrefix(
-      getSuggestedActionsForGrantLine(schema, line.text),
+      getActionOptions(schema, typeValue, idsValue),
       partial,
     )
       .filter((action) => !hasEnteredActions || action !== '*')
@@ -425,29 +453,4 @@ export const createGrantCompletionSource = (
   const schema = normalizeGrantsSchema(grantsSchema);
 
   return (context) => grantCompletions(context, schema, translatedStrings);
-};
-
-export const createGrantLineHelpers = (grantsSchema) => {
-  const schema = normalizeGrantsSchema(grantsSchema);
-
-  return {
-    getSuggestedActions: (lineText = '') => {
-      const { idsValue, typeValue } = parseGrantLine(lineText);
-
-      return getActionOptions(schema, typeValue, idsValue);
-    },
-    getDetectedResourceType: (lineText = '') => {
-      const { idsValue, typeValue } = parseGrantLine(lineText);
-
-      if (typeValue && typeValue !== '*') {
-        return typeValue;
-      }
-
-      if (!idsValue) {
-        return null;
-      }
-
-      return getCompatibleResourceTypeForIds(schema, idsValue);
-    },
-  };
 };

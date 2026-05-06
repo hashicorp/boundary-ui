@@ -708,6 +708,14 @@ role:
       delete:self: Delete a {resourceType} associated with the current user
       cancel: Cancel a {resourceType}
       cancel:self: Cancel a {resourceType} associated with the current user
+      generic:
+        create: Creates resources
+        list: Lists resources
+        read: Reads resources
+        update: Updates resources
+        delete: Deletes resources
+        read:self: Read the resource associated with the current user
+        delete:self: Delete a resource associated with the current user
       add-members: Add members to a group
       set-members: Set the full list of members on a group
       remove-members: Remove members from a group

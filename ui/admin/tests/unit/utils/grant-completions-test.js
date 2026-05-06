@@ -10,10 +10,9 @@ import { setupMirage } from 'admin/tests/helpers/mirage';
 
 import {
   createGrantCompletionSource,
-  createGrantLineHelpers,
+  analyzeGrantString,
   getChildResourceActions,
   getCompatibleResourceTypeForIds,
-  getSuggestedActionsForGrantLine,
   normalizeGrantsSchema,
   parseGrantFields,
   parseGrantLine,
@@ -480,54 +479,58 @@ module('Unit | Utils | grant-completions', function (hooks) {
     );
   });
 
-  test('createGrantLineHelpers.getSuggestedActions returns the same actions as the completion source uses', function (assert) {
-    const { getSuggestedActions } = createGrantLineHelpers(
+  test('analyzeGrantString.actions returns the same actions as the completion source uses', function (assert) {
+    const { actions } = analyzeGrantString(
       this.grantsSchemaData,
+      'ids=hcst_1234567890;type=host-set',
     );
 
-    assert.deepEqual(getSuggestedActions('ids=hcst_1234567890;type=host-set'), [
-      '*',
-      'create',
-      'list',
-      'delete',
+    assert.deepEqual(actions, [
       'add-hosts',
-      'set-hosts',
-      'remove-hosts',
+      'create',
+      'delete',
+      'list',
       'read',
+      'remove-hosts',
+      'set-hosts',
       'update',
     ]);
   });
 
-  test('createGrantLineHelpers.getDetectedResourceType returns the type inferred from a specific id', function (assert) {
-    const { getDetectedResourceType } = createGrantLineHelpers(
+  test('analyzeGrantString.detectedResourceType returns the type inferred from a specific id', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
       this.grantsSchemaData,
+      'ids=hs_123',
     );
 
-    assert.strictEqual(getDetectedResourceType('ids=hs_123'), 'host-set');
+    assert.strictEqual(detectedResourceType, 'host-set');
   });
 
-  test('createGrantLineHelpers.getDetectedResourceType returns an explicit type value', function (assert) {
-    const { getDetectedResourceType } = createGrantLineHelpers(
+  test('analyzeGrantString.detectedResourceType returns an explicit type value', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
       this.grantsSchemaData,
+      'type=session',
     );
 
-    assert.strictEqual(getDetectedResourceType('type=session'), 'session');
+    assert.strictEqual(detectedResourceType, 'session');
   });
 
-  test('createGrantLineHelpers.getDetectedResourceType returns null when no type can be detected', function (assert) {
-    const { getDetectedResourceType } = createGrantLineHelpers(
+  test('analyzeGrantString.detectedResourceType returns null when no type can be detected', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
       this.grantsSchemaData,
+      'output_fields=*',
     );
 
-    assert.strictEqual(getDetectedResourceType('output_fields=*'), null);
+    assert.strictEqual(detectedResourceType, null);
   });
 
-  test('createGrantLineHelpers.getDetectedResourceType returns null for a wildcard type', function (assert) {
-    const { getDetectedResourceType } = createGrantLineHelpers(
+  test('analyzeGrantString.detectedResourceType returns null for a wildcard type', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
       this.grantsSchemaData,
+      'type=*',
     );
 
-    assert.strictEqual(getDetectedResourceType('type=*'), null);
+    assert.strictEqual(detectedResourceType, null);
   });
 
   test('parseGrantFields preserves values that contain additional equals signs', function (assert) {
@@ -556,23 +559,164 @@ module('Unit | Utils | grant-completions', function (hooks) {
     ]);
   });
 
-  test('getSuggestedActionsForGrantLine derives the same action set the editor uses', function (assert) {
-    assert.deepEqual(
-      getSuggestedActionsForGrantLine(
+  test.each(
+    'analyzeGrantString.isWildcard',
+    {
+      'returns true when ids is wildcard': {
+        grantString: 'ids=*',
+        expected: true,
+      },
+      'returns true when type is wildcard': {
+        grantString: 'type=*',
+        expected: true,
+      },
+      'returns true when both ids and type are wildcard': {
+        grantString: 'ids=*;type=*',
+        expected: true,
+      },
+      'returns false for specific ids': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+      'returns false for a specific type': {
+        grantString: 'type=host-set',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { isWildcard } = analyzeGrantString(
         this.grantsSchemaData,
-        'ids=hcst_1234567890;type=host-set',
-      ),
-      [
-        '*',
-        'create',
-        'list',
-        'delete',
-        'add-hosts',
-        'set-hosts',
-        'remove-hosts',
-        'read',
-        'update',
-      ],
-    );
-  });
+        grantString,
+      );
+      assert.strictEqual(isWildcard, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasTemplateIds',
+    {
+      'returns true for a canonical template id': {
+        grantString: 'ids={{.User.Id}}',
+        expected: true,
+      },
+      'returns true when any id in a list is a template': {
+        grantString: 'ids={{.Account.Id}}',
+        expected: true,
+      },
+      'returns false for a specific id': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+      'returns false for a wildcard id': {
+        grantString: 'ids=*',
+        expected: false,
+      },
+      'returns false when there are no ids': {
+        grantString: 'type=host-set',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasTemplateIds } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasTemplateIds, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasInvalidType',
+    {
+      'returns true for an unknown type': {
+        grantString: 'type=not-a-real-type',
+        expected: true,
+      },
+      'returns false for a known type': {
+        grantString: 'type=host-set',
+        expected: false,
+      },
+      'returns false for a wildcard type': {
+        grantString: 'type=*',
+        expected: false,
+      },
+      'returns false when there is no type': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidType } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidType, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasInvalidIds',
+    {
+      'returns true for an unrecognised id prefix': {
+        grantString: 'ids=bad_123',
+        expected: true,
+      },
+      'returns true for mixed ids with conflicting resource types': {
+        grantString: 'ids=hs_123,s_123',
+        expected: true,
+      },
+      'returns false for a recognised id prefix': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+      'returns false for a wildcard id': {
+        grantString: 'ids=*',
+        expected: false,
+      },
+      'returns false for a template id': {
+        grantString: 'ids={{.User.Id}}',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidIds } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidIds, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasInvalidPinnedIdTypeCombination',
+    {
+      'returns true when a pinned id is paired with its own type': {
+        grantString: 'ids=hcst_1234567890;type=host-catalog',
+        expected: true,
+      },
+      'returns false when a pinned id is paired with a valid child type': {
+        grantString: 'ids=hcst_1234567890;type=host-set',
+        expected: false,
+      },
+      'returns false for wildcard ids with a specific type': {
+        grantString: 'ids=*;type=host-set',
+        expected: false,
+      },
+      'returns false when there is no type': {
+        grantString: 'ids=hcst_1234567890',
+        expected: false,
+      },
+      'returns false when ids are invalid': {
+        grantString: 'ids=bad_123;type=host-set',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidPinnedIdTypeCombination } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidPinnedIdTypeCombination, expected);
+    },
+  );
 });

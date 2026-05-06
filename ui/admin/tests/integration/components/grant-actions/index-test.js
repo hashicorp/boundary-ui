@@ -237,7 +237,7 @@ module('Integration | Component | grant-actions/index', function (hooks) {
       .hasText('Invalid ID and type. No actions available.');
   });
 
-  test('it renders actions with fallback descriptions when type is wildcard', async function (assert) {
+  test('it renders only CRUDL actions with fallback descriptions when type is wildcard', async function (assert) {
     this.grantString = 'ids=*;type=*';
 
     await render(hbs`
@@ -250,15 +250,23 @@ module('Integration | Component | grant-actions/index', function (hooks) {
     assert.dom(GRANT_ACTIONS_TABLE).isVisible();
 
     const rows = [...this.element.querySelectorAll(commonSelectors.TABLE_ROWS)];
+    const rowNames = rows.map((row) =>
+      row.querySelector('td')?.textContent.trim(),
+    );
+
+    assert.deepEqual(
+      rowNames,
+      ['create', 'delete', 'list', 'read', 'update'],
+      'only CRUDL actions are shown for wildcard grants',
+    );
+
     const createRow = rows.find(
       (row) => row.querySelector('td')?.textContent.trim() === 'create',
     );
-
-    assert.ok(createRow, 'create action row exists');
     assert.strictEqual(
       createRow.querySelectorAll('td')[1].textContent.trim(),
-      'create',
-      'description falls back to the action name when no resource type is detected',
+      'Creates resources',
+      'description falls back to generic when no resource type is detected',
     );
   });
 });

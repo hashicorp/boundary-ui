@@ -4,169 +4,66 @@
  */
 
 import Component from '@glimmer/component';
+import { cached } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
-import {
-  createGrantLineHelpers,
-  getCompatibleResourceTypeForIds,
-  normalizeGrantsSchema,
-  parseGrantLine,
-} from 'admin/utils/grant-completions';
-
-const ACTIONS_WITH_RESOURCE_TYPE = new Set([
-  'create',
-  'list',
-  'read',
-  'update',
-  'delete',
-  'read:self',
-  'delete:self',
-  'cancel',
-  'cancel:self',
-]);
+import { analyzeGrantString } from 'admin/utils/grant-completions';
 
 export default class GrantActionsIndex extends Component {
   @service intl;
 
-  #normalizedSchema = normalizeGrantsSchema(this.args.grantsSchema ?? {});
-
-  #grantLineHelpers = createGrantLineHelpers(this.args.grantsSchema ?? {});
-
-  get parsedGrantLine() {
-    return parseGrantLine(this.args.grantString);
-  }
-
-  get hasSpecificIds() {
-    return (
-      this.parsedGrantLine.idsValue &&
-      !this.parsedGrantLine.idsValue.includes('*')
-    );
-  }
-
-  get hasExplicitType() {
-    return (
-      this.parsedGrantLine.typeValue && this.parsedGrantLine.typeValue !== '*'
-    );
-  }
-
-  get hasTemplateIds() {
-    if (!this.hasSpecificIds) {
-      return false;
-    }
-
-    return this.parsedGrantLine.idsValue
-      .split(',')
-      .filter(Boolean)
-      .some((id) => id.startsWith('{{') && id.endsWith('}}'));
-  }
-
-  get compatibleIdsResourceType() {
-    if (!this.hasSpecificIds || this.hasTemplateIds) {
-      return null;
-    }
-
-    return getCompatibleResourceTypeForIds(
-      this.#normalizedSchema,
-      this.parsedGrantLine.idsValue,
-    );
-  }
-
-  get hasInvalidType() {
-    return (
-      this.hasExplicitType &&
-      !this.#normalizedSchema.resourcesByType[this.parsedGrantLine.typeValue]
-    );
-  }
-
-  get hasInvalidIds() {
-    return (
-      this.hasSpecificIds &&
-      !this.hasTemplateIds &&
-      !this.compatibleIdsResourceType
-    );
-  }
-
-  get hasInvalidPinnedIdTypeCombination() {
-    if (
-      !this.hasSpecificIds ||
-      !this.hasExplicitType ||
-      this.hasInvalidIds ||
-      this.hasInvalidType
-    ) {
-      return false;
-    }
-
-    const childTypes =
-      this.#normalizedSchema.childResourceTypesByParentType[
-        this.compatibleIdsResourceType
-      ] ?? [];
-
-    return !childTypes.includes(this.parsedGrantLine.typeValue);
-  }
-
-  get actions() {
-    if (!this.parsedGrantLine.idsValue && !this.parsedGrantLine.typeValue) {
-      return [];
-    }
-
-    return this.#grantLineHelpers
-      .getSuggestedActions(this.args.grantString)
-      .filter((action) => action !== '*')
-      .sort((left, right) => left.localeCompare(right));
-  }
-
-  get descriptionResourceType() {
-    if (this.parsedGrantLine.typeValue === '*') {
-      return null;
-    }
-
-    return (
-      this.parsedGrantLine.typeValue ||
-      this.#grantLineHelpers.getDetectedResourceType(this.args.grantString)
+  @cached
+  get grantAnalysis() {
+    return analyzeGrantString(
+      this.args.grantsSchema ?? {},
+      this.args.grantString,
     );
   }
 
   get actionRows() {
-    return this.actions.map((action) => ({
+    return this.grantAnalysis.actions.map((action) => ({
       name: action,
       description: this.getActionDescription(action),
     }));
   }
 
   get showNoResourceTypeDetected() {
+    const { actions, detectedResourceType } = this.grantAnalysis;
     return (
-      !this.showInvalidIdAndType &&
-      !this.actions.length &&
-      !this.#grantLineHelpers.getDetectedResourceType(this.args.grantString)
+      !this.showInvalidIdAndType && !actions.length && !detectedResourceType
     );
   }
 
   get showInvalidIdAndType() {
+    const {
+      actions,
+      hasInvalidType,
+      hasInvalidIds,
+      hasInvalidPinnedIdTypeCombination,
+    } = this.grantAnalysis;
     return (
-      !this.actions.length &&
-      (this.hasInvalidType ||
-        this.hasInvalidIds ||
-        this.hasInvalidPinnedIdTypeCombination)
+      !actions.length &&
+      (hasInvalidType || hasInvalidIds || hasInvalidPinnedIdTypeCombination)
     );
   }
 
   getActionDescription(action) {
-    const translationKey = `resources.role.edit-grants.actions.${action}`;
+    const { detectedResourceType } = this.grantAnalysis;
+    const specificKey = `resources.role.edit-grants.actions.${action}`;
+    const genericKey = `resources.role.edit-grants.actions.generic.${action}`;
 
-    if (!this.intl.exists(translationKey)) {
-      return action;
+    if (detectedResourceType && this.intl.exists(specificKey)) {
+      return this.intl.t(specificKey, { resourceType: detectedResourceType });
     }
 
-    if (ACTIONS_WITH_RESOURCE_TYPE.has(action)) {
-      if (!this.descriptionResourceType) {
-        return action;
-      }
-
-      return this.intl.t(translationKey, {
-        resourceType: this.descriptionResourceType,
-      });
+    if (this.intl.exists(genericKey)) {
+      return this.intl.t(genericKey);
     }
 
-    return this.intl.t(translationKey);
+    if (this.intl.exists(specificKey)) {
+      return this.intl.t(specificKey);
+    }
+
+    return action;
   }
 }

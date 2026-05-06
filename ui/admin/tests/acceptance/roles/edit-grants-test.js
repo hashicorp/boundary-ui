@@ -174,12 +174,13 @@ module('Acceptance | roles/edit grants', function (hooks) {
     );
   });
 
-  test('shows no resource type detected by default on page load', async function (assert) {
+  test('shows actions for the first grant on page load', async function (assert) {
     await visit(urls.editGrants);
 
-    assert
-      .dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED)
-      .hasText('No resource type detected.');
-    assert.dom(selectors.GRANT_ACTIONS_TABLE).doesNotExist();
+    assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    // opted to not check for specific actions here since the grants schema
+    // may change and cause the test to fail even though the functionality
+    // is working as expected
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).isVisible();
   });
 });
