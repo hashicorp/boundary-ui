@@ -97,6 +97,10 @@ module.exports = function (environment) {
         'role.add-principals':
           '/tutorials/oss-administration/oss-manage-roles#create-a-role',
         'role.add-grant-scopes': '/docs/commands/roles/add-grant-scopes',
+        'role.grant-string-format.resource-type':
+          '/docs/rbac/permission-grant-formats#type-only',
+        'role.grant-string-format.resource':
+          '/docs/rbac/permission-grant-formats#id-only',
         'role.grant-string-format.pinned-id':
           '/docs/rbac/permission-grant-formats#pinned-id',
         'role.grant-string-format.output-fields':

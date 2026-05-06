@@ -726,10 +726,10 @@ role:
       more-info: More info
       resource-type:
         label: Singular resource type
-        help: Applies actions to a specific resource type in a single grant.
+        help: Applies collection actions to a specific resource type in a single grant.
       resource:
         label: Specific resource(s)
-        help: Applies actions to one or more individual resources in a single grant.
+        help: Applies ID actions to one or more individual resources in a single grant.
       pinned-id:
         label: Pinned ID
         help: '"Pins" actions to a non-top-level type within a specific ID in a single grant.'

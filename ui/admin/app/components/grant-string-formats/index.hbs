@@ -39,11 +39,9 @@
   <F.Label>{{t 'resources.role.edit-grants.string-formats.syntax'}}</F.Label>
 </Hds::Form::Textarea::Field>
 
-{{#if this.stringFormat.link}}
-  <Hds::Link::Standalone
-    @icon='docs-link'
-    @iconPosition='trailing'
-    @text={{t 'resources.role.edit-grants.string-formats.more-info'}}
-    @href={{doc-url this.stringFormat.link}}
-  />
-{{/if}}
+<Hds::Link::Standalone
+  @icon='docs-link'
+  @iconPosition='trailing'
+  @text={{t 'resources.role.edit-grants.string-formats.more-info'}}
+  @href={{doc-url this.stringFormat.link}}
+/>
