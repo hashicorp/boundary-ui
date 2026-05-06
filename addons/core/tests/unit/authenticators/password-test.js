@@ -7,6 +7,13 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'dummy/tests/helpers/mirage';
 import { Response } from 'miragejs';
+import Service from '@ember/service';
+
+class FlashMessagesStub extends Service {
+  warning() {
+    return { getFlashObject: () => ({}) };
+  }
+}
 
 module('Unit | Authenticator | password', function (hooks) {
   setupTest(hooks);
@@ -18,6 +25,7 @@ module('Unit | Authenticator | password', function (hooks) {
   let authenticator;
 
   hooks.beforeEach(function () {
+    this.owner.register('service:flash-messages', FlashMessagesStub);
     store = this.owner.lookup('service:store');
     applicationAdapter = store.adapterFor('application');
     session = this.owner.lookup('service:session');

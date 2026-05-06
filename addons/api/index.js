@@ -18,6 +18,11 @@ module.exports = {
   name: require('./package').name,
 
   options: {
+    babel: {
+      plugins: [
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+      ],
+    },
     // Don't automatically import sqlite, we need to manually control how it gets used
     autoImport: {
       exclude: ['@sqlite.org/sqlite-wasm'],

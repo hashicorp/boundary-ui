@@ -7,9 +7,20 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import Service from '@ember/service';
+
+class FlashMessagesStub extends Service {
+  warning() {
+    return { getFlashObject: () => ({}) };
+  }
+}
 
 module('Integration | Component | session-status', function (hooks) {
   setupRenderingTest(hooks);
+
+  hooks.beforeEach(function () {
+    this.owner.register('service:flash-messages', FlashMessagesStub);
+  });
 
   test('it maps to correct text color, icon and type if it is in active status', async function (assert) {
     const store = this.owner.lookup('service:store');
