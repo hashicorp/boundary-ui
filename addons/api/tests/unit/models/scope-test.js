@@ -136,4 +136,70 @@ module('Unit | Model | scope', function (hooks) {
     const model = store.peekRecord('scope', '123abc');
     await model.detachStoragePolicy('abc');
   });
+
+  test('it has a `setAliasSuffix` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
+    this.server.post(
+      '/scopes/123abc:set-alias-target-suffix',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          alias_suffix: '.example',
+          version: 1,
+        });
+        return { id: '123abc' };
+      },
+    );
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'scope',
+        attributes: {
+          name: 'scope',
+          description: 'Description',
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('scope', '123abc');
+    await model.setAliasSuffix('.example');
+  });
+
+  test('it has a `removeAliasSuffix` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
+    this.server.post(
+      '/scopes/123abc:remove-alias-target-suffix',
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, {
+          version: 1,
+        });
+        return { id: '123abc' };
+      },
+    );
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: '123abc',
+        type: 'scope',
+        attributes: {
+          name: 'scope',
+          description: 'Description',
+          alias_suffix: '.example',
+          version: 1,
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    const model = store.peekRecord('scope', '123abc');
+    await model.removeAliasSuffix();
+  });
 });

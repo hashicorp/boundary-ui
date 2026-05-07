@@ -97,4 +97,44 @@ export default class ScopeModel extends GeneratedScopeModel {
       },
     });
   }
+
+  /**
+   * Sets the alias target suffix on this scope.
+   * @param {string} suffix
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  setAliasSuffix(suffix, options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'set-alias-target-suffix',
+      alias_suffix: suffix,
+    };
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Removes the alias target suffix on this scope.
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  removeAliasSuffix(options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'remove-alias-target-suffix',
+    };
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
 }

@@ -25,6 +25,14 @@ export default factory.extend({
       authorizedActions.push('delete');
     }
 
+    if (this.type === 'project') {
+      authorizedActions.push(
+        'set-alias-target-suffix',
+        'get-alias-target-suffix',
+        'remove-alias-target-suffix',
+      );
+    }
+
     return permissions.authorizedActionsFor('scope') || authorizedActions;
   },
 

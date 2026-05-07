@@ -3,15 +3,24 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import OverrideModelAbility from './model';
+import ScopeAbility from 'api/abilities/scope';
 import { service } from '@ember/service';
 
-export default class OverrideScopeAbility extends OverrideModelAbility {
+export default class OverrideScopeAbility extends ScopeAbility {
   // =services
 
   @service features;
 
   // =attributes
+
+  /**
+   * Navigating to a resource is allowed if either list or create grants
+   * are present.
+   * @type {boolean}
+   */
+  get canNavigate() {
+    return this.canList || this.canCreate;
+  }
 
   /**
    * Creating a resource is allowed only if a create grant is present

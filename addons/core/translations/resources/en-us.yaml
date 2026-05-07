@@ -1071,6 +1071,25 @@ scope:
     global: Global
     org: Org
     project: Project
+  alias-suffix:
+    title: Alias suffix
+    description: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix"
+    form:
+      helper-text: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix".
+    actions:
+      create: Create Alias suffix
+      edit: Edit suffix
+      delete: Delete suffix
+    questions:
+      delete:
+        title: Delete Alias suffix?
+        message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to delete the Alias suffix?
+      edit:
+        title: Change Alias suffix?
+        message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to change the Alias suffix?
+    messages:
+      delete: Alias suffix deleted
+      save: Alias suffix saved
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
