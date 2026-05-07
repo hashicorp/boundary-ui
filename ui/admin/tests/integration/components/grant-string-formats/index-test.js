@@ -41,43 +41,37 @@ module(
           selectedOption: 'resourceType',
           expectedValue:
             'type=<insert resource types>;actions=<insert actions>',
-          showsMoreInfoLink: false,
         },
         {
           optionToClick: RESOURCE_OPTION,
           selectedOption: 'resource',
           expectedValue: 'ids=<insert resource ids>;actions=<insert actions>',
-          showsMoreInfoLink: false,
         },
         {
           optionToClick: PINNED_ID_OPTION,
           selectedOption: 'pinnedId',
           expectedValue:
             'ids=<insert id>;type=<insert resource types>;actions=<insert actions>',
-          showsMoreInfoLink: true,
         },
         {
           optionToClick: OUTPUT_FIELDS_OPTION,
           selectedOption: 'outputFields',
           expectedValue: 'output_fields=<insert output fields>',
-          showsMoreInfoLink: true,
         },
         {
           optionToClick: ACCOUNT_TEMPLATE_OPTION,
           selectedOption: 'accountTemplate',
           expectedValue: 'ids={{.Account.Id}}',
-          showsMoreInfoLink: true,
         },
         {
           optionToClick: USER_TEMPLATE_OPTION,
           selectedOption: 'userTemplate',
           expectedValue: 'ids={{.User.Id}}',
-          showsMoreInfoLink: true,
         },
       ],
       async function (
         assert,
-        { optionToClick, selectedOption, expectedValue, showsMoreInfoLink },
+        { optionToClick, selectedOption, expectedValue },
       ) {
         await render(hbs`<GrantStringFormats />`);
 
@@ -98,12 +92,7 @@ module(
         }
 
         assert.dom(STRING_FORMAT_FIELD).hasValue(expectedValue);
-
-        if (showsMoreInfoLink) {
-          assert.dom(MORE_INFO_LINK).isVisible();
-        } else {
-          assert.dom(MORE_INFO_LINK).doesNotExist();
-        }
+        assert.dom(MORE_INFO_LINK).isVisible();
       },
     );
   },
