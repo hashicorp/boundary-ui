@@ -1280,6 +1280,10 @@ alias:
       title: Welcome to Aliases
       description: No Aliases yet
       link: Create a new alias
+    gated:
+      title: No aliases yet
+      description: To start using aliases, you need to set an Alias suffix first.
+      link: Create an Alias suffix
     delete: Deleting this alias may break any workflows using it. You can also clear the alias of the resource it points to without deleting it and then edit it to point it to a new resource.
   form:
     options:

@@ -19,7 +19,7 @@
       </PH.Description>
       <PH.Actions>
         {{#if (can 'create model' this.scope collection='aliases')}}
-          {{#if @model.doAliasesExist}}
+          {{#if (and @model.doAliasesExist (not this.isGated))}}
             <Hds::Button
               @route='scopes.scope.aliases.new'
               @text={{t 'resources.alias.titles.new'}}
@@ -31,7 +31,23 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if @model.doAliasesExist}}
+    {{#if this.isGated}}
+      <Hds::ApplicationState data-test-aliases-gated as |A|>
+        <A.Header @title={{t 'resources.alias.messages.gated.title'}} />
+        <A.Body @text={{t 'resources.alias.messages.gated.description'}} />
+        {{#if (can 'setAliasSuffix scope' this.scope)}}
+          <A.Footer as |F|>
+            <F.LinkStandalone
+              data-test-aliases-gated-link
+              @icon='arrow-right'
+              @iconPosition='trailing'
+              @route='scopes.scope.add-alias-suffix'
+              @text={{t 'resources.alias.messages.gated.link'}}
+            />
+          </A.Footer>
+        {{/if}}
+      </Hds::ApplicationState>
+    {{else if @model.doAliasesExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
