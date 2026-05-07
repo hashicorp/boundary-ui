@@ -31,6 +31,8 @@
     <Form::Role::EditGrants
       @model={{@model.role}}
       @grantsSchema={{@model.grantsSchema}}
+      @loadResourcesTask={{@model.loadResourcesTask}}
+      @searchableResourceTypes={{@model.searchableResourceTypes}}
       @submit={{fn this.save @model.role}}
       @cancel={{fn this.cancel @model.role}}
     />
