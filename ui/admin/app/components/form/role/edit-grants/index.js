@@ -152,14 +152,12 @@ export default class FormRoleEditGrantsComponent extends Component {
   };
 
   translateLintingError = (key, options = {}) => {
-    if (this.isDestroying || this.isDestroyed) return '';
     return this.intl.t(
       `resources.role.edit-grants.linting-errors.${key}`,
       options,
     );
   };
   translateCompletionString = (key, options = {}) => {
-    if (this.isDestroying || this.isDestroyed) return '';
     return this.intl.t(
       `resources.role.edit-grants.completion-info.${key}`,
       options,
@@ -247,6 +245,11 @@ export default class FormRoleEditGrantsComponent extends Component {
   }
 
   // =actions
+
+  @action
+  onSetup(view) {
+    this.#editorView = view;
+  }
 
   /**
    * Toggles the export options flyout open and closed.
