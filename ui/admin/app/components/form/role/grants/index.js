@@ -9,10 +9,8 @@ export default class FormRoleGrantsComponent extends Component {
   // =attributes
 
   /**
-   * Returns grants currently on model, in addition to
-   * grants added (or deleted) interactively by user -
-   * before form submission
-   * @return {[string]}
+   * Returns grants currently saved on a role
+   * @return {string}
    */
   get grants() {
     return this.args.model.grant_strings.join('\n');
