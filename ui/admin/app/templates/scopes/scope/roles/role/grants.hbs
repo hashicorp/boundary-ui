@@ -37,13 +37,7 @@
   </page.navigation>
 
   <page.body>
-    <Form::Role::Grants
-      @model={{@model}}
-      @submit={{fn this.save @model}}
-      @cancel={{fn this.cancel @model}}
-      @addGrant={{fn this.addGrant @model}}
-      @removeGrant={{fn this.removeGrant @model}}
-    />
+    <Form::Role::Grants @model={{@model}} />
   </page.body>
 
 </Rose::Layout::Page>
