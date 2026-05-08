@@ -45,7 +45,7 @@
     "tesseract.js": "^5.1.1"
   },
   "engines": {
-    "node": "20.* || 22.*"
+    "node": "22.* || 24.*"
   },
   "lint-staged": {
     "*.js": [
