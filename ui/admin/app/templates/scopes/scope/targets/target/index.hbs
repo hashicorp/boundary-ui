@@ -94,7 +94,10 @@
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
             {{#if this.isGated}}
-              <div data-test-target-aliases-gated>
+              <div
+                class='target-sidebar-aliases'
+                data-test-target-aliases-gated
+              >
                 <Hds::Text::Display @tag='h2'>
                   {{t 'resources.alias.title_plural'}}
                 </Hds::Text::Display>
