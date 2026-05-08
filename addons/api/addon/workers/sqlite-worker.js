@@ -97,15 +97,25 @@ import {
             if (poolUtil.getCapacity() > 20) {
               await poolUtil.removeVfs();
             }
-          } else {
+          } else if (
+            err?.resultCode === SQLITE_CORRUPT ||
+            err instanceof WebAssembly.RuntimeError
+          ) {
+            // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry.
             console.error('SQLite initialization error:', err);
-
-            // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry
-            if (err?.resultCode === SQLITE_CORRUPT) {
+            try {
+              if (db) {
+                db.close();
+                db = null;
+              }
               poolUtil.unlink(`/${dbName}`);
-            } else {
-              throw err;
+            } catch (cleanupErr) {
+              // If cleanup fails, wipe the entire VFS and reinstall to start fresh
+              console.error('SQLite cleanup error:', cleanupErr);
+              await poolUtil.removeVfs();
             }
+          } else {
+            throw err;
           }
         }
       }
