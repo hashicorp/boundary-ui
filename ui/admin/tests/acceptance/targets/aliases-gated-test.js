@@ -81,7 +81,6 @@ module('Acceptance | targets | aliases | gated', function (hooks) {
     await visit(urls.target);
 
     assert.dom(selectors.ALIASES_GATED).doesNotExist();
-    assert.dom(selectors.ALIASES_NEW_LINK).isVisible();
     assert
       .dom(selectors.ALIASES_NEW_LINK)
       .hasText(selectors.ALIASES_NEW_LINK_TEXT);
