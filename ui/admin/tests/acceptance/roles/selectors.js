@@ -54,7 +54,6 @@ export const REMOVE_ORG_PROJECTS_BTN = (name) =>
   `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button`;
 
 // Role grants
-export const FIELD_GRANT = 'form:nth-child(2) [name="grant"]';
 export const GRANT_CODE_BLOCK = '.grant-codeblock .hds-code-block__code';
 export const EXPORT_OPTIONS_FLYOUT = '[data-test-export-options-flyout]';
 export const EXPORT_FORMAT_SELECT =
