@@ -51,6 +51,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: '.example',
     });
 
     instances.target = this.server.create('target', {

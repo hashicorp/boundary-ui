@@ -48,6 +48,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: '.example',
     });
     instances.alias = this.server.createList('alias', 2, {
       scope: instances.scopes.global,

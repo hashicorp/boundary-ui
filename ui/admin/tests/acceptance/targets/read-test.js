@@ -59,6 +59,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: '.example',
     });
     instances.sshTarget = this.server.create('target', {
       type: TYPE_TARGET_SSH,

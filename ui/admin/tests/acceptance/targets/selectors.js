@@ -48,6 +48,9 @@ export const ALIASES_SIDEBAR = '.target-sidebar-aliases';
 export const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
 export const ALIASES_NEW_LINK = '.target-sidebar-aliases .hds-button';
 export const ALIASES_NEW_LINK_TEXT = 'Add an alias';
+
+export const ALIASES_GATED = '[data-test-target-aliases-gated]';
+export const ALIASES_GATED_LINK = '[data-test-target-aliases-gated-link]';
 export const ALIASES_VIEW_MORE_BTN = '[data-test-aliases-view-more]';
 export const ALIASES_FLYOUT = '[data-test-aliases-flyout]';
 export const ALIASES_ADD_BTN = '.target-sidebar-aliases .hds-button';
