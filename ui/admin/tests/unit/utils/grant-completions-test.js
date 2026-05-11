@@ -14,8 +14,6 @@ import {
   getChildResourceActions,
   getCompatibleResourceTypeForIds,
   normalizeGrantsSchema,
-  parseGrantFields,
-  parseGrantLine,
 } from 'admin/utils/grant-completions';
 
 const createCompletionContext = (lineText) => ({
@@ -460,44 +458,30 @@ module('Unit | Utils | grant-completions', function (hooks) {
     );
   });
 
-  test('parseGrantLine extracts all field values from a grant string', function (assert) {
-    assert.deepEqual(
-      parseGrantLine(
-        'ids=s_123;type=session;actions=read,list;output_fields=*',
-      ),
-      {
-        parsedFields: [
-          { fieldName: 'ids', fieldValue: 's_123' },
-          { fieldName: 'type', fieldValue: 'session' },
-          { fieldName: 'actions', fieldValue: 'read,list' },
-          { fieldName: 'output_fields', fieldValue: '*' },
-        ],
-        idsValue: 's_123',
-        typeValue: 'session',
-        actionsValue: 'read,list',
-        outputFieldsValue: '*',
-      },
+  test('analyzeGrantString detects resource type and actions for a complete grant string', function (assert) {
+    const result = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=hcst_1234567890;type=host-set;actions=read,list;output_fields=*',
     );
+
+    assert.strictEqual(result.detectedResourceType, 'host-set');
+    assert.false(result.hasInvalidType);
+    assert.false(result.hasInvalidIds);
+    assert.true(result.actions.length > 0);
   });
 
-  test('parseGrantLine returns undefined for missing fields', function (assert) {
-    const { idsValue, typeValue, actionsValue, outputFieldsValue } =
-      parseGrantLine('type=session');
+  test('analyzeGrantString returns no actions and no detected type for output_fields only', function (assert) {
+    const result = analyzeGrantString(this.grantsSchemaData, 'output_fields=*');
 
-    assert.strictEqual(idsValue, undefined);
-    assert.strictEqual(typeValue, 'session');
-    assert.strictEqual(actionsValue, undefined);
-    assert.strictEqual(outputFieldsValue, undefined);
+    assert.strictEqual(result.detectedResourceType, null);
+    assert.deepEqual(result.actions, []);
   });
 
-  test('parseGrantLine returns undefined values for an empty string', function (assert) {
-    const { idsValue, typeValue, actionsValue, outputFieldsValue } =
-      parseGrantLine('');
+  test('analyzeGrantString returns no actions and no detected type for an empty string', function (assert) {
+    const result = analyzeGrantString(this.grantsSchemaData, '');
 
-    assert.strictEqual(idsValue, undefined);
-    assert.strictEqual(typeValue, undefined);
-    assert.strictEqual(actionsValue, undefined);
-    assert.strictEqual(outputFieldsValue, undefined);
+    assert.strictEqual(result.detectedResourceType, null);
+    assert.deepEqual(result.actions, []);
   });
 
   test('getCompatibleResourceTypeForIds returns the matched type for a known id prefix', function (assert) {
@@ -590,15 +574,13 @@ module('Unit | Utils | grant-completions', function (hooks) {
     assert.strictEqual(detectedResourceType, null);
   });
 
-  test('parseGrantFields preserves values that contain additional equals signs', function (assert) {
-    assert.deepEqual(
-      parseGrantFields('ids=s_123;type=session=a;actions=read'),
-      [
-        { fieldName: 'ids', fieldValue: 's_123' },
-        { fieldName: 'type', fieldValue: 'session=a' },
-        { fieldName: 'actions', fieldValue: 'read' },
-      ],
+  test('analyzeGrantString treats a type with additional equals signs as invalid', function (assert) {
+    const result = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=s_123;type=session=a;actions=read',
     );
+
+    assert.true(result.hasInvalidType);
   });
 
   test('getChildResourceActions returns the union of child resource actions for a pinned parent id', function (assert) {
@@ -615,72 +597,6 @@ module('Unit | Utils | grant-completions', function (hooks) {
       'remove-hosts',
     ]);
   });
-
-  test.each(
-    'analyzeGrantString.isWildcard',
-    {
-      'returns true when ids is wildcard': {
-        grantString: 'ids=*',
-        expected: true,
-      },
-      'returns true when type is wildcard': {
-        grantString: 'type=*',
-        expected: true,
-      },
-      'returns true when both ids and type are wildcard': {
-        grantString: 'ids=*;type=*',
-        expected: true,
-      },
-      'returns false for specific ids': {
-        grantString: 'ids=hs_123',
-        expected: false,
-      },
-      'returns false for a specific type': {
-        grantString: 'type=host-set',
-        expected: false,
-      },
-    },
-    function (assert, { grantString, expected }) {
-      const { isWildcard } = analyzeGrantString(
-        this.grantsSchemaData,
-        grantString,
-      );
-      assert.strictEqual(isWildcard, expected);
-    },
-  );
-
-  test.each(
-    'analyzeGrantString.hasTemplateIds',
-    {
-      'returns true for a canonical template id': {
-        grantString: 'ids={{.User.Id}}',
-        expected: true,
-      },
-      'returns true when any id in a list is a template': {
-        grantString: 'ids={{.Account.Id}}',
-        expected: true,
-      },
-      'returns false for a specific id': {
-        grantString: 'ids=hs_123',
-        expected: false,
-      },
-      'returns false for a wildcard id': {
-        grantString: 'ids=*',
-        expected: false,
-      },
-      'returns false when there are no ids': {
-        grantString: 'type=host-set',
-        expected: false,
-      },
-    },
-    function (assert, { grantString, expected }) {
-      const { hasTemplateIds } = analyzeGrantString(
-        this.grantsSchemaData,
-        grantString,
-      );
-      assert.strictEqual(hasTemplateIds, expected);
-    },
-  );
 
   test.each(
     'analyzeGrantString.hasInvalidType',

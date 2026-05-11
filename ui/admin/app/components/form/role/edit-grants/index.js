@@ -151,18 +151,10 @@ export default class FormRoleEditGrantsComponent extends Component {
       .map(({ id, name }) => ({ id, name }));
   };
 
-  translateLintingError = (key, options = {}) => {
-    return this.intl.t(
-      `resources.role.edit-grants.linting-errors.${key}`,
-      options,
-    );
-  };
-  translateCompletionString = (key, options = {}) => {
-    return this.intl.t(
-      `resources.role.edit-grants.completion-info.${key}`,
-      options,
-    );
-  };
+  translateLintingError = (key, options = {}) =>
+    this.intl.t(`resources.role.edit-grants.linting-errors.${key}`, options);
+  translateCompletionString = (key, options = {}) =>
+    this.intl.t(`resources.role.edit-grants.completion-info.${key}`, options);
 
   completionSource = createGrantCompletionSource(
     this.args.grantsSchema,
@@ -185,9 +177,9 @@ export default class FormRoleEditGrantsComponent extends Component {
       if (update.docChanged || update.selectionSet) {
         const line = update.state.doc.lineAt(update.state.selection.main.head);
         this.currentLineText = line.text;
-      }
-      if (update.docChanged) {
-        this.grantStringsText = update.state.doc.toString();
+        if (update.docChanged) {
+          this.grantStringsText = update.state.doc.toString();
+        }
       }
     }),
     linter(this.linterSource),

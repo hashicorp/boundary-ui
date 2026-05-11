@@ -23,7 +23,7 @@ const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   apply: () => {},
 });
 
-export const parseGrantFields = (lineText = '') =>
+const parseGrantFields = (lineText = '') =>
   lineText
     .split(';')
     .map((pair) => {
@@ -43,7 +43,7 @@ const getGrantFieldValue = (parsedFields, targetFieldName) =>
   parsedFields.find(({ fieldName }) => fieldName === targetFieldName)
     ?.fieldValue;
 
-export const parseGrantLine = (lineText = '') => {
+const parseGrantLine = (lineText = '') => {
   const parsedFields = parseGrantFields(lineText);
 
   return {
@@ -258,9 +258,7 @@ const getActionOptions = (schema, typeValue, idsValue) => {
   }
 
   // Should be wildcard IDs with a specific type, so show all actions for that type
-  return selectedResource
-    ? withWildCard(selectedResource.actions)
-    : actionOptions;
+  return selectedResource ? withWildCard(selectedResource.actions) : [];
 };
 
 export const analyzeGrantString = (grantsSchema, grantString = '') => {
@@ -283,51 +281,40 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
   const hasInvalidIds = hasLiteralIds && !compatibleIdsResourceType;
 
-  const hasInvalidPinnedIdTypeCombination = (() => {
-    if (
-      !hasSpecificIds ||
-      !hasExplicitType ||
-      hasInvalidIds ||
-      hasInvalidType
-    ) {
-      return false;
-    }
-    const childTypes =
-      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? [];
-    return !childTypes.includes(typeValue);
-  })();
+  const hasInvalidPinnedIdTypeCombination =
+    hasSpecificIds &&
+    hasExplicitType &&
+    !hasInvalidIds &&
+    !hasInvalidType &&
+    !(
+      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? []
+    ).includes(typeValue);
 
-  const isWildcard = idsValue === '*' || typeValue === '*';
+  const detectedResourceType =
+    typeValue && typeValue !== '*'
+      ? typeValue
+      : idsValue
+        ? getCompatibleResourceTypeForIds(schema, idsValue)
+        : null;
 
-  const detectedResourceType = (() => {
-    if (typeValue && typeValue !== '*') return typeValue;
-    if (!idsValue) return null;
-    return getCompatibleResourceTypeForIds(schema, idsValue);
-  })();
+  const isBothWildcard = idsValue === '*' && typeValue === '*';
 
   const actions =
     idsValue || typeValue
       ? getActionOptions(schema, typeValue, idsValue)
           .filter(
             (action) =>
-              action !== '*' && (!isWildcard || CRUDL_ACTIONS.has(action)),
+              action !== '*' && (!isBothWildcard || CRUDL_ACTIONS.has(action)),
           )
           .sort((left, right) => left.localeCompare(right))
       : [];
 
   return {
-    idsValue,
-    typeValue,
-    hasSpecificIds,
-    hasExplicitType,
-    hasTemplateIds,
-    compatibleIdsResourceType,
+    actions,
+    detectedResourceType,
     hasInvalidType,
     hasInvalidIds,
     hasInvalidPinnedIdTypeCombination,
-    isWildcard,
-    detectedResourceType,
-    actions,
   };
 };
 
@@ -356,7 +343,13 @@ const getIdLookupTypes = (schema, typeValue, enteredIds) => {
   return null;
 };
 
-function grantCompletions(context, schema, translate, idLookup, getIsLoading) {
+async function grantCompletions(
+  context,
+  schema,
+  translate,
+  idLookup,
+  getIsLoading,
+) {
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
@@ -407,7 +400,7 @@ function grantCompletions(context, schema, translate, idLookup, getIsLoading) {
     };
   }
 
-  const idsValueMatch = beforeCursor.match(/ids=([\w*.{}, -]*)$/);
+  const idsValueMatch = beforeCursor.match(/ids=([\w*.{},\s-]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
     const partial = (enteredIds.pop() ?? '').trim();
@@ -437,38 +430,36 @@ function grantCompletions(context, schema, translate, idLookup, getIsLoading) {
     );
     const from = context.pos - partial.length;
 
-    return (async () => {
-      const ids = await idLookup(partial, compatibleResourceTypes);
-      const idOptions = ids
-        .filter(({ id }) => !enteredIds.includes(id))
-        .map(({ id, name }) => ({
-          label: id,
-          detail: name,
-          type: 'variable',
-        }));
+    const ids = await idLookup(partial, compatibleResourceTypes);
+    const idOptions = ids
+      .filter(({ id }) => !enteredIds.includes(id))
+      .map(({ id, name }) => ({
+        label: id,
+        detail: name,
+        type: 'variable',
+      }));
 
-      const allOptions = [...staticOptions, ...idOptions];
+    const allOptions = [...staticOptions, ...idOptions];
 
-      // Show a loading placeholder when IDs are still being fetched in the background
-      if (getIsLoading()) {
-        allOptions.push({
-          label: translate('loading-ids'),
-          type: 'text',
-          apply: () => {},
-        });
-      }
+    // Show a loading placeholder when IDs are still being fetched in the background
+    if (getIsLoading()) {
+      allOptions.push({
+        label: translate('loading-ids'),
+        type: 'text',
+        apply: () => {},
+      });
+    }
 
-      return {
-        from,
-        options: allOptions.length
-          ? allOptions
-          : [getNoSuggestionsOption(translate('no-suggestions'))],
-        // We do our own filtering via DB search, so disable CodeMirror's
-        // built-in filtering. Without this, name-based searches are dropped
-        // because the label (the ID) doesn't match the typed text (the name).
-        filter: false,
-      };
-    })();
+    return {
+      from,
+      options: allOptions.length
+        ? allOptions
+        : [getNoSuggestionsOption(translate('no-suggestions'))],
+      // We do our own filtering via DB search, so disable CodeMirror's
+      // built-in filtering. Without this, name-based searches are dropped
+      // because the label (the ID) doesn't match the typed text (the name).
+      filter: false,
+    };
   }
 
   const actionsValueMatch = beforeCursor.match(/actions=([a-z0-9_:,*-]*)$/);
