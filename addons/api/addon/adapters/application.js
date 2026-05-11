@@ -246,26 +246,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       );
       return new InvalidError(transformedPayload.errors, detailedMessage);
     }
-
-    const response = super.handleResponse(
-      status,
-      headers,
-      payload,
-      requestData,
-    );
-
-    // Attach rate-limit metadata from response headers so downstream
-    // error handlers can inform the user when they may retry.
-    if (status === 429 && response?.errors) {
-      const retryAfter = Number(
-        headers['Retry-After'] ?? headers['retry-after'],
-      );
-      response.errors.forEach((error) => {
-        error.retryAfter = retryAfter;
-      });
-    }
-
-    return response;
+    return super.handleResponse(status, headers, payload, requestData);
   }
 
   /**
@@ -291,7 +272,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @param  {Object} payload
    * @return {Array} errors payload
    */
-  normalizeErrorResponse(/*status, headers, payload*/) {
+  normalizeErrorResponse(status, headers /*, payload*/) {
     const errors = super.normalizeErrorResponse(...arguments);
     if (isArray(errors)) {
       errors.forEach((error) => {
@@ -307,6 +288,11 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
             break;
           case 429:
             error.isRateLimited = true;
+            // Attach rate-limit metadata from response headers so downstream
+            // error handlers can inform the user when they may retry.
+            error.retryAfter = Number(
+              headers['Retry-After'] ?? headers['retry-after'],
+            );
             break;
           case 500:
             error.isServer = true;
