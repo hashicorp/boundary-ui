@@ -54,8 +54,7 @@
       "ember-loading>ember-concurrency": "^4.0.0",
       "tmp": "^0.2.5",
       "tar": "^7.5.10",
-      "underscore": "^1.13.8",
-      "axios": "^1.15.1"
+      "underscore": "^1.13.8"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
