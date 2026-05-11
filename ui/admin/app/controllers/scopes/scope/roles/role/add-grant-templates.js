@@ -33,7 +33,7 @@ export default class ScopesScopeRolesRoleAddGrantTemplatesController extends Con
   async addGrantTemplates(role, grantTemplates) {
     // Add the grant templates to the role's grant_strings without saving yet
     // Note that we transition first to avoid a discard changes confirmation
-    this.router.replaceWith('scopes.scope.roles.role.grants');
+    this.router.replaceWith('scopes.scope.roles.role.edit-grants');
     role.grant_strings = [...role.grant_strings, ...grantTemplates];
   }
 
