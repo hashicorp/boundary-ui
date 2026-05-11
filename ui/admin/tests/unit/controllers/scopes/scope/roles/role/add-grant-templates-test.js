@@ -66,7 +66,9 @@ module(
 
       await controller.addGrantTemplates(role, newGrantTemplates);
 
-      assert.ok(routerStub.calledOnceWith('scopes.scope.roles.role.grants'));
+      assert.ok(
+        routerStub.calledOnceWith('scopes.scope.roles.role.edit-grants'),
+      );
       assert.deepEqual(role.grant_strings, [
         'ids=*;type=user;actions=read',
         'ids=*;type=*;actions=*',
