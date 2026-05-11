@@ -64,12 +64,21 @@ export class RolesPage extends BaseResourcePage {
    */
   async addGrantsToRole(grants) {
     await this.page.getByRole('link', { name: 'Grants', exact: true }).click();
-    await this.page.getByRole('textbox', { name: 'New Grant' }).fill(grants);
-    await this.page.getByRole('button', { name: 'Add', exact: true }).click();
+    await this.page
+      .getByRole('link', { name: 'Edit Grants', exact: true })
+      .click();
+    await this.page.locator('.hds-code-editor').getByRole('textbox').click();
+    await expect(
+      this.page.locator('.hds-code-editor').getByRole('textbox'),
+    ).toBeFocused();
+    await this.page
+      .locator('.hds-code-editor')
+      .getByRole('textbox')
+      .fill(grants);
     await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
     await expect(
-      this.page.getByRole('textbox', { name: 'Grant', exact: true }),
-    ).toHaveValue(grants);
+      this.page.locator('.grant-codeblock .hds-code-block__code'),
+    ).toHaveText(grants);
   }
 }

@@ -11,6 +11,7 @@ import {
   fillIn,
   findAll,
   waitUntil,
+  waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -46,6 +47,7 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.addGrantTemplates = `${urls.role}/add-grant-templates`;
     urls.grants = `${urls.role}/grants`;
+    urls.editGrants = `${urls.role}/edit-grants`;
   });
 
   test('visiting add-grant-templates route', async function (assert) {
@@ -107,11 +109,15 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
-    assert.strictEqual(currentURL(), urls.grants);
-
     assert.strictEqual(initialGrantCount, 0);
-    assert.dom(selectors.FIELD_GRANT).isVisible({ count: 1 });
-    assert.dom(selectors.FIELD_GRANT).hasValue('ids=*;type=*;actions=*');
+    assert.strictEqual(currentURL(), urls.editGrants);
+
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    assert.dom(commonSelectors.CODE_EDITOR_CODE).isVisible();
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .hasText('ids=*;type=*;actions=*');
   });
 
   test('cancel navigates back to grants without changes', async function (assert) {
@@ -122,6 +128,7 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(initialGrantCount, 0);
-    assert.dom(selectors.FIELD_GRANT).isVisible({ count: 0 });
+    assert.strictEqual(currentURL(), urls.grants);
+    assert.dom(selectors.GRANT_CODE_BLOCK).hasText('');
   });
 });
