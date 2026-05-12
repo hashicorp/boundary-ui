@@ -1,0 +1,41 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{#if this.actionRows.length}}
+  <Hds::Table
+    @model={{this.actionRows}}
+    @columns={{array
+      (hash label=(t 'titles.action'))
+      (hash label=(t 'form.description.label'))
+    }}
+    @valign='middle'
+    data-test-grant-actions-table
+  >
+    <:body as |B|>
+      <B.Tr>
+        <B.Td>{{B.data.name}}</B.Td>
+        <B.Td>{{B.data.description}}</B.Td>
+      </B.Tr>
+    </:body>
+  </Hds::Table>
+{{else if this.showInvalidIdAndType}}
+  <Hds::Alert @type='compact' as |A|>
+    <A.Description data-test-grant-actions-invalid-id-or-type>
+      {{t 'resources.role.edit-grants.actions.invalid-id-or-type'}}
+    </A.Description>
+  </Hds::Alert>
+{{else if this.showNoResourceTypeDetected}}
+  <Hds::Alert @type='compact' as |A|>
+    <A.Description data-test-grant-actions-no-type-detected>
+      {{t 'resources.role.edit-grants.actions.no-type-detected'}}
+    </A.Description>
+  </Hds::Alert>
+{{else}}
+  <Hds::Alert @type='compact' as |A|>
+    <A.Description data-test-grant-actions-empty-state>
+      {{t 'resources.role.edit-grants.completion-info.no-suggestions'}}
+    </A.Description>
+  </Hds::Alert>
+{{/if}}

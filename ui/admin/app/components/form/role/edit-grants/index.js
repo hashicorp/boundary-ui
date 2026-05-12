@@ -11,6 +11,7 @@ import {
   autocompletion,
   completionKeymap,
   keymap,
+  EditorView,
   linter,
   lintGutter,
   lintKeymap,
@@ -172,6 +173,15 @@ export default class FormRoleEditGrantsComponent extends Component {
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
       activateOnCompletion: (completion) => completion.type === 'keyword',
     }),
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged || update.selectionSet) {
+        const line = update.state.doc.lineAt(update.state.selection.main.head);
+        this.currentLineText = line.text;
+        if (update.docChanged) {
+          this.grantStringsText = update.state.doc.toString();
+        }
+      }
+    }),
     linter(this.linterSource),
     lintGutter(),
     keymap.of([...completionKeymap, ...lintKeymap]),
@@ -231,14 +241,6 @@ export default class FormRoleEditGrantsComponent extends Component {
   @action
   onSetup(view) {
     this.#editorView = view;
-  }
-
-  @action
-  onInput(value, view) {
-    this.grantStringsText = value;
-
-    const line = view.state.doc.lineAt(view.state.selection.main.head);
-    this.currentLineText = line.text;
   }
 
   /**

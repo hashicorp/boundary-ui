@@ -1008,3 +1008,8 @@
     height: 200px;
   }
 }
+
+.grant-actions-scroll-container {
+  max-height: 50vh;
+  overflow-y: auto;
+}

@@ -24,6 +24,7 @@ titles:
   empty-set: No Items Yet
   global: Global
   actions: Actions
+  action: Action
   documentation: Documentation
   abandon-confirm: Discard unsaved changes?
   welcome-to-boundary: Welcome to Boundary
