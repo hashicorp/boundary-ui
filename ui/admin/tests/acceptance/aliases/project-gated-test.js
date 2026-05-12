@@ -64,7 +64,6 @@ module('Acceptance | aliases | project | gated', function (hooks) {
   test('shows the gated empty state when project scope has no alias suffix', async function (assert) {
     await visit(urls.aliases);
 
-    assert.dom(selectors.GATED_STATE).isVisible();
     assert.dom(selectors.GATED_STATE_LINK).isVisible();
     assert.dom(commonSelectors.HREF(urls.newAlias)).doesNotExist();
   });
@@ -76,7 +75,7 @@ module('Acceptance | aliases | project | gated', function (hooks) {
     assert.strictEqual(currentURL(), urls.addAliasSuffix);
   });
 
-  test('gated CTA is hidden when user cannot set an alias suffix', async function (assert) {
+  test('gated state is not shown when user cannot set an alias suffix', async function (assert) {
     instances.scopes.project.update({
       authorized_actions: instances.scopes.project.authorized_actions.filter(
         (action) => action !== 'set-alias-target-suffix',
@@ -85,8 +84,14 @@ module('Acceptance | aliases | project | gated', function (hooks) {
 
     await visit(urls.aliases);
 
-    assert.dom(selectors.GATED_STATE).isVisible();
-    assert.dom(selectors.GATED_STATE_LINK).doesNotExist();
+    assert.dom(selectors.GATED_STATE).doesNotExist();
+    assert
+      .dom(commonSelectors.PAGE_MESSAGE_HEADER)
+      .hasText(
+        this.owner
+          .lookup('service:intl')
+          .t('resources.alias.messages.none.title'),
+      );
   });
 
   test('shows the normal aliases empty state when project scope has an alias suffix', async function (assert) {

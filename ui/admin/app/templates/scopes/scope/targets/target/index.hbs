@@ -93,44 +93,21 @@
           </div>
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
-            {{#if this.isGated}}
-              <div
-                class='target-sidebar-aliases'
-                data-test-target-aliases-gated
-              >
-                <Hds::Text::Display @tag='h2'>
-                  {{t 'resources.alias.title_plural'}}
-                </Hds::Text::Display>
-                <Hds::Text::Body @tag='p' @color='faint'>
-                  {{t 'resources.alias.messages.gated.description'}}
-                </Hds::Text::Body>
-                {{#if (can 'setAliasSuffix scope' @model.project)}}
-                  <Hds::Link::Standalone
-                    data-test-target-aliases-gated-link
-                    @icon='arrow-right'
-                    @iconPosition='trailing'
-                    @route='scopes.scope.add-alias-suffix'
-                    @text={{t 'resources.alias.messages.gated.link'}}
-                  />
-                {{/if}}
-              </div>
-            {{else}}
-              <div class='target-sidebar-aliases'>
-                <Hds::Text::Display @tag='h2' class='remove-margin'>
-                  {{t 'resources.alias.title_plural'}}
-                </Hds::Text::Display>
-                <Hds::Text::Body @tag='p' @color='faint' class='p'>
-                  {{t 'resources.alias.form.sidebar.help'}}
-                </Hds::Text::Body>
+            <div class='target-sidebar-aliases'>
+              <Hds::Text::Display @tag='h2' class='remove-margin'>
+                {{t 'resources.alias.title_plural'}}
+              </Hds::Text::Display>
+              <Hds::Text::Body @tag='p' @color='faint' class='p'>
+                {{t 'resources.alias.form.sidebar.help'}}
+              </Hds::Text::Body>
 
-                <Hds::Button
-                  @icon='plus'
-                  @text={{t 'resources.target.actions.add-an-alias'}}
-                  @color='secondary'
-                  @route='scopes.scope.targets.target.create-alias'
-                />
-              </div>
-            {{/if}}
+              <Hds::Button
+                @icon='plus'
+                @text={{t 'resources.target.actions.add-an-alias'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.create-alias'
+              />
+            </div>
           {{/if}}
         {{/if}}
         <div class='target-sidebar'>

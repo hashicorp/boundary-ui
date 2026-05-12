@@ -65,14 +65,4 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   get remainingAliases() {
     return this.model.aliases.slice(3);
   }
-
-  /**
-   * Project aliases are gated behind the project scope having an alias
-   * suffix configured.
-   * @type {boolean}
-   */
-  get isGated() {
-    const { project } = this.model;
-    return project?.isProject && !project?.hasSuffix;
-  }
 }

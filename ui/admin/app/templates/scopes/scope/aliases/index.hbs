@@ -35,17 +35,15 @@
       <Hds::ApplicationState data-test-aliases-gated as |A|>
         <A.Header @title={{t 'resources.alias.messages.gated.title'}} />
         <A.Body @text={{t 'resources.alias.messages.gated.description'}} />
-        {{#if (can 'setAliasSuffix scope' this.scope)}}
-          <A.Footer as |F|>
-            <F.LinkStandalone
-              data-test-aliases-gated-link
-              @icon='arrow-right'
-              @iconPosition='trailing'
-              @route='scopes.scope.add-alias-suffix'
-              @text={{t 'resources.alias.messages.gated.link'}}
-            />
-          </A.Footer>
-        {{/if}}
+        <A.Footer as |F|>
+          <F.LinkStandalone
+            data-test-aliases-gated-link
+            @icon='arrow-right'
+            @iconPosition='trailing'
+            @route='scopes.scope.add-alias-suffix'
+            @text={{t 'resources.alias.messages.gated.link'}}
+          />
+        </A.Footer>
       </Hds::ApplicationState>
     {{else if @model.doAliasesExist}}
       <Hds::SegmentedGroup as |S|>

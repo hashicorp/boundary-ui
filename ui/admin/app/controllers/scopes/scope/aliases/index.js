@@ -65,7 +65,11 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @type {boolean}
    */
   get isGated() {
-    return this.scope?.isProject && !this.scope?.hasSuffix;
+    return (
+      this.scope?.isProject &&
+      !this.scope?.hasSuffix &&
+      this.abilities.can('setAliasSuffix scope', this.scope)
+    );
   }
 
   // =actions
