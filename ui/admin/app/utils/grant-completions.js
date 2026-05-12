@@ -293,18 +293,24 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const detectedResourceType =
     typeValue && typeValue !== '*'
       ? typeValue
-      : idsValue
-        ? getCompatibleResourceTypeForIds(schema, idsValue)
-        : null;
+      : compatibleIdsResourceType && typeValue === '*'
+        ? (
+            schema.childResourceTypesByParentType[compatibleIdsResourceType] ??
+            []
+          ).join(' or ') || null
+        : typeValue !== '*' && idsValue
+          ? getCompatibleResourceTypeForIds(schema, idsValue)
+          : null;
 
-  const isBothWildcard = idsValue === '*' && typeValue === '*';
+  const hasWildcardIds = idsValue === '*';
+  const crudlOnly = hasWildcardIds && !hasExplicitType;
 
   const actions =
     idsValue || typeValue
       ? getActionOptions(schema, typeValue, idsValue)
           .filter(
             (action) =>
-              action !== '*' && (!isBothWildcard || CRUDL_ACTIONS.has(action)),
+              action !== '*' && (!crudlOnly || CRUDL_ACTIONS.has(action)),
           )
           .sort((left, right) => left.localeCompare(right))
       : [];

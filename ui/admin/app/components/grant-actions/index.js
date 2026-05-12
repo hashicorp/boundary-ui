@@ -53,7 +53,14 @@ export default class GrantActionsIndex extends Component {
     const genericKey = `resources.role.edit-grants.actions.generic.${action}`;
 
     if (detectedResourceType && this.intl.exists(specificKey)) {
-      return this.intl.t(specificKey, { resourceType: detectedResourceType });
+      // Determine the appropriate article ("a" or "an") to use based on the
+      // detected resource type. "u" is a special case that uses "a" instead
+      // of "an" because it's pronounced "you" so I don't include it below.
+      const article = /^[aeio]/i.test(detectedResourceType) ? 'an' : 'a';
+      return this.intl.t(specificKey, {
+        resourceType: detectedResourceType,
+        article,
+      });
     }
 
     if (this.intl.exists(genericKey)) {
