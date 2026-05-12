@@ -222,9 +222,80 @@ module('Unit | Utility | grant-linter', function (hooks) {
       ['ids=*;type=*;actions=read'], // valid wildcard id
       ['ids=hcst_123,hcplg_456;type=host-set;actions=read'], // valid pinned ids for host-set resource type
       ['ids={{.Account.Id}};actions=read'], // valid template id when type is not specified
-      ['ids={{.Account.Id}},{{.User.Id}};actions=read'], // valid template ids when type is not specified
+      [
+        'ids={{.Account.Id}},{{.User.Id}};actions=read',
+        'Template ids cannot be combined with each other',
+      ], // mixed template ids is not allowed
       ['ids=csst_1234,csvlt_5678;actions=*'], // valid id prefixes with same type
       ['ids=amldap_123,amoidc_456;type=*;actions=read,list'], // valid ids with wildcard type
+    ],
+    function (assert, [grantString, errorMsg]) {
+      const diagnostics = this.grantLinter(createContext(grantString));
+
+      if (errorMsg) {
+        assert.strictEqual(diagnostics[0].message, errorMsg);
+      } else {
+        assert.strictEqual(diagnostics.length, 0);
+      }
+    },
+  );
+
+  test.each(
+    'diagnostics for output_fields field values',
+    [
+      ['type=target;output_fields=,', 'Invalid syntax'],
+      [
+        'type=target;output_fields=*,id',
+        'Wildcard output field "*" cannot be combined with other fields',
+      ],
+      ['type=target;output_fields=id,id', 'Duplicate output field "id"'],
+      [
+        'type=target;output_fields=invalid_field',
+        'Invalid output field "invalid_field" for type "target"',
+      ],
+      [
+        'ids=ttcp_123;output_fields=member_ids',
+        'Invalid output field "member_ids" for type "target"',
+      ],
+      ['ids=hcst_123;type=*;actions=read;output_fields=host_catalog_id'], // valid: child type (host) output field
+      ['ids=hcst_123;type=*;actions=read;output_fields=host_set_ids'], // valid: child type (host) output field
+      [
+        'ids=hcst_123;type=*;actions=read;output_fields=session_max_seconds',
+        'Invalid output field "session_max_seconds"',
+      ], // invalid: not a host or host-set field
+      [
+        'ids=*;type=*;actions=read;output_fields=id',
+        'Invalid output field "id"',
+      ], // no specific type context, specific field is invalid
+      ['type=target;output_fields=id,name'], // valid output fields
+      ['type=target;output_fields=*'], // valid wildcard
+      ['ids=ttcp_123;output_fields=scope_id'], // valid inferred type
+      ['ids={{.User.Id}};output_fields=email'], // valid user template output field
+      ['ids={{user.id}};output_fields=email'], // valid user template alias output field
+      ['ids={{.Account.Id}};output_fields=auth_method_id'], // valid account template output field
+      ['ids={{account.id}};output_fields=auth_method_id'], // valid account template alias output field
+      [
+        'ids={{.User.Id}};output_fields=auth_method_id',
+        'Invalid output field "auth_method_id" for type "user"',
+      ], // account field is invalid for user template
+      [
+        'ids={{.Account.Id}};output_fields=email',
+        'Invalid output field "email" for type "account"',
+      ], // user field is invalid for account template
+      [
+        'ids={{.User.Id}},{{.Account.Id}};output_fields=email',
+        'Template ids cannot be combined with each other',
+      ], // ids error fires first; mixed templates are disallowed
+      [
+        'ids={{.User.Id}},{{.Account.Id}};output_fields=auth_method_id',
+        'Template ids cannot be combined with each other',
+      ], // ids error fires first; mixed templates are disallowed
+      [
+        'ids={{.User.Id}},{{.Account.Id}};output_fields=session_max_seconds',
+        'Template ids cannot be combined with each other',
+      ], // ids error fires first; mixed templates are disallowed
+      ['type=target;output_fields=id,scope_id,name'], // valid multiple output fields
+      ['ids=*;type=*;actions=read;output_fields=*'], // wildcard output fields with wildcard type is valid
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));

@@ -695,6 +695,7 @@ role:
       ids:
         empty-list: '"ids" field does not contain at least one id'
         wildcard-cannot-combine: Wildcard id "*" cannot be combined with other ids
+        templates-cannot-combine: Template ids cannot be combined with each other
         duplicate-template: Duplicate id "{primary}" and "{secondary}"
         duplicate-id: Duplicate id "{id}"
         unknown-template: Unknown template "{id}"
@@ -716,6 +717,12 @@ role:
         remove: Remove
         remove-comma: Remove comma
         add-noop: Add "no-op" action
+      output-fields:
+        empty-list: '"output_fields" field does not contain at least one field'
+        wildcard-cannot-combine: Wildcard output field "*" cannot be combined with other fields
+        duplicate-field: Duplicate output field "{field}"
+        invalid-field: Invalid output field "{field}"
+        invalid-field-for-type: Invalid output field "{field}" for type "{type}"
     editor:
       title: Grant Editor
       description: Add each new grant string on a different line

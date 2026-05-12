@@ -69,6 +69,7 @@ export const normalizeGrantsSchema = (grantsSchema) => {
       idActions,
       idPrefixes,
       parentType: resourceType.parent_type,
+      outputFields: resourceType.output_fields ?? [],
     };
 
     return resources;
@@ -124,7 +125,7 @@ const getResourceTypesForId = (schema, id) => {
         .map(({ type }) => type);
 };
 
-export const getCompatibleResourceTypeForIds = (schema, idsValue) => {
+const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   const resourceTypesById = parseIds(idsValue).flatMap((id) =>
     getResourceTypesForId(schema, id),
   );
@@ -152,7 +153,7 @@ const getIdActions = (schema, idsValue) => {
   return schema.resourcesByType[matchedType]?.idActions;
 };
 
-export const getChildResourceActions = (schema, idsValue) => {
+const getChildResourceValues = (schema, idsValue, getValues) => {
   const parentType = getCompatibleResourceTypeForIds(schema, idsValue);
 
   if (
@@ -166,10 +167,24 @@ export const getChildResourceActions = (schema, idsValue) => {
 
   return [
     ...new Set(
-      childTypes.flatMap((type) => schema.resourcesByType[type]?.actions ?? []),
+      childTypes.flatMap((type) => getValues(schema.resourcesByType[type])),
     ),
   ];
 };
+
+const getChildResourceActions = (schema, idsValue) =>
+  getChildResourceValues(
+    schema,
+    idsValue,
+    (resource) => resource?.actions ?? [],
+  );
+
+const getChildResourceOutputFields = (schema, idsValue) =>
+  getChildResourceValues(
+    schema,
+    idsValue,
+    (resource) => resource?.outputFields ?? [],
+  );
 
 const getTypeOptions = (schema, idsValue) => {
   // If there is no ids value, we can only suggest top-level resource types that have collection actions
@@ -318,6 +333,37 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   };
 };
 
+const getOutputFieldOptions = (schema, typeValue, idsValue) => {
+  const selectedResource = schema.resourcesByType[typeValue];
+
+  if (typeValue && typeValue !== '*' && selectedResource) {
+    return selectedResource.outputFields.length
+      ? withWildCard(selectedResource.outputFields)
+      : ['*'];
+  }
+
+  const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
+
+  // Pinned IDs with wildcard type
+  if (typeValue === '*' && hasSpecificIds) {
+    const childOutputFields = getChildResourceOutputFields(schema, idsValue);
+    return childOutputFields.length ? withWildCard(childOutputFields) : ['*'];
+  }
+
+  if (!typeValue && hasSpecificIds) {
+    const matchedType = getCompatibleResourceTypeForIds(schema, idsValue);
+    if (matchedType) {
+      const resourceOutputFields =
+        schema.resourcesByType[matchedType]?.outputFields ?? [];
+      return resourceOutputFields.length
+        ? withWildCard(resourceOutputFields)
+        : ['*'];
+    }
+  }
+
+  return ['*'];
+};
+
 const getIdLookupTypes = (schema, typeValue, enteredIds) => {
   if (enteredIds.length > 0) {
     const compatibleResourceType = getCompatibleResourceTypeForIds(
@@ -403,15 +449,15 @@ async function grantCompletions(
   const idsValueMatch = beforeCursor.match(/ids=([\w*.{},\s-]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
-    const partial = (enteredIds.pop() ?? '').trim();
+    const partial = enteredIds.pop() ?? '';
     const hasEnteredIds = enteredIds.length > 0;
+    const hasEnteredTemplateIds = enteredIds.some((id) => id.startsWith('{{'));
 
     const staticOptions = filterByPrefix(['*', ...ID_TEMPLATES], partial)
       .filter((value) => !hasEnteredIds || value !== '*')
       .filter(
         (value) =>
-          !ID_TEMPLATES.includes(value) ||
-          (!typeValue && enteredIds.every((id) => ID_TEMPLATES.includes(id))),
+          (!hasEnteredIds && !typeValue) || !ID_TEMPLATES.includes(value),
       )
       .filter((value) => !enteredIds.includes(value))
       .map((value) => ({
@@ -430,7 +476,9 @@ async function grantCompletions(
     );
     const from = context.pos - partial.length;
 
-    const ids = await idLookup(partial, compatibleResourceTypes);
+    const ids = hasEnteredTemplateIds
+      ? []
+      : await idLookup(partial, compatibleResourceTypes);
     const idOptions = ids
       .filter(({ id }) => !enteredIds.includes(id))
       .map(({ id, name }) => ({
@@ -498,15 +546,23 @@ async function grantCompletions(
     const partial = enteredOutputFields.pop() ?? '';
     const hasEnteredOutputFields = enteredOutputFields.length > 0;
 
+    const options = filterByPrefix(
+      getOutputFieldOptions(schema, typeValue, idsValue),
+      partial,
+    )
+      .filter((value) => !hasEnteredOutputFields || value !== '*')
+      .filter((value) => !enteredOutputFields.includes(value))
+      .map((value) => ({
+        label: value,
+        type: 'constant',
+        info: value === '*' ? translate('all-fields') : '',
+      }));
+
     return {
       from: context.pos - partial.length,
-      options: filterByPrefix(['*'], partial)
-        .filter((value) => !hasEnteredOutputFields || value !== '*')
-        .map((value) => ({
-          label: value,
-          type: 'constant',
-          info: translate('all-fields'),
-        })),
+      options: options.length
+        ? options
+        : [getNoSuggestionsOption(translate('no-suggestions'))],
     };
   }
 
