@@ -5,6 +5,7 @@
 
 const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
+const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
 const TEMPLATE_RESOURCE_TYPES = {
   '{{.User.Id}}': 'user',
   '{{.Account.Id}}': 'account',
@@ -22,7 +23,7 @@ const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   apply: () => {},
 });
 
-const parseGrantFields = (lineText) =>
+const parseGrantFields = (lineText = '') =>
   lineText
     .split(';')
     .map((pair) => {
@@ -38,8 +39,24 @@ const parseGrantFields = (lineText) =>
     })
     .filter(({ fieldName }) => fieldName);
 
-const normalizeGrantsSchema = (grantsSchema) => {
-  const resourceTypes = grantsSchema?.resource_types ?? [];
+const getGrantFieldValue = (parsedFields, targetFieldName) =>
+  parsedFields.find(({ fieldName }) => fieldName === targetFieldName)
+    ?.fieldValue;
+
+const parseGrantLine = (lineText = '') => {
+  const parsedFields = parseGrantFields(lineText);
+
+  return {
+    parsedFields,
+    idsValue: getGrantFieldValue(parsedFields, 'ids'),
+    typeValue: getGrantFieldValue(parsedFields, 'type'),
+    actionsValue: getGrantFieldValue(parsedFields, 'actions'),
+    outputFieldsValue: getGrantFieldValue(parsedFields, 'output_fields'),
+  };
+};
+
+export const normalizeGrantsSchema = (grantsSchema) => {
+  const resourceTypes = grantsSchema.resource_types ?? [];
 
   const resourcesByType = resourceTypes.reduce((resources, resourceType) => {
     const collectionActions = resourceType.collection_actions ?? [];
@@ -107,7 +124,7 @@ const getResourceTypesForId = (schema, id) => {
         .map(({ type }) => type);
 };
 
-const getCompatibleResourceTypeForIds = (schema, idsValue) => {
+export const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   const resourceTypesById = parseIds(idsValue).flatMap((id) =>
     getResourceTypesForId(schema, id),
   );
@@ -135,7 +152,7 @@ const getIdActions = (schema, idsValue) => {
   return schema.resourcesByType[matchedType]?.idActions;
 };
 
-const getChildResourceActions = (schema, idsValue) => {
+export const getChildResourceActions = (schema, idsValue) => {
   const parentType = getCompatibleResourceTypeForIds(schema, idsValue);
 
   if (
@@ -241,9 +258,64 @@ const getActionOptions = (schema, typeValue, idsValue) => {
   }
 
   // Should be wildcard IDs with a specific type, so show all actions for that type
-  return selectedResource
-    ? withWildCard(selectedResource.actions)
-    : actionOptions;
+  return selectedResource ? withWildCard(selectedResource.actions) : [];
+};
+
+export const analyzeGrantString = (grantsSchema, grantString = '') => {
+  const schema = normalizeGrantsSchema(grantsSchema);
+  const { idsValue, typeValue } = parseGrantLine(grantString);
+
+  const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
+  const hasExplicitType = Boolean(typeValue) && typeValue !== '*';
+
+  const hasTemplateIds =
+    hasSpecificIds &&
+    parseIds(idsValue).some((id) => id.startsWith('{{') && id.endsWith('}}'));
+
+  const hasLiteralIds = hasSpecificIds && !hasTemplateIds;
+
+  const compatibleIdsResourceType = hasLiteralIds
+    ? getCompatibleResourceTypeForIds(schema, idsValue)
+    : null;
+
+  const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
+  const hasInvalidIds = hasLiteralIds && !compatibleIdsResourceType;
+
+  const hasInvalidPinnedIdTypeCombination =
+    hasSpecificIds &&
+    hasExplicitType &&
+    !hasInvalidIds &&
+    !hasInvalidType &&
+    !(
+      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? []
+    ).includes(typeValue);
+
+  const detectedResourceType =
+    typeValue && typeValue !== '*'
+      ? typeValue
+      : idsValue
+        ? getCompatibleResourceTypeForIds(schema, idsValue)
+        : null;
+
+  const isBothWildcard = idsValue === '*' && typeValue === '*';
+
+  const actions =
+    idsValue || typeValue
+      ? getActionOptions(schema, typeValue, idsValue)
+          .filter(
+            (action) =>
+              action !== '*' && (!isBothWildcard || CRUDL_ACTIONS.has(action)),
+          )
+          .sort((left, right) => left.localeCompare(right))
+      : [];
+
+  return {
+    actions,
+    detectedResourceType,
+    hasInvalidType,
+    hasInvalidIds,
+    hasInvalidPinnedIdTypeCombination,
+  };
 };
 
 const getIdLookupTypes = (schema, typeValue, enteredIds) => {
@@ -281,15 +353,8 @@ async function grantCompletions(
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
-  const parsedFields = parseGrantFields(line.text);
+  const { parsedFields, idsValue, typeValue } = parseGrantLine(line.text);
   const parsedFieldNames = parsedFields.map(({ fieldName }) => fieldName);
-
-  const idsValue = parsedFields.find(
-    ({ fieldName }) => fieldName === 'ids',
-  )?.fieldValue;
-  const typeValue = parsedFields.find(
-    ({ fieldName }) => fieldName === 'type',
-  )?.fieldValue;
 
   // Check if we're typing a field name (e.g. "type=") by starting at the beginning or after a semicolon.
   // This allows us to provide field name suggestions when the user is typing a new field
@@ -338,14 +403,15 @@ async function grantCompletions(
   const idsValueMatch = beforeCursor.match(/ids=([\w*.{},\s-]*)$/);
   if (idsValueMatch) {
     const enteredIds = idsValueMatch[1].split(',');
-    const partial = enteredIds.pop() ?? '';
+    const partial = (enteredIds.pop() ?? '').trim();
     const hasEnteredIds = enteredIds.length > 0;
 
     const staticOptions = filterByPrefix(['*', ...ID_TEMPLATES], partial)
       .filter((value) => !hasEnteredIds || value !== '*')
       .filter(
         (value) =>
-          (!hasEnteredIds && !typeValue) || !ID_TEMPLATES.includes(value),
+          !ID_TEMPLATES.includes(value) ||
+          (!typeValue && enteredIds.every((id) => ID_TEMPLATES.includes(id))),
       )
       .filter((value) => !enteredIds.includes(value))
       .map((value) => ({
@@ -362,6 +428,8 @@ async function grantCompletions(
       typeValue,
       enteredIds,
     );
+    const from = context.pos - partial.length;
+
     const ids = await idLookup(partial, compatibleResourceTypes);
     const idOptions = ids
       .filter(({ id }) => !enteredIds.includes(id))
@@ -383,7 +451,7 @@ async function grantCompletions(
     }
 
     return {
-      from: context.pos - partial.length,
+      from,
       options: allOptions.length
         ? allOptions
         : [getNoSuggestionsOption(translate('no-suggestions'))],
