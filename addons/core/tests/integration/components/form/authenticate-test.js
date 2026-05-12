@@ -8,26 +8,15 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
-import Service from '@ember/service';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 
-class FlashMessagesStub extends Service {
-  warning() {
-    return { getFlashObject: () => ({}) };
-  }
-}
-
 module('Integration | Component | form | authenticate', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
-
-  hooks.beforeEach(function () {
-    this.owner.register('service:flash-messages', FlashMessagesStub);
-  });
 
   test('it shows login name and password when LDAP is selected from the list', async function (assert) {
     const store = this.owner.lookup('service:store');
