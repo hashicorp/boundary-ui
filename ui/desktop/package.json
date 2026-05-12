@@ -47,7 +47,7 @@
     "ember-inflector": "^6.0.0",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.23",
-    "uuid": "^11.0.3"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
@@ -102,7 +102,7 @@
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
     "miragejs": "^0.1.48",
-    "postcss": "^8.4.31",
+    "postcss": "^8.5.10",
     "prettier": "^3.3.3",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",

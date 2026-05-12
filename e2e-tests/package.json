@@ -25,13 +25,14 @@
     "admin:dev:firefox": "pnpm run admin --project=firefox --headed",
     "admin:dev:safari": "pnpm run admin --project=webkit --headed",
     "desktop": "pnpm run --filter desktop build && pnpm run desktop:dev",
+    "desktop:local": "SETUP_CLI=true pnpm run desktop",
     "desktop:dev": "pnpm playwright test --config desktop/playwright.config.js --reporter=html"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/eslint-parser": "^7.21.3",
     "@eslint/js": "^9.18.0",
-    "@openapitools/openapi-generator-cli": "^2.30.0",
+    "@openapitools/openapi-generator-cli": "^2.32.0",
     "@playwright/test": "^1.56.1",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",

@@ -211,7 +211,7 @@ test.describe('Filtering sessions tests', () => {
     ).toBeVisible();
   });
 
-  test('Filters by status', async ({ authedPage, tesseract }) => {
+  test('Filters by status', async ({ authedPage, tesseract, terminalView }) => {
     await authedPage
       .getByRole('row', { name: sshTarget.name })
       .getByRole('link')
@@ -219,7 +219,11 @@ test.describe('Filtering sessions tests', () => {
       .click();
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
     await expect(async () => {
-      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const terminal = await terminalView();
+      if (!terminal) {
+        throw new Error('Terminal view not found');
+      }
+      const screenshot = await terminal.locator('.xterm-screen').screenshot();
       const result = await tesseract.recognize(screenshot);
       expect(result.data.text).toMatch(textToMatch);
     }).toPass();

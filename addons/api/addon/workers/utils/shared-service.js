@@ -169,6 +169,12 @@ const onBecomeProvider = async ({
   target,
   status,
 }) => {
+  // Create a gate that prevents request handling until the provider is fully initialized.
+  // This prevents a race condition where a client registers and sends requests before
+  // the provider has finished initialization.
+  const { promise: providerReady, resolve: providerReadyResolve } =
+    Promise.withResolvers();
+
   // Set an event listener for other tabs to register with the provider tab
   commonChannel.addEventListener('message', async (event) => {
     const { clientId, type } = event.data;
@@ -193,6 +199,9 @@ const onBecomeProvider = async ({
         return;
       }
       const { method, args, id } = data;
+
+      // Wait for the provider to finish initialization before handling requests
+      await providerReady;
 
       let result, error;
       try {
@@ -221,6 +230,7 @@ const onBecomeProvider = async ({
   });
 
   await onProviderChange?.(status.isServiceProvider);
+  providerReadyResolve();
   commonChannel.postMessage({ type: 'providerChange', serviceName });
 
   // If we became the new provider and there were requests in flight, request it directly again.

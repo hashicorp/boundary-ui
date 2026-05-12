@@ -181,8 +181,8 @@ export default class ScopesScopeSessionsIndexController extends Controller {
    * Refreshes the all data for the current page
    */
   @action
-  refresh() {
-    this.router.refresh('scopes.scope.sessions');
+  async refresh() {
+    await this.currentRoute.refreshAll();
   }
 
   /**
