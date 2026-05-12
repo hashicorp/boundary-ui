@@ -290,17 +290,19 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
       schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? []
     ).includes(typeValue);
 
-  const detectedResourceType =
-    typeValue && typeValue !== '*'
-      ? typeValue
-      : compatibleIdsResourceType && typeValue === '*'
-        ? (
-            schema.childResourceTypesByParentType[compatibleIdsResourceType] ??
-            []
-          ).join(' or ') || null
-        : typeValue !== '*' && idsValue
-          ? getCompatibleResourceTypeForIds(schema, idsValue)
-          : null;
+  let detectedResourceType = null;
+  if (typeValue && typeValue !== '*') {
+    // Explicit type specified, use it directly
+    detectedResourceType = typeValue;
+  } else if (compatibleIdsResourceType && typeValue === '*') {
+    // Pinned IDs with wildcard type, show the child resource types
+    const childTypes =
+      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? [];
+    detectedResourceType = childTypes.join(' or ') || null;
+  } else if (typeValue !== '*' && idsValue) {
+    // No type field, infer resource type from the ID prefix
+    detectedResourceType = getCompatibleResourceTypeForIds(schema, idsValue);
+  }
 
   const hasWildcardIds = idsValue === '*';
   const crudlOnly = hasWildcardIds && !hasExplicitType;
