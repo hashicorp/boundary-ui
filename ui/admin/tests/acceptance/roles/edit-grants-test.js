@@ -173,4 +173,14 @@ module('Acceptance | roles/edit grants', function (hooks) {
       expectedGrantStrings,
     );
   });
+
+  test('shows actions for the first grant on page load', async function (assert) {
+    await visit(urls.editGrants);
+
+    assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
+    // opted to not check for specific actions here since the grants schema
+    // may change and cause the test to fail even though the functionality
+    // is working as expected
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).isVisible();
+  });
 });

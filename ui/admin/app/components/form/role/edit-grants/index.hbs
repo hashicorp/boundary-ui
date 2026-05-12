@@ -21,7 +21,6 @@
         @hasFullScreenButton={{true}}
         @ariaLabel={{t 'form.secret-editor.label'}}
         @value={{this.grantStringsText}}
-        @onInput={{this.onInput}}
         @onSetup={{this.onSetup}}
         @customExtensions={{this.customExtensions}}
         @cspNonce={{(csp-nonce)}}
@@ -66,6 +65,17 @@
           }}</:toggle>
         <:content>
           <GrantStringFormats />
+        </:content>
+      </A.Item>
+      <A.Item @isOpen={{true}} @isStatic={{true}} data-test-grant-actions>
+        <:toggle>{{t 'titles.actions'}}</:toggle>
+        <:content>
+          <div class='grant-actions-scroll-container'>
+            <GrantActions
+              @grantsSchema={{@grantsSchema}}
+              @grantString={{this.currentLineText}}
+            />
+          </div>
         </:content>
       </A.Item>
     </Hds::Accordion>

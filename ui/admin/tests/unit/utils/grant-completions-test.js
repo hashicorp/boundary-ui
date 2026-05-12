@@ -8,7 +8,13 @@ import { setupTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupMirage } from 'admin/tests/helpers/mirage';
 
-import { createGrantCompletionSource } from 'admin/utils/grant-completions';
+import {
+  createGrantCompletionSource,
+  analyzeGrantString,
+  getChildResourceActions,
+  getCompatibleResourceTypeForIds,
+  normalizeGrantsSchema,
+} from 'admin/utils/grant-completions';
 
 const createCompletionContext = (lineText) => ({
   pos: lineText.length,
@@ -73,6 +79,35 @@ module('Unit | Utils | grant-completions', function (hooks) {
       this.getIsLoading,
     );
   });
+
+  test.each(
+    'field name suggestions',
+    {
+      'suggest all fields on an empty line': {
+        lineText: '',
+        expectedLabels: ['ids=', 'type=', 'actions=', 'output_fields='],
+      },
+      'filter already-used fields from suggestions': {
+        lineText: 'ids=*;',
+        expectedLabels: ['type=', 'actions=', 'output_fields='],
+      },
+      'match a partial field name': {
+        lineText: 'ty',
+        expectedLabels: ['type='],
+      },
+      'filter multiple already-used fields': {
+        lineText: 'ids=*;type=scope;',
+        expectedLabels: ['actions=', 'output_fields='],
+      },
+    },
+    async function (assert, { lineText, expectedLabels }) {
+      const completionResult = await this.grantCompletionSource(
+        createCompletionContext(lineText),
+      );
+
+      assert.deepEqual(getLabels(completionResult), expectedLabels);
+    },
+  );
 
   test.each(
     'type suggestions',
@@ -358,6 +393,35 @@ module('Unit | Utils | grant-completions', function (hooks) {
     },
   );
 
+  test.each(
+    'ids suggestions',
+    {
+      'include supported template values': {
+        lineText: 'ids={{',
+        expectedLabels: ['{{.User.Id}}', '{{.Account.Id}}'],
+      },
+      'suggest wildcard and templates on an empty ids value': {
+        lineText: 'ids=',
+        expectedLabels: ['*', '{{.User.Id}}', '{{.Account.Id}}'],
+      },
+      'filter wildcard once an id is already entered': {
+        lineText: 'ids={{.User.Id}},',
+        expectedLabels: ['{{.Account.Id}}'],
+      },
+      'filter already-entered template ids when completing a partial': {
+        lineText: 'ids={{.User.Id}},{{',
+        expectedLabels: ['{{.Account.Id}}'],
+      },
+    },
+    async function (assert, { lineText, expectedLabels }) {
+      const completionResult = await this.grantCompletionSource(
+        createCompletionContext(lineText),
+      );
+
+      assert.deepEqual(getLabels(completionResult), expectedLabels);
+    },
+  );
+
   test('completion info labels are translated values', async function (assert) {
     const typeCompletionResult = await this.grantCompletionSource(
       createCompletionContext('type='),
@@ -394,6 +458,240 @@ module('Unit | Utils | grant-completions', function (hooks) {
     );
   });
 
+  test('analyzeGrantString detects resource type and actions for a complete grant string', function (assert) {
+    const result = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=hcst_1234567890;type=host-set;actions=read,list;output_fields=*',
+    );
+
+    assert.strictEqual(result.detectedResourceType, 'host-set');
+    assert.false(result.hasInvalidType);
+    assert.false(result.hasInvalidIds);
+    assert.true(result.actions.length > 0);
+  });
+
+  test('analyzeGrantString returns no actions and no detected type for output_fields only', function (assert) {
+    const result = analyzeGrantString(this.grantsSchemaData, 'output_fields=*');
+
+    assert.strictEqual(result.detectedResourceType, null);
+    assert.deepEqual(result.actions, []);
+  });
+
+  test('analyzeGrantString returns no actions and no detected type for an empty string', function (assert) {
+    const result = analyzeGrantString(this.grantsSchemaData, '');
+
+    assert.strictEqual(result.detectedResourceType, null);
+    assert.deepEqual(result.actions, []);
+  });
+
+  test('getCompatibleResourceTypeForIds returns the matched type for a known id prefix', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123'),
+      'host-set',
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns null for an unknown id prefix', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'bad_123'),
+      null,
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns null for mixed resource type ids', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123,s_123'),
+      null,
+    );
+  });
+
+  test('getCompatibleResourceTypeForIds returns the type when all ids share the same resource type', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.strictEqual(
+      getCompatibleResourceTypeForIds(schema, 'hs_123,hs_456'),
+      'host-set',
+    );
+  });
+
+  test('analyzeGrantString.actions returns the same actions as the completion source uses', function (assert) {
+    const { actions } = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=hcst_1234567890;type=host-set',
+    );
+
+    assert.deepEqual(actions, [
+      'add-hosts',
+      'create',
+      'delete',
+      'list',
+      'read',
+      'remove-hosts',
+      'set-hosts',
+      'update',
+    ]);
+  });
+
+  test('analyzeGrantString.detectedResourceType returns the type inferred from a specific id', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=hs_123',
+    );
+
+    assert.strictEqual(detectedResourceType, 'host-set');
+  });
+
+  test('analyzeGrantString.detectedResourceType returns an explicit type value', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
+      this.grantsSchemaData,
+      'type=session',
+    );
+
+    assert.strictEqual(detectedResourceType, 'session');
+  });
+
+  test('analyzeGrantString.detectedResourceType returns null when no type can be detected', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
+      this.grantsSchemaData,
+      'output_fields=*',
+    );
+
+    assert.strictEqual(detectedResourceType, null);
+  });
+
+  test('analyzeGrantString.detectedResourceType returns null for a wildcard type', function (assert) {
+    const { detectedResourceType } = analyzeGrantString(
+      this.grantsSchemaData,
+      'type=*',
+    );
+
+    assert.strictEqual(detectedResourceType, null);
+  });
+
+  test('analyzeGrantString treats a type with additional equals signs as invalid', function (assert) {
+    const result = analyzeGrantString(
+      this.grantsSchemaData,
+      'ids=s_123;type=session=a;actions=read',
+    );
+
+    assert.true(result.hasInvalidType);
+  });
+
+  test('getChildResourceActions returns the union of child resource actions for a pinned parent id', function (assert) {
+    const schema = normalizeGrantsSchema(this.grantsSchemaData);
+
+    assert.deepEqual(getChildResourceActions(schema, 'hcst_1234567890'), [
+      'create',
+      'list',
+      'read',
+      'update',
+      'delete',
+      'add-hosts',
+      'set-hosts',
+      'remove-hosts',
+    ]);
+  });
+
+  test.each(
+    'analyzeGrantString.hasInvalidType',
+    {
+      'returns true for an unknown type': {
+        grantString: 'type=not-a-real-type',
+        expected: true,
+      },
+      'returns false for a known type': {
+        grantString: 'type=host-set',
+        expected: false,
+      },
+      'returns false for a wildcard type': {
+        grantString: 'type=*',
+        expected: false,
+      },
+      'returns false when there is no type': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidType } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidType, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasInvalidIds',
+    {
+      'returns true for an unrecognised id prefix': {
+        grantString: 'ids=bad_123',
+        expected: true,
+      },
+      'returns true for mixed ids with conflicting resource types': {
+        grantString: 'ids=hs_123,s_123',
+        expected: true,
+      },
+      'returns false for a recognised id prefix': {
+        grantString: 'ids=hs_123',
+        expected: false,
+      },
+      'returns false for a wildcard id': {
+        grantString: 'ids=*',
+        expected: false,
+      },
+      'returns false for a template id': {
+        grantString: 'ids={{.User.Id}}',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidIds } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidIds, expected);
+    },
+  );
+
+  test.each(
+    'analyzeGrantString.hasInvalidPinnedIdTypeCombination',
+    {
+      'returns true when a pinned id is paired with its own type': {
+        grantString: 'ids=hcst_1234567890;type=host-catalog',
+        expected: true,
+      },
+      'returns false when a pinned id is paired with a valid child type': {
+        grantString: 'ids=hcst_1234567890;type=host-set',
+        expected: false,
+      },
+      'returns false for wildcard ids with a specific type': {
+        grantString: 'ids=*;type=host-set',
+        expected: false,
+      },
+      'returns false when there is no type': {
+        grantString: 'ids=hcst_1234567890',
+        expected: false,
+      },
+      'returns false when ids are invalid': {
+        grantString: 'ids=bad_123;type=host-set',
+        expected: false,
+      },
+    },
+    function (assert, { grantString, expected }) {
+      const { hasInvalidPinnedIdTypeCombination } = analyzeGrantString(
+        this.grantsSchemaData,
+        grantString,
+      );
+      assert.strictEqual(hasInvalidPinnedIdTypeCombination, expected);
+    },
+  );
   module('id auto completion', function () {
     test('idLookup results are included alongside static options', async function (assert) {
       const source = createGrantCompletionSource(
