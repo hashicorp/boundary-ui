@@ -5,12 +5,7 @@
 
 {{page-title (app-name)}}
 
-<Hds::AppFrame
-  @hasHeader={{true}}
-  @hasSidebar={{this.showSideNav}}
-  class='app-frame'
-  as |Frame|
->
+<Hds::AppFrame @hasHeader={{true}} @hasSidebar={{this.showSideNav}} as |Frame|>
   <Frame.Header>
     <Hds::AppHeader
       class='app-header
@@ -143,7 +138,7 @@
     </Hds::AppSideNav>
   </Frame.Sidebar>
 
-  <Frame.Main class='app-frame__main'>
+  <Frame.Main>
     {{outlet}}
   </Frame.Main>
 </Hds::AppFrame>

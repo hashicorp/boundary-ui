@@ -353,12 +353,3 @@
     }
   }
 }
-
-// App frame and main content area to ensure the app takes up the full height of the viewport
-// and that the main content area scrolls if content exceeds the viewport height.
-.app-frame {
-  height: 100vh;
-  &__main {
-    overflow: auto;
-  }
-}
