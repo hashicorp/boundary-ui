@@ -7,7 +7,6 @@ settings:
 overrides:
   micromatch: ^4.0.8
   css-select>nth-check: ^2.0.1
-  node-gyp: ^10.0.0
   ansi-html: ^0.0.9
   fireworm>async: ^2.6.4
   ember-cli-babel>@babel/runtime: 7.27.6
@@ -15,7 +14,7 @@ overrides:
   ember-loading>ember-concurrency: ^4.0.0
   tmp: ^0.2.5
   tar: ^7.5.10
-  underscore: ^1.13.8
+  nomnom>underscore: ^1.13.8
 
 patchedDependencies:
   ember-loading:
@@ -4214,7 +4213,7 @@ packages:
       toffee: ^0.3.6
       twig: ^1.15.2
       twing: ^5.0.2
-      underscore: ^1.13.8
+      underscore: ^1.11.0
       vash: ^0.13.0
       velocityjs: ^2.0.1
       walrus: ^0.10.1

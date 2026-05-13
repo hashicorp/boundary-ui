@@ -97,30 +97,7 @@ If you would like to do it through the command line:
 ```bash
 doormat login
 source <(doormat aws export --account boundary_team_acctest_dev)
-# Feel free to use a custom name for your key pair if you don't want to use $USER, just make sure it follows the <name>_enos format so it can be identified. e.g. zed_enos
-ssh-keygen -N '' -t ed25519 -f ~/.ssh/"$USER"_enos
-aws ec2 import-key-pair \
-  --region us-east-1 \
-  --key-name "$USER"_enos \
-  --public-key-material fileb://~/.ssh/"$USER"_enos.pub
 ```
-
-### Setup Enos:
-
-Make sure you're in the correct boundary repository for the version of Boundary you plan on using.
-The enos scenarios for CE need to be run in `boundary` and the enos scenarios for enterprise need to be run in `boundary-enterprise`.
-
-Enos needs some configuration variables to run the scenario successfully. [See the configuration file](https://github.com/hashicorp/boundary/blob/main/enos/enos.vars.hcl). The file has comments per each variable, but some awareness:
-
-- `boundary_edition`: The edition of Boundary you are using. Options are `oss` or `enterprise`.
-- `aws_region`: The AWS region you are using. Very important as mentioned within the EC2 Setup.
-- `aws_ssh_keypair_name`: The name of the AWS keypair.
-- `aws_ssh_private_key_path`: The path to the private key associated with your keypair.
-- `enos_user`: The user name to use for tagged resources in AWS.
-- `e2e_debug_no_run`: Make sure this is set to true.
-- `boundary_license_path` (enterprise only): Path to an enterprise license
-
-More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
 ## Run tests:
 Make sure you followed all the steps within the [Getting started section](#getting-started).
@@ -157,6 +134,7 @@ Using Terminal 1:
 - `cd boundary/enos` or `cd boundary_enterprise/enos`.
 - `doormat login`. Login with Doormat.
 - `eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
+- `export ENOS_VAR_boundary_license={LICENSE_KEY}`. If running enterprise, you will need a license key
 - `enos scenario launch e2e_ui_aws builder:local protocol:https` or `enos scenario launch e2e_ui_aws_ent builder:local protocol:https` if in enterprise.
   - Launches enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal. Check out more scenarios [here](https://github.com/hashicorp/boundary/tree/main/enos).
 - `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are needed within Boundary UI to run the test against the enos scenario.
@@ -324,7 +302,7 @@ If working on an E2E test that is working against a different version of the bou
 # in the following example $COMMITISH can be replaced with a branch name, commit, or tag
 OPENAPI_SWAGGER_URL_OR_FILE=https://raw.githubusercontent.com/hashicorp/boundary/$COMMITISH/internal/gen/controller.swagger.json pnpm generate:api-client
 
-# using a local absolute or relative path 
+# using a local absolute or relative path
 OPENAPI_SWAGGER_URL_OR_FILE=../../boundary-enterprise/internal/gen/controller.swagger.json pnpm generate:api-client
 ```
 
