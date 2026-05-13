@@ -838,25 +838,18 @@ const validateOutputFieldsField = (
   } else if (validatedFields.ids?.knownType && !validatedFields.type) {
     const knownType = validatedFields.ids.knownType;
     const TEMPLATE_RESOURCE_TYPES = {
-      'account-template': ['account'],
-      'user-template': ['user'],
+      'account-template': 'account',
+      'user-template': 'user',
     };
-    const resolvedTypes = TEMPLATE_RESOURCE_TYPES[knownType] ?? [knownType];
-    const resourceOutputFields = [
-      ...new Set(
-        resolvedTypes.flatMap(
-          (type) => schema.resourcesByType[type]?.outputFields ?? [],
-        ),
-      ),
-    ];
+    const resolvedType = TEMPLATE_RESOURCE_TYPES[knownType] ?? knownType;
+    const resourceOutputFields =
+      schema.resourcesByType[resolvedType]?.outputFields ?? [];
     validOutputFields = ['*', ...resourceOutputFields];
     errorMessage = (field) =>
-      resolvedTypes.length === 1
-        ? translate('output-fields.invalid-field-for-type', {
-            field,
-            type: resolvedTypes[0],
-          })
-        : translate('output-fields.invalid-field', { field });
+      translate('output-fields.invalid-field-for-type', {
+        field,
+        type: resolvedType,
+      });
   }
 
   let segmentStart = pos.valueStart;
