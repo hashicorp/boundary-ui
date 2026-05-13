@@ -98,6 +98,7 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page.getByLabel('Region').fill(region);
     await this.page.getByLabel('Access key ID').fill(accessKeyId);
     await this.page.getByLabel('Secret access key').fill(secretAccessKey);
+    await this.page.getByLabel('Worker filter').scrollIntoViewIfNeeded();
     await this.page
       .getByLabel('Worker filter')
       .getByRole('textbox')
