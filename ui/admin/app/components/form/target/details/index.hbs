@@ -244,37 +244,75 @@
   {{#if
     (and @model.isNew (can 'create model' @globalScope collection='aliases'))
   }}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
+    <Hds::Form::KeyValueInputs
       @isOptional={{true}}
-      @disabled={{form.disabled}}
+      @data={{@model.with_aliases}}
+      name='with_aliases'
+      class='target-aliases-kvi'
+      data-test-target-aliases
     >
-      <:fieldset as |F|>
-        <F.Legend>
-          {{t 'resources.alias.form.alias.label'}}
-        </F.Legend>
-        <F.HelperText>
-          {{t 'resources.alias.form.alias.help'}}
-        </F.HelperText>
+      <:header as |H|>
+        <H.Legend>{{t 'resources.alias.form.alias.label'}}</H.Legend>
+        <H.HelperText>{{t 'resources.alias.form.alias.help'}}</H.HelperText>
+      </:header>
 
+      <:row as |R|>
+        <R.Field as |F|>
+          <F.Label>{{t 'resources.alias.form.alias.scope.label'}}</F.Label>
+          <F.Select
+            disabled={{form.disabled}}
+            data-test-alias-row-scope={{R.rowIndex}}
+            {{on 'change' (fn this.setRowScope R.rowData)}}
+          >
+            <option
+              value={{@globalScope.id}}
+              selected={{eq R.rowData.scope_id @globalScope.id}}
+            >
+              {{t 'resources.alias.form.alias.scope.options.global'}}
+            </option>
+            {{#if this.canCreateAliasOnProject}}
+              <option
+                value={{@model.scopeModel.id}}
+                selected={{eq R.rowData.scope_id @model.scopeModel.id}}
+              >
+                {{this.projectOptionLabel}}
+              </option>
+            {{/if}}
+          </F.Select>
+        </R.Field>
+
+        <R.Field @width='1fr' as |F|>
+          <F.Label>{{t 'resources.alias.form.alias.value.label'}}</F.Label>
+          <F.TextInput
+            @value={{R.rowData.value}}
+            @type='text'
+            disabled={{form.disabled}}
+            data-test-alias-row-value={{R.rowIndex}}
+            {{on 'input' (fn this.setRowValue R.rowData)}}
+          />
+        </R.Field>
+
+        <R.DeleteRowButton
+          @onClick={{this.removeAliasRow}}
+          data-test-alias-row-remove={{R.rowIndex}}
+        />
+      </:row>
+
+      <:footer as |F|>
+        <F.AddRowButton
+          @text={{t 'actions.add'}}
+          @onClick={{this.addAliasRow}}
+          data-test-aliases-add-btn
+        />
         {{#if @model.errors.with_aliases}}
-          <F.Error as |E|>
+          <F.Error>
             {{#each @model.errors.with_aliases as |error|}}
-              <E.Message>{{error.message}}</E.Message>
+              {{error.message}}
             {{/each}}
           </F.Error>
         {{/if}}
-      </:fieldset>
-
-      <:field as |F|>
-        <F.TextInput
-          @name='with_aliases'
-          @options={{@model.with_aliases}}
-          @model={{@model}}
-        />
-      </:field>
-
-    </Form::Field::ListWrapper>
+      </:footer>
+    </Hds::Form::KeyValueInputs>
   {{/if}}
   {{#if (can 'save model' @model)}}
     <form.actions

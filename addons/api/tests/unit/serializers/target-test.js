@@ -112,6 +112,33 @@ module('Unit | Serializer | target', function (hooks) {
     });
   });
 
+  test('it preserves the scope_id on each with_aliases row and filters out blank rows', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('target');
+    const record = store.createRecord('target', {
+      name: 'Mixed scope target',
+      scope: { scope_id: 'p_123', type: 'project' },
+      version: 1,
+      type: TYPE_TARGET_TCP,
+      with_aliases: [
+        { value: 'a', scope_id: 'p_123' },
+        { value: 'b', scope_id: 'global' },
+        // no scope_id → defaults to 'global'
+        { value: 'c' },
+        // empty value → filtered out
+        { value: '', scope_id: 'p_123' },
+      ],
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {};
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord.with_aliases, [
+      { value: 'a', scope_id: 'p_123' },
+      { value: 'b', scope_id: 'global' },
+      { value: 'c', scope_id: 'global' },
+    ]);
+  });
+
   test('it serializes only host sources and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');

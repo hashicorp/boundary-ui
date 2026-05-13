@@ -480,13 +480,17 @@
     min-width: 0;
   }
 
-  .alias-value-with-suffix__suffix {
+  .alias-value-with-suffix--text {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+.target-aliases-kvi {
+  margin-bottom: 1.5rem;
 }
 
 .target-sidebar-aliases {

@@ -318,10 +318,9 @@ module('Acceptance | targets | create', function (hooks) {
       ),
     );
 
-    await fillIn(selectors.FIELD_ALIASES, 'alias 1');
+    await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(0), 'alias 1');
     await click(selectors.FIELD_ALIASES_ADD_BTN);
-    await fillIn(selectors.FIELD_ALIASES, 'alias 2');
-    await click(selectors.FIELD_ALIASES_ADD_BTN);
+    await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(1), 'alias 2');
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -331,6 +330,74 @@ module('Acceptance | targets | create', function (hooks) {
       { value: 'alias 2', scope_id: 'global' },
     ]);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
+  });
+
+  test('can add aliases scoped to the current project when the project has a suffix', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    // Give the project a suffix so the project option is enabled.
+    instances.scopes.project.update({ alias_suffix: '.example' });
+    // Ensure the project scope authorizes creating aliases.
+    instances.scopes.project.update({
+      authorized_collection_actions: {
+        ...instances.scopes.project.authorized_collection_actions,
+        aliases: ['create'],
+      },
+    });
+
+    const name = 'project-aliased-target';
+    await visit(urls.targets);
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, name);
+
+    // First row defaults to project scope; project option label includes
+    // the suffix so users can confirm which scope they're targeting.
+    assert
+      .dom(`${selectors.FIELD_ALIASES_ROW_SCOPE(0)} option:checked`)
+      .hasText(new RegExp(`suffix "\\.example"`));
+    await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(0), 'myhost');
+
+    // Add a second row and switch it to Global.
+    await click(selectors.FIELD_ALIASES_ADD_BTN);
+    await fillIn(
+      selectors.FIELD_ALIASES_ROW_SCOPE(1),
+      instances.scopes.global.id,
+    );
+    await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(1), 'globalhost');
+
+    await click(commonSelectors.SAVE_BTN);
+
+    const target = this.server.schema.targets.findBy({ name });
+    assert.deepEqual(target.withAliases, [
+      { value: 'myhost', scope_id: instances.scopes.project.id },
+      { value: 'globalhost', scope_id: 'global' },
+    ]);
+  });
+
+  test('alias rows show only Global when the project has no suffix', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    // Project has no suffix → no Project option in the row dropdown.
+    instances.scopes.project.update({ alias_suffix: null });
+
+    await visit(urls.targets);
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert
+      .dom(`${selectors.FIELD_ALIASES_ROW_SCOPE(0)} option`)
+      .exists({ count: 1 });
   });
 
   test('can cancel create new SSH target', async function (assert) {

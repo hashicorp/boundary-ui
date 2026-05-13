@@ -1305,4 +1305,11 @@ alias:
       help: Use a domain name as a shortcut for anyone with access to this target.
     alias:
       label: Aliases
-      help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
+      help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases. Projects must have a suffix in order to create a project level alias.
+      scope:
+        label: Select scope
+        options:
+          global: Global
+          project: '{name} (suffix "{suffix}")'
+      value:
+        label: Alias value

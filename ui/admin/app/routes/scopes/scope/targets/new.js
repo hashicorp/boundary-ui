@@ -54,10 +54,21 @@ export default class ScopesScopeTargetsNewRoute extends Route {
       this.currentModel.rollbackAttributes();
     }
 
+    // Seed the alias rows with a single empty row scoped to the project
+    // when it can host aliases, otherwise to global.
+    const canCreateOnProject =
+      scopeModel?.isProject &&
+      scopeModel.hasSuffix &&
+      this.abilities.can('create model', scopeModel, {
+        collection: 'aliases',
+      });
+    const defaultScopeId = canCreateOnProject ? scopeModel.id : 'global';
+
     const record = this.store.createRecord('target', {
       type,
       name,
       description,
+      with_aliases: [{ value: '', scope_id: defaultScopeId }],
     });
     record.scopeModel = scopeModel;
     return record;
