@@ -290,21 +290,29 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
       schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? []
     ).includes(typeValue);
 
-  const detectedResourceType =
-    typeValue && typeValue !== '*'
-      ? typeValue
-      : idsValue
-        ? getCompatibleResourceTypeForIds(schema, idsValue)
-        : null;
+  let detectedResourceType = null;
+  if (typeValue && typeValue !== '*') {
+    // Explicit type specified, use it directly
+    detectedResourceType = typeValue;
+  } else if (compatibleIdsResourceType && typeValue === '*') {
+    // Pinned IDs with wildcard type, return the child resource types
+    const childTypes =
+      schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? [];
+    detectedResourceType = childTypes.length ? childTypes : null;
+  } else if (typeValue !== '*' && idsValue) {
+    // No type field, infer resource type from the ID prefix
+    detectedResourceType = getCompatibleResourceTypeForIds(schema, idsValue);
+  }
 
-  const isBothWildcard = idsValue === '*' && typeValue === '*';
+  const hasWildcardIds = idsValue === '*';
+  const crudlOnly = hasWildcardIds && !hasExplicitType;
 
   const actions =
     idsValue || typeValue
       ? getActionOptions(schema, typeValue, idsValue)
           .filter(
             (action) =>
-              action !== '*' && (!isBothWildcard || CRUDL_ACTIONS.has(action)),
+              action !== '*' && (!crudlOnly || CRUDL_ACTIONS.has(action)),
           )
           .sort((left, right) => left.localeCompare(right))
       : [];
