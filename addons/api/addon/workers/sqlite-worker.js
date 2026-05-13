@@ -57,6 +57,9 @@ import {
       });
 
       function setupDb() {
+        // Allow SQLite to wait up to 5 s when it encounters a busy lock
+        db.exec('PRAGMA busy_timeout = 5000;');
+
         const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
         // Check if we're on a newer schema version and clear the database if so
         if (SCHEMA_VERSION > row.user_version) {
@@ -165,11 +168,15 @@ import {
       // We want to use as many VALUES as part of the insert statement as it's quicker
       // than doing multiple inserts. If we have too many rows to insert, we'll manually
       // chunk them up to avoid hitting the maximum number of host parameters
-      // and execute these separate insert statements in a transaction
+      // and execute these separate insert statements in a transaction.
       if (numberOfParameters > MAX_HOST_PARAMETERS) {
         const chunkSize = Math.floor(MAX_HOST_PARAMETERS / items[0].length);
 
-        return db.transaction(() => {
+        // Note: We use explicit BEGIN/COMMIT instead of db.transaction() because
+        // db.transaction() uses SAVEPOINT internally, which fails with SQLITE_BUSY
+        // when any statement is active on the connection.
+        db.exec('BEGIN');
+        try {
           const results = [];
           for (let i = 0; i < items.length; i += chunkSize) {
             const chunk = items.slice(i, i + chunkSize);
@@ -180,8 +187,12 @@ import {
             });
             results.push(result);
           }
+          db.exec('COMMIT');
           return results;
-        });
+        } catch (err) {
+          db.exec('ROLLBACK');
+          throw err;
+        }
       }
 
       db.exec({
@@ -191,9 +202,13 @@ import {
       });
     },
     deleteResource: ({ resource, ids }) => {
-      // Check if we have too many parameters for the deletion and chunk if so
+      // Check if we have too many parameters for the deletion and chunk if so.
       if (ids?.length > MAX_HOST_PARAMETERS) {
-        return db.transaction(() => {
+        // Note: We use explicit BEGIN/COMMIT instead of db.transaction() because
+        // db.transaction() uses SAVEPOINT internally, which fails with SQLITE_BUSY
+        // when any statement is active on the connection.
+        db.exec('BEGIN');
+        try {
           const results = [];
           for (let i = 0; i < ids.length; i += MAX_HOST_PARAMETERS) {
             const chunk = ids.slice(i, i + MAX_HOST_PARAMETERS);
@@ -204,8 +219,12 @@ import {
             });
             results.push(result);
           }
+          db.exec('COMMIT');
           return results;
-        });
+        } catch (err) {
+          db.exec('ROLLBACK');
+          throw err;
+        }
       }
 
       return db.exec({
