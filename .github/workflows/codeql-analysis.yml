@@ -14,6 +14,11 @@ on:
   schedule:
     - cron: '0 19 * * 4'
 
+permissions:
+  contents: read
+  actions: read
+  security-events: write   # CodeQL upload
+
 jobs:
   analyze:
     name: Analyze

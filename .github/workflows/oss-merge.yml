@@ -2,6 +2,9 @@ name: OSS → ENT Merge
 on:
   repository_dispatch:
     types: [ oss-merge ]
+# Checkout and merge run via ELEVATED_GITHUB_TOKEN; default token is unused.
+permissions: {}
+
 jobs:
   oss-merge:
     runs-on: ${{ fromJSON(vars.RUNNER) }}

@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+# gh workflow run uses ELEVATED_GITHUB_TOKEN; default token is unused.
+permissions: {}
+
 jobs:
   trigger-gha-release:
     runs-on: ${{ fromJSON(vars.RUNNER) }}

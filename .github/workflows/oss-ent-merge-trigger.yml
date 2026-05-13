@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+# curl uses ELEVATED_GITHUB_TOKEN to repository_dispatch the enterprise repo;
+# default GITHUB_TOKEN is unused.
+permissions: {}
+
 jobs:
   trigger-oss-merge:
     # Run this only on merge events in OSS repo

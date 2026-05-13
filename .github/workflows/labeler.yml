@@ -2,6 +2,11 @@ name: "Pull Request Labeler"
 on:
 - pull_request_target
 
+# actions/labeler reads .github/labeler.yml and applies labels in pull_request_target context.
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   triage:
     runs-on: ${{ fromJSON(vars.RUNNER) }}
