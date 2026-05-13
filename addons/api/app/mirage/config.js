@@ -975,16 +975,15 @@ function routes() {
       attrs.scope_id || attrs.scopeId || attrs.scope?.id || 'global';
     const scope = scopes.find(scopeId);
 
+    // Mirror the real API: clients submit `value` only; `base_value` is
+    // server-derived.
     const baseValue =
-      attrs.base_value || attrs.value || attrs.name || faker.word.words();
+      attrs.value || attrs.base_value || attrs.name || faker.word.words();
 
-    let fullValue = attrs.value || baseValue;
+    const fullValue = scope?.alias_suffix
+      ? `${baseValue}${scope.alias_suffix}`
+      : baseValue;
 
-    if (scope?.alias_suffix) {
-      fullValue = `${baseValue}${scope.alias_suffix}`;
-    }
-
-    // Create the alias with both base_value and value
     const aliasAttrs = {
       ...attrs,
       scope_id: scopeId,
