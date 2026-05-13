@@ -53,14 +53,14 @@ export default class GrantActionsIndex extends Component {
     const genericKey = `resources.role.edit-grants.actions.generic.${action}`;
 
     if (detectedResourceType && this.intl.exists(specificKey)) {
+      const resourceType = Array.isArray(detectedResourceType)
+        ? this.intl.formatList(detectedResourceType, { type: 'disjunction' })
+        : detectedResourceType;
       // Determine the appropriate article ("a" or "an") to use based on the
-      // detected resource type. "u" is a special case that uses "a" instead
+      // detected resource type. "user" is a special case that uses "a" instead
       // of "an" because it's pronounced "you" so I don't include it below.
-      const article = /^[aeio]/i.test(detectedResourceType) ? 'an' : 'a';
-      return this.intl.t(specificKey, {
-        resourceType: detectedResourceType,
-        article,
-      });
+      const article = /^[aeio]/i.test(resourceType) ? 'an' : 'a';
+      return this.intl.t(specificKey, { resourceType, article });
     }
 
     if (this.intl.exists(genericKey)) {

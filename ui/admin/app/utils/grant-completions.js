@@ -295,10 +295,10 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
     // Explicit type specified, use it directly
     detectedResourceType = typeValue;
   } else if (compatibleIdsResourceType && typeValue === '*') {
-    // Pinned IDs with wildcard type, show the child resource types
+    // Pinned IDs with wildcard type, return the child resource types
     const childTypes =
       schema.childResourceTypesByParentType[compatibleIdsResourceType] ?? [];
-    detectedResourceType = childTypes.join(' or ') || null;
+    detectedResourceType = childTypes.length ? childTypes : null;
   } else if (typeValue !== '*' && idsValue) {
     // No type field, infer resource type from the ID prefix
     detectedResourceType = getCompatibleResourceTypeForIds(schema, idsValue);
