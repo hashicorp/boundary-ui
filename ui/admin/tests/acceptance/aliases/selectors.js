@@ -6,6 +6,9 @@
 export const FIELD_DESTINATION_ID = '[name=destination_id]';
 export const FIELD_HOST_ID = '[name=authorize_session_arguments]';
 
+export const GATED_STATE = '[data-test-aliases-gated]';
+export const GATED_STATE_LINK = '[data-test-aliases-gated-link]';
+
 export const TABLE_ROW_ID_ACTION_DROPDOWN = (id) =>
   `tbody [data-test-alias-row="${id}"] td:last-child button`;
 export const TABLE_ROW_ID_ACTION_DROPDOWN_ITEM_LINK = (id) =>

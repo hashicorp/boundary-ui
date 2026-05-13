@@ -170,6 +170,14 @@
       />
     {{/if}}
 
+    {{#if (can 'navigate scope' @model collection='aliases')}}
+      <Nav.Link
+        @icon='at-sign'
+        @text={{t 'resources.alias.title_plural'}}
+        @route='scopes.scope.aliases'
+      />
+    {{/if}}
+
     <Nav.Title>{{t
         'titles.scope-iam'
         scope=(t 'resources.project.title')

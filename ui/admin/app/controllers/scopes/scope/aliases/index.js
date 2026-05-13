@@ -59,6 +59,19 @@ export default class ScopesScopeAliasesIndexController extends Controller {
     return this.intl.t(description, { resource });
   }
 
+  /**
+   * Project aliases are gated behind the project scope having an alias
+   * suffix configured.
+   * @type {boolean}
+   */
+  get isGated() {
+    return (
+      this.scope?.isProject &&
+      !this.scope?.hasSuffix &&
+      this.abilities.can('setAliasSuffix scope', this.scope)
+    );
+  }
+
   // =actions
 
   /**
