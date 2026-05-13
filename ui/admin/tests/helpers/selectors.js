@@ -95,6 +95,7 @@ export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
 
 export const CODE_EDITOR_CONTENT =
   '[data-test-code-editor-field-editor] textarea';
+export const CODE_EDITOR_CM = '[data-test-code-editor] .CodeMirror';
 
 // Toolbar refresher selectors
 export const TOOLBAR_REFRESHER = '.toolbar-refresher';
