@@ -92,18 +92,27 @@
             {{#each @model.aliases as |data|}}
               <B.Tr data-test-alias-row={{data.alias.id}}>
                 <B.Td>
-                  {{#if (can 'read model' data.alias)}}
-                    <LinkTo
-                      @route='scopes.scope.aliases.alias'
-                      @model={{data.alias.id}}
-                    >
-                      {{data.alias.value}}
-                    </LinkTo>
-                  {{else}}
-                    <Hds::Text::Body @tag='p'>
-                      {{data.alias.value}}
-                    </Hds::Text::Body>
-                  {{/if}}
+                  {{#let
+                    (if
+                      this.scope.isProject
+                      (or data.alias.base_value data.alias.value)
+                      data.alias.value
+                    )
+                    as |aliasDisplay|
+                  }}
+                    {{#if (can 'read model' data.alias)}}
+                      <LinkTo
+                        @route='scopes.scope.aliases.alias'
+                        @model={{data.alias.id}}
+                      >
+                        {{aliasDisplay}}
+                      </LinkTo>
+                    {{else}}
+                      <Hds::Text::Body @tag='p'>
+                        {{aliasDisplay}}
+                      </Hds::Text::Body>
+                    {{/if}}
+                  {{/let}}
                   {{#if data.alias.description}}
                     <Hds::Text::Body @tag='p'>
                       {{data.alias.description}}

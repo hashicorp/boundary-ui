@@ -468,6 +468,27 @@
   }
 }
 
+.alias-value-with-suffix {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+
+  .hds-form-text-input {
+    flex: 0 0 75%;
+    width: 75%;
+    min-width: 0;
+  }
+
+  .alias-value-with-suffix__suffix {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .target-sidebar-aliases {
   margin-bottom: 3rem;
 

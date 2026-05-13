@@ -949,7 +949,24 @@ function routes() {
   );
   this.get('/aliases/:id');
   this.del('/aliases/:id');
-  this.patch('/aliases/:id');
+  this.patch(
+    '/aliases/:id',
+    function ({ aliases, scopes }, { params: { id } }) {
+      const alias = aliases.find(id);
+      const attrs = this.normalizedRequestAttrs();
+
+      // Mirror the create-alias suffix logic on update.
+      const scopeId = alias.scope_id;
+      const scope = scopes.find(scopeId);
+      const updatedAttrs = { ...attrs };
+      if (attrs.value !== undefined && scope?.alias_suffix) {
+        updatedAttrs.base_value = attrs.value;
+        updatedAttrs.value = `${attrs.value}${scope.alias_suffix}`;
+      }
+
+      return alias.update(updatedAttrs);
+    },
+  );
   this.post('/aliases', function ({ aliases, scopes }) {
     const attrs = this.normalizedRequestAttrs();
 

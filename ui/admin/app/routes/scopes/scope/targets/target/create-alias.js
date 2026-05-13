@@ -28,4 +28,10 @@ export default class ScopesScopeTargetsTargetCreateAliasRoute extends Route {
     record.scopeModel = scopeModel;
     return record;
   }
+
+  setupController(controller) {
+    const scope = this.modelFor('scopes.scope');
+    super.setupController(...arguments);
+    controller.setProperties({ scope });
+  }
 }

@@ -67,6 +67,7 @@
   <page.body>
     <Form::Alias
       @model={{@model}}
+      @suffix={{this.scope.alias_suffix}}
       @submit={{fn this.aliases.save @model}}
       @cancel={{fn this.aliases.cancel @model}}
     />

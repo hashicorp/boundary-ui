@@ -71,30 +71,64 @@
     </F.Control>
   </Hds::Form::Fieldset>
 
-  <Hds::Form::TextInput::Field
-    name='value'
-    @isRequired={{true}}
-    @value={{@model.value}}
-    @isInvalid={{@model.errors.value}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'value')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.alias.form.value.label'}}</F.Label>
-    <F.HelperText>
-      {{t 'resources.alias.form.value.help'}}
-      <Hds::Link::Inline @href={{doc-url 'alias.single-word-aliases'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-    {{#if @model.errors.value}}
-      <F.Error as |E|>
-        {{#each @model.errors.value as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  {{#if @suffix}}
+    <Hds::Form::Field @layout='vertical' @isRequired={{true}} as |F|>
+      <F.Label>{{t 'resources.alias.form.value.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.alias.form.value.help_project'}}
+      </F.HelperText>
+      <F.Control>
+        <div class='alias-value-with-suffix'>
+          <Hds::Form::TextInput::Base
+            name='value'
+            @value={{this.displayBaseValue}}
+            @isInvalid={{@model.errors.value}}
+            disabled={{form.disabled}}
+            {{on 'input' this.handleBaseValueChange}}
+          />
+          <Hds::Text::Body
+            @tag='span'
+            @weight='semibold'
+            class='alias-value-with-suffix__suffix'
+            title={{this.normalizedSuffix}}
+            data-test-alias-suffix-decoration
+          >{{this.normalizedSuffix}}</Hds::Text::Body>
+        </div>
+      </F.Control>
+      {{#if @model.errors.value}}
+        <F.Error as |E|>
+          {{#each @model.errors.value as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::Field>
+  {{else}}
+    <Hds::Form::TextInput::Field
+      name='value'
+      @isRequired={{true}}
+      @value={{@model.value}}
+      @isInvalid={{@model.errors.value}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'value')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.alias.form.value.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.alias.form.value.help'}}
+        <Hds::Link::Inline @href={{doc-url 'alias.single-word-aliases'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+      {{#if @model.errors.value}}
+        <F.Error as |E|>
+          {{#each @model.errors.value as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/if}}
 
   <Hds::Form::TextInput::Field
     name='destination_id'
