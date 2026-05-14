@@ -195,7 +195,7 @@ import {
         }
       }
 
-      db.exec({
+      return db.exec({
         sql: INSERT_STATEMENTS(resource, items, modelMapping),
         bind: items.flat(),
         rowMode: 'object',
