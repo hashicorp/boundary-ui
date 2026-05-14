@@ -43,6 +43,7 @@ const normalizeGrantsSchema = (grantsSchema) => {
       idActions,
       idPrefixes,
       parentType: resourceType.parent_type,
+      outputFields: resourceType.output_fields ?? [],
     };
 
     return resources;
@@ -415,6 +416,44 @@ const grantLinter = (context, schema, translate) => {
         );
       }
     }
+
+    // Validate output_fields field
+    if (parsedFields.output_fields) {
+      const pos = fieldPositions.output_fields;
+      const outputFieldList = validateListField(
+        parsedFields.output_fields,
+        pos,
+        diagnostics,
+        translate,
+      );
+      if (outputFieldList.length === 0) {
+        diagnostics.push({
+          from: pos.valueStart,
+          to: pos.valueEnd,
+          severity: 'error',
+          message: translate('output-fields.empty-list'),
+        });
+      } else if (outputFieldList.includes('*') && outputFieldList.length > 1) {
+        const wildcardIndex =
+          pos.valueStart + parsedFields.output_fields.indexOf('*');
+        diagnostics.push({
+          from: wildcardIndex,
+          to: wildcardIndex + 1,
+          severity: 'error',
+          message: translate('output-fields.wildcard-cannot-combine'),
+          actions: [createDeleteTextAction(translate('editor.remove'))],
+        });
+      } else {
+        validateOutputFieldsField(
+          schema,
+          diagnostics,
+          outputFieldList,
+          validatedFields,
+          pos,
+          translate,
+        );
+      }
+    }
     currentPos += line.length + 1; // +1 for newline
   });
 
@@ -606,7 +645,13 @@ const validateIdsField = (
   }
   if (seenIdType === 'template') {
     if (idsList.length > 1) {
-      seenIdType = 'template-multiple';
+      diagnostics.push({
+        from: idsPos.valueStart,
+        to: idsPos.valueEnd,
+        severity: 'error',
+        message: translate('ids.templates-cannot-combine'),
+      });
+      return;
     } else if (
       idsList[0] === '{{.Account.Id}}' ||
       idsList[0] === '{{account.id}}'
@@ -621,12 +666,6 @@ const validateIdsField = (
 
 const getIdActionsForResourceType = (schema, resourceType) => {
   switch (resourceType) {
-    case 'template-multiple':
-      return [
-        '*',
-        ...schema.resourcesByType['account'].idActions,
-        ...schema.resourcesByType['user'].idActions,
-      ];
     case 'account-template':
       return ['*', ...schema.resourcesByType['account'].idActions];
     case 'user-template':
@@ -758,6 +797,87 @@ const validateActionsField = (
         return;
       }
     }
+  }
+};
+
+const validateOutputFieldsField = (
+  schema,
+  diagnostics,
+  outputFieldList,
+  validatedFields,
+  pos,
+  translate,
+) => {
+  let validOutputFields = ['*'];
+  let errorMessage = (field) =>
+    translate('output-fields.invalid-field', { field });
+
+  if (validatedFields.type?.value && !validatedFields.type.wildcard) {
+    const resourceOutputFields =
+      schema.resourcesByType[validatedFields.type.value]?.outputFields ?? [];
+    validOutputFields = ['*', ...resourceOutputFields];
+    errorMessage = (field) =>
+      translate('output-fields.invalid-field-for-type', {
+        field,
+        type: validatedFields.type.value,
+      });
+  } else if (validatedFields.type?.wildcard && validatedFields.ids?.knownType) {
+    // Pinned IDs with wildcard type: validate against union of child types' output fields
+    const parentType = validatedFields.ids.knownType;
+    const childTypes = schema.childResourceTypesByParentType[parentType] ?? [];
+    const childOutputFields = [
+      ...new Set(
+        childTypes.flatMap(
+          (type) => schema.resourcesByType[type]?.outputFields ?? [],
+        ),
+      ),
+    ];
+    validOutputFields = ['*', ...childOutputFields];
+    errorMessage = (field) =>
+      translate('output-fields.invalid-field', { field });
+  } else if (validatedFields.ids?.knownType && !validatedFields.type) {
+    const knownType = validatedFields.ids.knownType;
+    const TEMPLATE_RESOURCE_TYPES = {
+      'account-template': 'account',
+      'user-template': 'user',
+    };
+    const resolvedType = TEMPLATE_RESOURCE_TYPES[knownType] ?? knownType;
+    const resourceOutputFields =
+      schema.resourcesByType[resolvedType]?.outputFields ?? [];
+    validOutputFields = ['*', ...resourceOutputFields];
+    errorMessage = (field) =>
+      translate('output-fields.invalid-field-for-type', {
+        field,
+        type: resolvedType,
+      });
+  }
+
+  let segmentStart = pos.valueStart;
+  for (const [i, field] of outputFieldList.entries()) {
+    let segmentEnd = segmentStart + field.length;
+    if (i < outputFieldList.length - 1) {
+      segmentEnd += 1;
+    }
+    if (outputFieldList.slice(i + 1).includes(field)) {
+      diagnostics.push({
+        from: segmentStart,
+        to: segmentEnd,
+        severity: 'error',
+        message: translate('output-fields.duplicate-field', { field }),
+        actions: [createDeleteTextAction(translate('editor.remove'))],
+      });
+      return;
+    }
+    if (!validOutputFields.includes(field)) {
+      diagnostics.push({
+        from: pos.valueStart,
+        to: pos.valueEnd,
+        severity: 'error',
+        message: errorMessage(field),
+      });
+      return;
+    }
+    segmentStart += field.length + 1;
   }
 };
 

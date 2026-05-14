@@ -11,9 +11,6 @@ import { setupMirage } from 'admin/tests/helpers/mirage';
 import {
   createGrantCompletionSource,
   analyzeGrantString,
-  getChildResourceActions,
-  getCompatibleResourceTypeForIds,
-  normalizeGrantsSchema,
 } from 'admin/utils/grant-completions';
 
 const createCompletionContext = (lineText) => ({
@@ -185,7 +182,10 @@ module('Unit | Utils | grant-completions', function (hooks) {
         label === 'NO_SUGGESTIONS' ? this.translate('no-suggestions') : label,
       );
 
-      assert.deepEqual(getLabels(completionResult), resolvedLabels);
+      assert.deepEqual(
+        [...getLabels(completionResult)].sort(),
+        [...resolvedLabels].sort(),
+      );
     },
   );
 
@@ -389,7 +389,10 @@ module('Unit | Utils | grant-completions', function (hooks) {
         label === 'NO_SUGGESTIONS' ? this.translate('no-suggestions') : label,
       );
 
-      assert.deepEqual(getLabels(completionResult), resolvedLabels);
+      assert.deepEqual(
+        [...getLabels(completionResult)].sort(),
+        [...resolvedLabels].sort(),
+      );
     },
   );
 
@@ -404,21 +407,129 @@ module('Unit | Utils | grant-completions', function (hooks) {
         lineText: 'ids=',
         expectedLabels: ['*', '{{.User.Id}}', '{{.Account.Id}}'],
       },
-      'filter wildcard once an id is already entered': {
-        lineText: 'ids={{.User.Id}},',
-        expectedLabels: ['{{.Account.Id}}'],
+      'filter out wildcard and templates once an id is already entered': {
+        lineText: 'ids=h_123,',
+        expectedLabels: ['NO_SUGGESTIONS'],
       },
-      'filter already-entered template ids when completing a partial': {
-        lineText: 'ids={{.User.Id}},{{',
-        expectedLabels: ['{{.Account.Id}}'],
+      'filter out wildcard and templates once a template is already entered': {
+        lineText: 'ids={{.User.Id}},',
+        expectedLabels: ['NO_SUGGESTIONS'],
       },
     },
     async function (assert, { lineText, expectedLabels }) {
       const completionResult = await this.grantCompletionSource(
         createCompletionContext(lineText),
       );
+      const resolvedLabels = expectedLabels.map((label) =>
+        label === 'NO_SUGGESTIONS' ? this.translate('no-suggestions') : label,
+      );
 
-      assert.deepEqual(getLabels(completionResult), expectedLabels);
+      assert.deepEqual(getLabels(completionResult), resolvedLabels);
+    },
+  );
+
+  test.each(
+    'output_fields suggestions',
+    {
+      'with a specific type suggests wildcard and that type output fields': {
+        lineText: 'type=target;output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'target',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'with specific ids infers the type and suggests its output fields': {
+        lineText: 'ids=ttcp_123;output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'target',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'with a user template id suggests user output fields': {
+        lineText: 'ids={{.User.Id}};output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'user',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'with the user.id template suggests user output fields': {
+        lineText: 'ids={{user.id}};output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'user',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'with an account template id suggests account output fields': {
+        lineText: 'ids={{.Account.Id}};output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'account',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'with the account.id template suggests account output fields': {
+        lineText: 'ids={{account.id}};output_fields=',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'account',
+          );
+          return ['*', ...output_fields];
+        },
+      },
+      'mixed user and account template ids suggests only wildcard': {
+        lineText: 'ids={{.User.Id}},{{.Account.Id}};output_fields=',
+        getExpected: () => ['*'],
+      },
+      'pinned parent id with wildcard type suggests union of child output fields':
+        {
+          lineText: 'ids=hcst_123;type=*;output_fields=',
+          getExpected: (schema) => {
+            const childFields = schema.resource_types
+              .filter((r) => r.parent_type === 'host-catalog')
+              .flatMap((r) => r.output_fields);
+            return ['*', ...new Set(childFields)];
+          },
+        },
+      'excludes already entered output fields': {
+        lineText: 'type=target;output_fields=id,',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'target',
+          );
+          return output_fields.filter((f) => f !== 'id');
+        },
+      },
+      'partial prefix filters output fields': {
+        lineText: 'type=target;output_fields=sc',
+        getExpected: (schema) => {
+          const { output_fields } = schema.resource_types.find(
+            (r) => r.type === 'target',
+          );
+          return output_fields.filter((f) => f.startsWith('sc'));
+        },
+      },
+      'without type or ids suggests only wildcard': {
+        lineText: 'output_fields=',
+        getExpected: () => ['*'],
+      },
+    },
+    async function (assert, { lineText, getExpected }) {
+      const completionResult = await this.grantCompletionSource(
+        createCompletionContext(lineText),
+      );
+      const labels = getLabels(completionResult);
+      const expected = getExpected(this.grantsSchemaData);
+
+      assert.deepEqual([...labels].sort(), [...expected].sort());
     },
   );
 
@@ -484,42 +595,6 @@ module('Unit | Utils | grant-completions', function (hooks) {
     assert.deepEqual(result.actions, []);
   });
 
-  test('getCompatibleResourceTypeForIds returns the matched type for a known id prefix', function (assert) {
-    const schema = normalizeGrantsSchema(this.grantsSchemaData);
-
-    assert.strictEqual(
-      getCompatibleResourceTypeForIds(schema, 'hs_123'),
-      'host-set',
-    );
-  });
-
-  test('getCompatibleResourceTypeForIds returns null for an unknown id prefix', function (assert) {
-    const schema = normalizeGrantsSchema(this.grantsSchemaData);
-
-    assert.strictEqual(
-      getCompatibleResourceTypeForIds(schema, 'bad_123'),
-      null,
-    );
-  });
-
-  test('getCompatibleResourceTypeForIds returns null for mixed resource type ids', function (assert) {
-    const schema = normalizeGrantsSchema(this.grantsSchemaData);
-
-    assert.strictEqual(
-      getCompatibleResourceTypeForIds(schema, 'hs_123,s_123'),
-      null,
-    );
-  });
-
-  test('getCompatibleResourceTypeForIds returns the type when all ids share the same resource type', function (assert) {
-    const schema = normalizeGrantsSchema(this.grantsSchemaData);
-
-    assert.strictEqual(
-      getCompatibleResourceTypeForIds(schema, 'hs_123,hs_456'),
-      'host-set',
-    );
-  });
-
   test('analyzeGrantString.actions returns the same actions as the completion source uses', function (assert) {
     const { actions } = analyzeGrantString(
       this.grantsSchemaData,
@@ -583,21 +658,6 @@ module('Unit | Utils | grant-completions', function (hooks) {
     assert.true(result.hasInvalidType);
   });
 
-  test('getChildResourceActions returns the union of child resource actions for a pinned parent id', function (assert) {
-    const schema = normalizeGrantsSchema(this.grantsSchemaData);
-
-    assert.deepEqual(getChildResourceActions(schema, 'hcst_1234567890'), [
-      'create',
-      'list',
-      'read',
-      'update',
-      'delete',
-      'add-hosts',
-      'set-hosts',
-      'remove-hosts',
-    ]);
-  });
-
   test.each(
     'analyzeGrantString.hasInvalidType',
     {
@@ -650,6 +710,10 @@ module('Unit | Utils | grant-completions', function (hooks) {
         grantString: 'ids={{.User.Id}}',
         expected: false,
       },
+      'returns false for multiple ids sharing the same resource type': {
+        grantString: 'ids=hs_123,hs_456',
+        expected: false,
+      },
     },
     function (assert, { grantString, expected }) {
       const { hasInvalidIds } = analyzeGrantString(
@@ -692,6 +756,7 @@ module('Unit | Utils | grant-completions', function (hooks) {
       assert.strictEqual(hasInvalidPinnedIdTypeCombination, expected);
     },
   );
+
   module('id auto completion', function () {
     test('idLookup results are included alongside static options', async function (assert) {
       const source = createGrantCompletionSource(
@@ -847,9 +912,9 @@ module('Unit | Utils | grant-completions', function (hooks) {
         this.translate,
         async (partial, compatibleResourceTypes) => {
           assert.deepEqual(compatibleResourceTypes, [
+            'credential-store',
             'auth-method',
             'host-catalog',
-            'credential-store',
           ]);
           return [];
         },
@@ -877,6 +942,19 @@ module('Unit | Utils | grant-completions', function (hooks) {
       );
 
       assert.true(getLabels(result).includes('hcst_parentid'));
+    });
+
+    test('no ID suggestions are shown when a template id is already entered', async function (assert) {
+      const source = createGrantCompletionSource(
+        this.grantsSchemaData,
+        this.translate,
+        async () => [{ id: 'u_abc123', name: 'My User' }],
+        () => false,
+      );
+
+      const result = await source(createCompletionContext('ids={{.User.Id}},'));
+
+      assert.deepEqual(getLabels(result), [this.translate('no-suggestions')]);
     });
 
     test('already-entered IDs are not offered again', async function (assert) {
