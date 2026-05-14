@@ -191,13 +191,13 @@
   }
 }
 
-// Apply dark style overrides to scrollbar when system is in dark mode and app theme is not set to light
-html:has(.ember-application:not(.rose-theme-light)) {
-  scrollbar-color: var(--token-color-palette-neutral-400)
-    var(--token-color-palette-neutral-600);
-}
-
 @media (prefers-color-scheme: dark) {
+  // Apply dark style overrides to scrollbar when system is in dark mode and app theme is not set to light
+  html:has(.ember-application:not(.rose-theme-light)) {
+    scrollbar-color: var(--token-color-palette-neutral-400)
+      var(--token-color-palette-neutral-600);
+  }
+
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
