@@ -175,9 +175,44 @@ module('Unit | Adapter | application', function (hooks) {
     assert.ok(getResponse(401).errors[0].isUnauthenticated);
     assert.ok(getResponse(403).errors[0].isForbidden);
     assert.ok(getResponse(404).errors[0].isNotFound);
+    assert.ok(getResponse(429).errors[0].isRateLimited);
     assert.ok(getResponse(500).errors[0].isServer);
     assert.ok(getResponse(0).errors[0].isUnknown);
     assert.ok(getResponse(false).errors[0].isUnknown);
+  });
+
+  test('it attaches retryAfter from Retry-After header on 429 responses', function (assert) {
+    const adapter = this.owner.lookup('adapter:application');
+    const headers = { 'Retry-After': '30' };
+    const response = adapter.handleResponse(429, headers, { status: 429 });
+    assert.ok(response.errors[0].isRateLimited);
+    assert.strictEqual(response.errors[0].retryAfter, 30);
+  });
+
+  test('it returns partial data when rate limited mid-pagination', async function (assert) {
+    const adapter = this.owner.lookup('adapter:application');
+    const store = this.owner.lookup('service:store');
+    let requestCount = 0;
+    this.server.get('/groups', () => {
+      requestCount++;
+      if (requestCount === 1) {
+        return {
+          items: [{ id: 'g_1', scope_id: 'p_1' }],
+          response_type: 'delta',
+          list_token: 'token123',
+        };
+      }
+      // Second request returns a 429
+      return new Response(429, { 'Retry-After': '10' }, { status: 429 });
+    });
+
+    const result = await adapter.query(
+      store,
+      { modelName: 'group' },
+      { scope_id: 'p_1' },
+    );
+    assert.strictEqual(result.items.length, 1);
+    assert.strictEqual(result.meta.rateLimitWarning.retryAfter, 10);
   });
 
   test('it returns field-level errors in InvalidError from handleResponse', function (assert) {

@@ -131,11 +131,34 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // which indicates that there are more items in the list
     // or the batch size has not been reached
     do {
-      result = await super.query(store, schema, queryObject);
-      //add the result items to a data array
+      try {
+        result = await super.query(store, schema, queryObject);
+      } catch (e) {
+        // If we hit a rate limit mid-pagination, return whatever
+        // data has been accumulated so far rather than throwing and leaving
+        // the user stuck with nothing to show.
+        // Without a list_token this is the very first request with nothing to
+        // show, so rethrow and let normal error handling apply.
+        if (e?.errors?.[0]?.isRateLimited && queryObject.list_token) {
+          result ??= {};
+          result.items = data;
+          result.response_type = 'complete';
+          result.meta = {
+            ...result.meta,
+            rateLimitWarning: { retryAfter: e.errors[0].retryAfter },
+          };
+          return prenormalizeArrayResponse(result);
+        }
+
+        // For all other errors (or a 429 on the very first request with
+        // no data yet), rethrow so normal error handling applies.
+        throw e;
+      }
+
+      // Add the result items to a data array
       if (result && result.items) {
         data.push(...result.items);
-        //pass in the list token for subsequent calls to fetch the remaining list items
+        // Pass in the list token for subsequent calls to fetch the remaining list items
         queryObject.list_token = result.list_token;
       }
     } while (
@@ -237,6 +260,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    *   - `403 isForbidden`:  the session is authenticated but does not have
    *                         permission to perform the requested action
    *   - `404 isNotFound`:  the requested resource could not be found
+   *   - `429 isRateLimited`:  the client has exceeded the rate limit
    *   - `500 isServer`:  an internal server error occurred
    *   - `isUnknown`:  an error occurred, but we don't know which or
    *                   we don't distinguish it yet
@@ -248,7 +272,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @param  {Object} payload
    * @return {Array} errors payload
    */
-  normalizeErrorResponse(/*status, headers, payload*/) {
+  normalizeErrorResponse(status, headers /*, payload*/) {
     const errors = super.normalizeErrorResponse(...arguments);
     if (isArray(errors)) {
       errors.forEach((error) => {
@@ -261,6 +285,14 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
             break;
           case 404:
             error.isNotFound = true;
+            break;
+          case 429:
+            error.isRateLimited = true;
+            // Attach rate-limit metadata from response headers so downstream
+            // error handlers can inform the user when they may retry.
+            error.retryAfter = Number(
+              headers['Retry-After'] ?? headers['retry-after'],
+            );
             break;
           case 500:
             error.isServer = true;

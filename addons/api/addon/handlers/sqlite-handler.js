@@ -59,7 +59,8 @@ export default class SqliteHandler {
         let payload,
           listToken,
           writeToDbPromise,
-          totalInsert = 0;
+          totalInsert = 0,
+          rateLimitWarning;
 
         if (!peekDb) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
@@ -85,6 +86,11 @@ export default class SqliteHandler {
                 batchLimit: this.batchLimit,
               });
               totalInsert += payload.items?.length ?? 0;
+
+              // Propagate any rate-limit warning the adapter attached
+              if (payload.meta?.rateLimitWarning) {
+                rateLimitWarning = payload.meta.rateLimitWarning;
+              }
 
               // await the previous writeToDbPromise before writing to db again
               if (writeToDbPromise) {
@@ -163,7 +169,14 @@ export default class SqliteHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: count[0].total };
+        records.meta = {
+          totalItems: count[0].total,
+        };
+
+        if (rateLimitWarning) {
+          records.meta.rateLimitWarning = rateLimitWarning;
+        }
+
         return records;
       }
       default:

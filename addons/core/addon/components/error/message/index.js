@@ -12,6 +12,7 @@ import Component from '@glimmer/component';
  *   - 403 - `error.isForbidden`:  the session is authenticated but does not have
  *            permission to perform the requested action
  *   - 404 - `error.isNotFound`:  the requested resource could not be found
+ *   - 429 - `error.isRateLimited`:  the client has exceeded the rate limit
  *   - 500 - `error.isServer`:  an internal server error occurred
  *
  * For an unknown error state, i.e error state not matching to the above defined list:
@@ -19,7 +20,7 @@ import Component from '@glimmer/component';
  *            we don't distinguish it yet
  */
 
-const statuses = ['401', '403', '404', '500'];
+const statuses = ['401', '403', '404', '429', '500'];
 
 export default class ErrorMessageComponent extends Component {
   // =methods
