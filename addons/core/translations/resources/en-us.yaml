@@ -765,13 +765,13 @@ role:
       id-actions: ID Actions
       create: Create a new {resourceType}
       list: List all {resourceType} resources
-      read: Read a {resourceType}
-      update: Update a {resourceType}
-      delete: Delete a {resourceType}
+      read: Read {article} {resourceType}
+      update: Update {article} {resourceType}
+      delete: Delete {article} {resourceType}
       read:self: Read the {resourceType} associated with the current user
-      delete:self: Delete a {resourceType} associated with the current user
-      cancel: Cancel a {resourceType}
-      cancel:self: Cancel a {resourceType} associated with the current user
+      delete:self: Delete {article} {resourceType} associated with the current user
+      cancel: Cancel {article} {resourceType}
+      cancel:self: Cancel {article} {resourceType} associated with the current user
       generic:
         create: Creates resources
         list: Lists resources
@@ -780,6 +780,8 @@ role:
         delete: Deletes resources
         read:self: Read the resource associated with the current user
         delete:self: Delete a resource associated with the current user
+        cancel: Cancels resources
+        cancel:self: Cancel a resource associated with the current user
       add-members: Add members to a group
       set-members: Set the full list of members on a group
       remove-members: Remove members from a group
