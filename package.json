@@ -46,7 +46,6 @@
     "overrides": {
       "micromatch": "^4.0.8",
       "css-select>nth-check": "^2.0.1",
-      "node-gyp": "^10.0.0",
       "ansi-html": "^0.0.9",
       "fireworm>async": "^2.6.4",
       "ember-cli-babel>@babel/runtime": "7.27.6",
@@ -54,7 +53,7 @@
       "ember-loading>ember-concurrency": "^4.0.0",
       "tmp": "^0.2.5",
       "tar": "^7.5.10",
-      "underscore": "^1.13.8"
+      "nomnom>underscore": "^1.13.8"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
@@ -75,7 +74,7 @@
     }
   },
   "engines": {
-    "node": "20.* || 22.*"
+    "node": "22.* || 24.*"
   },
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@10.33.3"
 }

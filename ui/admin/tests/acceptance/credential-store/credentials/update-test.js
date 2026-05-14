@@ -10,7 +10,7 @@ import {
   find,
   click,
   fillIn,
-  waitUntil,
+  waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
@@ -982,7 +982,8 @@ module(
       await click(selectors.REPLACE_SECRET_BTN);
 
       assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
-      await waitUntil(() => assert.dom('.CodeMirror').isVisible());
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
+      assert.dom(commonSelectors.CODE_EDITOR_CM).isVisible();
     });
   },
 );
