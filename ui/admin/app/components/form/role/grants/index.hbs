@@ -5,11 +5,7 @@
 
 <Hds::Layout::Flex as |F|>
   <F.Item @basis='66%'>
-    <Hds::CodeBlock
-      class='grant-codeblock'
-      @ariaLabel={{t 'resources.role.grant-templates.titles.grant-strings'}}
-      @value={{this.grants}}
-    />
+    <Hds::CodeBlock class='grant-codeblock' @value={{this.grants}} />
   </F.Item>
 </Hds::Layout::Flex>
 

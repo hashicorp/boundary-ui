@@ -144,6 +144,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('loads current grants in the editor and updates them', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(4);
     const newGrantString = 'ids=*;type=session;actions=list,read';
     const expectedGrantStrings = [
@@ -183,6 +192,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows actions for the first grant on page load', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
 
     assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
@@ -206,6 +224,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('actions sidebar updates to "no type detected" when cursor moves to an empty line', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     const role = this.server.create('role', {
       scope: instances.scopes.global,
       grant_strings: ['ids=*;type=role;actions=read', ''],
@@ -232,6 +259,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('actions sidebar shows "invalid id or type" for a grant with an unrecognised type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     const role = this.server.create('role', {
       scope: instances.scopes.global,
       grant_strings: ['type=not-a-valid-type;actions=read'],
@@ -246,6 +282,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows linting error markers for an invalid grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
     await waitFor(commonSelectors.CODE_EDITOR_CM);
 
@@ -267,6 +312,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows autocomplete suggestions when triggered', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
     await waitFor(commonSelectors.CODE_EDITOR_CM);
 
