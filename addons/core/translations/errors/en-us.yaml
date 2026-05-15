@@ -13,6 +13,11 @@
 500:
   title: Server error
   description: We ran into a problem and could not continue. You can ask your administrator or try again later.
+429:
+  title: Rate limit exceeded
+  description: You've exceeded the rate limit. Please wait a moment and try again.
+  description-partial: Currently showing partial results. You can reload for more in {seconds} {seconds, plural, one {second} other {seconds}}.
+  description-ready: Currently showing partial results. You can reload now.
 unknown:
   title: Something went wrong
   description: We're not sure what happened.  Please contact your administrator or try again later.
