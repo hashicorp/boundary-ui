@@ -16,6 +16,7 @@ export const MANAGE_DROPDOWN_ADD_PRINCIPALS =
   '[data-test-manage-role-principals]';
 export const MANAGE_DROPDOWN_ADD_GRANT_TEMPLATES =
   '[data-test-manage-role-grant-templates]';
+export const MANAGE_DROPDOWN_EDIT_GRANTS = '[data-test-manage-dropdown-grants]';
 
 export const ROLE_BADGE = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
@@ -52,13 +53,23 @@ export const REMOVE_ORG_ONLY_BTN = (name) =>
 export const REMOVE_ORG_PROJECTS_BTN = (name) =>
   `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button`;
 
+// Grant actions
+export const GRANT_ACTIONS_TABLE = '[data-test-grant-actions-table]';
+export const GRANT_ACTIONS_NO_TYPE_DETECTED =
+  '[data-test-grant-actions-no-type-detected]';
+export const GRANT_ACTIONS_INVALID_ID_OR_TYPE =
+  '[data-test-grant-actions-invalid-id-or-type]';
+
+// Code mirror selectors
+export const LINT_ERROR_MARKER = '.cm-lintRange-error';
+export const AUTOCOMPLETE_TOOLTIP = '.cm-tooltip-autocomplete';
+
 // Role grants
-export const FIELD_NEW_GRANT = 'form:nth-child(1) [name="grant"]';
-export const FIELD_NEW_GRANT_ADD_BTN = 'form:nth-child(1) [type="submit"]';
-export const FIELD_GRANT = 'form:nth-child(2) [name="grant"]';
-export const FIELD_GRANT_VALUE = 'ids=123,action=delete';
-export const FIELD_GRANT_REMOVE_BTN = 'form:nth-child(2) button[type="button"]';
-export const GRANTS_FORM = 'form:nth-child(2)';
-// We need to use a different selector for the grants form because the
-// grants form has multiple submit buttons
-export const SAVE_BTN = '.rose-form-actions [type=submit]';
+export const GRANT_CODE_BLOCK = '.grant-codeblock .hds-code-block__code';
+export const EXPORT_OPTIONS_FLYOUT = '[data-test-export-options-flyout]';
+export const EXPORT_FORMAT_SELECT =
+  '[data-test-export-options-flyout] [name="export-format"]';
+export const FORMATTED_EXPORT_CODE_BLOCK =
+  '[data-test-export-options-flyout] .hds-code-block code';
+export const EXPORT_GRANTS_BTN = '[data-test-export-grants-btn]';
+export const GRANTS_BTNS = '[data-test-grants-btns]';

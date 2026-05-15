@@ -45,6 +45,12 @@
         >
           {{t 'resources.role.grant-templates.actions.add-grant-templates'}}
         </dd.Interactive>
+        <dd.Interactive
+          @route='scopes.scope.roles.role.edit-grants'
+          data-test-manage-dropdown-grants
+        >
+          {{t 'resources.role.edit-grants.title'}}
+        </dd.Interactive>
       {{/if}}
       {{#if perms.canDelete}}
         {{#if

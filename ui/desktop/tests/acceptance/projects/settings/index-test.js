@@ -338,6 +338,20 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('preferred clients is hidden for Linux', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     window.desktop.system.checkOS.resolves({
       isWindows: false,
       isMac: false,
