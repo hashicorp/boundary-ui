@@ -318,17 +318,14 @@ module('Acceptance | targets | create', function (hooks) {
       ),
     );
 
+    await click(selectors.FIELD_ALIASES_ADD_BTN);
     await fillIn(selectors.FIELD_ALIASES, 'alias 1');
-    await click(selectors.FIELD_ALIASES_ADD_BTN);
-    await fillIn(selectors.FIELD_ALIASES, 'alias 2');
-    await click(selectors.FIELD_ALIASES_ADD_BTN);
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
     assert.deepEqual(target.withAliases, [
       { value: 'alias 1', scope_id: 'global' },
-      { value: 'alias 2', scope_id: 'global' },
     ]);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
   });

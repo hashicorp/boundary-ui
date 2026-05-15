@@ -10,24 +10,35 @@
   @showEditToggle={{false}}
   as |form|
 >
-  <Form::Field::ListWrapper @layout='vertical' @disabled={{form.disabled}}>
-    <:field as |F|>
-      <F.KeyValue
-        @name='api_tags'
-        @options={{@apiTags}}
-        @disabled={{form.disabled}}
-        @addOption={{this.addApiTag}}
-        @removeOptionByIndex={{this.removeApiTagByIndex}}
-      >
-        <:key as |K|>
-          <K.text />
-        </:key>
-        <:value as |V|>
-          <V.text />
-        </:value>
-      </F.KeyValue>
-    </:field>
-  </Form::Field::ListWrapper>
+  <Form::Field::KeyValue
+    @name='api_tags'
+    @data={{@apiTags}}
+    @onAdd={{fn this.addApiTag (array 'key' 'value')}}
+    @onRemove={{this.removeApiTag}}
+    @onUpdate={{this.updateApiTag}}
+    @disabled={{form.disabled}}
+    @isOptional={{true}}
+  >
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.TextInput
+          data-test-key-input
+          @value={{R.rowData.key}}
+          {{on 'input' (fn R.updateRow 'key')}}
+        />
+      </R.Field>
+      <R.Field as |F|>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+      {{/if}}
+    </:row>
+  </Form::Field::KeyValue>
 
   <form.actions
     @submitText={{t 'actions.save'}}

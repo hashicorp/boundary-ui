@@ -19,7 +19,11 @@ export default class FormFieldKeyValueComponent extends Component {
 
     // For a single row, only show if it has any non-empty values
     if (rows.length === 1) {
-      return Object.values(rows[0]).some((value) => value);
+      const row = rows[0];
+      for (const key in row) {
+        if (row[key]) return true;
+      }
+      return false;
     }
 
     // Return false if there are no rows

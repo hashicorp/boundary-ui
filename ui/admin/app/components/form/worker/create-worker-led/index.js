@@ -7,9 +7,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { TrackedArray } from 'tracked-built-ins';
-import Tag from '../tag';
-
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services
   @service features;
@@ -21,7 +18,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
-  @tracked workerTags = new TrackedArray([]);
+  @tracked workerTags = [{ key: '', value: '' }];
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
@@ -66,7 +63,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
     const tagsText = `tags {
     ${
-      this.workerTags.length
+      this.workerTags.filter((t) => t.key?.trim() || t.value?.trim()).length
         ? this.getTagConfigString()
         : 'key = ["<tag1>", "<tag2>"]'
     }
@@ -168,6 +165,7 @@ unzip *.zip ;\\
 
   getTagConfigString() {
     return this.workerTags
+      .filter((tag) => tag.key?.trim() || tag.value?.trim())
       .map(
         (tag) =>
           `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
@@ -178,13 +176,27 @@ unzip *.zip ;\\
   }
 
   @action
-  addWorkerTag(e) {
-    this.workerTags.push(new Tag(e.key, e.value));
+  addWorkerTag(properties) {
+    const newRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+    this.workerTags = [...this.workerTags, newRow];
   }
 
   @action
-  removeWorkerTagByIndex(index) {
-    this.workerTags.splice(index, 1);
+  removeWorkerTag(rowData) {
+    let rows = this.workerTags.filter((item) => item !== rowData);
+    if (rows.length === 0) {
+      const emptyRow = Object.fromEntries(
+        Object.keys(rowData).map((key) => [key, '']),
+      );
+      rows = [emptyRow];
+    }
+    this.workerTags = rows;
+  }
+
+  @action
+  updateWorkerTag(rowData, property, event) {
+    rowData[property] = event.target.value;
+    this.workerTags = [...this.workerTags];
   }
 
   @action

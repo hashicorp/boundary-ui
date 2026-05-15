@@ -6,11 +6,6 @@
 import { tracked } from '@glimmer/tracking';
 
 export default class Tag {
-  @tracked key;
-  @tracked value;
-
-  constructor(key, value) {
-    this.key = key;
-    this.value = value;
-  }
+  @tracked key = '';
+  @tracked value = '';
 }

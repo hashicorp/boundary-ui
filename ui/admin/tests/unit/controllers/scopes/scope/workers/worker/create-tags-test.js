@@ -75,7 +75,9 @@ module(
 
       await controller.cancel();
 
-      assert.deepEqual(controller.apiTags, []);
+      assert.strictEqual(controller.apiTags.length, 1);
+      assert.strictEqual(controller.apiTags[0].key, '');
+      assert.strictEqual(controller.apiTags[0].value, '');
       assert.strictEqual(currentURL(), urls.tags);
     });
   },
