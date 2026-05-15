@@ -10,7 +10,11 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TYPE_CREDENTIAL_STATIC } from 'api/models/host-catalog';
+import {
+  TYPE_CREDENTIAL_DYNAMIC,
+  TYPE_CREDENTIAL_STATIC,
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+} from 'api/models/host-catalog';
 
 export default class ScopesScopeHostCatalogsIndexController extends Controller {
   // =services
@@ -60,6 +64,19 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
     return this.intl.t(description, { resource });
   }
 
+  /**
+   * Generates one empty role_tags row for AWS host catalogs when the field is empty.
+   * @param {HostCatalogModel} hostCatalog
+   */
+  generateAwsRoleTagsRowIfEmpty(hostCatalog) {
+    if (
+      hostCatalog.compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS &&
+      (!hostCatalog.role_tags || hostCatalog.role_tags.length === 0)
+    ) {
+      hostCatalog.role_tags = [{ key: '', value: '' }];
+    }
+  }
+
   // =actions
 
   /**
@@ -96,6 +113,12 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(hostCatalog) {
+    if (hostCatalog.role_tags) {
+      hostCatalog.role_tags = hostCatalog.role_tags.filter((item) =>
+        item.key?.trim(),
+      );
+    }
+
     // If the role_arn is empty, then the credential type should be static
     if (!hostCatalog.role_arn) {
       hostCatalog.credentialType = TYPE_CREDENTIAL_STATIC;
@@ -145,6 +168,25 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
   @action
   changeCredentialType(hostCatalog, credentialType) {
     hostCatalog.credentialType = credentialType;
+
+    if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+      this.generateAwsRoleTagsRowIfEmpty(hostCatalog);
+    }
+  }
+
+  /**
+   * Prepares key-value array fields for editing.
+   * @param {HostCatalogModel} hostCatalog
+   */
+  @action
+  edit(hostCatalog) {
+    if (hostCatalog.role_tags) {
+      hostCatalog.role_tags = structuredClone(hostCatalog.role_tags);
+    }
+
+    if (hostCatalog.credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+      this.generateAwsRoleTagsRowIfEmpty(hostCatalog);
+    }
   }
 
   /**

@@ -62,36 +62,31 @@
     </F.HelperText>
   </InfoField>
 
-  <Form::Field::ListWrapper
-    @layout='horizontal'
-    @isOptional={{true}}
+  <Form::Field::KeyValue
+    @name='preferred_endpoints'
+    @data={{@model.preferred_endpoints}}
+    @onAdd={{fn @addRow 'preferred_endpoints' (array 'value')}}
+    @onRemove={{fn @removeRow 'preferred_endpoints'}}
+    @onUpdate={{fn @updateRow 'preferred_endpoints'}}
+    @legend={{t 'resources.host-set.form.preferred_endpoints.label'}}
+    @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
+    @errors={{@model.errors.preferred_endpoints}}
     @disabled={{form.disabled}}
+    @isOptional={{true}}
   >
-    <:fieldset as |F|>
-      <F.Legend>
-        {{t 'resources.host-set.form.preferred_endpoints.label'}}
-      </F.Legend>
-      <F.HelperText>
-        {{t 'resources.host-set.form.preferred_endpoints.help'}}
-      </F.HelperText>
-
-      {{#if @model.errors.preferred_endpoints}}
-        <F.Error as |E|>
-          {{#each @model.errors.preferred_endpoints as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
+    <:row as |R|>
+      <R.Field as |F|>
+        <F.TextInput
+          data-test-value-input
+          @value={{R.rowData.value}}
+          {{on 'input' (fn R.updateRow 'value')}}
+        />
+      </R.Field>
+      {{#if R.canDelete}}
+        <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
       {{/if}}
-    </:fieldset>
-
-    <:field as |F|>
-      <F.TextInput
-        @name='preferred_endpoints'
-        @options={{@model.preferred_endpoints}}
-        @model={{@model}}
-      />
-    </:field>
-  </Form::Field::ListWrapper>
+    </:row>
+  </Form::Field::KeyValue>
 
   <Hds::Form::Textarea::Field
     name='filter'
