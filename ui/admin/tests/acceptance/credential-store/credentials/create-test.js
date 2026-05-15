@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -426,15 +433,24 @@ module(
       await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
 
-      await fillIn(selectors.FIELD_EDITOR, selectors.FIELD_EDITOR_VALUE);
-      assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-      await click(selectors.TYPE_SELECT);
-      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: '{"test": "value"}',
+        },
+      });
+
+      assert
+        .dom(commonSelectors.CODE_EDITOR_CODE)
+        .includesText('{"test": "value"}');
 
       await click(selectors.TYPE_SELECT);
       await click(selectors.FIELD_TYPE_JSON);
-      assert.dom(selectors.EDITOR).includesText('{}');
+      assert.dom(commonSelectors.CODE_EDITOR_CODE).includesText('{}');
     });
 
     test('users can cancel creation of new password credential', async function (assert) {

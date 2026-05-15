@@ -265,16 +265,9 @@
   margin-bottom: sizing.rems(l);
   width: 100%;
 
-  .secret-editor-json {
-    .CodeMirror {
-      border-radius: var(--token-border-radius-small);
-      height: var(--secret-editor-height);
-      display: block;
-    }
-
-    .CodeMirror-gutters {
-      background: var(--secret-editor-gutter);
-    }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-code-editor__editor {
+    height: var(--secret-editor-height);
   }
 
   .secret-editor-skeleton-wrapper {
@@ -1002,4 +995,21 @@
       text-overflow: ellipsis;
     }
   }
+}
+
+.grant-editor {
+  .hds-code-editor__editor {
+    height: 200px;
+  }
+}
+
+.grant-codeblock {
+  .hds-code-block__code {
+    height: 200px;
+  }
+}
+
+.grant-actions-scroll-container {
+  max-height: 50vh;
+  overflow-y: auto;
 }

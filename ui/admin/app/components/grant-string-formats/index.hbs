@@ -1,0 +1,47 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Hds::Form::SuperSelect::Single::Field
+  name='string-formats'
+  @onChange={{this.changeSelectedFormatType}}
+  @selected={{this.selectedFormatType}}
+  @options={{this.stringFormatTypesList}}
+  as |F|
+>
+  <F.Label>{{t
+      'resources.role.edit-grants.string-formats.syntax-format'
+    }}</F.Label>
+  <F.Options>
+    {{#let F.options as |formatType|}}
+      <Hds::Text::Body @tag='p' @weight='semibold'>{{t
+          (concat
+            'resources.role.edit-grants.string-formats.' formatType '.label'
+          )
+        }}</Hds::Text::Body>
+      <Hds::Text::Body @tag='p' @color='faint' @size='100'>{{t
+          (concat
+            'resources.role.edit-grants.string-formats.' formatType '.help'
+          )
+        }}</Hds::Text::Body>
+    {{/let}}
+  </F.Options>
+</Hds::Form::SuperSelect::Single::Field>
+
+<Hds::Form::Textarea::Field
+  name='string-format'
+  readonly
+  @value={{this.stringFormat.text}}
+  @height='3.5rem'
+  as |F|
+>
+  <F.Label>{{t 'resources.role.edit-grants.string-formats.syntax'}}</F.Label>
+</Hds::Form::Textarea::Field>
+
+<Hds::Link::Standalone
+  @icon='docs-link'
+  @iconPosition='trailing'
+  @text={{t 'resources.role.edit-grants.string-formats.more-info'}}
+  @href={{doc-url this.stringFormat.link}}
+/>

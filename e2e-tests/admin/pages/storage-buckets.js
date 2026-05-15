@@ -100,6 +100,10 @@ export class StorageBucketsPage extends BaseResourcePage {
     await this.page.getByLabel('Secret access key').fill(secretAccessKey);
     await this.page
       .getByLabel('Worker filter')
+      .first()
+      .scrollIntoViewIfNeeded();
+    await this.page
+      .getByLabel('Worker filter')
       .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
