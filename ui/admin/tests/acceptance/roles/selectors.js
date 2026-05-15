@@ -57,6 +57,12 @@ export const REMOVE_ORG_PROJECTS_BTN = (name) =>
 export const GRANT_ACTIONS_TABLE = '[data-test-grant-actions-table]';
 export const GRANT_ACTIONS_NO_TYPE_DETECTED =
   '[data-test-grant-actions-no-type-detected]';
+export const GRANT_ACTIONS_INVALID_ID_OR_TYPE =
+  '[data-test-grant-actions-invalid-id-or-type]';
+
+// Code mirror selectors
+export const LINT_ERROR_MARKER = '.cm-lintRange-error';
+export const AUTOCOMPLETE_TOOLTIP = '.cm-tooltip-autocomplete';
 
 // Role grants
 export const GRANT_CODE_BLOCK = '.grant-codeblock .hds-code-block__code';
