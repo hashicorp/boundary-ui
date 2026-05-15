@@ -11,6 +11,7 @@ import {
   find,
   select,
   waitFor,
+  triggerKeyEvent,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as selectors from './selectors';
@@ -107,10 +108,12 @@ module('Acceptance | roles/edit grants', function (hooks) {
 
     assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
     assert.dom(selectors.EXPORT_FORMAT_SELECT).hasValue('terraform');
-    // TODO: Update to check for the actual formatted grant string.
-    assert
-      .dom(selectors.FORMATTED_EXPORT_CODE_BLOCK)
-      .includesText('grant_strings');
+    assert.dom(selectors.FORMATTED_EXPORT_CODE_BLOCK).hasText(`
+      grant_strings = [
+        "${instances.role.grant_strings[0]}",
+        "${instances.role.grant_strings[1]}",
+      ]
+    `);
   });
 
   test('user can export a hcl formatted grant string', async function (assert) {
@@ -132,7 +135,12 @@ module('Acceptance | roles/edit grants', function (hooks) {
 
     assert.dom(selectors.EXPORT_OPTIONS_FLYOUT).isVisible();
     assert.dom(selectors.EXPORT_FORMAT_SELECT).hasValue('native-hcl');
-    // TODO: Update to check for the actual formatted grant string.
+    assert.dom(selectors.FORMATTED_EXPORT_CODE_BLOCK).hasText(`
+      [
+        "${instances.role.grant_strings[0]}",
+        "${instances.role.grant_strings[1]}",
+      ]
+    `);
   });
 
   test('loads current grants in the editor and updates them', async function (assert) {
@@ -182,5 +190,108 @@ module('Acceptance | roles/edit grants', function (hooks) {
     // may change and cause the test to fail even though the functionality
     // is working as expected
     assert.dom(selectors.GRANT_ACTIONS_TABLE).isVisible();
+  });
+
+  test('shows "no type detected" in actions sidebar when role has no grants', async function (assert) {
+    const emptyRole = this.server.create('role', {
+      scope: instances.scopes.global,
+      grant_strings: [],
+    });
+    const editGrantsUrl = `/scopes/global/roles/${emptyRole.id}/edit-grants`;
+
+    await visit(editGrantsUrl);
+
+    assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).isVisible();
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).doesNotExist();
+  });
+
+  test('actions sidebar updates to "no type detected" when cursor moves to an empty line', async function (assert) {
+    const role = this.server.create('role', {
+      scope: instances.scopes.global,
+      grant_strings: ['ids=*;type=role;actions=read', ''],
+    });
+    const editGrantsUrl = `/scopes/global/roles/${role.id}/edit-grants`;
+
+    await visit(editGrantsUrl);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    // Line 1 is a valid grant — the actions table should be visible
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).isVisible();
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+
+    // Move cursor to the second (empty) line
+    const line2 = editorView.state.doc.line(2);
+    editorView.dispatch({ selection: { anchor: line2.from } });
+
+    await waitFor(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED);
+
+    assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).isVisible();
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).doesNotExist();
+  });
+
+  test('actions sidebar shows "invalid id or type" for a grant with an unrecognised type', async function (assert) {
+    const role = this.server.create('role', {
+      scope: instances.scopes.global,
+      grant_strings: ['type=not-a-valid-type;actions=read'],
+    });
+    const editGrantsUrl = `/scopes/global/roles/${role.id}/edit-grants`;
+
+    await visit(editGrantsUrl);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    assert.dom(selectors.GRANT_ACTIONS_INVALID_ID_OR_TYPE).isVisible();
+    assert.dom(selectors.GRANT_ACTIONS_TABLE).doesNotExist();
+  });
+
+  test('shows linting error markers for an invalid grant string', async function (assert) {
+    await visit(urls.editGrants);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+
+    // Replace the editor content with an invalid grant string:
+    editorView.dispatch({
+      changes: {
+        from: 0,
+        to: editorView.state.doc.length,
+        insert: 'ids=*',
+      },
+    });
+
+    await waitFor(selectors.LINT_ERROR_MARKER);
+
+    assert.dom(selectors.LINT_ERROR_MARKER).exists();
+  });
+
+  test('shows autocomplete suggestions when triggered', async function (assert) {
+    await visit(urls.editGrants);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+
+    // Insert a partial grant string ending with 'type=' so completions are expected
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.doc.length,
+        insert: '\ntype=',
+      },
+      selection: { anchor: editorView.state.doc.length + '\ntype='.length },
+    });
+
+    // Trigger Ctrl+Space
+    await triggerKeyEvent(
+      find(commonSelectors.CODE_EDITOR_CONTENT),
+      'keydown',
+      ' ',
+      { ctrlKey: true },
+    );
+
+    await waitFor(selectors.AUTOCOMPLETE_TOOLTIP);
+
+    assert.dom(selectors.AUTOCOMPLETE_TOOLTIP).isVisible();
   });
 });
