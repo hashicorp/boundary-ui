@@ -46,6 +46,15 @@ import {
   // See https://sqlite.org/rescode.html#corrupt
   const SQLITE_CORRUPT = 11;
 
+  /**
+   * Throws if the database has not been initialized or has been closed.
+   */
+  const requireDb = () => {
+    if (!db) {
+      throw new Error('Database is not available');
+    }
+  };
+
   const methods = {
     initializeSQLite: async () => {
       sqlite3 = await sqlite3InitModule({
@@ -124,16 +133,16 @@ import {
       }
     },
     analyzeDatabase: () => {
+      requireDb();
       db.exec('PRAGMA optimize');
     },
     clearDatabase: () => {
+      requireDb();
       db.exec(CLEAR_DB);
       db.exec(CREATE_TABLES(SCHEMA_VERSION));
     },
     deleteDatabase: () => {
-      if (!db) {
-        throw new Error('No database was initialized');
-      }
+      requireDb();
 
       const name = db.dbFilename();
       db.close();
@@ -141,9 +150,11 @@ import {
       poolUtil.unlink(`/${name}`);
     },
     downloadDatabase: () => {
+      requireDb();
       return sqlite3.capi.sqlite3_js_db_export(db);
     },
     fetchResource: ({ sql, parameters = [] }) => {
+      requireDb();
       try {
         return db.exec({
           sql,
@@ -160,6 +171,7 @@ import {
       if (items.length === 0) {
         return [];
       }
+      requireDb();
 
       const numberOfParameters = items.reduce((acc, item) => {
         return acc + item.length;
@@ -202,6 +214,7 @@ import {
       });
     },
     deleteResource: ({ resource, ids }) => {
+      requireDb();
       // Check if we have too many parameters for the deletion and chunk if so.
       if (ids?.length > MAX_HOST_PARAMETERS) {
         // Note: We use explicit BEGIN/COMMIT instead of db.transaction() because
