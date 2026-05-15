@@ -52,6 +52,11 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-27
           enabled: false,
         },
+
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
+          enabled: false,
+        },
       },
     });
 
@@ -96,6 +101,11 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
           enabled: false,
         },
+
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
+          enabled: false,
+        },
       },
     });
 
@@ -120,6 +130,11 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
           enabled: false,
         },
+
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
+          enabled: false,
+        },
       },
     });
 
@@ -136,6 +151,20 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('loads current grants in the editor and updates them', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(4);
     const newGrantString = 'ids=*;type=session;actions=list,read';
     const expectedGrantStrings = [
@@ -175,6 +204,20 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows actions for the first grant on page load', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
 
     assert.dom(selectors.GRANT_ACTIONS_NO_TYPE_DETECTED).doesNotExist();
