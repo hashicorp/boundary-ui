@@ -52,11 +52,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-02-27
           enabled: false,
         },
-
-        'scrollable-region-focusable': {
-          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
-          enabled: false,
-        },
       },
     });
 
@@ -101,11 +96,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
           enabled: false,
         },
-
-        'scrollable-region-focusable': {
-          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
-          enabled: false,
-        },
       },
     });
 
@@ -130,11 +120,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-03-17
           enabled: false,
         },
-
-        'scrollable-region-focusable': {
-          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
-          enabled: false,
-        },
       },
     });
 
@@ -155,11 +140,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
       rules: {
         'color-contrast': {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
-          enabled: false,
-        },
-
-        'scrollable-region-focusable': {
-          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
           enabled: false,
         },
       },
@@ -208,11 +188,6 @@ module('Acceptance | roles/edit grants', function (hooks) {
       rules: {
         'color-contrast': {
           // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
-          enabled: false,
-        },
-
-        'scrollable-region-focusable': {
-          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2026-05-15
           enabled: false,
         },
       },
