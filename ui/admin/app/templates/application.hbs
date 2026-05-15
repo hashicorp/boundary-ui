@@ -185,6 +185,16 @@
         >
           <T.Title>{{flash.title}}</T.Title>
           <T.Description>{{flash.message}}</T.Description>
+          {{#if flash.button}}
+            <T.Button
+              @text={{flash.button.label}}
+              @icon={{flash.button.icon}}
+              @color='secondary'
+              @size='small'
+              disabled={{flash.button.disabled}}
+              {{on 'click' (fn flash.button.action flash)}}
+            />
+          {{/if}}
         </Hds::Toast>
       </div>
     {{/each}}
