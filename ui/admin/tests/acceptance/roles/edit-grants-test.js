@@ -224,6 +224,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('actions sidebar updates to "no type detected" when cursor moves to an empty line', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     const role = this.server.create('role', {
       scope: instances.scopes.global,
       grant_strings: ['ids=*;type=role;actions=read', ''],
@@ -250,6 +259,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('actions sidebar shows "invalid id or type" for a grant with an unrecognised type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     const role = this.server.create('role', {
       scope: instances.scopes.global,
       grant_strings: ['type=not-a-valid-type;actions=read'],
@@ -264,6 +282,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows linting error markers for an invalid grant string', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
     await waitFor(commonSelectors.CODE_EDITOR_CM);
 
@@ -285,6 +312,15 @@ module('Acceptance | roles/edit grants', function (hooks) {
   });
 
   test('shows autocomplete suggestions when triggered', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-15
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.editGrants);
     await waitFor(commonSelectors.CODE_EDITOR_CM);
 
