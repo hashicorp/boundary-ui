@@ -27,8 +27,10 @@ module('Unit | Service | clusterUrl', function (hooks) {
       await service.setClusterUrl('http://other-origin');
     } catch {
       assert.strictEqual(service.adapter.host, window.location.origin);
-      assert.ok(
-        window.desktop.cluster.setClusterUrl.calledWithExactly('http://other-origin'),
+      assert.true(
+        window.desktop.cluster.setClusterUrl.calledWithExactly(
+          'http://other-origin',
+        ),
       );
     }
   });
@@ -37,14 +39,18 @@ module('Unit | Service | clusterUrl', function (hooks) {
     assert.expect(4);
     await service.setClusterUrl(`${window.location.origin}/`);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    assert.ok(
-      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    assert.true(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(
+        window.location.origin,
+      ),
     );
 
     await service.setClusterUrl(`${window.location.origin}//////`);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    assert.ok(
-      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    assert.true(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(
+        window.location.origin,
+      ),
     );
   });
 
@@ -52,14 +58,18 @@ module('Unit | Service | clusterUrl', function (hooks) {
     assert.expect(4);
     await service.setClusterUrl(` ${window.location.origin}/ `);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    assert.ok(
-      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    assert.true(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(
+        window.location.origin,
+      ),
     );
 
     await service.setClusterUrl(`   ${window.location.origin}   `);
     assert.strictEqual(service.adapter.host, window.location.origin);
-    assert.ok(
-      window.desktop.cluster.setClusterUrl.calledWithExactly(window.location.origin),
+    assert.true(
+      window.desktop.cluster.setClusterUrl.calledWithExactly(
+        window.location.origin,
+      ),
     );
   });
 
@@ -70,6 +80,6 @@ module('Unit | Service | clusterUrl', function (hooks) {
     await service.resetClusterUrl();
 
     assert.strictEqual(service.adapter.host, undefined);
-    assert.ok(window.desktop.cluster.resetClusterUrl.calledOnce);
+    assert.true(window.desktop.cluster.resetClusterUrl.calledOnce);
   });
 });
