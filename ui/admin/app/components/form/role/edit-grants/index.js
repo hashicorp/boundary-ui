@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 import {
   autocompletion,
   completionKeymap,
+  startCompletion,
   keymap,
   EditorView,
   linter,
@@ -179,6 +180,10 @@ export default class FormRoleEditGrantsComponent extends Component {
         this.currentLineText = line.text;
         if (update.docChanged) {
           this.grantStringsText = update.state.doc.toString();
+        }
+        // Trigger autocomplete when we're on an empty line
+        if (line.text === '') {
+          startCompletion(update.view);
         }
       }
     }),

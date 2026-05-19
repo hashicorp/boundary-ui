@@ -726,7 +726,7 @@ role:
         invalid-field-for-type: Invalid output field "{field}" for type "{type}"
     editor:
       title: Grant Editor
-      description: Add each new grant string on a different line
+      description: Add each new grant string on a different line. Press Ctrl+Space to get suggestions.
     string-formats:
       title_plural: String formats
       syntax: Syntax
