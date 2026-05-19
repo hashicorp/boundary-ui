@@ -3,15 +3,18 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
+import {
+  GRANT_FIELDS,
+  TEMPLATE_RESOURCE_TYPES,
+  normalizeGrantsSchema,
+  parseGrantLine,
+  getChildResourceActions,
+  getChildResourceOutputFields,
+} from './grant-parser';
+
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
 const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
-const TEMPLATE_RESOURCE_TYPES = {
-  '{{.User.Id}}': 'user',
-  '{{.Account.Id}}': 'account',
-  '{{user.id}}': 'user',
-  '{{account.id}}': 'account',
-};
+
 const filterByPrefix = (values, partial) =>
   values.filter((value) => value.startsWith(partial));
 const withWildCard = (values = []) => ['*', ...new Set(values)];
@@ -23,88 +26,15 @@ const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   apply: () => {},
 });
 
-const parseGrantFields = (lineText = '') =>
-  lineText
-    .split(';')
-    .map((pair) => {
-      const [fieldName, ...valueParts] = pair.split('=');
-
-      // There should only be one '=' in a valid pair, but if there are more,
-      // we'll keep the value parts together and let the user know it's
-      // invalid through validation rather than breaking the parsing
-      return {
-        fieldName: fieldName,
-        fieldValue: valueParts.join('='),
-      };
-    })
-    .filter(({ fieldName }) => fieldName);
-
-const getGrantFieldValue = (parsedFields, targetFieldName) =>
-  parsedFields.find(({ fieldName }) => fieldName === targetFieldName)
-    ?.fieldValue;
-
-const parseGrantLine = (lineText = '') => {
-  const parsedFields = parseGrantFields(lineText);
+const parseGrantLineForCompletions = (lineText = '') => {
+  const { fields, fieldMap } = parseGrantLine(lineText);
 
   return {
-    parsedFields,
-    idsValue: getGrantFieldValue(parsedFields, 'ids'),
-    typeValue: getGrantFieldValue(parsedFields, 'type'),
-    actionsValue: getGrantFieldValue(parsedFields, 'actions'),
-    outputFieldsValue: getGrantFieldValue(parsedFields, 'output_fields'),
-  };
-};
-
-export const normalizeGrantsSchema = (grantsSchema) => {
-  const resourceTypes = grantsSchema.resource_types ?? [];
-
-  const resourcesByType = resourceTypes.reduce((resources, resourceType) => {
-    const collectionActions = resourceType.collection_actions ?? [];
-    const idActions = resourceType.id_actions ?? [];
-    const idPrefixes = resourceType.id_prefixes ?? [];
-
-    resources[resourceType.type] = {
-      actions: [...collectionActions, ...idActions],
-      collectionActions,
-      idActions,
-      idPrefixes,
-      parentType: resourceType.parent_type,
-      outputFields: resourceType.output_fields ?? [],
-    };
-
-    return resources;
-  }, {});
-
-  const childResourceTypesByParentType = resourceTypes.reduce(
-    (childrenByParentType, resourceType) => {
-      const parentType = resourceType.parent_type;
-
-      if (!parentType) {
-        return childrenByParentType;
-      }
-
-      childrenByParentType[parentType] = [
-        ...(childrenByParentType[parentType] ?? []),
-        resourceType.type,
-      ];
-
-      return childrenByParentType;
-    },
-    {},
-  );
-
-  const resourceTypesByIdPrefix = resourceTypes.flatMap((resourceType) =>
-    (resourceType.id_prefixes ?? []).map((idPrefix) => ({
-      idPrefix,
-      type: resourceType.type,
-    })),
-  );
-
-  return {
-    resourceTypes,
-    resourcesByType,
-    childResourceTypesByParentType,
-    resourceTypesByIdPrefix,
+    parsedFieldNames: fields.map(({ key }) => key),
+    idsValue: fieldMap['ids'],
+    typeValue: fieldMap['type'],
+    actionsValue: fieldMap['actions'],
+    outputFieldsValue: fieldMap['output_fields'],
   };
 };
 
@@ -114,15 +44,15 @@ const getResourceTypesForId = (schema, id) => {
     return [templateType].filter((type) => schema.resourcesByType[type]);
   }
 
-  return id.includes('_')
-    ? [
-        schema.resourceTypesByIdPrefix.find(
-          ({ idPrefix }) => id.split('_')[0] === idPrefix,
-        )?.type,
-      ].filter(Boolean)
-    : schema.resourceTypesByIdPrefix
-        .filter(({ idPrefix }) => idPrefix.startsWith(id))
-        .map(({ type }) => type);
+  if (id.includes('_')) {
+    const prefix = id.split('_')[0];
+    const type = schema.resourceTypesByIdPrefix[prefix];
+    return type ? [type] : [];
+  }
+
+  return Object.entries(schema.resourceTypesByIdPrefix)
+    .filter(([prefix]) => prefix.startsWith(id))
+    .map(([, type]) => type);
 };
 
 const getCompatibleResourceTypeForIds = (schema, idsValue) => {
@@ -143,81 +73,36 @@ const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   return firstResourceType;
 };
 
-const getIdActions = (schema, idsValue) => {
-  const matchedType = getCompatibleResourceTypeForIds(schema, idsValue);
-
-  if (!matchedType) {
+const getIdActions = (schema, compatibleType) => {
+  if (!compatibleType) {
     return [];
   }
 
-  return schema.resourcesByType[matchedType]?.idActions;
+  return schema.resourcesByType[compatibleType]?.idActions;
 };
 
-const getChildResourceValues = (schema, idsValue, getValues) => {
-  const parentType = getCompatibleResourceTypeForIds(schema, idsValue);
-
-  if (
-    !parentType ||
-    !schema.childResourceTypesByParentType[parentType]?.length
-  ) {
-    return [];
-  }
-
-  const childTypes = schema.childResourceTypesByParentType[parentType] ?? [];
-
-  return [
-    ...new Set(
-      childTypes.flatMap((type) => getValues(schema.resourcesByType[type])),
-    ),
-  ];
-};
-
-const getChildResourceActions = (schema, idsValue) =>
-  getChildResourceValues(
-    schema,
-    idsValue,
-    (resource) => resource?.actions ?? [],
-  );
-
-const getChildResourceOutputFields = (schema, idsValue) =>
-  getChildResourceValues(
-    schema,
-    idsValue,
-    (resource) => resource?.outputFields ?? [],
-  );
-
-const getTypeOptions = (schema, idsValue) => {
+const getTypeOptions = (schema, idsValue, compatibleType) => {
   // If there is no ids value, we can only suggest top-level resource types that have collection actions
   if (!idsValue) {
-    return schema.resourceTypes
-      .filter(
-        (resource) =>
-          !resource.parent_type &&
-          resource.collection_actions.some(
-            (action) => action === 'list' || action === 'create',
-          ),
-      )
-      .map((resource) => resource.type);
+    return schema.topLevelTypes;
   }
 
   const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
   if (hasSpecificIds) {
-    const parentType = getCompatibleResourceTypeForIds(schema, idsValue);
-
-    if (!parentType) {
+    if (!compatibleType) {
       return [];
     }
 
-    return schema.childResourceTypesByParentType[parentType] ?? [];
+    return schema.childResourceTypesByParentType[compatibleType] ?? [];
   }
 
   // Return the ones that have id based actions (currently only billing doesn't have them)
-  return schema.resourceTypes
-    .filter((resource) => resource.id_actions?.length > 0)
-    .map((resource) => resource.type);
+  return Object.entries(schema.resourcesByType)
+    .filter(([, resource]) => resource.idActions.length > 0)
+    .map(([type]) => type);
 };
 
-const getActionOptions = (schema, typeValue, idsValue) => {
+const getActionOptions = (schema, typeValue, idsValue, compatibleType) => {
   const actionOptions = withWildCard(
     Object.values(schema.resourcesByType).flatMap(({ actions }) => actions),
   );
@@ -228,7 +113,7 @@ const getActionOptions = (schema, typeValue, idsValue) => {
 
   // Just show ID specific actions as collection actions are invalid here
   if (!typeValue && hasSpecificIds) {
-    const idActions = getIdActions(schema, idsValue);
+    const idActions = getIdActions(schema, compatibleType);
     return idActions.length ? withWildCard(idActions) : [];
   }
 
@@ -247,16 +132,18 @@ const getActionOptions = (schema, typeValue, idsValue) => {
   if (hasSpecificIds) {
     // These are pinned IDs with a wildcard type
     if (typeValue === '*') {
-      const childResourceActions = getChildResourceActions(schema, idsValue);
+      const childResourceActions = getChildResourceActions(
+        schema,
+        compatibleType,
+      );
 
       return childResourceActions.length
         ? withWildCard(childResourceActions)
         : [];
     }
 
-    const matchedType = getCompatibleResourceTypeForIds(schema, idsValue);
     const isSelectedChildType = (
-      schema.childResourceTypesByParentType[matchedType] ?? []
+      schema.childResourceTypesByParentType[compatibleType] ?? []
     ).includes(typeValue);
 
     // A specific ID paired with its own type is not a valid combination.
@@ -278,7 +165,7 @@ const getActionOptions = (schema, typeValue, idsValue) => {
 
 export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const schema = normalizeGrantsSchema(grantsSchema);
-  const { idsValue, typeValue } = parseGrantLine(grantString);
+  const { idsValue, typeValue } = parseGrantLineForCompletions(grantString);
 
   const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
   const hasExplicitType = Boolean(typeValue) && typeValue !== '*';
@@ -316,7 +203,7 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
     detectedResourceType = childTypes.length ? childTypes : null;
   } else if (typeValue !== '*' && idsValue) {
     // No type field, infer resource type from the ID prefix
-    detectedResourceType = getCompatibleResourceTypeForIds(schema, idsValue);
+    detectedResourceType = compatibleIdsResourceType;
   }
 
   const hasWildcardIds = idsValue === '*';
@@ -324,7 +211,7 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
 
   const actions =
     idsValue || typeValue
-      ? getActionOptions(schema, typeValue, idsValue)
+      ? getActionOptions(schema, typeValue, idsValue, compatibleIdsResourceType)
           .filter(
             (action) =>
               action !== '*' && (!crudlOnly || CRUDL_ACTIONS.has(action)),
@@ -341,7 +228,7 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   };
 };
 
-const getOutputFieldOptions = (schema, typeValue, idsValue) => {
+const getOutputFieldOptions = (schema, typeValue, idsValue, compatibleType) => {
   const selectedResource = schema.resourcesByType[typeValue];
 
   if (typeValue && typeValue !== '*' && selectedResource) {
@@ -354,15 +241,17 @@ const getOutputFieldOptions = (schema, typeValue, idsValue) => {
 
   // Pinned IDs with wildcard type
   if (typeValue === '*' && hasSpecificIds) {
-    const childOutputFields = getChildResourceOutputFields(schema, idsValue);
+    const childOutputFields = getChildResourceOutputFields(
+      schema,
+      compatibleType,
+    );
     return childOutputFields.length ? withWildCard(childOutputFields) : ['*'];
   }
 
   if (!typeValue && hasSpecificIds) {
-    const matchedType = getCompatibleResourceTypeForIds(schema, idsValue);
-    if (matchedType) {
+    if (compatibleType) {
       const resourceOutputFields =
-        schema.resourcesByType[matchedType]?.outputFields ?? [];
+        schema.resourcesByType[compatibleType]?.outputFields ?? [];
       return resourceOutputFields.length
         ? withWildCard(resourceOutputFields)
         : ['*'];
@@ -407,8 +296,11 @@ async function grantCompletions(
   const line = context.state.doc.lineAt(context.pos);
   const beforeCursor = line.text.slice(0, context.pos - line.from);
 
-  const { parsedFields, idsValue, typeValue } = parseGrantLine(line.text);
-  const parsedFieldNames = parsedFields.map(({ fieldName }) => fieldName);
+  const { parsedFieldNames, idsValue, typeValue } =
+    parseGrantLineForCompletions(line.text);
+  const compatibleType = idsValue
+    ? getCompatibleResourceTypeForIds(schema, idsValue)
+    : null;
 
   // Check if we're typing a field name (e.g. "type=") by starting at the beginning or after a semicolon.
   // This allows us to provide field name suggestions when the user is typing a new field
@@ -435,7 +327,11 @@ async function grantCompletions(
   const typeValueMatch = beforeCursor.match(/type=([a-z-*]*)$/);
   if (typeValueMatch) {
     const partial = typeValueMatch[1];
-    const matchingTypeOptions = getTypeOptions(schema, idsValue);
+    const matchingTypeOptions = getTypeOptions(
+      schema,
+      idsValue,
+      compatibleType,
+    );
     const typeOptions =
       partial === '' && matchingTypeOptions.length
         ? withWildCard(matchingTypeOptions)
@@ -526,7 +422,7 @@ async function grantCompletions(
     const hasEnteredActions = enteredActions.length > 0;
 
     const options = filterByPrefix(
-      getActionOptions(schema, typeValue, idsValue),
+      getActionOptions(schema, typeValue, idsValue, compatibleType),
       partial,
     )
       .filter((action) => !hasEnteredActions || action !== '*')
@@ -555,7 +451,7 @@ async function grantCompletions(
     const hasEnteredOutputFields = enteredOutputFields.length > 0;
 
     const options = filterByPrefix(
-      getOutputFieldOptions(schema, typeValue, idsValue),
+      getOutputFieldOptions(schema, typeValue, idsValue, compatibleType),
       partial,
     )
       .filter((value) => !hasEnteredOutputFields || value !== '*')
