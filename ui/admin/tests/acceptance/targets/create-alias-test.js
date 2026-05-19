@@ -92,7 +92,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     assert.strictEqual(alias.name, NAME_FIELD_TEXT);
     assert.strictEqual(alias.destinationId, instances.target.id);
-    assert.strictEqual(alias.scopeId, 'global');
+    assert.strictEqual(alias.scopeId, instances.scopes.project.id);
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 
@@ -124,7 +124,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     assert.strictEqual(alias.name, NAME_FIELD_TEXT);
     assert.strictEqual(alias.destinationId, instances.target.id);
-    assert.strictEqual(alias.scopeId, 'global');
+    assert.strictEqual(alias.scopeId, instances.scopes.project.id);
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 
@@ -158,7 +158,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
     });
 
     assert.strictEqual(alias.name, NAME_FIELD_TEXT);
-    assert.strictEqual(alias.scopeId, 'global');
+    assert.strictEqual(alias.scopeId, instances.scopes.project.id);
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 

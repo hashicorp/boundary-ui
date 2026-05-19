@@ -22,10 +22,4 @@ export default class ScopesScopeTargetsTargetManageAliasRoute extends Route {
       reload: true,
     });
   }
-
-  setupController(controller) {
-    const scope = this.modelFor('scopes.scope');
-    super.setupController(...arguments);
-    controller.setProperties({ scope });
-  }
 }

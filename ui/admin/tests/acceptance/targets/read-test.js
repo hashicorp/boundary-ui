@@ -282,8 +282,8 @@ module('Acceptance | targets | read', function (hooks) {
       },
     });
 
-    instances.scopes.global.authorized_collection_actions['aliases'] =
-      instances.scopes.global.authorized_collection_actions['aliases'].filter(
+    instances.scopes.project.authorized_collection_actions['aliases'] =
+      instances.scopes.project.authorized_collection_actions['aliases'].filter(
         (item) => item !== 'create',
       );
     await visit(urls.targets);

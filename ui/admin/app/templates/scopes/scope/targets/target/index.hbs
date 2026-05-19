@@ -92,7 +92,7 @@
             {{/if}}
           </div>
         {{else}}
-          {{#if (can 'create model' this.globalScope collection='aliases')}}
+          {{#if (can 'create model' @model.scopeModel collection='aliases')}}
             <div class='target-sidebar-aliases'>
               <Hds::Text::Display @tag='h2' class='remove-margin'>
                 {{t 'resources.alias.title_plural'}}

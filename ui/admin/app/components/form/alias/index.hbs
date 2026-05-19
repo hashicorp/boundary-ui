@@ -179,7 +179,7 @@
 
   <InfoField
     @value={{@model.scopeModel.displayName}}
-    @icon='globe'
+    @icon={{if @model.scopeModel.isGlobal 'globe' 'grid'}}
     disabled={{form.disabled}}
     as |F|
   >

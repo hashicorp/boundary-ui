@@ -29,7 +29,7 @@
     <Form::Alias
       @model={{@model}}
       @hideTargetId='true'
-      @suffix={{this.scope.alias_suffix}}
+      @suffix={{@model.scopeModel.alias_suffix}}
       @submit={{fn this.targets.saveAlias @model}}
       @cancel={{fn this.targets.cancelAlias @model}}
     />
