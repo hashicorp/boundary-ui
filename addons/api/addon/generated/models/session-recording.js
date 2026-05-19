@@ -96,19 +96,19 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
   })
   duration;
 
-  @attr('string', {
+  @attr({
     description:
-      'The current state of the session recording. One of "started", "available" and "unknown".',
+      'The detailed state of the session recording. This contains storage_state, syncing_error_details, and verification_error_details.',
     readOnly: true,
   })
-  state;
+  recording_state;
 
   @attr('string', {
     description:
-      'Any error seen during the closing of the session recording. Currently only set if state is "unknown".',
+      'The availability of the session recording. One of "available" or "not available".',
     readOnly: true,
   })
-  error_details;
+  availability;
 
   @attr('date', {
     description: 'The time until a session recording is required to be stored.',
@@ -122,4 +122,19 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     readOnly: true,
   })
   delete_after;
+
+  // Deprecated: These two fields should be removed once support for RDP is added.
+  @attr('string', {
+    description:
+      'The current state of the session recording. One of "started", "available" and "unknown".',
+    readOnly: true,
+  })
+  state;
+
+  @attr('string', {
+    description:
+      'Any error seen during the closing of the session recording. Currently only set if state is "unknown".',
+    readOnly: true,
+  })
+  error_details;
 }

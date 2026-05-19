@@ -420,6 +420,9 @@ session-recording:
     title: Channels by connection
     messages:
       no-channels: There are no channels for this connection
+      sync-error:
+        title: This recording is not available
+        copy: Copy error
       started-no-connections:
         title: Session Recording In Progress
         description: The Session has started but no connections have been made.
