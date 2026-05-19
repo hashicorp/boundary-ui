@@ -748,6 +748,33 @@
   .no-channels-message {
     padding: 0 1rem;
   }
+
+  .playback-error-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+  }
+
+  .playback-error-list {
+    .playback-error-item::before {
+      content: '\2022';
+      font-size: 1.5em;
+    }
+  }
+
+  .playback-error-message {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-alert__content {
+    min-width: 0;
+  }
 }
 
 // Channel
