@@ -133,6 +133,8 @@ export const electronTest = test.extend({
   electronPage: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
     await page.evaluate(() => localStorage.clear());
+    // Reset the cluster URL stored by electron
+    await page.evaluate(() => window.desktop.cluster.resetClusterUrl());
     await page.context().tracing.start({ screenshots: true, snapshots: true });
 
     await use(page);
