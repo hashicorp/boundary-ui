@@ -611,6 +611,7 @@ role:
     title: Grant
     title_plural: Grants
     description: Grants are permissions which allow roles to take actions and access resources.
+    codeblock-description: Select "{editGrantsTitle}" to add or modify grants. Select "{addGrantTemplatesTitle}" to add in templates.
     actions:
       create: New Grant
   grant-templates:
