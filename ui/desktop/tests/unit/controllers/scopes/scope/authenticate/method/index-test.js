@@ -35,12 +35,6 @@ module(
       targets: null,
     };
 
-    const setDefaultClusterUrl = (test) => {
-      const windowOrigin = window.location.origin;
-      const clusterUrl = test.owner.lookup('service:clusterUrl');
-      clusterUrl.rendererClusterUrl = windowOrigin;
-    };
-
     hooks.beforeEach(async function () {
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
@@ -58,7 +52,7 @@ module(
 
       urls.targets = '/scopes/global/projects/targets';
 
-      setDefaultClusterUrl(this);
+      window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
     });
 
     test('it exists', function (assert) {

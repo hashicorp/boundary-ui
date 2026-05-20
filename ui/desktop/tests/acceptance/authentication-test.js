@@ -71,12 +71,6 @@ module('Acceptance | authentication', function (hooks) {
   const MODAL_CANCEL_BTN = '.hds-modal__footer .hds-button--color-secondary';
   const HEADER_DROPDOWN_BTN = '.app-header__utility-actions button';
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     await invalidateSession();
 
@@ -130,7 +124,7 @@ module('Acceptance | authentication', function (hooks) {
     urls.targets = `${urls.projects}/targets`;
     urls.sessions = `${urls.projects}/sessions`;
 
-    setDefaultClusterUrl(this);
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
   });
 
   hooks.afterEach(async function () {
@@ -147,8 +141,17 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting authenticate route without clusterUrl redirects to clusterUrl index', async function (assert) {
     assert.expect(1);
-    this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
-    await visit(urls.authenticate.global);
+    window.desktop.cluster.getClusterUrl.resolves(null);
+
+    try {
+      await visit(urls.authenticate.global);
+    } catch (e) {
+      if (e.message === 'TransitionAborted') {
+        // Ignore the expected transition abort error caused by the redirect in beforeModel
+      } else {
+        throw e;
+      }
+    }
 
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });

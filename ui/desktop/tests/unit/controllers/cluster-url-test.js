@@ -12,16 +12,13 @@ import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-
 module('Unit | Controller | cluster-url', function (hooks) {
   setupTest(hooks);
   setupIntl(hooks, 'en-us');
+  setupDesktopContextBridgeApiMock(hooks);
 
   let controller;
-  let clusterUrl;
-
-  setupDesktopContextBridgeApiMock(hooks);
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
     controller = this.owner.lookup('controller:cluster-url');
-    clusterUrl = this.owner.lookup('service:cluster-url');
   });
 
   test('it exists', function (assert) {
@@ -30,12 +27,10 @@ module('Unit | Controller | cluster-url', function (hooks) {
 
   test('setClusterUrl action de-authenticates a user and resets cluster url', async function (assert) {
     const newClusterUrl = 'http://localhost:9200';
-    assert.notEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
     assert.notEqual(window.desktop.clusterUrl, newClusterUrl);
 
     await controller.setClusterUrl(newClusterUrl);
 
-    assert.strictEqual(clusterUrl.rendererClusterUrl, newClusterUrl);
     assert.strictEqual(window.desktop.clusterUrl, newClusterUrl);
   });
 });
