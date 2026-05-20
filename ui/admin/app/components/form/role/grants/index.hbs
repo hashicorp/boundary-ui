@@ -5,7 +5,15 @@
 
 <Hds::Layout::Flex as |F|>
   <F.Item @basis='66%'>
-    <Hds::CodeBlock class='grant-codeblock' @value={{this.grants}} />
+    <Hds::CodeBlock class='grant-codeblock' @value={{this.grants}} as |CB|>
+      <CB.Description>{{t
+          'resources.role.grant.codeblock-description'
+          editGrantsTitle=(t 'resources.role.edit-grants.title')
+          addGrantTemplatesTitle=(t
+            'resources.role.grant-templates.actions.add-grant-templates'
+          )
+        }}</CB.Description>
+    </Hds::CodeBlock>
   </F.Item>
 </Hds::Layout::Flex>
 
