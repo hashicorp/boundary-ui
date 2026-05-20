@@ -141,7 +141,13 @@
                 </B.Td>
                 {{#unless this.scope.isProject}}
                   <B.Td>
-                    <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+                    <Hds::Badge
+                      @text={{or
+                        data.alias.scopeModel.displayName
+                        data.alias.scope.scope_id
+                      }}
+                      @icon={{if data.alias.scope.isGlobal 'globe' 'grid'}}
+                    />
                   </B.Td>
                 {{/unless}}
                 <B.Td>

@@ -103,9 +103,13 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           { pushToStore: false },
         );
 
+        const filters = scope.isProject
+          ? { scope_id: [{ equals: scope_id }] }
+          : undefined;
+
         aliases = await this.store.query('alias', {
           scope_id,
-          query: { search: searchOptions, sort },
+          query: { search: searchOptions, sort, filters },
           page,
           pageSize,
         });
