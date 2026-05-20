@@ -8,8 +8,9 @@ import {
   TEMPLATE_RESOURCE_TYPES,
   normalizeGrantsSchema,
   parseGrantLine,
-  getChildResourceActions,
   getChildResourceOutputFields,
+  getValidActions,
+  withWildCard,
 } from './grant-parser';
 
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
@@ -17,7 +18,6 @@ const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
 
 const filterByPrefix = (values, partial) =>
   values.filter((value) => value.startsWith(partial));
-const withWildCard = (values = []) => ['*', ...new Set(values)];
 const parseIds = (idsValue = '') => idsValue.split(',').filter(Boolean);
 
 const getNoSuggestionsOption = (noSuggestionsLabel) => ({
@@ -73,14 +73,6 @@ const getCompatibleResourceTypeForIds = (schema, idsValue) => {
   return firstResourceType;
 };
 
-const getIdActions = (schema, compatibleType) => {
-  if (!compatibleType) {
-    return [];
-  }
-
-  return schema.resourcesByType[compatibleType]?.idActions;
-};
-
 const getTypeOptions = (schema, idsValue, compatibleType) => {
   // If there is no ids value, we can only suggest top-level resource types that have collection actions
   if (!idsValue) {
@@ -100,67 +92,6 @@ const getTypeOptions = (schema, idsValue, compatibleType) => {
   return Object.entries(schema.resourcesByType)
     .filter(([, resource]) => resource.idActions.length > 0)
     .map(([type]) => type);
-};
-
-const getActionOptions = (schema, typeValue, idsValue, compatibleType) => {
-  const actionOptions = withWildCard(
-    Object.values(schema.resourcesByType).flatMap(({ actions }) => actions),
-  );
-
-  const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
-  const hasOnlyType = Boolean(typeValue) && !idsValue;
-  const selectedResource = schema.resourcesByType[typeValue];
-
-  // Just show ID specific actions as collection actions are invalid here
-  if (!typeValue && hasSpecificIds) {
-    const idActions = getIdActions(schema, compatibleType);
-    return idActions.length ? withWildCard(idActions) : [];
-  }
-
-  if (!typeValue || (typeValue === '*' && idsValue === '*')) {
-    return actionOptions;
-  }
-
-  if (hasOnlyType) {
-    if (selectedResource?.parentType) {
-      return [];
-    }
-
-    return selectedResource?.collectionActions ?? [];
-  }
-
-  if (hasSpecificIds) {
-    // These are pinned IDs with a wildcard type
-    if (typeValue === '*') {
-      const childResourceActions = getChildResourceActions(
-        schema,
-        compatibleType,
-      );
-
-      return childResourceActions.length
-        ? withWildCard(childResourceActions)
-        : [];
-    }
-
-    const isSelectedChildType = (
-      schema.childResourceTypesByParentType[compatibleType] ?? []
-    ).includes(typeValue);
-
-    // A specific ID paired with its own type is not a valid combination.
-    // For pinned IDs, only child types are valid.
-    if (!selectedResource || !isSelectedChildType) {
-      return [];
-    }
-
-    // Return all the actions for the selected type from a pinned ID
-    return withWildCard([
-      ...selectedResource.collectionActions,
-      ...selectedResource.idActions,
-    ]);
-  }
-
-  // Should be wildcard IDs with a specific type, so show all actions for that type
-  return selectedResource ? withWildCard(selectedResource.actions) : [];
 };
 
 export const analyzeGrantString = (grantsSchema, grantString = '') => {
@@ -209,15 +140,21 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const hasWildcardIds = idsValue === '*';
   const crudlOnly = hasWildcardIds && !hasExplicitType;
 
-  const actions =
+  const actionOptions =
     idsValue || typeValue
-      ? getActionOptions(schema, typeValue, idsValue, compatibleIdsResourceType)
-          .filter(
-            (action) =>
-              action !== '*' && (!crudlOnly || CRUDL_ACTIONS.has(action)),
-          )
-          .sort((left, right) => left.localeCompare(right))
+      ? getValidActions(schema, {
+          typeValue,
+          idsValue,
+          idsWildcard: hasWildcardIds,
+          idsKnownType: compatibleIdsResourceType,
+        }).actions
       : [];
+  const actions =
+    actionOptions
+      .filter(
+        (action) => action !== '*' && (!crudlOnly || CRUDL_ACTIONS.has(action)),
+      )
+      .sort((left, right) => left.localeCompare(right)) ?? [];
 
   return {
     actions,
@@ -421,10 +358,13 @@ async function grantCompletions(
     const partial = enteredActions.pop() ?? '';
     const hasEnteredActions = enteredActions.length > 0;
 
-    const options = filterByPrefix(
-      getActionOptions(schema, typeValue, idsValue, compatibleType),
-      partial,
-    )
+    const actionOptions = getValidActions(schema, {
+      typeValue,
+      idsValue,
+      idsWildcard: idsValue?.includes('*'),
+      idsKnownType: compatibleType,
+    }).actions;
+    const options = filterByPrefix(actionOptions, partial)
       .filter((action) => !hasEnteredActions || action !== '*')
       .filter((action) => !enteredActions.includes(action))
       .map((action) => ({

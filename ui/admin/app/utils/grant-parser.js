@@ -34,8 +34,6 @@ export const normalizeGrantsSchema = (grantsSchema) => {
     resource.actions.forEach((action) => allActions.add(action));
   });
   const validActions = Array.from(allActions);
-  validActions.push('*');
-  validActions.push('no-op');
 
   const resourceTypesByIdPrefix = resourceTypes.reduce((map, resource) => {
     resource.id_prefixes?.forEach((prefix) => {
@@ -86,14 +84,6 @@ export const normalizeGrantsSchema = (grantsSchema) => {
   };
 };
 
-/**
- * Parses a grant line into its constituent fields.
- * Returns an array of field entries with keys, values, and position info.
- *
- * @param {string} lineText
- * @param {number} lineStart
- * @returns {object}
- */
 export const parseGrantLine = (lineText = '', lineStart = 0) => {
   const pairs = lineText.split(';').filter((p) => p.trim());
 
@@ -174,6 +164,81 @@ export const getChildResourceOutputFields = (schema, compatibleType) =>
     (resource) => resource?.outputFields ?? [],
   );
 
-export default function grantParser() {
-  return true;
-}
+export const withWildCard = (values = []) => ['*', ...new Set(values)];
+
+export const getValidActions = (
+  schema,
+  { typeValue, idsValue, idsWildcard, idsKnownType },
+) => {
+  const typeWildcard = typeValue === '*';
+  const hasExplicitType = Boolean(typeValue) && !typeWildcard;
+  const hasIds = Boolean(idsValue);
+
+  if (!typeValue) {
+    if (hasIds) {
+      if (idsKnownType) {
+        return {
+          actionsType: 'id',
+          actions: withWildCard(
+            schema.resourcesByType[idsKnownType]?.idActions ?? [],
+          ),
+        };
+      }
+      if (idsWildcard) {
+        return {
+          actionsType: 'all',
+          actions: withWildCard(schema.validActions),
+        };
+      }
+    } else {
+      return { actionsType: 'all', actions: withWildCard(schema.validActions) };
+    }
+  } else if (typeWildcard) {
+    if (hasIds) {
+      if (idsKnownType) {
+        return {
+          actionsType: 'child',
+          actions: withWildCard(getChildResourceActions(schema, idsKnownType)),
+        };
+      }
+      if (idsWildcard) {
+        return {
+          actionsType: 'all',
+          actions: withWildCard(schema.validActions),
+        };
+      }
+    }
+  } else if (hasExplicitType) {
+    if (hasIds) {
+      if (idsKnownType) {
+        const selectedResource = schema.resourcesByType[typeValue];
+        if (selectedResource?.parentType !== idsKnownType) {
+          return { actionsType: 'invalid', actions: [] };
+        }
+        return {
+          actionsType: 'type',
+          actions: withWildCard(
+            schema.resourcesByType[typeValue]?.actions ?? [],
+          ),
+        };
+      }
+      if (idsWildcard) {
+        return {
+          actionsType: 'type',
+          actions: withWildCard(
+            schema.resourcesByType[typeValue]?.actions ?? [],
+          ),
+        };
+      }
+    } else {
+      if (schema.topLevelTypes.includes(typeValue)) {
+        return {
+          actionsType: 'collection',
+          actions: schema.resourcesByType[typeValue]?.collectionActions ?? [],
+        };
+      }
+    }
+  }
+
+  return { actionsType: 'invalid', actions: [] };
+};

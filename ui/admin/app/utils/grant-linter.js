@@ -7,8 +7,8 @@ import {
   TEMPLATE_RESOURCE_TYPES,
   normalizeGrantsSchema,
   parseGrantLine,
-  getChildResourceActions,
   getChildResourceOutputFields,
+  getValidActions,
 } from './grant-parser';
 
 const createDeleteTextAction = (name) => ({
@@ -546,49 +546,40 @@ const validateActionsField = (
   pos,
   translate,
 ) => {
-  let validActions = schema.validActions;
+  let validActions = ['*', 'no-op', ...schema.validActions];
   let errorMessage = (action) =>
     translate('actions.invalid-action', { action });
-  if (!validatedFields.type) {
-    if (validatedFields.ids?.knownType) {
-      // Only id actions belonging to known id type (including wildcard action)
-      validActions = [
-        '*',
-        ...schema.resourcesByType[validatedFields.ids.knownType].idActions,
-      ];
+  const { actionsType, actions } = getValidActions(schema, {
+    typeValue: validatedFields.type?.value,
+    idsValue: validatedFields.ids?.value,
+    idsWildcard: validatedFields.ids?.wildcard,
+    idsKnownType: validatedFields.ids?.knownType,
+  });
+  validActions = actions.length > 0 ? actions : validActions;
+
+  switch (actionsType) {
+    case 'id':
       errorMessage = (action) =>
         translate('actions.id-only', {
           type: validatedFields.ids.knownType,
           action,
         });
-    }
-  } else if (validatedFields.type.wildcard) {
-    if (validatedFields.ids?.knownType) {
-      // Any action from associated child resource types would be valid (including wildcard action)
-      validActions = [
-        '*',
-        'no-op',
-        ...getChildResourceActions(schema, validatedFields.ids.knownType),
-      ];
-    }
-  } else if (validatedFields.type.value) {
-    if (!validatedFields.ids) {
-      // Only collection actions create/list belonging to the specified type
-      validActions =
-        schema.resourcesByType[validatedFields.type.value].collectionActions;
-      validActions = validActions.filter(
-        (action) => action.startsWith('create') || action.startsWith('list'),
-      );
+      break;
+    case 'child':
+      validActions = ['no-op', ...validActions];
+      break;
+    case 'collection':
       errorMessage = (action) =>
         translate('actions.collection-only', { action });
-    } else if (validatedFields.ids.knownType || validatedFields.ids.wildcard) {
-      // Any action belonging to the specified type (including wildcard action)
-      validActions = [
-        '*',
-        'no-op',
-        ...schema.resourcesByType[validatedFields.type.value].actions,
-      ];
-    }
+      break;
+    case 'type':
+      validActions = ['no-op', ...validActions];
+      break;
+    case 'all':
+      validActions = ['no-op', ...validActions];
+      break;
+    default:
+      break;
   }
 
   let segmentStart = pos.valueStart;
