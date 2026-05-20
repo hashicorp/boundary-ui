@@ -13,6 +13,7 @@ export default class ScopesScopeRoute extends Route {
 
   @service store;
   @service scope;
+  @service abilities;
 
   // =methods
 
@@ -72,5 +73,17 @@ export default class ScopesScopeRoute extends Route {
     this.scope.project = selectedProject;
     this.scope.orgsList = orgs;
     this.scope.projectsList = projects;
+
+    // Fetch alias suffix for project scopes
+    if (model.isProject && this.abilities.can('getAliasSuffix scope', model)) {
+      try {
+        await this.store.findRecord('scope', model.id, {
+          adapterOptions: { method: 'get-alias-target-suffix' },
+          reload: true,
+        });
+      } catch {
+        // do nothing
+      }
+    }
   }
 }

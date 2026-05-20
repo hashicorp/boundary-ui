@@ -689,9 +689,31 @@ function routes() {
       return resultSet.filter(makeBooleanFilter(filter));
     },
   );
-  this.post('/targets', function ({ targets }) {
+  this.post('/targets', function ({ targets, aliases, scopes }) {
     const attrs = this.normalizedRequestAttrs();
-    return targets.create(attrs);
+    const withAliases = attrs.withAliases || [];
+    delete attrs.withAliases;
+
+    const target = targets.create(attrs);
+
+    if (withAliases.length) {
+      const createdAliases = withAliases.map((aliasData) => {
+        const scopeId = aliasData.scope_id || 'global';
+        const scope = scopes.find(scopeId);
+        return aliases.create({
+          value: aliasData.value,
+          scope_id: scopeId,
+          scope,
+          destination_id: target.id,
+        });
+      });
+
+      target.update({
+        aliases: createdAliases.map((a) => ({ id: a.id, value: a.value })),
+      });
+    }
+
+    return target;
   });
   this.get('/targets/:id');
   this.patch('/targets/:id');

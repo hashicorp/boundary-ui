@@ -325,10 +325,14 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
-    assert.deepEqual(target.withAliases, [
-      { value: 'alias 1', scope_id: 'global' },
-      { value: 'alias 2', scope_id: 'global' },
-    ]);
+    const aliases = this.server.schema.aliases.where({
+      destination_id: target.id,
+    }).models;
+    assert.strictEqual(aliases.length, 2);
+    assert.strictEqual(aliases[0].value, 'alias 1');
+    assert.strictEqual(aliases[0].scope_id, 'global');
+    assert.strictEqual(aliases[1].value, 'alias 2');
+    assert.strictEqual(aliases[1].scope_id, 'global');
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
   });
 
@@ -374,10 +378,14 @@ module('Acceptance | targets | create', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     const target = this.server.schema.targets.findBy({ name });
-    assert.deepEqual(target.withAliases, [
-      { value: 'myhost', scope_id: instances.scopes.project.id },
-      { value: 'globalhost', scope_id: 'global' },
-    ]);
+    const aliases = this.server.schema.aliases.where({
+      destination_id: target.id,
+    }).models;
+    assert.strictEqual(aliases.length, 2);
+    assert.strictEqual(aliases[0].value, 'myhost');
+    assert.strictEqual(aliases[0].scope_id, instances.scopes.project.id);
+    assert.strictEqual(aliases[1].value, 'globalhost');
+    assert.strictEqual(aliases[1].scope_id, 'global');
   });
 
   test('alias rows show only Global when the project has no suffix', async function (assert) {
