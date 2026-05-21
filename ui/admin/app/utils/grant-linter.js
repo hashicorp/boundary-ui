@@ -565,20 +565,14 @@ const validateActionsField = (
           action,
         });
       break;
-    case 'child':
-      validActions = ['no-op', ...validActions];
-      break;
     case 'collection':
       errorMessage = (action) =>
         translate('actions.collection-only', { action });
       break;
+    case 'child':
     case 'type':
-      validActions = ['no-op', ...validActions];
-      break;
     case 'all':
       validActions = ['no-op', ...validActions];
-      break;
-    default:
       break;
   }
 
@@ -684,19 +678,13 @@ const validateOutputFieldsField = (
     errorMessage = (field) =>
       translate('output-fields.invalid-field', { field });
   } else if (validatedFields.ids?.knownType && !validatedFields.type) {
-    const knownType = validatedFields.ids.knownType;
-    const TEMPLATE_RESOURCE_TYPES = {
-      'account-template': 'account',
-      'user-template': 'user',
-    };
-    const resolvedType = TEMPLATE_RESOURCE_TYPES[knownType] ?? knownType;
     const resourceOutputFields =
-      schema.resourcesByType[resolvedType]?.outputFields ?? [];
+      schema.resourcesByType[validatedFields.ids.knownType]?.outputFields ?? [];
     validOutputFields = ['*', ...resourceOutputFields];
     errorMessage = (field) =>
       translate('output-fields.invalid-field-for-type', {
         field,
-        type: resolvedType,
+        type: validatedFields.ids.knownType,
       });
   }
 

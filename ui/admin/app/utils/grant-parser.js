@@ -172,71 +172,56 @@ export const getValidActions = (
 ) => {
   const typeWildcard = typeValue === '*';
   const hasExplicitType = Boolean(typeValue) && !typeWildcard;
-  const hasIds = Boolean(idsValue);
 
-  if (!typeValue) {
-    if (hasIds) {
-      if (idsKnownType) {
-        return {
-          actionsType: 'id',
-          actions: withWildCard(
-            schema.resourcesByType[idsKnownType]?.idActions ?? [],
-          ),
-        };
-      }
-      if (idsWildcard) {
-        return {
-          actionsType: 'all',
-          actions: withWildCard(schema.validActions),
-        };
-      }
-    } else {
-      return { actionsType: 'all', actions: withWildCard(schema.validActions) };
+  if (idsValue) {
+    // No type, ids resolve to a known type → that type's id actions.
+    if (!typeValue && idsKnownType) {
+      return {
+        actionsType: 'id',
+        actions: withWildCard(
+          schema.resourcesByType[idsKnownType]?.idActions ?? [],
+        ),
+      };
     }
-  } else if (typeWildcard) {
-    if (hasIds) {
-      if (idsKnownType) {
-        return {
-          actionsType: 'child',
-          actions: withWildCard(getChildResourceActions(schema, idsKnownType)),
-        };
-      }
-      if (idsWildcard) {
-        return {
-          actionsType: 'all',
-          actions: withWildCard(schema.validActions),
-        };
-      }
+
+    // Wildcard type, known id type → child resource actions.
+    if (typeWildcard && idsKnownType) {
+      return {
+        actionsType: 'child',
+        actions: withWildCard(getChildResourceActions(schema, idsKnownType)),
+      };
     }
-  } else if (hasExplicitType) {
-    if (hasIds) {
+
+    // Explicit type → validate parent relationship then return type actions.
+    if (hasExplicitType) {
       if (idsKnownType) {
         const selectedResource = schema.resourcesByType[typeValue];
         if (selectedResource?.parentType !== idsKnownType) {
           return { actionsType: 'invalid', actions: [] };
         }
-        return {
-          actionsType: 'type',
-          actions: withWildCard(
-            schema.resourcesByType[typeValue]?.actions ?? [],
-          ),
-        };
       }
-      if (idsWildcard) {
-        return {
-          actionsType: 'type',
-          actions: withWildCard(
-            schema.resourcesByType[typeValue]?.actions ?? [],
-          ),
-        };
-      }
-    } else {
-      if (schema.topLevelTypes.includes(typeValue)) {
-        return {
-          actionsType: 'collection',
-          actions: schema.resourcesByType[typeValue]?.collectionActions ?? [],
-        };
-      }
+      return {
+        actionsType: 'type',
+        actions: withWildCard(schema.resourcesByType[typeValue]?.actions ?? []),
+      };
+    }
+
+    // Wildcard ids with no explicit type → all actions.
+    if (idsWildcard && !hasExplicitType) {
+      return { actionsType: 'all', actions: withWildCard(schema.validActions) };
+    }
+  } else {
+    // No ids and no type → all actions.
+    if (!typeValue) {
+      return { actionsType: 'all', actions: withWildCard(schema.validActions) };
+    }
+
+    // No ids, explicit top-level type → collection actions.
+    if (hasExplicitType && schema.topLevelTypes.includes(typeValue)) {
+      return {
+        actionsType: 'collection',
+        actions: schema.resourcesByType[typeValue]?.collectionActions ?? [],
+      };
     }
   }
 
