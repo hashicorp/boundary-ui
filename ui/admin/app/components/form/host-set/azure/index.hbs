@@ -64,10 +64,9 @@
 
   <Form::Field::KeyValue
     @name='preferred_endpoints'
+    @model={{@model}}
+    @properties={{array 'value'}}
     @data={{@model.preferred_endpoints}}
-    @onAdd={{fn @addRow 'preferred_endpoints' (array 'value')}}
-    @onRemove={{fn @removeRow 'preferred_endpoints'}}
-    @onUpdate={{fn @updateRow 'preferred_endpoints'}}
     @legend={{t 'resources.host-set.form.preferred_endpoints.label'}}
     @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
     @errors={{@model.errors.preferred_endpoints}}

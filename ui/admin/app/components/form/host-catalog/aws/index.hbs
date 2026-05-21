@@ -274,10 +274,9 @@
     {{! role_tags }}
     <Form::Field::KeyValue
       @name='role_tags'
+      @model={{@model}}
+      @properties={{array 'key' 'value'}}
       @data={{@model.role_tags}}
-      @onAdd={{fn @addRow 'role_tags' (array 'key' 'value')}}
-      @onRemove={{fn @removeRow 'role_tags'}}
-      @onUpdate={{fn @updateRow 'role_tags'}}
       @legend={{t 'resources.storage-bucket.form.role_tags.label'}}
       @helperText={{t 'resources.storage-bucket.form.role_tags.help'}}
       @errors={{@model.errors.role_tags}}

@@ -62,48 +62,4 @@ export default class FormHostCatalogIndexComponent extends Component {
   toggleDisableCredentialRotation(model) {
     model.disable_credential_rotation = !model.disable_credential_rotation;
   }
-
-  /**
-   * Adds a new empty row to the specified field
-   * @param {string} field - The field name to add a row to
-   * @param {Array<string>} properties - Array of property names for the empty row (e.g., ['value'] or ['key', 'value'])
-   */
-  @action
-  addRow(field, properties) {
-    const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
-    this.args.model[field] = [...(this.args.model[field] ?? []), emptyRow];
-  }
-
-  /**
-   * Removes a row from the specified field
-   * @param {string} field - The field name to remove a row from
-   * @param {object} rowData - The row data to remove
-   */
-  @action
-  removeRow(field, rowData) {
-    let rows = (this.args.model[field] ?? []).filter(
-      (item) => item !== rowData,
-    );
-
-    if (rows.length === 0) {
-      const properties = Object.keys(rowData).length
-        ? Object.keys(rowData)
-        : ['value'];
-      rows = [Object.fromEntries(properties.map((prop) => [prop, '']))];
-    }
-
-    this.args.model[field] = rows;
-  }
-
-  /**
-   * @param {string} field - The field name containing the row
-   * @param {object} rowData - The row object to update
-   * @param {string} property - The property name to update
-   * @param {object} event - The DOM event containing the new value
-   */
-  @action
-  updateRow(field, rowData, property, { target: { value } }) {
-    rowData[property] = value;
-    this.args.model[field] = [...(this.args.model[field] ?? [])];
-  }
 }

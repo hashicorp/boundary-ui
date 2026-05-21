@@ -21,8 +21,8 @@
         Field=R.Field
         DeleteRowButton=R.DeleteRowButton
         rowData=R.rowData
-        removeRow=(fn @onRemove R.rowData)
-        updateRow=(fn @onUpdate R.rowData)
+        removeRow=(fn (or @onRemove this.handleRemove) R.rowData)
+        updateRow=(fn (or @onUpdate this.handleUpdate) R.rowData)
         canDelete=this.canDelete
       )
       to='row'
@@ -32,7 +32,7 @@
     <F.AddRowButton
       @text={{t 'actions.add'}}
       data-test-add-button
-      @onClick={{@onAdd}}
+      @onClick={{or @onAdd this.handleAdd}}
     />
     {{#if @errors}}
       <F.Error as |E|>
