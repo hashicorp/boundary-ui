@@ -8,7 +8,6 @@ import {
   TEMPLATE_RESOURCE_TYPES,
   normalizeGrantsSchema,
   parseGrantLine,
-  withWildCard,
   getValidActions,
   getValidOutputFields,
 } from './grant-parser';
@@ -19,6 +18,7 @@ const CRUDL_ACTIONS = new Set(['create', 'read', 'update', 'delete', 'list']);
 const filterByPrefix = (values, partial) =>
   values.filter((value) => value.startsWith(partial));
 const parseIds = (idsValue = '') => idsValue.split(',').filter(Boolean);
+const withWildCard = (values = []) => ['*', ...new Set(values)];
 
 const getNoSuggestionsOption = (noSuggestionsLabel) => ({
   label: noSuggestionsLabel,

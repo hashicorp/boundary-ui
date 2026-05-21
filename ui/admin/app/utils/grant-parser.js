@@ -137,7 +137,7 @@ export const parseGrantLine = (lineText = '', lineStart = 0) => {
   return { fields, fieldMap, fieldPositions, fieldKeyCount };
 };
 
-export const getChildResourceValues = (schema, compatibleType, getValues) => {
+const getChildResourceValues = (schema, compatibleType, getValues) => {
   if (
     !compatibleType ||
     !schema.childResourceTypesByParentType[compatibleType]?.length
@@ -155,21 +155,21 @@ export const getChildResourceValues = (schema, compatibleType, getValues) => {
   ];
 };
 
-export const getChildResourceActions = (schema, compatibleType) =>
+const getChildResourceActions = (schema, compatibleType) =>
   getChildResourceValues(
     schema,
     compatibleType,
     (resource) => resource?.actions ?? [],
   );
 
-export const getChildResourceOutputFields = (schema, compatibleType) =>
+const getChildResourceOutputFields = (schema, compatibleType) =>
   getChildResourceValues(
     schema,
     compatibleType,
     (resource) => resource?.outputFields ?? [],
   );
 
-export const withWildCard = (values = []) => ['*', ...new Set(values)];
+const withWildCard = (values = []) => ['*', ...new Set(values)];
 
 export const getValidActions = (
   schema,
