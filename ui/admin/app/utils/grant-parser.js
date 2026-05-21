@@ -1,3 +1,8 @@
+/**
+ * Copyright IBM Corp. 2021, 2026
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 export const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
 export const TEMPLATE_RESOURCE_TYPES = {
   '{{.User.Id}}': 'user',
