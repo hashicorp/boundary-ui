@@ -74,9 +74,11 @@
               <H.Th>
                 {{t 'resources.alias.titles.points_to'}}
               </H.Th>
-              <H.Th>
-                {{t 'resources.scope.title'}}
-              </H.Th>
+              {{#unless this.scope.isProject}}
+                <H.Th>
+                  {{t 'resources.scope.title'}}
+                </H.Th>
+              {{/unless}}
               <H.Th>
                 {{t 'resources.alias.titles.resource_id'}}
               </H.Th>
@@ -128,9 +130,17 @@
                     </Hds::Text::Body>
                   {{/if}}
                 </B.Td>
-                <B.Td>
-                  <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
-                </B.Td>
+                {{#unless this.scope.isProject}}
+                  <B.Td>
+                    <Hds::Badge
+                      @text={{or
+                        data.alias.scopeModel.displayName
+                        data.alias.scope.scope_id
+                      }}
+                      @icon={{if data.alias.scope.isGlobal 'globe' 'grid'}}
+                    />
+                  </B.Td>
+                {{/unless}}
                 <B.Td>
                   {{#if data.alias.destination_id}}
                     <Hds::Copy::Snippet

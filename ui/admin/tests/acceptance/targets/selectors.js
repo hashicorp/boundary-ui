@@ -14,10 +14,13 @@ export const FIELD_INFO = '.info-field';
 export const FIELD_INFO_LABEL = '.info-field .hds-form-helper-text';
 export const FIELD_ALIAS = '[name="value"]';
 export const FIELD_DESTINATION_ID = '[name="destination_id"]';
-export const FIELD_ALIASES =
-  '[name="with_aliases"] tbody tr:last-of-type input';
-export const FIELD_ALIASES_ADD_BTN =
-  '[name="with_aliases"] tbody tr:last-of-type button';
+export const FIELD_ALIASES_ADD_BTN = '[data-test-aliases-add-btn]';
+export const FIELD_ALIASES_ROW_SCOPE = (index) =>
+  `[data-test-alias-row-scope="${index}"]`;
+export const FIELD_ALIASES_ROW_VALUE = (index) =>
+  `[data-test-alias-row-value="${index}"]`;
+export const FIELD_ALIASES_ROW_REMOVE = (index) =>
+  `[data-test-alias-row-remove="${index}"]`;
 export const FIELD_ADDRESS = '[name="address"]';
 export const FIELD_ADDRESS_VALUE = '0.0.0.0';
 export const FIELD_NAME_ERROR = '[data-test-error-message-name]';

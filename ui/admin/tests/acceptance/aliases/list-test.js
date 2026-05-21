@@ -197,6 +197,24 @@ module('Acceptance | aliases | list', function (hooks) {
     assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
+  test('global aliases list renders the scope column', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    await visit(urls.aliases);
+
+    // Global list columns: Alias | Points to | Scope | Resource ID | Actions
+    assert.dom('thead th').exists({ count: 5 });
+    assert
+      .dom('thead th:nth-child(3)')
+      .hasText(intl.t('resources.scope.title'));
+  });
+
   test('edit action in table directs user to appropriate page', async function (assert) {
     setRunOptions({
       rules: {

@@ -109,6 +109,13 @@ export default function (server) {
   server.createList('policy', 3, { scope: orgScope });
 
   // Other resources
+  // Set an alias_suffix on the first project scope so the project aliases
+  // page renders.
+  const projectScopes = server.schema.scopes.where({ type: 'project' }).models;
+  if (projectScopes[0]) {
+    projectScopes[0].update({ alias_suffix: '.example' });
+  }
+
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList(
       'host-catalog',

@@ -97,4 +97,37 @@ module('Acceptance | aliases | delete', function (hooks) {
 
     assert.dom(commonSelectors.DELETE_BTN).doesNotExist();
   });
+
+  test('users can delete a project-scoped alias from the project aliases list', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    // Give the project a suffix so the aliases list page renders (not gated).
+    instances.scopes.project.update({ alias_suffix: '.example' });
+
+    const projectAlias = this.server.create('alias', {
+      scope: instances.scopes.project,
+      scope_id: instances.scopes.project.id,
+      destination_id: instances.target.id,
+      base_value: 'shipping-api',
+      value: 'shipping-api.example',
+    });
+
+    const projectAliasesUrl = `/scopes/${instances.scopes.project.id}/aliases`;
+    const count = aliasCount();
+
+    assert.true(projectAlias.authorized_actions.includes('delete'));
+    await visit(projectAliasesUrl);
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.DELETE_BTN);
+
+    assert.strictEqual(aliasCount(), count - 1);
+    assert.notOk(this.server.schema.aliases.find(projectAlias.id));
+  });
 });

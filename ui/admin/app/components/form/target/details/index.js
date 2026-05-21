@@ -10,6 +10,7 @@ import {
   TYPE_TARGET_SSH,
 } from 'api/models/target';
 import { service } from '@ember/service';
+import { action, set } from '@ember/object';
 
 const icons = {
   ssh: 'terminal-screen',
@@ -21,6 +22,8 @@ export default class FormTargetComponent extends Component {
   // =services
 
   @service features;
+  @service abilities;
+  @service intl;
 
   /**
    * maps resource type with icon
@@ -74,5 +77,82 @@ export default class FormTargetComponent extends Component {
    */
   get showTargetTypeRadioGroup() {
     return (this.isRDPEnabled || this.isSSHEnabled) && this.args.model.isNew;
+  }
+
+  /**
+   * True when the current scope is a project with a configured suffix and
+   * the user can create aliases on it.
+   * @type {boolean}
+   */
+  get canCreateAliasOnProject() {
+    const scope = this.args.model?.scopeModel;
+    if (!scope?.isProject || !scope.hasSuffix) return false;
+    return this.abilities.can('create model', scope, { collection: 'aliases' });
+  }
+
+  /**
+   * Default scope id to seed onto a freshly-added alias row.
+   * @type {string}
+   */
+  get defaultAliasScopeId() {
+    return this.canCreateAliasOnProject
+      ? this.args.model.scopeModel.id
+      : (this.args.globalScope?.id ?? 'global');
+  }
+
+  /**
+   * Project alias suffix with a leading dot, regardless of how it is stored
+   * on the scope. Empty string when the project has no suffix.
+   * @type {string}
+   */
+  get normalizedProjectSuffix() {
+    const suffix = this.args.model?.scopeModel?.alias_suffix;
+    if (!suffix) return '';
+    return suffix.startsWith('.') ? suffix : `.${suffix}`;
+  }
+
+  /**
+   * Dropdown label for the Project scope option, e.g.
+   * "Project name (suffix '.example')".
+   * @type {string}
+   */
+  get projectOptionLabel() {
+    const scope = this.args.model?.scopeModel;
+    const name = scope?.displayName || scope?.name || scope?.id;
+    return this.intl.t('resources.alias.form.alias.scope.options.project', {
+      name,
+      suffix: this.normalizedProjectSuffix,
+    });
+  }
+
+  // =actions
+
+  @action
+  addAliasRow() {
+    const existing = this.args.model.with_aliases ?? [];
+    set(this.args.model, 'with_aliases', [
+      ...existing,
+      { value: '', scope_id: this.defaultAliasScopeId },
+    ]);
+  }
+
+  @action
+  removeAliasRow(rowData) {
+    const existing = this.args.model.with_aliases ?? [];
+    set(
+      this.args.model,
+      'with_aliases',
+      existing.filter((r) => r !== rowData),
+    );
+  }
+
+  @action
+  setRowScope(row, event) {
+    set(row, 'scope_id', event.target.value);
+  }
+
+  @action
+  setRowValue(row, event) {
+    set(row, 'value', event.target.value);
   }
 }

@@ -689,9 +689,38 @@ function routes() {
       return resultSet.filter(makeBooleanFilter(filter));
     },
   );
-  this.post('/targets', function ({ targets }) {
+  this.post('/targets', function ({ targets, aliases, scopes }) {
     const attrs = this.normalizedRequestAttrs();
-    return targets.create(attrs);
+    const withAliases = attrs.withAliases || [];
+    delete attrs.withAliases;
+
+    const target = targets.create(attrs);
+
+    if (withAliases.length) {
+      const createdAliases = withAliases.map((aliasData) => {
+        const scopeId = aliasData.scope_id || 'global';
+        const scope = scopes.find(scopeId);
+        const aliasSuffix = scope?.alias_suffix ?? scope?.aliasSuffix;
+        const aliasAttrs = {
+          value: aliasData.value,
+          scope_id: scopeId,
+          scope,
+          destination_id: target.id,
+        };
+
+        if (aliasSuffix) {
+          aliasAttrs.base_value = aliasData.value;
+          aliasAttrs.value = `${aliasData.value}${aliasSuffix}`;
+        }
+        return aliases.create(aliasAttrs);
+      });
+
+      target.update({
+        aliases: createdAliases.map((a) => ({ id: a.id, value: a.value })),
+      });
+    }
+
+    return target;
   });
   this.get('/targets/:id');
   this.patch('/targets/:id');
@@ -949,7 +978,24 @@ function routes() {
   );
   this.get('/aliases/:id');
   this.del('/aliases/:id');
-  this.patch('/aliases/:id');
+  this.patch(
+    '/aliases/:id',
+    function ({ aliases, scopes }, { params: { id } }) {
+      const alias = aliases.find(id);
+      const attrs = this.normalizedRequestAttrs();
+
+      // Mirror the create-alias suffix logic on update.
+      const scopeId = alias.scope_id;
+      const scope = scopes.find(scopeId);
+      const updatedAttrs = { ...attrs };
+      if (attrs.value !== undefined && scope?.alias_suffix) {
+        updatedAttrs.base_value = attrs.value;
+        updatedAttrs.value = `${attrs.value}${scope.alias_suffix}`;
+      }
+
+      return alias.update(updatedAttrs);
+    },
+  );
   this.post('/aliases', function ({ aliases, scopes }) {
     const attrs = this.normalizedRequestAttrs();
 
@@ -958,16 +1004,15 @@ function routes() {
       attrs.scope_id || attrs.scopeId || attrs.scope?.id || 'global';
     const scope = scopes.find(scopeId);
 
+    // Mirror the real API: clients submit `value` only; `base_value` is
+    // server-derived.
     const baseValue =
-      attrs.base_value || attrs.value || attrs.name || faker.word.words();
+      attrs.value || attrs.base_value || attrs.name || faker.word.words();
 
-    let fullValue = attrs.value || baseValue;
+    const fullValue = scope?.alias_suffix
+      ? `${baseValue}${scope.alias_suffix}`
+      : baseValue;
 
-    if (scope?.alias_suffix) {
-      fullValue = `${baseValue}${scope.alias_suffix}`;
-    }
-
-    // Create the alias with both base_value and value
     const aliasAttrs = {
       ...attrs,
       scope_id: scopeId,

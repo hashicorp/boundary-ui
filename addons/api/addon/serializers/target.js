@@ -47,14 +47,15 @@ export default class TargetSerializer extends ApplicationSerializer {
     }
 
     if (isNew && serialized?.with_aliases) {
-      // API expects scope id along with every alias value
-      // TODO: Should also use project scope id for project targets once supported by API.
-      // const defaultScopeId = snapshot.attr('scope')?.scope_id || 'global';
-      const defaultScopeId = 'global';
-      serialized.with_aliases = serialized.with_aliases.map((item) => ({
-        ...item,
-        scope_id: item.scope_id || defaultScopeId,
-      }));
+      // API expects a scope id alongside every alias value. Preserve the
+      // scope_id chosen on each row (global or the current project) and
+      // fall back to 'global' only when the row didn't carry one.
+      serialized.with_aliases = serialized.with_aliases
+        .filter((item) => item?.value)
+        .map((item) => ({
+          ...item,
+          scope_id: item.scope_id || 'global',
+        }));
     } else {
       // This field can't be updated, it is used only during creation time
       delete serialized.with_aliases;

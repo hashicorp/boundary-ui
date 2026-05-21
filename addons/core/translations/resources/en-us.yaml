@@ -1297,6 +1297,7 @@ alias:
     value:
       label: Alias Value
       help: The alias you would like to use for this resource. If using Windows, using a "." in the hostname is recommended.
+      help_project: The alias you would like to use for this resource. The Alias suffix has been set by your project administrator.
     authorize_session_arguments:
       label: Host ID
       help: Always use this host when connecting using this alias
@@ -1304,4 +1305,11 @@ alias:
       help: Use a domain name as a shortcut for anyone with access to this target.
     alias:
       label: Aliases
-      help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.
+      help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases. Projects must have a suffix in order to create a project level alias.
+      scope:
+        label: Select scope
+        options:
+          global: Global
+          project: '{name} (suffix "{suffix}")'
+      value:
+        label: Alias value
