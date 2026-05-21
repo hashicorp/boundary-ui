@@ -2,14 +2,14 @@
  * Copyright IBM Corp. 2021, 2026
  * SPDX-License-Identifier: BUSL-1.1
  */
-
-const GRANT_FIELDS = ['ids', 'type', 'actions', 'output_fields'];
-const ID_TEMPLATES = [
-  '{{.Account.Id}}',
-  '{{.User.Id}}',
-  '{{user.id}}',
-  '{{account.id}}',
-];
+import {
+  GRANT_FIELDS,
+  TEMPLATE_RESOURCE_TYPES,
+  normalizeGrantsSchema,
+  parseGrantLine,
+  getValidActions,
+  getValidOutputFields,
+} from './grant-parser';
 
 const createDeleteTextAction = (name) => ({
   name,
@@ -28,86 +28,6 @@ const createAddTextAction = (name) => ({
     });
   },
 });
-
-const normalizeGrantsSchema = (grantsSchema) => {
-  const resourceTypes = grantsSchema?.resource_types ?? [];
-
-  const resourcesByType = resourceTypes.reduce((resources, resourceType) => {
-    const collectionActions = resourceType.collection_actions ?? [];
-    const idActions = resourceType.id_actions ?? [];
-    const idPrefixes = resourceType.id_prefixes ?? [];
-
-    resources[resourceType.type] = {
-      actions: [...collectionActions, ...idActions],
-      collectionActions,
-      idActions,
-      idPrefixes,
-      parentType: resourceType.parent_type,
-      outputFields: resourceType.output_fields ?? [],
-    };
-
-    return resources;
-  }, {});
-
-  const validResourceTypes = resourceTypes.map((resource) => resource.type);
-  validResourceTypes.push('*');
-
-  const allActions = new Set();
-  Object.values(resourcesByType).forEach((resource) => {
-    resource.actions.forEach((action) => allActions.add(action));
-  });
-  const validActions = Array.from(allActions);
-  validActions.push('*');
-  validActions.push('no-op');
-
-  const resourcesByPrefix = resourceTypes.reduce((map, resource) => {
-    resource.id_prefixes?.forEach((prefix) => {
-      map[prefix] = resource.type;
-    });
-    return map;
-  }, {});
-
-  let parentTypes = new Set(
-    resourceTypes.filter((r) => r.parent_type).map((r) => r.parent_type),
-  );
-  parentTypes = Array.from(parentTypes);
-
-  const topLevelTypes = resourceTypes
-    .filter((r) => {
-      const hasCreateAction = r.collection_actions.includes('create');
-      const hasListAction = r.collection_actions.includes('list');
-      return !r.parent_type && (hasCreateAction || hasListAction);
-    })
-    .map((r) => r.type);
-
-  const childResourceTypesByParentType = resourceTypes.reduce(
-    (childrenByParentType, resourceType) => {
-      const parentType = resourceType.parent_type;
-
-      if (!parentType) {
-        return childrenByParentType;
-      }
-
-      childrenByParentType[parentType] = [
-        ...(childrenByParentType[parentType] ?? []),
-        resourceType.type,
-      ];
-
-      return childrenByParentType;
-    },
-    {},
-  );
-
-  return {
-    resourcesByType,
-    validResourceTypes,
-    validActions,
-    resourcesByPrefix,
-    childResourceTypesByParentType,
-    parentTypes,
-    topLevelTypes,
-  };
-};
 
 const grantLinter = (context, schema, translate) => {
   const diagnostics = [];
@@ -175,50 +95,27 @@ const grantLinter = (context, schema, translate) => {
     }
 
     // Parse key-value pairs separated by semicolons
-    const pairs = trimmedLine.split(';').filter((p) => p.trim());
-    const parsedFields = {};
-    const fieldPositions = {};
-    const allFields = [];
-    const fieldKeyCount = {};
+    const {
+      fields: allFields,
+      fieldMap: parsedFields,
+      fieldPositions,
+      fieldKeyCount,
+    } = parseGrantLine(line, lineStart);
 
-    let pairOffset = trimStart; // Start from where trimmed content begins
-
-    for (const pair of pairs) {
-      const pairInLine = line.indexOf(pair, pairOffset - trimStart);
-      const [key, ...valueParts] = pair.split('=');
-      const value = valueParts.join('='); // Handle cases where value contains '='
-
-      if (!key || value === undefined) {
-        // Invalid format - not a key=value pair
-        const pairStart = lineStart + pairInLine;
+    // Check for invalid format (no '=' in a pair or empty key)
+    for (const field of allFields) {
+      if (field.value === undefined || !field.key) {
         diagnostics.push({
-          from: pairStart,
-          to: pairStart + pair.length,
+          from: field.pos.keyStart,
+          to: field.pos.valueEnd,
           severity: 'error',
           message: translate('general.invalid-format'),
         });
-        continue;
       }
-
-      const trimmedKey = key.trim();
-      const keyStartInPair = pair.indexOf(trimmedKey);
-      const valueStartInPair = pair.indexOf('=') + 1;
-
-      const pos = {
-        keyStart: lineStart + pairInLine + keyStartInPair,
-        valueStart: lineStart + pairInLine + valueStartInPair,
-        valueEnd: lineStart + pairInLine + pair.length,
-      };
-      allFields.push({ key: trimmedKey, value: value.trim(), pos });
-      fieldKeyCount[trimmedKey] = (fieldKeyCount[trimmedKey] ?? 0) + 1;
-
-      pairOffset = pairInLine + pair.length + 1; // +1 for semicolon
     }
 
-    // Validate there are no duplicate fields and store the last instance of each field for further validation
+    // Validate there are no duplicate fields
     for (const field of allFields) {
-      parsedFields[field.key] = field.value;
-      fieldPositions[field.key] = field.pos;
       if (fieldKeyCount[field.key] > 1) {
         diagnostics.push({
           from: field.pos.keyStart,
@@ -245,8 +142,8 @@ const grantLinter = (context, schema, translate) => {
     }
 
     // Validate field values are not empty
-    for (const [field, value] of Object.entries(parsedFields)) {
-      if (!value.trim()) {
+    for (const field of Object.keys(fieldPositions)) {
+      if (!parsedFields[field]) {
         const pos = fieldPositions[field];
         diagnostics.push({
           from: pos.valueStart,
@@ -262,7 +159,7 @@ const grantLinter = (context, schema, translate) => {
     // Validate type field value is a valid resource type
     if (parsedFields.type) {
       validatedFields.type = { value: '', wildcard: false };
-      const typeValue = parsedFields.type.trim();
+      const typeValue = parsedFields.type;
       const pos = fieldPositions.type;
       if (!schema.validResourceTypes.includes(typeValue)) {
         diagnostics.push({
@@ -273,7 +170,7 @@ const grantLinter = (context, schema, translate) => {
         });
       } else {
         validatedFields.type.value = typeValue;
-        if (!parsedFields.ids) {
+        if (!fieldPositions.ids) {
           if (!schema.topLevelTypes.includes(typeValue)) {
             diagnostics.push({
               from: pos.valueStart,
@@ -317,7 +214,7 @@ const grantLinter = (context, schema, translate) => {
           });
         } else {
           validatedFields.ids.wildcard = true;
-          if (!parsedFields.type) {
+          if (!fieldPositions.type) {
             diagnostics.push({
               from: lineStart,
               to: lineEnd,
@@ -343,14 +240,14 @@ const grantLinter = (context, schema, translate) => {
     }
 
     if (!validatedFields.ids) {
-      if (!validatedFields.type) {
+      if (!fieldPositions.type) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
           severity: 'error',
           message: translate('fields.missing-ids-or-type'),
         });
-      } else if (validatedFields.type.wildcard) {
+      } else if (validatedFields.type?.wildcard) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
@@ -358,7 +255,7 @@ const grantLinter = (context, schema, translate) => {
           message: translate('type.wildcard-requires-ids'),
         });
       } else {
-        if (!parsedFields.actions && !parsedFields.output_fields) {
+        if (!fieldPositions.actions && !fieldPositions.output_fields) {
           diagnostics.push({
             from: lineStart,
             to: lineEnd,
@@ -368,7 +265,7 @@ const grantLinter = (context, schema, translate) => {
         }
       }
     } else {
-      if (!parsedFields.actions && !parsedFields.output_fields) {
+      if (!fieldPositions.actions && !fieldPositions.output_fields) {
         diagnostics.push({
           from: lineStart,
           to: lineEnd,
@@ -489,30 +386,13 @@ const validateListField = (fieldValue, pos, diagnostics, translate) => {
   return valList;
 };
 
-// Returns template, resource type, or null;
+// Returns 'template', resource type, or undefined
 const idType = (schema, id) => {
   if (id.startsWith('{{') && id.endsWith('}}')) {
     return 'template';
   }
   const prefix = id.split('_')[0];
-  return schema.resourcesByPrefix[prefix];
-};
-
-const getChildResourceActions = (schema, parentType) => {
-  if (
-    !parentType ||
-    !schema.childResourceTypesByParentType[parentType]?.length
-  ) {
-    return [];
-  }
-
-  const childTypes = schema.childResourceTypesByParentType[parentType] ?? [];
-
-  return [
-    ...new Set(
-      childTypes.flatMap((type) => schema.resourcesByType[type]?.actions ?? []),
-    ),
-  ];
+  return schema.resourceTypesByIdPrefix[prefix];
 };
 
 const validateIdsField = (
@@ -573,7 +453,7 @@ const validateIdsField = (
     }
     const currentIdType = idType(schema, id);
     if (currentIdType === 'template') {
-      if (!ID_TEMPLATES.includes(id)) {
+      if (!Object.keys(TEMPLATE_RESOURCE_TYPES).includes(id)) {
         diagnostics.push({
           from: segmentStart,
           to: segmentEnd,
@@ -652,27 +532,10 @@ const validateIdsField = (
         message: translate('ids.templates-cannot-combine'),
       });
       return;
-    } else if (
-      idsList[0] === '{{.Account.Id}}' ||
-      idsList[0] === '{{account.id}}'
-    ) {
-      seenIdType = 'account-template';
-    } else if (idsList[0] === '{{.User.Id}}' || idsList[0] === '{{user.id}}') {
-      seenIdType = 'user-template';
     }
+    return TEMPLATE_RESOURCE_TYPES[idsList[0]];
   }
   return seenIdType;
-};
-
-const getIdActionsForResourceType = (schema, resourceType) => {
-  switch (resourceType) {
-    case 'account-template':
-      return ['*', ...schema.resourcesByType['account'].idActions];
-    case 'user-template':
-      return ['*', ...schema.resourcesByType['user'].idActions];
-    default:
-      return ['*', ...schema.resourcesByType[resourceType].idActions];
-  }
 };
 
 const validateActionsField = (
@@ -683,49 +546,34 @@ const validateActionsField = (
   pos,
   translate,
 ) => {
-  let validActions = schema.validActions;
+  let validActions = ['*', 'no-op', ...schema.validActions];
   let errorMessage = (action) =>
     translate('actions.invalid-action', { action });
-  if (!validatedFields.type) {
-    if (validatedFields.ids?.knownType) {
-      // Only id actions belonging to known id type (including wildcard action)
-      validActions = getIdActionsForResourceType(
-        schema,
-        validatedFields.ids.knownType,
-      );
+  const { actionsType, actions } = getValidActions(schema, {
+    typeValue: validatedFields.type?.value,
+    idsValue: validatedFields.ids?.value,
+    idsWildcard: validatedFields.ids?.wildcard,
+    idsKnownType: validatedFields.ids?.knownType,
+  });
+  validActions = actions.length > 0 ? actions : validActions;
+
+  switch (actionsType) {
+    case 'id':
       errorMessage = (action) =>
         translate('actions.id-only', {
           type: validatedFields.ids.knownType,
           action,
         });
-    }
-  } else if (validatedFields.type.wildcard) {
-    if (validatedFields.ids?.knownType) {
-      // Any action from associated child resource types would be valid (including wildcard action)
-      validActions = [
-        '*',
-        'no-op',
-        ...getChildResourceActions(schema, validatedFields.ids.knownType),
-      ];
-    }
-  } else if (validatedFields.type.value) {
-    if (!validatedFields.ids) {
-      // Only collection actions create/list belonging to the specified type
-      validActions =
-        schema.resourcesByType[validatedFields.type.value].collectionActions;
-      validActions = validActions.filter(
-        (action) => action.startsWith('create') || action.startsWith('list'),
-      );
+      break;
+    case 'collection':
       errorMessage = (action) =>
         translate('actions.collection-only', { action });
-    } else if (validatedFields.ids.knownType || validatedFields.ids.wildcard) {
-      // Any action belonging to the specified type (including wildcard action)
-      validActions = [
-        '*',
-        'no-op',
-        ...schema.resourcesByType[validatedFields.type.value].actions,
-      ];
-    }
+      break;
+    case 'child':
+    case 'type':
+    case 'all':
+      validActions = ['no-op', ...validActions];
+      break;
   }
 
   let segmentStart = pos.valueStart;
@@ -808,49 +656,22 @@ const validateOutputFieldsField = (
   pos,
   translate,
 ) => {
-  let validOutputFields = ['*'];
-  let errorMessage = (field) =>
-    translate('output-fields.invalid-field', { field });
-
-  if (validatedFields.type?.value && !validatedFields.type.wildcard) {
-    const resourceOutputFields =
-      schema.resourcesByType[validatedFields.type.value]?.outputFields ?? [];
-    validOutputFields = ['*', ...resourceOutputFields];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field-for-type', {
-        field,
-        type: validatedFields.type.value,
-      });
-  } else if (validatedFields.type?.wildcard && validatedFields.ids?.knownType) {
-    // Pinned IDs with wildcard type: validate against union of child types' output fields
-    const parentType = validatedFields.ids.knownType;
-    const childTypes = schema.childResourceTypesByParentType[parentType] ?? [];
-    const childOutputFields = [
-      ...new Set(
-        childTypes.flatMap(
-          (type) => schema.resourcesByType[type]?.outputFields ?? [],
-        ),
-      ),
-    ];
-    validOutputFields = ['*', ...childOutputFields];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field', { field });
-  } else if (validatedFields.ids?.knownType && !validatedFields.type) {
-    const knownType = validatedFields.ids.knownType;
-    const TEMPLATE_RESOURCE_TYPES = {
-      'account-template': 'account',
-      'user-template': 'user',
-    };
-    const resolvedType = TEMPLATE_RESOURCE_TYPES[knownType] ?? knownType;
-    const resourceOutputFields =
-      schema.resourcesByType[resolvedType]?.outputFields ?? [];
-    validOutputFields = ['*', ...resourceOutputFields];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field-for-type', {
-        field,
-        type: resolvedType,
-      });
-  }
+  const {
+    outputFieldsType,
+    outputFields: validOutputFields,
+    resolvedType,
+  } = getValidOutputFields(schema, {
+    typeValue: validatedFields.type?.value,
+    idsKnownType: validatedFields.ids?.knownType,
+  });
+  const errorMessage =
+    outputFieldsType === 'type'
+      ? (field) =>
+          translate('output-fields.invalid-field-for-type', {
+            field,
+            type: resolvedType,
+          })
+      : (field) => translate('output-fields.invalid-field', { field });
 
   let segmentStart = pos.valueStart;
   for (const [i, field] of outputFieldList.entries()) {
