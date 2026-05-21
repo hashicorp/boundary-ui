@@ -7,8 +7,8 @@ import {
   TEMPLATE_RESOURCE_TYPES,
   normalizeGrantsSchema,
   parseGrantLine,
-  getChildResourceOutputFields,
   getValidActions,
+  getValidOutputFields,
 } from './grant-parser';
 
 const createDeleteTextAction = (name) => ({
@@ -656,37 +656,22 @@ const validateOutputFieldsField = (
   pos,
   translate,
 ) => {
-  let validOutputFields = ['*'];
-  let errorMessage = (field) =>
-    translate('output-fields.invalid-field', { field });
-
-  if (validatedFields.type?.value && !validatedFields.type.wildcard) {
-    const resourceOutputFields =
-      schema.resourcesByType[validatedFields.type.value]?.outputFields ?? [];
-    validOutputFields = ['*', ...resourceOutputFields];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field-for-type', {
-        field,
-        type: validatedFields.type.value,
-      });
-  } else if (validatedFields.type?.wildcard && validatedFields.ids?.knownType) {
-    // Pinned IDs with wildcard type: validate against union of child types' output fields
-    validOutputFields = [
-      '*',
-      ...getChildResourceOutputFields(schema, validatedFields.ids.knownType),
-    ];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field', { field });
-  } else if (validatedFields.ids?.knownType && !validatedFields.type) {
-    const resourceOutputFields =
-      schema.resourcesByType[validatedFields.ids.knownType]?.outputFields ?? [];
-    validOutputFields = ['*', ...resourceOutputFields];
-    errorMessage = (field) =>
-      translate('output-fields.invalid-field-for-type', {
-        field,
-        type: validatedFields.ids.knownType,
-      });
-  }
+  const {
+    outputFieldsType,
+    outputFields: validOutputFields,
+    resolvedType,
+  } = getValidOutputFields(schema, {
+    typeValue: validatedFields.type?.value,
+    idsKnownType: validatedFields.ids?.knownType,
+  });
+  const errorMessage =
+    outputFieldsType === 'type'
+      ? (field) =>
+          translate('output-fields.invalid-field-for-type', {
+            field,
+            type: resolvedType,
+          })
+      : (field) => translate('output-fields.invalid-field', { field });
 
   let segmentStart = pos.valueStart;
   for (const [i, field] of outputFieldList.entries()) {

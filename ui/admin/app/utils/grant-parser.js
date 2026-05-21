@@ -232,3 +232,48 @@ export const getValidActions = (
 
   return { actionsType: 'invalid', actions: [] };
 };
+
+export const getValidOutputFields = (schema, { typeValue, idsKnownType }) => {
+  const typeWildcard = typeValue === '*';
+  const hasExplicitType = Boolean(typeValue) && !typeWildcard;
+
+  if (hasExplicitType) {
+    const resourceOutputFields =
+      schema.resourcesByType[typeValue]?.outputFields ?? [];
+    return {
+      outputFieldsType: 'type',
+      outputFields: resourceOutputFields.length
+        ? withWildCard(resourceOutputFields)
+        : ['*'],
+      resolvedType: typeValue,
+    };
+  }
+
+  if (typeWildcard && idsKnownType) {
+    const childOutputFields = getChildResourceOutputFields(
+      schema,
+      idsKnownType,
+    );
+    return {
+      outputFieldsType: 'child',
+      outputFields: childOutputFields.length
+        ? withWildCard(childOutputFields)
+        : ['*'],
+      resolvedType: null,
+    };
+  }
+
+  if (!typeValue && idsKnownType) {
+    const resourceOutputFields =
+      schema.resourcesByType[idsKnownType]?.outputFields ?? [];
+    return {
+      outputFieldsType: 'type',
+      outputFields: resourceOutputFields.length
+        ? withWildCard(resourceOutputFields)
+        : ['*'],
+      resolvedType: idsKnownType,
+    };
+  }
+
+  return { outputFieldsType: 'all', outputFields: ['*'], resolvedType: null };
+};

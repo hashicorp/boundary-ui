@@ -8,9 +8,9 @@ import {
   TEMPLATE_RESOURCE_TYPES,
   normalizeGrantsSchema,
   parseGrantLine,
-  getChildResourceOutputFields,
-  getValidActions,
   withWildCard,
+  getValidActions,
+  getValidOutputFields,
 } from './grant-parser';
 
 const ID_TEMPLATES = ['{{.User.Id}}', '{{.Account.Id}}'];
@@ -163,39 +163,6 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
     hasInvalidIds,
     hasInvalidPinnedIdTypeCombination,
   };
-};
-
-const getOutputFieldOptions = (schema, typeValue, idsValue, compatibleType) => {
-  const selectedResource = schema.resourcesByType[typeValue];
-
-  if (typeValue && typeValue !== '*' && selectedResource) {
-    return selectedResource.outputFields.length
-      ? withWildCard(selectedResource.outputFields)
-      : ['*'];
-  }
-
-  const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
-
-  // Pinned IDs with wildcard type
-  if (typeValue === '*' && hasSpecificIds) {
-    const childOutputFields = getChildResourceOutputFields(
-      schema,
-      compatibleType,
-    );
-    return childOutputFields.length ? withWildCard(childOutputFields) : ['*'];
-  }
-
-  if (!typeValue && hasSpecificIds) {
-    if (compatibleType) {
-      const resourceOutputFields =
-        schema.resourcesByType[compatibleType]?.outputFields ?? [];
-      return resourceOutputFields.length
-        ? withWildCard(resourceOutputFields)
-        : ['*'];
-    }
-  }
-
-  return ['*'];
 };
 
 const getIdLookupTypes = (schema, typeValue, enteredIds) => {
@@ -390,10 +357,11 @@ async function grantCompletions(
     const partial = enteredOutputFields.pop() ?? '';
     const hasEnteredOutputFields = enteredOutputFields.length > 0;
 
-    const options = filterByPrefix(
-      getOutputFieldOptions(schema, typeValue, idsValue, compatibleType),
-      partial,
-    )
+    const { outputFields } = getValidOutputFields(schema, {
+      typeValue,
+      idsKnownType: compatibleType,
+    });
+    const options = filterByPrefix(outputFields, partial)
       .filter((value) => !hasEnteredOutputFields || value !== '*')
       .filter((value) => !enteredOutputFields.includes(value))
       .map((value) => ({
