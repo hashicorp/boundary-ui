@@ -69,12 +69,6 @@ module('Acceptance | projects | settings | index', function (hooks) {
   const RDP_RECOMMENDED_CLIENT = '[data-test-recommended-rdp-client]';
   const RDP_RECOMMENDED_CLIENT_LINK = '[data-test-recommended-rdp-client] a';
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     // Generate scopes
     instances.scopes.global = this.server.schema.scopes.find('global');
@@ -96,7 +90,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.settings = `${urls.projects}/settings`;
 
-    setDefaultClusterUrl(this);
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
 
     // mock RDP client data
     window.desktop.rdp.getRdpClients.resolves([

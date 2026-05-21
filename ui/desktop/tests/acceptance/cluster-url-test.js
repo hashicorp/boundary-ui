@@ -8,13 +8,11 @@ import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'desktop/tests/helpers';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
-import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import { setupDesktopContextBridgeApiMock } from '../helpers/desktop-context-bridge-api-mock';
 import config from '../../config/environment';
 
 module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
-  setupBrowserFakes(hooks, { window: true });
 
   const currentOrigin = window.location.origin;
 
@@ -108,7 +106,15 @@ module('Acceptance | clusterUrl', function (hooks) {
 
   test('visiting index without a clusterUrl specified redirects to clusterUrl route', async function (assert) {
     assert.expect(2);
-    await visit(urls.index);
+    try {
+      await visit(urls.index);
+    } catch (e) {
+      if (e.message === 'TransitionAborted') {
+        // Ignore the expected transition abort error caused by the redirect in beforeModel
+      } else {
+        throw e;
+      }
+    }
 
     assert.notOk(window.desktop.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
