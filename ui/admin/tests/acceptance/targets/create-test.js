@@ -381,11 +381,17 @@ module('Acceptance | targets | create', function (hooks) {
     const aliases = this.server.schema.aliases.where({
       destination_id: target.id,
     }).models;
+    const projectAlias = aliases.find(
+      (alias) => alias.scope_id === instances.scopes.project.id,
+    );
+    const globalAlias = aliases.find((alias) => alias.scope_id === 'global');
+
     assert.strictEqual(aliases.length, 2);
-    assert.strictEqual(aliases[0].value, 'myhost');
-    assert.strictEqual(aliases[0].scope_id, instances.scopes.project.id);
-    assert.strictEqual(aliases[1].value, 'globalhost');
-    assert.strictEqual(aliases[1].scope_id, 'global');
+    assert.strictEqual(projectAlias.base_value, 'myhost');
+    assert.strictEqual(projectAlias.value, 'myhost.example');
+    assert.strictEqual(projectAlias.scope_id, instances.scopes.project.id);
+    assert.strictEqual(globalAlias.value, 'globalhost');
+    assert.strictEqual(globalAlias.scope_id, 'global');
   });
 
   test('alias rows show only Global when the project has no suffix', async function (assert) {
@@ -406,6 +412,40 @@ module('Acceptance | targets | create', function (hooks) {
     assert
       .dom(`${selectors.FIELD_ALIASES_ROW_SCOPE(0)} option`)
       .exists({ count: 1 });
+  });
+
+  test('alias section appears when only project scope authorizes alias creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    // Remove alias create permission from global so only the project scope
+    // gate remains.
+    instances.scopes.global.update({
+      authorized_collection_actions: {
+        ...instances.scopes.global.authorized_collection_actions,
+        aliases: [],
+      },
+    });
+    // Give the project a suffix and alias create permission.
+    instances.scopes.project.update({
+      alias_suffix: '.example',
+      authorized_collection_actions: {
+        ...instances.scopes.project.authorized_collection_actions,
+        aliases: ['create'],
+      },
+    });
+
+    await visit(urls.targets);
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    // The alias section should still be rendered because
+    // canCreateAliasOnProject is true even though global cannot create.
+    assert.dom(selectors.FIELD_ALIASES_ADD_BTN).isVisible();
   });
 
   test('can cancel create new SSH target', async function (assert) {

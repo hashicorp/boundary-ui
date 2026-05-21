@@ -700,12 +700,19 @@ function routes() {
       const createdAliases = withAliases.map((aliasData) => {
         const scopeId = aliasData.scope_id || 'global';
         const scope = scopes.find(scopeId);
-        return aliases.create({
+        const aliasSuffix = scope?.alias_suffix ?? scope?.aliasSuffix;
+        const aliasAttrs = {
           value: aliasData.value,
           scope_id: scopeId,
           scope,
           destination_id: target.id,
-        });
+        };
+
+        if (aliasSuffix) {
+          aliasAttrs.base_value = aliasData.value;
+          aliasAttrs.value = `${aliasData.value}${aliasSuffix}`;
+        }
+        return aliases.create(aliasAttrs);
       });
 
       target.update({

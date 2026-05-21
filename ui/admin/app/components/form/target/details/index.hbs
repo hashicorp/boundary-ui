@@ -242,7 +242,13 @@
   </Hds::Form::TextInput::Field>
 
   {{#if
-    (and @model.isNew (can 'create model' @globalScope collection='aliases'))
+    (and
+      @model.isNew
+      (or
+        (can 'create model' @globalScope collection='aliases')
+        this.canCreateAliasOnProject
+      )
+    )
   }}
     <Hds::Form::KeyValueInputs
       @isOptional={{true}}
@@ -305,9 +311,9 @@
           data-test-aliases-add-btn
         />
         {{#if @model.errors.with_aliases}}
-          <F.Error>
+          <F.Error as |E|>
             {{#each @model.errors.with_aliases as |error|}}
-              {{error.message}}
+              <E.Message>{{error.message}}</E.Message>
             {{/each}}
           </F.Error>
         {{/if}}

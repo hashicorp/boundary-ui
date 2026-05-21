@@ -131,4 +131,17 @@ module('Acceptance | aliases | project | list', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.newAlias)).isVisible();
   });
+
+  test('displays the composed alias value (with suffix) in the table', async function (assert) {
+    await visit(urls.aliases);
+
+    assert
+      .dom(selectors.TABLE_ROW(instances.projectAlias.id))
+      .includesText(`shipping-api${SUFFIX_VALUE}`);
+    // Sanity-check: base_value alone ('shipping-api') without the suffix
+    // is not rendered as the cell text.
+    assert
+      .dom(selectors.TABLE_ROW(instances.projectAlias.id))
+      .doesNotIncludeText('shipping-api.example shipping-api');
+  });
 });

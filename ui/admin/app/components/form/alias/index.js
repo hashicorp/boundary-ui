@@ -29,8 +29,12 @@ export default class FormAliasComponent extends Component {
     if (!model) return '';
     if (model.base_value) return model.base_value;
     const value = model.value ?? '';
+    const normalizedSuffix = this.normalizedSuffix;
     // For legacy aliases without `base_value`, recover it by removing the
     // suffix from the composed `value`.
+    if (normalizedSuffix && value.endsWith(normalizedSuffix)) {
+      return value.slice(0, -normalizedSuffix.length);
+    }
     if (suffix && value.endsWith(suffix)) {
       return value.slice(0, -suffix.length);
     }

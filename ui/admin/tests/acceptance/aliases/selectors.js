@@ -10,7 +10,8 @@ export const GATED_STATE = '[data-test-aliases-gated]';
 export const GATED_STATE_LINK = '[data-test-aliases-gated-link]';
 
 export const TABLE_ROW = (id) => `tbody [data-test-alias-row="${id}"]`;
-export const SCOPE_COLUMN_HEADER = 'thead th:nth-child(3)';
+export const THIRD_COLUMN_HEADER = 'thead th:nth-child(3)';
+export const SCOPE_COLUMN_HEADER = THIRD_COLUMN_HEADER;
 export const TABLE_ROW_ID_ACTION_DROPDOWN = (id) =>
   `tbody [data-test-alias-row="${id}"] td:last-child button`;
 export const TABLE_ROW_ID_ACTION_DROPDOWN_ITEM_LINK = (id) =>
