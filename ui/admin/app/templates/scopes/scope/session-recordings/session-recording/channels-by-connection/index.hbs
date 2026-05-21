@@ -46,6 +46,84 @@
     <div class='channels-by-connection'>
       <Rose::Layout::BodyContent as |bc|>
         <bc.Body>
+          {{#if
+            (or
+              @model.sessionRecording.recording_state.syncing_error_details
+              @model.sessionRecording.recording_state.verification_error_details
+            )
+          }}
+            <Hds::Alert
+              data-test-session-playback-alert
+              @type='inline'
+              @color='critical'
+              as |A|
+            >
+              <A.Title>{{t
+                  'resources.session-recording.channels-by-connection.messages.sync-error.title'
+                }}</A.Title>
+              <A.Description>
+                {{#if
+                  (and
+                    @model.sessionRecording.recording_state.syncing_error_details
+                    @model.sessionRecording.recording_state.verification_error_details
+                  )
+                }}
+                  {{! Both errors present - show as bullet list with inline copy buttons }}
+                  <ul class='playback-error-list'>
+                    <li class='playback-error-item margin-bottom-s'>
+                      <Hds::Text::Body
+                        @tag='span'
+                        class='playback-error-message'
+                      >
+                        {{@model.sessionRecording.recording_state.syncing_error_details}}
+                      </Hds::Text::Body>
+                      <Hds::Copy::Button
+                        @size='small'
+                        @text='Copy'
+                        @isIconOnly={{true}}
+                        @textToCopy={{@model.sessionRecording.recording_state.syncing_error_details}}
+                      />
+                    </li>
+                    <li class='playback-error-item'>
+                      <Hds::Text::Body
+                        @tag='span'
+                        class='playback-error-message'
+                      >
+                        {{@model.sessionRecording.recording_state.verification_error_details}}
+                      </Hds::Text::Body>
+                      <Hds::Copy::Button
+                        @size='small'
+                        @text='Copy'
+                        @isIconOnly={{true}}
+                        @textToCopy={{@model.sessionRecording.recording_state.verification_error_details}}
+                      />
+                    </li>
+                  </ul>
+                {{else}}
+                  {{! Only one error present - show as single message }}
+                  <div class='playback-error-item'>
+                    <Hds::Text::Body @tag='span' class='playback-error-message'>
+                      {{or
+                        @model.sessionRecording.recording_state.syncing_error_details
+                        @model.sessionRecording.recording_state.verification_error_details
+                      }}
+                    </Hds::Text::Body>
+                    <Hds::Copy::Button
+                      @size='small'
+                      @text={{t
+                        'resources.session-recording.channels-by-connection.messages.sync-error.copy'
+                      }}
+                      @isIconOnly={{true}}
+                      @textToCopy={{or
+                        @model.sessionRecording.recording_state.syncing_error_details
+                        @model.sessionRecording.recording_state.verification_error_details
+                      }}
+                    />
+                  </div>
+                {{/if}}
+              </A.Description>
+            </Hds::Alert>
+          {{/if}}
           {{#if this.isSessionInprogressWithNoConnections}}
             <Hds::ApplicationState as |A|>
               {{! Session recording in progress with no connections }}
