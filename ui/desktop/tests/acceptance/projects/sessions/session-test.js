@@ -58,12 +58,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     rdpSession: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   let originalUncaughtException = QUnit.onUncaughtException;
 
   hooks.beforeEach(async function () {
@@ -139,7 +133,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
     urls.rdpSession = `${urls.projects}/sessions/${instances.rdpSession.id}`;
 
-    setDefaultClusterUrl(this);
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
 
     // mock RDP service calls
     this.rdpService = this.owner.lookup('service:rdp');
