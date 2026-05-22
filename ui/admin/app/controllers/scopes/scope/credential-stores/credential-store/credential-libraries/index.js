@@ -135,6 +135,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
 
     // Ensure at least one empty row exists for editing
     if (credentialLibrary.critical_options?.length === 0) {
+      console.log('Adding empty critical_options row');
       credentialLibrary.critical_options = [{ key: '', value: '' }];
     }
 
