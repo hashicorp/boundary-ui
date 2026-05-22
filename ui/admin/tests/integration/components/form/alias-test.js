@@ -110,42 +110,6 @@ module('Integration | Component | form/alias', function (hooks) {
     assert.dom(VALUE_INPUT_SELECTOR).hasValue('hi');
   });
 
-  test('it falls back to stripping the suffix from value when base_value is empty', async function (assert) {
-    this.suffix = 'test';
-    this.model.base_value = '';
-    this.model.value = 'legacytest';
-
-    await render(
-      hbs`<Form::Alias
-        @model={{this.model}}
-        @suffix={{this.suffix}}
-        @submit={{this.save}}
-        @cancel={{this.cancel}}
-      />`,
-    );
-
-    assert.dom(VALUE_INPUT_SELECTOR).hasValue('legacy');
-  });
-
-  test('it strips a dot-separated suffix even when @suffix lacks the leading dot', async function (assert) {
-    // Suffix stored without a leading dot, but the composed value uses one.
-    this.suffix = 'example';
-    this.model.base_value = '';
-    this.model.value = 'myhost.example';
-
-    await render(
-      hbs`<Form::Alias
-        @model={{this.model}}
-        @suffix={{this.suffix}}
-        @submit={{this.save}}
-        @cancel={{this.cancel}}
-      />`,
-    );
-
-    // Should show 'myhost', not 'myhost.' (trailing dot left by raw strip).
-    assert.dom(VALUE_INPUT_SELECTOR).hasValue('myhost');
-  });
-
   test('typing into the value input updates both value and base_value on the model', async function (assert) {
     this.suffix = '.test';
 

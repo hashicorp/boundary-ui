@@ -63,4 +63,18 @@ export default class ScopeAbility extends ModelAbility {
       this.hasAuthorizedAction('remove-alias-target-suffix')
     );
   }
+
+  /**
+   * Creating a project-scoped alias is allowed when the scope is a project
+   * with a configured suffix and the user has the `create` collection action
+   * on aliases.
+   * @type {boolean}
+   */
+  get canCreateProjectAlias() {
+    return (
+      this.model?.isProject &&
+      this.model?.hasSuffix &&
+      this.model?.authorized_collection_actions?.aliases?.includes('create')
+    );
+  }
 }

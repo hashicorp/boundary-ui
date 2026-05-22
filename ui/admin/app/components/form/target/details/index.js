@@ -10,7 +10,7 @@ import {
   TYPE_TARGET_SSH,
 } from 'api/models/target';
 import { service } from '@ember/service';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 
 const icons = {
   ssh: 'terminal-screen',
@@ -85,9 +85,10 @@ export default class FormTargetComponent extends Component {
    * @type {boolean}
    */
   get canCreateAliasOnProject() {
-    const scope = this.args.model?.scopeModel;
-    if (!scope?.isProject || !scope.hasSuffix) return false;
-    return this.abilities.can('create model', scope, { collection: 'aliases' });
+    return this.abilities.can(
+      'createProjectAlias scope',
+      this.args.model?.scopeModel,
+    );
   }
 
   /**
@@ -97,7 +98,7 @@ export default class FormTargetComponent extends Component {
   get defaultAliasScopeId() {
     return this.canCreateAliasOnProject
       ? this.args.model.scopeModel.id
-      : (this.args.globalScope?.id ?? 'global');
+      : this.args.globalScope.id;
   }
 
   /**
@@ -118,7 +119,7 @@ export default class FormTargetComponent extends Component {
    */
   get projectOptionLabel() {
     const scope = this.args.model?.scopeModel;
-    const name = scope?.displayName || scope?.name || scope?.id;
+    const name = scope?.displayName;
     return this.intl.t('resources.alias.form.alias.scope.options.project', {
       name,
       suffix: this.normalizedProjectSuffix,
@@ -130,29 +131,29 @@ export default class FormTargetComponent extends Component {
   @action
   addAliasRow() {
     const existing = this.args.model.with_aliases ?? [];
-    set(this.args.model, 'with_aliases', [
+    this.args.model.with_aliases = [
       ...existing,
       { value: '', scope_id: this.defaultAliasScopeId },
-    ]);
+    ];
   }
 
   @action
   removeAliasRow(rowData) {
     const existing = this.args.model.with_aliases ?? [];
-    set(
-      this.args.model,
-      'with_aliases',
-      existing.filter((r) => r !== rowData),
-    );
+    this.args.model.with_aliases = existing.filter((r) => r !== rowData);
   }
 
   @action
   setRowScope(row, event) {
-    set(row, 'scope_id', event.target.value);
+    this.args.model.with_aliases = this.args.model.with_aliases.map((r) =>
+      r === row ? { ...r, scope_id: event.target.value } : r,
+    );
   }
 
   @action
   setRowValue(row, event) {
-    set(row, 'value', event.target.value);
+    this.args.model.with_aliases = this.args.model.with_aliases.map((r) =>
+      r === row ? { ...r, value: event.target.value } : r,
+    );
   }
 }

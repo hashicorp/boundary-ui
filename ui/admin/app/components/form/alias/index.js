@@ -25,20 +25,9 @@ export default class FormAliasComponent extends Component {
    * @type {string}
    */
   get displayBaseValue() {
-    const { model, suffix } = this.args;
+    const { model } = this.args;
     if (!model) return '';
-    if (model.base_value) return model.base_value;
-    const value = model.value ?? '';
-    const normalizedSuffix = this.normalizedSuffix;
-    // For legacy aliases without `base_value`, recover it by removing the
-    // suffix from the composed `value`.
-    if (normalizedSuffix && value.endsWith(normalizedSuffix)) {
-      return value.slice(0, -normalizedSuffix.length);
-    }
-    if (suffix && value.endsWith(suffix)) {
-      return value.slice(0, -suffix.length);
-    }
-    return value;
+    return model.base_value || model.value || '';
   }
 
   // =actions
