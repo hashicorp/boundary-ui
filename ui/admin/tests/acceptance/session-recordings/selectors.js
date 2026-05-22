@@ -22,3 +22,10 @@ export const MANAGE_DROPDOWN =
   '[data-test-manage-channels-dropdown] button:first-child';
 export const DELETE_ACTION =
   '[data-test-manage-channels-dropdown] ul li:last-child button';
+
+// Playback error selectors
+export const SESSION_PLAYBACK_ERROR_ALERT =
+  '[data-test-session-playback-alert]';
+export const SESSION_PLAYBACK_ERROR_MESSAGE = '.playback-error-message';
+export const SESSION_PLAYBACK_ERROR_COPY_BUTTON =
+  '.playback-error-item .hds-copy-button';
