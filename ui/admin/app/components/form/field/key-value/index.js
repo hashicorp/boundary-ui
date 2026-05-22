@@ -4,6 +4,8 @@
  */
 
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { assert } from '@ember/debug';
 
 export default class FormFieldKeyValueComponent extends Component {
   /**
@@ -24,5 +26,79 @@ export default class FormFieldKeyValueComponent extends Component {
 
     // Return false if there are no rows
     return false;
+  }
+
+  /**
+   * Default handler for adding a row.
+   * Uses @model, @name, and @properties if provided, otherwise calls @onAdd.
+   */
+  @action
+  handleAdd() {
+    // If an onAdd handler is provided, use it
+    if (this.args.onAdd) {
+      return this.args.onAdd();
+    }
+
+    const { model, name, properties } = this.args;
+
+    assert(
+      'FormFieldKeyValueComponent: model, name, and properties are required if no custom onAdd handler is provided.',
+      model && name && properties,
+    );
+
+    const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+    model[name] = [...(model[name] ?? []), emptyRow];
+  }
+
+  /**
+   * Default handler for removing a row.
+   * Uses @model and @name if provided, otherwise calls @onRemove.
+   */
+  @action
+  handleRemove(rowData) {
+    // If an onRemove handler is provided, use it
+    if (this.args.onRemove) {
+      return this.args.onRemove(rowData);
+    }
+
+    const { model, name, properties } = this.args;
+
+    assert(
+      'FormFieldKeyValueComponent: model, name, and properties are required if no custom onRemove handler is provided.',
+      model && name && properties,
+    );
+
+    const rows = (model[name] ?? []).filter((item) => item !== rowData);
+
+    // If removing the last row, add an empty row back
+    if (rows.length === 0) {
+      const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+      model[name] = [emptyRow];
+    } else {
+      model[name] = rows;
+    }
+  }
+
+  /**
+   * Default handler for updating a row.
+   * Uses @model and @name if provided, otherwise calls @onUpdate.
+   */
+  @action
+  handleUpdate(rowData, property, event) {
+    // If an onUpdate handler is provided, use it
+    if (this.args.onUpdate) {
+      return this.args.onUpdate(rowData, property, event);
+    }
+
+    const { model, name } = this.args;
+
+    assert(
+      'FormFieldKeyValueComponent: model and name are required if no custom onUpdate handler is provided.',
+      model && name,
+    );
+
+    const value = event?.target?.value ?? event;
+    rowData[property] = value;
+    model[name] = [...(model[name] ?? [])];
   }
 }

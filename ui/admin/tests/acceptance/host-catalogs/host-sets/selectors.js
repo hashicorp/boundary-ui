@@ -3,17 +3,18 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const FIELD_PREFERRED_ENDPOINT = '[name=preferred_endpoints] input';
+export const FIELD_PREFERRED_ENDPOINT =
+  '[name=preferred_endpoints] [data-test-value-input]';
 export const FIELD_PREFERRED_ENDPOINT_ADD_BTN =
-  '[name=preferred_endpoints] button';
+  '[name=preferred_endpoints] [data-test-add-button]';
 export const FIELD_PREFERRED_ENDPOINT_DELETE_BTN =
-  '[name=preferred_endpoints] [data-test-remove-button]';
-export const FIELD_FILTERS = '[name=filters] input';
-export const FIELD_FILTERS_ADD_BTN = '[name=filters] button';
+  '[name=preferred_endpoints] [data-test-delete-button]';
+export const FIELD_FILTERS = '[name=filters] [data-test-value-input]';
+export const FIELD_FILTERS_ADD_BTN = '[name=filters] [data-test-add-button]';
 export const FIELD_SYNC_INTERVAL = '[name=sync_interval_seconds]';
 export const FIELD_AZURE_FILTER = '[name=filter]';
 export const FIELD_FILTERS_REMOVE_BTN =
-  '[name=filters] [data-test-remove-button]';
+  '[name=filters] [data-test-delete-button]';
 
 export const MANAGE_DROPDOWN_HOST_CATALOG =
   '[data-test-manage-host-catalogs-dropdown] button';
