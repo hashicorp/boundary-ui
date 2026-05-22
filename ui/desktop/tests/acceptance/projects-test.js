@@ -49,12 +49,6 @@ module('Acceptance | projects', function (hooks) {
     projects: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     instances.scopes.global = this.server.schema.scopes.find('global');
     instances.authMethods.global = this.server.schema.authMethods.first();
@@ -87,7 +81,7 @@ module('Acceptance | projects', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
 
-    setDefaultClusterUrl(this);
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {

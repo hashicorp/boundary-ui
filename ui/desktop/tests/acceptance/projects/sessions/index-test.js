@@ -72,12 +72,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     session: null,
   };
 
-  const setDefaultClusterUrl = (test) => {
-    const windowOrigin = window.location.origin;
-    const clusterUrl = test.owner.lookup('service:clusterUrl');
-    clusterUrl.rendererClusterUrl = windowOrigin;
-  };
-
   hooks.beforeEach(async function () {
     // create scopes
     instances.scopes.global = this.server.schema.scopes.find('global');
@@ -148,8 +142,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     urls.sessions2 = `${urls.projects2}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
-    setDefaultClusterUrl(this);
-
+    window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
     window.desktop.daemon.isCacheDaemonRunning.resolves(true);
     this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
 

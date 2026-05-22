@@ -346,6 +346,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
     assert.dom(commonSelectors.CODE_EDITOR_CODE).isVisible();
     assert.dom(selectors.READONLY_WORKER_FILTER).doesNotExist();
   });
