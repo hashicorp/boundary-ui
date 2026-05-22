@@ -129,14 +129,13 @@ const grantLinter = (context, schema, translate) => {
     }
 
     // Validate all fields are recognized
-    for (const field of Object.keys(parsedFields)) {
-      if (!GRANT_FIELDS.includes(field)) {
-        const pos = fieldPositions[field];
+    for (const field of allFields) {
+      if (!GRANT_FIELDS.includes(field.key)) {
         diagnostics.push({
-          from: pos.keyStart,
-          to: pos.valueEnd,
+          from: field.pos.keyStart,
+          to: field.pos.valueEnd,
           severity: 'error',
-          message: translate('fields.unknown-field', { field }),
+          message: translate('fields.unknown-field', { field: field.key }),
         });
       }
     }

@@ -73,6 +73,10 @@ module('Unit | Utility | grant-linter', function (hooks) {
         'Duplicate field "actions"',
       ], // duplicate actions field
       [
+        'type=credential;ids=cs_1234;actions=read;random=',
+        'Unknown field "random"',
+      ], // unknown field "random"
+      [
         'type=credential;ids=cs_1234;actions=read;random=name',
         'Unknown field "random"',
       ], // unknown field "random"
