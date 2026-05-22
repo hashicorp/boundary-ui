@@ -5,6 +5,7 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { assert } from '@ember/debug';
 
 export default class FormFieldKeyValueComponent extends Component {
   /**
@@ -33,13 +34,20 @@ export default class FormFieldKeyValueComponent extends Component {
    */
   @action
   handleAdd() {
-    const { model, name, properties } = this.args;
-    if (model && name && properties) {
-      const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
-      model[name] = [...(model[name] ?? []), emptyRow];
-    } else {
-      this.args.onAdd?.();
+    // If an onAdd handler is provided, use it
+    if (this.args.onAdd) {
+      return this.args.onAdd();
     }
+
+    const { model, name, properties } = this.args;
+
+    assert(
+      'FormFieldKeyValueComponent: model, name, and properties are required if no custom onAdd handler is provided.',
+      model && name && properties,
+    );
+
+    const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+    model[name] = [...(model[name] ?? []), emptyRow];
   }
 
   /**
@@ -48,20 +56,26 @@ export default class FormFieldKeyValueComponent extends Component {
    */
   @action
   handleRemove(rowData) {
+    // If an onRemove handler is provided, use it
+    if (this.args.onRemove) {
+      return this.args.onRemove(rowData);
+    }
+
     const { model, name, properties } = this.args;
-    if (model && name) {
-      const rows = (model[name] ?? []).filter((item) => item !== rowData);
-      // If removing the last row, add an empty row back
-      if (rows.length === 0) {
-        const emptyRow = Object.fromEntries(
-          properties.map((prop) => [prop, '']),
-        );
-        model[name] = [emptyRow];
-      } else {
-        model[name] = rows;
-      }
+
+    assert(
+      'FormFieldKeyValueComponent: model, name, and properties are required if no custom onRemove handler is provided.',
+      model && name && properties,
+    );
+
+    const rows = (model[name] ?? []).filter((item) => item !== rowData);
+
+    // If removing the last row, add an empty row back
+    if (rows.length === 0) {
+      const emptyRow = Object.fromEntries(properties.map((prop) => [prop, '']));
+      model[name] = [emptyRow];
     } else {
-      this.args.onRemove?.(rowData);
+      model[name] = rows;
     }
   }
 
@@ -71,13 +85,20 @@ export default class FormFieldKeyValueComponent extends Component {
    */
   @action
   handleUpdate(rowData, property, event) {
-    const { model, name } = this.args;
-    if (model && name) {
-      const value = event?.target?.value ?? event;
-      rowData[property] = value;
-      model[name] = [...(model[name] ?? [])];
-    } else {
-      this.args.onUpdate?.(rowData, property, event);
+    // If an onUpdate handler is provided, use it
+    if (this.args.onUpdate) {
+      return this.args.onUpdate(rowData, property, event);
     }
+
+    const { model, name } = this.args;
+
+    assert(
+      'FormFieldKeyValueComponent: model and name are required if no custom onUpdate handler is provided.',
+      model && name,
+    );
+
+    const value = event?.target?.value ?? event;
+    rowData[property] = value;
+    model[name] = [...(model[name] ?? [])];
   }
 }
