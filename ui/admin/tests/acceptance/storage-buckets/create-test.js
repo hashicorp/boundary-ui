@@ -244,7 +244,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     });
 
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
-    console.log(storageBucket.attributes, 'storage bucket attributes');
     assert.deepEqual(storageBucket.attributes.role_tags, {
       env: selectors.FIELD_ROLE_TAG_VALUE_TEXT,
     });
