@@ -149,10 +149,9 @@
   {{! Signing algorithms }}
   <Form::Field::KeyValue
     @name='signing_algorithms'
+    @model={{@model}}
+    @properties={{array 'value'}}
     @data={{@model.signing_algorithms}}
-    @onAdd={{fn @addRow 'signing_algorithms' (array 'value')}}
-    @onRemove={{fn @removeRow 'signing_algorithms'}}
-    @onUpdate={{fn @updateRow 'signing_algorithms'}}
     @legend={{t 'form.signing_algorithms.label'}}
     @helperText={{t 'form.signing_algorithms.help'}}
     @errors={{@model.errors.signing_algorithms}}
@@ -187,10 +186,9 @@
   {{! Allowed audiences }}
   <Form::Field::KeyValue
     @name='allowed_audiences'
+    @model={{@model}}
+    @properties={{array 'value'}}
     @data={{@model.allowed_audiences}}
-    @onAdd={{fn @addRow 'allowed_audiences' (array 'value')}}
-    @onRemove={{fn @removeRow 'allowed_audiences'}}
-    @onUpdate={{fn @updateRow 'allowed_audiences'}}
     @legend={{t 'form.allowed_audiences.label'}}
     @helperText={{t 'form.allowed_audiences.help'}}
     @errors={{@model.errors.allowed_audiences}}
@@ -214,10 +212,9 @@
   {{! Claims Scopes }}
   <Form::Field::KeyValue
     @name='claims_scopes'
+    @model={{@model}}
+    @properties={{array 'value'}}
     @data={{@model.claims_scopes}}
-    @onAdd={{fn @addRow 'claims_scopes' (array 'value')}}
-    @onRemove={{fn @removeRow 'claims_scopes'}}
-    @onUpdate={{fn @updateRow 'claims_scopes'}}
     @legend={{t 'form.claims_scopes.label'}}
     @helperText={{t 'form.claims_scopes.help'}}
     @errors={{@model.errors.claims_scopes}}
@@ -241,10 +238,9 @@
   {{! Account Claim Maps }}
   <Form::Field::KeyValue
     @name='account_claim_maps'
+    @model={{@model}}
+    @properties={{array 'key' 'value'}}
     @data={{@model.account_claim_maps}}
-    @onAdd={{fn @addRow 'account_claim_maps' (array 'key' 'value')}}
-    @onRemove={{fn @removeRow 'account_claim_maps'}}
-    @onUpdate={{fn @updateRow 'account_claim_maps'}}
     @legend={{t 'form.account_claim_maps.label'}}
     @helperText={{t 'form.account_claim_maps.help'}}
     @errors={{@model.errors.account_claim_maps}}
@@ -287,10 +283,9 @@
   {{! Certificates }}
   <Form::Field::KeyValue
     @name='idp_ca_certs'
+    @model={{@model}}
+    @properties={{array 'value'}}
     @data={{@model.idp_ca_certs}}
-    @onAdd={{fn @addRow 'idp_ca_certs' (array 'value')}}
-    @onRemove={{fn @removeRow 'idp_ca_certs'}}
-    @onUpdate={{fn @updateRow 'idp_ca_certs'}}
     @legend={{t 'form.idp_ca_certs.label'}}
     @helperText={{t 'form.idp_ca_certs.help'}}
     @errors={{@model.errors.idp_ca_certs}}

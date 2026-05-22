@@ -76,6 +76,16 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(hostSet) {
+    if (hostSet.preferred_endpoints) {
+      hostSet.preferred_endpoints = hostSet.preferred_endpoints.filter((item) =>
+        item.value?.trim(),
+      );
+    }
+
+    if (hostSet.filters) {
+      hostSet.filters = hostSet.filters.filter((item) => item.value?.trim());
+    }
+
     // Fetch newest host set as updates to host set attributes cause an async db update which
     // updates the version again and can cause a version mismatch if the host set is updated
     // again and we haven't fetched the newest version.
@@ -138,9 +148,15 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
       hostSet.preferred_endpoints = structuredClone(
         hostSet.preferred_endpoints,
       );
+      if (hostSet.preferred_endpoints.length === 0) {
+        hostSet.preferred_endpoints = [{ value: '' }];
+      }
     }
     if (hostSet.filters) {
       hostSet.filters = structuredClone(hostSet.filters);
+      if (hostSet.filters.length === 0) {
+        hostSet.filters = [{ value: '' }];
+      }
     }
   }
 
