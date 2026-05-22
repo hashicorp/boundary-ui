@@ -79,6 +79,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       credentialLibrary.critical_options =
         credentialLibrary.critical_options.filter((item) => item.key?.trim());
     }
+
+    if (credentialLibrary.extensions) {
+      credentialLibrary.extensions = credentialLibrary.extensions.filter(
+        (item) => item.key?.trim(),
+      );
+    }
+
     await credentialLibrary.save();
     if (this.abilities.can('read model', credentialLibrary)) {
       await this.router.transitionTo(
@@ -128,7 +135,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
 
     // Ensure at least one empty row exists for editing
     if (credentialLibrary.critical_options?.length === 0) {
+      console.log('Adding empty critical_options row');
       credentialLibrary.critical_options = [{ key: '', value: '' }];
+    }
+
+    if (credentialLibrary.extensions?.length === 0) {
+      console.log('Adding empty extension row');
+      credentialLibrary.extensions = [{ key: '', value: '' }];
     }
   }
 

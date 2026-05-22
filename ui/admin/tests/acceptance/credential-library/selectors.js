@@ -37,11 +37,8 @@ export const FIELD_CRIT_OPTS_KEY =
 export const FIELD_CRIT_OPTS_VALUE =
   '[name="critical_options"] [data-test-value-input]';
 
-export const FIELD_EXT_KEY =
-  '[name="extensions"] tbody td:nth-of-type(1) input';
-export const FIELD_EXT_VALUE =
-  '[name="extensions"] tbody td:nth-of-type(2) input';
-export const FIELD_EXT_BTN = '[name="extensions"] button';
+export const FIELD_EXT_KEY = '[name="extensions"] [data-test-key-input]';
+export const FIELD_EXT_VALUE = '[name="extensions"] [data-test-value-input]';
 
 export const MANAGE_DROPDOWN_CRED_LIB =
   '[data-test-manage-credential-library-dropdown] button:first-child';

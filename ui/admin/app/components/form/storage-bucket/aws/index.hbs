@@ -4,6 +4,7 @@
 }}
 
 <Rose::Form
+  @edit={{@edit}}
   @onSubmit={{@submit}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
@@ -417,42 +418,43 @@
     </Hds::Form::TextInput::Field>
 
     {{! role_tags }}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
+    <Form::Field::KeyValue
+      @model={{@model}}
+      @name='role_tags'
+      @properties={{array 'key' 'value'}}
+      @data={{@model.role_tags}}
       @isOptional={{true}}
+      @legend={{t 'resources.storage-bucket.form.role_tags.label'}}
+      @helperText={{t 'resources.storage-bucket.form.role_tags.help'}}
+      @errors={{@model.errors.role_tags}}
       @disabled={{form.disabled}}
     >
-      <:fieldset as |F|>
-        <F.Legend>
-          {{t 'resources.storage-bucket.form.role_tags.label'}}
-        </F.Legend>
-        <F.HelperText>
-          {{t 'resources.storage-bucket.form.role_tags.help'}}
-        </F.HelperText>
-
-        {{#if @model.errors.role_tags}}
-          <F.Error as |E|>
-            {{#each @model.errors.role_tags as |error|}}
-              <E.Message>{{error.message}}</E.Message>
-            {{/each}}
-          </F.Error>
+      <:row as |R|>
+        <R.Field as |F|>
+          <F.TextInput
+            data-test-key-input
+            @value={{R.rowData.key}}
+            {{on 'input' (fn R.updateRow 'key')}}
+            disabled={{form.disabled}}
+          />
+        </R.Field>
+        <R.Field as |F|>
+          <F.TextInput
+            data-test-value-input
+            @value={{R.rowData.value}}
+            {{on 'input' (fn R.updateRow 'value')}}
+            disabled={{form.disabled}}
+          />
+        </R.Field>
+        {{#if R.canDelete}}
+          <R.DeleteRowButton
+            data-test-delete-button
+            @onClick={{R.removeRow}}
+            disabled={{form.disabled}}
+          />
         {{/if}}
-      </:fieldset>
-      <:field as |F|>
-        <F.KeyValue
-          @name='role_tags'
-          @options={{@model.role_tags}}
-          @model={{@model}}
-        >
-          <:key as |K|>
-            <K.text />
-          </:key>
-          <:value as |V|>
-            <V.text />
-          </:value>
-        </F.KeyValue>
-      </:field>
-    </Form::Field::ListWrapper>
+      </:row>
+    </Form::Field::KeyValue>
   {{/if}}
 
   {{! worker_filter }}
