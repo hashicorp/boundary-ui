@@ -452,7 +452,7 @@ const validateIdsField = (
     }
     const currentIdType = idType(schema, id);
     if (currentIdType === 'template') {
-      if (!Object.keys(TEMPLATE_RESOURCE_TYPES).includes(id)) {
+      if (!TEMPLATE_RESOURCE_TYPES[id]) {
         diagnostics.push({
           from: segmentStart,
           to: segmentEnd,
