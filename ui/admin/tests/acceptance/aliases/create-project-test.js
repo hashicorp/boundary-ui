@@ -74,7 +74,6 @@ module('Acceptance | aliases | project | create', function (hooks) {
       name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(alias.base_value, BASE_VALUE);
     assert.strictEqual(alias.value, `${BASE_VALUE}${SUFFIX_VALUE}`);
   });
 });

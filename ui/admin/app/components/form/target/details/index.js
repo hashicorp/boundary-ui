@@ -145,15 +145,13 @@ export default class FormTargetComponent extends Component {
 
   @action
   setRowScope(row, event) {
-    this.args.model.with_aliases = this.args.model.with_aliases.map((r) =>
-      r === row ? { ...r, scope_id: event.target.value } : r,
-    );
+    row.scope_id = event.target.value;
+    this.args.model.with_aliases = [...(this.args.model.with_aliases ?? [])];
   }
 
   @action
   setRowValue(row, event) {
-    this.args.model.with_aliases = this.args.model.with_aliases.map((r) =>
-      r === row ? { ...r, value: event.target.value } : r,
-    );
+    row.value = event.target.value;
+    this.args.model.with_aliases = [...(this.args.model.with_aliases ?? [])];
   }
 }

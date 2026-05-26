@@ -387,7 +387,6 @@ module('Acceptance | targets | create', function (hooks) {
     const globalAlias = aliases.find((alias) => alias.scope_id === 'global');
 
     assert.strictEqual(aliases.length, 2);
-    assert.strictEqual(projectAlias.base_value, 'myhost');
     assert.strictEqual(projectAlias.value, 'myhost.example');
     assert.strictEqual(projectAlias.scope_id, instances.scopes.project.id);
     assert.strictEqual(globalAlias.value, 'globalhost');

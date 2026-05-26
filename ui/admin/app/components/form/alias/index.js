@@ -20,14 +20,19 @@ export default class FormAliasComponent extends Component {
   }
 
   /**
-   * User-editable portion of the alias value shown in the input. Prefers
-   * `base_value`; falls back to stripping `suffix` from `value` for legacy aliases.
+   * User-editable portion of the alias value shown in the input. When a suffix
+   * is present, strip the suffix from the model value for display.
    * @type {string}
    */
   get displayBaseValue() {
     const { model } = this.args;
     if (!model) return '';
-    return model.base_value || model.value || '';
+
+    const fullValue = model.value || '';
+    const suffix = this.normalizedSuffix;
+    if (!suffix || !fullValue.endsWith(suffix)) return fullValue;
+
+    return fullValue.slice(0, -suffix.length);
   }
 
   // =actions
@@ -48,7 +53,8 @@ export default class FormAliasComponent extends Component {
   @action
   handleBaseValueChange({ target: { value } }) {
     const { model } = this.args;
-    model.value = value;
-    model.base_value = value;
+    const suffix = this.normalizedSuffix;
+
+    model.value = suffix && value ? `${value}${suffix}` : value;
   }
 }

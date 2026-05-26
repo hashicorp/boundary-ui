@@ -708,9 +708,10 @@ function routes() {
           destination_id: target.id,
         };
 
-        if (aliasSuffix) {
-          aliasAttrs.base_value = aliasData.value;
-          aliasAttrs.value = `${aliasData.value}${aliasSuffix}`;
+        if (aliasSuffix && aliasData.value) {
+          aliasAttrs.value = aliasData.value.endsWith(aliasSuffix)
+            ? aliasData.value
+            : `${aliasData.value}${aliasSuffix}`;
         }
         return aliases.create(aliasAttrs);
       });
@@ -989,8 +990,9 @@ function routes() {
       const scope = scopes.find(scopeId);
       const updatedAttrs = { ...attrs };
       if (attrs.value !== undefined && scope?.alias_suffix) {
-        updatedAttrs.base_value = attrs.value;
-        updatedAttrs.value = `${attrs.value}${scope.alias_suffix}`;
+        updatedAttrs.value = attrs.value.endsWith(scope.alias_suffix)
+          ? attrs.value
+          : `${attrs.value}${scope.alias_suffix}`;
       }
 
       return alias.update(updatedAttrs);
@@ -1004,20 +1006,20 @@ function routes() {
       attrs.scope_id || attrs.scopeId || attrs.scope?.id || 'global';
     const scope = scopes.find(scopeId);
 
-    // Mirror the real API: clients submit `value` only; `base_value` is
-    // server-derived.
-    const baseValue =
-      attrs.value || attrs.base_value || attrs.name || faker.word.words();
+    // Mirror the real API: clients submit and receive full alias value via
+    // `value` only.
+    const submittedValue = attrs.value || attrs.name || faker.word.words();
 
     const fullValue = scope?.alias_suffix
-      ? `${baseValue}${scope.alias_suffix}`
-      : baseValue;
+      ? submittedValue.endsWith(scope.alias_suffix)
+        ? submittedValue
+        : `${submittedValue}${scope.alias_suffix}`
+      : submittedValue;
 
     const aliasAttrs = {
       ...attrs,
       scope_id: scopeId,
       value: fullValue,
-      base_value: baseValue,
       scope: scope || attrs.scope,
     };
 

@@ -14,7 +14,6 @@ class TestAliasModel {
   @tracked name = '';
   @tracked description = '';
   @tracked value = '';
-  @tracked base_value = '';
   @tracked destination_id = '';
   @tracked authorize_session_arguments = {};
   errors = {};
@@ -93,9 +92,8 @@ module('Integration | Component | form/alias', function (hooks) {
     assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix');
   });
 
-  test('it binds the value input to base_value when a suffix is present', async function (assert) {
+  test('it binds the value input to the unsuffixed display value when a suffix is present', async function (assert) {
     this.suffix = '.test';
-    this.model.base_value = 'hi';
     this.model.value = 'hi.test';
 
     await render(
@@ -110,7 +108,7 @@ module('Integration | Component | form/alias', function (hooks) {
     assert.dom(VALUE_INPUT_SELECTOR).hasValue('hi');
   });
 
-  test('typing into the value input updates both value and base_value on the model', async function (assert) {
+  test('typing into the value input updates value with the suffix when present', async function (assert) {
     this.suffix = '.test';
 
     await render(
@@ -124,7 +122,6 @@ module('Integration | Component | form/alias', function (hooks) {
 
     await fillIn(VALUE_INPUT_SELECTOR, 'yourhost');
 
-    assert.strictEqual(this.model.value, 'yourhost');
-    assert.strictEqual(this.model.base_value, 'yourhost');
+    assert.strictEqual(this.model.value, 'yourhost.test');
   });
 });

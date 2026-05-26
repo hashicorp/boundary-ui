@@ -114,7 +114,6 @@ module('Acceptance | aliases | delete', function (hooks) {
       scope: instances.scopes.project,
       scope_id: instances.scopes.project.id,
       destination_id: instances.target.id,
-      base_value: 'shipping-api',
       value: 'shipping-api.example',
     });
 

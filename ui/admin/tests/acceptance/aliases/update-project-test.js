@@ -61,7 +61,6 @@ module('Acceptance | aliases | project | update', function (hooks) {
       scope: instances.scopes.project,
       scope_id: instances.scopes.project.id,
       destination_id: instances.target.id,
-      base_value: SEED_BASE_VALUE,
       value: `${SEED_BASE_VALUE}${SUFFIX_VALUE}`,
     });
 
@@ -69,7 +68,7 @@ module('Acceptance | aliases | project | update', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
   });
 
-  test('the edit input pre-populates with base_value and the suffix decoration is rendered', async function (assert) {
+  test('the edit input pre-populates with unsuffixed value and renders the suffix decoration', async function (assert) {
     await visit(urls.alias);
 
     assert.dom(VALUE_INPUT).hasValue(SEED_BASE_VALUE);
@@ -83,7 +82,6 @@ module('Acceptance | aliases | project | update', function (hooks) {
     await fillIn(VALUE_INPUT, NEW_BASE_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
-    assert.strictEqual(instances.alias.base_value, NEW_BASE_VALUE);
     assert.strictEqual(
       instances.alias.value,
       `${NEW_BASE_VALUE}${SUFFIX_VALUE}`,
@@ -91,7 +89,6 @@ module('Acceptance | aliases | project | update', function (hooks) {
   });
 
   test('cancelling an edit leaves the composed value unchanged', async function (assert) {
-    const originalBaseValue = instances.alias.base_value;
     const originalValue = instances.alias.value;
 
     await visit(urls.alias);
@@ -100,7 +97,6 @@ module('Acceptance | aliases | project | update', function (hooks) {
     await fillIn(VALUE_INPUT, NEW_BASE_VALUE);
     await click(commonSelectors.CANCEL_BTN);
 
-    assert.strictEqual(instances.alias.base_value, originalBaseValue);
     assert.strictEqual(instances.alias.value, originalValue);
   });
 });

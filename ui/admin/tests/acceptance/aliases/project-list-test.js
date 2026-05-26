@@ -62,7 +62,6 @@ module('Acceptance | aliases | project | list', function (hooks) {
       scope: instances.scopes.project,
       scope_id: instances.scopes.project.id,
       destination_id: instances.target.id,
-      base_value: 'shipping-api',
       value: `shipping-api${SUFFIX_VALUE}`,
     });
 
@@ -70,7 +69,6 @@ module('Acceptance | aliases | project | list', function (hooks) {
       scope: instances.scopes.project,
       scope_id: instances.scopes.project.id,
       destination_id: null,
-      base_value: 'orphan-alias',
       value: `orphan-alias${SUFFIX_VALUE}`,
     });
 
@@ -79,7 +77,6 @@ module('Acceptance | aliases | project | list', function (hooks) {
       scope: instances.scopes.global,
       scope_id: instances.scopes.global.id,
       destination_id: null,
-      base_value: 'global-only',
       value: 'global-only',
     });
 
@@ -138,7 +135,7 @@ module('Acceptance | aliases | project | list', function (hooks) {
     assert
       .dom(selectors.TABLE_ROW(instances.projectAlias.id))
       .includesText(`shipping-api${SUFFIX_VALUE}`);
-    // Sanity-check: base_value alone ('shipping-api') without the suffix
+    // Sanity-check: the unsuffixed value ('shipping-api') without the suffix
     // is not rendered as the cell text.
     assert
       .dom(selectors.TABLE_ROW(instances.projectAlias.id))

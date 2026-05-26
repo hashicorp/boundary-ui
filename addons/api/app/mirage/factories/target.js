@@ -193,7 +193,6 @@ export default factory.extend({
           scope,
           scope_id: scope.id,
           destination_id: target.id,
-          base_value: baseValue,
           value: fullValue,
         });
       });
