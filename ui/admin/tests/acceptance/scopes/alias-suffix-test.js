@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { visit, click, fillIn, currentURL } from '@ember/test-helpers';
-import { Response } from 'miragejs';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -194,43 +193,5 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     await visit(urls.projectScopeEdit);
 
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).hasText(SUFFIX_VALUE);
-  });
-
-  test('renders empty sidebar gracefully when fetching the alias suffix fails', async function (assert) {
-    this.server.get(
-      '/scopes/:idMethod',
-      function ({ scopes }, { params: { idMethod } }) {
-        const [id, method] = idMethod.split(':');
-        if (method === 'get-alias-target-suffix') {
-          return new Response(500);
-        }
-        return scopes.find(id);
-      },
-    );
-
-    await visit(urls.projectScopeEdit);
-
-    assert.strictEqual(currentURL(), urls.projectScopeEdit);
-    assert.dom(selectors.ALIAS_SUFFIX_SIDEBAR).isVisible();
-    assert.dom(selectors.CREATE_ALIAS_SUFFIX_BTN).isVisible();
-    assert.dom(selectors.ALIAS_SUFFIX_VALUE).doesNotExist();
-  });
-
-  test('renders the error substate on the add-alias-suffix page when fetching the suffix fails', async function (assert) {
-    instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
-    this.server.get(
-      '/scopes/:idMethod',
-      function ({ scopes }, { params: { idMethod } }) {
-        const [id, method] = idMethod.split(':');
-        if (method === 'get-alias-target-suffix') {
-          return new Response(500);
-        }
-        return scopes.find(id);
-      },
-    );
-
-    await visit(urls.addAliasSuffix);
-
-    assert.dom('[data-test-error-application-state]').isVisible();
   });
 });

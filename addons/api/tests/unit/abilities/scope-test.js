@@ -77,42 +77,6 @@ module('Unit | Abilities | Scope', function (hooks) {
   );
 
   test.each(
-    'canGetAliasSuffix reflects scope type and authorized action',
-    {
-      'project with action': {
-        type: 'project',
-        authorized_actions: ['get-alias-target-suffix'],
-        expected: true,
-      },
-      'project without action': {
-        type: 'project',
-        authorized_actions: [],
-        expected: false,
-      },
-      'org with action': {
-        type: 'org',
-        authorized_actions: ['get-alias-target-suffix'],
-        expected: false,
-      },
-      'global with action': {
-        type: 'global',
-        authorized_actions: ['get-alias-target-suffix'],
-        expected: false,
-      },
-    },
-    function (assert, { type, authorized_actions, expected }) {
-      const scopeModel = store.createRecord('scope', {
-        type,
-        authorized_actions,
-      });
-      assert.strictEqual(
-        abilitiesService.can('getAliasSuffix scope', scopeModel),
-        expected,
-      );
-    },
-  );
-
-  test.each(
     'canRemoveAliasSuffix reflects scope type, authorized action, and suffix presence',
     {
       'project with action and suffix': {

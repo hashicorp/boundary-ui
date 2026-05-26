@@ -28,7 +28,6 @@ export default factory.extend({
     if (this.type === 'project') {
       authorizedActions.push(
         'set-alias-target-suffix',
-        'get-alias-target-suffix',
         'remove-alias-target-suffix',
       );
     }
