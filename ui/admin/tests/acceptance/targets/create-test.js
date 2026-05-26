@@ -65,6 +65,7 @@ module('Acceptance | targets | create', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: null,
     });
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,

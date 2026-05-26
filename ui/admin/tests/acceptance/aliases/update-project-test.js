@@ -71,6 +71,12 @@ module('Acceptance | aliases | project | update', function (hooks) {
   test('the edit input pre-populates with unsuffixed value and renders the suffix decoration', async function (assert) {
     await visit(urls.alias);
 
+    // View mode: full composed value is shown, no suffix decoration.
+    assert.dom(VALUE_INPUT).hasValue(`${SEED_BASE_VALUE}${SUFFIX_VALUE}`);
+    assert.dom(SUFFIX_DECORATION).doesNotExist();
+
+    // Edit mode: only the base portion is shown with the suffix decoration.
+    await click(commonSelectors.EDIT_BTN);
     assert.dom(VALUE_INPUT).hasValue(SEED_BASE_VALUE);
     assert.dom(SUFFIX_DECORATION).hasText(SUFFIX_VALUE);
   });

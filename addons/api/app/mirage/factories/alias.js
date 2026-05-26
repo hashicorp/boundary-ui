@@ -20,4 +20,20 @@ export default factory.extend({
       'delete',
     ],
   scope: () => ({ id: 'global', type: 'global' }),
+
+  afterCreate(alias, server) {
+    const scopeId = alias.scope_id || alias.scope?.id;
+    if (!scopeId) return;
+
+    const scope = server.schema.scopes.find(scopeId);
+    if (!scope?.alias_suffix) return;
+
+    const currentValue = alias.value || '';
+    if (!currentValue.endsWith(scope.alias_suffix)) {
+      const separator = scope.alias_suffix.startsWith('.') ? '' : '.';
+      alias.update({
+        value: `${currentValue}${separator}${scope.alias_suffix}`,
+      });
+    }
+  },
 });

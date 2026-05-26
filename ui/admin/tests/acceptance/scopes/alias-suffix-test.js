@@ -46,6 +46,7 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: null,
     });
 
     urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;

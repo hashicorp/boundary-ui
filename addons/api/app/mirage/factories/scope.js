@@ -87,6 +87,13 @@ export default factory.extend({
     return name;
   },
 
+  alias_suffix() {
+    if (this.type === 'project') {
+      return `.${faker.internet.domainWord()}`;
+    }
+    return null;
+  },
+
   scope() {
     if (this.type === 'global') {
       return {

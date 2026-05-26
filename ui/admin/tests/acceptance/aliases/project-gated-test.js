@@ -47,6 +47,7 @@ module('Acceptance | aliases | project | gated', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
+      alias_suffix: null,
     });
 
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;

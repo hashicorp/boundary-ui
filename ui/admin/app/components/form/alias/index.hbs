@@ -78,22 +78,29 @@
         {{t 'resources.alias.form.value.help_project'}}
       </F.HelperText>
       <F.Control>
-        <div class='alias-value-with-suffix'>
+        {{#if form.disabled}}
           <Hds::Form::TextInput::Base
             name='value'
-            @value={{this.displayBaseValue}}
-            @isInvalid={{@model.errors.value}}
-            disabled={{form.disabled}}
-            {{on 'input' this.handleBaseValueChange}}
+            @value={{@model.value}}
+            disabled={{true}}
           />
-          <Hds::Text::Body
-            @tag='span'
-            @weight='semibold'
-            class='alias-value-with-suffix--text'
-            title={{this.normalizedSuffix}}
-            data-test-alias-suffix-decoration
-          >{{this.normalizedSuffix}}</Hds::Text::Body>
-        </div>
+        {{else}}
+          <div class='alias-value-with-suffix'>
+            <Hds::Form::TextInput::Base
+              name='value'
+              @value={{this.displayBaseValue}}
+              @isInvalid={{@model.errors.value}}
+              {{on 'input' this.handleBaseValueChange}}
+            />
+            <Hds::Text::Body
+              @tag='span'
+              @weight='semibold'
+              class='alias-value-with-suffix--text'
+              title={{this.normalizedSuffix}}
+              data-test-alias-suffix-decoration
+            >{{this.normalizedSuffix}}</Hds::Text::Body>
+          </div>
+        {{/if}}
       </F.Control>
       {{#if @model.errors.value}}
         <F.Error as |E|>
