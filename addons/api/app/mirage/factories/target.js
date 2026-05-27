@@ -180,21 +180,38 @@ export default factory.extend({
       }
 
       // Create aliases scoped to this target's scope and attach them to target.
-      const aliasCount = faker.number.int({ min: 1, max: 2 });
-      const aliases = Array.from({ length: aliasCount }, () => {
-        const baseValue = faker.internet.domainWord();
+      // Only create aliases if the scope has a suffix (and for projects, the parent org also has one).
+      const scopeRecord = server.schema.scopes.find(scope.id);
+      const hasScopeSuffix = Boolean(scopeRecord?.alias_suffix);
+      const parentOrgId = scopeRecord?.scope?.id;
+      const parentOrg = parentOrgId
+        ? server.schema.scopes.find(parentOrgId)
+        : null;
+      const hasOrgSuffix =
+        !parentOrg ||
+        parentOrg.type === 'global' ||
+        Boolean(parentOrg.alias_suffix);
 
-        return server.create('alias', {
-          scope,
-          scope_id: scope.id,
-          destination_id: target.id,
-          value: baseValue,
+      if (hasScopeSuffix && hasOrgSuffix) {
+        const aliasCount = faker.number.int({ min: 1, max: 2 });
+        const aliases = Array.from({ length: aliasCount }, () => {
+          const baseValue = faker.internet.domainWord();
+
+          return server.create('alias', {
+            scope,
+            scope_id: scope.id,
+            destination_id: target.id,
+            value: baseValue,
+          });
         });
-      });
 
-      target.update({
-        aliases: aliases.map((alias) => ({ id: alias.id, value: alias.value })),
-      });
+        target.update({
+          aliases: aliases.map((alias) => ({
+            id: alias.id,
+            value: alias.value,
+          })),
+        });
+      }
     },
   }),
 
