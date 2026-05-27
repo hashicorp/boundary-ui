@@ -13,10 +13,17 @@ module('Integration | Component | form/field/key-value', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
+  // Test selectors
+  const KEY_INPUT = '[data-test-key-input]';
+  const VALUE_INPUT = '[data-test-value-input]';
+  const DELETE_BUTTON = '[data-test-delete-button]';
+  const ADD_BUTTON = '[data-test-add-button]';
+  const ERROR_MESSAGE = '[data-test-error-message]';
+
   // Helper functions
-  const getKeyInputs = () => findAll('[data-test-key-input]');
-  const getValueInputs = () => findAll('[data-test-value-input]');
-  const getDeleteButtons = () => findAll('[data-test-delete-button]');
+  const getKeyInputs = () => findAll(KEY_INPUT);
+  const getValueInputs = () => findAll(VALUE_INPUT);
+  const getDeleteButtons = () => findAll(DELETE_BUTTON);
 
   test('it renders with default and provided data', async function (assert) {
     // Default empty row
@@ -39,10 +46,10 @@ module('Integration | Component | form/field/key-value', function (hooks) {
         </:footer>
       </Form::Field::KeyValue>
     `);
-    assert.dom('[data-test-key-input]').exists();
-    assert.dom('[data-test-value-input]').exists();
-    assert.dom('[data-test-add-button]').exists();
-    assert.dom('[data-test-delete-button]').doesNotExist();
+    assert.dom(KEY_INPUT).exists();
+    assert.dom(VALUE_INPUT).exists();
+    assert.dom(ADD_BUTTON).exists();
+    assert.dom(DELETE_BUTTON).doesNotExist();
 
     // Provided data
     this.set('data', [
@@ -112,7 +119,9 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     `);
 
     assert.strictEqual(getKeyInputs().length, 1, 'Initially has one row');
-    await click('[data-test-add-button]');
+
+    await click(ADD_BUTTON);
+
     assert.strictEqual(
       getKeyInputs().length,
       2,
@@ -156,8 +165,8 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
 
-    assert.dom('[data-test-key-input]').hasValue('k');
-    assert.dom('[data-test-value-input]').hasValue('v');
+    assert.dom(KEY_INPUT).hasValue('k');
+    assert.dom(VALUE_INPUT).hasValue('v');
     assert.dom('[data-test-id-input]').hasValue('1');
 
     // Test Textarea field
@@ -177,7 +186,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
 
-    assert.dom('[data-test-key-input]').hasValue('k');
+    assert.dom(KEY_INPUT).hasValue('k');
 
     // Test single field
     this.set('data', [{ key: '' }]);
@@ -197,10 +206,10 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
 
-    assert.dom('[data-test-key-input]').exists();
-    assert.dom('[data-test-value-input]').doesNotExist();
-    assert.dom('[data-test-add-button]').exists();
-    assert.dom('[data-test-delete-button]').doesNotExist();
+    assert.dom(KEY_INPUT).exists();
+    assert.dom(VALUE_INPUT).doesNotExist();
+    assert.dom(ADD_BUTTON).exists();
+    assert.dom(DELETE_BUTTON).doesNotExist();
   });
 
   test('it displays error messages in footer (model errors)', async function (assert) {
@@ -239,7 +248,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
         </:footer>
       </Form::Field::KeyValue>
     `);
-    assert.dom('[data-test-error-message]').exists().hasText('Key is required');
+    assert.dom(ERROR_MESSAGE).exists().hasText('Key is required');
     assert
       .dom('[data-test-error-message]:nth-child(2)')
       .hasText('Value must be unique');
@@ -268,7 +277,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
         </:footer>
       </Form::Field::KeyValue>
     `);
-    assert.dom('[data-test-error-message]').doesNotExist();
+    assert.dom(ERROR_MESSAGE).doesNotExist();
   });
 
   test('it updates both key and value fields using custom handlers', async function (assert) {
@@ -296,8 +305,8 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
 
-    await fillIn('[data-test-key-input]', 'test-key');
-    await fillIn('[data-test-value-input]', 'test-value');
+    await fillIn(KEY_INPUT, 'test-key');
+    await fillIn(VALUE_INPUT, 'test-value');
 
     assert.strictEqual(this.data.length, 1);
     assert.strictEqual(this.data[0].key, 'test-key');
@@ -379,7 +388,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     `);
 
     // Test custom add handler takes precedence
-    await click('[data-test-add-button]');
+    await click(ADD_BUTTON);
 
     assert.strictEqual(model.tags.length, 2);
     assert.strictEqual(model.tags[1].key, 'custom');
@@ -425,7 +434,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
 
     assert.strictEqual(model.tags.length, 1);
 
-    await click('[data-test-add-button]');
+    await click(ADD_BUTTON);
 
     assert.strictEqual(model.tags.length, 2);
 
@@ -502,10 +511,76 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
 
-    await fillIn('[data-test-key-input]', 'updated-key');
-    await fillIn('[data-test-value-input]', 'updated-value');
+    await fillIn(KEY_INPUT, 'updated-key');
+    await fillIn(VALUE_INPUT, 'updated-value');
 
     assert.strictEqual(model.tags[0].key, 'updated-key');
     assert.strictEqual(model.tags[0].value, 'updated-value');
+  });
+
+  test('canDelete uses properties argument correctly (trash icon visible)', async function (assert) {
+    // Multiple rows: trash icon should be visible
+    this.set('data', [
+      { key: 'foo', value: 'bar' },
+      { key: '', value: '' },
+    ]);
+    this.set('properties', ['key', 'value']);
+    await render(hbs`
+      <Form::Field::KeyValue @data={{this.data}} @properties={{this.properties}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          {{#if R.canDelete}}
+            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          {{/if}}
+        </:row>
+      </Form::Field::KeyValue>
+    `);
+
+    assert.dom(DELETE_BUTTON).isVisible();
+
+    // Single row, property is empty: trash icon should not be visible
+    this.set('data', [{ key: '', value: '' }]);
+    await render(hbs`
+      <Form::Field::KeyValue @data={{this.data}} @properties={{this.properties}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          {{#if R.canDelete}}
+            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          {{/if}}
+        </:row>
+      </Form::Field::KeyValue>
+    `);
+
+    assert.dom(DELETE_BUTTON).isNotVisible();
+
+    // Single row, property is set: trash icon should be visible
+    this.set('data', [{ key: 'foo', value: '' }]);
+    await render(hbs`
+      <Form::Field::KeyValue @data={{this.data}} @properties={{this.properties}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+          <R.Field as |F|>
+            <F.TextInput data-test-value-input @value={{R.rowData.value}} />
+          </R.Field>
+          {{#if R.canDelete}}
+            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          {{/if}}
+        </:row>
+      </Form::Field::KeyValue>
+    `);
+
+    assert.dom(DELETE_BUTTON).isVisible();
   });
 });

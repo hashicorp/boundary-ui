@@ -29,7 +29,7 @@ export default class FormFieldKeyValueComponent extends Component {
         return properties.some((property) => row?.[property]);
       }
 
-      return Object.values(rows[0]).some((value) => value);
+      return Object.values(row).some((value) => value);
     }
 
     // Return false if there are no rows
