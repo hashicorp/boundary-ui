@@ -63,16 +63,16 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
       id: 'host-resource-manager',
       grantStrings: [
         'ids=*;type=host-catalog;actions=create,list,read,update,delete',
-        'ids=*;type=host-set;actions=create,read,update,delete,add-hosts,set-hosts,remove-hosts',
-        'ids=*;type=host;actions=create,read,update,delete',
+        'ids=*;type=host-set;actions=create,list,read,update,delete,add-hosts,set-hosts,remove-hosts',
+        'ids=*;type=host;actions=create,list,read,update,delete',
       ],
     },
     {
       id: 'credential-manager',
       grantStrings: [
-        'ids=*;type=credential;actions=create,read,update,delete',
+        'ids=*;type=credential;actions=create,list,read,update,delete',
         'ids=*;type=credential-store;actions=create,list,read,update,delete',
-        'ids=*;type=credential-library;actions=create,read,update,delete',
+        'ids=*;type=credential-library;actions=create,list,read,update,delete',
       ],
     },
     {
@@ -80,14 +80,14 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
       grantStrings: [
         'ids=*;type=user;actions=create,list,read,update,delete,add-accounts,set-accounts,remove-accounts',
         'ids=*;type=group;actions=create,list,read,update,delete,add-members,set-members,remove-members',
-        'ids=*;type=account;actions=create,read,update,delete',
+        'ids=*;type=account;actions=create,list,read,update,delete',
       ],
     },
     {
       id: 'auth-method-manager',
       grantStrings: [
         'ids=*;type=auth-method;actions=create,list,read,update,delete,change-state',
-        'ids=*;type=managed-group;actions=create,read,update,delete',
+        'ids=*;type=managed-group;actions=create,list,read,update,delete',
       ],
     },
     {
@@ -106,7 +106,7 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
     },
     {
       id: 'read-only-user',
-      grantStrings: ['ids=*;type=session;actions=list,read,cancel'],
+      grantStrings: ['ids=*;type=*;actions=list,read'],
     },
   ];
 
