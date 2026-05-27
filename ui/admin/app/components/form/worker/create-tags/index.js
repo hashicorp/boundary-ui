@@ -50,6 +50,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   save() {
+    // Filter out empty tags
     const tagsToProcess = this.args.apiTags.filter((tag) => tag.key?.trim());
     if (tagsToProcess.length === 0) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
