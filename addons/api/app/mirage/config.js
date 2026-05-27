@@ -188,6 +188,43 @@ export default function (mirageConfig) {
   return createServer(finalConfig);
 }
 
+function normalizeSuffixSegments(suffix) {
+  if (!suffix) return null;
+  const normalized = String(suffix).split('.').filter(Boolean).join('.');
+  return normalized || null;
+}
+
+function getScopeAliasSuffix(scope, scopes) {
+  if (!scope) return null;
+
+  const scopeSuffix = normalizeSuffixSegments(
+    scope.alias_suffix ?? scope.aliasSuffix,
+  );
+  if (!scopeSuffix) return null;
+
+  if (scope.type !== 'project') {
+    return `.${scopeSuffix}`;
+  }
+
+  const parentScopeId = scope.scope?.id ?? scope.scope_id ?? scope.scopeId;
+  const parentScope = parentScopeId ? scopes.find(parentScopeId) : null;
+  const orgSuffix = normalizeSuffixSegments(
+    parentScope?.alias_suffix ?? parentScope?.aliasSuffix,
+  );
+
+  if (!orgSuffix || scopeSuffix.endsWith(`.${orgSuffix}`)) {
+    return `.${scopeSuffix}`;
+  }
+
+  return `.${scopeSuffix}.${orgSuffix}`;
+}
+
+function appendSuffixIfMissing(value, suffix) {
+  if (!value || !suffix) return value;
+  if (value.endsWith(suffix)) return value;
+  return `${value}${suffix}`;
+}
+
 // Only routes are defined here
 function routes() {
   initializeMockDesktopContextBridgeAPI(this, environmentConfig);
@@ -700,7 +737,7 @@ function routes() {
       const createdAliases = withAliases.map((aliasData) => {
         const scopeId = aliasData.scope_id || 'global';
         const scope = scopes.find(scopeId);
-        const aliasSuffix = scope?.alias_suffix ?? scope?.aliasSuffix;
+        const aliasSuffix = getScopeAliasSuffix(scope, scopes);
         const aliasAttrs = {
           value: aliasData.value,
           scope_id: scopeId,
@@ -709,9 +746,10 @@ function routes() {
         };
 
         if (aliasSuffix && aliasData.value) {
-          aliasAttrs.value = aliasData.value.endsWith(aliasSuffix)
-            ? aliasData.value
-            : `${aliasData.value}${aliasSuffix}`;
+          aliasAttrs.value = appendSuffixIfMissing(
+            aliasData.value,
+            aliasSuffix,
+          );
         }
         return aliases.create(aliasAttrs);
       });
@@ -988,11 +1026,10 @@ function routes() {
       // Mirror the create-alias suffix logic on update.
       const scopeId = alias.scope_id;
       const scope = scopes.find(scopeId);
+      const aliasSuffix = getScopeAliasSuffix(scope, scopes);
       const updatedAttrs = { ...attrs };
-      if (attrs.value !== undefined && scope?.alias_suffix) {
-        updatedAttrs.value = attrs.value.endsWith(scope.alias_suffix)
-          ? attrs.value
-          : `${attrs.value}${scope.alias_suffix}`;
+      if (attrs.value !== undefined && aliasSuffix) {
+        updatedAttrs.value = appendSuffixIfMissing(attrs.value, aliasSuffix);
       }
 
       return alias.update(updatedAttrs);
@@ -1010,11 +1047,8 @@ function routes() {
     // `value` only.
     const submittedValue = attrs.value || attrs.name || faker.word.words();
 
-    const fullValue = scope?.alias_suffix
-      ? submittedValue.endsWith(scope.alias_suffix)
-        ? submittedValue
-        : `${submittedValue}${scope.alias_suffix}`
-      : submittedValue;
+    const aliasSuffix = getScopeAliasSuffix(scope, scopes);
+    const fullValue = appendSuffixIfMissing(submittedValue, aliasSuffix);
 
     const aliasAttrs = {
       ...attrs,

@@ -10,29 +10,15 @@ export default class ScopesScopeAddAliasSuffixRoute extends Route {
   // =services
 
   @service store;
-  @service abilities;
 
   // =methods
 
   /**
-   * Returns the current project scope.
+   * Returns the current scope.
    * @return {ScopeModel}
    */
   model() {
     return this.modelFor('scopes.scope');
-  }
-
-  /**
-   * Refresh the alias suffix for project scopes.
-   * @param {ScopeModel} scope
-   */
-  async afterModel(scope) {
-    if (this.abilities.can('getAliasSuffix scope', scope)) {
-      await this.store.findRecord('scope', scope.id, {
-        adapterOptions: { method: 'get-alias-target-suffix' },
-        reload: true,
-      });
-    }
   }
 
   /**

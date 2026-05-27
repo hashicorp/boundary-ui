@@ -47,11 +47,11 @@ export default class ScopeModel extends GeneratedScopeModel {
   }
 
   /**
-   * Returns true if this scope is a project and has an alias target suffix configured.
+   * Returns true if this scope is a project or org and has an alias target suffix configured.
    * @type {boolean}
    */
   get hasSuffix() {
-    return this.isProject && this.alias_suffix;
+    return (this.isProject || this.isOrg) && this.alias_suffix;
   }
 
   /**

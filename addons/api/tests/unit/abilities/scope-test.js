@@ -56,6 +56,11 @@ module('Unit | Abilities | Scope', function (hooks) {
       'org with action': {
         type: 'org',
         authorized_actions: ['set-alias-target-suffix'],
+        expected: true,
+      },
+      'org without action': {
+        type: 'org',
+        authorized_actions: [],
         expected: false,
       },
       'global with action': {
@@ -101,6 +106,12 @@ module('Unit | Abilities | Scope', function (hooks) {
         type: 'org',
         authorized_actions: ['remove-alias-target-suffix'],
         alias_suffix: '.example',
+        expected: true,
+      },
+      'org with action but no suffix': {
+        type: 'org',
+        authorized_actions: ['remove-alias-target-suffix'],
+        alias_suffix: '',
         expected: false,
       },
       'global with action and suffix': {

@@ -47,6 +47,7 @@ module('Acceptance | aliases | project | list', function (hooks) {
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
+      alias_suffix: SUFFIX_VALUE,
     });
     instances.scopes.project = this.server.create('scope', {
       type: 'project',

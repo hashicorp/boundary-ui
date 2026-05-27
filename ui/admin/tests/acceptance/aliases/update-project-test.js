@@ -14,7 +14,9 @@ module('Acceptance | aliases | project | update', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
+  const ORG_SUFFIX_VALUE = '.boundary';
   const SUFFIX_VALUE = '.example';
+  const COMBINED_SUFFIX_VALUE = `${SUFFIX_VALUE}${ORG_SUFFIX_VALUE}`;
   const SEED_BASE_VALUE = 'foo';
   const NEW_BASE_VALUE = 'bar';
   const VALUE_INPUT = '[name=value]';
@@ -48,6 +50,7 @@ module('Acceptance | aliases | project | update', function (hooks) {
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
+      alias_suffix: ORG_SUFFIX_VALUE,
     });
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
@@ -61,7 +64,7 @@ module('Acceptance | aliases | project | update', function (hooks) {
       scope: instances.scopes.project,
       scope_id: instances.scopes.project.id,
       destination_id: instances.target.id,
-      value: `${SEED_BASE_VALUE}${SUFFIX_VALUE}`,
+      value: `${SEED_BASE_VALUE}${COMBINED_SUFFIX_VALUE}`,
     });
 
     urls.aliases = `/scopes/${instances.scopes.project.id}/aliases`;
@@ -72,13 +75,15 @@ module('Acceptance | aliases | project | update', function (hooks) {
     await visit(urls.alias);
 
     // View mode: full composed value is shown, no suffix decoration.
-    assert.dom(VALUE_INPUT).hasValue(`${SEED_BASE_VALUE}${SUFFIX_VALUE}`);
+    assert
+      .dom(VALUE_INPUT)
+      .hasValue(`${SEED_BASE_VALUE}${COMBINED_SUFFIX_VALUE}`);
     assert.dom(SUFFIX_DECORATION).doesNotExist();
 
     // Edit mode: only the base portion is shown with the suffix decoration.
     await click(commonSelectors.EDIT_BTN);
     assert.dom(VALUE_INPUT).hasValue(SEED_BASE_VALUE);
-    assert.dom(SUFFIX_DECORATION).hasText(SUFFIX_VALUE);
+    assert.dom(SUFFIX_DECORATION).hasText(COMBINED_SUFFIX_VALUE);
   });
 
   test('updating a project alias submits the user input and the server composes the suffixed value', async function (assert) {
@@ -90,7 +95,7 @@ module('Acceptance | aliases | project | update', function (hooks) {
 
     assert.strictEqual(
       instances.alias.value,
-      `${NEW_BASE_VALUE}${SUFFIX_VALUE}`,
+      `${NEW_BASE_VALUE}${COMBINED_SUFFIX_VALUE}`,
     );
   });
 

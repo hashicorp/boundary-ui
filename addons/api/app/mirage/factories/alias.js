@@ -9,6 +9,29 @@ import generateId from '../helpers/id';
 
 const destinationIDs = ['', generateId('t_')];
 
+const normalizeSuffixSegments = (suffix) => {
+  if (!suffix) return null;
+  const normalized = String(suffix).split('.').filter(Boolean).join('.');
+  return normalized || null;
+};
+
+const getCombinedSuffixForScope = (scope, server) => {
+  const scopeSuffix = normalizeSuffixSegments(scope?.alias_suffix);
+  if (!scopeSuffix) return null;
+
+  if (scope.type !== 'project') return `.${scopeSuffix}`;
+
+  const orgScopeId = scope.scope?.id;
+  const orgScope = orgScopeId ? server.schema.scopes.find(orgScopeId) : null;
+  const orgSuffix = normalizeSuffixSegments(orgScope?.alias_suffix);
+
+  if (!orgSuffix || scopeSuffix.endsWith(`.${orgSuffix}`)) {
+    return `.${scopeSuffix}`;
+  }
+
+  return `.${scopeSuffix}.${orgSuffix}`;
+};
+
 export default factory.extend({
   id: () => generateId('alt_'),
   destination_id: (i) => destinationIDs[i % destinationIDs.length],
@@ -26,14 +49,12 @@ export default factory.extend({
     if (!scopeId) return;
 
     const scope = server.schema.scopes.find(scopeId);
-    if (!scope?.alias_suffix) return;
+    const combinedSuffix = getCombinedSuffixForScope(scope, server);
+    if (!combinedSuffix) return;
 
     const currentValue = alias.value || '';
-    if (!currentValue.endsWith(scope.alias_suffix)) {
-      const separator = scope.alias_suffix.startsWith('.') ? '' : '.';
-      alias.update({
-        value: `${currentValue}${separator}${scope.alias_suffix}`,
-      });
+    if (!currentValue.endsWith(combinedSuffix)) {
+      alias.update({ value: `${currentValue}${combinedSuffix}` });
     }
   },
 });

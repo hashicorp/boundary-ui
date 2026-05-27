@@ -346,7 +346,12 @@ module('Acceptance | targets | create', function (hooks) {
       },
     });
 
-    // Give the project a suffix so the project option is enabled.
+    const orgSuffix = '.boundary';
+    const projectSuffix = '.example';
+    const combinedSuffix = `${projectSuffix}${orgSuffix}`;
+
+    // Give the org and project suffixes so project aliases compose both.
+    instances.scopes.org.update({ alias_suffix: orgSuffix });
     instances.scopes.project.update({ alias_suffix: '.example' });
     // Ensure the project scope authorizes creating aliases.
     instances.scopes.project.update({
@@ -388,7 +393,7 @@ module('Acceptance | targets | create', function (hooks) {
     const globalAlias = aliases.find((alias) => alias.scope_id === 'global');
 
     assert.strictEqual(aliases.length, 2);
-    assert.strictEqual(projectAlias.value, 'myhost.example');
+    assert.strictEqual(projectAlias.value, `myhost${combinedSuffix}`);
     assert.strictEqual(projectAlias.scope_id, instances.scopes.project.id);
     assert.strictEqual(globalAlias.value, 'globalhost');
     assert.strictEqual(globalAlias.scope_id, 'global');

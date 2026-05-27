@@ -7,7 +7,10 @@ export const FIELD_DESTINATION_ID = '[name=destination_id]';
 export const FIELD_HOST_ID = '[name=authorize_session_arguments]';
 
 export const GATED_STATE = '[data-test-aliases-gated]';
-export const GATED_STATE_LINK = '[data-test-aliases-gated-link]';
+export const GATED_STATE_LINK = '[data-test-aliases-gated-link-project]';
+export const GATED_STATE_LINK_PROJECT =
+  '[data-test-aliases-gated-link-project]';
+export const GATED_STATE_LINK_ORG = '[data-test-aliases-gated-link-org]';
 
 export const TABLE_ROW = (id) => `tbody [data-test-alias-row="${id}"]`;
 export const THIRD_COLUMN_HEADER = 'thead th:nth-child(3)';

@@ -14,7 +14,9 @@ module('Acceptance | aliases | project | create', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
+  const ORG_SUFFIX_VALUE = '.boundary';
   const SUFFIX_VALUE = '.example';
+  const COMBINED_SUFFIX_VALUE = `${SUFFIX_VALUE}${ORG_SUFFIX_VALUE}`;
   const BASE_VALUE = 'myhost';
   const VALUE_INPUT = '[name=value]';
   const SUFFIX_DECORATION = '[data-test-alias-suffix-decoration]';
@@ -45,6 +47,7 @@ module('Acceptance | aliases | project | create', function (hooks) {
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
+      alias_suffix: ORG_SUFFIX_VALUE,
     });
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
@@ -60,7 +63,7 @@ module('Acceptance | aliases | project | create', function (hooks) {
     await visit(urls.newAlias);
 
     assert.dom(VALUE_INPUT).isVisible();
-    assert.dom(SUFFIX_DECORATION).hasText(SUFFIX_VALUE);
+    assert.dom(SUFFIX_DECORATION).hasText(COMBINED_SUFFIX_VALUE);
   });
 
   test('creating a project alias submits the user input as value and the server composes the suffixed value', async function (assert) {
@@ -74,6 +77,6 @@ module('Acceptance | aliases | project | create', function (hooks) {
       name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(alias.value, `${BASE_VALUE}${SUFFIX_VALUE}`);
+    assert.strictEqual(alias.value, `${BASE_VALUE}${COMBINED_SUFFIX_VALUE}`);
   });
 });

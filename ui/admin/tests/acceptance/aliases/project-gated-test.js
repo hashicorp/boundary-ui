@@ -25,8 +25,10 @@ module('Acceptance | aliases | project | gated', function (hooks) {
 
   const urls = {
     projectScope: null,
+    orgScope: null,
     aliases: null,
     addAliasSuffix: null,
+    addOrgAliasSuffix: null,
     newAlias: null,
   };
 
@@ -43,6 +45,7 @@ module('Acceptance | aliases | project | gated', function (hooks) {
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
+      alias_suffix: null,
     });
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
@@ -50,9 +53,11 @@ module('Acceptance | aliases | project | gated', function (hooks) {
       alias_suffix: null,
     });
 
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.aliases = `${urls.projectScope}/aliases`;
     urls.addAliasSuffix = `${urls.projectScope}/add-alias-suffix`;
+    urls.addOrgAliasSuffix = `${urls.orgScope}/add-alias-suffix`;
     urls.newAlias = `${urls.aliases}/new`;
   });
 
@@ -65,20 +70,51 @@ module('Acceptance | aliases | project | gated', function (hooks) {
   test('shows the gated empty state when project scope has no alias suffix', async function (assert) {
     await visit(urls.aliases);
 
-    assert.dom(selectors.GATED_STATE_LINK).isVisible();
+    assert.dom(selectors.GATED_STATE_LINK_PROJECT).isVisible();
+    assert.dom(selectors.GATED_STATE_LINK_ORG).isVisible();
     assert.dom(commonSelectors.HREF(urls.newAlias)).doesNotExist();
   });
 
-  test('gated CTA navigates to the add alias suffix page', async function (assert) {
+  test('gated CTA for project navigates to the project add alias suffix page', async function (assert) {
     await visit(urls.aliases);
-    await click(selectors.GATED_STATE_LINK);
+    await click(selectors.GATED_STATE_LINK_PROJECT);
 
     assert.strictEqual(currentURL(), urls.addAliasSuffix);
+  });
+
+  test('gated CTA for org navigates to the org add alias suffix page', async function (assert) {
+    await visit(urls.aliases);
+    await click(selectors.GATED_STATE_LINK_ORG);
+
+    assert.strictEqual(currentURL(), urls.addOrgAliasSuffix);
+  });
+
+  test('shows only org link when project has suffix but org does not', async function (assert) {
+    instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
+
+    await visit(urls.aliases);
+
+    assert.dom(selectors.GATED_STATE_LINK_PROJECT).doesNotExist();
+    assert.dom(selectors.GATED_STATE_LINK_ORG).isVisible();
+  });
+
+  test('shows only project link when org has suffix but project does not', async function (assert) {
+    instances.scopes.org.update({ alias_suffix: SUFFIX_VALUE });
+
+    await visit(urls.aliases);
+
+    assert.dom(selectors.GATED_STATE_LINK_PROJECT).isVisible();
+    assert.dom(selectors.GATED_STATE_LINK_ORG).doesNotExist();
   });
 
   test('gated state is not shown when user cannot set an alias suffix', async function (assert) {
     instances.scopes.project.update({
       authorized_actions: instances.scopes.project.authorized_actions.filter(
+        (action) => action !== 'set-alias-target-suffix',
+      ),
+    });
+    instances.scopes.org.update({
+      authorized_actions: instances.scopes.org.authorized_actions.filter(
         (action) => action !== 'set-alias-target-suffix',
       ),
     });
@@ -95,7 +131,8 @@ module('Acceptance | aliases | project | gated', function (hooks) {
       );
   });
 
-  test('shows the normal aliases empty state when project scope has an alias suffix', async function (assert) {
+  test('shows the normal aliases empty state when both scopes have an alias suffix', async function (assert) {
+    instances.scopes.org.update({ alias_suffix: SUFFIX_VALUE });
     instances.scopes.project.update({ alias_suffix: SUFFIX_VALUE });
 
     await visit(urls.aliases);

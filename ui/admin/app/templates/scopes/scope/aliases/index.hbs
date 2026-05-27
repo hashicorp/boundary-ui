@@ -34,15 +34,39 @@
     {{#if this.isGated}}
       <Hds::ApplicationState data-test-aliases-gated as |A|>
         <A.Header @title={{t 'resources.alias.messages.gated.title'}} />
-        <A.Body @text={{t 'resources.alias.messages.gated.description'}} />
+        <A.Body
+          @text={{t
+            (if
+              (and this.isProjectSuffixMissing this.isOrgSuffixMissing)
+              'resources.alias.messages.gated.description-both'
+              (if
+                this.isOrgSuffixMissing
+                'resources.alias.messages.gated.description-org'
+                'resources.alias.messages.gated.description-project'
+              )
+            )
+          }}
+        />
         <A.Footer as |F|>
-          <F.LinkStandalone
-            data-test-aliases-gated-link
-            @icon='arrow-right'
-            @iconPosition='trailing'
-            @route='scopes.scope.add-alias-suffix'
-            @text={{t 'resources.alias.messages.gated.link'}}
-          />
+          {{#if this.isProjectSuffixMissing}}
+            <F.LinkStandalone
+              data-test-aliases-gated-link-project
+              @icon='arrow-right'
+              @iconPosition='trailing'
+              @route='scopes.scope.add-alias-suffix'
+              @text={{t 'resources.alias.messages.gated.link-project'}}
+            />
+          {{/if}}
+          {{#if this.isOrgSuffixMissing}}
+            <F.LinkStandalone
+              data-test-aliases-gated-link-org
+              @icon='arrow-right'
+              @iconPosition='trailing'
+              @route='scopes.scope.add-alias-suffix'
+              @model={{this.scopeService.org.id}}
+              @text={{t 'resources.alias.messages.gated.link-org'}}
+            />
+          {{/if}}
         </A.Footer>
       </Hds::ApplicationState>
     {{else if @model.doAliasesExist}}

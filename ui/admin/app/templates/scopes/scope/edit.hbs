@@ -81,70 +81,147 @@
           </Rose::Layout::Centered>
         {{/if}}
       </bc.Body>
-      {{#if (can 'attachStoragePolicy scope' @model)}}
+      {{#if
+        (or
+          (can 'attachStoragePolicy scope' @model)
+          (can 'setAliasSuffix scope' @model)
+        )
+      }}
         <bc.Sidebar>
-          <div class='scope-sidebar' data-test-storage-policy-sidebar>
-            <Hds::Text::Display @tag='h2' class='remove-margin'>
-              {{t 'resources.policy.title'}}
-            </Hds::Text::Display>
+          {{#if (can 'attachStoragePolicy scope' @model)}}
+            <div
+              class='scope-sidebar-storage-policy'
+              data-test-storage-policy-sidebar
+            >
+              <Hds::Text::Display @tag='h2' class='remove-margin'>
+                {{t 'resources.policy.title'}}
+              </Hds::Text::Display>
 
-            {{#if @model.storage_policy_id}}
-              <Hds::Text::Body @tag='p' class='description'>
-                {{t 'resources.policy.titles.policy_description'}}
-                <Hds::Link::Inline
-                  @color='secondary'
-                  @href={{doc-url 'storage-policy.update'}}
-                >
-                  {{t 'actions.read-more'}}
-                </Hds::Link::Inline>
-              </Hds::Text::Body>
-            {{else}}
-              <Hds::Text::Body @tag='p' class='description'>
-                {{t 'resources.policy.titles.create_policy_description'}}
-                <Hds::Link::Inline
-                  @color='secondary'
-                  @href={{doc-url 'storage-policy.update'}}
-                >
-                  {{t 'actions.read-more'}}
-                </Hds::Link::Inline>
-              </Hds::Text::Body>
-            {{/if}}
-            {{#if @model.storage_policy_id}}
-              <LinkListPanel as |P|>
-                <P.Item
-                  @icon='hourglass'
-                  @color='boundary'
-                  @text={{this.storage_policy.displayName}}
-                >
-                  {{#if this.storage_policy.retain_for.days}}
-                    <Hds::Text::Body
-                      @tag='p'
-                      @color='var(--ui-gray-subtler-1)'
-                      @size='100'
-                    >
-                      {{t 'resources.policy.titles.retain_for'}}
-                      {{#if (gte this.storage_policy.retain_for.days 1)}}
-                        {{format-day-year this.storage_policy.retain_for.days}}
-                      {{else if (eq this.storage_policy.retain_for.days -1)}}
-                        {{t 'resources.policy.titles.forever'}}
-                      {{/if}}
-                    </Hds::Text::Body>
+              {{#if @model.storage_policy_id}}
+                <Hds::Text::Body @tag='p' class='description'>
+                  {{t 'resources.policy.titles.policy_description'}}
+                  <Hds::Link::Inline
+                    @color='secondary'
+                    @href={{doc-url 'storage-policy.update'}}
+                  >
+                    {{t 'actions.read-more'}}
+                  </Hds::Link::Inline>
+                </Hds::Text::Body>
+              {{else}}
+                <Hds::Text::Body @tag='p' class='description'>
+                  {{t 'resources.policy.titles.create_policy_description'}}
+                  <Hds::Link::Inline
+                    @color='secondary'
+                    @href={{doc-url 'storage-policy.update'}}
+                  >
+                    {{t 'actions.read-more'}}
+                  </Hds::Link::Inline>
+                </Hds::Text::Body>
+              {{/if}}
+              {{#if @model.storage_policy_id}}
+                <LinkListPanel as |P|>
+                  <P.Item
+                    @icon='hourglass'
+                    @color='boundary'
+                    @text={{this.storage_policy.displayName}}
+                  >
+                    {{#if this.storage_policy.retain_for.days}}
+                      <Hds::Text::Body
+                        @tag='p'
+                        @color='var(--ui-gray-subtler-1)'
+                        @size='100'
+                      >
+                        {{t 'resources.policy.titles.retain_for'}}
+                        {{#if (gte this.storage_policy.retain_for.days 1)}}
+                          {{format-day-year
+                            this.storage_policy.retain_for.days
+                          }}
+                        {{else if (eq this.storage_policy.retain_for.days -1)}}
+                          {{t 'resources.policy.titles.forever'}}
+                        {{/if}}
+                      </Hds::Text::Body>
+                    {{/if}}
+
+                    {{#if (gt this.storage_policy.delete_after.days 0)}}
+                      <Hds::Text::Body
+                        @tag='p'
+                        @color='var(--ui-gray-subtler-1)'
+                        @size='100'
+                      >
+                        {{t 'resources.policy.titles.delete_after'}}
+                        {{format-day-year
+                          this.storage_policy.delete_after.days
+                        }}
+                      </Hds::Text::Body>
+                    {{/if}}
+                  </P.Item>
+                  {{#if (can 'detachStoragePolicy scope' @model)}}
+                    <P.Item>
+                      <Hds::Dropdown as |dd|>
+                        <dd.ToggleIcon
+                          @icon='more-horizontal'
+                          @text={{t 'actions.manage'}}
+                          @hasChevron={{false}}
+                          @size='small'
+                        />
+                        <dd.Interactive
+                          @route='scopes.scope.policies.policy'
+                          @model={{this.storage_policy.id}}
+                        >{{t 'actions.view'}}</dd.Interactive>
+                        <dd.Separator />
+                        <dd.Interactive
+                          @color='critical'
+                          {{on
+                            'click'
+                            (fn this.scopes.detachStoragePolicy @model)
+                          }}
+                        >{{t
+                            'resources.policy.actions.detach'
+                          }}</dd.Interactive>
+                      </Hds::Dropdown>
+                    </P.Item>
                   {{/if}}
 
-                  {{#if (gt this.storage_policy.delete_after.days 0)}}
-                    <Hds::Text::Body
-                      @tag='p'
-                      @color='var(--ui-gray-subtler-1)'
-                      @size='100'
-                    >
-                      {{t 'resources.policy.titles.delete_after'}}
-                      {{format-day-year this.storage_policy.delete_after.days}}
-                    </Hds::Text::Body>
-                  {{/if}}
-                </P.Item>
-                {{#if (can 'detachStoragePolicy scope' @model)}}
+                </LinkListPanel>
+
+                <Hds::Link::Standalone
+                  @icon='arrow-right'
+                  @iconPosition='trailing'
+                  @text={{t 'resources.policy.actions.add'}}
+                  @route='scopes.scope.add-storage-policy'
+                />
+
+              {{else}}
+                <Hds::Button
+                  @text={{t 'resources.policy.actions.add'}}
+                  @color='secondary'
+                  @route='scopes.scope.add-storage-policy'
+                />
+              {{/if}}
+            </div>
+          {{/if}}
+          {{#if (can 'setAliasSuffix scope' @model)}}
+            <div
+              class='scope-sidebar-alias-suffix'
+              data-test-alias-suffix-sidebar
+            >
+              <Hds::Text::Display @tag='h2' class='remove-margin'>
+                {{t 'resources.scope.alias-suffix.title'}}
+              </Hds::Text::Display>
+
+              <Hds::Text::Body @tag='p' class='description'>
+                {{t 'resources.scope.alias-suffix.description'}}
+              </Hds::Text::Body>
+
+              {{#if @model.hasSuffix}}
+                <LinkListPanel as |P|>
+                  <P.Item
+                    @icon='identity-user'
+                    @color='boundary'
+                    @text={{@model.alias_suffix}}
+                  />
                   <P.Item>
-                    <Hds::Dropdown as |dd|>
+                    <Hds::Dropdown data-test-alias-suffix-dropdown as |dd|>
                       <dd.ToggleIcon
                         @icon='more-horizontal'
                         @text={{t 'actions.manage'}}
@@ -152,93 +229,36 @@
                         @size='small'
                       />
                       <dd.Interactive
-                        @route='scopes.scope.policies.policy'
-                        @model={{this.storage_policy.id}}
-                      >{{t 'actions.view'}}</dd.Interactive>
-                      <dd.Separator />
-                      <dd.Interactive
-                        @color='critical'
-                        {{on
-                          'click'
-                          (fn this.scopes.detachStoragePolicy @model)
-                        }}
-                      >{{t 'resources.policy.actions.detach'}}</dd.Interactive>
+                        data-test-alias-suffix-edit
+                        @route='scopes.scope.add-alias-suffix'
+                      >{{t
+                          'resources.scope.alias-suffix.actions.edit'
+                        }}</dd.Interactive>
+                      {{#if (can 'removeAliasSuffix scope' @model)}}
+                        <dd.Separator />
+                        <dd.Interactive
+                          data-test-alias-suffix-delete
+                          @color='critical'
+                          {{on
+                            'click'
+                            (fn this.scopes.deleteAliasSuffix @model)
+                          }}
+                        >{{t
+                            'resources.scope.alias-suffix.actions.delete'
+                          }}</dd.Interactive>
+                      {{/if}}
                     </Hds::Dropdown>
                   </P.Item>
-                {{/if}}
-
-              </LinkListPanel>
-
-              <Hds::Link::Standalone
-                @icon='arrow-right'
-                @iconPosition='trailing'
-                @text={{t 'resources.policy.actions.add'}}
-                @route='scopes.scope.add-storage-policy'
-              />
-
-            {{else}}
-              <Hds::Button
-                @text={{t 'resources.policy.actions.add'}}
-                @color='secondary'
-                @route='scopes.scope.add-storage-policy'
-              />
-            {{/if}}
-          </div>
-        </bc.Sidebar>
-      {{/if}}
-      {{#if (can 'setAliasSuffix scope' @model)}}
-        <bc.Sidebar>
-          <div class='scope-sidebar' data-test-alias-suffix-sidebar>
-            <Hds::Text::Display @tag='h2' class='remove-margin'>
-              {{t 'resources.scope.alias-suffix.title'}}
-            </Hds::Text::Display>
-
-            <Hds::Text::Body @tag='p' class='description'>
-              {{t 'resources.scope.alias-suffix.description'}}
-            </Hds::Text::Body>
-
-            {{#if @model.hasSuffix}}
-              <LinkListPanel as |P|>
-                <P.Item
-                  @icon='identity-user'
-                  @color='boundary'
-                  @text={{@model.alias_suffix}}
+                </LinkListPanel>
+              {{else}}
+                <Hds::Button
+                  @text={{t 'resources.scope.alias-suffix.actions.create'}}
+                  @color='secondary'
+                  @route='scopes.scope.add-alias-suffix'
                 />
-                <P.Item>
-                  <Hds::Dropdown data-test-alias-suffix-dropdown as |dd|>
-                    <dd.ToggleIcon
-                      @icon='more-horizontal'
-                      @text={{t 'actions.manage'}}
-                      @hasChevron={{false}}
-                      @size='small'
-                    />
-                    <dd.Interactive
-                      data-test-alias-suffix-edit
-                      @route='scopes.scope.add-alias-suffix'
-                    >{{t
-                        'resources.scope.alias-suffix.actions.edit'
-                      }}</dd.Interactive>
-                    {{#if (can 'removeAliasSuffix scope' @model)}}
-                      <dd.Separator />
-                      <dd.Interactive
-                        data-test-alias-suffix-delete
-                        @color='critical'
-                        {{on 'click' (fn this.scopes.deleteAliasSuffix @model)}}
-                      >{{t
-                          'resources.scope.alias-suffix.actions.delete'
-                        }}</dd.Interactive>
-                    {{/if}}
-                  </Hds::Dropdown>
-                </P.Item>
-              </LinkListPanel>
-            {{else}}
-              <Hds::Button
-                @text={{t 'resources.scope.alias-suffix.actions.create'}}
-                @color='secondary'
-                @route='scopes.scope.add-alias-suffix'
-              />
-            {{/if}}
-          </div>
+              {{/if}}
+            </div>
+          {{/if}}
         </bc.Sidebar>
       {{/if}}
     </Rose::Layout::BodyContent>

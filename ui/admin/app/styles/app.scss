@@ -475,8 +475,8 @@
   width: 100%;
 
   .hds-form-text-input {
-    flex: 0 0 75%;
-    width: 75%;
+    flex: 0 0 50%;
+    width: 50%;
     min-width: 0;
   }
 
@@ -858,7 +858,8 @@
 
 // scope sidebar
 
-.scope-sidebar {
+.scope-sidebar-storage-policy,
+.scope-sidebar-alias-suffix {
   background-color: var(--token-form-control-disabled-surface-color);
   padding: 1.5rem 1rem 0.7rem;
   width: 300px;
@@ -880,6 +881,10 @@
   .hds-link-standalone__text {
     margin: 1rem 0;
   }
+}
+
+.scope-sidebar-storage-policy + .scope-sidebar-alias-suffix {
+  margin-top: 1rem;
 }
 
 // add storage policy

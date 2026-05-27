@@ -1073,9 +1073,9 @@ scope:
     project: Project
   alias-suffix:
     title: Alias suffix
-    description: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix"
+    description: Append this suffix to aliases in this scope. The alias will appear as "alias.customsuffix"
     form:
-      helper-text: Append this suffix to aliases in this project scope. The alias will appear as "alias.customsuffix".
+      helper-text: Append this suffix to aliases in this scope. The alias will appear as "alias.customsuffix".
     actions:
       create: Create Alias suffix
       edit: Edit suffix
@@ -1083,10 +1083,10 @@ scope:
     questions:
       delete:
         title: Delete Alias suffix?
-        message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to delete the Alias suffix?
+        message: This change will impact all aliases that currently exist in this scope. Are you sure you want to delete the Alias suffix?
       edit:
         title: Change Alias suffix?
-        message: This change will impact all aliases that currently exist in this project scope. Are you sure you want to change the Alias suffix?
+        message: This change will impact all aliases that currently exist in this scope. Are you sure you want to change the Alias suffix?
     messages:
       delete: Alias suffix deleted
       save: Alias suffix saved
@@ -1282,8 +1282,11 @@ alias:
       link: Create a new alias
     gated:
       title: No aliases yet
-      description: To start using aliases, you need to set an Alias suffix first.
-      link: Create an Alias suffix
+      description-both: To start using aliases, you need to set an Alias suffix on both the project and the org scope.
+      description-project: To start using aliases, you need to set an Alias suffix on the project scope.
+      description-org: To start using aliases, you need to set an Alias suffix on the org scope.
+      link-project: Set project Alias suffix
+      link-org: Set org Alias suffix
     delete: Deleting this alias may break any workflows using it. You can also clear the alias of the resource it points to without deleting it and then edit it to point it to a new resource.
   form:
     options:

@@ -17,6 +17,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   @service abilities;
   @service intl;
   @service router;
+  @service('scope') scopeService;
 
   // =attributes
 
@@ -60,15 +61,40 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   }
 
   /**
-   * Project aliases are gated behind the project scope having an alias
-   * suffix configured.
+   * Project aliases are gated behind both the project and its parent org
+   * scope having an alias suffix configured.
    * @type {boolean}
    */
   get isGated() {
     return (
       this.scope?.isProject &&
-      !this.scope?.hasSuffix &&
+      (this.isProjectSuffixMissing || this.isOrgSuffixMissing)
+    );
+  }
+
+  /**
+   * True when the project scope is missing an alias suffix.
+   * @type {boolean}
+   */
+  get isProjectSuffixMissing() {
+    return (
+      this.scope?.isProject &&
+      !this.scope?.alias_suffix &&
       this.abilities.can('setAliasSuffix scope', this.scope)
+    );
+  }
+
+  /**
+   * True when the parent org scope is missing an alias suffix.
+   * @type {boolean}
+   */
+  get isOrgSuffixMissing() {
+    const org = this.scopeService.org;
+    return (
+      this.scope?.isProject &&
+      org &&
+      !org.alias_suffix &&
+      this.abilities.can('setAliasSuffix scope', org)
     );
   }
 

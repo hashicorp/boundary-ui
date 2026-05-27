@@ -27,26 +27,26 @@ export default class ScopeAbility extends ModelAbility {
   }
 
   /**
-   * Setting the alias target suffix is allowed on project scopes when the
-   * `set-alias-target-suffix` authorized action is present.
+   * Setting the alias target suffix is allowed on project and org scopes when
+   * the `set-alias-target-suffix` authorized action is present.
    * @type {boolean}
    */
   get canSetAliasSuffix() {
     return (
-      this.model?.isProject &&
+      (this.model?.isProject || this.model?.isOrg) &&
       this.hasAuthorizedAction('set-alias-target-suffix')
     );
   }
 
   /**
-   * Removing the alias target suffix is allowed on project scopes when the
-   * `remove-alias-target-suffix` authorized action is present and a suffix
+   * Removing the alias target suffix is allowed on project and org scopes when
+   * the `remove-alias-target-suffix` authorized action is present and a suffix
    * is currently set.
    * @type {boolean}
    */
   get canRemoveAliasSuffix() {
     return (
-      this.model?.isProject &&
+      (this.model?.isProject || this.model?.isOrg) &&
       Boolean(this.model?.alias_suffix) &&
       this.hasAuthorizedAction('remove-alias-target-suffix')
     );

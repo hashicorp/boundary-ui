@@ -107,7 +107,8 @@ module('Acceptance | aliases | delete', function (hooks) {
       },
     });
 
-    // Give the project a suffix so the aliases list page renders (not gated).
+    // Give the project and org a suffix so the aliases list page renders (not gated).
+    instances.scopes.org.update({ alias_suffix: '.boundary' });
     instances.scopes.project.update({ alias_suffix: '.example' });
 
     const projectAlias = this.server.create('alias', {

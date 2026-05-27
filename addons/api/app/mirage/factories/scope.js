@@ -25,7 +25,7 @@ export default factory.extend({
       authorizedActions.push('delete');
     }
 
-    if (this.type === 'project') {
+    if (this.type === 'org' || this.type === 'project') {
       authorizedActions.push(
         'set-alias-target-suffix',
         'remove-alias-target-suffix',
@@ -87,8 +87,8 @@ export default factory.extend({
     return name;
   },
 
-  alias_suffix() {
-    if (this.type === 'project') {
+  alias_suffix(i) {
+    if ((this.type === 'org' || this.type === 'project') && i % 3 !== 0) {
       return `.${faker.internet.domainWord()}`;
     }
     return null;
