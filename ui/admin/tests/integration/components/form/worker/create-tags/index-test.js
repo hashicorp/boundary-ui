@@ -28,9 +28,8 @@ module(
         hbs`<Form::Worker::CreateTags @model={{this.model}} @apiTags={{this.apiTags}} @submit={{this.save}} @cancel={{this.cancel}} />`,
       );
 
-      assert
-        .dom(this.element)
-        .includesText('Key Value Actions Add Save Cancel');
+      assert.dom(this.element).includesText('Add Save Cancel');
+      assert.dom('[data-test-add-button]').exists();
     });
 
     test('it calls the passed in save action', async function (assert) {

@@ -78,35 +78,40 @@
         </F.HelperText>
       </Hds::Form::TextInput::Field>
     {{/if}}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @disabled={{form.disabled}}
-      @isOptional={{true}}
-    >
-      <:fieldset as |F|>
-        <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-        <F.HelperText>
-          {{t 'resources.worker.form.worker_tags.help'}}
-        </F.HelperText>
-      </:fieldset>
 
-      <:field as |F|>
-        <F.KeyValue
-          @name='worker_tags'
-          @options={{this.workerTags}}
-          @disabled={{form.disabled}}
-          @addOption={{this.addWorkerTag}}
-          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
-        >
-          <:key as |K|>
-            <K.text />
-          </:key>
-          <:value as |V|>
-            <V.text />
-          </:value>
-        </F.KeyValue>
-      </:field>
-    </Form::Field::ListWrapper>
+    <Form::Field::KeyValue
+      @name='worker_tags'
+      @data={{this.workerTags}}
+      @model={{this}}
+      @properties={{array 'key' 'value'}}
+      @onAdd={{this.addWorkerTag}}
+      @onRemove={{this.removeWorkerTagByIndex}}
+      @onUpdate={{this.updateWorkerTagValue}}
+      @legend={{t 'resources.worker.form.worker_tags.label'}}
+      @helperText={{t 'resources.worker.form.worker_tags.help'}}
+      @isOptional={{true}}
+      @disabled={{form.disabled}}
+    >
+      <:row as |R|>
+        <R.Field as |F|>
+          <F.TextInput
+            data-test-key-input
+            @value={{R.rowData.key}}
+            {{on 'input' (fn R.updateRow 'key')}}
+          />
+        </R.Field>
+
+        <R.Field as |F|>
+          <F.TextInput
+            data-test-value-input
+            {{on 'input' (fn R.updateRow 'value')}}
+          />
+        </R.Field>
+        {{#if R.canDelete}}
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+        {{/if}}
+      </:row>
+    </Form::Field::KeyValue>
 
     {{#if (feature-flag 'ssh-session-recording')}}
       <Hds::Form::Fieldset @isOptional={{true}} as |F|>

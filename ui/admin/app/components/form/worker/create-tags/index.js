@@ -20,8 +20,8 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    * @param {object} option
    */
   @action
-  addApiTag(option) {
-    this.args.apiTags.push(new Tag(option.key, option.value));
+  addApiTag() {
+    this.args.apiTags.push(new Tag());
   }
 
   /**
@@ -29,10 +29,20 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    * @param {number} index
    */
   @action
-  removeApiTagByIndex(index) {
-    this.args.apiTags.splice(index, 1);
+  removeApiTagByIndex(rowData) {
+    const index = this.args.apiTags.indexOf(rowData);
+    if (index !== -1) {
+      this.args.apiTags.splice(index, 1);
+    }
+    if (this.args.apiTags.length === 0) {
+      this.args.apiTags.push(new Tag());
+    }
   }
 
+  @action
+  updateApiTagValue(rowData, property, event) {
+    rowData[property] = event.target.value;
+  }
   /**
    * Uses `@apiTags` to build and submits it to the parent component.
    * If there are no tags, it transitions to the tags route.
@@ -40,13 +50,14 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   save() {
-    if (this.args.apiTags.length === 0) {
+    const tagsToProcess = this.args.apiTags.filter((tag) => tag.key?.trim());
+    if (tagsToProcess.length === 0) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
       return;
     }
 
     const apiTags = structuredClone(this.args.model.api_tags ?? {});
-    this.args.apiTags.forEach((tag) => {
+    tagsToProcess.forEach((tag) => {
       let key = tag.key;
       let values = tag.value.split(',').map((value) => value.trim());
 
