@@ -27,6 +27,11 @@ export default class FormFieldKeyValueComponent extends Component {
           return true;
         }
       }
+<<<<<<< HEAD
+=======
+
+      return Object.values(row).some((value) => value);
+>>>>>>> ef40f70de (test: 💍 tests)
     }
 
     // Return false if there are no rows

@@ -289,6 +289,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       </Form::Field::KeyValue>
     `);
     assert.dom(ERROR_MESSAGE).doesNotExist();
+<<<<<<< HEAD
   });
 
   test('it displays error messages in footer from @errors arg', async function (assert) {
@@ -315,6 +316,8 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert
       .dom('[data-test-error-message]:nth-child(2)')
       .hasText('Direct error two');
+=======
+>>>>>>> ef40f70de (test: 💍 tests)
   });
 
   test('it updates both key and value fields using custom handlers', async function (assert) {
