@@ -14,8 +14,8 @@
       }}</A.Title>
     <A.Description>
       {{#if (and @syncError @verifyError)}}
-        <ul class='playback-error-list'>
-          <li class='playback-error-item'>
+        <ul>
+          <li class='playback-error-item margin-bottom-s'>
             <Hds::Text::Body @tag='p' class='playback-error-message'>
               {{@syncError}}
             </Hds::Text::Body>

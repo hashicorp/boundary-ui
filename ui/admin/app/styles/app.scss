@@ -750,16 +750,7 @@
   }
 
   .playback-error-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .playback-error-list {
-    .playback-error-item::before {
-      content: '•';
-      font-size: 1.5em;
-    }
+    list-style: disc;
   }
 
   .playback-error-message {

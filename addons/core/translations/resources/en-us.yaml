@@ -424,7 +424,6 @@ session-recording:
         title: Session playback errors
       sync-error:
         title: This recording is not available
-        copy: Copy error
         flyout-section-title: Sync error
       verification-error:
         flyout-section-title: Verification error

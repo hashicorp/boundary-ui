@@ -224,13 +224,13 @@ module('Acceptance | session-recordings | read', function (hooks) {
     await visit(urls.sessionRecordings);
     await click(commonSelectors.HREF(urls.sessionRecording));
 
-    assert.dom(selectors.SESSION_PLAYBACK_ALERT).isVisible();
+    assert.dom(selectors.SESSION_PLAYBACK_ERROR_ALERT).isVisible();
     assert
-      .dom(`${selectors.SESSION_PLAYBACK_ALERT} button`)
+      .dom(`${selectors.SESSION_PLAYBACK_ERROR_ALERT} button`)
       .hasTextContaining('Show more');
 
     // Open the flyout
-    await click(`${selectors.SESSION_PLAYBACK_ALERT} button`);
+    await click(`${selectors.SESSION_PLAYBACK_ERROR_ALERT} button`);
     assert.dom(selectors.SESSION_ERROR_FLYOUT).isVisible();
 
     // Check for sync error section and copy button
