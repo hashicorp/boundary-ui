@@ -325,6 +325,86 @@ module('Acceptance | targets | read', function (hooks) {
     assert.dom(selectors.ALIASES_FLYOUT).isVisible();
   });
 
+  test('shows "Create a Project Suffix" link when project scope has no alias suffix', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.scopes.project.update({ alias_suffix: null });
+    instances.scopes.org.update({ alias_suffix: '.example' });
+
+    await visit(urls.tcpTarget);
+
+    assert.dom(selectors.CREATE_PROJECT_SUFFIX_LINK).isVisible();
+    assert.dom(selectors.CREATE_ORG_SUFFIX_LINK).doesNotExist();
+    assert.dom(selectors.ALIASES_ADD_BTN).doesNotExist();
+  });
+
+  test('shows "Create an Org Suffix" link when org scope has no alias suffix', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.scopes.project.update({ alias_suffix: '.example' });
+    instances.scopes.org.update({ alias_suffix: null });
+
+    await visit(urls.tcpTarget);
+
+    assert.dom(selectors.CREATE_ORG_SUFFIX_LINK).isVisible();
+    assert.dom(selectors.CREATE_PROJECT_SUFFIX_LINK).doesNotExist();
+    assert.dom(selectors.ALIASES_ADD_BTN).doesNotExist();
+  });
+
+  test('shows both suffix links when both project and org scopes have no alias suffix', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.scopes.project.update({ alias_suffix: null });
+    instances.scopes.org.update({ alias_suffix: null });
+
+    await visit(urls.tcpTarget);
+
+    assert.dom(selectors.CREATE_PROJECT_SUFFIX_LINK).isVisible();
+    assert.dom(selectors.CREATE_ORG_SUFFIX_LINK).isVisible();
+    assert.dom(selectors.ALIASES_ADD_BTN).doesNotExist();
+  });
+
+  test('shows "Add an alias" button when both project and org scopes have alias suffixes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    instances.scopes.project.update({ alias_suffix: '.project.example' });
+    instances.scopes.org.update({ alias_suffix: '.org.example' });
+
+    await visit(urls.tcpTarget);
+
+    assert.dom(selectors.ALIASES_ADD_BTN).isVisible();
+    assert.dom(selectors.CREATE_PROJECT_SUFFIX_LINK).doesNotExist();
+    assert.dom(selectors.CREATE_ORG_SUFFIX_LINK).doesNotExist();
+  });
+
   test('cannot navigate to a rdp target form without proper authorization', async function (assert) {
     setRunOptions({
       rules: {

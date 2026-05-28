@@ -492,8 +492,8 @@
 .target-sidebar-aliases {
   margin-bottom: 3rem;
 
-  .hds-link-standalone {
-    margin-top: 1rem;
+  .hds-link-standalone:first-of-type {
+    margin-bottom: 1rem;
   }
 
   .link-list-item:first-of-type {
@@ -511,9 +511,6 @@
     margin-bottom: 0.5rem;
   }
 
-  .hds-link-standalone__text {
-    margin: 1rem 0;
-  }
   /* stylelint-enable selector-class-pattern */
 
   .hds-dropdown .hds-dropdown-toggle-icon {

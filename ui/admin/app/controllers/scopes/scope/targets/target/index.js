@@ -15,6 +15,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
 
   @service abilities;
   @service router;
+  @service('scope') scopeService;
 
   // =attributes
 
@@ -28,6 +29,49 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   @action
   toggleFlyout() {
     this.showFlyout = !this.showFlyout;
+  }
+
+  /**
+   * True when the project scope is missing an alias suffix.
+   * @type {boolean}
+   */
+  get isProjectSuffixMissing() {
+    const scope = this.model.scopeModel;
+    return (
+      scope?.isProject &&
+      !scope?.alias_suffix &&
+      this.abilities.can('setAliasSuffix scope', scope)
+    );
+  }
+
+  /**
+   * True when the parent org scope is missing an alias suffix.
+   * @type {boolean}
+   */
+  get isOrgSuffixMissing() {
+    const org = this.scopeService.org;
+    return (
+      this.model.scopeModel?.isProject &&
+      org &&
+      !org.alias_suffix &&
+      this.abilities.can('setAliasSuffix scope', org)
+    );
+  }
+
+  /**
+   * True when either the project or org suffix is missing.
+   * @type {boolean}
+   */
+  get hasSuffixIssue() {
+    return this.isProjectSuffixMissing || this.isOrgSuffixMissing;
+  }
+
+  /**
+   * The parent org scope model.
+   * @type {ScopeModel|null}
+   */
+  get orgScope() {
+    return this.scopeService.org;
   }
 
   /**

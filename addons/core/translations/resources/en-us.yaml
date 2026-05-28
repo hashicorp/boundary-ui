@@ -1310,6 +1310,9 @@ alias:
       help: Always use this host when connecting using this alias
     sidebar:
       help: Use a domain name as a shortcut for anyone with access to this target.
+      no-suffix-message: 'To start using aliases, you need to set an Alias suffix first.'
+      link-project-suffix: Create a Project Suffix
+      link-org-suffix: Create an Org Suffix
     alias:
       label: Aliases
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases. Projects must have a suffix in order to create a project level alias.

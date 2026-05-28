@@ -97,16 +97,43 @@
               <Hds::Text::Display @tag='h2' class='remove-margin'>
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
-              <Hds::Text::Body @tag='p' @color='faint' class='p'>
-                {{t 'resources.alias.form.sidebar.help'}}
-              </Hds::Text::Body>
 
-              <Hds::Button
-                @icon='plus'
-                @text={{t 'resources.target.actions.add-an-alias'}}
-                @color='secondary'
-                @route='scopes.scope.targets.target.create-alias'
-              />
+              {{#if this.hasSuffixIssue}}
+                <Hds::Text::Body @tag='p' @color='faint' class='p'>
+                  {{t 'resources.alias.form.sidebar.no-suffix-message'}}
+                </Hds::Text::Body>
+                {{#if this.isProjectSuffixMissing}}
+                  <Hds::Link::Standalone
+                    data-test-create-project-suffix-link
+                    @icon='arrow-right'
+                    @iconPosition='trailing'
+                    @route='scopes.scope.add-alias-suffix'
+                    @text={{t
+                      'resources.alias.form.sidebar.link-project-suffix'
+                    }}
+                  />
+                {{/if}}
+                {{#if this.isOrgSuffixMissing}}
+                  <Hds::Link::Standalone
+                    data-test-create-org-suffix-link
+                    @icon='arrow-right'
+                    @iconPosition='trailing'
+                    @route='scopes.scope.add-alias-suffix'
+                    @model={{this.orgScope.id}}
+                    @text={{t 'resources.alias.form.sidebar.link-org-suffix'}}
+                  />
+                {{/if}}
+              {{else}}
+                <Hds::Text::Body @tag='p' @color='faint' class='p'>
+                  {{t 'resources.alias.form.sidebar.help'}}
+                </Hds::Text::Body>
+                <Hds::Button
+                  @icon='plus'
+                  @text={{t 'resources.target.actions.add-an-alias'}}
+                  @color='secondary'
+                  @route='scopes.scope.targets.target.create-alias'
+                />
+              {{/if}}
             </div>
           {{/if}}
         {{/if}}

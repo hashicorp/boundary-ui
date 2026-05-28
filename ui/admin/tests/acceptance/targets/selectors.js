@@ -54,6 +54,9 @@ export const ALIASES_NEW_LINK_TEXT = 'Add an alias';
 export const ALIASES_VIEW_MORE_BTN = '[data-test-aliases-view-more]';
 export const ALIASES_FLYOUT = '[data-test-aliases-flyout]';
 export const ALIASES_ADD_BTN = '.target-sidebar-aliases .hds-button';
+export const CREATE_PROJECT_SUFFIX_LINK =
+  '[data-test-create-project-suffix-link]';
+export const CREATE_ORG_SUFFIX_LINK = '[data-test-create-org-suffix-link]';
 
 export const ENABLE_RECORDING_BTN = '.target-sidebar .hds-button';
 export const RECORDING_SETTINGS_LINK = '.target-sidebar .hds-link-standalone';
