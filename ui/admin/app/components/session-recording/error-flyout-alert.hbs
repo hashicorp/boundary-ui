@@ -27,11 +27,9 @@
           </li>
         </ul>
       {{else}}
-        <div class='playback-error-item'>
-          <Hds::Text::Body @tag='p' class='playback-error-message'>
-            {{or @syncError @verifyError}}
-          </Hds::Text::Body>
-        </div>
+        <Hds::Text::Body @tag='p' class='playback-error-message'>
+          {{or @syncError @verifyError}}
+        </Hds::Text::Body>
       {{/if}}
     </A.Description>
     <A.Button
