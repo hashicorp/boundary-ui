@@ -199,7 +199,7 @@ module('Acceptance | session-recordings | read', function (hooks) {
 
     assert.dom(selectors.SESSION_PLAYBACK_ERROR_ALERT).isVisible();
 
-    let errorMessages = findAll(selectors.SESSION_PLAYBACK_ERROR_MESSAGE).map(
+    const errorMessages = findAll(selectors.SESSION_PLAYBACK_ERROR_MESSAGE).map(
       (err) => err.textContent.trim(),
     );
 
