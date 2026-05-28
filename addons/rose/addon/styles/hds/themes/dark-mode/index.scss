@@ -121,6 +121,15 @@
   }
 }
 
+@mixin dark-mode-badge-count-override {
+  // Override the neutral badge count to fix contrast in dark mode.
+  /* stylelint-disable selector-class-pattern */
+  .hds-badge-count--color-neutral.hds-badge-count--type-inverted {
+    color: var(--token-color-palette-neutral-0);
+  }
+  /* stylelint-enable selector-class-pattern */
+}
+
 @mixin dark-mode-ember-dropdown-override {
   .ember-basic-dropdown-content {
     background-color: var(--token-color-palette-neutral-0);
@@ -251,6 +260,7 @@
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
+    @include dark-mode-badge-count-override;
     @include dark-mode-ember-dropdown-override;
     @include dark-mode-app-header-override;
     @include dark-mode-app-side-nav-override;
@@ -267,6 +277,7 @@ html:has(.ember-application.rose-theme-dark) {
 .ember-application.rose-theme-dark {
   @include dark-mode;
   @include dark-mode-modal-override;
+  @include dark-mode-badge-count-override;
   @include dark-mode-ember-dropdown-override;
   @include dark-mode-app-header-override;
   @include dark-mode-app-side-nav-override;
