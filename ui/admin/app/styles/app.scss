@@ -757,7 +757,7 @@
 
   .playback-error-list {
     .playback-error-item::before {
-      content: '\2022';
+      content: '•';
       font-size: 1.5em;
     }
   }

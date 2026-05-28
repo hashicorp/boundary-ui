@@ -65,7 +65,7 @@
                 @size='small'
                 @text={{t 'actions.copy'}}
                 @isIconOnly={{true}}
-                @textToCopy={{join @syncErrorLines '\n'}}
+                @textToCopy={{@syncError}}
               />
             </:toggle>
             <:content>
@@ -89,7 +89,7 @@
                 @size='small'
                 @text={{t 'actions.copy'}}
                 @isIconOnly={{true}}
-                @textToCopy={{join @verifyErrorLines '\n'}}
+                @textToCopy={{@verifyError}}
               />
             </:toggle>
             <:content>
