@@ -29,3 +29,12 @@ export const SESSION_PLAYBACK_ERROR_ALERT =
 export const SESSION_PLAYBACK_ERROR_MESSAGE = '.playback-error-message';
 export const SESSION_PLAYBACK_ERROR_COPY_BUTTON =
   '.playback-error-item .hds-copy-button';
+
+// Flyout and alert selectors
+export const SESSION_PLAYBACK_ALERT = '[data-test-session-playback-alert]';
+export const SESSION_ERROR_FLYOUT = '[data-test-error-flyout]';
+export const SESSION_ERROR_FLYOUT_COPY_BUTTON =
+  '[data-test-error-flyout] .hds-copy-button';
+export const SESSION_ERROR_FLYOUT_ACCORDION_ITEM =
+  '[data-test-error-flyout] .hds-accordion-item';
+export const SESSION_ERROR_FLYOUT_CLOSE = '[data-test-error-flyout] button';

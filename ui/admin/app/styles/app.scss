@@ -751,10 +751,8 @@
 
   .playback-error-item {
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    position: relative;
   }
 
   .playback-error-list {
@@ -774,6 +772,19 @@
   /* stylelint-disable-next-line selector-class-pattern */
   .hds-alert__content {
     min-width: 0;
+  }
+}
+
+// Session playback error flyout
+.session-playback-error-flyout {
+  .flyout-error-message {
+    margin-bottom: 0.5rem;
+  }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-accordion-item__toggle-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 

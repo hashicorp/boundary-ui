@@ -420,9 +420,14 @@ session-recording:
     title: Channels by connection
     messages:
       no-channels: There are no channels for this connection
+      flyout:
+        title: Session playback errors
       sync-error:
         title: This recording is not available
         copy: Copy error
+        flyout-section-title: Sync error
+      verification-error:
+        flyout-section-title: Verification error
       started-no-connections:
         title: Session Recording In Progress
         description: The Session has started but no connections have been made.
