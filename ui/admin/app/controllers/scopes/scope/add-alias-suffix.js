@@ -15,6 +15,7 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
   @service router;
   @service confirm;
   @service intl;
+  @service('scope') scopeService;
 
   // =properties
 
@@ -22,6 +23,26 @@ export default class ScopesScopeAddAliasSuffixController extends Controller {
    * @type {boolean}
    */
   isEdit = false;
+
+  /**
+   * True when the current scope is a project and its parent org has no
+   * alias suffix configured.
+   * @type {boolean}
+   */
+  get showOrgSuffixAlert() {
+    const scope = this.model;
+    if (!scope?.isProject) return false;
+    const org = this.scopeService.org;
+    return org && !org.alias_suffix;
+  }
+
+  /**
+   * The parent org scope model, used to link to its add-alias-suffix route.
+   * @type {ScopeModel|null}
+   */
+  get orgScope() {
+    return this.scopeService.org;
+  }
 
   // =actions
 

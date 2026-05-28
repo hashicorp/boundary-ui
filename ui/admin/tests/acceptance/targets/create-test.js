@@ -367,10 +367,10 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, name);
 
     // First row defaults to project scope; project option label includes
-    // the suffix so users can confirm which scope they're targeting.
+    // the combined suffix so users can confirm which scope they're targeting.
     assert
       .dom(`${selectors.FIELD_ALIASES_ROW_SCOPE(0)} option:checked`)
-      .hasText(new RegExp(`suffix "\\.example"`));
+      .hasText(new RegExp(`suffix "${combinedSuffix.replace(/\./g, '\\.')}"`));
     await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(0), 'myhost');
 
     // Add a second row and switch it to Global.

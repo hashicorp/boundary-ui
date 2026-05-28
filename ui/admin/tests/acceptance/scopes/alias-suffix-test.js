@@ -195,6 +195,23 @@ module('Acceptance | scopes | alias suffix', function (hooks) {
 
     assert.dom(selectors.ALIAS_SUFFIX_VALUE).hasText(SUFFIX_VALUE);
   });
+
+  test('shows org suffix alert when project has no org suffix', async function (assert) {
+    instances.scopes.org.update({ alias_suffix: null });
+
+    await visit(urls.addAliasSuffix);
+
+    assert.dom(selectors.ORG_SUFFIX_ALERT).isVisible();
+    assert.dom(selectors.ORG_SUFFIX_ALERT_LINK).isVisible();
+  });
+
+  test('does not show org suffix alert when org already has a suffix', async function (assert) {
+    instances.scopes.org.update({ alias_suffix: '.boundary' });
+
+    await visit(urls.addAliasSuffix);
+
+    assert.dom(selectors.ORG_SUFFIX_ALERT).doesNotExist();
+  });
 });
 
 module('Acceptance | scopes | alias suffix | org', function (hooks) {

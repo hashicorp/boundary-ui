@@ -27,6 +27,8 @@ export const ALIAS_SUFFIX_DROPDOWN_TOGGLE =
 export const ALIAS_SUFFIX_EDIT_ITEM = '[data-test-alias-suffix-edit]';
 export const ALIAS_SUFFIX_DELETE_ITEM = '[data-test-alias-suffix-delete]';
 export const FIELD_ALIAS_SUFFIX = '[name=alias_suffix]';
+export const ORG_SUFFIX_ALERT = '[data-test-org-suffix-alert]';
+export const ORG_SUFFIX_ALERT_LINK = '[data-test-org-suffix-alert-link]';
 
 export const NO_SCOPE_RESULTS_MSG = '[data-test-no-scope-results]';
 export const TABLE_ROW_SCOPE_LINK = (id) =>

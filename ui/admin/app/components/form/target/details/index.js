@@ -24,6 +24,7 @@ export default class FormTargetComponent extends Component {
   @service features;
   @service abilities;
   @service intl;
+  @service store;
 
   /**
    * maps resource type with icon
@@ -102,14 +103,40 @@ export default class FormTargetComponent extends Component {
   }
 
   /**
-   * Project alias suffix with a leading dot, regardless of how it is stored
-   * on the scope. Empty string when the project has no suffix.
+   * Normalizes a suffix value into dot-separated segments without a leading dot.
+   * @param {string | null | undefined} suffix
+   * @returns {string | null}
+   */
+  normalizeSuffixSegments(suffix) {
+    if (!suffix) return null;
+    const normalized = String(suffix).split('.').filter(Boolean).join('.');
+    return normalized || null;
+  }
+
+  /**
+   * Combined project+org suffix with a leading dot.
+   * For project scopes: `.projectSuffix.orgSuffix`.
+   * Empty string when no suffix is configured.
    * @type {string}
    */
   get normalizedProjectSuffix() {
-    const suffix = this.args.model?.scopeModel?.alias_suffix;
-    if (!suffix) return '';
-    return suffix.startsWith('.') ? suffix : `.${suffix}`;
+    const scope = this.args.model?.scopeModel;
+    const projectSuffix = this.normalizeSuffixSegments(scope?.alias_suffix);
+    if (!projectSuffix) return '';
+
+    const orgScope = scope?.scopeID
+      ? this.store.peekRecord('scope', scope.scopeID)
+      : null;
+    const orgSuffix = this.normalizeSuffixSegments(orgScope?.alias_suffix);
+
+    if (
+      !orgSuffix ||
+      projectSuffix === orgSuffix ||
+      projectSuffix.endsWith(`.${orgSuffix}`)
+    ) {
+      return `.${projectSuffix}`;
+    }
+    return `.${projectSuffix}.${orgSuffix}`;
   }
 
   /**

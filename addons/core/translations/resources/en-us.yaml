@@ -1090,6 +1090,10 @@ scope:
     messages:
       delete: Alias suffix deleted
       save: Alias suffix saved
+      org-suffix-required:
+        title: This org does not have a suffix set
+        description: No aliases can be created in this project until an org suffix has been set.
+        link: Set an org suffix
 managed-group:
   title: Managed Group
   title_plural: Managed Groups

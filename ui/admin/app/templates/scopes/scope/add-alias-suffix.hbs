@@ -43,6 +43,32 @@
   </page.header>
 
   <page.body>
+    {{#if this.showOrgSuffixAlert}}
+      <Hds::Alert
+        class='margin-bottom-m'
+        data-test-org-suffix-alert
+        @type='inline'
+        @color='warning'
+        as |A|
+      >
+        <A.Title>{{t
+            'resources.scope.alias-suffix.messages.org-suffix-required.title'
+          }}</A.Title>
+        <A.Description>{{t
+            'resources.scope.alias-suffix.messages.org-suffix-required.description'
+          }}</A.Description>
+        <A.LinkStandalone
+          data-test-org-suffix-alert-link
+          @icon='arrow-right'
+          @iconPosition='trailing'
+          @route='scopes.scope.add-alias-suffix'
+          @model={{this.orgScope.id}}
+          @text={{t
+            'resources.scope.alias-suffix.messages.org-suffix-required.link'
+          }}
+        />
+      </Hds::Alert>
+    {{/if}}
     <Form::Scope::AliasSuffix
       @model={{@model}}
       @submit={{fn this.save @model}}
