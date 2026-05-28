@@ -1081,7 +1081,7 @@ scope:
     questions:
       delete:
         title: Delete Alias suffix?
-        message: This change will impact all aliases that currently exist in this scope. Are you sure you want to delete the Alias suffix?
+        message: Are you sure you want to delete this suffix?
       edit:
         title: Change Alias suffix?
         message: Changing the Alias suffix will not change previously created aliases.
