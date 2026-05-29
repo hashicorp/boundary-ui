@@ -73,6 +73,10 @@ module('Unit | Utility | grant-linter', function (hooks) {
         'Duplicate field "actions"',
       ], // duplicate actions field
       [
+        'type=credential;ids=cs_1234;actions=read;random=',
+        'Unknown field "random"',
+      ], // unknown field "random"
+      [
         'type=credential;ids=cs_1234;actions=read;random=name',
         'Unknown field "random"',
       ], // unknown field "random"
@@ -80,6 +84,7 @@ module('Unit | Utility | grant-linter', function (hooks) {
         '=credential;actions=;ids=cs_1234',
         'Invalid format: expected key=value',
       ], // missing type key
+      ['type;actions=;ids=cs_1234', 'Invalid format: expected key=value'], // missing type value and equal sign
     ],
     function (assert, [grantString, errorMsg]) {
       const diagnostics = this.grantLinter(createContext(grantString));
