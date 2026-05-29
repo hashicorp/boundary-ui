@@ -13,7 +13,7 @@ jobs:
       - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 #v6.0.8
         with:
           cache: true
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache_dependency_path: '**/pnpm-lock.yaml'
           run_install: false
       - run: pnpm install --frozen-lockfile
 
@@ -30,7 +30,7 @@ jobs:
         with:
           run_install: false
           cache: true
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache_dependency_path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm run compliance:licenses
 
@@ -48,7 +48,7 @@ jobs:
         with:
           run_install: false
           cache: true
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache_dependency_path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm lint
 
@@ -69,6 +69,6 @@ jobs:
         with:
           run_install: false
           cache: true
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache_dependency_path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm test
