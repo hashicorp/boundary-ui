@@ -748,6 +748,35 @@
   .no-channels-message {
     padding: 0 1rem;
   }
+
+  .playback-error-item {
+    list-style: disc;
+  }
+
+  .playback-error-message {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-alert__content {
+    min-width: 0;
+  }
+}
+
+// Session playback error flyout
+.session-playback-error-flyout {
+  .flyout-error-message {
+    margin-bottom: 0.5rem;
+  }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-accordion-item__toggle-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 // Channel
