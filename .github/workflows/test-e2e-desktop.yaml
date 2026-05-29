@@ -136,6 +136,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm build:ui:desktop
+          pnpm --dir ui/desktop/electron-app make
           cd e2e-tests
           if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
             pnpm playwright install --with-deps
