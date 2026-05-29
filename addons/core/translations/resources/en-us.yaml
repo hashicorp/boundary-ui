@@ -663,11 +663,11 @@ role:
         name: Session Auditor
         description: Can view session recordings
       target-user:
-        name: Target User
+        name: User
         description: Can connect to targets but cannot manage anything
       read-only-user:
-        name: Read-Only User
-        description: Can view but not modify any resources
+        name: Resource Auditor
+        description: Can only view but not modify any resources
   edit-grants:
     title: Edit Grants
     description: Modify existing grant strings or add new grant strings to this role.
