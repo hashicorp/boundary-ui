@@ -68,6 +68,7 @@
     @data={{@model.preferred_endpoints}}
     @legend={{t 'resources.host-set.form.preferred_endpoints.label'}}
     @helperText={{t 'resources.host-set.form.preferred_endpoints.help'}}
+    @errors={{@model.errors.preferred_endpoints}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >
@@ -92,6 +93,7 @@
     @data={{@model.filters}}
     @legend={{t 'resources.host-set.form.filter.label'}}
     @helperText={{t 'resources.host-set.form.filter.gcp.help'}}
+    @errors={{@model.errors.filters}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >

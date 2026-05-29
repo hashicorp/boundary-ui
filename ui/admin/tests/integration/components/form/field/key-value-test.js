@@ -212,26 +212,16 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.dom(DELETE_BUTTON).doesNotExist();
   });
 
-  test('it displays error messages in footer (model errors)', async function (assert) {
-    const model = {
-      tags: [{ key: '', value: '' }],
-      errors: {
-        tags: [
-          { message: 'Key is required' },
-          { message: 'Value must be unique' },
-        ],
-      },
-    };
-    this.set('model', model);
-    this.set('properties', ['key', 'value']);
+  test('it displays error messages in footer', async function (assert) {
+    this.set('data', [{ key: '', value: '' }]);
+    this.set('errors', [
+      { message: 'Key is required' },
+      { message: 'Value must be unique' },
+    ]);
 
     // With errors
     await render(hbs`
-      <Form::Field::KeyValue
-        @model={{this.model}}
-        @name="tags"
-        @properties={{this.properties}}
-        @data={{this.model.tags}}>
+      <Form::Field::KeyValue @data={{this.data}} @errors={{this.errors}}>
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
@@ -240,7 +230,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
             <F.TextInput data-test-value-input @value={{R.rowData.value}} />
           </R.Field>
           {{#if R.canDelete}}
-            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
           {{/if}}
         </:row>
         <:footer as |F|>
@@ -254,13 +244,9 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       .hasText('Value must be unique');
 
     // Without errors
-    this.set('model', { ...model, errors: {} });
+    this.set('errors', undefined);
     await render(hbs`
-      <Form::Field::KeyValue
-        @model={{this.model}}
-        @name="tags"
-        @properties={{this.properties}}
-        @data={{this.model.tags}}>
+      <Form::Field::KeyValue @data={{this.data}} @errors={{this.errors}}>
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
@@ -345,12 +331,6 @@ module('Integration | Component | form/field/key-value', function (hooks) {
   test('custom handlers take precedence over default handlers', async function (assert) {
     const model = {
       tags: [{ key: '', value: '' }],
-      errors: {
-        tags: [
-          { message: 'Key is required' },
-          { message: 'Value must be unique' },
-        ],
-      },
     };
     this.set('model', model);
 

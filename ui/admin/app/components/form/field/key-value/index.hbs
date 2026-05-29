@@ -35,9 +35,9 @@
       @onClick={{this.handleAdd}}
     />
 
-    {{#if (get @model.errors @name)}}
+    {{#if @errors}}
       <F.Error as |E|>
-        {{#each (get @model.errors @name) as |error|}}
+        {{#each @errors as |error|}}
           <E.Message data-test-error-message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>

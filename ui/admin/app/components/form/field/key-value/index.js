@@ -22,14 +22,11 @@ export default class FormFieldKeyValueComponent extends Component {
     // For a single row, only show if it has any non-empty values
     if (rows.length === 1) {
       const row = rows[0];
-
-      // Pass @properties for rows with tracked fields so canDelete reactively checks the tracked properties.
-      const properties = this.args.properties || [];
-      if (properties.length) {
-        return properties.some((property) => row?.[property]);
+      for (const key in row) {
+        if (row[key]) {
+          return true;
+        }
       }
-
-      return Object.values(row).some((value) => value);
     }
 
     // Return false if there are no rows
