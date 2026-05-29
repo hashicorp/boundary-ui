@@ -249,6 +249,14 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
+    await fillIn(
+      selectors.FIELD_ROLE_TAG_KEY,
+      selectors.FIELD_ROLE_TAG_KEY_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_ROLE_TAG_VALUE,
+      selectors.FIELD_ROLE_TAG_VALUE_TEXT,
+    );
     await waitFor(commonSelectors.CODE_EDITOR_CM);
 
     const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
@@ -266,6 +274,10 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     });
 
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.deepEqual(storageBucket.attributes.role_tags, {
+      env: selectors.FIELD_ROLE_TAG_VALUE_TEXT,
+    });
+
     //for dynamic credentials, there should be no secret field
     assert.notOk(storageBucket.secret);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
