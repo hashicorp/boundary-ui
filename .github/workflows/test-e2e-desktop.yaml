@@ -135,6 +135,7 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
+          pnpm build:ui:desktop
           cd e2e-tests
           if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
             pnpm playwright install --with-deps
@@ -155,7 +156,7 @@ jobs:
 
           export DISPLAY=:99
           Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          pnpm run desktop
+          pnpm run desktop:dev
 
       - name: Upload Playwright report
         if: ${{ failure() }}
