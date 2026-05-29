@@ -135,5 +135,132 @@ module(
 
       assert.notEqual(sessionRecording.delete_after, deleteAfter);
     });
+
+    test('isSessionInprogressWithNoConnections handles session with syncing_error_details', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_STARTED,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details: 'sync error occurred',
+          verification_error_details: null,
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.true(controller.isSessionInprogressWithNoConnections);
+    });
+
+    test('isSessionUnknownWithNoConnections handles session with verification_error_details', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details: null,
+          verification_error_details: 'verification failed',
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.true(controller.isSessionUnknownWithNoConnections);
+    });
+
+    test('isSessionUnknownWithNoConnections handles session with both error types', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details: 'sync error occurred',
+          verification_error_details: 'verification failed',
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.true(controller.isSessionUnknownWithNoConnections);
+    });
+
+    test('model handles recording_state with only syncing_error_details', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details:
+            'sync errors in container "sr_jovU2XLzBP.bsr": storage error',
+          verification_error_details: null,
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.strictEqual(
+        sessionRecording.recording_state.syncing_error_details,
+        'sync errors in container "sr_jovU2XLzBP.bsr": storage error',
+      );
+      assert.strictEqual(
+        sessionRecording.recording_state.verification_error_details,
+        null,
+      );
+    });
+
+    test('model handles recording_state with only verification_error_details', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details: null,
+          verification_error_details:
+            'integrity check failed for session recording file',
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.strictEqual(
+        sessionRecording.recording_state.syncing_error_details,
+        null,
+      );
+      assert.strictEqual(
+        sessionRecording.recording_state.verification_error_details,
+        'integrity check failed for session recording file',
+      );
+    });
+
+    test('model handles recording_state with both error details', function (assert) {
+      const syncError = 'sync errors in container';
+      const verifyError = 'integrity check failed';
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {
+          syncing_error_details: syncError,
+          verification_error_details: verifyError,
+        },
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.strictEqual(
+        sessionRecording.recording_state.syncing_error_details,
+        syncError,
+      );
+      assert.strictEqual(
+        sessionRecording.recording_state.verification_error_details,
+        verifyError,
+      );
+    });
+
+    test('model handles empty recording_state object', function (assert) {
+      const sessionRecording = store.createRecord('session-recording', {
+        state: STATE_SESSION_RECORDING_UNKNOWN,
+        connection_recordings: [],
+        recording_state: {},
+      });
+      controller.set('model', { sessionRecording });
+
+      assert.strictEqual(
+        sessionRecording.recording_state.syncing_error_details,
+        undefined,
+      );
+      assert.strictEqual(
+        sessionRecording.recording_state.verification_error_details,
+        undefined,
+      );
+    });
   },
 );
