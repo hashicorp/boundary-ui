@@ -13,11 +13,18 @@ import {
   STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_UNKNOWN,
 } from 'api/models/session-recording';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionIndexController extends Controller {
   // =services
 
   @service router;
+
+  // =tracked
+
+  @tracked showErrorFlyout = false;
+  @tracked syncErrorLines = [];
+  @tracked verifyErrorLines = [];
 
   // =attributes
 
@@ -85,6 +92,26 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     } catch (e) {
       sessionRecording.rollbackAttributes();
       throw new Error(e);
+    }
+  }
+
+  // =actions
+  /**
+   * Toggles the error flyout open and closed, and sets the error messages to be displayed when opening.
+   */
+  @action
+  toggleErrorFlyout() {
+    if (this.showErrorFlyout) {
+      this.showErrorFlyout = false;
+    } else {
+      const recordingState = this.model.sessionRecording?.recording_state || {};
+
+      const { syncing_error_details, verification_error_details } =
+        recordingState;
+
+      this.syncErrorLines = syncing_error_details?.split('\n') ?? [];
+      this.verifyErrorLines = verification_error_details?.split('\n') ?? [];
+      this.showErrorFlyout = true;
     }
   }
 }
