@@ -35,6 +35,7 @@
         <F.Label>{{t 'form.value.label'}}</F.Label>
         <F.TextInput
           data-test-value-input
+          @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}
         />
       </R.Field>

@@ -104,6 +104,7 @@
         <R.Field as |F|>
           <F.TextInput
             data-test-value-input
+            @value={{R.rowData.value}}
             {{on 'input' (fn R.updateRow 'value')}}
           />
         </R.Field>
