@@ -28,7 +28,7 @@
     "@babel/core": "^7.26.10",
     "@ember/test-waiters": "^4.1.0",
     "ember-auto-import": "^2.10.0",
-    "ember-cli-babel": "^8.2.0",
+    "ember-cli-babel": "^8.3.1",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-simple-auth": "^6.1.0"
   },
