@@ -153,6 +153,7 @@
     @data={{@model.signing_algorithms}}
     @legend={{t 'form.signing_algorithms.label'}}
     @helperText={{t 'form.signing_algorithms.help'}}
+    @errors={{@model.errors.signing_algorithms}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >
@@ -189,6 +190,7 @@
     @data={{@model.allowed_audiences}}
     @legend={{t 'form.allowed_audiences.label'}}
     @helperText={{t 'form.allowed_audiences.help'}}
+    @errors={{@model.errors.allowed_audiences}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >
@@ -214,6 +216,7 @@
     @data={{@model.claims_scopes}}
     @legend={{t 'form.claims_scopes.label'}}
     @helperText={{t 'form.claims_scopes.help'}}
+    @errors={{@model.errors.claims_scopes}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >
@@ -239,6 +242,7 @@
     @data={{@model.account_claim_maps}}
     @legend={{t 'form.account_claim_maps.label'}}
     @helperText={{t 'form.account_claim_maps.help'}}
+    @errors={{@model.errors.account_claim_maps}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >
@@ -283,6 +287,7 @@
     @data={{@model.idp_ca_certs}}
     @legend={{t 'form.idp_ca_certs.label'}}
     @helperText={{t 'form.idp_ca_certs.help'}}
+    @errors={{@model.errors.idp_ca_certs}}
     @disabled={{form.disabled}}
     @isOptional={{true}}
   >

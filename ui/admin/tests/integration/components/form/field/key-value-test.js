@@ -233,7 +233,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
             <F.TextInput data-test-value-input @value={{R.rowData.value}} />
           </R.Field>
           {{#if R.canDelete}}
-            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
           {{/if}}
         </:row>
         <:footer as |F|>

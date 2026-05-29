@@ -426,6 +426,7 @@
       @isOptional={{true}}
       @legend={{t 'resources.storage-bucket.form.role_tags.label'}}
       @helperText={{t 'resources.storage-bucket.form.role_tags.help'}}
+      @errors={{@model.errors.role_tags}}
       @disabled={{form.disabled}}
     >
       <:row as |R|>
