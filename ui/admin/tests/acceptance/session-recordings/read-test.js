@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
@@ -174,5 +174,71 @@ module('Acceptance | session-recordings | read', function (hooks) {
 
     assert.notEqual(currentURL(), incorrectUrl);
     assert.strictEqual(currentURL(), urls.sessionRecording);
+  });
+
+  test('it displays error messages for session recording', async function (assert) {
+    setRunOptions({
+      rules: {
+        // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-22
+        'color-contrast': {
+          enabled: false,
+        },
+      },
+    });
+
+    instances.sessionRecording.recording_state = {
+      syncing_error_details: 'sync errors in container',
+      verification_error_details: 'verification error',
+    };
+
+    featuresService.enable('ssh-session-recording');
+
+    await visit(urls.sessionRecordings);
+
+    await click(commonSelectors.HREF(urls.sessionRecording));
+
+    assert.dom(selectors.SESSION_PLAYBACK_ERROR_ALERT).isVisible();
+
+    const errorMessages = findAll(selectors.SESSION_PLAYBACK_ERROR_MESSAGE).map(
+      (err) => err.textContent.trim(),
+    );
+
+    assert.ok(errorMessages[0].includes('sync errors in container'));
+    assert.ok(errorMessages[1].includes('verification error'));
+  });
+
+  test('flyout opens, displays errors, and can be closed', async function (assert) {
+    setRunOptions({
+      rules: {
+        // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-05-27
+        'color-contrast': { enabled: false },
+      },
+    });
+
+    instances.sessionRecording.recording_state = {
+      syncing_error_details: 'Test sync error line 1\nTest sync error line 2',
+      verification_error_details: 'Test verification error',
+    };
+    featuresService.enable('ssh-session-recording');
+
+    await visit(urls.sessionRecordings);
+    await click(commonSelectors.HREF(urls.sessionRecording));
+
+    assert.dom(selectors.SESSION_PLAYBACK_ERROR_ALERT).isVisible();
+    assert
+      .dom(`${selectors.SESSION_PLAYBACK_ERROR_ALERT} button`)
+      .hasTextContaining('Show more');
+
+    // Open the flyout
+    await click(`${selectors.SESSION_PLAYBACK_ERROR_ALERT} button`);
+    assert.dom(selectors.SESSION_ERROR_FLYOUT).isVisible();
+
+    // Check for sync error section and copy button
+    assert.dom(selectors.SESSION_ERROR_FLYOUT_ACCORDION_ITEM).isVisible();
+    assert.dom(selectors.SESSION_ERROR_FLYOUT_COPY_BUTTON).isVisible();
+    // Close the flyout
+    await click(selectors.SESSION_ERROR_FLYOUT_CLOSE);
+
+    assert.dom(selectors.SESSION_ERROR_FLYOUT).isNotVisible();
   });
 });
