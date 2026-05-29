@@ -48,6 +48,9 @@ export default factory.extend({
           critical_options: {
             [faker.word.noun()]: faker.word.words(2),
           },
+          extensions: {
+            [faker.word.noun()]: faker.word.words(2),
+          },
         };
       case TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP:
         return {

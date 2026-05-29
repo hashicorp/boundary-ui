@@ -193,7 +193,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await fillIn(selectors.FIELD_CRIT_OPTS_VALUE, 'co_value');
     await fillIn(selectors.FIELD_EXT_KEY, 'ext_key');
     await fillIn(selectors.FIELD_EXT_VALUE, 'ext_value');
-    await click(selectors.FIELD_EXT_BTN);
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getCredentialLibraryCount(), count + 1);

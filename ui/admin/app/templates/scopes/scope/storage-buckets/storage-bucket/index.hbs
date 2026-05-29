@@ -42,6 +42,7 @@
   <page.body>
     <Form::StorageBucket
       @model={{@model}}
+      @edit={{fn this.storageBuckets.edit @model}}
       @submit={{fn this.storageBuckets.save @model}}
       @cancel={{fn this.storageBuckets.cancel @model}}
       @scopes={{this.scopes}}

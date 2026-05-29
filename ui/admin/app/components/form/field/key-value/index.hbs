@@ -34,9 +34,10 @@
       data-test-add-button
       @onClick={{this.handleAdd}}
     />
-    {{#if @errors}}
+
+    {{#if (get @model.errors @name)}}
       <F.Error as |E|>
-        {{#each @errors as |error|}}
+        {{#each (get @model.errors @name) as |error|}}
           <E.Message data-test-error-message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
