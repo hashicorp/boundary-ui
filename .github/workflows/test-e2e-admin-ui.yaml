@@ -65,7 +65,7 @@ jobs:
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 #v6.0.8
         with:
           cache: true
-          cache-dependency-path: |
+          cache_dependency_path: |
             pnpm-lock.yaml
             ui/desktop/electron-app/pnpm-lock.yaml
           run_install: false
