@@ -107,7 +107,7 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   );
 
   const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
-  const hasInvalidIds = !compatibleIdsResourceType;
+  const hasInvalidIds = hasSpecificIds && !compatibleIdsResourceType;
 
   const hasInvalidPinnedIdTypeCombination =
     hasSpecificIds &&
