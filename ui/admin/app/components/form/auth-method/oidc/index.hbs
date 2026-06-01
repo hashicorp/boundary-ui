@@ -195,6 +195,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.TextInput
+          aria-label={{t 'form.allowed_audiences.label'}}
           data-test-value-input
           @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}
@@ -220,6 +221,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.TextInput
+          aria-label={{t 'form.claims_scopes.label'}}
           data-test-value-input
           @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}
@@ -289,6 +291,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.Textarea
+          aria-label={{t 'form.idp_ca_certs.label'}}
           data-test-value-input
           @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}

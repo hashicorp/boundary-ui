@@ -95,6 +95,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.Textarea
+          aria-label={{t 'resources.auth-method.form.certificates.label'}}
           data-test-value-input
           @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}
