@@ -506,4 +506,90 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.strictEqual(record.client_certificate_key, '');
     assert.strictEqual(record.bind_password, '');
   });
+
+  test('it includes account_claim_maps when serializing new OIDC records', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('auth-method');
+    const record = store.createRecord('auth-method', {
+      type: TYPE_AUTH_METHOD_OIDC,
+      name: 'Test OIDC',
+      account_claim_maps: [
+        { key: 'email', value: 'email' },
+        { key: 'name', value: 'sub' },
+      ],
+    });
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.ok(
+      serializedRecord.attributes.account_claim_maps,
+      'account_claim_maps is included for new records',
+    );
+
+    assert.deepEqual(serializedRecord.attributes.account_claim_maps, [
+      'email=email',
+      'name=sub',
+    ]);
+  });
+
+  test('it excludes account_claim_maps when serializing existing OIDC records with "sub" mapping', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('auth-method');
+
+    const record = store.push({
+      data: {
+        id: 'oidc123',
+        type: 'auth-method',
+        attributes: {
+          type: TYPE_AUTH_METHOD_OIDC,
+          name: 'Test OIDC',
+          account_claim_maps: [
+            { key: 'email', value: 'email' },
+            { key: 'name', value: 'sub' },
+          ],
+        },
+      },
+    });
+
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.notOk(
+      serializedRecord.attributes.account_claim_maps,
+      'account_claim_maps is excluded when updating with "sub" mapping',
+    );
+  });
+
+  test('it includes account_claim_maps when serializing existing OIDC records without "sub" mapping', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('auth-method');
+
+    const record = store.push({
+      data: {
+        id: 'oidc456',
+        type: 'auth-method',
+        attributes: {
+          type: TYPE_AUTH_METHOD_OIDC,
+          name: 'Test OIDC',
+          account_claim_maps: [
+            { key: 'email', value: 'email' },
+            { key: 'name', value: 'name' },
+          ],
+        },
+      },
+    });
+
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.ok(
+      serializedRecord.attributes.account_claim_maps,
+      'account_claim_maps is included when updating without "sub" mapping',
+    );
+
+    assert.deepEqual(serializedRecord.attributes.account_claim_maps, [
+      'email=email',
+      'name=name',
+    ]);
+  });
 });
