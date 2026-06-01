@@ -39,18 +39,19 @@
     "which": "^4.0.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.7.0",
-    "@electron-forge/maker-deb": "^7.7.0",
-    "@electron-forge/maker-dmg": "^7.7.0",
-    "@electron-forge/maker-squirrel": "^7.7.0",
-    "@electron-forge/maker-zip": "^7.7.0",
+    "@electron-forge/cli": "^7.11.0",
+    "@electron-forge/maker-deb": "^7.11.0",
+    "@electron-forge/maker-dmg": "^7.11.0",
+    "@electron-forge/maker-squirrel": "^7.11.0",
+    "@electron-forge/maker-zip": "^7.11.0",
     "electron": "42.0.1",
     "esbuild": "^0.25.4",
     "unzipper": "^0.11.5"
   },
   "pnpm": {
     "overrides": {
-      "tar": "^7.5.10"
+      "tar": "^7.5.10",
+      "yauzl": "^3.3.1"
     },
     "ignoredBuiltDependencies": [],
     "onlyBuiltDependencies": [
