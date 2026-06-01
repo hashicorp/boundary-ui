@@ -101,10 +101,9 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
   const hasExplicitType = Boolean(typeValue) && typeValue !== '*';
 
-  const compatibleIdsResourceType = getCompatibleResourceTypeForIds(
-    schema,
-    idsValue,
-  );
+  const compatibleIdsResourceType = hasSpecificIds
+    ? getCompatibleResourceTypeForIds(schema, idsValue)
+    : null;
 
   const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
   const hasInvalidIds = hasSpecificIds && !compatibleIdsResourceType;
