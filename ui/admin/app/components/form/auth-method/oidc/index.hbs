@@ -98,7 +98,6 @@
     name='client_id'
     @value={{@model.client_id}}
     @isRequired={{true}}
-    @isInvalid={{@model.errors.client_id}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|

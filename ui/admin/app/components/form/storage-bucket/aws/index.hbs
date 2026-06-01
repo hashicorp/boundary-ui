@@ -434,7 +434,6 @@
             data-test-key-input
             @value={{R.rowData.key}}
             {{on 'input' (fn R.updateRow 'key')}}
-            disabled={{form.disabled}}
           />
         </R.Field>
         <R.Field as |F|>
@@ -442,15 +441,10 @@
             data-test-value-input
             @value={{R.rowData.value}}
             {{on 'input' (fn R.updateRow 'value')}}
-            disabled={{form.disabled}}
           />
         </R.Field>
         {{#if R.canDelete}}
-          <R.DeleteRowButton
-            data-test-delete-button
-            @onClick={{R.removeRow}}
-            disabled={{form.disabled}}
-          />
+          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
         {{/if}}
       </:row>
     </Form::Field::KeyValue>

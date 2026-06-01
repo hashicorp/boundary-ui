@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, fillIn, render } from '@ember/test-helpers';
+import { click, fillIn, render, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { v4 as uuidv4 } from 'uuid';
 import { setupIntl } from 'ember-intl/test-support';
@@ -17,6 +17,10 @@ module(
     setupRenderingTest(hooks);
     setupBrowserFakes(hooks, { window: true });
     setupIntl(hooks, 'en-us');
+
+    const ADD_BTN = '[name="worker_tags"] [data-test-add-button]';
+    const KEY_VALUE_ROW =
+      '[name="worker_tags"] .hds-form-key-value-inputs__row';
 
     hooks.beforeEach(function () {
       const featuresService = this.owner.lookup('service:features');
@@ -91,11 +95,12 @@ module(
       this.submit = () => {};
       this.cancel = () => {};
 
-      const KEY_VALUE_INPUT_SELECTOR = (row, column) =>
-        `[name="worker_tags"] tbody :nth-child(${row}) td:nth-child(${column}) input`;
-      const KEY_VALUE_BUTTON_SELECTOR = (row) =>
-        `[name="worker_tags"] tbody :nth-child(${row}) button`;
-      const KEY_VALUE_ROW = '[name="worker_tags"] tbody tr';
+      const getKeyInputs = () =>
+        findAll('[name="worker_tags"] [data-test-key-input]');
+      const getValueInputs = () =>
+        findAll('[name="worker_tags"] [data-test-value-input]');
+      const getDeleteBtns = () =>
+        findAll('[name="worker_tags"] [data-test-delete-button]');
 
       await render(
         hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
@@ -103,21 +108,17 @@ module(
 
       assert.dom(KEY_VALUE_ROW).exists({ count: 1 });
 
-      // Test adding a worker tag
-      await fillIn(KEY_VALUE_INPUT_SELECTOR(1, 1), 'environment');
-      await fillIn(KEY_VALUE_INPUT_SELECTOR(1, 2), 'dev');
-      await click(KEY_VALUE_BUTTON_SELECTOR(1));
+      // Add second worker tag
+      await click(ADD_BTN);
+      assert.dom(KEY_VALUE_ROW).exists({ count: 2 });
+      await fillIn(getKeyInputs()[1], 'environment');
+      await fillIn(getValueInputs()[1], 'test');
 
-      await fillIn(KEY_VALUE_INPUT_SELECTOR(2, 1), 'environment');
-      await fillIn(KEY_VALUE_INPUT_SELECTOR(2, 2), 'test');
-      await click(KEY_VALUE_BUTTON_SELECTOR(2));
-
-      assert.dom(KEY_VALUE_ROW).exists({ count: 3 });
+      // Remove the first worker tag
+      await click(getDeleteBtns()[0]);
 
       // Remove the worker tag
-      await click(KEY_VALUE_BUTTON_SELECTOR(1));
-
-      assert.dom(KEY_VALUE_ROW).exists({ count: 2 });
+      assert.dom(KEY_VALUE_ROW).exists({ count: 1 });
     });
   },
 );
