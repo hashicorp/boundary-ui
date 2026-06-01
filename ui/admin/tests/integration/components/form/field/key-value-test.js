@@ -277,9 +277,10 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       { message: 'Direct error one' },
       { message: 'Direct error two' },
     ]);
+    this.set('data', []);
 
     await render(hbs`
-      <Form::Field::KeyValue @errors={{this.errors}} @data={{array}}>
+      <Form::Field::KeyValue @errors={{this.errors}} @data={{this.data}}>
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
