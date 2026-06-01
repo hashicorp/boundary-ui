@@ -159,6 +159,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.Select
+          aria-label={{t 'form.signing_algorithms.label'}}
           data-test-value-select
           {{on 'change' (fn R.updateRow 'value')}}
         >
