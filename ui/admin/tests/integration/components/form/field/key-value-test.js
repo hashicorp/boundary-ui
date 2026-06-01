@@ -212,13 +212,8 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.dom(DELETE_BUTTON).doesNotExist();
   });
 
-<<<<<<< HEAD
   test('it displays error messages in footer from model errors', async function (assert) {
     this.set('model', {
-=======
-  test('it displays error messages in footer (model errors)', async function (assert) {
-    const model = {
->>>>>>> 92621b834 (Chore migrate credential library storage bucket (#3282))
       tags: [{ key: '', value: '' }],
       errors: {
         tags: [
@@ -226,24 +221,10 @@ module('Integration | Component | form/field/key-value', function (hooks) {
           { message: 'Value must be unique' },
         ],
       },
-<<<<<<< HEAD
     });
-=======
-    };
-    this.set('model', model);
-    this.set('properties', ['key', 'value']);
->>>>>>> 92621b834 (Chore migrate credential library storage bucket (#3282))
 
     await render(hbs`
-<<<<<<< HEAD
       <Form::Field::KeyValue @model={{this.model}} @name="tags" @data={{this.model.tags}}>
-=======
-      <Form::Field::KeyValue
-        @model={{this.model}}
-        @name="tags"
-        @properties={{this.properties}}
-        @data={{this.model.tags}}>
->>>>>>> 92621b834 (Chore migrate credential library storage bucket (#3282))
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
