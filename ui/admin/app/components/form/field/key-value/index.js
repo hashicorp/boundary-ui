@@ -33,6 +33,16 @@ export default class FormFieldKeyValueComponent extends Component {
     return false;
   }
 
+  get errors() {
+    const { model, name } = this.args;
+
+    if (model && name && model.errors) {
+      return model.errors[name];
+    }
+
+    return null;
+  }
+
   /**
    * Default handler for adding a row.
    * Uses @model, @name, and @properties if provided, otherwise calls @onAdd.

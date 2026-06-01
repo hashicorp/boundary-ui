@@ -35,9 +35,9 @@
       @onClick={{this.handleAdd}}
     />
 
-    {{#if @errors}}
+    {{#if this.errors}}
       <F.Error as |E|>
-        {{#each @errors as |error|}}
+        {{#each this.errors as |error|}}
           <E.Message data-test-error-message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>

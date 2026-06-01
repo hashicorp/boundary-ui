@@ -212,16 +212,19 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.dom(DELETE_BUTTON).doesNotExist();
   });
 
-  test('it displays error messages in footer', async function (assert) {
-    this.set('data', [{ key: '', value: '' }]);
-    this.set('errors', [
-      { message: 'Key is required' },
-      { message: 'Value must be unique' },
-    ]);
+  test('it displays error messages in footer from model errors', async function (assert) {
+    this.set('model', {
+      tags: [{ key: '', value: '' }],
+      errors: {
+        tags: [
+          { message: 'Key is required' },
+          { message: 'Value must be unique' },
+        ],
+      },
+    });
 
-    // With errors
     await render(hbs`
-      <Form::Field::KeyValue @data={{this.data}} @errors={{this.errors}}>
+      <Form::Field::KeyValue @model={{this.model}} @name="tags" @data={{this.model.tags}}>
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
@@ -230,7 +233,7 @@ module('Integration | Component | form/field/key-value', function (hooks) {
             <F.TextInput data-test-value-input @value={{R.rowData.value}} />
           </R.Field>
           {{#if R.canDelete}}
-          <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
+            <R.DeleteRowButton data-test-delete-button @onClick={{R.removeRow}} />
           {{/if}}
         </:row>
         <:footer as |F|>
@@ -243,10 +246,13 @@ module('Integration | Component | form/field/key-value', function (hooks) {
       .dom('[data-test-error-message]:nth-child(2)')
       .hasText('Value must be unique');
 
-    // Without errors
-    this.set('errors', undefined);
+    this.set('model', {
+      tags: [{ key: '', value: '' }],
+      errors: {},
+    });
+
     await render(hbs`
-      <Form::Field::KeyValue @data={{this.data}} @errors={{this.errors}}>
+      <Form::Field::KeyValue @model={{this.model}} @name="tags" @data={{this.model.tags}}>
         <:row as |R|>
           <R.Field as |F|>
             <F.TextInput data-test-key-input @value={{R.rowData.key}} />
