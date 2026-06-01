@@ -21,7 +21,8 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
-  @tracked workerTags = new TrackedArray([]);
+  @tracked workerTags = new TrackedArray([new Tag()]);
+
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
@@ -66,7 +67,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
     const tagsText = `tags {
     ${
-      this.workerTags.length
+      this.workerTags.filter((t) => t.key?.trim() || t.value?.trim()).length
         ? this.getTagConfigString()
         : 'key = ["<tag1>", "<tag2>"]'
     }
@@ -141,6 +142,7 @@ unzip *.zip ;\\
 
   getTagConfigString() {
     return this.workerTags
+      .filter((t) => t.key?.trim() || t.value?.trim())
       .map(
         (tag) =>
           `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
@@ -151,13 +153,24 @@ unzip *.zip ;\\
   }
 
   @action
-  addWorkerTag(e) {
-    this.workerTags.push(new Tag(e.key, e.value));
+  addWorkerTag() {
+    this.workerTags.push(new Tag());
   }
 
   @action
-  removeWorkerTagByIndex(index) {
-    this.workerTags.splice(index, 1);
+  removeWorkerTagByIndex(rowData) {
+    const index = this.workerTags.indexOf(rowData);
+    if (index !== -1) {
+      this.workerTags.splice(index, 1);
+    }
+    if (this.workerTags.length === 0) {
+      this.workerTags.push(new Tag());
+    }
+  }
+
+  @action
+  updateWorkerTagValue(rowData, property, event) {
+    rowData[property] = event.target.value;
   }
 
   @action
