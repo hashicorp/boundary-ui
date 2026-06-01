@@ -272,6 +272,31 @@ module('Integration | Component | form/field/key-value', function (hooks) {
     assert.dom(ERROR_MESSAGE).doesNotExist();
   });
 
+  test('it displays error messages in footer from @errors arg', async function (assert) {
+    this.set('errors', [
+      { message: 'Direct error one' },
+      { message: 'Direct error two' },
+    ]);
+
+    await render(hbs`
+      <Form::Field::KeyValue @errors={{this.errors}} @data={{array}}>
+        <:row as |R|>
+          <R.Field as |F|>
+            <F.TextInput data-test-key-input @value={{R.rowData.key}} />
+          </R.Field>
+        </:row>
+        <:footer as |F|>
+          <F.AddRowButton />
+        </:footer>
+      </Form::Field::KeyValue>
+    `);
+
+    assert.dom(ERROR_MESSAGE).exists().hasText('Direct error one');
+    assert
+      .dom('[data-test-error-message]:nth-child(2)')
+      .hasText('Direct error two');
+  });
+
   test('it updates both key and value fields using custom handlers', async function (assert) {
     this.set('data', [{ key: '', value: '' }]);
     this.set('onUpdate', (rowData, property, { target: { value } }) => {

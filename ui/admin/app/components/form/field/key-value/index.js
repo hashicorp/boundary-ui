@@ -34,6 +34,11 @@ export default class FormFieldKeyValueComponent extends Component {
   }
 
   get errors() {
+    // If errors are passed directly as an argument, use those
+    if (this.args.errors) {
+      return this.args.errors;
+    }
+
     const { model, name } = this.args;
 
     if (model && name && model.errors) {
