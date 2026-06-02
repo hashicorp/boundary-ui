@@ -63,23 +63,17 @@ export default class FormAliasComponent extends Component {
     return `.${suffix}`;
   }
 
-  /**
-   * Fallback for project aliases when a suffix cannot be resolved from scope:
-   * derive `.<segmentN-1>.<segmentN>` from the current model value.
-   * @type {string|null}
-   */
-  get trailingTwoSegmentSuffix() {
-    const scope = this.args.model?.scopeModel;
-    const fullValue = this.args.model?.value || '';
-    if (!scope?.isProject || !fullValue) return null;
+  stripTrailingSegments(value, segmentCount) {
+    if (!value || !segmentCount) return value;
 
-    const lastDot = fullValue.lastIndexOf('.');
-    if (lastDot <= 0) return null;
+    let cutIndex = value.length;
+    for (let i = 0; i < segmentCount; i++) {
+      const lastDot = value.lastIndexOf('.', cutIndex - 1);
+      if (lastDot <= 0) return value;
+      cutIndex = lastDot;
+    }
 
-    const secondLastDot = fullValue.lastIndexOf('.', lastDot - 1);
-    if (secondLastDot <= 0) return null;
-
-    return fullValue.slice(secondLastDot);
+    return value.slice(0, cutIndex);
   }
 
   /**
@@ -91,14 +85,33 @@ export default class FormAliasComponent extends Component {
     const { model } = this.args;
     if (!model) return '';
 
-    const fullValue = model.value || '';
-    const suffix = this.normalizedSuffix || this.trailingTwoSegmentSuffix;
-    if (!suffix || !fullValue.endsWith(suffix)) return fullValue;
+    const fullValue = model.value ?? '';
+    const suffix = this.normalizedSuffix;
+    if (!suffix) return fullValue;
+    if (fullValue.endsWith(suffix)) return fullValue.slice(0, -suffix.length);
 
-    return fullValue.slice(0, -suffix.length);
+    const suffixSegmentCount = suffix.split('.').filter(Boolean).length;
+    return this.stripTrailingSegments(fullValue, suffixSegmentCount);
   }
 
   // =actions
+
+  /**
+   * Recomposes model.value with the current suffix before delegating to @submit.
+   * Guards against the case where the user opens edit mode and saves without
+   * typing, leaving stale suffix segments on the stored value.
+   */
+  @action
+  handleSubmit() {
+    const { model } = this.args;
+    const suffix = this.normalizedSuffix;
+    if (model && suffix && !model.value?.endsWith(suffix)) {
+      const segmentCount = suffix.split('.').filter(Boolean).length;
+      const base = this.stripTrailingSegments(model.value ?? '', segmentCount);
+      model.value = base ? `${base}${suffix}` : model.value;
+    }
+    return this.args.submit();
+  }
 
   /**
    * Handles input changes
@@ -116,8 +129,8 @@ export default class FormAliasComponent extends Component {
   @action
   handleBaseValueChange({ target: { value } }) {
     const { model } = this.args;
-    const suffix = this.normalizedSuffix || this.trailingTwoSegmentSuffix;
+    const suffix = this.normalizedSuffix ?? '';
 
-    model.value = suffix && value ? `${value}${suffix}` : value;
+    model.value = value ? `${value}${suffix}` : value;
   }
 }

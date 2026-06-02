@@ -188,31 +188,27 @@ export default function (mirageConfig) {
   return createServer(finalConfig);
 }
 
+// Strip a leading dot so callers can re-add exactly one (e.g. '.example' → 'example').
 function normalizeSuffixSegments(suffix) {
   if (!suffix) return null;
-  const normalized = String(suffix).split('.').filter(Boolean).join('.');
-  return normalized || null;
+  return suffix.replace(/^\.+|\.+$/g, '') || null;
 }
 
 function getScopeAliasSuffix(scope, scopes) {
   if (!scope) return null;
 
-  const scopeSuffix = normalizeSuffixSegments(
-    scope.alias_suffix ?? scope.aliasSuffix,
-  );
+  const scopeSuffix = normalizeSuffixSegments(scope.alias_suffix);
   if (!scopeSuffix) return null;
 
   if (scope.type !== 'project') {
     return `.${scopeSuffix}`;
   }
 
-  const parentScopeId = scope.scope?.id ?? scope.scope_id ?? scope.scopeId;
+  const parentScopeId = scope.scope?.id;
   const parentScope = parentScopeId ? scopes.find(parentScopeId) : null;
-  const orgSuffix = normalizeSuffixSegments(
-    parentScope?.alias_suffix ?? parentScope?.aliasSuffix,
-  );
+  const orgSuffix = normalizeSuffixSegments(parentScope?.alias_suffix);
 
-  if (!orgSuffix || scopeSuffix.endsWith(`.${orgSuffix}`)) {
+  if (!orgSuffix) {
     return `.${scopeSuffix}`;
   }
 
@@ -755,7 +751,10 @@ function routes() {
       });
 
       target.update({
-        aliases: createdAliases.map((a) => ({ id: a.id, value: a.value })),
+        aliases: createdAliases.map((alias) => ({
+          id: alias.id,
+          value: alias.value,
+        })),
       });
     }
 
@@ -1027,10 +1026,10 @@ function routes() {
       const scopeId = alias.scope_id;
       const scope = scopes.find(scopeId);
       const aliasSuffix = getScopeAliasSuffix(scope, scopes);
-      const updatedAttrs = { ...attrs };
-      if (attrs.value !== undefined && aliasSuffix) {
-        updatedAttrs.value = appendSuffixIfMissing(attrs.value, aliasSuffix);
-      }
+      const updatedAttrs = {
+        ...attrs,
+        value: appendSuffixIfMissing(attrs.value, aliasSuffix),
+      };
 
       return alias.update(updatedAttrs);
     },

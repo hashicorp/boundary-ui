@@ -246,7 +246,7 @@
       @model.isNew
       (or
         (can 'create model' @globalScope collection='aliases')
-        this.canCreateAliasOnProject
+        (can 'createProjectAlias scope' @model.scopeModel)
       )
     )
   }}
@@ -276,7 +276,7 @@
               >
                 {{t 'resources.alias.form.alias.scope.options.global'}}
               </option>
-              {{#if this.canCreateAliasOnProject}}
+              {{#if (can 'createProjectAlias scope' @model.scopeModel)}}
                 <option
                   value={{@model.scopeModel.id}}
                   selected={{eq R.rowData.scope_id @model.scopeModel.id}}

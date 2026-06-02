@@ -137,7 +137,7 @@ export default factory.extend({
               TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
               TYPE_CREDENTIAL_USERNAME_PASSWORD,
             ].includes(cred.credential_type)) ||
-          cred.type == TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+          cred.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       );
       const filteredCredentialsForRDP = selectItems(
         server.schema.credentials,

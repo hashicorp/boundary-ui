@@ -1073,7 +1073,7 @@ scope:
     project: Project
   alias-suffix:
     title: Alias suffix
-    description: Append this suffix to aliases in this project scope. The alias will appear as “alias.projectsuffix.orgsuffix”
+    description: Append this suffix to aliases in this project scope. The alias will appear as "alias.projectsuffix.orgsuffix"
     actions:
       create: Create Alias suffix
       edit: Edit suffix
@@ -1308,7 +1308,7 @@ alias:
       help: Always use this host when connecting using this alias
     sidebar:
       help: Use a domain name as a shortcut for anyone with access to this target.
-      no-suffix-message: 'To start using aliases, you need to set an Alias suffix first.'
+      no-suffix-message: To start using aliases, you need to set an Alias suffix first.
       link-project-suffix: Create a Project Suffix
       link-org-suffix: Create an Org Suffix
     alias:

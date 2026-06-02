@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import { fillIn, render } from '@ember/test-helpers';
+import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { tracked } from '@glimmer/tracking';
 
@@ -123,5 +123,75 @@ module('Integration | Component | form/alias', function (hooks) {
     await fillIn(VALUE_INPUT_SELECTOR, 'yourhost');
 
     assert.strictEqual(this.model.value, 'yourhost.test');
+  });
+
+  test('it shows only the base value when the stored suffix does not match the current suffix', async function (assert) {
+    this.suffix = '.newsuffix';
+    this.model.value = 'foo.oldsuffix';
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    assert.dom(VALUE_INPUT_SELECTOR).hasValue('foo');
+  });
+
+  test('it shows only the base value when a two-segment stored suffix does not match the current two-segment suffix', async function (assert) {
+    this.suffix = '.new.boundary';
+    this.model.value = 'foo.old.boundary';
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    assert.dom(VALUE_INPUT_SELECTOR).hasValue('foo');
+  });
+
+  test('handleSubmit recomposes model.value with the current suffix when the stored value has stale suffix segments', async function (assert) {
+    this.suffix = '.newsuffix';
+    this.model.value = 'foo.oldsuffix';
+    this.save = () => {};
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    await click('[type=submit]');
+
+    assert.strictEqual(this.model.value, 'foo.newsuffix');
+  });
+
+  test('handleSubmit does not alter model.value when it already ends with the current suffix', async function (assert) {
+    this.suffix = '.test';
+    this.model.value = 'foo.test';
+    this.save = () => {};
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    await click('[type=submit]');
+
+    assert.strictEqual(this.model.value, 'foo.test');
   });
 });

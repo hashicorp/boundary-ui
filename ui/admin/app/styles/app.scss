@@ -476,11 +476,9 @@
 
   .hds-form-text-input {
     flex: 0 0 50%;
-    width: 50%;
-    min-width: 0;
   }
 
-  .alias-value-with-suffix--text {
+  &--text {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;

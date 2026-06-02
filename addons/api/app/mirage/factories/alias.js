@@ -9,10 +9,10 @@ import generateId from '../helpers/id';
 
 const destinationIDs = ['', generateId('t_')];
 
+// Strip a leading dot so callers can re-add exactly one (e.g. '.example' → 'example').
 const normalizeSuffixSegments = (suffix) => {
   if (!suffix) return null;
-  const normalized = String(suffix).split('.').filter(Boolean).join('.');
-  return normalized || null;
+  return suffix.replace(/^\.+|\.+$/g, '') || null;
 };
 
 const getCombinedSuffixForScope = (scope, server) => {
@@ -25,7 +25,7 @@ const getCombinedSuffixForScope = (scope, server) => {
   const orgScope = orgScopeId ? server.schema.scopes.find(orgScopeId) : null;
   const orgSuffix = normalizeSuffixSegments(orgScope?.alias_suffix);
 
-  if (!orgSuffix || scopeSuffix.endsWith(`.${orgSuffix}`)) {
+  if (!orgSuffix) {
     return `.${scopeSuffix}`;
   }
 
@@ -45,16 +45,15 @@ export default factory.extend({
   scope: () => ({ id: 'global', type: 'global' }),
 
   afterCreate(alias, server) {
-    const scopeId = alias.scope_id || alias.scope?.id;
+    const scopeId = alias.scope?.id;
     if (!scopeId) return;
 
     const scope = server.schema.scopes.find(scopeId);
     const combinedSuffix = getCombinedSuffixForScope(scope, server);
     if (!combinedSuffix) return;
 
-    const currentValue = alias.value || '';
-    if (!currentValue.endsWith(combinedSuffix)) {
-      alias.update({ value: `${currentValue}${combinedSuffix}` });
-    }
+    const currentValue = alias.value ?? '';
+    if (currentValue.endsWith(combinedSuffix)) return;
+    alias.update({ value: `${currentValue}${combinedSuffix}` });
   },
 });

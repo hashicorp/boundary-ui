@@ -110,4 +110,19 @@ module('Acceptance | aliases | project | update', function (hooks) {
 
     assert.strictEqual(instances.alias.value, originalValue);
   });
+
+  test('saving without typing recomposes the alias value when the project scope suffix has changed', async function (assert) {
+    const NEW_PROJECT_SUFFIX = '.updated';
+    instances.scopes.project.update({ alias_suffix: NEW_PROJECT_SUFFIX });
+
+    await visit(urls.alias);
+
+    await click(commonSelectors.EDIT_BTN);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(
+      instances.alias.value,
+      `${SEED_BASE_VALUE}${NEW_PROJECT_SUFFIX}${ORG_SUFFIX_VALUE}`,
+    );
+  });
 });

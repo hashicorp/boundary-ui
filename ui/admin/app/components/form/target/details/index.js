@@ -81,23 +81,14 @@ export default class FormTargetComponent extends Component {
   }
 
   /**
-   * True when the current scope is a project with a configured suffix and
-   * the user can create aliases on it.
-   * @type {boolean}
-   */
-  get canCreateAliasOnProject() {
-    return this.abilities.can(
-      'createProjectAlias scope',
-      this.args.model?.scopeModel,
-    );
-  }
-
-  /**
    * Default scope id to seed onto a freshly-added alias row.
    * @type {string}
    */
   get defaultAliasScopeId() {
-    return this.canCreateAliasOnProject
+    return this.abilities.can(
+      'createProjectAlias scope',
+      this.args.model?.scopeModel,
+    )
       ? this.args.model.scopeModel.id
       : this.args.globalScope.id;
   }

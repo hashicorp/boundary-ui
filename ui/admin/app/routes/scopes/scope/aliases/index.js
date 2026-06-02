@@ -164,6 +164,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
       'alias',
       {
         scope_id,
+        query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
       },

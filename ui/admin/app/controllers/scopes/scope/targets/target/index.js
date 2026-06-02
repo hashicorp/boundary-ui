@@ -32,41 +32,6 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   }
 
   /**
-   * True when the project scope is missing an alias suffix.
-   * @type {boolean}
-   */
-  get isProjectSuffixMissing() {
-    const scope = this.model.scopeModel;
-    return (
-      scope?.isProject &&
-      !scope?.alias_suffix &&
-      this.abilities.can('setAliasSuffix scope', scope)
-    );
-  }
-
-  /**
-   * True when the parent org scope is missing an alias suffix.
-   * @type {boolean}
-   */
-  get isOrgSuffixMissing() {
-    const org = this.scopeService.org;
-    return (
-      this.model.scopeModel?.isProject &&
-      org &&
-      !org.alias_suffix &&
-      this.abilities.can('setAliasSuffix scope', org)
-    );
-  }
-
-  /**
-   * True when either the project or org suffix is missing.
-   * @type {boolean}
-   */
-  get hasSuffixIssue() {
-    return this.isProjectSuffixMissing || this.isOrgSuffixMissing;
-  }
-
-  /**
    * The parent org scope model.
    * @type {ScopeModel|null}
    */
@@ -94,12 +59,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
    * @returns {array}
    */
   get aliases() {
-    if (this.model.aliases.length > 3) {
-      const arrWithThreeItems = this.model.aliases.slice(0, 3);
-      return arrWithThreeItems;
-    } else {
-      return this.model.aliases;
-    }
+    return this.model.aliases.slice(0, 3);
   }
 
   /**

@@ -19,7 +19,17 @@
       </PH.Description>
       <PH.Actions>
         {{#if (can 'create model' this.scope collection='aliases')}}
-          {{#if (and @model.doAliasesExist (not this.isGated))}}
+          {{#if
+            (and
+              @model.doAliasesExist
+              (not
+                (or
+                  (can 'seeProjectSuffixPrompt scope' this.scope)
+                  (can 'seeOrgSuffixPrompt scope' this.scope)
+                )
+              )
+            )
+          }}
             <Hds::Button
               @route='scopes.scope.aliases.new'
               @text={{t 'resources.alias.titles.new'}}
@@ -31,16 +41,24 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if this.isGated}}
+    {{#if
+      (or
+        (can 'seeProjectSuffixPrompt scope' this.scope)
+        (can 'seeOrgSuffixPrompt scope' this.scope)
+      )
+    }}
       <Hds::ApplicationState data-test-aliases-gated as |A|>
         <A.Header @title={{t 'resources.alias.messages.gated.title'}} />
         <A.Body
           @text={{t
             (if
-              (and this.isProjectSuffixMissing this.isOrgSuffixMissing)
+              (and
+                (can 'seeProjectSuffixPrompt scope' this.scope)
+                (can 'seeOrgSuffixPrompt scope' this.scope)
+              )
               'resources.alias.messages.gated.description-both'
               (if
-                this.isOrgSuffixMissing
+                (can 'seeOrgSuffixPrompt scope' this.scope)
                 'resources.alias.messages.gated.description-org'
                 'resources.alias.messages.gated.description-project'
               )
@@ -48,7 +66,7 @@
           }}
         />
         <A.Footer as |F|>
-          {{#if this.isProjectSuffixMissing}}
+          {{#if (can 'seeProjectSuffixPrompt scope' this.scope)}}
             <F.LinkStandalone
               data-test-aliases-gated-link-project
               @icon='arrow-right'
@@ -57,7 +75,7 @@
               @text={{t 'resources.alias.messages.gated.link-project'}}
             />
           {{/if}}
-          {{#if this.isOrgSuffixMissing}}
+          {{#if (can 'seeOrgSuffixPrompt scope' this.scope)}}
             <F.LinkStandalone
               data-test-aliases-gated-link-org
               @icon='arrow-right'
@@ -157,10 +175,7 @@
                 {{#unless this.scope.isProject}}
                   <B.Td>
                     <Hds::Badge
-                      @text={{or
-                        data.alias.scopeModel.displayName
-                        data.alias.scope.scope_id
-                      }}
+                      @text={{data.alias.scopeModel.displayName}}
                       @icon={{if data.alias.scope.isGlobal 'globe' 'grid'}}
                     />
                   </B.Td>

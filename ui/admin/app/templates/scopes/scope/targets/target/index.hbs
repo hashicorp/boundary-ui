@@ -98,11 +98,18 @@
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
 
-              {{#if this.hasSuffixIssue}}
+              {{#if
+                (or
+                  (can 'seeProjectSuffixPrompt scope' this.model.scopeModel)
+                  (can 'seeOrgSuffixPrompt scope' this.model.scopeModel)
+                )
+              }}
                 <Hds::Text::Body @tag='p' @color='faint' class='p'>
                   {{t 'resources.alias.form.sidebar.no-suffix-message'}}
                 </Hds::Text::Body>
-                {{#if this.isProjectSuffixMissing}}
+                {{#if
+                  (can 'seeProjectSuffixPrompt scope' this.model.scopeModel)
+                }}
                   <Hds::Link::Standalone
                     data-test-create-project-suffix-link
                     @icon='arrow-right'
@@ -113,7 +120,7 @@
                     }}
                   />
                 {{/if}}
-                {{#if this.isOrgSuffixMissing}}
+                {{#if (can 'seeOrgSuffixPrompt scope' this.model.scopeModel)}}
                   <Hds::Link::Standalone
                     data-test-create-org-suffix-link
                     @icon='arrow-right'
