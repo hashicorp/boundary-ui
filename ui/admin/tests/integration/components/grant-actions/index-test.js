@@ -32,7 +32,6 @@ module('Integration | Component | grant-actions/index', function (hooks) {
 
     const grantsSchemaData = await response.json();
     this.grantsSchema = grantsSchemaData;
-    console.log('grantsSchemaData', this.grantSchema);
   });
 
   test('it renders the actions relevant to the current grant line', async function (assert) {
