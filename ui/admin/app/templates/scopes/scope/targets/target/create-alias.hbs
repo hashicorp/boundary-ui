@@ -30,6 +30,7 @@
       @model={{@model}}
       @hideTargetId='true'
       @suffix={{@model.scopeModel.alias_suffix}}
+      @orgSuffix={{@model.scopeModel.scopeModel.alias_suffix}}
       @submit={{fn this.targets.saveAlias @model}}
       @cancel={{fn this.targets.cancelAlias @model}}
     />

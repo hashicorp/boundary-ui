@@ -14,12 +14,19 @@ export default class ScopesScopeTargetsTargetManageAliasRoute extends Route {
   // =methods
 
   /**
-   * Creates a new unsaved alias.
-   * @return {AliasModel}
+   * Loads an existing alias for editing.
+   * @param {object} params
+   * @param {string} params.alias_id
+   * @return {Promise<AliasModel>}
    */
   async model({ alias_id }) {
-    return this.store.findRecord('alias', alias_id, {
+    const scopeModel = this.modelFor('scopes.scope');
+    const alias = await this.store.findRecord('alias', alias_id, {
       reload: true,
     });
+    if (scopeModel.isProject) {
+      await this.store.findRecord('scope', scopeModel.scopeID);
+    }
+    return alias;
   }
 }

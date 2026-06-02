@@ -5,11 +5,8 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 
 export default class FormAliasComponent extends Component {
-  @service store;
-
   // =attributes
 
   /**
@@ -19,7 +16,9 @@ export default class FormAliasComponent extends Component {
    * @returns {string | null}
    */
   normalizeSuffixSegments(suffix) {
-    if (!suffix) return null;
+    if (!suffix) {
+      return null;
+    }
     const normalized = String(suffix).split('.').filter(Boolean).join('.');
     return normalized || null;
   }
@@ -34,21 +33,11 @@ export default class FormAliasComponent extends Component {
     const projectSuffix = this.normalizeSuffixSegments(this.args.suffix);
     const scope = this.args.model?.scopeModel;
 
-    if (!scope?.isProject) return projectSuffix;
-
-    const orgScope = scope.scopeID
-      ? this.store.peekRecord('scope', scope.scopeID)
-      : null;
-    const orgSuffix = this.normalizeSuffixSegments(orgScope?.alias_suffix);
-
-    if (!projectSuffix) return orgSuffix;
-    if (!orgSuffix) return projectSuffix;
-    if (
-      projectSuffix === orgSuffix ||
-      projectSuffix.endsWith(`.${orgSuffix}`)
-    ) {
+    if (!scope?.isProject) {
       return projectSuffix;
     }
+
+    const orgSuffix = this.normalizeSuffixSegments(this.args.orgSuffix);
 
     return `${projectSuffix}.${orgSuffix}`;
   }
@@ -59,39 +48,30 @@ export default class FormAliasComponent extends Component {
    */
   get normalizedSuffix() {
     const suffix = this.combinedSuffixSegments;
-    if (!suffix) return null;
-    return `.${suffix}`;
-  }
-
-  stripTrailingSegments(value, segmentCount) {
-    if (!value || !segmentCount) return value;
-
-    let cutIndex = value.length;
-    for (let i = 0; i < segmentCount; i++) {
-      const lastDot = value.lastIndexOf('.', cutIndex - 1);
-      if (lastDot <= 0) return value;
-      cutIndex = lastDot;
+    if (!suffix) {
+      return null;
     }
-
-    return value.slice(0, cutIndex);
+    return `.${suffix}`;
   }
 
   /**
    * User-editable portion of the alias value shown in the input. When a suffix
-   * is present, strip the suffix from the model value for display.
+   * is present, strip it from the stored value.
    * @type {string}
    */
   get displayBaseValue() {
-    const { model } = this.args;
-    if (!model) return '';
-
-    const fullValue = model.value ?? '';
+    const fullValue = this.args.model.value ?? '';
     const suffix = this.normalizedSuffix;
-    if (!suffix) return fullValue;
-    if (fullValue.endsWith(suffix)) return fullValue.slice(0, -suffix.length);
-
-    const suffixSegmentCount = suffix.split('.').filter(Boolean).length;
-    return this.stripTrailingSegments(fullValue, suffixSegmentCount);
+    // This will be the common case when there is no suffix for global aliases
+    if (!suffix) {
+      return fullValue;
+    }
+    // This is our normal case for project level aliases
+    // with current suffix segments present on the stored value
+    if (fullValue.endsWith(suffix)) {
+      return fullValue.slice(0, -suffix.length);
+    }
+    return fullValue;
   }
 
   // =actions
@@ -106,9 +86,7 @@ export default class FormAliasComponent extends Component {
     const { model } = this.args;
     const suffix = this.normalizedSuffix;
     if (model && suffix && !model.value?.endsWith(suffix)) {
-      const segmentCount = suffix.split('.').filter(Boolean).length;
-      const base = this.stripTrailingSegments(model.value ?? '', segmentCount);
-      model.value = base ? `${base}${suffix}` : model.value;
+      model.value = `${model.value}${suffix}`;
     }
     return this.args.submit();
   }

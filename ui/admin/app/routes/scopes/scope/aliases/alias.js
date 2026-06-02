@@ -18,8 +18,13 @@ export default class ScopesScopeAliasesAliasRoute extends Route {
    * @return {Promise{AliasModel}}
    */
   async model({ alias_id }) {
-    return this.store.findRecord('alias', alias_id, {
+    const scopeModel = this.modelFor('scopes.scope');
+    const alias = await this.store.findRecord('alias', alias_id, {
       reload: true,
     });
+    if (scopeModel.isProject) {
+      await this.store.findRecord('scope', scopeModel.scopeID);
+    }
+    return alias;
   }
 }

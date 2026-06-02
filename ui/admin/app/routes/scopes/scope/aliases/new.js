@@ -34,12 +34,15 @@ export default class ScopesScopeAliasesNewRoute extends Route {
    * Creates a new unsaved alias.
    * @return {AliasModel}
    */
-  model() {
+  async model() {
     const scopeModel = this.modelFor('scopes.scope');
     const record = this.store.createRecord('alias', {
       type: TYPE_ALIAS_TARGET,
     });
     record.scopeModel = scopeModel;
+    if (scopeModel.isProject && scopeModel.scopeID) {
+      await this.store.findRecord('scope', scopeModel.scopeID);
+    }
     return record;
   }
 }

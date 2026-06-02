@@ -68,6 +68,7 @@
     <Form::Alias
       @model={{@model}}
       @suffix={{@model.scopeModel.alias_suffix}}
+      @orgSuffix={{@model.scopeModel.scopeModel.alias_suffix}}
       @submit={{fn this.aliases.save @model}}
       @cancel={{fn this.aliases.cancel @model}}
     />

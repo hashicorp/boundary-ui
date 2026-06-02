@@ -52,20 +52,23 @@ module('Integration | Component | form/alias', function (hooks) {
       .includesText('If using Windows, using a "." in the hostname');
   });
 
-  test('it renders the suffix decoration with a leading dot when @suffix is passed', async function (assert) {
-    this.suffix = '.projectsuffix';
+  test('it renders the suffix decoration with a leading dot when @suffix and @orgSuffix are passed', async function (assert) {
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'projectsuffix';
+    this.orgSuffix = 'orgsuffix';
 
     await render(
       hbs`<Form::Alias
         @model={{this.model}}
         @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
         @submit={{this.save}}
         @cancel={{this.cancel}}
       />`,
     );
 
     assert.dom(VALUE_INPUT_SELECTOR).exists();
-    assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix');
+    assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix.orgsuffix');
     // Project-specific help text is rendered, global copy is not.
     assert
       .dom(this.element)
@@ -78,28 +81,34 @@ module('Integration | Component | form/alias', function (hooks) {
   });
 
   test('it prepends a leading dot to the suffix decoration when missing', async function (assert) {
+    this.model.scopeModel = { isProject: true };
     this.suffix = 'projectsuffix';
+    this.orgSuffix = 'orgsuffix';
 
     await render(
       hbs`<Form::Alias
         @model={{this.model}}
         @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
         @submit={{this.save}}
         @cancel={{this.cancel}}
       />`,
     );
 
-    assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix');
+    assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix.orgsuffix');
   });
 
   test('it binds the value input to the unsuffixed display value when a suffix is present', async function (assert) {
-    this.suffix = '.test';
-    this.model.value = 'hi.test';
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'proj';
+    this.orgSuffix = 'org';
+    this.model.value = 'hi.proj.org';
 
     await render(
       hbs`<Form::Alias
         @model={{this.model}}
         @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
         @submit={{this.save}}
         @cancel={{this.cancel}}
       />`,
@@ -109,12 +118,15 @@ module('Integration | Component | form/alias', function (hooks) {
   });
 
   test('typing into the value input updates value with the suffix when present', async function (assert) {
-    this.suffix = '.test';
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'proj';
+    this.orgSuffix = 'org';
 
     await render(
       hbs`<Form::Alias
         @model={{this.model}}
         @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
         @submit={{this.save}}
         @cancel={{this.cancel}}
       />`,
@@ -122,69 +134,21 @@ module('Integration | Component | form/alias', function (hooks) {
 
     await fillIn(VALUE_INPUT_SELECTOR, 'yourhost');
 
-    assert.strictEqual(this.model.value, 'yourhost.test');
-  });
-
-  test('it shows only the base value when the stored suffix does not match the current suffix', async function (assert) {
-    this.suffix = '.newsuffix';
-    this.model.value = 'foo.oldsuffix';
-
-    await render(
-      hbs`<Form::Alias
-        @model={{this.model}}
-        @suffix={{this.suffix}}
-        @submit={{this.save}}
-        @cancel={{this.cancel}}
-      />`,
-    );
-
-    assert.dom(VALUE_INPUT_SELECTOR).hasValue('foo');
-  });
-
-  test('it shows only the base value when a two-segment stored suffix does not match the current two-segment suffix', async function (assert) {
-    this.suffix = '.new.boundary';
-    this.model.value = 'foo.old.boundary';
-
-    await render(
-      hbs`<Form::Alias
-        @model={{this.model}}
-        @suffix={{this.suffix}}
-        @submit={{this.save}}
-        @cancel={{this.cancel}}
-      />`,
-    );
-
-    assert.dom(VALUE_INPUT_SELECTOR).hasValue('foo');
-  });
-
-  test('handleSubmit recomposes model.value with the current suffix when the stored value has stale suffix segments', async function (assert) {
-    this.suffix = '.newsuffix';
-    this.model.value = 'foo.oldsuffix';
-    this.save = () => {};
-
-    await render(
-      hbs`<Form::Alias
-        @model={{this.model}}
-        @suffix={{this.suffix}}
-        @submit={{this.save}}
-        @cancel={{this.cancel}}
-      />`,
-    );
-
-    await click('[type=submit]');
-
-    assert.strictEqual(this.model.value, 'foo.newsuffix');
+    assert.strictEqual(this.model.value, 'yourhost.proj.org');
   });
 
   test('handleSubmit does not alter model.value when it already ends with the current suffix', async function (assert) {
-    this.suffix = '.test';
-    this.model.value = 'foo.test';
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'proj';
+    this.orgSuffix = 'org';
+    this.model.value = 'foo.proj.org';
     this.save = () => {};
 
     await render(
       hbs`<Form::Alias
         @model={{this.model}}
         @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
         @submit={{this.save}}
         @cancel={{this.cancel}}
       />`,
@@ -192,6 +156,63 @@ module('Integration | Component | form/alias', function (hooks) {
 
     await click('[type=submit]');
 
-    assert.strictEqual(this.model.value, 'foo.test');
+    assert.strictEqual(this.model.value, 'foo.proj.org');
+  });
+
+  test('it shows the combined suffix decoration when both @suffix and @orgSuffix are present', async function (assert) {
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'projectsuffix';
+    this.orgSuffix = 'orgsuffix';
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    assert.dom(SUFFIX_DECORATION_SELECTOR).hasText('.projectsuffix.orgsuffix');
+  });
+
+  test('it binds the value input to the base with combined suffix stripped', async function (assert) {
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'projectsuffix';
+    this.orgSuffix = 'orgsuffix';
+    this.model.value = 'myhost.projectsuffix.orgsuffix';
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    assert.dom(VALUE_INPUT_SELECTOR).hasValue('myhost');
+  });
+
+  test('typing into the value input appends the combined suffix', async function (assert) {
+    this.model.scopeModel = { isProject: true };
+    this.suffix = 'projectsuffix';
+    this.orgSuffix = 'orgsuffix';
+
+    await render(
+      hbs`<Form::Alias
+        @model={{this.model}}
+        @suffix={{this.suffix}}
+        @orgSuffix={{this.orgSuffix}}
+        @submit={{this.save}}
+        @cancel={{this.cancel}}
+      />`,
+    );
+
+    await fillIn(VALUE_INPUT_SELECTOR, 'myhost');
+
+    assert.strictEqual(this.model.value, 'myhost.projectsuffix.orgsuffix');
   });
 });

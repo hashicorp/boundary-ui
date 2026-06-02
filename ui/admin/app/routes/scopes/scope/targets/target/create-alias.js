@@ -18,7 +18,7 @@ export default class ScopesScopeTargetsTargetCreateAliasRoute extends Route {
    * Creates a new unsaved alias.
    * @return {AliasModel}
    */
-  model() {
+  async model() {
     const scopeModel = this.modelFor('scopes.scope');
     const { id } = this.modelFor('scopes.scope.targets.target');
     const record = this.store.createRecord('alias', {
@@ -26,6 +26,9 @@ export default class ScopesScopeTargetsTargetCreateAliasRoute extends Route {
       destination_id: id,
     });
     record.scopeModel = scopeModel;
+    if (scopeModel.isProject && scopeModel.scopeID) {
+      await this.store.findRecord('scope', scopeModel.scopeID);
+    }
     return record;
   }
 }
