@@ -58,7 +58,7 @@ export class TargetsPage extends BaseResourcePage {
     if (alias) {
       await this.page
         .getByRole('group', { name: 'Aliases' })
-        .getByLabel('Alias')
+        .getByLabel('Aliases')
         .last()
         .fill(alias);
       await this.page.getByRole('button', { name: 'Add' }).click();
