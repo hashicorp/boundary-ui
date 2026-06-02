@@ -37,6 +37,8 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
     }
   }
 
+  //
+
   /**
    * Creates a new unsaved host catalog belonging to the current scope.
    * Also rollback/destroy any new, unsaved instances from this route before
