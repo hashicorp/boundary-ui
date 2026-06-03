@@ -161,7 +161,7 @@ jobs:
 
           cd e2e-tests
 
-          #Install browsers and dependencies based on the repository
+          # Install browsers and dependencies based on the repository
           if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
             pnpm playwright install --with-deps
 
