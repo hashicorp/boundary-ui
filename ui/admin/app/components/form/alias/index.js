@@ -11,18 +11,17 @@ export default class FormAliasComponent extends Component {
 
   /**
    * Returns the combined suffix segments for the current alias scope.
-   * For project aliases: `projectSuffix.orgSuffix`.
-   * For other scopes: `scopeSuffix`.
+   * Only project aliases have suffix values: `projectSuffix.orgSuffix`.
+   * Returns null for all other scope types.
    * @type {string|null}
    */
   get combinedSuffixSegments() {
-    const projectSuffix = this.args.suffix;
     const scope = this.args.model?.scopeModel;
-
     if (!scope?.isProject) {
-      return projectSuffix || null;
+      return null;
     }
 
+    const projectSuffix = this.args.suffix;
     const orgSuffix = this.args.orgSuffix;
 
     return `${projectSuffix}.${orgSuffix}`;

@@ -187,10 +187,7 @@ export default factory.extend({
       const parentOrg = parentOrgId
         ? server.schema.scopes.find(parentOrgId)
         : null;
-      const hasOrgSuffix =
-        !parentOrg ||
-        parentOrg.type === 'global' ||
-        Boolean(parentOrg.alias_suffix);
+      const hasOrgSuffix = Boolean(parentOrg?.alias_suffix);
 
       if (hasScopeSuffix && hasOrgSuffix) {
         const aliasCount = faker.number.int({ min: 1, max: 2 });

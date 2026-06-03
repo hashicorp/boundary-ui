@@ -22,12 +22,8 @@
           {{#if
             (and
               @model.doAliasesExist
-              (not
-                (or
-                  (can 'seeProjectSuffixPrompt scope' this.scope)
-                  (can 'seeOrgSuffixPrompt scope' this.scope)
-                )
-              )
+              (cannot 'seeProjectSuffixPrompt scope' this.scope)
+              (cannot 'seeOrgSuffixPrompt scope' this.scope)
             )
           }}
             <Hds::Button
