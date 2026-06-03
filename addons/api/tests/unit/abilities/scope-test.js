@@ -87,7 +87,7 @@ module('Unit | Abilities | Scope', function (hooks) {
       'project with action and suffix': {
         type: 'project',
         authorized_actions: ['remove-alias-target-suffix'],
-        alias_suffix: '.example',
+        alias_suffix: 'example',
         expected: true,
       },
       'project with action but no suffix': {
@@ -99,13 +99,13 @@ module('Unit | Abilities | Scope', function (hooks) {
       'project with suffix but no action': {
         type: 'project',
         authorized_actions: [],
-        alias_suffix: '.example',
+        alias_suffix: 'example',
         expected: false,
       },
       'org with action and suffix': {
         type: 'org',
         authorized_actions: ['remove-alias-target-suffix'],
-        alias_suffix: '.example',
+        alias_suffix: 'example',
         expected: true,
       },
       'org with action but no suffix': {
@@ -117,7 +117,7 @@ module('Unit | Abilities | Scope', function (hooks) {
       'global with action and suffix': {
         type: 'global',
         authorized_actions: ['remove-alias-target-suffix'],
-        alias_suffix: '.example',
+        alias_suffix: 'example',
         expected: false,
       },
     },
@@ -138,26 +138,26 @@ module('Unit | Abilities | Scope', function (hooks) {
     'canCreateProjectAlias requires project scope with suffix, parent org with suffix, and aliases create action',
     {
       'project with suffix, org with suffix, and create action': {
-        projectSuffix: '.example',
-        orgSuffix: '.boundary',
+        projectSuffix: 'example',
+        orgSuffix: 'boundary',
         aliasActions: ['create'],
         expected: true,
       },
       'project without suffix, org with suffix, and create action': {
         projectSuffix: '',
-        orgSuffix: '.boundary',
+        orgSuffix: 'boundary',
         aliasActions: ['create'],
         expected: false,
       },
       'project with suffix, org without suffix, and create action': {
-        projectSuffix: '.example',
+        projectSuffix: 'example',
         orgSuffix: '',
         aliasActions: ['create'],
         expected: false,
       },
       'project with suffix, org with suffix, but no create action': {
-        projectSuffix: '.example',
-        orgSuffix: '.boundary',
+        projectSuffix: 'example',
+        orgSuffix: 'boundary',
         aliasActions: [],
         expected: false,
       },
@@ -203,7 +203,7 @@ module('Unit | Abilities | Scope', function (hooks) {
       'project with action and existing suffix': {
         type: 'project',
         authorized_actions: ['set-alias-target-suffix'],
-        alias_suffix: '.example',
+        alias_suffix: 'example',
         expected: false,
       },
       'project without action and no suffix': {
@@ -242,7 +242,7 @@ module('Unit | Abilities | Scope', function (hooks) {
       },
       'project whose org has action and existing suffix': {
         orgActions: ['set-alias-target-suffix'],
-        orgSuffix: '.boundary',
+        orgSuffix: 'boundary',
         expected: false,
       },
       'project whose org has no action and no suffix': {

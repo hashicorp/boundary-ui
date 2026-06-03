@@ -346,13 +346,13 @@ module('Acceptance | targets | create', function (hooks) {
       },
     });
 
-    const orgSuffix = '.boundary';
-    const projectSuffix = '.example';
-    const combinedSuffix = `${projectSuffix}${orgSuffix}`;
+    const orgSuffix = 'boundary';
+    const projectSuffix = 'example';
+    const combinedSuffix = `${projectSuffix}.${orgSuffix}`;
 
     // Give the org and project suffixes so project aliases compose both.
     instances.scopes.org.update({ alias_suffix: orgSuffix });
-    instances.scopes.project.update({ alias_suffix: '.example' });
+    instances.scopes.project.update({ alias_suffix: projectSuffix });
     // Ensure the project scope authorizes creating aliases.
     instances.scopes.project.update({
       authorized_collection_actions: {
@@ -370,7 +370,7 @@ module('Acceptance | targets | create', function (hooks) {
     // the combined suffix so users can confirm which scope they're targeting.
     assert
       .dom(`${selectors.FIELD_ALIASES_ROW_SCOPE(0)} option:checked`)
-      .hasText(new RegExp(`suffix "${combinedSuffix.replace(/\./g, '\\.')}"`));
+      .includesText(`suffix ".${combinedSuffix}"`);
     await fillIn(selectors.FIELD_ALIASES_ROW_VALUE(0), 'myhost');
 
     // Add a second row and switch it to Global.
@@ -393,7 +393,7 @@ module('Acceptance | targets | create', function (hooks) {
     const globalAlias = aliases.find((alias) => alias.scope_id === 'global');
 
     assert.strictEqual(aliases.length, 2);
-    assert.strictEqual(projectAlias.value, `myhost${combinedSuffix}`);
+    assert.strictEqual(projectAlias.value, `myhost.${combinedSuffix}`);
     assert.strictEqual(projectAlias.scope_id, instances.scopes.project.id);
     assert.strictEqual(globalAlias.value, 'globalhost');
     assert.strictEqual(globalAlias.scope_id, 'global');

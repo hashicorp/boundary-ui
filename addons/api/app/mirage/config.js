@@ -188,31 +188,19 @@ export default function (mirageConfig) {
   return createServer(finalConfig);
 }
 
-// Strip a leading dot so callers can re-add exactly one (e.g. '.example' → 'example').
-function normalizeSuffixSegments(suffix) {
-  if (!suffix) return null;
-  return suffix.replace(/^\.+|\.+$/g, '') || null;
-}
+function getFullAliasSuffix(scope, scopes) {
+  if (scope?.type !== 'project') return null;
 
-function getScopeAliasSuffix(scope, scopes) {
-  if (!scope) return null;
-
-  const scopeSuffix = normalizeSuffixSegments(scope.alias_suffix);
-  if (!scopeSuffix) return null;
-
-  if (scope.type !== 'project') {
-    return `.${scopeSuffix}`;
-  }
+  const projectSuffix = scope.alias_suffix;
+  if (!projectSuffix) return null;
 
   const parentScopeId = scope.scope?.id;
   const parentScope = parentScopeId ? scopes.find(parentScopeId) : null;
-  const orgSuffix = normalizeSuffixSegments(parentScope?.alias_suffix);
+  const orgSuffix = parentScope?.alias_suffix;
 
-  if (!orgSuffix) {
-    return `.${scopeSuffix}`;
-  }
+  if (!orgSuffix) return null;
 
-  return `.${scopeSuffix}.${orgSuffix}`;
+  return `.${projectSuffix}.${orgSuffix}`;
 }
 
 function appendSuffixIfMissing(value, suffix) {
@@ -733,7 +721,7 @@ function routes() {
       const createdAliases = withAliases.map((aliasData) => {
         const scopeId = aliasData.scope_id || 'global';
         const scope = scopes.find(scopeId);
-        const aliasSuffix = getScopeAliasSuffix(scope, scopes);
+        const aliasSuffix = getFullAliasSuffix(scope, scopes);
         const aliasAttrs = {
           value: aliasData.value,
           scope_id: scopeId,
@@ -1025,7 +1013,7 @@ function routes() {
       // Mirror the create-alias suffix logic on update.
       const scopeId = alias.scope_id;
       const scope = scopes.find(scopeId);
-      const aliasSuffix = getScopeAliasSuffix(scope, scopes);
+      const aliasSuffix = getFullAliasSuffix(scope, scopes);
       const updatedAttrs = {
         ...attrs,
         value: appendSuffixIfMissing(attrs.value, aliasSuffix),
@@ -1046,7 +1034,7 @@ function routes() {
     // `value` only.
     const submittedValue = attrs.value || attrs.name || faker.word.words();
 
-    const aliasSuffix = getScopeAliasSuffix(scope, scopes);
+    const aliasSuffix = getFullAliasSuffix(scope, scopes);
     const fullValue = appendSuffixIfMissing(submittedValue, aliasSuffix);
 
     const aliasAttrs = {

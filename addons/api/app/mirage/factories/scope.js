@@ -89,7 +89,7 @@ export default factory.extend({
 
   alias_suffix(i) {
     if ((this.type === 'org' || this.type === 'project') && i % 3 !== 0) {
-      return `.${faker.internet.domainWord()}`;
+      return faker.internet.domainWord();
     }
     return null;
   },
@@ -143,6 +143,6 @@ export default factory.extend({
   }),
 
   withAliasSuffix: trait({
-    alias_suffix: () => `.${faker.word.words()}`,
+    alias_suffix: () => faker.word.words(),
   }),
 });

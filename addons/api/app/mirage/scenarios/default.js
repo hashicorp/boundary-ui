@@ -113,7 +113,7 @@ export default function (server) {
   // page renders.
   const projectScopes = server.schema.scopes.where({ type: 'project' }).models;
   if (projectScopes[0]) {
-    projectScopes[0].update({ alias_suffix: '.example' });
+    projectScopes[0].update({ alias_suffix: 'example' });
   }
 
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {

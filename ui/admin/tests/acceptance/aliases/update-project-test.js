@@ -14,9 +14,9 @@ module('Acceptance | aliases | project | update', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
-  const ORG_SUFFIX_VALUE = '.boundary';
-  const SUFFIX_VALUE = '.example';
-  const COMBINED_SUFFIX_VALUE = `${SUFFIX_VALUE}${ORG_SUFFIX_VALUE}`;
+  const ORG_SUFFIX_VALUE = 'boundary';
+  const SUFFIX_VALUE = 'example';
+  const COMBINED_SUFFIX_VALUE = `.${SUFFIX_VALUE}.${ORG_SUFFIX_VALUE}`;
   const SEED_BASE_VALUE = 'foo';
   const NEW_BASE_VALUE = 'bar';
   const VALUE_INPUT = '[name=value]';
@@ -109,20 +109,5 @@ module('Acceptance | aliases | project | update', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(instances.alias.value, originalValue);
-  });
-
-  test('saving without typing recomposes the alias value when the project scope suffix has changed', async function (assert) {
-    const NEW_PROJECT_SUFFIX = '.updated';
-    instances.scopes.project.update({ alias_suffix: NEW_PROJECT_SUFFIX });
-
-    await visit(urls.alias);
-
-    await click(commonSelectors.EDIT_BTN);
-    await click(commonSelectors.SAVE_BTN);
-
-    assert.strictEqual(
-      instances.alias.value,
-      `${SEED_BASE_VALUE}${NEW_PROJECT_SUFFIX}${ORG_SUFFIX_VALUE}`,
-    );
   });
 });

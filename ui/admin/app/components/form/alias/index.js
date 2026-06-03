@@ -10,34 +10,20 @@ export default class FormAliasComponent extends Component {
   // =attributes
 
   /**
-   * Normalizes a suffix value into dot-separated segments without
-   * a leading `.`.
-   * @param {string | null | undefined} suffix
-   * @returns {string | null}
-   */
-  normalizeSuffixSegments(suffix) {
-    if (!suffix) {
-      return null;
-    }
-    const normalized = String(suffix).split('.').filter(Boolean).join('.');
-    return normalized || null;
-  }
-
-  /**
    * Returns the combined suffix segments for the current alias scope.
    * For project aliases: `projectSuffix.orgSuffix`.
    * For other scopes: `scopeSuffix`.
    * @type {string|null}
    */
   get combinedSuffixSegments() {
-    const projectSuffix = this.normalizeSuffixSegments(this.args.suffix);
+    const projectSuffix = this.args.suffix;
     const scope = this.args.model?.scopeModel;
 
     if (!scope?.isProject) {
-      return projectSuffix;
+      return projectSuffix || null;
     }
 
-    const orgSuffix = this.normalizeSuffixSegments(this.args.orgSuffix);
+    const orgSuffix = this.args.orgSuffix;
 
     return `${projectSuffix}.${orgSuffix}`;
   }
@@ -68,25 +54,18 @@ export default class FormAliasComponent extends Component {
     }
     // This is our normal case for project level aliases
     // with current suffix segments present on the stored value
-    if (fullValue.endsWith(suffix)) {
-      return fullValue.slice(0, -suffix.length);
-    }
-    return fullValue;
+    const segments = fullValue.split('.');
+    return segments.slice(0, -2).join('.');
   }
 
   // =actions
 
-  /**
-   * Recomposes model.value with the current suffix before delegating to @submit.
-   * Guards against the case where the user opens edit mode and saves without
-   * typing, leaving stale suffix segments on the stored value.
-   */
   @action
   handleSubmit() {
     const { model } = this.args;
     const suffix = this.normalizedSuffix;
-    if (model && suffix && !model.value?.endsWith(suffix)) {
-      model.value = `${model.value}${suffix}`;
+    if (model && suffix) {
+      model.value = `${this.displayBaseValue}${suffix}`;
     }
     return this.args.submit();
   }

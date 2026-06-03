@@ -58,9 +58,7 @@ export default class ScopeAbility extends ModelAbility {
    */
   get canSeeProjectSuffixPrompt() {
     return (
-      this.model?.isProject &&
-      !this.model?.alias_suffix &&
-      this.canSetAliasSuffix
+      this.model?.isProject && !this.model?.hasSuffix && this.canSetAliasSuffix
     );
   }
 
@@ -75,7 +73,7 @@ export default class ScopeAbility extends ModelAbility {
     return (
       this.model?.isProject &&
       !!org &&
-      !org.alias_suffix &&
+      !org.hasSuffix &&
       org.authorized_actions?.includes('set-alias-target-suffix')
     );
   }

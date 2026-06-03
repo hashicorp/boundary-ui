@@ -9,21 +9,15 @@ import generateId from '../helpers/id';
 
 const destinationIDs = ['', generateId('t_')];
 
-// Strip a leading dot so callers can re-add exactly one (e.g. '.example' → 'example').
-const normalizeSuffixSegments = (suffix) => {
-  if (!suffix) return null;
-  return suffix.replace(/^\.+|\.+$/g, '') || null;
-};
-
 const getCombinedSuffixForScope = (scope, server) => {
-  const scopeSuffix = normalizeSuffixSegments(scope?.alias_suffix);
+  const scopeSuffix = scope?.alias_suffix;
   if (!scopeSuffix) return null;
 
   if (scope.type !== 'project') return `.${scopeSuffix}`;
 
   const orgScopeId = scope.scope?.id;
   const orgScope = orgScopeId ? server.schema.scopes.find(orgScopeId) : null;
-  const orgSuffix = normalizeSuffixSegments(orgScope?.alias_suffix);
+  const orgSuffix = orgScope?.alias_suffix;
 
   if (!orgSuffix) {
     return `.${scopeSuffix}`;

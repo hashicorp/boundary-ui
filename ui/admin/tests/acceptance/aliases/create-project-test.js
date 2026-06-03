@@ -14,9 +14,9 @@ module('Acceptance | aliases | project | create', function (hooks) {
   setupApplicationTest(hooks);
   setupSqlite(hooks);
 
-  const ORG_SUFFIX_VALUE = '.boundary';
-  const SUFFIX_VALUE = '.example';
-  const COMBINED_SUFFIX_VALUE = `${SUFFIX_VALUE}${ORG_SUFFIX_VALUE}`;
+  const ORG_SUFFIX_VALUE = 'boundary';
+  const SUFFIX_VALUE = 'example';
+  const COMBINED_SUFFIX_VALUE = `.${SUFFIX_VALUE}.${ORG_SUFFIX_VALUE}`;
   const BASE_VALUE = 'myhost';
   const VALUE_INPUT = '[name=value]';
   const SUFFIX_DECORATION = '[data-test-alias-suffix-decoration]';
