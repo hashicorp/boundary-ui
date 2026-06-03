@@ -43,11 +43,6 @@ jobs:
             enos_scenario: e2e_ui_docker_ent
             test_command: admin:ent:docker
             boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
-        # in boundary-ui-enterprise, only run tests on chromium because playwright dependencies can't
-        # be installed on self-hosted runners due to permission issues
-        exclude:
-          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'firefox' }}
-          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'webkit' }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
@@ -159,15 +154,59 @@ jobs:
         run: |
           git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
-      - name: Install node dependencies
+      - name: Install Dependencies and Browsers
         run: |
-          pnpm install --frozen-lockfile
+          # Block Playwright from doing anything during the pnpm install
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 pnpm install --frozen-lockfile
+
           cd e2e-tests
+
+          #Install browsers and dependencies based on the repository
           if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
             pnpm playwright install --with-deps
+
           elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
-            # playwright dependencies can't be installed on a self-hosted runner
-            # due to permission issues
+            # Use raw apt-get to install system libraries without npx
+            sudo apt-get install -y \
+              libnss3 \
+              libnspr4 \
+              libatk1.0-0 \
+              libatk-bridge2.0-0 \
+              libcups2 \
+              libdrm2 \
+              libdbus-1-3 \
+              libxcb1 \
+              libxkbcommon0 \
+              libx11-6 \
+              libxcomposite1 \
+              libxdamage1 \
+              libxext6 \
+              libxfixes3 \
+              libxrandr2 \
+              libgbm1 \
+              libpango-1.0-0 \
+              libcairo2 \
+              libasound2 \
+              libgtk-4-1 \
+              libgraphene-1.0-0 \
+              libevent-2.1-7 \
+              libopus0 \
+              libgstreamer-plugins-base1.0-0 \
+              libgstreamer-plugins-good1.0-0 \
+              libgstreamer-gl1.0-0 \
+              libgstreamer-plugins-bad1.0-0 \
+              libflite1 \
+              libwebpdemux2 \
+              libavif13 \
+              libwebpmux3 \
+              libmanette-0.2-0 \
+              libenchant-2-2 \
+              libhyphen0 \
+              libsecret-1-0 \
+              libwoff1 \
+              libx264-163
+
+            # Install the browser executables
             pnpm playwright install
           fi
 
