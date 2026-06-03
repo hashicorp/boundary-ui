@@ -101,18 +101,12 @@ export const analyzeGrantString = (grantsSchema, grantString = '') => {
   const hasSpecificIds = Boolean(idsValue) && !idsValue.includes('*');
   const hasExplicitType = Boolean(typeValue) && typeValue !== '*';
 
-  const hasTemplateIds =
-    hasSpecificIds &&
-    parseIds(idsValue).some((id) => id.startsWith('{{') && id.endsWith('}}'));
-
-  const hasLiteralIds = hasSpecificIds && !hasTemplateIds;
-
-  const compatibleIdsResourceType = hasLiteralIds
+  const compatibleIdsResourceType = hasSpecificIds
     ? getCompatibleResourceTypeForIds(schema, idsValue)
     : null;
 
   const hasInvalidType = hasExplicitType && !schema.resourcesByType[typeValue];
-  const hasInvalidIds = hasLiteralIds && !compatibleIdsResourceType;
+  const hasInvalidIds = hasSpecificIds && !compatibleIdsResourceType;
 
   const hasInvalidPinnedIdTypeCombination =
     hasSpecificIds &&

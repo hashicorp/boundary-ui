@@ -28,7 +28,7 @@ export default class GrantStringFormatsIndex extends Component {
 
   stringFormats = {
     [this.stringFormatTypes.resourceType]: {
-      text: `type=<${this.intl.t('resources.role.edit-grants.string-formats.insert-resource-types')}>;actions=<${this.intl.t('resources.role.edit-grants.string-formats.insert-actions')}>`,
+      text: `type=<${this.intl.t('resources.role.edit-grants.string-formats.insert-resource-type')}>;actions=<${this.intl.t('resources.role.edit-grants.string-formats.insert-actions')}>`,
       link: 'role.grant-string-format.resource-type',
     },
     [this.stringFormatTypes.resource]: {
@@ -36,7 +36,7 @@ export default class GrantStringFormatsIndex extends Component {
       link: 'role.grant-string-format.resource',
     },
     [this.stringFormatTypes.pinnedId]: {
-      text: `ids=<${this.intl.t('resources.role.edit-grants.string-formats.insert-id')}>;type=<${this.intl.t('resources.role.edit-grants.string-formats.insert-resource-types')}>;actions=<${this.intl.t('resources.role.edit-grants.string-formats.insert-actions')}>`,
+      text: `ids=<${this.intl.t('resources.role.edit-grants.string-formats.insert-ids')}>;type=<${this.intl.t('resources.role.edit-grants.string-formats.insert-resource-type')}>;actions=<${this.intl.t('resources.role.edit-grants.string-formats.insert-actions')}>`,
       link: 'role.grant-string-format.pinned-id',
     },
     [this.stringFormatTypes.outputFields]: {

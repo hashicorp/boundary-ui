@@ -39,8 +39,7 @@ module(
       [
         {
           selectedOption: 'resourceType',
-          expectedValue:
-            'type=<insert resource types>;actions=<insert actions>',
+          expectedValue: 'type=<insert resource type>;actions=<insert actions>',
         },
         {
           optionToClick: RESOURCE_OPTION,
@@ -51,7 +50,7 @@ module(
           optionToClick: PINNED_ID_OPTION,
           selectedOption: 'pinnedId',
           expectedValue:
-            'ids=<insert id>;type=<insert resource types>;actions=<insert actions>',
+            'ids=<insert ids>;type=<insert resource type>;actions=<insert actions>',
         },
         {
           optionToClick: OUTPUT_FIELDS_OPTION,
