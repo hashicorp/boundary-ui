@@ -430,6 +430,7 @@
     >
       <:row as |R|>
         <R.Field as |F|>
+          <F.Label>{{t 'form.key.label'}}</F.Label>
           <F.TextInput
             data-test-key-input
             @value={{R.rowData.key}}
@@ -437,6 +438,7 @@
           />
         </R.Field>
         <R.Field as |F|>
+          <F.Label>{{t 'form.value.label'}}</F.Label>
           <F.TextInput
             data-test-value-input
             @value={{R.rowData.value}}

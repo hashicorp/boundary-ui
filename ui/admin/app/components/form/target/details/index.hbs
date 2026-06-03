@@ -257,6 +257,7 @@
       <:row as |R|>
         <R.Field as |F|>
           <F.TextInput
+            aria-label={{t 'resources.alias.form.alias.label'}}
             data-test-value-input
             @value={{R.rowData.value}}
             {{on 'input' (fn R.updateRow 'value')}}

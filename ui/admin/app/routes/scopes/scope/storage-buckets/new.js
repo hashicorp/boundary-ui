@@ -53,8 +53,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       bucket_name,
       bucket_prefix,
       region,
-      worker_filter,
-      role_tags;
+      worker_filter;
 
     if (this.currentModel?.isNew) {
       ({
@@ -65,7 +64,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
         bucket_prefix,
         region,
         worker_filter,
-        role_tags,
       } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
@@ -80,7 +78,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       bucket_prefix,
       region,
       worker_filter,
-      role_tags: role_tags || [{ key: '', value: '' }],
     });
     return record;
   }

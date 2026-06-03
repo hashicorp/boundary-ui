@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { TYPE_HOST_CATALOG_PLUGIN_AWS } from 'api/models/host-catalog';
 
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
   // =services
@@ -60,11 +59,6 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
       description,
       disable_credential_rotation,
     });
-
-    if (compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS) {
-      // Ensure one editable role_tags row exists for dynamic credentials.
-      record.role_tags = [{ key: '', value: '' }];
-    }
 
     record.scopeModel = scopeModel;
     return record;

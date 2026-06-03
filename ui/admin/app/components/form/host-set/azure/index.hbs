@@ -75,6 +75,7 @@
     <:row as |R|>
       <R.Field as |F|>
         <F.TextInput
+          aria-label={{t 'resources.host-set.form.preferred_endpoints.label'}}
           data-test-value-input
           @value={{R.rowData.value}}
           {{on 'input' (fn R.updateRow 'value')}}
