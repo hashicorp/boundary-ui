@@ -52,6 +52,9 @@ test(
         .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Host Catalogs' })
         .click();
+      await expect(
+        page.getByRole('heading', { name: 'Host Catalogs' }),
+      ).toBeVisible();
       await page.getByRole('link', { name: hostCatalogName }).click();
       const hostSetName2 = await hostCatalogsPage.createHostSet();
 
