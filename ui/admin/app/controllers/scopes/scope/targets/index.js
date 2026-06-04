@@ -186,6 +186,11 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(target) {
+    if (target.with_aliases) {
+      target.with_aliases = target.with_aliases.filter((item) =>
+        item.value?.trim(),
+      );
+    }
     await target.save();
     if (this.abilities.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);

@@ -124,11 +124,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE,
     );
+
     await select(
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
     );
-    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_ADD_BTN);
 
     await fillIn(selectors.FIELD_IDP_CERTS, selectors.FIELD_IDP_CERTS_VALUE);
     await click(selectors.FIELD_IDP_CERTS_ADD_BTN);
@@ -214,7 +214,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_CERTIFICATES,
       selectors.FIELD_CERTIFICATES_VALUE,
     );
-    await click(selectors.FIELD_CERTIFICATES_ADD_BTN);
+
     await fillIn(
       selectors.FIELD_CLIENT_CERTIFICATE,
       selectors.FIELD_CLIENT_CERTIFICATE_VALUE,
@@ -247,7 +247,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO,
       selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO_VALUE,
     );
-    await click(selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_ADD_BTN);
+
     await fillIn(selectors.FIELD_GROUP_DN, selectors.FIELD_GROUP_DN_VALUE);
     await fillIn(selectors.FIELD_GROUP_ATTR, selectors.FIELD_GROUP_ATTR_VALUE);
     await fillIn(

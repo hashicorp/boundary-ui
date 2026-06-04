@@ -80,6 +80,9 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
       id: instances.authMethod.id,
     });
 
+    // Re-open dropdown to check the selected state
+    await click(selectors.CHANGE_STATE_DROPDOWN);
+
     assert
       .dom(selectors.CHANGE_STATE_DROPDOWN_CHECKED)
       .hasValue(instances.authMethod.attributes.state);
@@ -97,6 +100,9 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
+
+    // Re-open dropdown to check the selected state
+    await click(selectors.CHANGE_STATE_DROPDOWN);
 
     assert
       .dom(selectors.CHANGE_STATE_DROPDOWN_CHECKED)

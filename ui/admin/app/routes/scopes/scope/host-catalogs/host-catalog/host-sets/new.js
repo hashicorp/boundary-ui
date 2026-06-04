@@ -5,6 +5,11 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import {
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+} from 'api/models/host-catalog';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends Route {
   // =services
@@ -41,9 +46,21 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
     const { id: host_catalog_id, compositeType } = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog',
     );
-    return this.store.createRecord('host-set', {
+    const record = this.store.createRecord('host-set', {
       compositeType,
       host_catalog_id,
     });
+
+    if (
+      compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS ||
+      compositeType === TYPE_HOST_CATALOG_PLUGIN_GCP
+    ) {
+      record.preferred_endpoints = [{ value: '' }];
+      record.filters = [{ value: '' }];
+    } else if (compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE) {
+      record.preferred_endpoints = [{ value: '' }];
+    }
+
+    return record;
   }
 }

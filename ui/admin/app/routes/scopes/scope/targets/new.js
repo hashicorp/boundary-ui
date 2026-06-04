@@ -60,6 +60,7 @@ export default class ScopesScopeTargetsNewRoute extends Route {
       description,
     });
     record.scopeModel = scopeModel;
+    record.with_aliases = [{ value: '' }];
     return record;
   }
 

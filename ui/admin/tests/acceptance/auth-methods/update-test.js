@@ -132,7 +132,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_SIGNING_ALGORITHMS,
       selectors.FIELD_SIGNING_ALGORITHMS_VALUE,
     );
-    await click(selectors.FIELD_SIGNING_ALGORITHMS_ADD_BTN);
 
     // Remove all allowed audiences
     const allowedAudiencesList = findAll(
@@ -147,7 +146,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_ALLOWED_AUDIENCES,
       selectors.FIELD_ALLOWED_AUDIENCES_VALUE,
     );
-    await click(selectors.FIELD_ALLOWED_AUDIENCES_ADD_BTN);
 
     // Remove all claims scopes
     const claimsScopeList = await Promise.all(
@@ -162,7 +160,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_CLAIMS_SCOPES,
       selectors.FIELD_CLAIMS_SCOPES_VALUE,
     );
-    await click(selectors.FIELD_CLAIMS_SCOPES_ADD_BTN);
 
     // Remove all claim maps
     const claimMaps = await Promise.all(
@@ -180,8 +177,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
     );
-
-    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_ADD_BTN);
 
     // Remove all certificates
     const certificatesList = findAll(selectors.FIELD_IDP_CERTS_DELETE_BTN);
@@ -272,8 +267,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_CERTIFICATES,
       selectors.FIELD_CERTIFICATES_VALUE,
     );
-    await click(selectors.FIELD_CERTIFICATES_ADD_BTN);
-
     await click(selectors.FIELD_START_TLS);
     await click(selectors.FIELD_INSECURE_TLS);
     await fillIn(selectors.FIELD_BIND_DN, selectors.FIELD_BIND_DN_VALUE);

@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormAuthMethodOidcComponent extends Component {
   // =attributes
+
   /**
    * @type {object}
    */
@@ -53,7 +54,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   }
 
   //actions
-
   /**
    * @param {string} value
    */
