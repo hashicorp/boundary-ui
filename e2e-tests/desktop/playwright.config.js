@@ -6,7 +6,7 @@ import { defineConfig } from '@playwright/test';
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 export default defineConfig({
-  globalSetup: '../global-setup',
+  globalSetup: './global-setup',
   outputDir: './artifacts',
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
   use: {

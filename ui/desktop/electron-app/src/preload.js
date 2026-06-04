@@ -5,75 +5,108 @@
 
 const { ipcRenderer, contextBridge } = require('electron');
 
-// Messages must originate from this origin
-const emberAppOrigin = window.location.origin;
+/**
+ * Helper function to invoke IPC calls to properly handle errors
+ */
+async function invoke(method, payload) {
+  const { error, result } = await ipcRenderer.invoke(method, payload);
+  if (error) {
+    throw new Error(error.message ?? 'Unknown error');
+  }
+  return result;
+}
 
 /**
- * Exposing terminal creation to an isolated context (Ember)
- * More information about contextBridge https://www.electronjs.org/docs/latest/api/context-bridge
- * usage example: window.terminal.send(data);
+ * Exposes `desktop` via Electron ContextBridge to the renderer process. It is grouped into nested objects based on the type of functionality.
+ * use example: window.desktop.cluster.getClusterUrl().
  */
-contextBridge.exposeInMainWorld('terminal', {
-  // We could've sent data through our established postMessage pattern
-  // but we don't need a response back so we can make it include it here
-  // to make it simpler. This keeps sending and receiving handlers symmetrical.
-  send: (data, id) => {
-    ipcRenderer.send(`terminalKeystroke-${id}`, data);
+contextBridge.exposeInMainWorld('desktop', {
+  cluster: {
+    getClusterUrl: () => invoke('getClusterUrl'),
+    setClusterUrl: (url) => invoke('setClusterUrl', url),
+    resetClusterUrl: () => invoke('resetClusterUrl'),
   },
-  receive: (callback, id) => {
-    const incomingDataChannel = `terminalIncomingData-${id}`;
-    const listenerCallback = (_event, value) => callback(value);
-    ipcRenderer.on(incomingDataChannel, listenerCallback);
 
-    // Return a function for the caller to handle cleaning up the listener
-    return () => {
-      return ipcRenderer.removeListener(incomingDataChannel, listenerCallback);
-    };
+  system: {
+    openExternal: (href) => invoke('openExternal', href),
+    cliExists: () => invoke('cliExists'),
+    getCliVersion: () => invoke('getCliVersion'),
+    checkCommand: (command) => invoke('checkCommand', command),
+    checkOS: () => invoke('checkOS'),
+    getDesktopVersion: () => invoke('getDesktopVersion'),
   },
-  create: (vars) => {
-    ipcRenderer.send('createTerminal', vars);
+
+  session: {
+    connectSession: (params) => invoke('connect', params),
+    stopSession: (params) => invoke('stop', params),
+    stopAllSessions: () => invoke('stopAll'),
+    hasRunningSessions: () => invoke('hasRunningSessions'),
   },
-  remove: (id) => {
-    ipcRenderer.send(`removeTerminal-${id}`);
+
+  windowAction: {
+    hasMacOSChrome: () => invoke('hasMacOSChrome'),
+    showWindowActions: () => invoke('showWindowActions'),
+    minimizeWindow: () => invoke('minimizeWindow'),
+    toggleFullscreenWindow: () => invoke('toggleFullscreenWindow'),
+    closeWindow: () => invoke('closeWindow'),
+    focusWindow: () => invoke('focusWindow'),
   },
-  resize: (size, id) => {
-    ipcRenderer.send(`resize-${id}`, size);
+
+  daemon: {
+    addTokenToDaemons: (data) => invoke('addTokenToDaemons', data),
+    searchCacheDaemon: (request) => invoke('searchCacheDaemon', request),
+    isCacheDaemonRunning: () => invoke('isCacheDaemonRunning'),
+    cacheDaemonStatus: () => invoke('cacheDaemonStatus'),
+  },
+
+  clientAgent: {
+    getClientAgentSessions: () => invoke('getClientAgentSessions'),
+    isClientAgentRunning: () => invoke('isClientAgentRunning'),
+    clientAgentStatus: () => invoke('clientAgentStatus'),
+    pauseClientAgent: () => invoke('pauseClientAgent'),
+    resumeClientAgent: () => invoke('resumeClientAgent'),
+  },
+
+  logging: {
+    getLogLevel: () => invoke('getLogLevel'),
+    setLogLevel: (logLevel) => invoke('setLogLevel', logLevel),
+    getLogPath: () => invoke('getLogPath'),
+  },
+
+  rdp: {
+    getRdpClients: () => invoke('getRdpClients'),
+    getPreferredRdpClient: () => invoke('getPreferredRdpClient'),
+    setPreferredRdpClient: (client) => invoke('setPreferredRdpClient', client),
+    launchRdpClient: (sessionId) => invoke('launchRdpClient', sessionId),
+  },
+
+  app: {
+    onAppQuit: (callback) => {
+      // Don't pass in callback directly so users can't access passed in event for security
+      const listenerCallback = () => callback();
+      ipcRenderer.on('onAppQuit', listenerCallback);
+
+      return () => {
+        return ipcRenderer.removeListener('onAppQuit', listenerCallback);
+      };
+    },
   },
 });
 
-process.once('loaded', () => {
-  /**
-   * Ember-land has no access to the renderer or node modules, and thus
-   * cannot call into the main process or make invocations directly.
-   * In order to communicate with the main process, the Ember app uses
-   * the `postMessage` interface to send messages to its browser window.
-   * These messages include message ports with which to receive responses from
-   * the main process.
-   *
-   * This preload script simply wires up the forwarding of
-   * messages received on the window and responses received from main.
-   */
-  window.addEventListener('message', async function (event) {
-    if (event.origin !== emberAppOrigin) return;
-    const { method, payload } = event?.data ?? {};
-    if (method) {
-      const response = await ipcRenderer.invoke(method, payload);
-      event.ports[0].postMessage(response);
-    }
-  });
-});
-
 /**
- * Listener on electron app when user triggers before-quit event
+ * Exposes `webContentView` via Electron ContextBridge to the renderer process for managing the terminal view
  */
-contextBridge.exposeInMainWorld('electron', {
-  onAppQuit: (callback) => {
-    // Don't pass in callback directly so users can't access passed in event for security
-    const listenerCallback = () => callback();
-    ipcRenderer.on('onAppQuit', listenerCallback);
-
-    return () => {
-      return ipcRenderer.removeListener('onAppQuit', listenerCallback);
-    };
+contextBridge.exposeInMainWorld('webContentView', {
+  createTerminalView: (params) => {
+    ipcRenderer.send('createTerminalView', params);
+  },
+  destroyTerminalView: () => {
+    ipcRenderer.send('destroyTerminalView');
+  },
+  hideTerminalView: () => {
+    return invoke('hideTerminalView');
+  },
+  positionTerminalView: (position) => {
+    ipcRenderer.send('positionTerminalView', position);
   },
 });

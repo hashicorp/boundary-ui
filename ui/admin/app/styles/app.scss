@@ -265,16 +265,9 @@
   margin-bottom: sizing.rems(l);
   width: 100%;
 
-  .secret-editor-json {
-    .CodeMirror {
-      border-radius: var(--token-border-radius-small);
-      height: var(--secret-editor-height);
-      display: block;
-    }
-
-    .CodeMirror-gutters {
-      background: var(--secret-editor-gutter);
-    }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-code-editor__editor {
+    height: var(--secret-editor-height);
   }
 
   .secret-editor-skeleton-wrapper {
@@ -755,6 +748,35 @@
   .no-channels-message {
     padding: 0 1rem;
   }
+
+  .playback-error-item {
+    list-style: disc;
+  }
+
+  .playback-error-message {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-alert__content {
+    min-width: 0;
+  }
+}
+
+// Session playback error flyout
+.session-playback-error-flyout {
+  .flyout-error-message {
+    margin-bottom: 0.5rem;
+  }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-accordion-item__toggle-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 // Channel
@@ -888,26 +910,6 @@
   }
 }
 
-.role-manage-custom-scopes-form {
-  .filters-applied {
-    margin-top: 1rem;
-  }
-
-  .table-selected-items-text {
-    display: flex;
-    justify-content: end;
-    height: 1rem;
-  }
-
-  .hds-table {
-    margin-top: 0.5rem;
-  }
-
-  .hds-pagination {
-    margin-bottom: 2rem;
-  }
-}
-
 // workers
 .workers {
   > div {
@@ -1022,4 +1024,21 @@
       text-overflow: ellipsis;
     }
   }
+}
+
+.grant-editor {
+  .hds-code-editor__editor {
+    height: 200px;
+  }
+}
+
+.grant-codeblock {
+  .hds-code-block__code {
+    height: 200px;
+  }
+}
+
+.grant-actions-scroll-container {
+  max-height: 50vh;
+  overflow-y: auto;
 }

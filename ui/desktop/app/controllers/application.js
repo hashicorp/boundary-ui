@@ -16,12 +16,12 @@ export default class ApplicationController extends Controller {
 
   @service clusterUrl;
   @service flashMessages;
-  @service ipc;
   @service session;
   @service('browser/window') window;
   @service router;
   @service scope;
   @service intl;
+  @service terminal;
 
   // =attributes
 
@@ -34,8 +34,9 @@ export default class ApplicationController extends Controller {
     super(...arguments);
     // Listen for when user attempts to quit app
     // Setup removeOnAppQuitListener to destroy the listener afterwards
-    this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
+    this.removeOnAppQuitListener = this.window.desktop?.app.onAppQuit(() => {
       this.isAppQuitting = true;
+      this.hideTerminalViewForModal();
     });
   }
 
@@ -44,7 +45,7 @@ export default class ApplicationController extends Controller {
    * @type {object}
    */
   get currentScope() {
-    if (this.scope.org.isOrg) {
+    if (this.scope.org?.isOrg) {
       return { name: this.scope.org.displayName, icon: 'org' };
     } else {
       return { name: this.intl.t('titles.global'), icon: 'globe' };
@@ -71,7 +72,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   async confirmCloseSessions() {
-    await this.ipc.invoke('stopAll');
+    await window.desktop.session.stopAllSessions();
     if (this.isAppQuitting) {
       this.isAppQuitting = false;
       this.close();
@@ -88,37 +89,40 @@ export default class ApplicationController extends Controller {
    */
   @action
   async showModalOrLogout() {
-    const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
+    const hasRunningSessions =
+      await window.desktop.session.hasRunningSessions();
     if (hasRunningSessions) {
       this.isLoggingOut = true;
+      this.hideTerminalViewForModal();
     } else {
       this.session.invalidate();
     }
   }
 
   /**
-   * Disconnects from clusterUrl and invalidates session, thereby resetting
-   * the client and reloading to the onboarding clusterUrl screen.
+   * Invalidates the session and navigates to the cluster-url route.
+   * The cluster URL is preserved so that upon reload the user is directed
+   * back to the authentication screen for the same cluster.
    */
   @action
   disconnect() {
-    this.clusterUrl.resetClusterUrl();
     this.session.invalidate();
+    this.router.replaceWith('cluster-url');
   }
 
   @action
   minimize() {
-    this.ipc.invoke('minimizeWindow');
+    window.desktop.windowAction.minimizeWindow();
   }
 
   @action
   toggleFullScreen() {
-    this.ipc.invoke('toggleFullscreenWindow');
+    window.desktop.windowAction.toggleFullscreenWindow();
   }
 
   @action
   close() {
-    this.ipc.invoke('closeWindow');
+    window.desktop.windowAction.closeWindow();
   }
 
   /**
@@ -151,6 +155,9 @@ export default class ApplicationController extends Controller {
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
+    if (this.terminal.isTerminalTabActive) {
+      this.terminal.displayTerminalView();
+    }
   }
 
   willDestroy() {
@@ -181,5 +188,34 @@ export default class ApplicationController extends Controller {
       return JSON.stringify(toParams) !== JSON.stringify(fromParams);
     }
     return defaultValidator(transition);
+  }
+
+  /**
+   * Hides terminal if open and on terminal tab of Session details page for logout/app quit modal
+   */
+  hideTerminalViewForModal() {
+    if (this.terminal.isTerminalTabActive) {
+      this.terminal.hideTerminalView();
+    }
+  }
+
+  /**
+   * Handles side nav toggle to hide/show terminal based on side nav state
+   * @param {boolean} isMinimized - Whether the side nav is minimized i.e. collapsed
+   */
+  @action
+  handleSideNavToggle(isMinimized) {
+    this.terminal.setSideNavMinimized(isMinimized);
+
+    // update terminal view if we're on the terminal tab
+    if (this.terminal.isTerminalTabActive) {
+      if (isMinimized) {
+        // Side nav is collapsed, display terminal view
+        this.terminal.displayTerminalView();
+      } else {
+        // Side nav is expanded, hide terminal view
+        this.terminal.hideTerminalView();
+      }
+    }
   }
 }

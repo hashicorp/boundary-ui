@@ -81,6 +81,7 @@ test.describe('Scope tests', () => {
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeHidden();
 
+    await headerNavLocator.click();
     const orgBHeaderNavLink = authedPage.getByRole('option', {
       name: orgB.name,
     });

@@ -46,6 +46,14 @@
     <div class='channels-by-connection'>
       <Rose::Layout::BodyContent as |bc|>
         <bc.Body>
+          <SessionRecording::ErrorFlyoutAlert
+            @syncError={{@model.sessionRecording.recording_state.syncing_error_details}}
+            @verifyError={{@model.sessionRecording.recording_state.verification_error_details}}
+            @syncErrorLines={{this.syncErrorLines}}
+            @verifyErrorLines={{this.verifyErrorLines}}
+            @showFlyout={{this.showErrorFlyout}}
+            @onShowFlyout={{this.toggleErrorFlyout}}
+          />
           {{#if this.isSessionInprogressWithNoConnections}}
             <Hds::ApplicationState as |A|>
               {{! Session recording in progress with no connections }}

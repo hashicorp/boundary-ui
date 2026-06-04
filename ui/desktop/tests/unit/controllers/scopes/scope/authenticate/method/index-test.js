@@ -8,7 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'desktop/tests/helpers/mirage';
 import { visit, currentURL, settled } from '@ember/test-helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import WindowMockIPC from '../../../../../../helpers/window-mock-ipc';
+import { setupDesktopContextBridgeApiMock } from '../../../../../../helpers/desktop-context-bridge-api-mock';
 
 module(
   'Unit | Controller | scopes/scope/authenticate/method/index',
@@ -16,6 +16,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
     setupIntl(hooks, 'en-us');
+    setupDesktopContextBridgeApiMock(hooks);
 
     let controller;
     let store;
@@ -32,12 +33,6 @@ module(
 
     const urls = {
       targets: null,
-    };
-
-    const setDefaultClusterUrl = (test) => {
-      const windowOrigin = window.location.origin;
-      const clusterUrl = test.owner.lookup('service:clusterUrl');
-      clusterUrl.rendererClusterUrl = windowOrigin;
     };
 
     hooks.beforeEach(async function () {
@@ -57,8 +52,7 @@ module(
 
       urls.targets = '/scopes/global/projects/targets';
 
-      this.owner.register('service:browser/window', WindowMockIPC);
-      setDefaultClusterUrl(this);
+      window.desktop.cluster.getClusterUrl.resolves(window.location.origin);
     });
 
     test('it exists', function (assert) {

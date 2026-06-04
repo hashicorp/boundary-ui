@@ -1,0 +1,107 @@
+{{!
+  Copyright IBM Corp. 2021, 2026
+  SPDX-License-Identifier: BUSL-1.1
+}}
+{{#if (or @syncError @verifyError)}}
+  <Hds::Alert
+    data-test-session-playback-alert
+    @type='inline'
+    @color='critical'
+    as |A|
+  >
+    <A.Title>{{t
+        'resources.session-recording.channels-by-connection.messages.sync-error.title'
+      }}</A.Title>
+    <A.Description>
+      {{#if (and @syncError @verifyError)}}
+        <ul>
+          <li class='playback-error-item margin-bottom-s'>
+            <Hds::Text::Body @tag='p' class='playback-error-message'>
+              {{@syncError}}
+            </Hds::Text::Body>
+          </li>
+          <li class='playback-error-item'>
+            <Hds::Text::Body @tag='p' class='playback-error-message'>
+              {{@verifyError}}
+            </Hds::Text::Body>
+          </li>
+        </ul>
+      {{else}}
+        <Hds::Text::Body @tag='p' class='playback-error-message'>
+          {{or @syncError @verifyError}}
+        </Hds::Text::Body>
+      {{/if}}
+    </A.Description>
+    <A.Button
+      @text={{t 'actions.show-more'}}
+      @color='secondary'
+      {{on 'click' @onShowFlyout}}
+    />
+  </Hds::Alert>
+{{/if}}
+
+{{#if @showFlyout}}
+  <Hds::Flyout
+    class='session-playback-error-flyout'
+    @size='large'
+    @onClose={{@onShowFlyout}}
+    data-test-error-flyout
+    as |F|
+  >
+    <F.Header>{{t
+        'resources.session-recording.channels-by-connection.messages.flyout.title'
+      }}</F.Header>
+    <F.Body>
+      <Hds::Accordion @size='large' as |A|>
+        {{#if @syncErrorLines.length}}
+          <A.Item @isOpen={{true}}>
+            <:toggle>
+              <Hds::Text::Body @tag='p' @size='300' @weight='medium'>
+                {{t
+                  'resources.session-recording.channels-by-connection.messages.sync-error.flyout-section-title'
+                }}
+              </Hds::Text::Body>
+              <Hds::Copy::Button
+                @size='small'
+                @text={{t 'actions.copy'}}
+                @isIconOnly={{true}}
+                @textToCopy={{@syncError}}
+              />
+            </:toggle>
+            <:content>
+              {{#each @syncErrorLines as |error|}}
+                <Hds::Text::Body @tag='p' class='flyout-error-message'>
+                  {{error}}
+                </Hds::Text::Body>
+              {{/each}}
+            </:content>
+          </A.Item>
+        {{/if}}
+        {{#if @verifyErrorLines.length}}
+          <A.Item @isOpen={{true}}>
+            <:toggle>
+              <Hds::Text::Body @tag='p' @size='300' @weight='medium'>
+                {{t
+                  'resources.session-recording.channels-by-connection.messages.verification-error.flyout-section-title'
+                }}
+              </Hds::Text::Body>
+              <Hds::Copy::Button
+                @size='small'
+                @text={{t 'actions.copy'}}
+                @isIconOnly={{true}}
+                @textToCopy={{@verifyError}}
+              />
+            </:toggle>
+            <:content>
+              {{#each @verifyErrorLines as |error|}}
+                <Hds::Text::Body @tag='p' class='flyout-error-message'>
+                  {{error}}
+                </Hds::Text::Body>
+              {{/each}}
+            </:content>
+          </A.Item>
+        {{/if}}
+      </Hds::Accordion>
+    </F.Body>
+  </Hds::Flyout>
+{{/if}}

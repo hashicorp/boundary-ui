@@ -23,6 +23,7 @@ retry: Retry
 play: Play
 pause: Pause
 resume: Resume
+export: Export
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard
@@ -69,3 +70,5 @@ hide-errors: Hide Errors
 edit-worker-filter: Edit Worker Filter
 add-worker-filter: Add Worker Filter
 open: Open
+download: Download
+show-more: Show more

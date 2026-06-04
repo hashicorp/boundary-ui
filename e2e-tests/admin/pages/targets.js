@@ -58,7 +58,7 @@ export class TargetsPage extends BaseResourcePage {
     if (alias) {
       await this.page
         .getByRole('group', { name: 'Aliases' })
-        .getByLabel('value')
+        .getByLabel('Aliases')
         .last()
         .fill(alias);
       await this.page.getByRole('button', { name: 'Add' }).click();
@@ -145,7 +145,10 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Ingress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
+    await this.page
+      .locator('.hds-code-editor')
+      .getByRole('textbox')
+      .fill(filter);
 
     await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();
@@ -174,7 +177,10 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Egress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
+    await this.page
+      .locator('.hds-code-editor')
+      .getByRole('textbox')
+      .fill(filter);
 
     await this.page.getByRole('button', { name: 'Save', exact: true }).click();
     await this.dismissSuccessAlert();

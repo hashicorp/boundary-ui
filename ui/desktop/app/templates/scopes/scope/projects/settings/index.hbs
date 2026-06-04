@@ -8,4 +8,6 @@
 <SettingsCard::Application @model={{@model}} @toggle={{this.toggleTheme}} />
 <SettingsCard::ClientAgent @model={{@model}} />
 <SettingsCard::Logs @model={{@model}} />
-<SettingsCard::PreferredClients />
+{{#unless @model.isLinux}}
+  <SettingsCard::PreferredClients />
+{{/unless}}

@@ -7,10 +7,11 @@ import { createServer, Response } from 'miragejs';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
-import initializeMockIPC from './scenarios/ipc';
+import initializeMockDesktopContextBridgeAPI from './scenarios/ipc/desktop-context-bridge-api';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
+import { grantsSchemaData } from './data/grants-schema';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
 import environmentConfig from 'ember-get-config';
 
@@ -66,7 +67,7 @@ import workerSerializer from './serializers/worker';
 
 // mirage scenarios (alphabetical)
 import defaultScenario from './scenarios/default';
-import ipcScenario from './scenarios/ipc';
+import desktopContextBridgeApiScenario from './scenarios/ipc/desktop-context-bridge-api';
 
 // mirage factories (alphabetical)
 import accountFactory from './factories/account';
@@ -103,7 +104,7 @@ export default function (mirageConfig) {
 
     scenarios: {
       default: defaultScenario,
-      ipcScenario: ipcScenario,
+      desktopContextBridgeApiScenario: desktopContextBridgeApiScenario,
     },
 
     factories: {
@@ -190,7 +191,7 @@ export default function (mirageConfig) {
 
 // Only routes are defined here
 function routes() {
-  initializeMockIPC(this, environmentConfig);
+  initializeMockDesktopContextBridgeAPI(this, environmentConfig);
 
   this.passthrough();
   // make this `http://localhost:8080`, for example, if your API is on a different server
@@ -208,6 +209,10 @@ function routes() {
       },
     };
     return metadata;
+  });
+
+  this.get('/grants-schema.json', () => {
+    return grantsSchemaData;
   });
 
   // make this `/api`, for example, if your API is namespaced

@@ -29,8 +29,15 @@ export const FIELD_SECRET_KEY_EDIT_BTN =
   '[data-test-secret-access-key] [type=button]';
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
+export const FIELD_ROLE_TAG_KEY = '[name=role_tags] [data-test-key-input]';
+export const FIELD_ROLE_TAG_VALUE = '[name=role_tags] [data-test-value-input]';
+export const FIELD_ROLE_TAG_KEY_VALUE = 'env';
+export const FIELD_ROLE_TAG_VALUE_TEXT = 'dev';
+export const FIELD_ROLE_TAG_ADD_BTN = '[name=role_tags] [data-test-add-button]';
+export const FIELD_ROLE_TAG_DELETE_BTN =
+  '[name=role_tags] [data-test-delete-button]';
 export const READONLY_WORKER_FILTER = '[data-test-worker-filter]';
-export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFUL_VALUE = 'Saved successfully.';
 

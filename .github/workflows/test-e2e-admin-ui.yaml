@@ -3,13 +3,6 @@ name: Test E2E Admin UI
 on:
   pull_request:
     types: [labeled, opened, synchronize, reopened]
-    paths:
-      - 'ui/admin/**'
-      - 'e2e-tests/*'
-      - 'e2e-tests/api-client/**'
-      - 'e2e-tests/helpers/**'
-      - 'e2e-tests/admin/**'
-      - '.github/workflows/test-e2e-admin-ui.yaml'
   workflow_dispatch:
     inputs:
       boundary-enterprise-branch:
@@ -26,9 +19,15 @@ on:
 jobs:
   test:
     name: test
+    # don't need to run e2e tests on ce -> ent merges since tests were already
+    # run in the ce branch, and there are currently no code diffferences between
+    # the two repos
+    if: github.actor != 'hc-github-team-secure-boundary'
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
       matrix:
+        boundary_edition: [community, enterprise]
+        browser: [chromium, firefox, webkit]
         include:
           - boundary_edition: community
             github_repo: hashicorp/boundary
@@ -44,6 +43,11 @@ jobs:
             enos_scenario: e2e_ui_docker_ent
             test_command: admin:ent:docker
             boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
+        # in boundary-ui-enterprise, only run tests on chromium because playwright dependencies can't
+        # be installed on self-hosted runners due to permission issues
+        exclude:
+          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'firefox' }}
+          - browser: ${{ github.repository == 'hashicorp/boundary-ui-enterprise' && 'webkit' }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
@@ -52,32 +56,36 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 #v4.2.0
-        with:
-          run_install: false
-
       - name: Set up Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 20
-          cache: "pnpm"
-          cache-dependency-path: |
+          node-version: 24
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 #v6.0.8
+        with:
+          cache: true
+          cache_dependency_path: |
             pnpm-lock.yaml
             ui/desktop/electron-app/pnpm-lock.yaml
+          run_install: false
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
 
       - name: Set up Enos
-        uses: hashicorp/action-setup-enos@80a17fa25605989a7a53199137dae1244e32353f
+        uses: hashicorp/action-setup-enos@6ec106c8f809fe645162d73bea565c65f3269907
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Vault CLI
         run: |
-          wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
-          unzip /tmp/vault.zip -d /usr/local/bin
+          wget https://releases.hashicorp.com/vault/1.17.6/vault_1.17.6_linux_amd64.zip -O /tmp/vault.zip
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            unzip -o -q /tmp/vault.zip -d /usr/local/bin
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            unzip -o -q /tmp/vault.zip -d "$HOME/bin"
+          fi
 
       - name: GPG setup
         run: |
@@ -126,6 +134,8 @@ jobs:
           echo "trusted-key $KEY_ID" >> ~/.gnupg/gpg.conf
 
           # Initialize the password store
+          sudo apt-get update
+          sudo apt-get install -y pass
           pass init $KEY_ID &>/dev/null
 
       - name: Checkout ${{ matrix.folder_name }} repo
@@ -138,14 +148,12 @@ jobs:
 
       - name: GH fix for localhost resolution
         run: |
-          cat /etc/hosts && echo "-----------"
-          sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
-          cat /etc/hosts
-          ssh -V
-
-          echo "127.0.0.1 localhost boundary" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            cat /etc/hosts && echo "-----------"
+            sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
+            cat /etc/hosts
+            ssh -V
+          fi
 
       - name: Set git config
         run: |
@@ -155,15 +163,40 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           cd e2e-tests
-          pnpm playwright install --with-deps
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            pnpm playwright install --with-deps
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            # playwright dependencies can't be installed on a self-hosted runner
+            # due to permission issues
+            pnpm playwright install
+          fi
+
+      - name: Determine Go version
+        id: get-go-version
+        run: |
+          echo "Building with Go $(cat ./support/src/${{matrix.folder_name}}/.go-version)"
+          echo "go-version=$(cat ./support/src/${{matrix.folder_name}}/.go-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version: ${{ steps.get-go-version.outputs.go-version }}
+          cache: false
 
       - name: Set up test infra
         id: infra
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
-          echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
-          export ENOS_VAR_ui_build_override="oss" && \
+
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION
+            export ENOS_VAR_ui_build_override="oss"
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            echo ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }} > ./support/src/${{matrix.folder_name}}/internal/ui/VERSION_ent
+            export ENOS_VAR_ui_build_override="enterprise"
+          fi
+
           export ENOS_VAR_boundary_edition=${{ matrix.boundary_edition_short }} && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
@@ -172,20 +205,25 @@ jobs:
 
       - name: Move boundary binary
         run: |
-          mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            mv ./support/src/${{matrix.folder_name}}/bin/boundary /usr/local/bin/
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            mv ./support/src/${{matrix.folder_name}}/bin/boundary $HOME/bin
+          fi
+
           boundary version
 
       - name: Run Tests
         run: |
           source <(bash ./support/src/${{matrix.folder_name}}/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
-          pnpm run ${{ matrix.test_command }} --reporter=html
+          pnpm run ${{ matrix.test_command }} --project=${{ matrix.browser}} --reporter=html
 
       - name: Upload Playwright report
         if: ${{ failure() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: playwright-report-${{ matrix.boundary_edition }}
+          name: playwright-report-${{ matrix.boundary_edition }}-${{ matrix.browser }}
           path: e2e-tests/playwright-report
 
       - name: Clean up test infra
@@ -198,11 +236,11 @@ jobs:
           enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
 
       - name: Send Slack message on failure
-        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
         if: ${{ failure() && github.repository == 'hashicorp/boundary-ui' }}
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: ":x: admin ui e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref }}"
+            text: ":x: admin ui e2e tests (${{ matrix.boundary_edition }}:${{ matrix.browser }}) failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref || github.ref_name }}"

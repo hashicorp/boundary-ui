@@ -52,6 +52,16 @@ module('Integration | Component | error/message', function (hooks) {
       .hasText(
         'We could not find the requested resource. You can ask your administrator or try again later.',
       );
+
+    await render(hbs`<Error::Message @status='429' />`);
+
+    assert.dom(ERROR_MSG_TITLE).hasText('Rate limit exceeded');
+    assert.dom(ERROR_MSG_CODE).hasText('ERROR 429');
+    assert
+      .dom(ERROR_MSG_BODY)
+      .hasText(
+        "You've exceeded the rate limit. Please wait a moment and try again.",
+      );
   });
 
   test('it renders default error for unknown error status', async function (assert) {

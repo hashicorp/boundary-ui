@@ -6,24 +6,19 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import WindowMockIPC from '../../helpers/window-mock-ipc';
+import { setupDesktopContextBridgeApiMock } from '../../helpers/desktop-context-bridge-api-mock';
+import sinon from 'sinon';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
+  setupDesktopContextBridgeApiMock(hooks);
 
   let controller;
   let clusterUrl;
-  let mockIPC;
   let session;
-
-  const setupMockIpc = (test) => {
-    test.owner.register('service:browser/window', WindowMockIPC);
-    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
-  };
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
-    setupMockIpc(this);
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
@@ -46,18 +41,19 @@ module('Unit | Controller | application', function (hooks) {
     assert.strictEqual(session.data.theme, 'light');
   });
 
-  test('disconnect action de-authenticates a user and resets cluster url', async function (assert) {
+  test('disconnect action de-authenticates a user and keeps last cluster url', async function (assert) {
     const url = 'http://localhost:9200';
     await clusterUrl.setClusterUrl(url);
 
     assert.true(session.isAuthenticated);
-    assert.strictEqual(clusterUrl.rendererClusterUrl, url);
-    assert.strictEqual(mockIPC.clusterUrl, url);
+    assert.strictEqual(await window.desktop.cluster.getClusterUrl(), url);
+    assert.strictEqual(clusterUrl.adapter.host, url);
 
+    sinon.stub(controller.router, 'replaceWith');
     await controller.disconnect();
 
     assert.false(session.isAuthenticated);
-    assert.notOk(clusterUrl.rendererClusterUrl);
-    assert.notOk(mockIPC.clusterUrl);
+    assert.strictEqual(await window.desktop.cluster.getClusterUrl(), url);
+    assert.strictEqual(clusterUrl.adapter.host, url);
   });
 });

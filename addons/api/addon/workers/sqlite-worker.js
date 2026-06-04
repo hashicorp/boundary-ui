@@ -46,6 +46,15 @@ import {
   // See https://sqlite.org/rescode.html#corrupt
   const SQLITE_CORRUPT = 11;
 
+  /**
+   * Throws if the database has not been initialized or has been closed.
+   */
+  const requireDb = () => {
+    if (!db) {
+      throw new Error('Database is not available');
+    }
+  };
+
   const methods = {
     initializeSQLite: async () => {
       sqlite3 = await sqlite3InitModule({
@@ -57,6 +66,9 @@ import {
       });
 
       function setupDb() {
+        // Allow SQLite to wait up to 5 s when it encounters a busy lock
+        db.exec('PRAGMA busy_timeout = 5000;');
+
         const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
         // Check if we're on a newer schema version and clear the database if so
         if (SCHEMA_VERSION > row.user_version) {
@@ -97,30 +109,40 @@ import {
             if (poolUtil.getCapacity() > 20) {
               await poolUtil.removeVfs();
             }
-          } else {
+          } else if (
+            err?.resultCode === SQLITE_CORRUPT ||
+            err instanceof WebAssembly.RuntimeError
+          ) {
+            // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry.
             console.error('SQLite initialization error:', err);
-
-            // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry
-            if (err?.resultCode === SQLITE_CORRUPT) {
+            try {
+              if (db) {
+                db.close();
+                db = null;
+              }
               poolUtil.unlink(`/${dbName}`);
-            } else {
-              throw err;
+            } catch (cleanupErr) {
+              // If cleanup fails, wipe the entire VFS and reinstall to start fresh
+              console.error('SQLite cleanup error:', cleanupErr);
+              await poolUtil.removeVfs();
             }
+          } else {
+            throw err;
           }
         }
       }
     },
     analyzeDatabase: () => {
+      requireDb();
       db.exec('PRAGMA optimize');
     },
     clearDatabase: () => {
+      requireDb();
       db.exec(CLEAR_DB);
       db.exec(CREATE_TABLES(SCHEMA_VERSION));
     },
     deleteDatabase: () => {
-      if (!db) {
-        throw new Error('No database was initialized');
-      }
+      requireDb();
 
       const name = db.dbFilename();
       db.close();
@@ -128,9 +150,11 @@ import {
       poolUtil.unlink(`/${name}`);
     },
     downloadDatabase: () => {
+      requireDb();
       return sqlite3.capi.sqlite3_js_db_export(db);
     },
     fetchResource: ({ sql, parameters = [] }) => {
+      requireDb();
       try {
         return db.exec({
           sql,
@@ -147,6 +171,7 @@ import {
       if (items.length === 0) {
         return [];
       }
+      requireDb();
 
       const numberOfParameters = items.reduce((acc, item) => {
         return acc + item.length;
@@ -155,11 +180,15 @@ import {
       // We want to use as many VALUES as part of the insert statement as it's quicker
       // than doing multiple inserts. If we have too many rows to insert, we'll manually
       // chunk them up to avoid hitting the maximum number of host parameters
-      // and execute these separate insert statements in a transaction
+      // and execute these separate insert statements in a transaction.
       if (numberOfParameters > MAX_HOST_PARAMETERS) {
         const chunkSize = Math.floor(MAX_HOST_PARAMETERS / items[0].length);
 
-        return db.transaction(() => {
+        // Note: We use explicit BEGIN/COMMIT instead of db.transaction() because
+        // db.transaction() uses SAVEPOINT internally, which fails with SQLITE_BUSY
+        // when any statement is active on the connection.
+        db.exec('BEGIN');
+        try {
           const results = [];
           for (let i = 0; i < items.length; i += chunkSize) {
             const chunk = items.slice(i, i + chunkSize);
@@ -170,20 +199,29 @@ import {
             });
             results.push(result);
           }
+          db.exec('COMMIT');
           return results;
-        });
+        } catch (err) {
+          db.exec('ROLLBACK');
+          throw err;
+        }
       }
 
-      db.exec({
+      return db.exec({
         sql: INSERT_STATEMENTS(resource, items, modelMapping),
         bind: items.flat(),
         rowMode: 'object',
       });
     },
     deleteResource: ({ resource, ids }) => {
-      // Check if we have too many parameters for the deletion and chunk if so
+      requireDb();
+      // Check if we have too many parameters for the deletion and chunk if so.
       if (ids?.length > MAX_HOST_PARAMETERS) {
-        return db.transaction(() => {
+        // Note: We use explicit BEGIN/COMMIT instead of db.transaction() because
+        // db.transaction() uses SAVEPOINT internally, which fails with SQLITE_BUSY
+        // when any statement is active on the connection.
+        db.exec('BEGIN');
+        try {
           const results = [];
           for (let i = 0; i < ids.length; i += MAX_HOST_PARAMETERS) {
             const chunk = ids.slice(i, i + MAX_HOST_PARAMETERS);
@@ -194,8 +232,12 @@ import {
             });
             results.push(result);
           }
+          db.exec('COMMIT');
           return results;
-        });
+        } catch (err) {
+          db.exec('ROLLBACK');
+          throw err;
+        }
       }
 
       return db.exec({

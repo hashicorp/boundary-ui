@@ -133,8 +133,22 @@ export const electronTest = test.extend({
   electronPage: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
     await page.evaluate(() => localStorage.clear());
+    // Reset the cluster URL stored by electron
+    await page.evaluate(() => window.desktop.cluster.resetClusterUrl());
     await page.context().tracing.start({ screenshots: true, snapshots: true });
 
     await use(page);
+  },
+  // Get terminal WebContentsView when it's created
+  terminalView: async ({ electronApp }, use) => {
+    const getTerminalView = async () => {
+      const windows = await electronApp.windows();
+      // terminal view is loaded at - serve://boundary/terminal
+      const terminal = windows.find((window) =>
+        window.url().includes('terminal'),
+      );
+      return terminal;
+    };
+    await use(getTerminalView);
   },
 });

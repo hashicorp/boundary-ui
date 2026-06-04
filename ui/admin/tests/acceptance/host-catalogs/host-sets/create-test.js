@@ -97,9 +97,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const name = 'aws host set';
     await fillIn(commonSelectors.FIELD_NAME, name);
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
     await fillIn(selectors.FIELD_FILTERS, 'filter_test');
-    await click(selectors.FIELD_FILTERS_ADD_BTN);
 
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);
@@ -128,7 +126,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const name = 'azure host set';
     await fillIn(commonSelectors.FIELD_NAME, name);
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
     await fillIn(selectors.FIELD_AZURE_FILTER, 'filter');
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);
@@ -157,9 +154,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const name = 'gcp host set';
     await fillIn(commonSelectors.FIELD_NAME, name);
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
     await fillIn(selectors.FIELD_FILTERS, 'filter_test');
-    await click(selectors.FIELD_FILTERS_ADD_BTN);
 
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);

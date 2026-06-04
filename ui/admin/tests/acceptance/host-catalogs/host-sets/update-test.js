@@ -172,7 +172,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     );
 
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, mockEndpoint);
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
 
     const filterList = await Promise.all(
       findAll(selectors.FIELD_FILTERS_REMOVE_BTN),
@@ -184,7 +183,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE_BTN).length, 0);
 
     await fillIn(selectors.FIELD_FILTERS, mockFilter);
-    await click(selectors.FIELD_FILTERS_ADD_BTN);
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);
 
@@ -216,7 +214,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     );
 
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, mockEndpoint);
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
     await fillIn(selectors.FIELD_AZURE_FILTER, 'filter');
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);
@@ -247,7 +244,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     );
 
     await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'sample endpoint');
-    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
 
     // Remove all the filters
     const filterList = await Promise.all(
@@ -260,7 +256,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE_BTN).length, 0);
 
     await fillIn(selectors.FIELD_FILTERS, 'sample filters');
-    await click(selectors.FIELD_FILTERS_ADD_BTN);
     await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
     await click(commonSelectors.SAVE_BTN);
 

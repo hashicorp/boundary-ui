@@ -4,7 +4,6 @@
  */
 
 import Component from '@glimmer/component';
-
 import { options } from 'api/models/credential-library';
 
 export default class FormCredentialLibraryVaultSshCertComponent extends Component {

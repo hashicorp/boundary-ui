@@ -121,6 +121,15 @@
   }
 }
 
+@mixin dark-mode-badge-count-override {
+  // Override the neutral badge count to fix contrast in dark mode.
+  /* stylelint-disable selector-class-pattern */
+  .hds-badge-count--color-neutral.hds-badge-count--type-inverted {
+    color: var(--token-color-palette-neutral-0);
+  }
+  /* stylelint-enable selector-class-pattern */
+}
+
 @mixin dark-mode-ember-dropdown-override {
   .ember-basic-dropdown-content {
     background-color: var(--token-color-palette-neutral-0);
@@ -132,23 +141,6 @@
   }
 }
 
-@mixin dark-mode-button-override {
-  /* stylelint-disable selector-class-pattern */
-  .hds-app-frame:has(
-    .hds-app-side-nav--is-mobile.hds-app-side-nav--is-not-minimized
-  ) {
-    .hds-button,
-    .hds-dropdown-toggle-button,
-    .hds-dropdown-toggle-icon,
-    .hds-app-header__home-link {
-      color: var(--token-color-palette-neutral-200);
-      background-color: var(--token-color-palette-neutral-50);
-      border-color: var(--token-color-palette-neutral-100);
-    }
-  }
-  /* stylelint-enable selector-class-pattern */
-}
-
 @mixin dark-mode-app-header-override {
   .app-header-dark-mode-overrides {
     color: var(--token-color-palette-neutral-700);
@@ -156,8 +148,12 @@
     border-bottom-color: var(--token-color-palette-neutral-100);
 
     /* stylelint-disable selector-class-pattern */
-    .home-link-color-override,
-    .hds-app-header__actions {
+    .home-link-color-override {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+
+    &.hds-app-header--is-mobile.hds-app-header--menu-is-open
+      .hds-app-header__actions {
       background-color: var(--token-color-palette-neutral-0);
     }
 
@@ -204,22 +200,86 @@
   }
 }
 
+// Overrides for CodeMirror 6 autocomplete and lint tooltips/panels.
+@mixin dark-mode-codemirror-override {
+  /* stylelint-disable selector-class-pattern */
+  .cm-editor {
+    // Autocomplete dropdown and lint hover tooltips
+    .cm-tooltip {
+      background-color: var(--token-color-palette-neutral-50);
+      border: 1px solid var(--token-color-palette-neutral-100);
+      color: var(--token-color-palette-neutral-400);
+    }
+
+    // Arrow pointer for tooltips shown above the cursor
+    .cm-tooltip-above::before {
+      border-top-color: var(--token-color-palette-neutral-50);
+    }
+
+    // Arrow pointer for tooltips shown below the cursor
+    .cm-tooltip-below::before {
+      border-bottom-color: var(--token-color-palette-neutral-50);
+    }
+
+    // Autocomplete list > selected item highlight
+    .cm-tooltip-autocomplete > ul > li[aria-selected] {
+      background-color: var(--token-color-palette-blue-300);
+      color: var(--token-color-palette-neutral-700);
+    }
+
+    // Content/gutter border
+    .cm-content {
+      border-left: 1px solid var(--token-color-palette-neutral-100);
+    }
+
+    // Lint diagnostics panel (shown at the bottom of the editor)
+    .cm-panel.cm-panel-lint {
+      border-top: 3px solid var(--token-color-palette-neutral-100);
+
+      ul {
+        background-color: var(--token-color-palette-neutral-100);
+
+        // Lint panel > selected diagnostic item highlight
+        &:focus li.cm-diagnostic[aria-selected] {
+          background-color: var(--token-color-palette-neutral-50);
+          color: var(--token-color-palette-neutral-400);
+        }
+      }
+    }
+  }
+  /* stylelint-enable selector-class-pattern */
+}
+
 @media (prefers-color-scheme: dark) {
+  // Apply dark style overrides to scrollbar when system is in dark mode and app theme is not set to light
+  html:has(.ember-application:not(.rose-theme-light)) {
+    scrollbar-color: var(--token-color-palette-neutral-400)
+      var(--token-color-palette-neutral-600);
+  }
+
   .ember-application:not(.rose-theme-light) {
     @include dark-mode;
     @include dark-mode-modal-override;
+    @include dark-mode-badge-count-override;
     @include dark-mode-ember-dropdown-override;
     @include dark-mode-app-header-override;
     @include dark-mode-app-side-nav-override;
-    @include dark-mode-button-override;
+    @include dark-mode-codemirror-override;
   }
+}
+
+// Apply dark style overrides to scrollbar when app theme is set to dark regardless of system theme
+html:has(.ember-application.rose-theme-dark) {
+  scrollbar-color: var(--token-color-palette-neutral-400)
+    var(--token-color-palette-neutral-600);
 }
 
 .ember-application.rose-theme-dark {
   @include dark-mode;
   @include dark-mode-modal-override;
+  @include dark-mode-badge-count-override;
   @include dark-mode-ember-dropdown-override;
   @include dark-mode-app-header-override;
   @include dark-mode-app-side-nav-override;
-  @include dark-mode-button-override;
+  @include dark-mode-codemirror-override;
 }

@@ -21,7 +21,8 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
-  @tracked workerTags = new TrackedArray([]);
+  @tracked workerTags = new TrackedArray([new Tag()]);
+
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
@@ -38,7 +39,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =properties
   /**
-   * Returns directory creation text for `<Rose::CodeEditor>`.
+   * Returns directory creation text for `<Hds::CodeBlock>`.
    * @type {string}
    */
   get createConfigText() {
@@ -55,7 +56,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
   }
 
   /**
-   * Returns config creation text for `<Rose::CodeEditor>`. The user will see
+   * Returns config creation text for `<Hds::CodeBlock>`. The user will see
    * different outputs based on if they are using `hcp` or `oss` binaries.
    * @type {string}
    */
@@ -66,7 +67,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
 
     const tagsText = `tags {
     ${
-      this.workerTags.length
+      this.workerTags.filter((t) => t.key?.trim() || t.value?.trim()).length
         ? this.getTagConfigString()
         : 'key = ["<tag1>", "<tag2>"]'
     }
@@ -108,7 +109,7 @@ ${listenerText}
 
   /**
    * Returns boundary installation command and start worker server command
-   * for `<Rose::CodeEditor>`.
+   * for `<Hds::CodeBlock>`.
    * @type {string}
    */
   get installBoundaryText() {
@@ -129,33 +130,6 @@ unzip *.zip ;\\
       : ossContent;
   }
 
-  /**
-   * Returns `shell` configuration object for `<Rose::CodeEditor>`.
-   * @type {Object}
-   */
-  get shellCodeEditor() {
-    return {
-      mode: 'shell',
-      readOnly: true,
-      lineNumbers: false,
-      cursorBlinkRate: -1,
-      styleActiveLine: false,
-    };
-  }
-
-  /**
-   * Returns `hcl` configuration object for `<Rose::CodeEditor>`.
-   * @type {Object}
-   */
-  get hclCodeEditor() {
-    return {
-      mode: 'hcl',
-      readOnly: true,
-      cursorBlinkRate: -1,
-      styleActiveLine: false,
-    };
-  }
-
   //=methods
 
   convertCommaSeparatedValuesToArray(input) {
@@ -168,6 +142,7 @@ unzip *.zip ;\\
 
   getTagConfigString() {
     return this.workerTags
+      .filter((t) => t.key?.trim() || t.value?.trim())
       .map(
         (tag) =>
           `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
@@ -178,13 +153,24 @@ unzip *.zip ;\\
   }
 
   @action
-  addWorkerTag(e) {
-    this.workerTags.push(new Tag(e.key, e.value));
+  addWorkerTag() {
+    this.workerTags.push(new Tag());
   }
 
   @action
-  removeWorkerTagByIndex(index) {
-    this.workerTags.splice(index, 1);
+  removeWorkerTagByIndex(rowData) {
+    const index = this.workerTags.indexOf(rowData);
+    if (index !== -1) {
+      this.workerTags.splice(index, 1);
+    }
+    if (this.workerTags.length === 0) {
+      this.workerTags.push(new Tag());
+    }
+  }
+
+  @action
+  updateWorkerTagValue(rowData, property, event) {
+    rowData[property] = event.target.value;
   }
 
   @action

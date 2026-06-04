@@ -470,6 +470,62 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
     assert.strictEqual(results[0].name, 'specific-target');
   });
 
+  test('it reuses the global token for a more specific query when the global token exists', async function (assert) {
+    const targets = this.server.createList('target', 3, { scope });
+    let capturedListToken;
+    let responseToken = 'specific-list-token';
+
+    this.server.get('targets', (_schema, request) => {
+      capturedListToken = request.queryParams.list_token;
+      return {
+        items: targets.map((t) =>
+          this.server.serializerOrRegistry.serialize(t),
+        ),
+        list_token: responseToken,
+        response_type: 'complete',
+      };
+    });
+
+    // Run the specific query first
+    await store.query('target', { scope_id: 'some-specific-scope' });
+
+    // Switch the response token and run the global query
+    responseToken = 'global-list-token';
+    await store.query('target', { scope_id: 'global', recursive: true });
+
+    capturedListToken = undefined;
+
+    // Re-run the specific query which has a cached token but should prefer the global token since it exists
+    await store.query('target', { scope_id: 'some-specific-scope' });
+
+    assert.strictEqual(capturedListToken, 'global-list-token');
+  });
+
+  test('it uses the specific token when no global token exists', async function (assert) {
+    const targets = this.server.createList('target', 3, { scope });
+    let capturedListToken;
+
+    this.server.get('targets', (_schema, request) => {
+      capturedListToken = request.queryParams.list_token;
+      return {
+        items: targets.map((t) =>
+          this.server.serializerOrRegistry.serialize(t),
+        ),
+        list_token: 'specific-list-token',
+        response_type: 'complete',
+      };
+    });
+
+    await store.query('target', { scope_id: 'some-specific-scope' });
+
+    capturedListToken = undefined;
+
+    // Re-run the specific query which should just use the normal specific token since no global token exists
+    await store.query('target', { scope_id: 'some-specific-scope' });
+
+    assert.strictEqual(capturedListToken, 'specific-list-token');
+  });
+
   test('it retries query when invalid list token error occurs', async function (assert) {
     let targets = this.server.createList('target', 5, { scope });
 

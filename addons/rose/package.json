@@ -30,20 +30,18 @@
   },
   "dependencies": {
     "@babel/core": "^7.26.10",
-    "@hashicorp/design-system-components": "^5.2.0",
+    "@hashicorp/design-system-components": "^6.0.0",
     "@hashicorp/design-system-tokens": "^2.3.0",
     "@hashicorp/flight-icons": "^3.10.0",
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.10",
-    "codemirror": "5.65.7",
     "ember-auto-import": "^2.10.0",
-    "ember-cli-babel": "^8.2.0",
+    "ember-cli-babel": "^8.3.1",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-cli-sass": "^11.0.1",
     "ember-focus-trap": "^1.0.1",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "jsonlint": "^1.6.3",
     "sass": "^1.69.5",
-    "uuid": "^11.0.3"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
@@ -84,7 +82,7 @@
     "@eslint/js": "^9.18.0",
     "globals": "^15.14.0",
     "loader.js": "^4.7.0",
-    "postcss": "^8.4.31",
+    "postcss": "^8.5.10",
     "prettier": "^3.3.3",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
@@ -92,13 +90,13 @@
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
-    "webpack": "^5.104.1"
+    "webpack": "^5.105.4"
   },
   "peerDependencies": {
     "ember-source": ">= 4.0.0"
   },
   "engines": {
-    "node": "20.* || 22.*"
+    "node": "22.* || 24.*"
   },
   "ember": {
     "edition": "octane"

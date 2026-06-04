@@ -3,109 +3,163 @@ name: Test E2E Desktop Client
 on:
   pull_request:
     types: [labeled, opened, synchronize, reopened]
-    paths:
-      - 'ui/desktop/**'
-      - 'e2e-tests/*'
-      - 'e2e-tests/api-client/**'
-      - 'e2e-tests/helpers/**'
-      - 'e2e-tests/desktop/**'
-      - '.github/workflows/test-e2e-desktop.yaml'
   workflow_dispatch:
+    inputs:
+      boundary-enterprise-branch:
+        description: 'Branch of boundary-enterprise to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
+      boundary-ui-enterprise-branch:
+        description: 'Branch of boundary-ui-enterprise to test against (default to main)'
+        required: true
+        default: 'main'
+        type: string
 
 jobs:
   test:
     name: test
+    # don't need to run e2e tests on ce -> ent merges since tests were already
+    # run in the ce branch, and there are currently no code diffferences between
+    # the two repos
+    if: github.actor != 'hc-github-team-secure-boundary'
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     env:
       ENOS_VAR_boundary_edition: "ent"
       ENOS_VAR_e2e_debug_no_run: true
-      SETUP_CLI: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 #v4.2.0
-        with:
-          run_install: false
-
       - name: Set up Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 20
-          cache: "pnpm"
-          cache-dependency-path: |
+          node-version: 24
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 #v6.0.8
+        with:
+          cache: true
+          cache_dependency_path: |
             pnpm-lock.yaml
             ui/desktop/electron-app/pnpm-lock.yaml
+          run_install: false
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
 
       - name: Set up Enos
-        uses: hashicorp/action-setup-enos@80a17fa25605989a7a53199137dae1244e32353f
+        uses: hashicorp/action-setup-enos@6ec106c8f809fe645162d73bea565c65f3269907
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Vault CLI
         run: |
-          wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
-          unzip /tmp/vault.zip -d /usr/local/bin
+          wget https://releases.hashicorp.com/vault/1.17.6/vault_1.17.6_linux_amd64.zip -O /tmp/vault.zip
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            unzip -o -q /tmp/vault.zip -d /usr/local/bin
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            unzip -o -q /tmp/vault.zip -d "$HOME/bin"
+          fi
 
+        # TODO: We should consider modifying to also build CE binary. For now
+        # building ENT binary using most recent UI commit is sufficient.
       - name: Checkout boundary-enterprise
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: hashicorp/boundary-enterprise
-          #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
+          ref: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
           path: support/src/boundary-enterprise
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
+      - name: Checkout boundary-ui-enterprise
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: hashicorp/boundary-ui-enterprise
+          ref: ${{ github.event.inputs.boundary-ui-enterprise-branch || 'main' }}
+          path: support/src/boundary-ui-enterprise
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
+
+      - name: Use boundary-ui-enterprise commit SHA for building binary
+        run: |
+          cd support/src/boundary-ui-enterprise
+          git rev-parse HEAD > ../boundary-enterprise/internal/ui/VERSION_ent
+
       - name: GH fix for localhost resolution
         run: |
-          cat /etc/hosts && echo "-----------"
-          sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
-          cat /etc/hosts
-          ssh -V
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            cat /etc/hosts && echo "-----------"
+            sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
+            cat /etc/hosts
+            ssh -V
+          fi
 
-          echo "127.0.0.1 localhost boundary" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
-          echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
-
-      # TODO: Build image ourselves in case we don't want to use latest?
-      - name: Get Boundary docker image
+      - name: Set git config
         run: |
-          docker pull hashicorp/boundary-enterprise:latest
-          docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
+          git config --global url."https://oauth2:${{ secrets.ELEVATED_GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+
+      - name: Determine Go version
+        id: get-go-version
+        run: |
+          echo "Building with Go $(cat ./support/src/boundary-enterprise/.go-version)"
+          echo "go-version=$(cat ./support/src/boundary-enterprise/.go-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version: ${{ steps.get-go-version.outputs.go-version }}
+          cache: false
 
       - name: Set up test infra
         id: infra
         run: |
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
+          export ENOS_VAR_ui_build_override="ent" && \
+          export ENOS_VAR_boundary_edition="ent" && \
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           export ENOS_VAR_boundary_license="${{ secrets.BOUNDARY_ENT_LICENSE }}" && \
-          export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
-          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
+          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:local
+
+      - name: Move boundary binary
+        run: |
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            mv ./support/src/boundary-enterprise/bin/boundary /usr/local/bin/
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            mv ./support/src/boundary-enterprise/bin/boundary $HOME/bin
+          fi
+          boundary version
 
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
           cd e2e-tests
-          pnpm playwright install --with-deps
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            pnpm playwright install --with-deps
+          elif [[ "${{ github.repository }}" == "hashicorp/boundary-ui-enterprise" ]]; then
+            # playwright dependencies can't be installed on a self-hosted runner
+            # due to permission issues
+            pnpm playwright install
+
+            sudo apt update -qq
+            sudo apt install xvfb -y
+          fi
 
         # Runner is headless so we need to enable a display to run the client
       - name: Run Tests
         run: |
           source <(bash ./support/src/boundary-enterprise/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
+
           export DISPLAY=:99
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           pnpm run desktop
 
       - name: Upload Playwright report
         if: ${{ failure() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: playwright-report
           path: e2e-tests/playwright-report
@@ -116,14 +170,14 @@ jobs:
         run: |
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
-          enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
+          enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:local
 
       - name: Send Slack message on failure
-        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
         if: ${{ failure() && github.repository == 'hashicorp/boundary-ui' }}
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: ":x: desktop client e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref }}"
+            text: ":x: desktop client e2e tests failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n*Branch:* ${{ github.repository }}:${{ github.head_ref || github.ref_name }}"

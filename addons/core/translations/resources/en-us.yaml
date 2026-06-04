@@ -420,6 +420,13 @@ session-recording:
     title: Channels by connection
     messages:
       no-channels: There are no channels for this connection
+      flyout:
+        title: Session playback errors
+      sync-error:
+        title: This recording is not available
+        flyout-section-title: Sync error
+      verification-error:
+        flyout-section-title: Verification error
       started-no-connections:
         title: Session Recording In Progress
         description: The Session has started but no connections have been made.
@@ -611,8 +618,228 @@ role:
     title: Grant
     title_plural: Grants
     description: Grants are permissions which allow roles to take actions and access resources.
+    codeblock-description: Select "{editGrantsTitle}" to add or modify grants. Select "{addGrantTemplatesTitle}" to add in templates.
     actions:
       create: New Grant
+  grant-templates:
+    title_plural: Grant Templates
+    actions:
+      add-grant-templates: Add Grant Templates
+    messages:
+      add-grant-templates:
+        title: Add Grant Templates
+        description: Select grant templates to add to this role.
+    titles:
+      grant-strings: Grant Strings
+    templates:
+      global-admin:
+        name: Global Admin
+        description: Full administrative access to all resources in Boundary
+      org-admin:
+        name: Org Admin
+        description: Administrative access to all resources within an organization
+      project-admin:
+        name: Project Admin
+        description: Administrative access to all resources within a project
+      session-manager:
+        name: Session Manager
+        description: Can view and cancel sessions
+      target-manager:
+        name: Target Manager
+        description: Can create and manage targets
+      host-resource-manager:
+        name: Host Resource Manager
+        description: Can manage hosts and host catalogs
+      credential-manager:
+        name: Credential Manager
+        description: Can manage credentials and credential stores
+      user-manager:
+        name: User Manager
+        description: Can manage users, groups, and accounts
+      auth-method-manager:
+        name: Auth Method Manager
+        description: Can manage auth methods and managed groups
+      session-auditor:
+        name: Session Auditor
+        description: Can view session recordings
+      target-user:
+        name: User
+        description: Can connect to targets but cannot manage anything
+      read-only-user:
+        name: Resource Auditor
+        description: Can only view but not modify any resources
+  edit-grants:
+    title: Edit Grants
+    description: Modify existing grant strings or add new grant strings to this role.
+    completion-info:
+      no-suggestions: No suggestions
+      wildcard-types: Wildcard - matches all types
+      wildcard-ids: Wildcard - matches all IDs
+      wildcard-actions: Wildcard - matches all actions
+      template-value: Template value
+      all-fields: All fields
+      loading-ids: Still loading ID suggestions…
+    linting-errors:
+      general:
+        whitespace-not-allowed: Whitespace is not allowed
+        leading-semicolon-not-allowed: Leading semicolon is not allowed
+        trailing-semicolon-not-allowed: Trailing semicolon is not allowed
+        invalid-character: Invalid character "{character}"
+        invalid-format: 'Invalid format: expected key=value'
+        invalid-syntax: Invalid syntax
+      fields:
+        duplicate-field: Duplicate field "{field}"
+        unknown-field: Unknown field "{field}"
+        empty-value: '"{field}" value cannot be empty'
+        missing-ids-or-type: Missing "ids" or "type" fields
+        missing-actions: Missing "actions" field
+        missing-actions-or-output-fields: Missing "actions" or "output_fields" fields
+      type:
+        invalid-type: Invalid resource type "{type}"
+        not-top-level: Type "{type}" is not a top-level type
+        not-child-type: Type "{type}" is not a child type of the pinned ID
+        missing-for-wildcard-ids: Missing "type" field for wildcard ids
+        wildcard-requires-ids: Missing "ids" field for wildcard type
+      ids:
+        empty-list: '"ids" field does not contain at least one id'
+        wildcard-cannot-combine: Wildcard id "*" cannot be combined with other ids
+        templates-cannot-combine: Template ids cannot be combined with each other
+        duplicate-template: Duplicate id "{primary}" and "{secondary}"
+        duplicate-id: Duplicate id "{id}"
+        unknown-template: Unknown template "{id}"
+        invalid-id: Invalid id "{id}"
+        mismatched-types: Ids do not have the same type. Invalid id "{id}"
+        must-support-child-types: Pinned IDs must support child types. Invalid id "{id}"
+        must-match-parent-type: Pinned IDs must be "{parentType}" ids. Invalid id "{id}"
+      actions:
+        empty-list: '"actions" field does not contain at least one action'
+        wildcard-cannot-combine: Wildcard action "*" cannot be combined with other actions
+        duplicate-action: Duplicate action "{action}"
+        invalid-action: Invalid action "{action}"
+        id-only: Only id actions for "{type}" type are allowed. Invalid action "{action}"
+        collection-only: Only collection actions are allowed. Invalid action "{action}"
+        noop-requires-list: '"no-op" action should only be used with "list" action'
+        list-requires-noop: '"list" action should be used with "no-op" action to have an effect'
+        noop-unnecessary: '"no-op" action is unnecessary when other actions are specified'
+      editor:
+        remove: Remove
+        remove-comma: Remove comma
+        add-noop: Add "no-op" action
+      output-fields:
+        empty-list: '"output_fields" field does not contain at least one field'
+        wildcard-cannot-combine: Wildcard output field "*" cannot be combined with other fields
+        duplicate-field: Duplicate output field "{field}"
+        invalid-field: Invalid output field "{field}"
+        invalid-field-for-type: Invalid output field "{field}" for type "{type}"
+    editor:
+      title: Grant Editor
+      description: Add each new grant string on a different line. Press Ctrl+Space to get suggestions.
+    string-formats:
+      title_plural: String formats
+      syntax: Syntax
+      syntax-format: Syntax format
+      more-info: More info
+      resource-type:
+        label: Singular resource type
+        help: Applies collection actions to a specific resource type in a single grant.
+      resource:
+        label: Specific resource(s)
+        help: Applies ID actions to one or more individual resources in a single grant.
+      pinned-id:
+        label: Pinned ID
+        help: '"Pins" actions to a non-top-level type within a specific ID in a single grant.'
+      output-fields:
+        label: Output fields
+        help: Defines which fields from a request are returned to the user.
+      account-template:
+        label: Account template
+        help: Substitutes the account ID from the token used to perform the request.
+      user-template:
+        label: User template
+        help: Substitutes the user ID from the token used to perform the request.
+      insert-actions: insert actions
+      insert-resource-type: insert resource type
+      insert-ids: insert ids
+      insert-resource-ids: insert resource ids
+      insert-output-fields: insert output fields
+    export:
+      format: Format
+      formatted-export-aria-label: Formatted export
+      options:
+        terraform: Terraform
+        native-hcl: Native HCL
+    actions:
+      collection-actions: Collection Actions
+      id-actions: ID Actions
+      create: Create a new {resourceType}
+      list: List all {resourceType} resources
+      read: Read {article} {resourceType}
+      update: Update {article} {resourceType}
+      delete: Delete {article} {resourceType}
+      read:self: Read the {resourceType} associated with the current user
+      delete:self: Delete {article} {resourceType} associated with the current user
+      cancel: Cancel {article} {resourceType}
+      cancel:self: Cancel {article} {resourceType} associated with the current user
+      generic:
+        create: Creates resources
+        list: Lists resources
+        read: Reads resources
+        update: Updates resources
+        delete: Deletes resources
+        read:self: Read the resource associated with the current user
+        delete:self: Delete a resource associated with the current user
+        cancel: Cancels resources
+        cancel:self: Cancel a resource associated with the current user
+      add-members: Add members to a group
+      set-members: Set the full list of members on a group
+      remove-members: Remove members from a group
+      add-hosts: Add hosts to a host set
+      set-hosts: Set the full list of hosts on a host set
+      remove-hosts: Remove hosts from a host set
+      add-worker-tags: Add tags to a worker
+      set-worker-tags: Set the full list of tags on a worker
+      remove-worker-tags: Remove tags from a worker
+      reinitialize-certificate-authority: Reinitialize the certificate authority that is used to authorize Boundary workers
+      create:controller-led: Create a worker via controller-led workflow
+      create:worker-led: Create a worker via worker-led workflow
+      read-certificate-authority: Read the certificate authority that is used to authorize Boundary workers
+      set-password: Set a password on an account, without requiring the current password
+      change-password: Change the password on an account
+      authenticate: Authenticate to an auth method
+      change-state: Change the active and visibility state of an OIDC-type auth method
+      add-accounts: Add accounts to a user
+      set-accounts: Set the full list of accounts on a user
+      remove-accounts: Remove accounts from a user
+      list-resolvable-aliases: List all aliases that point to resources the user has permission to access
+      add-principals: Add principals to a role
+      set-principals: Set the full list of principals on a role
+      remove-principals: Remove principals from a role
+      set-grants: Set the full list of grants on a role
+      add-grants: Add grants to a role
+      remove-grants: Remove grants from a role
+      add-grant-scopes: Add grant scopes to a role
+      set-grant-scopes: Set the full list of grant scopes on a role
+      remove-grant-scopes: Remove grant scopes from a role
+      authorize-session: Authorize a session via a target
+      add-host-sources: Add host sources to a target
+      set-host-sources: Set the full list of host sources on a target
+      remove-host-sources: Remove host sources from a target
+      add-credential-sources: Add credential sources to a target
+      set-credential-sources: Set the full list of credential sources on a target
+      remove-credential-sources: Remove credential sources from a target
+      attach-storage-policy: Attach a storage policy to all session recordings in the scope
+      detach-storage-policy: Detach a storage policy from all session recordings in the scope
+      list-keys: List the keys within a given scope
+      rotate-keys: Replace a scope's current KEK and DEKs with a new set of keys
+      list-key-version-destruction-jobs: List all pending key version destruction jobs within a scope
+      destroy-key-version: Destroy a key version in the scope
+      download: Download a session recording
+      reapply-storage-policy: Reapply the storage policy to a session recording
+      monthly-active-users: Display the number of monthly active Boundary users to help predict billing
+      no-actions: No actions available for this resource type.
+      invalid-id-or-type: Invalid ID and type. No actions available.
+      no-type-detected: No resource type detected.
+      unavailable: Grant actions information not available.
   scope:
     title: Scope
     title_plural: Scopes
@@ -624,7 +851,6 @@ role:
       parent_scope: Parent scope
       resource_type: Resource type
       projects_selected: Projects selected
-      selected: '{items} selected out of {total}'
     messages:
       none:
         title: No scopes added

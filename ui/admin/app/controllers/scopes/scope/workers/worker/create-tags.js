@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { TrackedArray } from 'tracked-built-ins';
+import Tag from 'admin/components/form/worker/tag';
 
 export default class ScopesScopeWorkersWorkerCreateTagsController extends Controller {
   // =services
@@ -16,7 +17,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
   @service router;
 
   // =attributes
-  apiTags = new TrackedArray([]);
+  apiTags = new TrackedArray([new Tag()]);
 
   // =actions
 
@@ -32,7 +33,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
     const worker = this.model;
     await worker.setApiTags(apiTags);
     // Clear the apiTags array after saving
-    this.apiTags = new TrackedArray([]);
+    this.apiTags = new TrackedArray([new Tag()]);
     this.router.transitionTo('scopes.scope.workers.worker.tags', worker);
   }
 
@@ -41,7 +42,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
    */
   @action
   cancel() {
-    this.apiTags = new TrackedArray([]);
+    this.apiTags = new TrackedArray([new Tag()]);
     this.router.replaceWith('scopes.scope.workers.worker.tags');
   }
 }

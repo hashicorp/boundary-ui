@@ -10,7 +10,8 @@
   "scripts": {
     "build:cli": "node -e \"require('./config/cli.js').setup()\"",
     "build:config": "node -e \"require('./config/desktop.js').setup()\"",
-    "build:all": "pnpm build:cli && pnpm build:config",
+    "build:terminal-view": "node -e \"require('./config/terminal-view.config.js').setup()\"",
+    "build:all": "pnpm build:cli && pnpm build:config && pnpm build:terminal-view",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "pnpm build:all && electron-forge make",
@@ -22,6 +23,9 @@
     "forge": "config/forge.config.js"
   },
   "dependencies": {
+    "@xterm/addon-canvas": "^0.7.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-log": "^5.1.2",
@@ -35,25 +39,27 @@
     "which": "^4.0.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.7.0",
-    "@electron-forge/maker-deb": "^7.7.0",
-    "@electron-forge/maker-dmg": "^7.7.0",
-    "@electron-forge/maker-squirrel": "^7.7.0",
-    "@electron-forge/maker-zip": "^7.7.0",
-    "electron": "38.2.1",
+    "@electron-forge/cli": "^7.11.0",
+    "@electron-forge/maker-deb": "^7.11.0",
+    "@electron-forge/maker-dmg": "^7.11.0",
+    "@electron-forge/maker-squirrel": "^7.11.0",
+    "@electron-forge/maker-zip": "^7.11.0",
+    "electron": "42.0.1",
+    "esbuild": "^0.25.4",
     "unzipper": "^0.11.5"
   },
   "pnpm": {
     "overrides": {
-      "tar": "^7.5.8"
+      "tar": "^7.5.10",
+      "yauzl": "^3.3.1"
     },
     "ignoredBuiltDependencies": [],
     "onlyBuiltDependencies": [
-      "electron",
       "electron-winstaller",
+      "esbuild",
       "fs-xattr",
-      "node-pty",
-      "macos-alias"
+      "macos-alias",
+      "node-pty"
     ]
   }
 }

@@ -18,12 +18,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
 
   @service abilities;
-  @service clusterUrl;
   @service resourceFilterStore;
   @service router;
   @service session;
   @service store;
-  @service ipc;
 
   // =attributes
 
@@ -113,7 +111,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         await timeout(250);
       }
 
-      const isCacheRunningPromise = this.ipc.invoke('isCacheDaemonRunning');
+      const isCacheRunningPromise =
+        window.desktop.daemon.isCacheDaemonRunning();
 
       const orgScope = this.modelFor('scopes.scope');
       const projects = this.modelFor('scopes.scope.projects');

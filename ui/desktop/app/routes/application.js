@@ -14,9 +14,10 @@ export default class ApplicationRoute extends Route {
 
   @service session;
   @service clusterUrl;
-  @service ipc;
   @service intl;
+  @service store;
   @service rdp;
+  @service terminal;
 
   // =attributes
 
@@ -25,19 +26,20 @@ export default class ApplicationRoute extends Route {
    */
   routeIfUnauthenticated = 'index';
 
-  /**
-   * Check that the clusterUrl specified in the renderer matches the clusterUrl
-   * reported by the main process.  If they differ, update the main process
-   * clusterUrl so that the renderer's CSP can be rewritten to allow requests.
-   */
   @notifyError(({ message }) => message, {
     catch: true,
     log: { origin: 'ApplicationRoute:beforeModel' },
   })
   async beforeModel() {
     this.intl.setLocale(['en-us']);
+
+    const clusterUrl = await this.clusterUrl.getClusterUrl();
+    if (clusterUrl) {
+      const adapter = this.store.adapterFor('application');
+      adapter.host = clusterUrl;
+    }
+
     await this.session.setup();
-    await this.clusterUrl.updateClusterUrl();
     const theme = this.session.get('data.theme');
     /* eslint-disable-next-line ember/no-controller-access-in-routes */
     const controller = this.controllerFor(this.routeName);
@@ -46,7 +48,7 @@ export default class ApplicationRoute extends Route {
     // Add token to cache daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      await this.ipc.invoke('addTokenToDaemons', {
+      await window.desktop.daemon.addTokenToDaemons({
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
@@ -62,10 +64,13 @@ export default class ApplicationRoute extends Route {
    * Add window frame config on controller.
    */
   async setupController(controller) {
-    controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
+    controller.set(
+      'hasMacOSChrome',
+      await window.desktop.windowAction.hasMacOSChrome(),
+    );
     controller.set(
       'showWindowActions',
-      await this.ipc.invoke('showWindowActions'),
+      await window.desktop.windowAction.showWindowActions(),
     );
   }
 
@@ -81,6 +86,8 @@ export default class ApplicationRoute extends Route {
   @action
   error(e) {
     const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
+    // clean up terminal view for all errors
+    this.terminal.cleanup();
     if (isUnauthenticated) {
       this.session.invalidate();
       return false;

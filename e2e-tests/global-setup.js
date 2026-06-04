@@ -4,6 +4,7 @@
  */
 
 import { chromium, test as baseTest, mergeTests } from '@playwright/test';
+
 import { checkEnv } from './helpers/general.js';
 import { boundaryApiClientTest } from './helpers/boundary-api-client.js';
 import { LoginPage } from './admin/pages/login.js';
@@ -92,6 +93,7 @@ export const base = baseTest.extend({
   targetPort: process.env.E2E_TARGET_PORT,
   vaultAddr: process.env.E2E_VAULT_ADDR_PUBLIC,
   vaultAddrPrivate: process.env.E2E_VAULT_ADDR_PRIVATE,
+  vaultAddrUnified: process.env.E2E_VAULT_ADDR_UNIFIED,
   workerTagEgress: process.env.E2E_WORKER_TAG_EGRESS,
   request: async ({ playwright }, use) => {
     const request = await playwright.request.newContext({

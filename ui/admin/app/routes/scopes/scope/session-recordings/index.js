@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATE_SESSION_RECORDING_STARTED,
@@ -203,12 +204,18 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
 
   // =actions
 
+  @action
+  async refreshAll() {
+    return super.refresh(...arguments);
+  }
+
   /**
    * Loads initial filter options in controller so it happens outside of model hook
    * @param controller
    */
   setupController(controller) {
     super.setupController(...arguments);
+    controller.currentRoute = this;
     controller.loadItems.perform();
   }
 }

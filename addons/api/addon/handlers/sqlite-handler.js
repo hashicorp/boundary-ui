@@ -59,17 +59,39 @@ export default class SqliteHandler {
         let payload,
           listToken,
           writeToDbPromise,
-          totalInsert = 0;
+          totalInsert = 0,
+          rateLimitWarning;
 
         if (!peekDb) {
-          const tokenKey = `${type}-${hashCode(remainingQuery)}`;
+          let tokenKey = `${type}-${hashCode(remainingQuery)}`;
+          // The global token key represents a recursive query from global scope,
+          // which pulls back every resource of this type.
+          const globalTokenKey = `${type}-${hashCode({ scope_id: 'global', recursive: true })}`;
           if (storeToken) {
-            const [tokenObj] = await this.sqlite.fetchResource({
-              ...generateSQLExpressions('token', {
-                filters: { id: [{ equals: tokenKey }] },
-              }),
-            });
-            listToken = tokenObj?.token;
+            // Always prefer the global token when it exists for
+            // any more fine-grained query. The global query already fetched every
+            // item for this resource type, so we should just re-use it.
+            if (tokenKey !== globalTokenKey) {
+              const [globalTokenObj] = await this.sqlite.fetchResource({
+                ...generateSQLExpressions('token', {
+                  filters: { id: [{ equals: globalTokenKey }] },
+                }),
+              });
+              if (globalTokenObj?.token) {
+                tokenKey = globalTokenKey;
+                listToken = globalTokenObj.token;
+              }
+            }
+
+            // Only look up the specific token if no global token was found.
+            if (!listToken) {
+              const [tokenObj] = await this.sqlite.fetchResource({
+                ...generateSQLExpressions('token', {
+                  filters: { id: [{ equals: tokenKey }] },
+                }),
+              });
+              listToken = tokenObj?.token;
+            }
           } else {
             // This is a temporary fix of clearing the DB (specifically for auth-methods)
             // since we are not storing the token we do not get back a list of removed_ids
@@ -85,6 +107,11 @@ export default class SqliteHandler {
                 batchLimit: this.batchLimit,
               });
               totalInsert += payload.items?.length ?? 0;
+
+              // Propagate any rate-limit warning the adapter attached
+              if (payload.meta?.rateLimitWarning) {
+                rateLimitWarning = payload.meta.rateLimitWarning;
+              }
 
               // await the previous writeToDbPromise before writing to db again
               if (writeToDbPromise) {
@@ -163,7 +190,14 @@ export default class SqliteHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: count[0].total };
+        records.meta = {
+          totalItems: count[0].total,
+        };
+
+        if (rateLimitWarning) {
+          records.meta.rateLimitWarning = rateLimitWarning;
+        }
+
         return records;
       }
       default:
