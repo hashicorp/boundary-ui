@@ -30,12 +30,13 @@ export const FIELD_CLAIMS_SCOPES_ADD_BTN =
   '[name=claims_scopes] [data-test-add-button]';
 export const FIELD_CLAIMS_SCOPES_DELETE_BTN =
   '[name=claims_scopes] [data-test-delete-button]';
+export const FIELD_ACCOUNT_CLAIM_MAPS = '[name=account_claim_maps]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM =
   '[name=account_claim_maps] [data-test-key-input]';
 export const FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE = 'from_claim';
 export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM =
   '[name=account_claim_maps] [data-test-value-select]';
-export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE = 'email';
+export const FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE = 'sub';
 export const FIELD_ACCOUNT_CLAIM_MAPS_DELETE_BTN =
   '[name=account_claim_maps] [data-test-delete-button]';
 export const FIELD_IDP_CERTS = '[name=idp_ca_certs] [data-test-value-input]';

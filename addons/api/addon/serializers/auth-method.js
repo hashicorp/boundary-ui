@@ -48,6 +48,18 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
     } else {
       delete serialized.attributes.state;
     }
+
+    // Don't send account_claim_maps on update if there's a saved 'sub' mapping
+    // The API doesn't allow updating when 'sub' claim mappings exist
+    if (!snapshot.record.isNew && snapshot.record.account_claim_maps) {
+      const hasSubClaimMap = snapshot.record.account_claim_maps.some(
+        (item) => item?.value === 'sub',
+      );
+
+      if (hasSubClaimMap) {
+        delete serialized.attributes.account_claim_maps;
+      }
+    }
     return serialized;
   }
 

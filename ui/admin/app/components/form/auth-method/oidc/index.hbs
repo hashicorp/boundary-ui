@@ -242,7 +242,7 @@
     @data={{@model.account_claim_maps}}
     @legend={{t 'form.account_claim_maps.label'}}
     @helperText={{t 'form.account_claim_maps.help'}}
-    @disabled={{form.disabled}}
+    @disabled={{or form.disabled this.hasSavedSubClaimMap}}
     @isOptional={{true}}
   >
     <:row as |R|>
@@ -264,7 +264,7 @@
           <option disabled hidden selected value=''>
             {{t 'titles.choose-an-option'}}
           </option>
-          {{#each this.toClaims as |claim|}}
+          {{#each (this.toClaimOptions R.rowData) as |claim|}}
             <option value={{claim}} selected={{eq R.rowData.value claim}}>
               {{claim}}
             </option>

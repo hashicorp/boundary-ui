@@ -169,14 +169,16 @@ module('Acceptance | auth-methods | update', function (hooks) {
       await click(element);
     }
 
-    await fillIn(
-      selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM,
-      selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE,
-    );
-    await select(
-      selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM,
-      selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
-    );
+    await fillIn(selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM, 'test_claim');
+
+    // Verify "sub" option is not available during update
+    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM);
+    assert
+      .dom(`${selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM} option[value="sub"]`)
+      .doesNotExist('"sub" option is not available during update');
+
+    // Select 'email' instead since 'sub' is not available
+    await select(selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM, 'email');
 
     // Remove all certificates
     const certificatesList = findAll(selectors.FIELD_IDP_CERTS_DELETE_BTN);
@@ -223,7 +225,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_CLAIMS_SCOPES_VALUE,
     ]);
     assert.deepEqual(authMethod.attributes.account_claim_maps, [
-      'from_claim=email',
+      'test_claim=email',
     ]);
     assert.deepEqual(authMethod.attributes.idp_ca_certs, [
       selectors.FIELD_IDP_CERTS_VALUE,
@@ -237,6 +239,62 @@ module('Acceptance | auth-methods | update', function (hooks) {
       selectors.FIELD_API_URL_PREFIX_VALUE,
     );
     assert.deepEqual(authMethod.attributes.prompts, ['none']);
+  });
+
+  test('account claim maps field is disabled when sub mapping exists', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-06-02
+          enabled: false,
+        },
+      },
+    });
+
+    // Create OIDC auth method with a 'sub' mapping
+    instances.authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    instances.authMethod.attributes.account_claim_maps = ['username=sub'];
+
+    await visit(urls.authMethods);
+
+    await click(
+      commonSelectors.HREF(`${urls.authMethods}/${instances.authMethod.id}`),
+    );
+    await click(commonSelectors.EDIT_BTN);
+
+    assert.dom(selectors.FIELD_ACCOUNT_CLAIM_MAPS).isDisabled();
+  });
+
+  test('account claim maps field is editable when no sub mapping exists', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-06-02
+          enabled: false,
+        },
+      },
+    });
+
+    // Create OIDC auth method with email/name mappings (no 'sub')
+    instances.authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_OIDC,
+    });
+    instances.authMethod.attributes.account_claim_maps = [
+      'username=email',
+      'fullname=name',
+    ];
+
+    await visit(urls.authMethods);
+    await click(
+      commonSelectors.HREF(`${urls.authMethods}/${instances.authMethod.id}`),
+    );
+    await click(commonSelectors.EDIT_BTN);
+
+    assert.dom(selectors.FIELD_ACCOUNT_CLAIM_MAPS).isNotDisabled();
   });
 
   test('can update an ldap auth method and save changes', async function (assert) {
