@@ -93,7 +93,7 @@ export default function transformer(file, api) {
         eachTestNames = testArguments[1].elements?.map((element, i) => element.type.endsWith('Literal') ? element.value : i);
       }
 
-      testName = eachTestNames?.map(eachTestName => `${testName} [${eachTestName}]`);
+      testName = eachTestNames?.map(eachTestName => `${testName} [${eachTestName}]`) ?? [];
     } else {
       testName = [testName];
     }
