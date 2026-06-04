@@ -87,6 +87,6 @@ export default class FormAliasComponent extends Component {
     const { model } = this.args;
     const suffix = this.normalizedSuffix ?? '';
 
-    model.value = value ? `${value}${suffix}` : value;
+    model.value = `${value}${suffix}`;
   }
 }
