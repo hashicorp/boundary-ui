@@ -120,6 +120,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await click(selectors.FIELD_CLAIMS_SCOPES_ADD_BTN);
 
+    // Verify Account Claim Maps field is editable during creation
+    assert.dom(selectors.FIELD_ACCOUNT_CLAIM_MAPS).isNotDisabled();
+
     await fillIn(
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM,
       selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE,
