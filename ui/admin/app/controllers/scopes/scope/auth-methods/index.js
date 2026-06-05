@@ -147,6 +147,41 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(authMethod) {
+    // Filter out empty account claim maps before saving (only check key)
+    if (authMethod.account_claim_maps) {
+      authMethod.account_claim_maps = authMethod.account_claim_maps.filter(
+        (item) => item.key?.trim(),
+      );
+    }
+    if (authMethod.claims_scopes) {
+      authMethod.claims_scopes = authMethod.claims_scopes.filter((item) =>
+        item.value?.trim(),
+      );
+    }
+    if (authMethod.allowed_audiences) {
+      authMethod.allowed_audiences = authMethod.allowed_audiences.filter(
+        (item) => item.value?.trim(),
+      );
+    }
+    if (authMethod.signing_algorithms) {
+      authMethod.signing_algorithms = authMethod.signing_algorithms.filter(
+        (item) => item.value?.trim(),
+      );
+    }
+    if (authMethod.idp_ca_certs) {
+      authMethod.idp_ca_certs = authMethod.idp_ca_certs.filter((item) =>
+        item.value?.trim(),
+      );
+    }
+    if (authMethod.certificates) {
+      authMethod.certificates = authMethod.certificates.filter((item) =>
+        item.value?.trim(),
+      );
+    }
+    if (authMethod.account_attribute_maps) {
+      authMethod.account_attribute_maps =
+        authMethod.account_attribute_maps.filter((item) => item.key?.trim());
+    }
     await authMethod.save();
     if (this.abilities.can('read model', authMethod)) {
       await this.router.transitionTo(
@@ -290,32 +325,56 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   edit(authMethod) {
     if (authMethod.claims_scopes) {
       authMethod.claims_scopes = structuredClone(authMethod.claims_scopes);
+      // Ensure at least one empty row exists for editing
+      if (authMethod.claims_scopes.length === 0) {
+        authMethod.claims_scopes = [{ value: '' }];
+      }
     }
     if (authMethod.signing_algorithms) {
       authMethod.signing_algorithms = structuredClone(
         authMethod.signing_algorithms,
       );
+      if (authMethod.signing_algorithms.length === 0) {
+        authMethod.signing_algorithms = [{ value: '' }];
+      }
     }
     if (authMethod.allowed_audiences) {
       authMethod.allowed_audiences = structuredClone(
         authMethod.allowed_audiences,
       );
+      if (authMethod.allowed_audiences.length === 0) {
+        authMethod.allowed_audiences = [{ value: '' }];
+      }
     }
     if (authMethod.idp_ca_certs) {
       authMethod.idp_ca_certs = structuredClone(authMethod.idp_ca_certs);
+      if (authMethod.idp_ca_certs.length === 0) {
+        authMethod.idp_ca_certs = [{ value: '' }];
+      }
     }
     if (authMethod.account_claim_maps) {
       authMethod.account_claim_maps = structuredClone(
         authMethod.account_claim_maps,
       );
+      // Ensure at least one empty row exists for editing
+      if (authMethod.account_claim_maps.length === 0) {
+        authMethod.account_claim_maps = [{ key: '', value: '' }];
+      }
     }
     if (authMethod.certificates) {
       authMethod.certificates = structuredClone(authMethod.certificates);
+      if (authMethod.certificates.length === 0) {
+        authMethod.certificates = [{ value: '' }];
+      }
     }
     if (authMethod.account_attribute_maps) {
       authMethod.account_attribute_maps = structuredClone(
         authMethod.account_attribute_maps,
       );
+      // Ensure at least one empty row exists for editing
+      if (authMethod.account_attribute_maps.length === 0) {
+        authMethod.account_attribute_maps = [{ key: '', value: '' }];
+      }
     }
   }
 

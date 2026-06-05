@@ -59,6 +59,7 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
       description,
       disable_credential_rotation,
     });
+
     record.scopeModel = scopeModel;
     return record;
   }

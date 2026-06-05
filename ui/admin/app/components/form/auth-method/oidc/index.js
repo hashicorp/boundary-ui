@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormAuthMethodOidcComponent extends Component {
   // =attributes
+
   /**
    * @type {object}
    */
@@ -39,6 +40,35 @@ export default class FormAuthMethodOidcComponent extends Component {
   @tracked skipPromptsList = this.isToggleChecked();
 
   /**
+   * @returns {boolean}
+   */
+  get hasSavedSubClaimMap() {
+    return (
+      !this.args.model?.isNew &&
+      this.args.model.account_claim_maps?.some((item) => item?.value === 'sub')
+    );
+  }
+
+  /**
+   * Filter 'sub' from dropdown options when updating
+   * On creation, show all options including sub.
+   * On update, hide sub unless it's the current value of the row (to display it when disabled).
+   * @param {Object} rowData - The current row data
+   * @returns {string[]}
+   */
+  toClaimOptions = (rowData) => {
+    // On creation, show all options
+    if (this.args.model?.isNew) {
+      return this.toClaims;
+    }
+
+    // On update, filter "sub" unless it's the current value
+    return this.toClaims.filter(
+      (claim) => claim !== 'sub' || rowData?.value === 'sub',
+    );
+  };
+
+  /**
    * @returns {string}
    */
   parsePromptsArray() {
@@ -53,7 +83,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   }
 
   //actions
-
   /**
    * @param {string} value
    */

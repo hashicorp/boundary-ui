@@ -9,7 +9,10 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TYPE_CREDENTIAL_STATIC } from 'api/models/storage-bucket';
+import {
+  TYPE_CREDENTIAL_STATIC,
+  TYPE_CREDENTIAL_DYNAMIC,
+} from 'api/models/storage-bucket';
 
 export default class ScopesScopeStorageBucketsIndexController extends Controller {
   // =services
@@ -45,6 +48,17 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
     return this.intl.t(description, { resource });
   }
 
+  /**
+   * Generates one empty role_tags row for storage bucket when the field is empty.
+   * @param {storageBucketModel} bucket
+   */
+  generateAwsRoleTagsRowIfEmpty(bucket) {
+    // If role_tags is an empty array, add an empty row
+    if (!bucket.role_tags || bucket.role_tags.length === 0) {
+      bucket.role_tags = [{ key: '', value: '' }];
+    }
+  }
+
   // =actions
 
   /**
@@ -60,6 +74,13 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
     if (!storageBucket.role_arn) {
       storageBucket.credentialType = TYPE_CREDENTIAL_STATIC;
     }
+
+    if (storageBucket.role_tags) {
+      storageBucket.role_tags = storageBucket.role_tags.filter((item) =>
+        item.key?.trim(),
+      );
+    }
+
     await storageBucket.save();
     await this.router.transitionTo(
       'scopes.scope.storage-buckets.storage-bucket',
@@ -105,6 +126,10 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
   @action
   changeCredentialType(storageBucket, credentialType) {
     storageBucket.credentialType = credentialType;
+
+    if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+      this.generateAwsRoleTagsRowIfEmpty(storageBucket);
+    }
   }
 
   /**
@@ -116,5 +141,16 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
     await this.router.replaceWith({
       queryParams: { compositeType: pluginType },
     });
+  }
+
+  @action
+  edit(storageBucket) {
+    if (storageBucket.role_tags) {
+      storageBucket.role_tags = structuredClone(storageBucket.role_tags);
+    }
+
+    if (storageBucket.credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+      this.generateAwsRoleTagsRowIfEmpty(storageBucket);
+    }
   }
 }

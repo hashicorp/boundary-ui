@@ -183,7 +183,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
       .doesNotExist();
   });
 
-  test('users can edit a specific tag', async function (assert) {
+  test('users can edit a specific tag and create a new one afterwards', async function (assert) {
     setRunOptions({
       rules: {
         'color-contrast': {
@@ -210,6 +210,25 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     assert.dom(selectors.TABLE_ROW_API_TAG_KEY(11)).hasText('red');
     assert.dom(selectors.TABLE_ROW_API_TAG_VALUE(11)).hasText('blue');
+
+    // After editing, go to create tags route and create a new tag
+
+    await click(selectors.MANAGE_DROPDOWN_WORKER);
+    await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+
+    await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
+    await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
+
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_KEY(12))
+      .hasText(selectors.FIELD_KEY_VALUE);
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_VALUE(12))
+      .hasText(selectors.FIELD_VALUE_VALUE);
   });
 
   test('users can cancel editing a tag', async function (assert) {

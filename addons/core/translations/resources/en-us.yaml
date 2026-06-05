@@ -758,8 +758,8 @@ role:
         label: User template
         help: Substitutes the user ID from the token used to perform the request.
       insert-actions: insert actions
-      insert-resource-types: insert resource types
-      insert-id: insert id
+      insert-resource-type: insert resource type
+      insert-ids: insert ids
       insert-resource-ids: insert resource ids
       insert-output-fields: insert output fields
     export:

@@ -96,6 +96,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_WORKER);
     await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
+    await click(selectors.ADD_WORKER_TAG_ACTION);
     await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
     await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
     await click(selectors.ADD_WORKER_TAG_ACTION);
@@ -137,9 +138,11 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.createTags);
 
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+
     await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
     await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
-    await click(selectors.ADD_WORKER_TAG_ACTION);
+
     await click(commonSelectors.HREF(urls.workers));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();

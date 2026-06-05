@@ -51,7 +51,8 @@
   "pnpm": {
     "overrides": {
       "tar": "^7.5.10",
-      "yauzl": "^3.3.1"
+      "yauzl": "^3.3.1",
+      "external-editor>tmp": "^0.2.7"
     },
     "ignoredBuiltDependencies": [],
     "onlyBuiltDependencies": [

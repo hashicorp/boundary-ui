@@ -27,6 +27,7 @@
   <page.body>
     <Form::HostCatalog
       @model={{@model}}
+      @edit={{fn this.hostCatalogs.edit @model}}
       @submit={{fn this.hostCatalogs.save @model}}
       @cancel={{fn this.hostCatalogs.cancel @model}}
       @changeCredentialType={{fn this.hostCatalogs.changeCredentialType @model}}

@@ -10,8 +10,7 @@ export const FIELD_WORKER_AUTH_REGISTRATION_VALUE = 'token';
 export const WORKER_CREATE_SECTION_FORM_LABEL =
   '.worker-create-section label.hds-form-label';
 export const WORKER_CREATE_SECTION = '.worker-create-section';
-export const ADD_WORKER_TAG_ACTION =
-  '[name="api_tags"] tr td:last-child button';
+export const ADD_WORKER_TAG_ACTION = '[name="api_tags"] [data-test-add-button]';
 
 export const MANAGE_DROPDOWN_WORKER =
   '[data-test-manage-worker-dropdown] button:first-child';
@@ -20,10 +19,10 @@ export const MANAGE_DROPDOWN_WORKER_REMOVE =
 export const MANAGE_DROPDOWN_WORKER_CREATE_TAGS =
   '[data-test-manage-worker-dropdown] ul a:first-child';
 
-export const FIELD_KEY = '[name="api_tags"] tr td:first-child input';
+export const FIELD_KEY = '[name="api_tags"] [data-test-key-input]';
 export const FIELD_KEY_VALUE = 'key';
 
-export const FIELD_VALUE = '[name="api_tags"] tr td:nth-child(2) input';
+export const FIELD_VALUE = '[name="api_tags"] [data-test-value-input]';
 export const FIELD_VALUE_VALUE = 'value';
 
 export const WORKER_TAGS_FLYOUT = '[data-test-worker-tags-flyout]';
