@@ -18,17 +18,23 @@
 
     <Hds::Dropdown @listPosition='bottom-left' as |dd|>
       <dd.ToggleButton
-        @text={{t 'actions.choose-different-org'}}
-        @icon='org'
+        @text={{@model.scope.displayName}}
+        @icon={{if (eq @model.scope.id 'global') 'globe' 'org'}}
         @color='secondary'
       />
-      <dd.Interactive {{on 'click' (fn this.selectScope 'global' dd.close)}}>
+      <dd.Checkmark
+        @selected={{eq @model.scope.id 'global'}}
+        {{on 'click' (fn this.selectScope 'global' dd.close)}}
+      >
         {{t 'titles.global'}}
-      </dd.Interactive>
+      </dd.Checkmark>
       {{#each this.sortedScopes as |scope|}}
-        <dd.Interactive {{on 'click' (fn this.selectScope scope.id dd.close)}}>
+        <dd.Checkmark
+          @selected={{eq @model.scope.id scope.id}}
+          {{on 'click' (fn this.selectScope scope.id dd.close)}}
+        >
           {{scope.displayName}}
-        </dd.Interactive>
+        </dd.Checkmark>
       {{/each}}
     </Hds::Dropdown>
 
