@@ -36,11 +36,11 @@
   "devDependencies": {
     "concurrently": "^9.1.0",
     "doctoc": "^2.2.0",
+    "esbuild": "^0.25.4",
     "git-cz": "^4.9.0",
     "husky": "^9.1.6",
     "license-checker": "^25.0.1",
-    "lint-staged": "^15.2.10",
-    "esbuild": "^0.25.4"
+    "lint-staged": "^15.5.2"
   },
   "pnpm": {
     "overrides": {
