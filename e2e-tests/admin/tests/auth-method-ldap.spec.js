@@ -174,8 +174,8 @@ test(
       // Log in using ldap account
       await loginPage.logout(adminLoginName);
 
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: orgName }).click();
       await page.getByRole('link', { name: ldapAuthMethodName }).click();
       await loginPage.login(ldapUserName, ldapUserPassword);
       await expect(
