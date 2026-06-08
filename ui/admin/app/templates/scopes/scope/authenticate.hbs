@@ -28,23 +28,25 @@
 
             <Hds::Dropdown @listPosition='bottom-left' as |dd|>
               <dd.ToggleButton
-                @text={{t 'actions.choose-different-org'}}
-                @icon='org'
+                @text={{@model.scope.displayName}}
+                @icon={{if (eq @model.scope.id 'global') 'globe' 'org'}}
                 @color='secondary'
               />
-              <dd.Interactive
+              <dd.Checkmark
                 @route='scopes.scope.authenticate'
                 @model='global'
+                @selected={{eq @model.scope.id 'global'}}
               >
                 {{t 'titles.global'}}
-              </dd.Interactive>
+              </dd.Checkmark>
               {{#each this.sortedScopes as |scope|}}
-                <dd.Interactive
+                <dd.Checkmark
                   @route='scopes.scope.authenticate'
                   @model={{scope.id}}
+                  @selected={{eq @model.scope.id scope.id}}
                 >
                   {{scope.displayName}}
-                </dd.Interactive>
+                </dd.Checkmark>
               {{/each}}
             </Hds::Dropdown>
             <Hds::Separator />

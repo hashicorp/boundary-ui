@@ -52,8 +52,8 @@ test(
 
       // Log in using new account
       await page.reload();
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: org.name }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: org.name }).click();
       await page.getByRole('link', { name: authMethod.name }).click();
       const loginPage = new LoginPage(page);
       await loginPage.login(username, password);
@@ -79,8 +79,8 @@ test(
 
       // Confirm user cannot log in with old password
       await loginPage.logout(username);
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: org.name }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: org.name }).click();
       await page.getByRole('link', { name: authMethod.name }).click();
       await page.getByLabel('Login Name').fill(username);
       await page.getByLabel('Password', { exact: true }).fill(password);

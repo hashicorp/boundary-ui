@@ -30,7 +30,6 @@ copy-error-detail-to-clipboard: Copy error detail to clipboard
 authenticate: Sign In
 deauthenticate: Sign Out
 choose-org: Choose Scope
-choose-different-org: Choose a different scope
 add-host-set: Create Host Set
 add-host: Create Host
 add-principals: Add Principals
