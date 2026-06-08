@@ -48,7 +48,7 @@ module('Unit | Utils | grant-completions', function (hooks) {
     this.idLookup = async () => [];
     this.getIsLoading = () => false;
 
-    const response = await fetch('/grants-schema.json');
+    const response = await fetch('/internal/grants-schema.json');
 
     if (!response.ok) {
       throw new Error(`Failed to fetch grants schema: ${response.status}`);
