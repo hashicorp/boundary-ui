@@ -53,7 +53,8 @@
       "ember-loading>ember-concurrency": "^4.0.0",
       "tmp": "^0.2.7",
       "tar": "^7.5.10",
-      "nomnom>underscore": "^1.13.8"
+      "nomnom>underscore": "^1.13.8",
+      "ember-cli>markdown-it": "^14.2.0"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
