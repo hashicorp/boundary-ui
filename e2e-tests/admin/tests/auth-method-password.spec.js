@@ -58,8 +58,8 @@ test(
 
       // Log in using new account
       await loginPage.logout(adminLoginName);
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: orgName }).click();
       await page.getByRole('link', { name: authMethodName }).click();
 
       await loginPage.login(username, password);
@@ -97,8 +97,8 @@ test(
       // Log in using new password
       await loginPage.logout(adminLoginName);
 
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: orgName }).click();
       await page.getByRole('link', { name: authMethodName }).click();
       await loginPage.login(username, newPassword);
       await expect(

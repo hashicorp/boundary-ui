@@ -129,8 +129,8 @@ test(
 
       // Log in using oidc account
       await loginPage.logout(adminLoginName);
-      await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('button', { name: /global/i }).click();
+      await page.getByRole('option', { name: orgName }).click();
       await page.getByRole('link', { name: oidcAuthMethodName }).click();
       const pagePromise = context.waitForEvent('page');
       await page.getByRole('button', { name: 'Sign In' }).click();
