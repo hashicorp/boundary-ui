@@ -193,6 +193,9 @@ test(
 
       // View the LDAP account and verify account attributes
       await page.getByRole('link', { name: orgName }).click();
+      await expect(
+        page.getByRole('heading', { name: 'Projects' }),
+      ).toBeVisible();
       await page
         .getByRole('navigation', { name: 'Primary' })
         .getByRole('link', { name: 'Auth Methods' })
