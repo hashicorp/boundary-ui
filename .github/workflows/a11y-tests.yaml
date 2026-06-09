@@ -37,9 +37,9 @@ jobs:
           jq -s 'map(.[])' ./ui/admin/ember-a11y-report/*.json > ember-a11y-reports/admin.json
           jq -s 'map(.[])' ./ui/desktop/ember-a11y-report/*.json > ember-a11y-reports/desktop.json
       - name: Output ember a11y test report summary (admin)
-        run: 'cat ember-a11y-reports/admin.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
+        run: 'cat ember-a11y-reports/admin.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[] | .[]? | .relatedNodes? | .[]? | .target? })}) })"'
       - name: Output ember a11y test report summary (desktop)
-        run: 'cat ember-a11y-reports/desktop.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
+        run: 'cat ember-a11y-reports/desktop.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[] | .[]? | .relatedNodes? | .[]? | .target? })}) })"'
       - name: Upload ember a11y reports
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
