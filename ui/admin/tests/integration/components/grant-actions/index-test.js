@@ -24,7 +24,7 @@ module('Integration | Component | grant-actions/index', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   hooks.beforeEach(async function () {
-    const response = await fetch('/grants-schema.json');
+    const response = await fetch('/internal/grants-schema.json');
 
     if (!response.ok) {
       throw new Error(`Failed to fetch grants schema: ${response.status}`);

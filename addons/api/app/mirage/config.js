@@ -211,7 +211,7 @@ function routes() {
     return metadata;
   });
 
-  this.get('/grants-schema.json', () => {
+  this.get('/internal/grants-schema.json', () => {
     return grantsSchemaData;
   });
 
