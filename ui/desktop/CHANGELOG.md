@@ -6,7 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New & Improved
 
-- Upgrade CLI to v1.0.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/))
+- Upgrade CLI to v1.0.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/3316))
 - Display current scope name in the authenticate page scope dropdown ([PR](https://github.com/hashicorp/boundary-ui/pull/3308))
 
 ### Bug Fixes
