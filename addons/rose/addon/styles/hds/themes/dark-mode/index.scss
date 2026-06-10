@@ -250,6 +250,13 @@
   /* stylelint-enable selector-class-pattern */
 }
 
+// Override to improve visibility of search clear ("x") icon.
+@mixin dark-mode-search-clear-override {
+  input[type='search']::-webkit-search-cancel-button {
+    filter: invert(1);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   // Apply dark style overrides to scrollbar when system is in dark mode and app theme is not set to light
   html:has(.ember-application:not(.rose-theme-light)) {
@@ -265,6 +272,7 @@
     @include dark-mode-app-header-override;
     @include dark-mode-app-side-nav-override;
     @include dark-mode-codemirror-override;
+    @include dark-mode-search-clear-override;
   }
 }
 
@@ -282,4 +290,5 @@ html:has(.ember-application.rose-theme-dark) {
   @include dark-mode-app-header-override;
   @include dark-mode-app-side-nav-override;
   @include dark-mode-codemirror-override;
+  @include dark-mode-search-clear-override;
 }
