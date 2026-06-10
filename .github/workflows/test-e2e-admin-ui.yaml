@@ -204,7 +204,37 @@ jobs:
               libhyphen0 \
               libsecret-1-0 \
               libwoff1 \
-              libx264-163
+              libx264-163 \
+              libsoup-3.0-0 \
+              gstreamer1.0-libav \
+              libicu70 \
+              libegl1 \
+              libepoxy0 \
+              libevdev2 \
+              libffi7 \
+              libfontconfig1 \
+              libfreetype6 \
+              libgdk-pixbuf-2.0-0 \
+              libgles2 \
+              libglib2.0-0 \
+              libglx0 \
+              libgstreamer1.0-0 \
+              libgudev-1.0-0 \
+              libharfbuzz-icu0 \
+              libharfbuzz0b \
+              libjpeg-turbo8 \
+              liblcms2-2 \
+              libnotify4 \
+              libopengl0 \
+              libopenjp2-7 \
+              libpng16-16 \
+              libproxy1v5 \
+              libwayland-client0 \
+              libwayland-egl1 \
+              libwayland-server0 \
+              libxml2 \
+              libxslt1.1 \
+              libatomic1
 
             # Install the browser executables
             pnpm playwright install
