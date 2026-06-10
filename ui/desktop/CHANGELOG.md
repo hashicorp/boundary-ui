@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.6.1 [CLI 1.0.0] (2026.06.30)
+
+### New & Improved
+
+- Upgrade CLI to v1.0.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/))
+- Display current scope name in the authenticate page scope dropdown ([PR](https://github.com/hashicorp/boundary-ui/pull/3308))
+
+### Bug Fixes
+
+- Fix Preferred Clients section in Settings page ([PR](https://github.com/hashicorp/boundary-ui/pull/3241))
+
 ## V2.6.0 [CLI 0.21.2] (2026.04.06)
 
 ### New & Improved
