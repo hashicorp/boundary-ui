@@ -51,7 +51,7 @@ export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   async fetchGrantsSchema() {
     const adapter = this.store.adapterFor('application');
-    const url = `${adapter.host ?? ''}/grants-schema.json`;
+    const url = `${adapter.host ?? ''}/internal/grants-schema.json`;
     const response = await fetch(url);
 
     if (!response.ok) {
