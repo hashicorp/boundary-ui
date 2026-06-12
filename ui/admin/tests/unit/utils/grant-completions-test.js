@@ -912,8 +912,8 @@ module('Unit | Utils | grant-completions', function (hooks) {
         this.translate,
         async (partial, compatibleResourceTypes) => {
           assert.deepEqual(compatibleResourceTypes, [
-            'credential-store',
             'auth-method',
+            'credential-store',
             'host-catalog',
           ]);
           return [];
