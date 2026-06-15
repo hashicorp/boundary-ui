@@ -635,12 +635,18 @@ role:
       global-admin:
         name: Global Admin
         description: Full administrative access to all resources in Boundary
+      org-access:
+        name: Org Access
+        description: Administrative access to perform actions on an org scope, but not the resources the org contains
       org-admin:
         name: Org Admin
-        description: Administrative access to all resources within an organization
+        description: Administrative access to perform actions on the resources an org contains
+      project-access:
+        name: Project Access
+        description: Administrative access to perform actions on a project scope, but not the resources the project contains
       project-admin:
         name: Project Admin
-        description: Administrative access to all resources within a project
+        description: Administrative access to perform actions on the resources a project contains
       session-manager:
         name: Session Manager
         description: Can view and cancel sessions
@@ -829,12 +835,17 @@ role:
       remove-credential-sources: Remove credential sources from a target
       attach-storage-policy: Attach a storage policy to all session recordings in the scope
       detach-storage-policy: Detach a storage policy from all session recordings in the scope
+      set-alias-suffix: Set the alias suffix on a scope
+      remove-alias-suffix: Remove the alias suffix from a scope
       list-keys: List the keys within a given scope
       rotate-keys: Replace a scope's current KEK and DEKs with a new set of keys
       list-key-version-destruction-jobs: List all pending key version destruction jobs within a scope
       destroy-key-version: Destroy a key version in the scope
       download: Download a session recording
       reapply-storage-policy: Reapply the storage policy to a session recording
+      list-exports: List all export jobs for session recordings
+      export: Export a session recording
+      export:cancel: Cancel an in-progress session recording export
       monthly-active-users: Display the number of monthly active Boundary users to help predict billing
       no-actions: No actions available for this resource type.
       invalid-id-or-type: Invalid ID and type. No actions available.
