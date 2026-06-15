@@ -84,15 +84,15 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
     {
       id: 'user-manager',
       grantStrings: [
-        'ids=*;type=user;actions=create,list,read,update,delete,add-accounts,set-accounts,remove-accounts',
+        'ids=*;type=user;actions=*',
         'ids=*;type=group;actions=*',
-        'ids=*;type=account;actions=create,list,read,update,delete',
+        'ids=*;type=account;actions=*',
       ],
     },
     {
       id: 'auth-method-manager',
       grantStrings: [
-        'ids=*;type=auth-method;actions=create,list,read,update,delete,change-state',
+        'ids=*;type=auth-method;actions=*',
         'ids=*;type=managed-group;actions=*',
       ],
     },
