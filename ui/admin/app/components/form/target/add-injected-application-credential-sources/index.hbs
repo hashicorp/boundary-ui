@@ -17,29 +17,31 @@
     @cancelText={{t 'actions.cancel'}}
   />
 
-  <Hds::Table
-    @model={{@filteredCredentialSources}}
-    @columns={{array
-      (hash label=(t 'form.id.label'))
-      (hash label=(t 'form.name.label'))
-      (hash label=(t 'form.type.label'))
-    }}
-    @valign='middle'
-  >
-    <:body as |B|>
-      <B.Tr>
-        <B.Td data-test-credential-source={{B.data.type}}>
-          <Hds::Form::Checkbox::Field
-            {{on 'change' (fn this.toggleCredentialSource B.data.id)}}
-            as |F|
-          >
-            <F.Label>{{B.data.id}}</F.Label>
-            <F.HelperText>{{B.data.description}}</F.HelperText>
-          </Hds::Form::Checkbox::Field>
-        </B.Td>
-        <B.Td>{{B.data.name}}</B.Td>
-        <B.Td><CredSourceTypeBadge @model={{B.data}} /></B.Td>
-      </B.Tr>
-    </:body>
-  </Hds::Table>
+  <div class='table-scroll-container'>
+    <Hds::Table
+      @model={{@filteredCredentialSources}}
+      @columns={{array
+        (hash label=(t 'form.id.label'))
+        (hash label=(t 'form.name.label'))
+        (hash label=(t 'form.type.label'))
+      }}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td data-test-credential-source={{B.data.type}}>
+            <Hds::Form::Checkbox::Field
+              {{on 'change' (fn this.toggleCredentialSource B.data.id)}}
+              as |F|
+            >
+              <F.Label>{{B.data.id}}</F.Label>
+              <F.HelperText>{{B.data.description}}</F.HelperText>
+            </Hds::Form::Checkbox::Field>
+          </B.Td>
+          <B.Td>{{B.data.name}}</B.Td>
+          <B.Td><CredSourceTypeBadge @model={{B.data}} /></B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
+  </div>
 </Rose::Form>

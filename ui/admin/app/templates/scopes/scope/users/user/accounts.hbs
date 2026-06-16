@@ -32,71 +32,73 @@
 
   <page.body>
     {{#if @model.accounts}}
+      <div class='table-scroll-container'>
+        <Hds::Table
+          @model={{@model.accounts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'titles.actions'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                <Hds::Text::Body @weight='semibold'>
+                  {{#if (can 'read accounts' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @models={{array B.data.auth_method_id B.data.id}}
+                    >
+                      {{B.data.accountName}}
+                    </LinkTo>
+                  {{else}}
+                    {{B.data.displayName}}
+                  {{/if}}
+                </Hds::Text::Body>
 
-      <Hds::Table
-        @model={{@model.accounts}}
-        @columns={{array
-          (hash label=(t 'form.name.label'))
-          (hash label=(t 'form.type.label'))
-          (hash label=(t 'form.id.label'))
-          (hash label=(t 'titles.actions'))
-        }}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              <Hds::Text::Body @weight='semibold'>
-                {{#if (can 'read accounts' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                    @models={{array B.data.auth_method_id B.data.id}}
-                  >
-                    {{B.data.accountName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <Hds::Badge
+                  @text={{t
+                    (concat 'resources.auth-method.types.' B.data.type)
+                  }}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+              <B.Td>
+
+                {{#if (can 'removeAccount user' @model.user account=B.data)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                    />
+                    <dd.Interactive
+                      @color='critical'
+                      {{on
+                        'click'
+                        (fn this.users.removeAccount @model.user B.data)
+                      }}
+                    >{{t 'actions.remove'}}</dd.Interactive>
+                  </Hds::Dropdown>
                 {{/if}}
-              </Hds::Text::Body>
-
-              <Hds::Text::Body @tag='p'>
-                {{B.data.description}}
-              </Hds::Text::Body>
-            </B.Td>
-            <B.Td>
-              <Hds::Badge
-                @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
-              />
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-            <B.Td>
-
-              {{#if (can 'removeAccount user' @model.user account=B.data)}}
-                <Hds::Dropdown as |dd|>
-                  <dd.ToggleIcon
-                    @icon='more-horizontal'
-                    @text={{t 'actions.manage'}}
-                    @hasChevron={{false}}
-                  />
-                  <dd.Interactive
-                    @color='critical'
-                    {{on
-                      'click'
-                      (fn this.users.removeAccount @model.user B.data)
-                    }}
-                  >{{t 'actions.remove'}}</dd.Interactive>
-                </Hds::Dropdown>
-              {{/if}}
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      </div>
     {{else}}
 
       <Rose::Layout::Centered>

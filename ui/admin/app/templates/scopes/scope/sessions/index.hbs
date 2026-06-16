@@ -111,69 +111,71 @@
       <FilterTags @filters={{this.filters}} />
 
       {{#if @model.sessions}}
-        <Hds::Table
-          @valign='middle'
-          @onSort={{this.onSort}}
-          @sortBy={{this.sortAttribute}}
-          @sortOrder={{this.sortDirection}}
-        >
-          <:head as |H|>
-            <H.Tr>
-              <H.ThSort
-                @onClickSort={{fn H.setSortBy 'id'}}
-                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
-              >{{t 'form.id.label'}}</H.ThSort>
-              <H.Th>{{t 'resources.user.title'}}</H.Th>
-              <H.Th>{{t 'resources.target.title'}}</H.Th>
-              <H.ThSort
-                @onClickSort={{fn H.setSortBy 'created_time'}}
-                @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
-              >{{t 'form.started.label'}}</H.ThSort>
-              <H.ThSort
-                @onClickSort={{fn H.setSortBy 'status'}}
-                @sortOrder={{if (eq 'status' H.sortBy) H.sortOrder}}
-              >{{t 'form.status.label'}}</H.ThSort>
-              <H.Th>{{t 'titles.actions'}}</H.Th>
-            </H.Tr>
-          </:head>
-          <:body as |B|>
-            {{#each @model.sessions as |data|}}
-              <B.Tr data-test-sessions-table-row={{data.id}}>
-                <B.Td>
-                  <Hds::Copy::Snippet
-                    data-test-session={{data.id}}
-                    @textToCopy={{data.id}}
-                    @color='secondary'
-                  />
-                </B.Td>
-                <B.Td>
-                  {{data.user.displayName}}
-                </B.Td>
-                <B.Td>
-                  {{data.target.displayName}}
-                </B.Td>
-                <B.Td>
-                  <Hds::Time
-                    @date={{data.created_time}}
-                    @display='friendly-local'
-                  />
-                </B.Td>
-                <B.Td>
-                  <SessionStatus @model={{data}} />
-                </B.Td>
-                <B.Td>
-                  {{#if (can 'cancel session' data)}}
-                    <Hds::Button
+        <div class='table-scroll-container'>
+          <Hds::Table
+            @valign='middle'
+            @onSort={{this.onSort}}
+            @sortBy={{this.sortAttribute}}
+            @sortOrder={{this.sortDirection}}
+          >
+            <:head as |H|>
+              <H.Tr>
+                <H.ThSort
+                  @onClickSort={{fn H.setSortBy 'id'}}
+                  @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+                >{{t 'form.id.label'}}</H.ThSort>
+                <H.Th>{{t 'resources.user.title'}}</H.Th>
+                <H.Th>{{t 'resources.target.title'}}</H.Th>
+                <H.ThSort
+                  @onClickSort={{fn H.setSortBy 'created_time'}}
+                  @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
+                >{{t 'form.started.label'}}</H.ThSort>
+                <H.ThSort
+                  @onClickSort={{fn H.setSortBy 'status'}}
+                  @sortOrder={{if (eq 'status' H.sortBy) H.sortOrder}}
+                >{{t 'form.status.label'}}</H.ThSort>
+                <H.Th>{{t 'titles.actions'}}</H.Th>
+              </H.Tr>
+            </:head>
+            <:body as |B|>
+              {{#each @model.sessions as |data|}}
+                <B.Tr data-test-sessions-table-row={{data.id}}>
+                  <B.Td>
+                    <Hds::Copy::Snippet
+                      data-test-session={{data.id}}
+                      @textToCopy={{data.id}}
                       @color='secondary'
-                      @text={{t 'actions.cancel'}}
-                      {{on 'click' (fn this.cancelSession data)}}
                     />
-                  {{/if}}
-                </B.Td>
-              </B.Tr>
-            {{/each}}
-          </:body>
-        </Hds::Table>
+                  </B.Td>
+                  <B.Td>
+                    {{data.user.displayName}}
+                  </B.Td>
+                  <B.Td>
+                    {{data.target.displayName}}
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Time
+                      @date={{data.created_time}}
+                      @display='friendly-local'
+                    />
+                  </B.Td>
+                  <B.Td>
+                    <SessionStatus @model={{data}} />
+                  </B.Td>
+                  <B.Td>
+                    {{#if (can 'cancel session' data)}}
+                      <Hds::Button
+                        @color='secondary'
+                        @text={{t 'actions.cancel'}}
+                        {{on 'click' (fn this.cancelSession data)}}
+                      />
+                    {{/if}}
+                  </B.Td>
+                </B.Tr>
+              {{/each}}
+            </:body>
+          </Hds::Table>
+        </div>
         <Rose::Pagination
           @totalItems={{@model.totalItems}}
           @currentPage={{this.page}}

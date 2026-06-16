@@ -16,42 +16,44 @@
       @submitText={{t 'resources.group.actions.add-members'}}
       @cancelText={{t 'actions.cancel'}}
     />
-    <Hds::Table
-      @model={{this.availableUsers}}
-      @columns={{array
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'resources.scope.title'))
-        (hash label=(t 'form.description.label'))
-      }}
-      @valign='middle'
-    >
-      <:body as |B|>
-        <B.Tr>
-          <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleMember B.data)}}
-              as |F|
-            >
-              <F.Label>{{B.data.displayName}}</F.Label>
-              {{#if B.data.accountName}}
-                <F.HelperText>
-                  <Hds::Badge @text={{B.data.accountName}} />
-                </F.HelperText>
-              {{/if}}
-            </Hds::Form::Checkbox::Field>
-          </B.Td>
-          <B.Td>
-            <Hds::Text::Code>
-              {{B.data.id}}
-            </Hds::Text::Code>
-          </B.Td>
-          <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
-          <B.Td>{{B.data.description}}</B.Td>
-        </B.Tr>
+    <div class='table-scroll-container'>
+      <Hds::Table
+        @model={{this.availableUsers}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'form.description.label'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Form::Checkbox::Field
+                {{on 'change' (fn this.toggleMember B.data)}}
+                as |F|
+              >
+                <F.Label>{{B.data.displayName}}</F.Label>
+                {{#if B.data.accountName}}
+                  <F.HelperText>
+                    <Hds::Badge @text={{B.data.accountName}} />
+                  </F.HelperText>
+                {{/if}}
+              </Hds::Form::Checkbox::Field>
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Code>
+                {{B.data.id}}
+              </Hds::Text::Code>
+            </B.Td>
+            <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
+            <B.Td>{{B.data.description}}</B.Td>
+          </B.Tr>
 
-      </:body>
-    </Hds::Table>
+        </:body>
+      </Hds::Table>
+    </div>
 
   </Rose::Form>
 {{/if}}

@@ -17,41 +17,43 @@
       @cancelText={{t 'actions.cancel'}}
     />
 
-    <Hds::Table
-      @model={{this.filteredAccounts}}
-      @columns={{array
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.type.label'))
-        (hash label=(t 'resources.auth-method.title'))
-      }}
-      @valign='middle'
-    >
-      <:body as |B|>
-        <B.Tr>
-          <B.Td>
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.toggleAccount B.data.id)}}
-              as |F|
-            >
-              <F.Label>{{B.data.id}}</F.Label>
-              <F.HelperText>{{B.data.description}}</F.HelperText>
-            </Hds::Form::Checkbox::Field>
-          </B.Td>
-          <B.Td>{{B.data.accountName}}</B.Td>
-          <B.Td>
-            <Hds::Badge
-              @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
-            />
-          </B.Td>
-          <B.Td>
-            <Hds::Text::Code>
-              {{B.data.auth_method_id}}
-            </Hds::Text::Code>
-          </B.Td>
-        </B.Tr>
-      </:body>
-    </Hds::Table>
+    <div class='table-scroll-container'>
+      <Hds::Table
+        @model={{this.filteredAccounts}}
+        @columns={{array
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'resources.auth-method.title'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Form::Checkbox::Field
+                {{on 'change' (fn this.toggleAccount B.data.id)}}
+                as |F|
+              >
+                <F.Label>{{B.data.id}}</F.Label>
+                <F.HelperText>{{B.data.description}}</F.HelperText>
+              </Hds::Form::Checkbox::Field>
+            </B.Td>
+            <B.Td>{{B.data.accountName}}</B.Td>
+            <B.Td>
+              <Hds::Badge
+                @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
+              />
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Code>
+                {{B.data.auth_method_id}}
+              </Hds::Text::Code>
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    </div>
   </Rose::Form>
 {{/if}}
 
