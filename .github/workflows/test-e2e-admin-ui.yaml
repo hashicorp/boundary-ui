@@ -17,32 +17,57 @@ on:
         type: string
 
 jobs:
-  test:
-    name: test
+  setup:
+    name: setup matrix
     # don't need to run e2e tests on ce -> ent merges since tests were already
-    # run in the ce branch, and there are currently no code diffferences between
+    # run in the ce branch, and there are currently no code differences between
     # the two repos
     if: github.actor != 'hc-github-team-secure-boundary'
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          BOUNDARY_BRANCH="${{ github.event.inputs.boundary-branch || 'main' }}"
+          ENT_BRANCH="${{ github.event.inputs.boundary-enterprise-branch || 'main' }}"
+
+          if [[ "${{ github.repository }}" == "hashicorp/boundary-ui" ]]; then
+            matrix=$(jq -cn --arg branch "$BOUNDARY_BRANCH" '{
+              browser: ["chromium", "firefox", "webkit"],
+              include: [{
+                boundary_edition: "community",
+                github_repo: "hashicorp/boundary",
+                folder_name: "boundary",
+                boundary_edition_short: "oss",
+                enos_scenario: "e2e_ui_docker",
+                test_command: "admin:ce:docker",
+                boundary_branch: $branch
+              }]
+            }')
+          else
+            matrix=$(jq -cn --arg branch "$ENT_BRANCH" '{
+              browser: ["chromium", "firefox", "webkit"],
+              include: [{
+                boundary_edition: "enterprise",
+                github_repo: "hashicorp/boundary-enterprise",
+                folder_name: "boundary-enterprise",
+                boundary_edition_short: "ent",
+                enos_scenario: "e2e_ui_docker_ent",
+                test_command: "admin:ent:docker",
+                boundary_branch: $branch
+              }]
+            }')
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  test:
+    name: test
+    needs: setup
     runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     strategy:
-      matrix:
-        boundary_edition: [community, enterprise]
-        browser: [chromium, firefox, webkit]
-        include:
-          - boundary_edition: community
-            github_repo: hashicorp/boundary
-            folder_name: boundary
-            boundary_edition_short: oss
-            enos_scenario: e2e_ui_docker
-            test_command: admin:ce:docker
-            boundary_branch: ${{ github.event.inputs.boundary-branch || 'main' }}
-          - boundary_edition: enterprise
-            github_repo: hashicorp/boundary-enterprise
-            folder_name: boundary-enterprise
-            boundary_edition_short: ent
-            enos_scenario: e2e_ui_docker_ent
-            test_command: admin:ent:docker
-            boundary_branch: ${{ github.event.inputs.boundary-enterprise-branch || 'main' }}
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
       fail-fast: false
     env:
       ENOS_VAR_e2e_debug_no_run: true
@@ -306,7 +331,7 @@ jobs:
 
       - name: Send Slack message on failure
         uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
-        if: ${{ failure() && github.repository == 'hashicorp/boundary-ui' }}
+        if: ${{ failure() && github.repository == 'hashicorp/boundary-ui-enterprise' }}
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
