@@ -20,7 +20,7 @@ jobs:
   test:
     name: test
     # don't need to run e2e tests on ce -> ent merges since tests were already
-    # run in the ce branch, and there are currently no code diffferences between
+    # run in the ce branch, and there are currently no code differences between
     # the two repos
     # desktop client e2e tests only run enterprise tests, so only run in boundary-ui-enterprise
     if: github.actor != 'hc-github-team-secure-boundary' && github.repository == 'hashicorp/boundary-ui-enterprise'
