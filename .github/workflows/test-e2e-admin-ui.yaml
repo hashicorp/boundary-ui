@@ -331,7 +331,7 @@ jobs:
 
       - name: Send Slack message on failure
         uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
-        if: ${{ failure() && github.repository == 'hashicorp/boundary-ui' }}
+        if: ${{ failure() && github.repository == 'hashicorp/boundary-ui-enterprise' }}
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
