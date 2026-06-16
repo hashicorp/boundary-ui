@@ -25,7 +25,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "@babel/core": "^7.26.10",
+    "@babel/core": "^7.29.6",
     "@ember/test-waiters": "^4.1.0",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.3.1",
