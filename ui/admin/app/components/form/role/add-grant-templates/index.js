@@ -27,6 +27,10 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
       grantStrings: ['ids=*;type=*;actions=*'],
     },
     {
+      id: 'org-access',
+      grantStrings: ['ids=<org-id>;type=scope;actions=*'],
+    },
+    {
       id: 'org-admin',
       grantStrings: [
         'ids=<org-id>;type=scope;actions=*',
@@ -35,6 +39,10 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
         'ids=*;type=group;actions=*',
         'ids=*;type=role;actions=*',
       ],
+    },
+    {
+      id: 'project-access',
+      grantStrings: ['ids=<project-id>;type=scope;actions=*'],
     },
     {
       id: 'project-admin',
@@ -49,52 +57,50 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
     {
       id: 'session-manager',
       grantStrings: [
-        'ids=*;type=session;actions=list,read,cancel',
+        'ids=*;type=session;actions=*',
         'ids=*;type=target;actions=read,list',
       ],
     },
     {
       id: 'target-manager',
-      grantStrings: [
-        'ids=*;type=target;actions=create,list,read,update,delete,add-host-sources,set-host-sources,remove-host-sources,add-credential-sources,set-credential-sources,remove-credential-sources',
-      ],
+      grantStrings: ['ids=*;type=target;actions=*'],
     },
     {
       id: 'host-resource-manager',
       grantStrings: [
-        'ids=*;type=host-catalog;actions=create,list,read,update,delete',
-        'ids=*;type=host-set;actions=create,list,read,update,delete,add-hosts,set-hosts,remove-hosts',
-        'ids=*;type=host;actions=create,list,read,update,delete',
+        'ids=*;type=host-catalog;actions=*',
+        'ids=*;type=host-set;actions=*',
+        'ids=*;type=host;actions=*',
       ],
     },
     {
       id: 'credential-manager',
       grantStrings: [
-        'ids=*;type=credential;actions=create,list,read,update,delete',
-        'ids=*;type=credential-store;actions=create,list,read,update,delete',
-        'ids=*;type=credential-library;actions=create,list,read,update,delete',
+        'ids=*;type=credential;actions=*',
+        'ids=*;type=credential-store;actions=*',
+        'ids=*;type=credential-library;actions=*',
       ],
     },
     {
       id: 'user-manager',
       grantStrings: [
-        'ids=*;type=user;actions=create,list,read,update,delete,add-accounts,set-accounts,remove-accounts',
-        'ids=*;type=group;actions=create,list,read,update,delete,add-members,set-members,remove-members',
-        'ids=*;type=account;actions=create,list,read,update,delete',
+        'ids=*;type=user;actions=*',
+        'ids=*;type=group;actions=*',
+        'ids=*;type=account;actions=*',
       ],
     },
     {
       id: 'auth-method-manager',
       grantStrings: [
-        'ids=*;type=auth-method;actions=create,list,read,update,delete,change-state',
-        'ids=*;type=managed-group;actions=create,list,read,update,delete',
+        'ids=*;type=auth-method;actions=*',
+        'ids=*;type=managed-group;actions=*',
       ],
     },
     {
       id: 'session-auditor',
       grantStrings: [
         'ids=*;type=session;actions=list,read',
-        'ids=*;type=session-recording;actions=list,read,download',
+        'ids=*;type=session-recording;actions=list,list-exports,read,download,export,export:cancel',
       ],
     },
     {

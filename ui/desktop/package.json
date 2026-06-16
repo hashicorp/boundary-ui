@@ -62,7 +62,7 @@
     "@glimmer/tracking": "^1.1.2",
     "@warp-drive/build-config": "^0.0.2",
     "broccoli-asset-rev": "^3.0.0",
-    "concurrently": "^9.1.0",
+    "concurrently": "^10.0.3",
     "core": "workspace:*",
     "cross-env": "^7.0.3",
     "doctoc": "^2.2.0",

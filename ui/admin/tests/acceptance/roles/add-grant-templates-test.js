@@ -83,10 +83,10 @@ module('Acceptance | roles | add-grant-templates', function (hooks) {
     const initialRowCount = findAll(commonSelectors.TABLE_ROWS).length;
 
     await fillIn(commonSelectors.SEARCH_INPUT, 'admin');
-    await waitUntil(() => findAll(commonSelectors.TABLE_ROWS).length === 3);
+    await waitUntil(() => findAll(commonSelectors.TABLE_ROWS).length === 5);
 
     assert.strictEqual(initialRowCount, 10);
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROWS).length, 3);
+    assert.strictEqual(findAll(commonSelectors.TABLE_ROWS).length, 5);
   });
 
   test('can search for grant templates and get no results', async function (assert) {
