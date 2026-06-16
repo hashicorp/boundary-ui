@@ -12,7 +12,7 @@
     'header header header'
     'navigation navigation navigation'
     'body body body';
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: auto 1fr;
 
   .rose-layout-page-header {

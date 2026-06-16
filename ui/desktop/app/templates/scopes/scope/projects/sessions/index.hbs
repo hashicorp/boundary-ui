@@ -62,103 +62,105 @@
   <FilterTags @filters={{this.filters}} />
 {{/if}}
 {{#if @model.sessions}}
-  <Hds::Table
-    @onSort={{this.onSort}}
-    @sortBy={{this.sortAttribute}}
-    @sortOrder={{this.sortDirection}}
-    @model={{this.sortedSessions}}
-    @valign='middle'
-  >
-    <:head as |H|>
-      <H.Tr>
-        <H.ThSort
-          @onClickSort={{fn H.setSortBy 'created_time'}}
-          @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
-        >{{t 'form.started.label'}}</H.ThSort>
-        <H.Th>{{t 'form.session_id.label'}}</H.Th>
-        <H.Th>{{t 'resources.target.title'}}</H.Th>
-        <H.Th>{{t 'form.proxy_url.label'}}</H.Th>
-        <H.Th>{{t 'form.status.label'}}</H.Th>
-        <H.Th @isVisuallyHidden={{true}} @align='right' @width='60px'>{{t
-            'titles.actions'
-          }}</H.Th>
-      </H.Tr>
-    </:head>
-    <:body as |B|>
-      {{#each this.sortedSessions as |session|}}
-        <B.Tr>
-          <B.Td>
-            <Hds::Time
-              @date={{session.created_time}}
-              @display='friendly-local'
-            />
-          </B.Td>
-          <B.Td>
-            <div class='link-copy-button-container'>
-              {{#if session.isAvailable}}
-                <Hds::Link::Inline
-                  @route='scopes.scope.projects.sessions.session.index'
-                  @model={{session.id}}
-                  data-test-session-detail-link={{session.id}}
-                >
-                  {{session.id}}
-                </Hds::Link::Inline>
-              {{else}}
-                <Hds::Text::Body data-test-session-id-copy={{session.id}}>
-                  {{session.id}}
-                </Hds::Text::Body>
-              {{/if}}
-              <Hds::Copy::Button
-                @text={{session.id}}
-                @isIconOnly={{true}}
-                @textToCopy={{session.id}}
-                data-test-session-id-copy={{session.id}}
+  <div class='table-scroll-container'>
+    <Hds::Table
+      @onSort={{this.onSort}}
+      @sortBy={{this.sortAttribute}}
+      @sortOrder={{this.sortDirection}}
+      @model={{this.sortedSessions}}
+      @valign='middle'
+    >
+      <:head as |H|>
+        <H.Tr>
+          <H.ThSort
+            @onClickSort={{fn H.setSortBy 'created_time'}}
+            @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
+          >{{t 'form.started.label'}}</H.ThSort>
+          <H.Th>{{t 'form.session_id.label'}}</H.Th>
+          <H.Th>{{t 'resources.target.title'}}</H.Th>
+          <H.Th>{{t 'form.proxy_url.label'}}</H.Th>
+          <H.Th>{{t 'form.status.label'}}</H.Th>
+          <H.Th @isVisuallyHidden={{true}} @align='right' @width='60px'>{{t
+              'titles.actions'
+            }}</H.Th>
+        </H.Tr>
+      </:head>
+      <:body as |B|>
+        {{#each this.sortedSessions as |session|}}
+          <B.Tr>
+            <B.Td>
+              <Hds::Time
+                @date={{session.created_time}}
+                @display='friendly-local'
               />
-            </div>
-          </B.Td>
-          <B.Td>
-            {{session.target.displayName}}
-          </B.Td>
-          {{!
-              Two if's here because:
-              1) Local proxy info is only relevant if the session is
-                active or pending (aka isAvailable).  Once the session
-                is canceled or in the process thereof, the local proxy
-                may no longer be used.
-              2) The session actually has proxy information associated
-                with it.  It's possible for the user to start sessions
-                from other devices (or even another tab), in which case we
-                won't have the local proxy info available here.
-            }}
-          <B.Td>
-            {{#if session.isAvailable}}
-              {{#if session.proxy}}
-                <Hds::Copy::Snippet
-                  @textToCopy={{session.proxy}}
+            </B.Td>
+            <B.Td>
+              <div class='link-copy-button-container'>
+                {{#if session.isAvailable}}
+                  <Hds::Link::Inline
+                    @route='scopes.scope.projects.sessions.session.index'
+                    @model={{session.id}}
+                    data-test-session-detail-link={{session.id}}
+                  >
+                    {{session.id}}
+                  </Hds::Link::Inline>
+                {{else}}
+                  <Hds::Text::Body data-test-session-id-copy={{session.id}}>
+                    {{session.id}}
+                  </Hds::Text::Body>
+                {{/if}}
+                <Hds::Copy::Button
+                  @text={{session.id}}
+                  @isIconOnly={{true}}
+                  @textToCopy={{session.id}}
+                  data-test-session-id-copy={{session.id}}
+                />
+              </div>
+            </B.Td>
+            <B.Td>
+              {{session.target.displayName}}
+            </B.Td>
+            {{!
+                Two if's here because:
+                1) Local proxy info is only relevant if the session is
+                  active or pending (aka isAvailable).  Once the session
+                  is canceled or in the process thereof, the local proxy
+                  may no longer be used.
+                2) The session actually has proxy information associated
+                  with it.  It's possible for the user to start sessions
+                  from other devices (or even another tab), in which case we
+                  won't have the local proxy info available here.
+              }}
+            <B.Td>
+              {{#if session.isAvailable}}
+                {{#if session.proxy}}
+                  <Hds::Copy::Snippet
+                    @textToCopy={{session.proxy}}
+                    @color='secondary'
+                  />
+                {{/if}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <SessionStatus @model={{session}} />
+            </B.Td>
+            <B.Td @align='right' width='60px'>
+              {{#if (can 'cancel session' session)}}
+                <Hds::Button
+                  @text={{t 'actions.cancel'}}
+                  @icon='x'
+                  @isIconOnly={{true}}
                   @color='secondary'
+                  {{on 'click' (fn this.cancelSession session)}}
+                  data-test-session-cancel-button={{session.id}}
                 />
               {{/if}}
-            {{/if}}
-          </B.Td>
-          <B.Td>
-            <SessionStatus @model={{session}} />
-          </B.Td>
-          <B.Td @align='right' width='60px'>
-            {{#if (can 'cancel session' session)}}
-              <Hds::Button
-                @text={{t 'actions.cancel'}}
-                @icon='x'
-                @isIconOnly={{true}}
-                @color='secondary'
-                {{on 'click' (fn this.cancelSession session)}}
-                data-test-session-cancel-button={{session.id}}
-              />
-            {{/if}}
-          </B.Td>
-        </B.Tr>
-      {{/each}}
-    </:body>
-  </Hds::Table>
+            </B.Td>
+          </B.Tr>
+        {{/each}}
+      </:body>
+    </Hds::Table>
+  </div>
   <Rose::Pagination
     @totalItems={{@model.totalItems}}
     @currentPage={{this.page}}

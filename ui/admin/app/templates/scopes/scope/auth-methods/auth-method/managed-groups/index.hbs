@@ -31,83 +31,85 @@
 
   <page.body>
     {{#if @model.managedGroups}}
-      {{#if (get @model.managedGroups '0.isOIDC')}}
-        <Hds::Table
-          @model={{@model.managedGroups}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.description.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read model' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
-                    @model={{B.data.id}}
-                  >
+      <div class='table-scroll-container'>
+        {{#if (get @model.managedGroups '0.isOIDC')}}
+          <Hds::Table
+            @model={{@model.managedGroups}}
+            @columns={{array
+              (hash label=(t 'form.name.label'))
+              (hash label=(t 'form.description.label'))
+              (hash label=(t 'form.type.label'))
+              (hash label=(t 'form.id.label'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read model' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+                      @model={{B.data.id}}
+                    >
+                      {{B.data.displayName}}
+                    </LinkTo>
+                  {{else}}
                     {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-              </B.Td>
-              <B.Td>{{B.data.description}}</B.Td>
-              <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      {{else}}
-        <Hds::Table
-          @model={{@model.managedGroups}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.description.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-            (hash label=(t 'resources.managed-group.form.group_names.label'))
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read model' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
-                    @model={{B.data.id}}
-                  >
+                  {{/if}}
+                </B.Td>
+                <B.Td>{{B.data.description}}</B.Td>
+                <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{B.data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{else}}
+          <Hds::Table
+            @model={{@model.managedGroups}}
+            @columns={{array
+              (hash label=(t 'form.name.label'))
+              (hash label=(t 'form.description.label'))
+              (hash label=(t 'form.type.label'))
+              (hash label=(t 'form.id.label'))
+              (hash label=(t 'resources.managed-group.form.group_names.label'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read model' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+                      @model={{B.data.id}}
+                    >
+                      {{B.data.displayName}}
+                    </LinkTo>
+                  {{else}}
                     {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-              </B.Td>
-              <B.Td>{{B.data.description}}</B.Td>
-              <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-              <B.Td>
-                {{truncate-list 'actions.more' B.data.group_names 3}}
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      {{/if}}
+                  {{/if}}
+                </B.Td>
+                <B.Td>{{B.data.description}}</B.Td>
+                <B.Td><Hds::Badge @text={{B.data.type}} /></B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{B.data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+                <B.Td>
+                  {{truncate-list 'actions.more' B.data.group_names 3}}
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{/if}}
+      </div>
     {{else}}
       <Rose::Layout::Centered>
         <Hds::ApplicationState as |A|>

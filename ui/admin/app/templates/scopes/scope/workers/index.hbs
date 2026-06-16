@@ -66,71 +66,73 @@
       </div>
       <FilterTags @filters={{this.filters}} />
 
-      <Hds::Table
-        @model={{@model}}
-        @columns={{array
-          (hash label=(t 'resources.worker.title'))
-          (hash label=(t 'form.tags.label'))
-          (hash label=(t 'resources.session.title_plural'))
-          (hash label=(t 'resources.worker.table.release_version'))
-          (hash label=(t 'resources.worker.table.ip_address'))
-          (hash label=(t 'form.worker_last_seen.label'))
-          (hash label=(t 'form.id.label'))
-        }}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if (and (can 'read worker' B.data) B.data.isPki)}}
-                <LinkTo
-                  @route='scopes.scope.workers.worker'
-                  @model={{B.data.id}}
-                >
+      <div class='table-scroll-container'>
+        <Hds::Table
+          @model={{@model}}
+          @columns={{array
+            (hash label=(t 'resources.worker.title'))
+            (hash label=(t 'form.tags.label'))
+            (hash label=(t 'resources.session.title_plural'))
+            (hash label=(t 'resources.worker.table.release_version'))
+            (hash label=(t 'resources.worker.table.ip_address'))
+            (hash label=(t 'form.worker_last_seen.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (and (can 'read worker' B.data) B.data.isPki)}}
+                  <LinkTo
+                    @route='scopes.scope.workers.worker'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
                   {{B.data.displayName}}
-                </LinkTo>
-              {{else}}
-                {{B.data.displayName}}
-              {{/if}}
-              {{#if B.data.description}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              {{#if B.data.tagCount}}
-                <Hds::Button
-                  data-test-worker-tags-flyout-button={{B.data.id}}
-                  @icon='tag'
-                  @text={{t
-                    'resources.worker.table.tag_count'
-                    tagCount=B.data.tagCount
-                  }}
-                  @color='tertiary'
-                  @size='small'
-                  {{on 'click' (fn this.selectWorker B.data)}}
+                {{/if}}
+                {{#if B.data.description}}
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                {{#if B.data.tagCount}}
+                  <Hds::Button
+                    data-test-worker-tags-flyout-button={{B.data.id}}
+                    @icon='tag'
+                    @text={{t
+                      'resources.worker.table.tag_count'
+                      tagCount=B.data.tagCount
+                    }}
+                    @color='tertiary'
+                    @size='small'
+                    {{on 'click' (fn this.selectWorker B.data)}}
+                  />
+                {{/if}}
+              </B.Td>
+              <B.Td>{{B.data.active_connection_count}}</B.Td>
+              <B.Td>{{B.data.release_version}}</B.Td>
+              <B.Td>{{B.data.address}}</B.Td>
+              <B.Td>
+                <Hds::Text::Body><Hds::Time
+                    @date={{B.data.last_status_time}}
+                    @display='relative'
+                  /></Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
                 />
-              {{/if}}
-            </B.Td>
-            <B.Td>{{B.data.active_connection_count}}</B.Td>
-            <B.Td>{{B.data.release_version}}</B.Td>
-            <B.Td>{{B.data.address}}</B.Td>
-            <B.Td>
-              <Hds::Text::Body><Hds::Time
-                  @date={{B.data.last_status_time}}
-                  @display='relative'
-                /></Hds::Text::Body>
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      </div>
 
       {{#if this.selectedWorker}}
         <Hds::Flyout

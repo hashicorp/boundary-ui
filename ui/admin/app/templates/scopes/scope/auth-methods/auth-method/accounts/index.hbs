@@ -31,149 +31,151 @@
 
   <page.body>
     {{#if @model.accounts}}
-      {{! OIDC accounts display more fields }}
-      {{#if (get @model.accounts '0.isOIDC')}}
-        <Hds::Table
-          @model={{@model.accounts}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.issuer.label'))
-            (hash label=(t 'form.subject.label'))
-            (hash label=(t 'form.email.label'))
-            (hash label=(t 'form.full_name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read account' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                    @model={{B.data.id}}
-                  >
+      <div class='table-scroll-container'>
+        {{! OIDC accounts display more fields }}
+        {{#if (get @model.accounts '0.isOIDC')}}
+          <Hds::Table
+            @model={{@model.accounts}}
+            @columns={{array
+              (hash label=(t 'form.name.label'))
+              (hash label=(t 'form.issuer.label'))
+              (hash label=(t 'form.subject.label'))
+              (hash label=(t 'form.email.label'))
+              (hash label=(t 'form.full_name.label'))
+              (hash label=(t 'form.type.label'))
+              (hash label=(t 'form.id.label'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read account' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @model={{B.data.id}}
+                    >
+                      {{B.data.displayName}}
+                    </LinkTo>
+                  {{else}}
                     {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                {{B.data.issuer}}
-              </B.Td>
-              <B.Td>
-                {{B.data.subject}}
-              </B.Td>
-              <B.Td>
-                {{B.data.email}}
-              </B.Td>
-              <B.Td>
-                {{B.data.full_name}}
-              </B.Td>
-              <B.Td>
-                <Hds::Badge @text={{B.data.type}} />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      {{else if (get @model.accounts '0.isLDAP')}}
-        <Hds::Table
-          @model={{@model.accounts}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'resources.account.form.email.label'))
-            (hash label=(t 'resources.account.form.full_name.label'))
-            (hash label=(t 'resources.account.form.dn.label'))
-            (hash label=(t 'resources.account.form.member_of_groups.label'))
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read account' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                    @model={{B.data.id}}
-                  >
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{B.data.issuer}}
+                </B.Td>
+                <B.Td>
+                  {{B.data.subject}}
+                </B.Td>
+                <B.Td>
+                  {{B.data.email}}
+                </B.Td>
+                <B.Td>
+                  {{B.data.full_name}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Badge @text={{B.data.type}} />
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{B.data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{else if (get @model.accounts '0.isLDAP')}}
+          <Hds::Table
+            @model={{@model.accounts}}
+            @columns={{array
+              (hash label=(t 'form.name.label'))
+              (hash label=(t 'resources.account.form.email.label'))
+              (hash label=(t 'resources.account.form.full_name.label'))
+              (hash label=(t 'resources.account.form.dn.label'))
+              (hash label=(t 'resources.account.form.member_of_groups.label'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read account' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @model={{B.data.id}}
+                    >
+                      {{B.data.displayName}}
+                    </LinkTo>
+                  {{else}}
                     {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                {{B.data.email}}
-              </B.Td>
-              <B.Td>{{B.data.full_name}}</B.Td>
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{B.data.email}}
+                </B.Td>
+                <B.Td>{{B.data.full_name}}</B.Td>
 
-              <B.Td>{{B.data.dn}}</B.Td>
-              <B.Td>
-                <div class='truncated-list'>
-                  {{truncate-list 'actions.more' B.data.member_of_groups 3}}
-                </div>
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      {{else}}
-        <Hds::Table
-          @model={{@model.accounts}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.login_name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read account' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
-                    @model={{B.data.id}}
-                  >
+                <B.Td>{{B.data.dn}}</B.Td>
+                <B.Td>
+                  <div class='truncated-list'>
+                    {{truncate-list 'actions.more' B.data.member_of_groups 3}}
+                  </div>
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{else}}
+          <Hds::Table
+            @model={{@model.accounts}}
+            @columns={{array
+              (hash label=(t 'form.name.label'))
+              (hash label=(t 'form.login_name.label'))
+              (hash label=(t 'form.type.label'))
+              (hash label=(t 'form.id.label'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read account' B.data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                      @model={{B.data.id}}
+                    >
+                      {{B.data.accountName}}
+                    </LinkTo>
+                  {{else}}
                     {{B.data.accountName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.accountName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                {{B.data.login_name}}
-              </B.Td>
-              <B.Td>
-                <Hds::Badge @text={{B.data.type}} />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      {{/if}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{B.data.login_name}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Badge @text={{B.data.type}} />
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{B.data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        {{/if}}
+      </div>
     {{else}}
       <Rose::Layout::Centered>
         <Hds::ApplicationState as |A|>

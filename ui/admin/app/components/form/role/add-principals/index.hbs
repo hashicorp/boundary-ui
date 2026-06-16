@@ -17,40 +17,42 @@
       @cancelText={{t 'actions.cancel'}}
     />
 
-    <Hds::Table
-      @model={{this.filteredPrincipals}}
-      @columns={{array
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.id.label'))
-        (hash label=(t 'form.type.label'))
-        (hash label=(t 'resources.scope.title'))
-        (hash label=(t 'form.description.label'))
-      }}
-      @valign='middle'
-    >
-      <:body as |B|>
-        <B.Tr>
-          <B.Td>
+    <div class='table-scroll-container'>
+      <Hds::Table
+        @model={{this.filteredPrincipals}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'form.description.label'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
 
-            <Hds::Form::Checkbox::Field
-              {{on 'change' (fn this.togglePrincipal B.data)}}
-              as |F|
-            >
-              <F.Label>{{B.data.displayName}}</F.Label>
-              {{#if B.data.accountName}}
-                <F.HelperText>
-                  <Hds::Badge @text={{B.data.accountName}} />
-                </F.HelperText>
-              {{/if}}
-            </Hds::Form::Checkbox::Field>
-          </B.Td>
-          <B.Td>{{B.data.id}}</B.Td>
-          <B.Td><PrincipalTypeBadge @model={{B.data}} /></B.Td>
-          <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
-          <B.Td>{{B.data.description}}</B.Td>
-        </B.Tr>
-      </:body>
-    </Hds::Table>
+              <Hds::Form::Checkbox::Field
+                {{on 'change' (fn this.togglePrincipal B.data)}}
+                as |F|
+              >
+                <F.Label>{{B.data.displayName}}</F.Label>
+                {{#if B.data.accountName}}
+                  <F.HelperText>
+                    <Hds::Badge @text={{B.data.accountName}} />
+                  </F.HelperText>
+                {{/if}}
+              </Hds::Form::Checkbox::Field>
+            </B.Td>
+            <B.Td>{{B.data.id}}</B.Td>
+            <B.Td><PrincipalTypeBadge @model={{B.data}} /></B.Td>
+            <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
+            <B.Td>{{B.data.description}}</B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    </div>
   </Rose::Form>
 {{/if}}
 
