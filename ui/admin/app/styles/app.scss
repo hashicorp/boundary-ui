@@ -1042,3 +1042,8 @@
   max-height: 50vh;
   overflow-y: auto;
 }
+
+// Grants editor autocomplete tooltip
+.rose-layout-page div .cm-tooltip-autocomplete {
+  z-index: 1000;
+}
