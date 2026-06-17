@@ -8,6 +8,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
+  tooltips,
   autocompletion,
   completionKeymap,
   startCompletion,
@@ -169,6 +170,7 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   customExtensions = [
+    tooltips({ parent: document.body }),
     autocompletion({
       override: [this.completionSource],
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
