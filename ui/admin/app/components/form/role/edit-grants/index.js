@@ -170,6 +170,7 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   customExtensions = [
+    // Configure tooltips to render in the body to avoid overflow issues within the editor container.
     tooltips({ parent: document.body }),
     autocompletion({
       override: [this.completionSource],
