@@ -1043,7 +1043,8 @@
   overflow-y: auto;
 }
 
-// Grants editor autocomplete tooltip
+// Prevent grants editor autocomplete tooltip from
+// being hidden by code editor in fullscreen mode.
 .rose-layout-page div .cm-tooltip-autocomplete {
   z-index: 1000;
 }
