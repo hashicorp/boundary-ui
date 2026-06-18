@@ -44,7 +44,7 @@
               @color='secondary'
               {{on 'click' @cancel}}
             />
-            {{#if this.grantStringsText}}
+            {{#if this.grantStrings.length}}
               <Hds::Button
                 @text={{t 'actions.export'}}
                 @color='tertiary'

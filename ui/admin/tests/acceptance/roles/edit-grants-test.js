@@ -348,4 +348,83 @@ module('Acceptance | roles/edit grants', function (hooks) {
 
     assert.dom(selectors.AUTOCOMPLETE_TOOLTIP).isVisible();
   });
+
+  test('can discard unsaved grant changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-06-17
+          enabled: false,
+        },
+      },
+    });
+
+    assert.expect(3);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.editGrants);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const newGrantString = 'ids=*;type=session;actions=list';
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.doc.length,
+        insert: `\n${newGrantString}`,
+      },
+    });
+    await click(commonSelectors.HREF(urls.role));
+
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
+
+    assert.strictEqual(currentURL(), urls.role);
+    console.log(this.server.schema.roles.find(instances.role.id));
+    assert.false(
+      this.server.schema.roles
+        .find(instances.role.id)
+        .grant_strings.includes(newGrantString),
+    );
+  });
+
+  test('can cancel discard grant changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-06-17
+          enabled: false,
+        },
+      },
+    });
+
+    assert.expect(3);
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.editGrants);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const newGrantString = 'ids=*;type=session;actions=list';
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.doc.length,
+        insert: `\n${newGrantString}`,
+      },
+    });
+    await click(commonSelectors.HREF(urls.role));
+
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
+    assert.strictEqual(currentURL(), urls.editGrants);
+    assert
+      .dom(commonSelectors.CODE_EDITOR_CONTENT)
+      .includesText(newGrantString);
+  });
 });
