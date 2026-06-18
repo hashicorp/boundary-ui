@@ -8,6 +8,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
+  tooltips,
   autocompletion,
   completionKeymap,
   startCompletion,
@@ -168,6 +169,8 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   customExtensions = [
+    // Configure tooltips to render in page layout to avoid overflow issues within the editor container.
+    tooltips({ parent: document.querySelector('.rose-layout-page') }),
     autocompletion({
       override: [this.completionSource],
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
