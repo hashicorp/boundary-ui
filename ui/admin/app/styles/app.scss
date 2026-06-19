@@ -1043,8 +1043,8 @@
   overflow-y: auto;
 }
 
-// Prevent grants editor autocomplete tooltip from
-// being hidden by code editor in fullscreen mode.
-.rose-layout-page div .cm-tooltip-autocomplete {
+// Prevent grants editor tooltip from being
+// hidden by code editor in fullscreen mode.
+.ember-application div .cm-tooltip {
   z-index: 1000;
 }
