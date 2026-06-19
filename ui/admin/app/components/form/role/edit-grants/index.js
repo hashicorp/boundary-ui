@@ -169,8 +169,10 @@ export default class FormRoleEditGrantsComponent extends Component {
   );
 
   customExtensions = [
-    // Configure tooltips to render in body to avoid overflow issues within the editor container.
-    tooltips({ parent: document.querySelector('.ember-application') }),
+    // Configure tooltips to render in app root to avoid overflow issues within the editor container.
+    tooltips({
+      parent: document.querySelector('.ember-application') ?? document.body,
+    }),
     autocompletion({
       override: [this.completionSource],
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
