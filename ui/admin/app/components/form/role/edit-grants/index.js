@@ -7,6 +7,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { getOwner } from '@ember/application';
 import {
   tooltips,
   autocompletion,
@@ -168,9 +169,14 @@ export default class FormRoleEditGrantsComponent extends Component {
     this.translateLintingError,
   );
 
+  rootElementSelector = getOwner(this).rootElement;
+  rootElement = getOwner(this)
+    .lookup('service:-document')
+    .querySelector(this.rootElementSelector);
+
   customExtensions = [
-    // Configure tooltips to render in page layout to avoid overflow issues within the editor container.
-    tooltips({ parent: document.querySelector('.rose-layout-page') }),
+    // Configure tooltips to render in app root to avoid overflow issues within the editor container.
+    tooltips({ parent: this.rootElement }),
     autocompletion({
       override: [this.completionSource],
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
