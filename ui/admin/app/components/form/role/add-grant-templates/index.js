@@ -33,7 +33,6 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
     {
       id: 'org-admin',
       grantStrings: [
-        'ids=<org-id>;type=scope;actions=*',
         'ids=*;type=auth-method;actions=*',
         'ids=*;type=user;actions=*',
         'ids=*;type=group;actions=*',
@@ -47,7 +46,6 @@ export default class FormRoleAddGrantTemplatesIndexComponent extends Component {
     {
       id: 'project-admin',
       grantStrings: [
-        'ids=<project-id>;type=scope;actions=*',
         'ids=*;type=host-catalog;actions=*',
         'ids=*;type=target;actions=*',
         'ids=*;type=credential-store;actions=*',
