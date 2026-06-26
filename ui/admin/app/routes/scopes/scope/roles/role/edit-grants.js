@@ -4,6 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { dropTask } from 'ember-concurrency';
 import { modelMapping } from 'api/services/sqlite';
@@ -59,5 +60,16 @@ export default class ScopesScopeRolesRoleEditGrantsRoute extends Route {
     }
 
     return response.json();
+  }
+
+  /**
+   * Stores the role model in the transition data property so that the application level hook
+   * can check for dirty attributes and trigger the confirm service.
+   * @param {object} transition
+   */
+  @action
+  async willTransition(transition) {
+    const { role } = transition.from.attributes;
+    transition.data = { model: role };
   }
 }

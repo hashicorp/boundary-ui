@@ -617,7 +617,7 @@ const validateActionsField = (
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
-          severity: 'error',
+          severity: 'warning',
           message: translate('actions.noop-requires-list'),
         });
         return;
@@ -637,7 +637,7 @@ const validateActionsField = (
         diagnostics.push({
           from: pos.valueStart,
           to: pos.valueEnd,
-          severity: 'error',
+          severity: 'warning',
           message: translate('actions.list-requires-noop'),
           actions: [createAddTextAction(translate('editor.add-noop'))],
         });

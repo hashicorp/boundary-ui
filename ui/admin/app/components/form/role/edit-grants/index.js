@@ -7,7 +7,9 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { getOwner } from '@ember/application';
 import {
+  tooltips,
   autocompletion,
   completionKeymap,
   startCompletion,
@@ -36,7 +38,6 @@ export default class FormRoleEditGrantsComponent extends Component {
   exportOptionsMap = { terraform: 'terraform', nativeHCL: 'native-hcl' };
   exportOptions = Object.values(this.exportOptionsMap);
 
-  @tracked grantStringsText = (this.args.model?.grant_strings ?? []).join('\n');
   @tracked currentLineText = this.args.model?.grant_strings?.[0] ?? '';
   @tracked showExportOptionsFlyout = false;
   @tracked selectedExportOption = this.exportOptions[0];
@@ -168,7 +169,14 @@ export default class FormRoleEditGrantsComponent extends Component {
     this.translateLintingError,
   );
 
+  rootElementSelector = getOwner(this).rootElement;
+  rootElement = getOwner(this)
+    .lookup('service:-document')
+    .querySelector(this.rootElementSelector);
+
   customExtensions = [
+    // Configure tooltips to render in app root to avoid overflow issues within the editor container.
+    tooltips({ parent: this.rootElement }),
     autocompletion({
       override: [this.completionSource],
       // Trigger autocompletion when the user completes a grant field (which we labeled as keywords)
@@ -179,7 +187,11 @@ export default class FormRoleEditGrantsComponent extends Component {
         const line = update.state.doc.lineAt(update.state.selection.main.head);
         this.currentLineText = line.text;
         if (update.docChanged) {
-          this.grantStringsText = update.state.doc.toString();
+          const text = update.state.doc.toString();
+          this.args.model.grant_strings = text
+            .split('\n')
+            .map((s) => s.trim())
+            .filter(Boolean);
         }
         // Trigger autocomplete when we're on an empty line
         if (line.text === '') {
@@ -197,11 +209,12 @@ export default class FormRoleEditGrantsComponent extends Component {
     this.#editorView?.destroy();
   }
 
+  get grantStringsText() {
+    return this.grantStrings.join('\n');
+  }
+
   get grantStrings() {
-    return this.grantStringsText
-      .split('\n')
-      .map((grantString) => grantString.trim())
-      .filter(Boolean);
+    return this.args.model?.grant_strings ?? [];
   }
 
   /**
@@ -221,7 +234,7 @@ export default class FormRoleEditGrantsComponent extends Component {
    */
   get terraformFormattedExport() {
     let formatted = `grant_strings = [ \n`;
-    this.grantStringsText.split('\n').forEach((line) => {
+    this.grantStrings.forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
@@ -234,7 +247,7 @@ export default class FormRoleEditGrantsComponent extends Component {
    */
   get nativeHclFormattedExport() {
     let formatted = `[ \n`;
-    this.grantStringsText.split('\n').forEach((line) => {
+    this.grantStrings.forEach((line) => {
       formatted += `  "${line}",\n`;
     });
     formatted += `]\n`;
