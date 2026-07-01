@@ -94,7 +94,7 @@ jobs:
         uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
 
       - name: Set up Enos
-        uses: hashicorp/action-setup-enos@6ec106c8f809fe645162d73bea565c65f3269907
+        uses: hashicorp/action-setup-enos@3817610f3f8dc74a8dbe15bc23c6dc3164f9b224
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
