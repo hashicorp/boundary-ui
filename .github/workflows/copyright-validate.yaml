@@ -6,7 +6,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         # Ref and repository aren't normally needed, this is a workaround for a bug in auto commit
         with:
           ref: ${{ github.event.pull_request.head.ref }}
