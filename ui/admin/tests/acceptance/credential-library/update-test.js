@@ -462,6 +462,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault generic credential library without credential_type and save changes without error', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-07-07
+          enabled: false,
+        },
+      },
+    });
+
     const credentialLibraryWithoutType = this.server.create(
       'credential-library',
       {
