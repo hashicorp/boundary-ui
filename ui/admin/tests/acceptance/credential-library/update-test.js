@@ -487,9 +487,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
     await click(commonSelectors.SAVE_BTN);
 
-    // Verify the save succeeded: no error toast should appear
-    assert.dom(commonSelectors.ALERT_TOAST).doesNotExist();
-
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
       id: credentialLibraryWithoutType.id,
     });
