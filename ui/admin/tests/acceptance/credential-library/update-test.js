@@ -460,4 +460,58 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       selectors.FIELD_VAULT_PATH_VALUE,
     );
   });
+
+  test('can update a vault generic credential library without credential_type and save changes without error', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2026-07-07
+          enabled: false,
+        },
+      },
+    });
+
+    const credentialLibraryWithoutType = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: null,
+        credentialMappingOverrides: null,
+      },
+    );
+
+    await visit(
+      `${urls.credentialLibraries}/${credentialLibraryWithoutType.id}`,
+    );
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
+
+    await click(commonSelectors.SAVE_BTN);
+
+    const credentialLibrary = this.server.schema.credentialLibraries.find(
+      credentialLibraryWithoutType.id,
+    );
+
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.path,
+      selectors.FIELD_VAULT_PATH_VALUE,
+    );
+    assert.strictEqual(credentialLibrary.credentialType, null);
+  });
 });
