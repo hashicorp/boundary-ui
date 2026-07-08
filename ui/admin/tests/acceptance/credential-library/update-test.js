@@ -496,9 +496,10 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
     await click(commonSelectors.SAVE_BTN);
 
-    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      id: credentialLibraryWithoutType.id,
-    });
+    const credentialLibrary = this.server.schema.credentialLibraries.find(
+      credentialLibraryWithoutType.id,
+    );
+
     assert.strictEqual(
       credentialLibrary.name,
       commonSelectors.FIELD_NAME_VALUE,
