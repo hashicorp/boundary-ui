@@ -22,6 +22,7 @@ import {
 // mirage models (alphabetical)
 import accountModel from './models/account';
 import aliasModel from './models/alias';
+import appTokenModel from './models/app-token';
 import authMethodModel from './models/auth-method';
 import baseModel from './models/base';
 import channelRecordingModel from './models/channel-recording';
@@ -47,6 +48,7 @@ import workerModel from './models/worker';
 // mirage serializers (alphabetical)
 import accountSerializer from './serializers/account';
 import aliasSerializer from './serializers/alias';
+import appTokenSerializer from './serializers/app-token';
 import applicationSerializer from './serializers/application';
 import authMethodSerializer from './serializers/auth-method';
 import channelRecordingSerializer from './serializers/channel-recording';
@@ -76,6 +78,7 @@ import desktopContextBridgeApiScenario from './scenarios/ipc/desktop-context-bri
 // mirage factories (alphabetical)
 import accountFactory from './factories/account';
 import aliasFactory from './factories/alias';
+import appTokenFactory from './factories/app-token';
 import authMethodFactory from './factories/auth-method';
 import channelRecordingFactory from './factories/channel-recording';
 import connectionRecordingFactory from './factories/connection-recording';
@@ -114,6 +117,7 @@ export default function (mirageConfig) {
     factories: {
       account: accountFactory,
       alias: aliasFactory,
+      appToken: appTokenFactory,
       authMethod: authMethodFactory,
       channelRecording: channelRecordingFactory,
       connectionRecording: connectionRecordingFactory,
@@ -139,6 +143,7 @@ export default function (mirageConfig) {
     models: {
       account: accountModel,
       alias: aliasModel,
+      appToken: appTokenModel,
       authMethod: authMethodModel,
       base: baseModel,
       channelRecording: channelRecordingModel,
@@ -165,6 +170,7 @@ export default function (mirageConfig) {
     serializers: {
       account: accountSerializer,
       alias: aliasSerializer,
+      appToken: appTokenSerializer,
       application: applicationSerializer,
       authMethod: authMethodSerializer,
       channelRecording: channelRecordingSerializer,

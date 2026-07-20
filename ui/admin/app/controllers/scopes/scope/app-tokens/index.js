@@ -15,7 +15,7 @@ import { STATUSES_APP_TOKEN } from 'api/models/app-token';
 export default class ScopesScopeAppTokensIndexController extends Controller {
   // =services
 
-  @service can;
+  @service abilities;
   @service intl;
   @service router;
   @service store;
@@ -167,7 +167,7 @@ export default class ScopesScopeAppTokensIndexController extends Controller {
     const originalToken = cloneAppTokenId
       ? await this.store.findRecord('app-token', cloneAppTokenId)
       : null;
-    if (this.can.can('read model', appToken)) {
+    if (this.abilities.can('read model', appToken)) {
       const queryParams = { showCreatedAppToken: true };
 
       // If the original token was inactive, include clonedFromId to show delete banner

@@ -10,7 +10,7 @@ import { TrackedArray } from 'tracked-built-ins';
 export default class ScopesScopeAppTokensNewRoute extends Route {
   // =services
 
-  @service can;
+  @service abilities;
   @service router;
   @service store;
 
@@ -22,7 +22,9 @@ export default class ScopesScopeAppTokensNewRoute extends Route {
   beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
-      this.can.cannot('create model', scopeModel, { collection: 'app-tokens' })
+      this.abilities.cannot('create model', scopeModel, {
+        collection: 'app-tokens',
+      })
     ) {
       this.router.replaceWith('scopes.scope.app-tokens');
     }

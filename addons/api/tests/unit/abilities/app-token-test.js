@@ -9,11 +9,11 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Ability | app-token', function (hooks) {
   setupTest(hooks);
 
-  let canService;
+  let abilitiesService;
   let store;
 
   hooks.beforeEach(function () {
-    canService = this.owner.lookup('service:can');
+    abilitiesService = this.owner.lookup('service:abilities');
     store = this.owner.lookup('service:store');
   });
 
@@ -35,7 +35,7 @@ module('Unit | Ability | app-token', function (hooks) {
         authorized_actions: input.actions,
       });
 
-      assert.true(canService.can(`${input.perm} app-token`, appToken));
+      assert.true(abilitiesService.can(`${input.perm} app-token`, appToken));
     },
   );
 
@@ -51,7 +51,7 @@ module('Unit | Ability | app-token', function (hooks) {
         authorized_actions: input.actions,
       });
 
-      assert.false(canService.can(`${input.perm} app-token`, appToken));
+      assert.false(abilitiesService.can(`${input.perm} app-token`, appToken));
     },
   );
 
@@ -66,7 +66,7 @@ module('Unit | Ability | app-token', function (hooks) {
     });
     appToken.scopeModel = scopeModel;
 
-    assert.true(canService.can('clone app-token', appToken));
+    assert.true(abilitiesService.can('clone app-token', appToken));
   });
 
   test('cannot clone app-token when unauthorized', function (assert) {
@@ -80,6 +80,6 @@ module('Unit | Ability | app-token', function (hooks) {
     });
     appToken.scopeModel = scopeModel;
 
-    assert.false(canService.can('clone app-token', appToken));
+    assert.false(abilitiesService.can('clone app-token', appToken));
   });
 });

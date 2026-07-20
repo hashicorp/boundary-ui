@@ -10,7 +10,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 export default class ScopesScopeAppTokensIndexRoute extends Route {
   // =services
   @service store;
-  @service can;
+  @service abilities;
 
   // =attributes
 
@@ -90,7 +90,9 @@ export default class ScopesScopeAppTokensIndexRoute extends Route {
           }
         : undefined;
 
-      if (this.can.can('list scope', scope, { collection: 'app-tokens' })) {
+      if (
+        this.abilities.can('list scope', scope, { collection: 'app-tokens' })
+      ) {
         const queryOptions = {
           scope_id,
           query: {
