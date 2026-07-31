@@ -22,7 +22,7 @@ export const paginateResults = (array, page, pageSize) => {
   }
 
   const offset = (page - 1) * pageSize;
-  const start = Math.min(length - 1, offset);
+  const start = Math.min(length, offset);
   const end = Math.min(length, offset + pageSize);
 
   return array.slice(start, end);

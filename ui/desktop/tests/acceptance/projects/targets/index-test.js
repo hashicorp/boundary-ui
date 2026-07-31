@@ -55,6 +55,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     'thead tr th:nth-child(1) button .hds-icon-arrow-up';
   const TABLE_SORT_BTN_ARROW_DOWN =
     'thead tr th:nth-child(1) button .hds-icon-arrow-down';
+  const PAGINATION_INFO = '[data-test-pagination] .hds-pagination-info';
 
   const instances = {
     scopes: {
@@ -229,6 +230,108 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await click(`[href="${urls.targets}"]`);
 
     assert.dom(APP_STATE_TITLE).hasText('No Targets Available');
+  });
+
+  test('pagination reflects unique targets when the cache daemon returns duplicate rows for the same target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    this.server.schema.targets.all().destroy();
+    this.server.schema.sessions.all().destroy();
+
+    const targets = this.server.createList('target', 5, {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
+
+    // The cache daemon is known to sometimes return multiple raw rows for
+    // the same underlying target (e.g. stale/duplicate entries in its local
+    // cache). These collapse into a single record per unique id once
+    // normalized and pushed into the Ember Data store, but pagination must
+    // still be computed from the unique target count, not the raw
+    // (duplicated) row count returned by the daemon.
+    const duplicatedRows = targets.flatMap((target) => Array(20).fill(target));
+
+    this.stubCacheDaemonSearch(
+      'sessions',
+      { resource: 'targets', func: () => duplicatedRows },
+      'aliases',
+      'sessions',
+    );
+
+    await visit(urls.targets);
+
+    assert
+      .dom('[data-test-visit-target]')
+      .exists(
+        { count: 5 },
+        'all 5 unique targets are shown on a single page despite the duplicate raw rows',
+      );
+    assert
+      .dom(PAGINATION_INFO)
+      .includesText(
+        'of 5',
+        'pagination totals reflect the unique target count, not the raw duplicated row count',
+      );
+  });
+
+  test('pagination reflects only targets the user can connect to, computed before pagination', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    this.server.schema.targets.all().destroy();
+    this.server.schema.sessions.all().destroy();
+
+    // Simulate a scope with many targets, most of which the current user
+    // is not authorized to connect to (a common real-world shape). The
+    // "connect" ability can only be evaluated after records are loaded,
+    // so it must be applied before pagination: only the 5 connectable
+    // targets should ever be counted or paginated, and all 5 should fit
+    // on a single page regardless of the requested page size.
+    const nonConnectableTargets = this.server.createList('target', 70, {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
+    nonConnectableTargets.forEach((target) => {
+      target.update({
+        authorized_actions: target.authorized_actions.filter(
+          (action) => action !== 'authorize-session',
+        ),
+      });
+    });
+    this.server.createList('target', 5, {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
+
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases', 'sessions');
+
+    await visit(urls.targets);
+
+    assert
+      .dom('[data-test-visit-target]')
+      .exists(
+        { count: 5 },
+        'all 5 connectable targets are shown on a single page',
+      );
+    assert
+      .dom(PAGINATION_INFO)
+      .includesText(
+        'of 5',
+        'pagination totals reflect only the connectable targets, not the full raw match count',
+      );
   });
 
   test('user cannot navigate to a target without proper authorization', async function (assert) {
