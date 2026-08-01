@@ -330,7 +330,7 @@ jobs:
           enos scenario destroy --timeout 60m0s --chdir ./support/src/${{matrix.folder_name}}/enos ${{matrix.enos_scenario}} builder:local
 
       - name: Send Slack message on failure
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         if: ${{ failure() && github.repository == 'hashicorp/boundary-ui-enterprise' }}
         with:
           method: chat.postMessage
