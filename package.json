@@ -44,6 +44,7 @@
   },
   "pnpm": {
     "overrides": {
+      "@embroider/macros": "^1.20.6",
       "micromatch": "^4.0.8",
       "css-select>nth-check": "^2.0.1",
       "ansi-html": "^0.0.9",
