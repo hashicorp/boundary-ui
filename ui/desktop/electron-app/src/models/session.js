@@ -115,7 +115,9 @@ class Session {
       const errorResponse = jsonify(stderr);
       const error = errorResponse.api_error || errorResponse.error;
       throw new Error(
-        error?.message ?? 'Unknown error occurred while starting session',
+        error?.message ??
+          error ??
+          'Unknown error occurred while starting session',
       );
     }
 
