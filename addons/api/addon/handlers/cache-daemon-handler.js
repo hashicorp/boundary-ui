@@ -147,7 +147,20 @@ export default class CacheDaemonHandler {
           }
         }
 
-        const results = cacheDaemonResults[underscore(resourceName)];
+        // The cache daemon may return multiple raw rows for the same
+        // underlying resource (e.g. stale or duplicate entries in its local
+        // cache). Pagination must be computed from the unique set of
+        // resources, not the raw row count, otherwise a single resource can
+        // be repeated or fragmented across many pages.
+        const rawResults = cacheDaemonResults[underscore(resourceName)];
+        const seenIds = new Set();
+        const results = rawResults?.filter((result) => {
+          if (seenIds.has(result.id)) {
+            return false;
+          }
+          seenIds.add(result.id);
+          return true;
+        });
         const payload = { items: paginateResults(results, page, pageSize) };
 
         const schema = store.modelFor(type);
