@@ -29,7 +29,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "@babel/core": "^7.26.10",
+    "@babel/core": "^7.29.6",
     "@hashicorp/design-system-components": "^6.0.0",
     "@hashicorp/design-system-tokens": "^2.3.0",
     "@hashicorp/flight-icons": "^3.10.0",
