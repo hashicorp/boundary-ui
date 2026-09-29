@@ -54,7 +54,10 @@
       "tmp": "^0.2.7",
       "tar": "^7.5.10",
       "nomnom>underscore": "^1.13.8",
-      "ember-cli>markdown-it": "^14.2.0"
+      "ember-cli>markdown-it": "^14.2.0",
+      "brace-expansion@1": "1.1.18",
+      "brace-expansion@2": "2.1.4",
+      "brace-expansion@5": "5.0.9"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
