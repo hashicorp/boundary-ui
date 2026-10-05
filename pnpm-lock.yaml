@@ -16,7 +16,8 @@ overrides:
   tar: ^7.5.10
   nomnom>underscore: ^1.13.8
   ember-cli>markdown-it: ^14.2.0
-  '@embroider/macros': 1.19.3
+  ember-resources: 7.0.4
+  tracked-built-ins: 4.0.0
 
 patchedDependencies:
   ember-loading:
@@ -115,7 +116,7 @@ importers:
         specifier: ^19.0.2
         version: 19.0.5
       tracked-built-ins:
-        specifier: ^4.0.0
+        specifier: 4.0.0
         version: 4.0.0(@babel/core@7.27.1)
       uuid:
         specifier: ^14.0.0
@@ -834,7 +835,7 @@ importers:
         specifier: ^5.2.1
         version: 5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2)
       '@embroider/macros':
-        specifier: 1.19.3
+        specifier: ^1.18.1
         version: 1.19.3(@glint/template@1.5.2)
       '@eslint/js':
         specifier: ^9.18.0
@@ -999,7 +1000,7 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
-        specifier: ^4.0.0
+        specifier: 4.0.0
         version: 4.0.0(@babel/core@7.27.1)
       webpack:
         specifier: ^5.105.4
@@ -1048,7 +1049,7 @@ importers:
         specifier: ^5.2.1
         version: 5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2)
       '@embroider/macros':
-        specifier: 1.19.3
+        specifier: ^1.18.1
         version: 1.19.3(@glint/template@1.5.2)
       '@eslint/js':
         specifier: ^9.18.0
@@ -1222,7 +1223,7 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(postcss@8.5.14)(stylelint@15.11.0(typescript@5.8.3))
       tracked-built-ins:
-        specifier: ^4.0.0
+        specifier: 4.0.0
         version: 4.0.0(@babel/core@7.27.1)
       webpack:
         specifier: ^5.105.4
@@ -4935,7 +4936,7 @@ packages:
     resolution: {integrity: sha512-ig8V5HKqXyTobJgHsIfnViPAmmyqx1c8T77LB5qmarPlVrx1G+EhSjlRcTr/y16Kg/EZalSBldHiLvv9M/5t6g==}
     peerDependencies:
       '@ember/string': '>= 3.0.0'
-      '@embroider/macros': 1.19.3
+      '@embroider/macros': ^1.13.2
       ember-modifier: '>= 4.0.0'
 
   ember-cli-get-component-path-option@1.0.0:
@@ -5214,15 +5215,13 @@ packages:
     resolution: {integrity: sha512-rA4RDuTm/F9AzYX2+g7EY3QWU48kyF9+Ck8IE8VQipnlwv2Q42kdRWiw7hfeQbRxx6XoSZCak6nzAG9ePd/+Ug==}
     engines: {node: 14.* || 16.* || >= 18}
 
-  ember-resources@7.1.0:
-    resolution: {integrity: sha512-3Pt/bhXeG6ACHgsDi03R00BH29Tso4j08yFNnQB/h/SZr06zjByQdatlB1YmCI0ebRDU1Z0wZA6c3EtiSQKkkA==}
+  ember-resources@7.0.4:
+    resolution: {integrity: sha512-x/KJrfQCq8hrnOHDzdpSteUXdeqP4iAjeS4xWTxxtWDeP2KqOZYpAz4CvigzzBktWGZByPp+Y1Ysvlvl99SnFA==}
     peerDependencies:
       '@glimmer/component': '>= 1.1.2 || >= 2.0.0'
       '@glint/template': '>= 1.0.0'
     peerDependenciesMeta:
       '@glimmer/component':
-        optional: true
-      '@glint/template':
         optional: true
 
   ember-rfc176-data@0.3.18:
@@ -9042,9 +9041,6 @@ packages:
   tracked-built-ins@4.0.0:
     resolution: {integrity: sha512-0Jl43A1SDZd+yYCJvXfgDSn4Wk/zcawkyFTBPqOETU5UJRngnVEnQ8oOjawqPRg6qja3sKjIQ8z6X9xJzcUTUA==}
 
-  tracked-built-ins@4.1.2:
-    resolution: {integrity: sha512-KiiV/Pzi7VNKTn9Fip6Ic54AjKgFfqows1Jq3L0WLVqZcvfswdhVxQ9yqqhTXsmgLhVzIgtdzNBH4ExqWf34BQ==}
-
   traverse@0.6.6:
     resolution: {integrity: sha512-kdf4JKs8lbARxWdp7RKdNzoJBhGUcIalSYibuGyHJbmk40pOysQ0+QPvlkCOICOivDWU2IJo2rkrxyTK2AH4fw==}
 
@@ -11650,8 +11646,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.94.6
 
-  '@glint/template@1.5.2':
-    optional: true
+  '@glint/template@1.5.2': {}
 
   '@handlebars/parser@2.0.0': {}
 
@@ -11698,7 +11693,7 @@ snapshots:
       prismjs: 1.30.0
       tabbable: 6.5.0
       tippy.js: 6.3.7
-      tracked-built-ins: 4.1.2(@babel/core@7.27.1)
+      tracked-built-ins: 4.0.0(@babel/core@7.27.1)
     transitivePeerDependencies:
       - '@babel/core'
       - '@ember/test-helpers'
@@ -15058,12 +15053,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-resources@7.1.0(@glimmer/component@2.0.0)(@glint/template@1.5.2):
+  ember-resources@7.0.4(@glimmer/component@2.0.0)(@glint/template@1.5.2):
     dependencies:
       '@embroider/addon-shim': 1.10.3
+      '@embroider/macros': 1.19.3(@glint/template@1.5.2)
+      '@glint/template': 1.5.2
     optionalDependencies:
       '@glimmer/component': 2.0.0
-      '@glint/template': 1.5.2
     transitivePeerDependencies:
       - supports-color
 
@@ -15157,8 +15153,8 @@ snapshots:
       '@glimmer/component': 2.0.0
       decorator-transforms: 2.4.0(@babel/core@7.27.1)
       ember-modifier: 4.2.2(@babel/core@7.27.1)
-      ember-resources: 7.1.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)
-      tracked-built-ins: 4.1.2(@babel/core@7.27.1)
+      ember-resources: 7.0.4(@glimmer/component@2.0.0)(@glint/template@1.5.2)
+      tracked-built-ins: 4.0.0(@babel/core@7.27.1)
     transitivePeerDependencies:
       - '@babel/core'
       - '@glint/template'
@@ -19657,17 +19653,9 @@ snapshots:
 
   tracked-built-ins@4.0.0(@babel/core@7.27.1):
     dependencies:
-      '@embroider/addon-shim': 1.10.0
-      decorator-transforms: 2.3.0(@babel/core@7.27.1)
-      ember-tracked-storage-polyfill: 1.0.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - supports-color
-
-  tracked-built-ins@4.1.2(@babel/core@7.27.1):
-    dependencies:
       '@embroider/addon-shim': 1.10.3
       decorator-transforms: 2.4.0(@babel/core@7.27.1)
+      ember-tracked-storage-polyfill: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color

@@ -55,7 +55,8 @@
       "tar": "^7.5.10",
       "nomnom>underscore": "^1.13.8",
       "ember-cli>markdown-it": "^14.2.0",
-      "@embroider/macros": "1.19.3"
+      "ember-resources": "7.0.4",
+      "tracked-built-ins": "4.0.0"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
