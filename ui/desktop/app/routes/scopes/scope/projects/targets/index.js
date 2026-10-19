@@ -11,6 +11,7 @@ import {
 } from 'api/models/session';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { paginateResults } from 'api/utils/paginate-results';
 
 const { __electronLog } = globalThis;
 
@@ -136,19 +137,26 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         recursive: true,
         scope_id: orgScope.id,
         query: { search, filters, sort },
-        page,
-        pageSize,
         force_refresh: true,
       };
       if (orgScope.isOrg && scopes.length === 0) {
         query.filter = orgFilter;
       }
-      let targets = await this.store.query('target', query);
-      const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
+      // Intentionally don't send page/pageSize here: the "connect" ability
+      // can only be evaluated client-side once records are loaded, so we
+      // have to filter out targets the user can't connect to *before*
+      // paginating. Paginating the raw (unfiltered) result set first would
+      // compute page counts against targets the user may not even be able
+      // to see, and could scatter the targets they can connect to sparsely
+      // (or not at all) across pages.
+      const allTargets = await this.store.query('target', query);
+      const { isLoadIncomplete, isCacheRefreshing } = allTargets.meta;
       // Filter out targets to which users do not have the connect ability
-      targets = targets.filter((target) =>
+      const connectableTargets = allTargets.filter((target) =>
         this.abilities.can('connect target', target),
       );
+      const totalItems = connectableTargets.length;
+      const targets = paginateResults(connectableTargets, page, pageSize);
 
       const aliasPromise = this.store.query('alias', {
         scope_id: 'global',
